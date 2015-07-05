@@ -17,10 +17,10 @@ For koolshare.cn 小宝merlin改版固件
 <br/>由下面两个文件合并生成
 
 <b>easylist.conf</b><br/>
-wget --no-check-certificate -qO - https://easylist-downloads.adblockplus.org/easylist.txt | grep ^\|\|[^\*]*\^$ | sed -e 's:||:address\=\/:' -e 's:\^:/127\.0\.0\.1:' > easylist.conf
+<pre>wget --no-check-certificate -qO - https://easylist-downloads.adblockplus.org/easylist.txt | grep ^\|\|[^\*]*\^$ | sed -e 's:||:address\=\/:' -e 's:\^:/127\.0\.0\.1:' > easylist.conf</pre>
 
 
 <b>chinalist.conf</b><br/>
-wget --no-check-certificate -qO - https://easylist-downloads.adblockplus.org/easylistchina.txt | grep ^\|\|[^\*]*\^$ | sed -e 's:||:address\=\/:' -e 's:\^:/127\.0\.0\.1:' > chinalist.conf
+<pre>wget --no-check-certificate -qO - https://easylist-downloads.adblockplus.org/easylistchina.txt | grep ^\|\|[^\*]*\^$ | sed -e 's:||:address\=\/:' -e 's:\^:/127\.0\.0\.1:' > chinalist.conf</pre>
 
 
