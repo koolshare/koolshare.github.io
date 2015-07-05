@@ -14,7 +14,7 @@ For koolshare.cn 小宝merlin改版固件
 
 <b>adblock.conf</b><br/>
 该文件用于dnsmasq添加host，过滤列表内的域名，达到过滤广告的效果
-由下面两个文件合并生成
+<br/>由下面两个文件合并生成
 
 <b>easylist.conf</b><br/>
 wget --no-check-certificate -qO - https://easylist-downloads.adblockplus.org/easylist.txt | grep ^\|\|[^\*]*\^$ | sed -e 's:||:address\=\/:' -e 's:\^:/127\.0\.0\.1:' > easylist.conf
