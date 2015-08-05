@@ -1947,6 +1947,7 @@ cmsbs.com
 cmstop.com
 cmwb.com
 cn
+.cn
 cn029.com
 cn0556.com
 cn163.net
