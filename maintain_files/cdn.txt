@@ -3306,6 +3306,7 @@ g-svc.io
 gs.ww.np.dl.playstation.net
 gtags.net
 gtfund.com
+gtimg.cn
 gtimg.com
 gtja.com
 gtjazg.com
@@ -7064,6 +7065,7 @@ weand.com
 weartrends.com
 weathercn.com
 web20share.com
+webank.com
 webcname.net
 webdissector.com
 webfuns.net
