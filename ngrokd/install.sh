@@ -10,11 +10,11 @@ if [ ! -f n.tar.gz ]; then
     tar -zxvf ./n.tar.gz
 fi
 
-if [ ! -f config.sh ]; then
+if [ ! -f ../config.sh ]; then
 echo "Please enter your dns: "
 read indns
 dns=$indns
-cat > ./config.sh <<EOF
+cat > ../config.sh <<EOF
 #!/bin/sh
 dns="${dns}"
 http_port=80
@@ -22,7 +22,7 @@ https_port=443
 remote_port=4443
 EOF
 
-chmod 755 ./config.sh
+chmod 755 ../config.sh
 fi
 
 http_port=80
@@ -30,7 +30,7 @@ https_port=443
 remote_port=4443
 
 echo "you can change config.sh for port settings"
-. ./config.sh
+. ../config.sh
 
 if [ ! -f device.csr ]; then
     echo "generate tls"
