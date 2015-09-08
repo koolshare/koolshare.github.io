@@ -6,7 +6,7 @@ cd ./ngrok
 
 if [ ! -f n.tar.gz ]; then
     echo "geting install script"
-    wget --no-check-certificate  $HOME_URL/ngrokd/n.tar.gz -o n.tar.gz
+    wget --no-check-certificate  $HOME_URL/ngrokd/n.tar.gz
     tar -zxvf ./n.tar.gz
 fi
 
