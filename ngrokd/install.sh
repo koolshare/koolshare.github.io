@@ -17,6 +17,9 @@ dns=$indns
 cat > ./config.sh <<EOF
 #!/bin/sh
 dns="${dns}"
+http_port=80
+https_port=443
+remote_port=4443
 EOF
 
 chmod 755 ./config.sh
