@@ -24,6 +24,7 @@ http_port=80
 https_port=443
 remote_port=4443
 
+echo "you can change config.sh for port settings"
 . ./config.sh
 
 if [ ! -f device.csr ]; then
@@ -35,8 +36,9 @@ if [ ! -f device.csr ]; then
     openssl x509 -req -in device.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out device.crt -days 5000 
 fi
 
-echo "check for port 80 443 4443"
-sudo lsof -i -n -P 
+echo "TODO check for port 80 443 4443 for available"
+#sudo lsof -i -n -P 
+
 ROOT_UID="0"
 if [ "$UID" -ne "$ROOT_UID" ] ; then
 
@@ -63,4 +65,6 @@ fi
 fi
 
 nohup ./bin/ngrokd -domain="$dns" -httpAddr=":$http_port" -httpsAddr=":$https_port" -tlsCrt=device.crt -tlsKey=device.key -tunnelAddr=":$remote_port" > z.log 2>&1 &
-
+sleep 2
+echo "read z.log for log"
+cat z.log
