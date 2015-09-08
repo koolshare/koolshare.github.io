@@ -16,7 +16,7 @@ read indns
 dns=$indns
 cat > ./config.sh <<EOF
 #!/bin/sh
-dns="$(dns)"
+dns="${dns}"
 EOF
 
 chmod 755 ./config.sh
