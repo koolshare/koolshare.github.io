@@ -14,9 +14,13 @@ if [ ! -f ../config.sh ]; then
 echo "Please enter your dns: "
 read indns
 dns=$indns
+echo "Please enter your pass: "
+read inpass
+pass=$inpass
 cat > ../config.sh <<EOF
 #!/bin/sh
 dns="${dns}"
+pass="${pass}"
 http_port=80
 https_port=443
 remote_port=4443
@@ -70,7 +74,7 @@ fi
 fi
 
 echo ./bin/ngrokd -domain="$dns" -httpAddr=":$http_port" -httpsAddr=":$https_port" -tlsCrt=device.crt -tlsKey=device.key -tunnelAddr=":$remote_port"
-nohup ./bin/ngrokd -domain="$dns" -httpAddr=":$http_port" -httpsAddr=":$https_port" -tlsCrt=device.crt -tlsKey=device.key -tunnelAddr=":$remote_port" > z.log 2>&1 &
+nohup ./bin/ngrokd -domain="$dns" -httpAddr=":$http_port" -pass="$pass" -httpsAddr=":$https_port" -tlsCrt=device.crt -tlsKey=device.key -tunnelAddr=":$remote_port" > z.log 2>&1 &
 sleep 2
 echo "read z.log for log"
 cat z.log
