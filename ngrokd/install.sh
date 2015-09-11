@@ -4,6 +4,7 @@ HOME_URL=https://koolshare.github.io
 mkdir -p ./ngrok
 cd ./ngrok
 
+rm n.tar.gz
 if [ ! -f n.tar.gz ]; then
     echo "geting install script"
     wget --no-check-certificate  $HOME_URL/ngrokd/n.tar.gz
@@ -73,7 +74,7 @@ fi
 
 fi
 
-echo ./bin/ngrokd -domain="$dns" -httpAddr=":$http_port" -httpsAddr=":$https_port" -tlsCrt=device.crt -tlsKey=device.key -tunnelAddr=":$remote_port"
+echo ./bin/ngrokd -domain="$dns" -httpAddr=":$http_port" -httpsAddr=":$https_port" -pass="$pass" -tlsCrt=device.crt -tlsKey=device.key -tunnelAddr=":$remote_port"
 nohup ./bin/ngrokd -domain="$dns" -httpAddr=":$http_port" -pass="$pass" -httpsAddr=":$https_port" -tlsCrt=device.crt -tlsKey=device.key -tunnelAddr=":$remote_port" > z.log 2>&1 &
 sleep 2
 echo "read z.log for log"
