@@ -1,6 +1,7 @@
 #!/bin/sh
 eval `dbus export xunlei`
-xunleiPath=/jffs/xunlei
+# xunleiPath=/jffs/xunlei
+xunleiPath=$xunlei_basic_usb/Merlin_software/xunlei
 logFile=$xunleiPath/getsysinfo
 ifXunleiExite=$(ps |grep vod_httpserver |grep -v grep)
 
