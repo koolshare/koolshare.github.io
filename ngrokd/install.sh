@@ -74,8 +74,17 @@ fi
 
 fi
 
+
+NPID=`ps -ef|grep ngrokd|grep -v grep|awk '{print $2}'`
+if [ -z "$NPID" ]; then
+echo "Not running"
+else
+echo "Already run, kill it"
+kill $NPID
+fi
+
 echo ./bin/ngrokd -domain="$dns" -httpAddr=":$http_port" -httpsAddr=":$https_port" -pass="$pass" -tlsCrt=device.crt -tlsKey=device.key -tunnelAddr=":$remote_port"
 nohup ./bin/ngrokd -domain="$dns" -httpAddr=":$http_port" -pass="$pass" -httpsAddr=":$https_port" -tlsCrt=device.crt -tlsKey=device.key -tunnelAddr=":$remote_port" > z.log 2>&1 &
 sleep 2
 echo "read z.log for log"
-cat z.log
+head z.log
