@@ -1,0 +1,19 @@
+{
+    "lang": "简体中文",
+    "details": "详情",
+    "grid": "网格",
+    "icons": "图标",
+    "name": "文件名",
+    "lastModified": "修改时间",
+    "size": "大小",
+    "parentDirectory": "父文件夹",
+    "empty": "空文件夹",
+    "folders": "文件夹",
+    "files": "文件",
+    "download": "下载",
+    "noMatch": "无匹配项",
+    "dateFormat": "YYYY-MM-DD HH:mm",
+    "filter": "查找",
+    "view": "视图",
+    "language": "语言"
+}

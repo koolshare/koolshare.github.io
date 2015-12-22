@@ -1,0 +1,17 @@
+{
+    "lang": "español",
+    "details": "Detalles",
+    "grid": "Cuadrícula",
+    "icons": "Íconos",
+    "name": "Nombre",
+    "lastModified": "Última modificación",
+    "size": "Tamaño",
+    "parentDirectory": "Directorio superior",
+    "empty": "vacío",
+    "folders": "Directorios",
+    "files": "Archivos",
+    "download": "Descargar",
+    "noMatch": "Sin coincidencias",
+    "dateFormat": "DD/MM/YYYY HH:mm",
+    "filter": "Filtar"
+}

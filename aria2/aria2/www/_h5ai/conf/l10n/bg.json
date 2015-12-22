@@ -1,0 +1,17 @@
+{
+    "lang": "български",
+    "details": "детайли",
+    "grid": "мрежа",
+    "icons": "икони",
+    "name": "Име",
+    "lastModified": "Последна промяна",
+    "size": "Размер",
+    "parentDirectory": "Предходна директория",
+    "empty": "празна",
+    "folders": "директории",
+    "files": "файлове",
+    "download": "изтегляне",
+    "noMatch": "няма съвпадение",
+    "dateFormat": "DD-MM-YYYY HH:mm",
+    "filter": "филтър"
+}

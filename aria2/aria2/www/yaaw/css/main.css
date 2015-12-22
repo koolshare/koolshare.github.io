@@ -1,0 +1,543 @@
+/* 
+ * Copyright (C) 2015 Binux <roy@binux.me>
+ *
+ * This file is part of YAAW (https://github.com/binux/yaaw).
+ *
+ * YAAW is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * YAAW is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You may get a copy of the GNU Lesser General Public License
+ * from http://www.gnu.org/licenses/lgpl.txt
+ *
+ */
+
+.select-box {
+    cursor: pointer;
+}
+.btn-inline {
+    /* fix for MAC/chrome */
+    display: inline !important;
+}
+.btn-inline:before, .btn-inline:after {
+    /* fix for IE8 */
+    content: none !important;
+    display: none !important;
+}
+
+/* header */
+.main-head {
+    position: relative;
+}
+.main-head h1 {
+    display: inline-block;
+}
+
+#main-alert {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+#main-alert-inline {
+    display: inline-block;
+    text-align: left;
+    position: relative;
+    top: -10px;
+    z-index: 99;
+}
+
+#global-info {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+#global-version {
+    text-align: right;
+}
+
+/* main-control */
+#main-control {
+    margin-top: 10px;
+}
+
+#select-btn {
+    margin-right: 30px;
+}
+.select-box {
+    display: inline-block;
+    vertical-align: text-top;
+    border: 1px solid #C6C6C6;
+    border: 1px solid rgba(155, 155, 155, .57);
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+}
+
+#do-all-btn {
+    position: relative;
+    margin-left: 10px;
+}
+
+#info-btn {
+    margin-left: 10px;
+}
+
+#other-grp {
+}
+
+/* active-tasks */
+#active-tasks {
+    margin-top: 40px;
+}
+.empty-tasks {
+    text-align: center;
+    padding: 8px;
+}
+.section-header {
+    font-size: 16px;
+}
+.section-header i {
+    margin-right: 5px;
+    vertical-align: baseline;
+}
+
+/* other-tasks */
+#other-tasks {
+    margin-top: 40px;
+}
+#waiting-tasks-table {
+    margin-bottom: 0;
+}
+#stoped-tasks-table {
+    border-top: 0;
+    margin-top: 0;
+}
+
+/* tasks */
+.tasks-table {
+    margin: 0;
+    margin-top: 10px;
+}
+
+.task.selected {
+    background-color: #F9F9F9;
+}
+.tasks-table > li {
+    display: block;
+    position: relative;
+    margin-top: -1px;
+    border-top: 1px solid #DDD;
+    border-bottom: 1px solid #DDD;
+    line-height: 18px;
+    text-align: left;
+    vertical-align: top;
+}
+.tasks-table > li:hover {
+    background-color: #f5f5f5;
+}
+
+.left-area {
+    position: relative;
+    padding: 8px;
+}
+.right-area {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 8px;
+}
+
+.task .task-name {
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.task .task-name span {
+    margin-left: 3px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.task .task-name .select-box {
+    vertical-align: -15%;
+}
+.task:hover .select-box {
+    border-color: #666;
+}
+
+.task .task-info span {
+    margin-right: 8px;
+}
+
+.task .task-info,
+.task .progress-info {
+    margin-top: 4px;
+}
+.task .progress {
+    margin: 1px 0;
+}
+
+.task .download-speed,
+.task .upload-speed,
+.task .seeders {
+    margin-right: 8px;
+}
+
+#other-tasks .task-info {
+    margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+@media (max-height: 600px) {
+    .modal.fade.in {
+        position: absolute;
+        top: 260px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal.fade.in {
+        top: 60px;
+    }
+    .modal-body {
+        max-height: none;
+    }
+
+    #main-alert {
+        top: 25px;
+    }
+
+    #offline-cached {
+        display: none;
+    }
+
+    #select-btn {
+        margin-right: 10px;
+    }
+    #not-selected-grp {
+        float: right;
+    }
+    #selected-grp {
+        float: right;
+    }
+    #other-grp {
+        clear: both;
+        margin-top: 5px;
+    }
+
+    #active-tasks {
+        margin-top: 20px;
+    }
+    #active-tasks .left-area {
+        padding-bottom: 0;
+        margin-right: 0;
+    }
+    .task .task-name {
+        margin-right: 0;
+        overflow: visible;
+        white-space: normal;
+    }
+    #active-tasks .right-area {
+        padding-top: 0;
+        position: relative;
+        width: auto;
+    }
+
+    #other-tasks .right-area {
+        position: relative;
+        padding-top: 0;
+    }
+    #other-tasks .right-area .task-info {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #other-tasks .right-area .pull-right {
+        width: 100%;
+    }
+    #other-tasks .right-area .pull-right .progress {
+        margin-left: 110px;
+    }
+}
+@media (min-width: 480px) and (max-width: 980px) {
+    #active-tasks .left-area {
+        margin-right: 186px;
+    }
+    #active-tasks .right-area {
+        width: 170px;
+    }
+
+    #other-tasks .left-area {
+        margin-right: 246px;
+    }
+    #other-tasks .right-area {
+        width: 230px;
+    }
+    #other-tasks .task-info {
+        width: 120px;
+    }
+    #other-tasks .progress {
+        width: 100px;
+    }
+}
+@media (min-width: 980px) {
+    #active-tasks .left-area {
+        margin-right: 286px;
+    }
+    #active-tasks .right-area {
+        width: 270px;
+    }
+
+    #other-tasks .left-area {
+        margin-right: 416px;
+    }
+    #other-tasks .right-area {
+        width: 400px;
+    }
+    #other-tasks .task-info {
+        width: 190px;
+    }
+    #other-tasks .progress {
+        width: 200px;
+    }
+}
+
+/* task infobox */
+.info-open {
+    background-color: #F9F9F9;
+}
+.info-box {
+}
+.info-box .tab-content {
+    height: 300px;
+    overflow-y: auto;
+}
+.info-box .nav {
+    margin-top: -1px;
+    margin-bottom: 0;
+    height: 300px;
+}
+#ib-status,
+#ib-options,
+#ib-peers {
+    position: relative;
+    margin: 18px 0;
+}
+#ib-files .file-list {
+    margin-left: -25px;
+}
+#ib-files ul,
+#ib-options ul {
+    margin-top: 5px;
+}
+#ib-files li {
+    display: block;
+    cursor: pointer;
+    line-height: 14px;
+    padding-bottom: 6px;
+    vertical-align: top;
+    border-bottom: 1px solid #FFF;
+}
+#ib-files .ib-file-title:hover {
+    border-bottom: 1px solid #666;
+}
+#ib-file-btn,
+#ib-options-btn {
+    float: right !important;
+    margin: 0 0 5px 5px;
+}
+@media (max-width: 980px) {
+    #ib-file-btn, #ib-options-btn {
+        float: none !important;
+        margin-bottom: 5px;
+    }
+}
+.ib-file-title {
+    margin-left: 5px;
+}
+.ib-file-size {
+    margin-left: 20px;
+}
+#ib-options li {
+    display: block;
+    float: left;
+    padding-bottom: 6px;
+    margin-right: 100px;
+}
+#ib-options li span {
+    display: block;
+    text-align: right;
+    padding-right: 1em;
+    width: 140px;
+    line-height: 24px;
+}
+#ib-options li > * {
+    float: left;
+}
+#ib-peers .ip_port {
+    display: inline-block;
+    width: 250px;
+}
+
+/* task-contextmenu */
+
+#task-contextmenu {
+    position: fixed;
+    z-index: 99;
+}
+
+/* add task modal */
+#add-task-modal {
+    overflow-x: hidden;
+}
+#add-task-modal .modal-body.hover {
+    padding: 13px;
+    border: 2px solid #666;
+}
+
+#add-task-uri {
+    text-align: center;
+    white-space: nowrap;
+    padding: 10px 19px;
+    margin: 0;
+    overflow: hidden;
+}
+#add-task-uri div {
+    padding-right: 118px;
+}
+#uri-input {
+    width: 100%; 
+}
+#uri-textarea {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+}
+
+#uri-more {
+    font-size: 7px;
+    text-align: center;
+    height: 10px;
+    margin: 0 20px 20px;
+    line-height: 10px;
+    color: #DDD;
+    background-color: whiteSmoke;
+    cursor: pointer;
+}
+#uri-more:hover {
+    background-color: #DDD;
+    color: #999;
+}
+
+#torrent-up-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: right;
+    height: 100%;
+    width: 100%;
+    -moz-opacity: 0;
+    filter: alpha(opacity: 0);
+    opacity: 0;
+    z-index: 2;
+    cursor: pointer;
+}
+#torrent-up-btn {
+    position: relative;
+}
+
+#add-task-alert {
+    position: relative;
+    top: 5px;
+}
+
+#add-task-option {
+    padding: 0 50px 0 20px;
+}
+@media (max-width: 480px) {
+    #add-task-option {
+        padding: 0 10px 0 20px;
+    }
+}
+#add-task-option .controls {
+    padding-right: 10px;
+}
+#add-task-option .input-xlarge {
+    width: 100%;
+}
+#add-task-option .half {
+    float: left;
+    width: 220px;
+}
+#add-task-option .control-label {
+    width: 70px;
+}
+#add-task-option .controls {
+    margin-left: 85px;
+}
+
+/* aria2 global setting */
+#copyright {
+    margin-top: 10px;
+    float: left;
+}
+#setting-form .rpc-path-group .controls {
+    padding-right: 70px;
+}
+@media (max-width: 480px) {
+    #setting-form .rpc-path-group .controls {
+        padding-right: 35px;
+    }
+}
+#setting-form .rpc-path-wrap {
+    padding-right: 34px;
+    width: 100%;
+}
+#setting-form .rpc-path-wrap .add-on {
+    position: absolute;
+    right: 1px;
+}
+#rpc-path {
+  width: 100%;
+  height: 28px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+#aria2-gs-form {
+    margin-right: 30px;
+}
+@media (max-width: 480px) {
+    #aria2-gs-form {
+        margin-right: 0;
+    }
+}
+#aria2-gs-form .controls {
+    padding-right: 10px;
+}
+#aria2-gs-form .input-xlarge {
+    width: 100%;
+}
+#aria2-gs-form .half {
+    float: left;
+    width: 240px;
+    margin-left: 10px;
+}
+#aria2-gs-form .half .control-label {
+    width: 110px;
+}
+#aria2-gs-form .half .controls {
+    margin-left: 130px;
+    padding-right: 0;
+}
+
+/* vim: set et sw=4 ts=4 sts=4 fdm=marker ff=unix fenc=utf8: */ 

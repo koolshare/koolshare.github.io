@@ -1,0 +1,19 @@
+{
+    "lang": "日本語",
+    "details": "詳細",
+    "grid": "グリッド",
+    "icons": "アイコン",
+    "name": "名前",
+    "lastModified": "最終変更日時",
+    "size": "サイズ",
+    "parentDirectory": "親ディレクトリへ",
+    "empty": "(空)",
+    "folders": "フォルダー",
+    "files": "ファイル",
+    "download": "ダウンロード",
+    "noMatch": "一致する項目が見つかりません",
+    "dateFormat": "YYYY-MM-DD HH:mm",
+    "filter": "フィルター",
+    "view": "ビュー",
+    "language": "言語"
+}

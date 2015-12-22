@@ -1,0 +1,17 @@
+{
+    "lang": "finnish",
+    "details": "tiedot",
+    "grid": "ruudukko",
+    "icons": "ikonit",
+    "name": "Nimi",
+    "lastModified": "Viimeksi muokattu",
+    "size": "Koko",
+    "parentDirectory": "Ylähakemisto",
+    "empty": "tyhjä",
+    "folders": "hakemistoa",
+    "files": "tiedostoa",
+    "download": "lataa",
+    "noMatch": "ei osumia",
+    "dateFormat": "DD.MM.YYYY HH:mm",
+    "filter": "suodata"
+}

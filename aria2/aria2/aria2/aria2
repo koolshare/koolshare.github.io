@@ -1,0 +1,185 @@
+#!/bin/sh
+
+# define variables
+lan_ipaddr=$(nvram get lan_ipaddr)
+old_token=$(cat /jffs/aria2/aria2.conf|grep rpc-secret|cut -d "=" -f2)
+token=$(head -200 /dev/urandom | md5sum | cut -d " " -f 1)
+ddns=$(nvram get ddns_hostname_x)
+usb_disk=`/bin/mount | grep -E 'mnt' | sed -n 1p | cut -d" " -f3`
+version="1.0"
+
+echo ""
+echo "#############################################################"
+printf "%0s%50s%10s\n" "#" "Aria2c Auto Install Script for Merlin ARM" "#"
+printf "%0s%37s%23s\n" "#" "Website: http://koolshare.cn" "#"
+printf "%0s%46s%14s\n" "#" "Author: sadoneli <sadoneli@gmail.com>" "#"
+echo "#############################################################"
+echo ""
+
+# create tmp folder for lighttpd
+mkdir -p /tmp/lighttpd
+
+# start aria2c
+start_aria2(){
+	if [ ! -z "$$usb_disk" ];then
+		/jffs/aria2/aria2c --conf-path=/jffs/aria2/aria2.conf -d $usb_disk -D
+	fi
+	aria2_run=$(ps|grep aria2c|grep -v grep)
+	if [ ! -z "$aria2_run" ];then
+		echo aria2c start success!
+	else
+		echo aria2c start failure£¡
+	fi
+}
+
+# start lighttpd
+start_lighttpd(){
+	/usr/sbin/lighttpd -f /jffs/www/lighttpd.conf
+	lighttpd_run=$(ps|grep lighttpd|grep -v grep)
+	if [ ! -z "$lighttpd_run" ];then
+		echo lighttpd start success!
+	else
+		echo lighttpd start failure£¡
+	fi
+}
+
+# generate token
+generate_token(){
+		# dbus set aria2_token="$token"
+		echo -e Please visit"\033[42;4m" $lan_ipaddr:8088/aria2 "\033[0m" to acess Aria2 webui in lan
+		echo -e You can also visit "\033[42;4m" $lan_ipaddr:8088/yaaw "\033[0m" to manage download
+		if [ ! -z "$ddns" ];then
+
+			echo -e For remote control visit"\033[42;4m" $ddns:8088/aria2 "\033[0m" or "\033[42;4m" $ddns:8088/yaaw "\033[0m"to acess Aria2 webui
+		fi
+		echo -e Your aria2 \host is "\033[42;4m" $lan_ipaddr "\033[0m"
+		echo -e Your aria2 rpc port is "\033[42;4m" 6800 "\033[0m"
+	if [ "$old_token" = "koolshare" ];then
+		sed -i "s/koolshare/$token/g" "/jffs/aria2/aria2.conf"
+		echo -e Your aria2 token is "\033[42;4m" $token "\033[0m"
+	else
+		echo -e Your aria2 token is "\033[42;4m" $old_token "\033[0m"
+	fi
+}
+
+# open firewall port
+open_port(){
+	echo open firewall port 6800 and 8088
+	iptables -I INPUT -p tcp --dport 6800 -j ACCEPT >/dev/null 2>&1
+	iptables -I INPUT -p tcp --dport 8088 -j ACCEPT >/dev/null 2>&1
+	echo done
+}
+
+# close firewall port
+close_port(){
+	echo close firewall port 6800 and 8088
+	iptables -D INPUT -p tcp --dport 6800 -j ACCEPT >/dev/null 2>&1
+	iptables -D INPUT -p tcp --dport 8088 -j ACCEPT >/dev/null 2>&1
+	echo done
+}
+
+# for auto start with wan
+auto_start(){
+	dbus event onwanstart_aria2 "/jffs/aria2/start_aria2 start_up"
+}
+
+# for auto start with wan
+stop_auto_start(){	
+	dbus remove __event__onwanstart_aria2
+}
+
+
+# kill aria2
+kill_aria2(){
+    killall aria2c >/dev/null 2>&1
+    sleep 2
+    aria2_run1=$(ps|grep aria2c|grep -v grep|grep -v killall)
+    
+	if [ -z "$aria2_run1" ];then
+		echo aria2c stoped!
+	else
+		echo aria2c stop failure!
+	fi
+}
+
+# kill lighttpd
+kill_lighttpd(){
+	killall lighttpd >/dev/null 2>&1
+	sleep 2
+	lighttpd_run1=$(ps|grep lighttpd|grep -v grep|grep -v killall)
+	if [ -z "$lighttpd_run1" ];then
+		echo lighttpd stoped!
+	else
+		echo lighttpd stop failure!
+	fi
+}
+
+case "$1" in
+	-start)
+		generate_token
+		start_aria2
+		start_lighttpd
+		open_port
+		auto_start
+		;;
+	-start_up)
+		sleep 15
+		generate_token
+		start_aria2
+		start_lighttpd
+		open_port
+		;;
+	-stop)
+		kill_aria2
+		kill_lighttpd
+		close_port
+		stop_auto_start
+		;;
+	-restart)
+		kill_aria2
+		kill_lighttpd
+		close_port
+		stop_auto_start
+		generate_token
+		start_aria2
+		start_lighttpd
+		open_port
+		auto_start
+		;;
+	-uninstall)
+		kill_aria2
+		kill_lighttpd
+		stop_auto_start
+		rm -rf /jffs/aria2
+		echo succeed!
+		cd /jffs
+		;;
+	-reinstall)
+		kill_aria2
+		kill_lighttpd
+		stop_auto_start
+		rm -rf /jffs/aria2
+		eval `wget -q -O - http://file.fancyss.com/aria2c`
+		;;\
+	-token)
+		generate_token
+		;;
+	-version)
+		echo version $version
+		;;
+	*)
+		  cat << EOF
+Usage: $0 [OPTION]
+Options:
+  -start             [start aria2]
+  -stop              [stop aria2]
+  -restart           [restart aria2]
+  -uninstall         [remove all installed files]
+  -reinstall         [reinstall nas service]
+  -token             [show your token]
+  -version           [show version]
+EOF
+		;;
+esac
+
+
