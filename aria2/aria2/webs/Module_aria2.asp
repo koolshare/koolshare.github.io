@@ -527,7 +527,7 @@
 					eval("var default_dir=" + data);
 				}
 				else {
-					document.getElementById("EditExports").style.display = "none";
+					//document.getElementById("EditExports").style.display = "none";
 					document.getElementById("NoUSB").style.display = "";
 					disk_flag=1;
 				}
