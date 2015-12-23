@@ -384,7 +384,6 @@ load_default(){
 	dbus remove $r
 	done
 	dbus set aria2_enable=0
-	sh /jffs/scripts/aria2_run.sh
 	dbus set aria2_install_status=1
 	dbus set aria2_version=`dbus get tmp_aria2_version`
 	dbus set aria2_version_web=`dbus get tmp_aria2_version_web`
@@ -435,7 +434,6 @@ if [ $aria2_enable = 2 ];then
 	install_aria2
 fi
 
-
 if [ $aria2_enable = 3 ];then
 	uninstall_aria2
 fi
@@ -445,8 +443,8 @@ if [ $aria2_enable = 4 ];then
 	install_aria2
 fi
 
-
 if [ $aria2_enable = 5 ];then
 	load_default
 fi
+
 

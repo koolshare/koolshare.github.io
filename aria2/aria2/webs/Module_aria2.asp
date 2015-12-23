@@ -91,13 +91,13 @@
 			    conf2obj();
 			    line_show();
 				update_visibility();
-				//show_installed_status();
 				write_aria2_install_status();
 				version_check();
 			   	initial_dir();
 				check_dir_path();
 			}
 			function done_validating() {
+				return true;
 			//refreshpage();
 			}
 			function buildswitch(){
@@ -113,8 +113,6 @@
 			        document.getElementById('aria2_limit_table').style.display = "";
 			        document.getElementById('aria2_bt_table').style.display = "";
 					document.getElementById('cmdBtn1').style.display = "";
-					//document.getElementById('install_button').style.display = "none";
-					//document.getElementById('update_button').style.display = "";
 			    } else {
 				    document.aria2_form.aria2_enable.value = 0;
 			        document.getElementById('h5ai').style.display = "none";
@@ -125,8 +123,6 @@
 			        document.getElementById('aria2_limit_table').style.display = "none";
 			        document.getElementById('aria2_bt_table').style.display = "none";
 			        document.getElementById('cmdBtn1').style.display = "none";
-			        //document.getElementById('update_button').style.display = "none";
-			        //document.getElementById('install_button').style.display = "";
 					}
 				});
 			}
@@ -142,8 +138,6 @@
 			        document.getElementById('aria2_limit_table').style.display = "none";
 			        document.getElementById('aria2_bt_table').style.display = "none";
 			        document.getElementById('cmdBtn1').style.display = "none";
-			        //document.getElementById('update_button').style.display = "none";
-			        //document.getElementById('install_button').style.display = "";
 			    } else {
 			        rrt.checked = true;
 			        document.getElementById('h5ai').style.display = "";
@@ -154,9 +148,6 @@
 			        document.getElementById('aria2_limit_table').style.display = "";
 			        document.getElementById('aria2_bt_table').style.display = "";
 			        document.getElementById('cmdBtn1').style.display = "";
-			        //document.getElementById('install_button').style.display = "none";
-			        //document.getElementById('uninstall_button').style.display = "none";
-			        //document.getElementById('update_button').style.display = "";
 			    }
 			    var lan_ipaddr = '<% nvram_get("lan_ipaddr"); %>';
 			    document.getElementById("link1.1").innerHTML = "<i><u>http://"+lan_ipaddr+":8088</u></i>";
@@ -180,7 +171,6 @@
 			}
 			function onSubmitCtrl(o, s) {
 				alert_custom();
-				//valid_custom();
 				if(validForm()){
 					document.aria2_form.action_mode.value = s;
 					showLoading(5);
@@ -214,27 +204,6 @@
 						}
 					}
 			}
-			function show_installed_status() {
-						if (db_aria2_['aria2_install_status'] != "1") {
-							document.aria2_form.aria2_enable.value = 0;
-							//$("#aria2_install_status").html("<i>Aria2尚未安装</i>");
-							//$("#install_button").html("安装");
-							document.getElementById('aria2_switch').style.display = "none";
-							document.getElementById('cmdBtn').style.display = "none";
-							document.getElementById('uninstall_button').style.display = "none";
-							document.getElementById('install_button').style.display = "";
-							document.getElementById('aria2_version_status').style.display = "none";
-						}else{
-							//$("#aria2_install_status").html("<i>Aria2已安装</i>");
-							//$("#install_button").html("卸载");
-							document.getElementById('aria2_switch').style.display = "";
-							document.getElementById('cmdBtn').style.display = "";
-							document.getElementById('uninstall_button').style.display = "";
-							document.getElementById('install_button').style.display = "none";
-							document.getElementById('aria2_version_status').style.display = "";
-						}
-			        }
-
 			function write_aria2_install_status(){
 				$.ajax({
 					type: "get",
@@ -306,57 +275,6 @@
 					}
 					});
 				}
-			/*
-			function install_aria21(){
-			$.ajax({
-			    url: 'apply.cgi?current_page=Main_Ss_Update.asp&next_page=Main_Ss_Content.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=aria2_install.sh&firmver=3.0.0.4',
-				dataType: 'html',
-				error: function(xhr) {},
-				success: function(response) {
-				if (response == "ok") {
-				write_aria2_install_status();
-				}
-			}
-			});
-			}
-			function uninstall_aria2() {
-			    $.ajax({
-			    	url: 'apply.cgi?current_page=Main_Ss_Update.asp&next_page=Main_Ss_Content.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=aria2_uninstall.sh&firmver=3.0.0.4',
-			    	dataType: 'html',
-			        error: function(xhr) {},
-			        success: function(response) {
-			            if (response == "ok") {
-			                write_aria2_install_status();
-			            }
-			        }
-			    });
-			}
-			
-			var PostDatas = {};
-			PostDatas["action_mode"] = " Refresh ";
-			PostDatas["SystemCmd"] = "";
-			PostDatas["current_page"] = "Module_aria2.asp";
-			function install_aria2(s){
-				if (s == "1"){
-					PostDatas["SystemCmd"] = "aria2_install.sh";
-				} else if (s == "0"){
-					PostDatas["SystemCmd"] = "aria2_uninstall.sh";
-				}
-				$.ajax({
-					type: "POST",
-					url: "applydb.cgi?p=aria2_",
-					dataType: "text",
-					data: PostDatas,
-					error: function(xhr) {
-						end("error");
-					},
-					success: function() {
-						write_aria2_install_status();
-					}
-				});
-				}
-				*/
-
 			function aria2_install(o, s){
 				//document.getElementById('SystemCmd').value = "aria2_install.sh";
 				document.aria2_form.aria2_enable.value = 2;
@@ -369,27 +287,22 @@
 				}
 			}
 			function aria2_uninstall(o, s){
-				//document.getElementById('SystemCmd').value = "aria2_uninstall.sh";
 				document.aria2_form.aria2_enable.value = 3;
 				if(validForm()){
 					document.aria2_form.action_mode.value = s;
-					//showLoading(5);
 					document.aria2_form.submit();
 					update_visibility();
 				}
 			}
 			function update_aria2(o, s){
-				//document.getElementById('SystemCmd').value = "aria2_default.sh";
 				document.aria2_form.aria2_enable.value = 4;
 				if(validForm()){
 					document.aria2_form.action_mode.value = s;
-					//showLoading(5);
 					document.aria2_form.submit();
 					update_visibility();
 				}
 			}
 			function load_default_value(o, s){
-				//document.getElementById('SystemCmd').value = "aria2_default.sh";
 				document.aria2_form.aria2_enable.value = 5;
 				if(validForm()){
 					document.aria2_form.action_mode.value = s;
@@ -412,7 +325,6 @@
 				var ins = ["/enable-rpc=/", "/rpc-allow-origin-all=/", "/rpc-listen-all=/"];
 				for (var i = 0; i < ins.length; i++) {
 					if (s.search(ins[i]) != -1){
-					//if(ins[i].indexOf(s)>0){
 					alert("不能在此设置选项! 请在图形界面设置");
 					}
 				}
@@ -556,16 +468,6 @@
 			        document.getElementById("f_" + obj.id).value = "false";
 			    }
 			}
-			
-
-
-			
-			/*
-			function install_aria2(o, s){
-				document.getElementById('SystemCmd').value = "aria2_install.sh";
-				onSubmitCtrl(this, ' Refresh ');
-			}
-			*/
 			function line_show(){
 				var temp_aria2 = ["aria2_custom"];
 					for (var i = 0; i < temp_aria2.length; i++) {
@@ -600,18 +502,6 @@
 				}
 
 			}
-			/*
-			function detect_usb() {
-			$j.ajax({
-				url: 'apply.cgi?current_page=Module_aria2.asp&next_page=Module_aria2.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=aria2_detect_usb.sh&firmver=3.0.0.4',
-				dataType: 'html',
-				error: function(xhr) {},
-				success: function(response) {
-				console.log("start ok" + response);
-				}
-			});
-			}
-			*/
 			function pass_checked(obj){
 				switchType(obj, document.form.show_pass.checked, true);
 			}
