@@ -176,6 +176,11 @@ if [ "1" == "$aria2_update_enable" ]; then
 	cru a aria2_version_check "0 $aria2_update_sel * * * /bin/sh /jffs/scripts/aria2_version_check.sh"
 else
 cru d aria2_version_check >/dev/null 2>&1
+
+version=`cat /jffs/aria2/version`
+export aria2_version=$version
+
+
 fi
 }
 del_version_check(){
@@ -300,15 +305,13 @@ eval `dbus export aria2`
 	dbus save aria2
 	tar -zxvf aria2.tar.gz
 	mkdir -p /jffs/scripts
+	mkdir -p /jffs/webs
 	cp -r /jffs/aria2.session /tmp
 	echo moving files
 	mv -f /tmp/aria2/aria2 /jffs/
 	mv -f /tmp/aria2/www /jffs/
-	mv -f /tmp/scripts/* /jffs/scripts/
-	if [ -d /tmp/aria2/webs ];then
-		mkdir -p /jffs/webs
-		mv -f /tmp/webs/* /jffs/webs/
-	fi
+	mv -f /tmp/aria2/scripts/* /jffs/scripts/
+	mv -f /tmp/aria2/webs/* /jffs/webs/
 	mv -f /tmp/aria2.session /jffs/aria2 >/dev/null 2>&1
 	cd /jffs
 	chmod +x /jffs/aria2/*
@@ -349,14 +352,15 @@ uninstall_aria2(){
 	
 	export aria2_install_status="6"
 	dbus save aria2
-	rm -rf /jffs/www
-	rm -rf /jffs/aria2
 	del_version_check
 	rm_shortcut
 	kill_aria2
 	kill_lighttpd
 	close_port
 	stop_auto_start
+	rm -rf /jffs/www
+	cp -r /jffs/aria2.session /tmp
+	rm -rf /jffs/aria2
 	sleep 2
 	export aria2_install_status="0"
 	dbus save aria2
@@ -374,7 +378,7 @@ load_default(){
 	close_port
 	stop_auto_start
 	dbus set tmp_aria2_version=`dbus get aria2_version`
-	
+	dbus set tmp_aria2_version_web=`dbus get aria2_version_web`
 	for r in `dbus list aria2|cut -d"=" -f 1`
 	do
 	dbus remove $r
@@ -383,6 +387,7 @@ load_default(){
 	sh /jffs/scripts/aria2_run.sh
 	dbus set aria2_install_status=1
 	dbus set aria2_version=`dbus get tmp_aria2_version`
+	dbus set aria2_version_web=`dbus get tmp_aria2_version_web`
 	dbus remove tmp_aria2_version
 }
 # ============================================
