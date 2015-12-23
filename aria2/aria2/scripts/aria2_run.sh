@@ -222,11 +222,9 @@ rm_shortcut(){
 }
 
 add_cpulimit(){
-	if [ ! -z `which cpulimit` ];then
-		if [ "$aria2_cpulimit_enable" = "true"];then
-		limit=`expr $aria2_cpulimit_value / 2`
+	if [ "$aria2_cpulimit_enable" = "true" ];then
+		limit=`expr $aria2_cpulimit_value \* 2`
 		cpulimit -e aria2c -l 20  >/dev/null 2>&1 &
-		fi
 	fi
 }
 
