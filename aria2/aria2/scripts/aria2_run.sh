@@ -306,19 +306,19 @@ eval `dbus export aria2`
 	tar -zxvf aria2.tar.gz
 	mkdir -p /jffs/scripts
 	mkdir -p /jffs/webs
-	cp -r /jffs/aria2.session /tmp
 	echo moving files
 	mv -f /tmp/aria2/aria2 /jffs/
 	mv -f /tmp/aria2/www /jffs/
 	mv -f /tmp/aria2/scripts/* /jffs/scripts/
 	mv -f /tmp/aria2/webs/* /jffs/webs/
-	mv -f /tmp/aria2.session /jffs/aria2 >/dev/null 2>&1
+	mv -f /tmp/aria2.session /jffs/aria2/ >/dev/null 2>&1
 	cd /jffs
 	chmod +x /jffs/aria2/*
 	chmod +x /jffs/www/php-cgi
 	chmod +x /jffs/scripts/*
 	chmod 777 /jffs/www/_h5ai/cache
-	rm -rf /tmp/aria*
+	rm -rf /tmp/aria2
+	rm -rf /tmp/aria2.tar.gz
 	sleep 2
 	export aria2_install_status="5"
 	dbus save aria2
@@ -359,7 +359,7 @@ uninstall_aria2(){
 	close_port
 	stop_auto_start
 	rm -rf /jffs/www
-	cp -r /jffs/aria2.session /tmp
+	cp -r /jffs/aria2.session /tmp/
 	rm -rf /jffs/aria2
 	sleep 2
 	export aria2_install_status="0"
