@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
@@ -90,20 +90,21 @@
 				buildswitch();
 			    conf2obj();
 			    line_show();
-			    show_installed_status();
 				update_visibility();
+				//show_installed_status();
+				write_aria2_install_status();
+				version_check();
 			   	initial_dir();
 				check_dir_path();
-				version_check();
 			}
 			function done_validating() {
-			refreshpage(5);
+			//refreshpage();
 			}
 			function buildswitch(){
 				$("#switch").click(
 				function(){
 					if(document.getElementById('switch').checked){
-					document.form.aria2_enable.value = 1;
+					document.aria2_form.aria2_enable.value = 1;
 			        document.getElementById('h5ai').style.display = "";
 			        document.getElementById('aria2-webui').style.display = "";
 			        document.getElementById('yaaw').style.display = "";
@@ -112,10 +113,10 @@
 			        document.getElementById('aria2_limit_table').style.display = "";
 			        document.getElementById('aria2_bt_table').style.display = "";
 					document.getElementById('cmdBtn1').style.display = "";
-					document.getElementById('install_button').style.display = "none";
+					//document.getElementById('install_button').style.display = "none";
 					//document.getElementById('update_button').style.display = "";
 			    } else {
-				    document.form.aria2_enable.value = 0;
+				    document.aria2_form.aria2_enable.value = 0;
 			        document.getElementById('h5ai').style.display = "none";
 			        document.getElementById('aria2-webui').style.display = "none";
 			        document.getElementById('yaaw').style.display = "none";
@@ -125,13 +126,13 @@
 			        document.getElementById('aria2_bt_table').style.display = "none";
 			        document.getElementById('cmdBtn1').style.display = "none";
 			        //document.getElementById('update_button').style.display = "none";
-			        document.getElementById('install_button').style.display = "";
+			        //document.getElementById('install_button').style.display = "";
 					}
 				});
 			}
 			function update_visibility(){
 				var rrt = document.getElementById("switch");
-			    if (document.form.aria2_enable.value !== "1") {
+			    if (document.aria2_form.aria2_enable.value !== "1") {
 			        rrt.checked = false;
 			        document.getElementById('h5ai').style.display = "none";
 			        document.getElementById('aria2-webui').style.display = "none";
@@ -141,8 +142,8 @@
 			        document.getElementById('aria2_limit_table').style.display = "none";
 			        document.getElementById('aria2_bt_table').style.display = "none";
 			        document.getElementById('cmdBtn1').style.display = "none";
-			        document.getElementById('update_button').style.display = "none";
-			        document.getElementById('install_button').style.display = "";
+			        //document.getElementById('update_button').style.display = "none";
+			        //document.getElementById('install_button').style.display = "";
 			    } else {
 			        rrt.checked = true;
 			        document.getElementById('h5ai').style.display = "";
@@ -153,8 +154,9 @@
 			        document.getElementById('aria2_limit_table').style.display = "";
 			        document.getElementById('aria2_bt_table').style.display = "";
 			        document.getElementById('cmdBtn1').style.display = "";
-			        document.getElementById('install_button').style.display = "none";
-			        document.getElementById('update_button').style.display = "";
+			        //document.getElementById('install_button').style.display = "none";
+			        //document.getElementById('uninstall_button').style.display = "none";
+			        //document.getElementById('update_button').style.display = "";
 			    }
 			    var lan_ipaddr = '<% nvram_get("lan_ipaddr"); %>';
 			    document.getElementById("link1.1").innerHTML = "<i><u>http://"+lan_ipaddr+":8088</u></i>";
@@ -163,38 +165,36 @@
 			   	document.getElementById("link2.1").href = "http://"+lan_ipaddr+":8088/aria2";
 			    document.getElementById("link3.1").innerHTML = "<i><u>http://"+lan_ipaddr+":8088/yaaw</u></i>";
 			   	document.getElementById("link3.1").href = "http://"+lan_ipaddr+":8088/yaaw";
-			   	showhide("aria2_binary_custom", (document.form.aria2_binary.value == "custom"));
-			   	showhide("aria2_check_time_tr", (document.form.f_aria2_check.value !== "false"));
-			   	showhide("aria2_rpc_listen_port_tr", (document.form.f_aria2_enable_rpc.value !== "false"));
-			   	showhide("aria2_rpc_allow_origin_all_tr", (document.form.f_aria2_enable_rpc.value !== "false"));
-			   	showhide("aria2_rpc_listen_all_tr", (document.form.f_aria2_enable_rpc.value !== "false"));
-			   	showhide("aria2_disable_ipv6_tr", (document.form.f_aria2_enable_rpc.value !== "false"));
-			   	showhide("aria2_event_poll_tr", (document.form.f_aria2_enable_rpc.value !== "false"));
-			   	showhide("aria2_rpc_secret_tr", (document.form.f_aria2_enable_rpc.value !== "false"));
-			   	showhide("aria2_save_session_tr", (document.form.f_aria2_force_save.value !== "false"));
-			   	showhide("aria2_save_session_interval_tr", (document.form.f_aria2_force_save.value !== "false"));
-			   	showhide("aria2_dht_listen_port_tr", (document.form.f_aria2_enable_dht.value !== "false"));
-
-
-			   	
+			   	showhide("aria2_binary_custom", (document.aria2_form.aria2_binary.value == "custom"));
+			   	showhide("aria2_check_time_tr", (document.aria2_form.f_aria2_check.value !== "false"));
+			   	showhide("aria2_rpc_listen_port_tr", (document.aria2_form.f_aria2_enable_rpc.value !== "false"));
+			   	showhide("aria2_rpc_allow_origin_all_tr", (document.aria2_form.f_aria2_enable_rpc.value !== "false"));
+			   	showhide("aria2_rpc_listen_all_tr", (document.aria2_form.f_aria2_enable_rpc.value !== "false"));
+			   	showhide("aria2_disable_ipv6_tr", (document.aria2_form.f_aria2_enable_rpc.value !== "false"));
+			   	showhide("aria2_event_poll_tr", (document.aria2_form.f_aria2_enable_rpc.value !== "false"));
+			   	showhide("aria2_rpc_secret_tr", (document.aria2_form.f_aria2_enable_rpc.value !== "false"));
+			   	showhide("aria2_save_session_tr", (document.aria2_form.f_aria2_force_save.value !== "false"));
+			   	showhide("aria2_save_session_interval_tr", (document.aria2_form.f_aria2_force_save.value !== "false"));
+			   	showhide("aria2_dht_listen_port_tr", (document.aria2_form.f_aria2_enable_dht.value !== "false"));
+			   	showhide("aria2_cpulimit_value", (document.aria2_form.f_aria2_cpulimit_enable.value !== "false"));
 			}
 			function onSubmitCtrl(o, s) {
 				alert_custom();
 				//valid_custom();
 				if(validForm()){
-					document.form.action_mode.value = s;
+					document.aria2_form.action_mode.value = s;
 					showLoading(5);
-					document.form.submit();
+					document.aria2_form.submit();
 				}
 			}
 			function conf2obj(){
-			        var params1 = ["aria2_binary", "aria2_binary_custom", "aria2_bt_max_peers", "aria2_check_time", "aria2_custom", "aria2_dht_listen_port", "aria2_dir", "aria2_disk_cache", "aria2_enable", "aria2_event_poll", "aria2_file_allocation", "aria2_force_save", "aria2_install_status", "aria2_listen_port", "aria2_lowest_speed_limit", "aria2_max_concurrent_downloads", "aria2_max_connection_per_server", "aria2_max_download_limit", "aria2_max_overall_download_limit", "aria2_max_overall_upload_limit", "aria2_max_tries", "aria2_max_upload_limit", "aria2_min_split_size", "aria2_peer_id_prefix", "aria2_referer", "aria2_retry_wait", "aria2_rpc_listen_port", "aria2_rpc_secret", "aria2_save_session_interval", "aria2_seed_ratio", "aria2_sleep", "aria2_split", "aria2_update_enable", "aria2_update_sel", "aria2_user_agent"];
+			        var params1 = ["aria2_cpulimit_value", "aria2_binary", "aria2_binary_custom", "aria2_bt_max_peers", "aria2_check_time", "aria2_custom", "aria2_dht_listen_port", "aria2_dir", "aria2_disk_cache", "aria2_enable", "aria2_event_poll", "aria2_file_allocation", "aria2_force_save", "aria2_install_status", "aria2_listen_port", "aria2_lowest_speed_limit", "aria2_max_concurrent_downloads", "aria2_max_connection_per_server", "aria2_max_download_limit", "aria2_max_overall_download_limit", "aria2_max_overall_upload_limit", "aria2_max_tries", "aria2_max_upload_limit", "aria2_min_split_size", "aria2_peer_id_prefix", "aria2_referer", "aria2_retry_wait", "aria2_rpc_listen_port", "aria2_rpc_secret", "aria2_save_session_interval", "aria2_seed_ratio", "aria2_sleep", "aria2_split", "aria2_update_enable", "aria2_update_sel", "aria2_user_agent"];
 			        for (var i = 0; i < params1.length; i++) {
 				        if (typeof db_aria2_[params1[i]] !== "undefined") {
 					        $("#"+params1[i]).val(db_aria2_[params1[i]]);
 				        }
 		       		}
-			        var params2 = ["aria2_disable_ipv6", "aria2_check", "aria2_continue", "aria2_enable_mmap", "aria2_enable_rpc", "aria2_rpc_allow_origin_all", "aria2_rpc_listen_all", "aria2_bt_enable_lpd", "aria2_enable_dht", "aria2_bt_require_crypto", "aria2_follow_torrent", "aria2_enable_peer_exchange", "aria2_force_save", "aria2_bt_hash_check_seed", "aria2_bt_seed_unverified", "aria2_bt_save_metadata"];
+			        var params2 = ["aria2_cpulimit_enable", "aria2_disable_ipv6", "aria2_check", "aria2_continue", "aria2_enable_mmap", "aria2_enable_rpc", "aria2_rpc_allow_origin_all", "aria2_rpc_listen_all", "aria2_bt_enable_lpd", "aria2_enable_dht", "aria2_bt_require_crypto", "aria2_follow_torrent", "aria2_enable_peer_exchange", "aria2_force_save", "aria2_bt_hash_check_seed", "aria2_bt_seed_unverified", "aria2_bt_save_metadata"];
 					for (var i = 0; i < params2.length; i++) {
 						if (typeof db_aria2_[params2[i]] !== "undefined") {
 							$("#f_"+params2[i]).val(db_aria2_[params2[i]]);
@@ -216,50 +216,188 @@
 			}
 			function show_installed_status() {
 						if (db_aria2_['aria2_install_status'] != "1") {
-							document.form.aria2_enable.value = 0;
-							$("#aria2_install_status").html("<i>Aria2尚未安装</i>");
-							$("#install_button").html("安装");
+							document.aria2_form.aria2_enable.value = 0;
+							//$("#aria2_install_status").html("<i>Aria2尚未安装</i>");
+							//$("#install_button").html("安装");
 							document.getElementById('aria2_switch').style.display = "none";
 							document.getElementById('cmdBtn').style.display = "none";
-							//document.getElementById('update_button').style.display = "none";
+							document.getElementById('uninstall_button').style.display = "none";
+							document.getElementById('install_button').style.display = "";
 							document.getElementById('aria2_version_status').style.display = "none";
 						}else{
-							$("#aria2_install_status").html("<i>Aria2已安装</i>");
-							$("#install_button").html("卸载");
+							//$("#aria2_install_status").html("<i>Aria2已安装</i>");
+							//$("#install_button").html("卸载");
 							document.getElementById('aria2_switch').style.display = "";
 							document.getElementById('cmdBtn').style.display = "";
-							//document.getElementById('update_button').style.display = "";
+							document.getElementById('uninstall_button').style.display = "";
+							document.getElementById('install_button').style.display = "none";
 							document.getElementById('aria2_version_status').style.display = "";
 						}
 			        }
 
-
 			function write_aria2_install_status(){
-					var usb_path = db_aria2_['xunlei_basic_usb'];	
+				$.ajax({
+					type: "get",
+					url: "dbconf?p=aria2_",
+					dataType: "script",
+					success: function() {
 					if (db_aria2_['aria2_install_status'] == "0"){
 						$("#aria2_install_status").html("<i>Aria2尚未安装</i>");
+						//document.aria2_form.aria2_enable.value = 0;
+						document.getElementById('aria2_switch').style.display = "none";
+						document.getElementById('cmdBtn').style.display = "none";
+						document.getElementById('uninstall_button').style.display = "none";
+						document.getElementById('install_button').style.display = "";
+						document.getElementById('aria2_version_status').style.display = "none";
 					} else if (db_aria2_['aria2_install_status'] == "1"){
+						//document.aria2_form.aria2_enable.value = 0;
 						$("#aria2_install_status").html("<i>Aria2已安装</i>");
+						document.getElementById('aria2_switch').style.display = "";
+						document.getElementById('cmdBtn').style.display = "";
+						document.getElementById('uninstall_button').style.display = "";
+						document.getElementById('install_button').style.display = "none";
+						document.getElementById('aria2_version_status').style.display = "";
 					} else if (db_aria2_['aria2_install_status'] == "2"){
 						$("#aria2_install_status").html("<i>Aria2将被安装到jffs分区</i>");
+						document.getElementById('install_button').style.display = "none";
+						document.getElementById('uninstall_button').style.display = "none";
+						document.getElementById('update_button').style.display = "none";
 					} else if (db_aria2_['aria2_install_status'] == "3"){
 						$("#aria2_install_status").html("<i>正在下载Aria2中...请耐心等待...</i>");
+						document.getElementById('install_button').style.display = "none";
+						document.getElementById('uninstall_button').style.display = "none";
+						document.getElementById('update_button').style.display = "none";
 					} else if (db_aria2_['aria2_install_status'] == "4"){
 						$("#aria2_install_status").html("<i>正在安装Aria2中...</i>");
+						document.getElementById('install_button').style.display = "none";
+						document.getElementById('uninstall_button').style.display = "none";
+						document.getElementById('update_button').style.display = "none";
 					} else if (db_aria2_['aria2_install_status'] == "5"){
-						$("#aria2_install_status").html("<i>Aria2安装成功！请5秒后刷新本页面！</i>");
+						$("#aria2_install_status").html("<i>Aria2安装成功！请等待页面刷新！</i>");
+						document.getElementById('install_button').style.display = "none";
+						document.getElementById('uninstall_button').style.display = "none";
+						document.getElementById('update_button').style.display = "none";
+						version_check();
 					} else if (db_aria2_['aria2_install_status'] == "6"){
 						$("#aria2_install_status").html("<i>Aria2卸载中...</i>");
+						document.getElementById('install_button').style.display = "none";
+						document.getElementById('uninstall_button').style.display = "none";
+						document.getElementById('update_button').style.display = "none";
 					} else if (db_aria2_['aria2_install_status'] == "7"){
 						$("#aria2_install_status").html("<i>Aria2卸载成功！</i>");
+						document.getElementById('install_button').style.display = "none";
+						document.getElementById('uninstall_button').style.display = "none";
+						document.getElementById('update_button').style.display = "none";
 					} else if (db_aria2_['aria2_install_status'] == "8"){
 						$("#aria2_install_status").html("<i>Aria2下载文件校验不一致！</i>");
+						document.getElementById('install_button').style.display = "none";
+						document.getElementById('uninstall_button').style.display = "none";
+						document.getElementById('update_button').style.display = "none";
 					} else {
 						$("#aria2_install_status").html("<i>Aria2尚未安装</i>");
+						//document.aria2_form.aria2_enable.value = 0;
+						document.getElementById('aria2_switch').style.display = "none";
+						document.getElementById('cmdBtn').style.display = "none";
+						document.getElementById('uninstall_button').style.display = "none";
+						document.getElementById('install_button').style.display = "";
+						document.getElementById('aria2_version_status').style.display = "none";
 					}
 					setTimeout("write_aria2_install_status()", 1000);
+					}
+					});
 				}
+			/*
+			function install_aria21(){
+			$.ajax({
+			    url: 'apply.cgi?current_page=Main_Ss_Update.asp&next_page=Main_Ss_Content.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=aria2_install.sh&firmver=3.0.0.4',
+				dataType: 'html',
+				error: function(xhr) {},
+				success: function(response) {
+				if (response == "ok") {
+				write_aria2_install_status();
+				}
+			}
+			});
+			}
+			function uninstall_aria2() {
+			    $.ajax({
+			    	url: 'apply.cgi?current_page=Main_Ss_Update.asp&next_page=Main_Ss_Content.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=aria2_uninstall.sh&firmver=3.0.0.4',
+			    	dataType: 'html',
+			        error: function(xhr) {},
+			        success: function(response) {
+			            if (response == "ok") {
+			                write_aria2_install_status();
+			            }
+			        }
+			    });
+			}
+			
+			var PostDatas = {};
+			PostDatas["action_mode"] = " Refresh ";
+			PostDatas["SystemCmd"] = "";
+			PostDatas["current_page"] = "Module_aria2.asp";
+			function install_aria2(s){
+				if (s == "1"){
+					PostDatas["SystemCmd"] = "aria2_install.sh";
+				} else if (s == "0"){
+					PostDatas["SystemCmd"] = "aria2_uninstall.sh";
+				}
+				$.ajax({
+					type: "POST",
+					url: "applydb.cgi?p=aria2_",
+					dataType: "text",
+					data: PostDatas,
+					error: function(xhr) {
+						end("error");
+					},
+					success: function() {
+						write_aria2_install_status();
+					}
+				});
+				}
+				*/
 
+			function aria2_install(o, s){
+				//document.getElementById('SystemCmd').value = "aria2_install.sh";
+				document.aria2_form.aria2_enable.value = 2;
+				if(validForm()){
+					document.aria2_form.action_mode.value = s;
+					//showLoading(5);
+					document.aria2_form.submit();
+					
+					update_visibility();
+				}
+			}
+			function aria2_uninstall(o, s){
+				//document.getElementById('SystemCmd').value = "aria2_uninstall.sh";
+				document.aria2_form.aria2_enable.value = 3;
+				if(validForm()){
+					document.aria2_form.action_mode.value = s;
+					//showLoading(5);
+					document.aria2_form.submit();
+					update_visibility();
+				}
+			}
+			function update_aria2(o, s){
+				//document.getElementById('SystemCmd').value = "aria2_default.sh";
+				document.aria2_form.aria2_enable.value = 4;
+				if(validForm()){
+					document.aria2_form.action_mode.value = s;
+					//showLoading(5);
+					document.aria2_form.submit();
+					update_visibility();
+				}
+			}
+			function load_default_value(o, s){
+				//document.getElementById('SystemCmd').value = "aria2_default.sh";
+				document.aria2_form.aria2_enable.value = 5;
+				if(validForm()){
+					document.aria2_form.action_mode.value = s;
+					showLoading(5);
+					document.aria2_form.submit();
+					update_visibility();
+				}
+			}
 			function version_check(){
 				if (db_aria2_['aria2_version'] != db_aria2_['aria2_version_web'] && db_aria2_['aria2_version_web'] !== "undefined"){
 					$("#aria2_version_status").html("<i>有新版本：" + db_aria2_['aria2_version_web']);
@@ -269,8 +407,6 @@
 					document.getElementById('update_button').style.display = "none";
 				}
 			}
-			
-	
 			function valid_custom(){
 				var s = document.getElementById('aria2_custom').value;
 				var ins = ["/enable-rpc=/", "/rpc-allow-origin-all=/", "/rpc-listen-all=/"];
@@ -421,10 +557,10 @@
 			    }
 			}
 			
-			function load_default_value(o, s){
-				document.getElementById('SystemCmd').value = "aria2_default.sh";
-				onSubmitCtrl(this, ' Refresh ');
-			}/*
+
+
+			
+			/*
 			function install_aria2(o, s){
 				document.getElementById('SystemCmd').value = "aria2_install.sh";
 				onSubmitCtrl(this, ' Refresh ');
@@ -936,7 +1072,7 @@
 			<input type="hidden" name="test_flag" value="" disabled="disabled">
 			<input type="hidden" name="protocol" id="protocol" value="">
 		</form>
-		<form method="POST" name="form" action="/applydb.cgi?p=aria2_" target="hidden_frame">
+		<form method="POST" name="aria2_form" action="/applydb.cgi?p=aria2_" target="hidden_frame">
 			<input type="hidden" name="current_page" value="Module_aria2.asp" />
 			<input type="hidden" name="next_page" value="Module_aria2.asp" />
 			<input type="hidden" name="group_id" value="" />
@@ -1003,12 +1139,14 @@
 													<tr>
 														<th style="width:25%;">Aria2安装</th>
 														<td>
-															<div id="aria2_install_status" style="padding-top:5px;"></div>
-															<div style="margin-left:150px;margin-top:-28px;">
-																<button id="install_button" class="button_gen" onclick="install_aria2()">安装</button>
-																<button id="update_button" class="button_gen" onclick="update_aria2()">更新</button>
+															
+															<div id="aria2_install_status" style="padding-top:5px;float: left;"></div>
+															<div id="aria2_version_status" style="padding-top:5px;margin-left:30px;margin-top:0px;float: left;"><i>当前版本：<% dbus_get_def("aria2_version", "0"); %></i></div>
+															<div style="padding-top:0px;margin-left:30px;margin-top:0px;float: left;">
+																<button id="install_button" class="button_gen" onclick="aria2_install(this, ' Refresh ');">安装</button>
+																<button id="uninstall_button" class="button_gen" onclick="aria2_uninstall(this, ' Refresh ');">卸载</button>
+																<button id="update_button" class="button_gen" onclick="update_aria2(this, ' Refresh ');">更新</button>
 															</div>
-															<div id="aria2_version_status" style="padding-top:5px;margin-left:460px;margin-top:-30px;"><i>当前版本：<% dbus_get_def("aria2_version", "0"); %></i></div>
 														</td>
 													</tr>
 													<tr id="h5ai">
@@ -1062,6 +1200,21 @@
 
 														</td>
 													</tr>
+
+
+													<tr>
+														<td style="background-color: #2F3A3E;width:25%;">
+															<label>启用CPU占用限制</label>
+														</td>
+														<td>
+															<input type="checkbox" id="aria2_cpulimit_enable" checked="" onclick="oncheckclick(this)" onchange="update_visibility();">
+															<input type="hidden" id="f_aria2_cpulimit_enable" name="aria2_cpulimit_enable" value="" />
+															<input style="display: none;" type="text" class="input_ss_table" style="width:auto;" name="aria2_cpulimit_value" value="30" maxlength="40" size="40" id="aria2_cpulimit_value">
+															<small>(范围: 1 - 100; 默认: 30)</small>
+														</td>
+													</tr>	
+
+													
 													<tr>
 														<td style="background-color: #2F3A3E;width:25%;">
 															<label>启用守护进程</label>
@@ -1532,7 +1685,7 @@
 															<label>&nbsp;&nbsp;&nbsp;&nbsp;下载的URIs 文件</label>
 														</td>
 														<td>
-															<input type="text" class="input_ss_table" style="width:auto;" name="aria2_input_file" value="" maxlength="50" size="50" id="aria2_input_file">
+															<input type="text" class="input_ss_table" style="width:auto;" name="aria2_input_file" value="/jffs/aria2/aria2.session" maxlength="50" size="50" id="aria2_input_file">
 														</td>
 													</tr>
 													<tr id="aria2_save_session_tr">
@@ -1540,7 +1693,7 @@
 															<label>&nbsp;&nbsp;&nbsp;&nbsp;会话session保存文件</label>
 														</td>
 														<td>
-															<input type="text" class="input_ss_table" style="width:auto;" name="aria2_save_session" value="" maxlength="50" size="50" id="aria2_save_session">
+															<input type="text" class="input_ss_table" style="width:auto;" name="aria2_save_session" value="/jffs/aria2/aria2.session" maxlength="50" size="50" id="aria2_save_session">
 														</td>
 													</tr>
 													<tr>
