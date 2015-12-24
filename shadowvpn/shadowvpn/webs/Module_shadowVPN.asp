@@ -103,6 +103,7 @@ function write_shadowvpn_install_status(){
 			$("#shadowvpn_install_show").html("<i>正在安装更新...</i>");
 		} else if (db_shadowvpn_['shadowvpn_install_status'] == "3"){
 			$("#shadowvpn_install_show").html("<i>安装更新成功，5秒后刷新本页！</i>");
+			version_show();
 		} else if (db_shadowvpn_['shadowvpn_install_status'] == "4"){
 			$("#shadowvpn_install_show").html("<i>下载文件校验不一致！</i>");
 		} else if (db_shadowvpn_['shadowvpn_install_status'] == "5"){
@@ -350,4 +351,5 @@ location.href = "/Main_Soft_center.asp";
 	<div id="footer"></div>
 </body>
 </html>
+
 
