@@ -4,7 +4,7 @@ Pcap_DNSProxy=$(ps | grep "Pcap_DNSProxy" | grep -v "grep")
 shadowvpn=$(ps | grep "shadowvpn" | grep -v "grep")
 startshadowvpn=$(cat /jffs/scripts/wan-start | grep "shadowvpn")
 CONFIG=/tmp/shadowvpn.conf
-version="1.0"
+version="1.1"
 #time=$(cat /proc/uptime | sed 's/ /\n/g'|sed -n 1p)
 start_vpn() {
 	#mkdir -p $(dirname $CONFIG)
@@ -141,10 +141,7 @@ if [ "$shadowvpn_update_check" = "1" ];then
 		dbus set shadowvpn_version_web=$shadowvpn_version_web1
 		export shadowvpn_install_status="6"
 		dbus save shadowvpn
-		sleep 3
-		export shadowvpn_install_status="0"
-		dbus save shadowvpn
-		exit
+		sleep 1
 		if [ "$version" != "$shadowvpn_version_web1" ] && [ ! -z "$shadowvpn_version_web1" ];then
 			export shadowvpn_install_status="1"
 			dbus save shadowvpn
@@ -162,21 +159,26 @@ if [ "$shadowvpn_update_check" = "1" ];then
 				exit
 			fi
 			stop_vpn
+			tar -zxf shadowvpn.tar.gz
 			export shadowvpn_enable="0"
 			export shadowvpn_install_status="2"
 			dbus save shadowvpn
 			cp -rf /tmp/shadowvpn/scripts/* /jffs/scripts/
-			#cp -rf /tmp/shadowvpn/ss/shadowvpn /jffs/ss/
 			cp -rf /tmp/shadowvpn/webs/* /jffs/webs/
+			rm -rf /tmp/shadowvpn* >/dev/null 2>&1
 			sleep 2
 			export shadowvpn_install_status="3"
 			dbus save shadowvpn
 			dbus set shadowvpn_version=$shadowvpn_version_web1
-
+			sleep 2
+			export shadowvpn_install_status="0"
+			dbus save shadowvpn
 		else
 			export shadowvpn_install_status="5"
 			dbus save shadowvpn
 			sleep 2
+			export shadowvpn_install_status="0"
+			dbus save shadowvpn
 		fi
 	else
 		export shadowvpn_install_status="7"
