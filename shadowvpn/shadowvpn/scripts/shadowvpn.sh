@@ -4,7 +4,8 @@ Pcap_DNSProxy=$(ps | grep "Pcap_DNSProxy" | grep -v "grep")
 shadowvpn=$(ps | grep "shadowvpn" | grep -v "grep")
 startshadowvpn=$(cat /jffs/scripts/wan-start | grep "shadowvpn")
 CONFIG=/tmp/shadowvpn.conf
-version="1.1"
+# don't forget change this version when update shadowvpn
+version="1.2"
 #time=$(cat /proc/uptime | sed 's/ /\n/g'|sed -n 1p)
 start_vpn() {
 	#mkdir -p $(dirname $CONFIG)
@@ -126,13 +127,13 @@ if [ "$shadowvpn_update_check" = "1" ];then
 
 	# shadowvpn_install_status=	#
 	# shadowvpn_install_status=0	#
-	# shadowvpn_install_status=1	#正在下载更新...
-	# shadowvpn_install_status=2	#正在安装更新...
-	# shadowvpn_install_status=3	#安装更新成功，5秒后刷新本页！
-	# shadowvpn_install_status=4	#下载文件校验不一致！
-	# shadowvpn_install_status=5	#然而并没有更新！
-	# shadowvpn_install_status=6	#正在检查是否有更新~
-	# shadowvpn_install_status=7	#检测更新错误！
+	# shadowvpn_install_status=1	#姝ｅ湪涓嬭浇鏇存柊...
+	# shadowvpn_install_status=2	#姝ｅ湪瀹夎鏇存柊...
+	# shadowvpn_install_status=3	#瀹夎鏇存柊鎴愬姛锛?绉掑悗鍒锋柊鏈〉锛?
+	# shadowvpn_install_status=4	#涓嬭浇鏂囦欢鏍￠獙涓嶄竴鑷达紒
+	# shadowvpn_install_status=5	#鐒惰€屽苟娌℃湁鏇存柊锛?
+	# shadowvpn_install_status=6	#姝ｅ湪妫€鏌ユ槸鍚︽湁鏇存柊~
+	# shadowvpn_install_status=7	#妫€娴嬫洿鏂伴敊璇紒
 	
 	export shadowvpn_install_status="6"
 	dbus save shadowvpn
@@ -194,6 +195,7 @@ fi
 
 dbus save shadowvpn
 dbus set shadowvpn_version=$version
+
 
 
 
