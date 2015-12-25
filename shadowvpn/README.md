@@ -1,10 +1,11 @@
 # koolshare.github.io
 ####For koolshare.cn 小宝merlin改版固件 软件中心
 
-<b>shadowvpn文件夹下的内容，用于向路由器内软件中心shadowvpn功能推送更新</b>
+<b>shadowvpn文件夹下的内容，用于向路由器内软件中心shadowvpn功能推送更新</b><br/>
 
 * <b>shadowvpn/scripts 文件夹 </b><br/>
 该文件夹用于存放shadowvpn相关脚本：
+<br/>
 1. shadowvpn.sh<br/>
 	用于shadowvpn的启动，停止，更新；
 2. shadowvpn_client_up.sh<br/>
