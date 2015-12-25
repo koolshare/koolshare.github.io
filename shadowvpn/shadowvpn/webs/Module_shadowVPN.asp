@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
@@ -29,7 +29,6 @@ function init() {
     conf2obj();
     version_show();
     write_shadowvpn_install_status();
-   	var lb_mode = '<% nvram_get("wans_mode"); %>';
     var ss_mode = '<% nvram_get("ss_mode"); %>';
 	if(ss_mode != "0" && ss_mode != ''){
 		document.getElementById('ShadowVPN_detail_table').style.display = "none";
@@ -39,7 +38,12 @@ function init() {
 		inputCtrl(document.form.switch,0);
 		//document.form.cmdBtn.disabled = true;
 	}
-	var rrt = document.getElementById("switch");
+	  var lb_mode = '<% nvram_get("wans_mode"); %>';
+	if(lb_mode !== "lb"){
+   document.getElementById("shadowvpn_wan").options.length=0;
+   document.getElementById("shadowvpn_china").options.length=0;
+  }
+    var rrt = document.getElementById("switch");
     if (document.form.shadowvpn_enable.value != "1") {
         rrt.checked = false;
         document.getElementById('ShadowVPN_detail_table').style.display = "none";
@@ -81,7 +85,7 @@ function conf2obj(){
 	dataType: "script",
 	success: function(xhr) {
     var p = "shadowvpn_";
-        var params = ["address", "port", "passwd","token", "number", "net", "wan","mtu", "tun", "mode", "file", "start", "time"];
+        var params = ["address", "port", "passwd","token", "number", "net", "wan","china","mtu", "tun", "mode", "file", "start", "time"];
         for (var i = 0; i < params.length; i++) {
 			if (typeof db_shadowvpn_[p + params[i]] !== "undefined") {
 				$("#shadowvpn_"+params[i]).val(db_shadowvpn_[p + params[i]]);
@@ -248,7 +252,8 @@ location.href = "/Main_Soft_center.asp";
 											</tr>
 												<th width="35%">并发连接数</th>
 												<td>
-													<input  type="text" class="input_ss_table" style="width:auto;" size="8" id="shadowvpn_number" name="shadowvpn_number" maxlength="5" placeholder="默认1" value="1" />
+													<input  type="text" class="input_ss_table" style="width:auto;" size="8" id="shadowvpn_number" name="shadowvpn_number" maxlength="5" placeholder="默认1" value="1" readonly="true" />
+													<span class='software_action'><font color='#ffcc00'>当前版本不支持设置</font></span>
 												</td>										
 											</tr>
 												<th width="35%">设置net</th>
@@ -264,7 +269,8 @@ location.href = "/Main_Soft_center.asp";
 											</tr>
 												<th width="35%">接口名称</th>
 												<td>
-														<input  type="text" class="input_ss_table" style="width:auto;" size="8" id="shadowvpn_tun" name="shadowvpn_tun" maxlength="5" placeholder="默认tun0" value="tun0" />
+														<input  type="text" class="input_ss_table" style="width:auto;" size="8" id="shadowvpn_tun" name="shadowvpn_tun" maxlength="5" placeholder="默认tun0" value="tun0" readonly="true" />
+													<span class='software_action'><font color='#ffcc00'>当前版本不支持设置</font></span>
 												</td>										
 											</tr>
 											<tr>
@@ -284,14 +290,25 @@ location.href = "/Main_Soft_center.asp";
                                     	    <tr>
 											    <th width="35%">路由文件</th>
 												<td>
-														<input  type="text" class="input_ss_table" style="width:auto; display:none;" size="45"   id="shadowvpn_file" name="shadowvpn_file" maxlength="50" placeholder="请输入绝对文件路径" value="/jffs/ss/shadowvpn/chroute.txt" />
+														<input  type="text" class="input_ss_table" style="width:auto; display:none;" size="45"   id="shadowvpn_file" name="shadowvpn_file" maxlength="50" placeholder="请输入绝对文件路径" value="/jffs/ss/redchn/chnroute.txt" />
 													<span class='software_action'><font color='#ffcc00'>全局模式无需设置</font></span>
 												</td>
 											</tr>
                                     	    <tr>
-											    <th width="35%">指定线路</th>
+											    <th width="35%">VPN线路</th>
 												<td>
 													<select id="shadowvpn_wan" name="shadowvpn_wan" class="input_option"  onclick="update_visibility();" >
+														<option value="1">WAN 1</option>
+														<option value="2">WAN 2</option>
+													</select>
+													<span class='software_action'><font color='#ffcc00'>单线路用户无需设置</font></span>
+												</td>
+											</tr>
+											</tr>
+                                    	    <tr>
+											    <th width="35%">国内线路</th>
+												<td>
+													<select id="shadowvpn_china" name="shadowvpn_china" class="input_option"  onclick="update_visibility();" >
 														<option value="1">WAN 1</option>
 														<option value="2">WAN 2</option>
 													</select>

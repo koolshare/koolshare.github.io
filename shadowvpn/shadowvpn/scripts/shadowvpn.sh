@@ -5,7 +5,7 @@ shadowvpn=$(ps | grep "shadowvpn" | grep -v "grep")
 startshadowvpn=$(cat /jffs/scripts/wan-start | grep "shadowvpn")
 CONFIG=/tmp/shadowvpn.conf
 # don't forget change this version when update shadowvpn
-version="1.4"
+version="1.5"
 #time=$(cat /proc/uptime | sed 's/ /\n/g'|sed -n 1p)
 start_vpn() {
 	#mkdir -p $(dirname $CONFIG)
@@ -52,6 +52,7 @@ echo $(date): done
 echo $(date):
 }
 auto_start(){
+if [ "$shadowvpn_start" == "1" ]; then
 if [ ! -f /jffs/scripts/wan-start ]; then
 cat > /jffs/scripts/wan-start <<EOF
 #!/bin/sh
@@ -61,9 +62,14 @@ EOF
 fi
 echo $(date): Adding service to wan-start...
 if [ -z "$startshadowvpn" ];then
-sed -i '2a sh shadowvpn.sh' /jffs/scripts/wan-start
+   if [ ! -f /jffs/scripts/shadowvpn.sh ]; then
+      sed -i '2a sh /usr/bin/shadowvpn.sh' /jffs/scripts/wan-start
+   else
+      sed -i '2a sh /jffs/scripts/shadowvpn.sh' /jffs/scripts/wan-start
+   fi
 fi
 chmod +x /jffs/scripts/wan-start
+fi
 }
 sleep_a_while(){
 	if [ $shadowvpn_poweron = 1 ];then
@@ -114,9 +120,10 @@ if [ "$shadowvpn_enable" = "1" ];then
 		chmod 0666 /dev/net/tun
 	fi
    sleep_a_while
-   start_dns
-   sleep 2
    start_vpn
+   sleep 3
+   start_dns
+   auto_start
    check_version
    dbus set shadowvpn_version=$version
    dbus set shadowvpn_poweron=0
