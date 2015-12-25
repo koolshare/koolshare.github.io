@@ -13,8 +13,10 @@ ip link set $intf up
 # Get original gateway
 if [ "$shadowvpn_wan" == "2" ];then
   gateway=$(ip route show 0/0 | sed -e 's/.* via \([^ ]*\).*/\1/' |sed -n 3p)
+  #gateway=`nvram get wan1_gateway`
   else
   gateway=$(ip route show 0/0 | sed -e 's/.* via \([^ ]*\).*/\1/' |sed -n 2p)
+  #gateway=`nvram get wan0_gateway`
 fi
 echo "$(date '+%c') The default gateway: via $gateway"
 
@@ -39,3 +41,4 @@ if [ "$shadowvpn_mode" == 1 -a -f "$shadowvpn_file" ]; then
 fi
 
 echo "$(date '+%c') Script $0 completed"
+

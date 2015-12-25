@@ -30,7 +30,6 @@ function init() {
     version_show();
     write_shadowvpn_install_status();
    	var lb_mode = '<% nvram_get("wans_mode"); %>';
-	//showhide("shadowvpn_wan", (lb_mode !== "lb"));
     var ss_mode = '<% nvram_get("ss_mode"); %>';
 	if(ss_mode != "0" && ss_mode != ''){
 		document.getElementById('ShadowVPN_detail_table').style.display = "none";
@@ -50,10 +49,12 @@ function init() {
     }
     
 }
+
 function done_validating() {
 	return true;
 //refreshpage(5);
 }
+
 function buildswitch(){
 	$("#switch").click(
 	function(){
@@ -66,6 +67,7 @@ function buildswitch(){
 		}
 	});
 }
+
 function onSubmitCtrl(o, s) {
 	document.form.action_mode.value = s;
 	showLoading(15);
@@ -83,9 +85,7 @@ function conf2obj(){
         for (var i = 0; i < params.length; i++) {
 			if (typeof db_shadowvpn_[p + params[i]] !== "undefined") {
 				$("#shadowvpn_"+params[i]).val(db_shadowvpn_[p + params[i]]);
-				
 				}
-            
             update_visibility();
         }
 	}
@@ -104,6 +104,7 @@ function write_shadowvpn_install_status(){
 		} else if (db_shadowvpn_['shadowvpn_install_status'] == "3"){
 			$("#shadowvpn_install_show").html("<i>安装更新成功，5秒后刷新本页！</i>");
 			version_show();
+			refreshpage(3);
 		} else if (db_shadowvpn_['shadowvpn_install_status'] == "4"){
 			$("#shadowvpn_install_show").html("<i>下载文件校验不一致！</i>");
 		} else if (db_shadowvpn_['shadowvpn_install_status'] == "5"){
@@ -351,5 +352,6 @@ location.href = "/Main_Soft_center.asp";
 	<div id="footer"></div>
 </body>
 </html>
+
 
 
