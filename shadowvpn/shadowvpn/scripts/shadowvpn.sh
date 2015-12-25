@@ -5,7 +5,7 @@ shadowvpn=$(ps | grep "shadowvpn" | grep -v "grep")
 startshadowvpn=$(cat /jffs/scripts/wan-start | grep "shadowvpn")
 CONFIG=/tmp/shadowvpn.conf
 # don't forget change this version when update shadowvpn
-version="1.7"
+version="1.8"
 #time=$(cat /proc/uptime | sed 's/ /\n/g'|sed -n 1p)
 start_vpn() {
 	#mkdir -p $(dirname $CONFIG)
@@ -164,6 +164,14 @@ if [ "$shadowvpn_update_check" = "1" ];then
 				tar -zxf shadowvpn.tar.gz
 				dbus set shadowvpn_enable="0"
 				dbus set shadowvpn_install_status="2"
+				if [ ! -d /jffs/webs ]; then 
+          mkdir -p /jffs/webs
+        fi
+				if [ ! -d /jffs/scripts ]; then 
+          mkdir -p /jffs/scripts
+        fi
+        chmod a+x /tmp/shadowvpn/scripts/*
+				chmod a+x /tmp/shadowvpn/webs/*
 				cp -rf /tmp/shadowvpn/scripts/* /jffs/scripts/
 				cp -rf /tmp/shadowvpn/webs/* /jffs/webs/
 				rm -rf /tmp/shadowvpn* >/dev/null 2>&1
