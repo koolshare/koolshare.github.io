@@ -110,6 +110,7 @@ function write_shadowvpn_install_status(){
 			version_show();
 			refreshpage(3);
 		} else if (db_shadowvpn_['shadowvpn_install_status'] == "4"){
+		   document.getElementById('updateBtn').style.display = "";
 			$("#shadowvpn_install_show").html("<i>下载文件校验不一致！</i>");
 		} else if (db_shadowvpn_['shadowvpn_install_status'] == "5"){
 			document.getElementById('updateBtn').style.display = "";
@@ -117,6 +118,7 @@ function write_shadowvpn_install_status(){
 		} else if (db_shadowvpn_['shadowvpn_install_status'] == "6"){
       $("#shadowvpn_install_show").html("<i>正在检查是否有更新~</i>");
 		} else if (db_shadowvpn_['shadowvpn_install_status'] == "7"){
+		   document.getElementById('updateBtn').style.display = "";
 			$("#shadowvpn_install_show").html("<i>检测更新错误！</i>");
 		} else {
 			$("#shadowvpn_install_show").html("");
