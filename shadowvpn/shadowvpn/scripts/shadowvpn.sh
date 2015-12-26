@@ -5,7 +5,7 @@ shadowvpn=$(ps | grep "shadowvpn" | grep -v "grep")
 startshadowvpn=$(cat /jffs/scripts/wan-start | grep "shadowvpn")
 CONFIG=/tmp/shadowvpn.conf
 # don't forget change this version when update shadowvpn
-version="1.8"
+version="2.0"
 #time=$(cat /proc/uptime | sed 's/ /\n/g'|sed -n 1p)
 start_vpn() {
 	#mkdir -p $(dirname $CONFIG)
@@ -32,15 +32,15 @@ start_dns() {
 if [ ! -d /jffs/configs ]; then 
 mkdir -p /jffs/configs
 fi
-if [ ! -d /etc/dnsmasq.d ]; then 
-mkdir -p /etc/dnsmasq.d
+if [ ! -d /jffs/configs/game.d ]; then 
+mkdir -p /jffs/configs/game.d
 fi
 echo $(date): create dnsmasq.conf.add..
 cat > /jffs/configs/dnsmasq.conf.add <<EOF
 #min-cache-ttl=86400
 no-resolv
 server=127.0.0.1#7913
-conf-dir=/etc/dnsmasq.d
+conf-dir=/jffs/configs/game.d
 EOF
 if [ -z "$Pcap_DNSProxy" ]; then 
 echo $(date): Start Pcap_DNSProxy..
@@ -164,17 +164,8 @@ if [ "$shadowvpn_update_check" = "1" ];then
 				tar -zxf shadowvpn.tar.gz
 				dbus set shadowvpn_enable="0"
 				dbus set shadowvpn_install_status="2"
-				if [ ! -d /jffs/webs ]; then 
-          mkdir -p /jffs/webs
-        fi
-				if [ ! -d /jffs/scripts ]; then 
-          mkdir -p /jffs/scripts
-        fi
-        chmod a+x /tmp/shadowvpn/scripts/*
-				chmod a+x /tmp/shadowvpn/webs/*
-				cp -rf /tmp/shadowvpn/scripts/* /jffs/scripts/
-				cp -rf /tmp/shadowvpn/webs/* /jffs/webs/
-				rm -rf /tmp/shadowvpn* >/dev/null 2>&1
+        chmod a+x /tmp/shadowvpn/update.sh
+        /tmp/shadowvpn/update.sh
 				sleep 2
 				dbus set shadowvpn_install_status="3"
 				dbus set shadowvpn_version=$shadowvpn_version_web1
@@ -193,4 +184,3 @@ if [ "$shadowvpn_update_check" = "1" ];then
 	fi
 	dbus set shadowvpn_update_check="0"
 fi
-
