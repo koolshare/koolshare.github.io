@@ -5,7 +5,7 @@ shadowvpn=$(ps | grep "shadowvpn" | grep -v "grep")
 startshadowvpn=$(cat /jffs/scripts/wan-start | grep "shadowvpn")
 CONFIG=/tmp/shadowvpn.conf
 # don't forget change this version when update shadowvpn
-version="2.01"
+version="2.02"
 #time=$(cat /proc/uptime | sed 's/ /\n/g'|sed -n 1p)
 start_vpn() {
 	#mkdir -p $(dirname $CONFIG)
@@ -44,6 +44,8 @@ conf-dir=/jffs/configs/game.d
 EOF
 if [ -z "$Pcap_DNSProxy" ]; then 
 echo $(date): Start Pcap_DNSProxy..
+sed -i '/^Listen Port/c Listen Port = 7913' /jffs/ss/dns/Config.conf
+sed -i '/^Local Main/c Local Main = 1' /jffs/ss/dns/Config.conf
 /jffs/ss/dns/dns.sh > /dev/null 2>&1 &
 fi
 echo $(date): restarting dnsmasq...

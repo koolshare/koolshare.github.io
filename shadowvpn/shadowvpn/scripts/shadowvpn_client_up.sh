@@ -21,8 +21,8 @@ if [ "$shadowvpn_china" == "2" ];then
   else
   ccgateway=`nvram get wan0_gateway`
 fi
-echo "$(date '+%c') The default gateway: via $ccgateway"
-echo "$(date '+%c') The default gateway: via $gateway"
+echo "$(date '+%c') The china gateway: via $ccgateway"
+echo "$(date '+%c') The vpn gateway: via $gateway"
 
 # Turn on NAT over VPN
 iptables -t nat -A POSTROUTING -o $intf -j MASQUERADE
