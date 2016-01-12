@@ -1,0 +1,5 @@
+Koolshare Asuswrt-Merlin shadowsocks Changelog
+===========================================
+
+0.7.6 (12/01/2016 10:45:43 )
+   - ADD:	add shadowsocks for Merlin Koolshare firmware Softerware center
