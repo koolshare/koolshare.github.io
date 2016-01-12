@@ -22,7 +22,7 @@
 <script language="JavaScript" type="text/javascript" src="/client_function.js"></script>
 <script type="text/javascript" src="/ss_conf?v=<% uptime(); %>"></script>
 <script type="text/javascript" src="/dbconf?p=ssconf_basic&v=<% uptime(); %>"></script>
-<script type="text/javascript" src="/ss-menu.js"></script>
+<script type="text/javascript" src="/res/ss-menu.js"></script>
 <style>
 .Bar_container{
 	width:85%;
