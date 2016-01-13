@@ -1,0 +1,7 @@
+Koolshare Asuswrt-Merlin shadowsocks Changelog
+===========================================
+0.7.7 (12/01/2016 13:44:35 )
+   - FIX:	fix ss page layout
+
+0.7.6 (12/01/2016 10:45:43)
+   - ADD:	add shadowsocks for Merlin Koolshare firmware Softerware center

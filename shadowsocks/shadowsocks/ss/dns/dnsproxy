@@ -1,0 +1,47 @@
+﻿#!/bin/sh
+
+PROCS=Pcap_DNSProxy
+BIN=/usr/bin
+START=$BIN/$PROCS
+CONFIG=/jffs/ss/dns
+RESTART=/jffs/ss/dns/dnsproxy
+
+case "$1" in
+start)
+	if [ $(ps|grep $PROCS|grep -v grep|wc -l) -ge 1 ]; then
+		echo "Pcap_DNSProxy is already running"
+		exit 1
+	else
+		echo "Pcap_DNSProxy started successfully"	
+		$START -c $CONFIG
+	fi
+	;;
+
+stop)
+	if [ $(ps|grep $PROCS|grep -v grep|wc -l) -ge 1 ]; then
+		echo "Stopping Pcap_DNSProxy"
+		killall $PROCS
+	else
+		echo "Pcap_DNSProxy is not running"
+	fi
+	;;
+
+restart)
+	$RESTART stop
+	sleep 3
+	$RESTART start	
+	;;
+
+flush)
+	if [ $(ps|grep $PROCS|grep -v grep|wc -l) -ge 1 ]; then
+		$START --flush-dns
+	else
+		echo "Pcap_DNSProxy is not running"
+	fi
+	;;
+
+*)
+	echo "Usage: $0 {start|stop|restart|flush}"
+	exit 1
+	;;
+esac
