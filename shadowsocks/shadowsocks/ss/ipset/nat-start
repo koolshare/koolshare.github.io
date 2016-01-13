@@ -22,18 +22,18 @@ esac
 if [ -z "$shadowsocks_server_ip" ];then
         if [ ! -z "$server_ip" ];then
                 export shadowsocks_server_ip="$server_ip"
-                ss_server="$server_ip"
+                ss_basic_server="$server_ip"
                 dbus save shadowsocks
         fi
 else
         if [ "$shadowsocks_server_ip"x = "$server_ip"x ];then
-                ss_server="$shadowsocks_server_ip"
+                ss_basic_server="$shadowsocks_server_ip"
         elif [ "$shadowsocks_server_ip"x != "$server_ip"x ] && [ ! -z "$server_ip" ];then
-                ss_server="$server_ip"
+                ss_basic_server="$server_ip"
                 export shadowsocks_server_ip="$server_ip"
                 dbus save shadowsocks
         else
-                ss_server="$shadowsocks_server_ip"
+                ss_basic_server="$shadowsocks_server_ip"
         fi
 fi
 
@@ -55,7 +55,7 @@ ipset -N gfwlist iphash
 iptables -t nat -N SHADOWSOCKS
 
 # Ignore LANs and any other addresses you'd like to bypass the proxy
-iptables -t nat -A SHADOWSOCKS -d $ss_server -j RETURN
+iptables -t nat -A SHADOWSOCKS -d $ss_basic_server -j RETURN
 iptables -t nat -A SHADOWSOCKS -d 0.0.0.0/8 -j RETURN
 iptables -t nat -A SHADOWSOCKS -d 10.0.0.0/8 -j RETURN
 iptables -t nat -A SHADOWSOCKS -d 127.0.0.0/8 -j RETURN
@@ -70,8 +70,8 @@ iptables -t nat -A SHADOWSOCKS -d $ip1.$ip2.0.0/16 -j RETURN
 
 
 # lan control
-if [ "$ss_lan_control" == "1" ];then
-	if [ ! -z $ss_black_lan ];then
+if [ "$ss_basic_lan_control" == "1" ];then
+	if [ ! -z $ss_basic_black_lan ];then
 		for balck_ip in $black
 		do
 			iptables -t nat -A SHADOWSOCKS -p tcp -s $balck_ip -j RETURN
@@ -80,8 +80,8 @@ if [ "$ss_lan_control" == "1" ];then
 	else
 	iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-ports 3333
 	fi
-elif [ "$ss_lan_control" == "2" ];then
-	if [ ! -z $ss_white_lan ];then
+elif [ "$ss_basic_lan_control" == "2" ];then
+	if [ ! -z $ss_basic_white_lan ];then
 		for white_ip in $white
 		do
 			iptables -t nat -A SHADOWSOCKS -p tcp -s $white_ip -m set $MATCH_SET gfwlist dst -j REDIRECT --to-ports 3333
@@ -98,7 +98,7 @@ iptables -t nat -A PREROUTING -p tcp -j SHADOWSOCKS
 # Apply the rules for router self
 iptables -t nat -A OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 3333
 
-	if [ "$ss_chromecast" == "1" ]; then
+	if [ "$ss_basic_chromecast" == "1" ]; then
 		echo $(date): enable lan dns take over, i.e chromecast...
 		iptables -t nat -A PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 		echo $(date): done

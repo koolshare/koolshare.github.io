@@ -3,12 +3,10 @@
 # Variable definitions
 eval `dbus export shadowsocks`
 eval `dbus export ss`
-#source /koolshare/configs/ss.sh
-#source /koolshare/configs/ipset.sh
-#source /koolshare/scripts/base.sh
+source /koolshare/scripts/base.sh
 ISP_DNS=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
 lan_ipaddr=$(nvram get lan_ipaddr)
-server_ip=`resolvip $ss_server`
+server_ip=`resolvip $ss_basic_server`
 nat_ready=$(iptables -t nat -L PREROUTING -v -n --line-numbers|grep -v PREROUTING|grep -v destination)
 version_gfwlist=$(cat /koolshare/ss/cru/version | sed -n 1p | sed 's/ /\n/g'| sed -n 3p)
 md5sum_gfwlist=$(md5sum /jffs/configs/dnsmasq.d/gfwlist.conf | sed 's/ /\n/g'| sed -n 1p)
@@ -21,46 +19,46 @@ echo $(date): ----------------- Shadowsock gfwlist mode Starting----------------
 if [ -z "$shadowsocks_server_ip" ];then
         if [ ! -z "$server_ip" ];then
                 export shadowsocks_server_ip="$server_ip"
-                ss_server="$server_ip"
+                ss_basic_server="$server_ip"
                 dbus save shadowsocks
         fi
 else
         if [ "$shadowsocks_server_ip"x = "$server_ip"x ];then
-                ss_server="$shadowsocks_server_ip"
+                ss_basic_server="$shadowsocks_server_ip"
         elif [ "$shadowsocks_server_ip"x != "$server_ip"x ] && [ ! -z "$server_ip" ];then
-                ss_server="$server_ip"
+                ss_basic_server="$server_ip"
                 export shadowsocks_server_ip="$server_ip"
                 dbus save shadowsocks
         else
-                ss_server="$ss_server"
+                ss_basic_server="$ss_basic_server"
         fi
 fi
 
 # create shadowsocks config file...
 echo $(date): create shadowsocks config file...
-if [ "$ss_use_rss" == "0" ];then
+if [ "$ss_basic_use_rss" == "0" ];then
 cat > /koolshare/ss/ipset/ss.json <<EOF
 {
-    "server":"$ss_server",
-    "server_port":$ss_port,
+    "server":"$ss_basic_server",
+    "server_port":$ss_basic_port,
     "local_port":3333,
-    "password":"$ss_password",
+    "password":"$ss_basic_password",
     "timeout":600,
-    "method":"$ss_method"
+    "method":"$ss_basic_method"
 }
 
 EOF
-elif [ "$ss_use_rss" == "1" ];then
+elif [ "$ss_basic_use_rss" == "1" ];then
 cat > /koolshare/ss/ipset/ss.json <<EOF
 {
-    "server":"$ss_server",
-    "server_port":$ss_port,
+    "server":"$ss_basic_server",
+    "server_port":$ss_basic_port,
     "local_port":3333,
-    "password":"$ss_password",
+    "password":"$ss_basic_password",
     "timeout":600,
-    "protocol":"$ss_rss_protocol",
-    "obfs":"$ss_rss_obfs",
-    "method":"$ss_method"
+    "protocol":"$ss_basic_rss_protocol",
+    "obfs":"$ss_basic_rss_obfs",
+    "method":"$ss_basic_method"
 }
 
 EOF
@@ -106,7 +104,7 @@ echo $(date):
 		echo $(date):
 	fi
 # append adblock rules
-	if [ "1" == "$ss_adblock" ];then
+	if [ "1" == "$ss_basic_adblock" ];then
 		echo $(date): enable adblock in gfwlist mode
 		md5sum_adblock=$(md5sum /jffs/configs/dnsmasq.d/adblock.conf | sed 's/ /\n/g'| sed -n 1p)
 		version_adblock=$(cat /koolshare/ss/cru/version | sed -n 3p | sed 's/ /\n/g'| sed -n 3p)
@@ -162,7 +160,7 @@ fi
 writenat=$(cat /jffs/scripts/nat-start | grep "nat-start")
 if [ -z "$writenat" ];then
 	echo $(date): Creating iptables rules \for shadowsocks
-	sed -i "2a sleep $ss_sleep" /jffs/scripts/nat-start
+	sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/nat-start
 	sed -i '3a sh /koolshare/ss/ipset/nat-start' /jffs/scripts/nat-start
 	chmod +x /jffs/scripts/nat-start
 fi
@@ -180,7 +178,7 @@ fi
 startss=$(cat /jffs/scripts/wan-start | grep "ssconfig")
 if [ -z "$startss" ];then
 echo $(date): Add service to wan-start...
-sed -i "2a sleep $ss_sleep" /jffs/scripts/wan-start
+sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/wan-start
 sed -i '3a sh /usr/bin/ssconfig' /jffs/scripts/wan-start
 fi
 chmod +x /jffs/scripts/wan-start
@@ -188,9 +186,9 @@ echo $(date): done
 echo $(date):
 #=========================================================================================================
 	# start setvice
-	if [ "1" == "$ss_rule_update" ]; then
+	if [ "1" == "$ss_basic_rule_update" ]; then
 		echo $(date): add schedual update
-		cru a ssupdate "0 $ss_rule_update_time * * * /bin/sh /koolshare/ss/cru/update.sh"
+		cru a ssupdate "0 $ss_basic_rule_update_time * * * /bin/sh /koolshare/ss/cru/update.sh"
 		echo $(date): done
 		echo $(date):
 	else
@@ -212,12 +210,12 @@ echo $(date):
 	
 	if [ "$ss_ipset_foreign_dns" == "1" ]; then
 		echo $(date): Starting ss-tunnel...
-		if [ "$ss_use_rss" == "1" ];then
+		if [ "$ss_basic_use_rss" == "1" ];then
 			rss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
-		elif  [ "$ss_use_rss" == "0" ];then
-			if [ "$ss_onetime_auth" == "1" ];then
+		elif  [ "$ss_basic_use_rss" == "0" ];then
+			if [ "$ss_basic_onetime_auth" == "1" ];then
 				ss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -A -f /var/run/sstunnel.pid
-			elif [ "$ss_onetime_auth" == "0" ];then
+			elif [ "$ss_basic_onetime_auth" == "0" ];then
 				ss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -f /var/run/sstunnel.pid
 			fi
 		fi
@@ -228,12 +226,12 @@ echo $(date):
 	# Start DNS2SOCKS
 	if [ "$ss_ipset_foreign_dns" == "2" ]; then
 		echo $(date): Sicks5 enable on port 23456 for DNS2SOCKS..
-		if [ "$ss_use_rss" == "1" ];then
+		if [ "$ss_basic_use_rss" == "1" ];then
 			rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
-		elif  [ "$ss_use_rss" == "0" ];then
-			if [ "$ss_onetime_auth" == "1" ];then
+		elif  [ "$ss_basic_use_rss" == "0" ];then
+			if [ "$ss_basic_onetime_auth" == "1" ];then
 				ss-local -b 0.0.0.0 -l 23456 -A -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid
-			elif [ "$ss_onetime_auth" == "0" ];then
+			elif [ "$ss_basic_onetime_auth" == "0" ];then
 				ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid
 			fi
 		fi
@@ -254,24 +252,17 @@ echo $(date):
 
 	# Start ss-redir
 	echo $(date): Starting ss-redir...
-	if [ "$ss_use_rss" == "1" ];then
+	if [ "$ss_basic_use_rss" == "1" ];then
 		rss-redir -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -f /var/run/shadowsocks.pid >/dev/null 2>&1
-	elif  [ "$ss_use_rss" == "0" ];then
-		if [ "$ss_onetime_auth" == "1" ];then
+	elif  [ "$ss_basic_use_rss" == "0" ];then
+		if [ "$ss_basic_onetime_auth" == "1" ];then
 			ss-redir -b 0.0.0.0 -A -c /koolshare/ss/ipset/ss.json -f /var/run/shadowsocks.pid
-		elif [ "$ss_onetime_auth" == "0" ];then
+		elif [ "$ss_basic_onetime_auth" == "0" ];then
 			ss-redir -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -f /var/run/shadowsocks.pid
 		fi
 	fi
 	echo $(date): done
 	echo $(date):
-
-	if [ "$sslocal_enable" == "1" ]; then
-		echo $(date): enable sslocal...
-		ss-local -b 0.0.0.0 -s "$sslocal_server" -p "$sslocal_port" -l" $sslocal_proxyport" -k "$sslocal_password" -m "$sslocal_method" -u -f /var/run/sslocal.pid
-		echo $(date): done
-		echo $(date):
-	fi
 
 	# laod nat rules
 	until [ -n "$nat_ready" ]

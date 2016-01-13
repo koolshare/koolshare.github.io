@@ -190,8 +190,8 @@ sourceObj.innerHTML = openTip;
   <input type="hidden" name="action_script" value="">
   <input type="hidden" name="action_wait" value="8">
   <input type="hidden" name="first_time" value="">
-  <input type="hidden" id="ss_enable" name="ss_enable" value="1" />
-  <input type="hidden" id="ss_mode" name="ss_mode" value="2" />
+<input type="hidden" id="ss_basic_enable" name="ss_basic_enable" value="1" />
+<input type="hidden" id="ss_basic_mode" name="ss_basic_mode" value="4" />
   <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>">
   <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="">
   <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>">

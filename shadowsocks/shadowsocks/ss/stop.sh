@@ -1,7 +1,9 @@
 #!/bin/sh
 #--------------------------------------------------------------------------
 # Variable definitions
-source /koolshare/configs/ss.sh
+# source /koolshare/configs/ss.sh
+eval `dbus export shadowsocks`
+eval `dbus export ss`
 redsocks2=$(ps | grep "redsocks2" | grep -v "grep")
 dnscrypt=$(ps | grep "dnscrypt-proxy" | grep -v "grep")
 sokcs5=$(ps|grep ss-local|grep -vw rss-local|grep -v 23456|cut -d " " -f 1)

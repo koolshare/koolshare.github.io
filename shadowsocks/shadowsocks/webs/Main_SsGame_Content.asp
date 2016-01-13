@@ -41,41 +41,10 @@
  	height:21px;
 	background:#C0D1D3 url(/images/ss_proceding.gif);
 }
-#ClientList_Block_PC {
-border: 1px outset #999;
-background-color: #576D73;
-position: absolute;
-*margin-top:26px;
-margin-left: 3px;
-*margin-left:-129px;
-width: 255px;
-text-align: left;
-height: auto;
-overflow-y: auto;
-z-index: 200;
-padding: 1px;
-display: none;
-}
-#ClientList_Block_PC div {
-background-color: #576D73;
-height: auto;
-*height:20px;
-line-height: 20px;
-text-decoration: none;
-font-family: Lucida Console;
-padding-left: 2px;
-}
-#ClientList_Block_PC a {
-background-color: #EFEFEF;
-color: #FFF;
-font-size: 12px;
-font-family: Arial, Helvetica, sans-serif;
-text-decoration: none;
-}
-#ClientList_Block_PC div:hover, #ClientList_Block a:hover {
-background-color: #3366FF;
-color: #FFFFFF;
-cursor: default;
+#ss_game_host::-webkit-input-placeholder::before {
+    color:#999;
+    content:"# 此处填入需要指定解析地址的域名，一行一个，格式如下：\A address=/koolshare.cn/2.2.2.2\A address=/baidu.com/3.3.3.3\A ";
+    address=/example1.com/2.2.2.2,address=/example2.com/3.3.3.3
 }
 </style>
 <script>
@@ -89,6 +58,11 @@ String.prototype.replaceAll = function(s1,s2){
 　　return this.replace(new RegExp(s1,"gm"),s2);
 }
 
+function init(){
+	show_menu(menu_hook);
+	conf_to_obj();
+	update_visibility();
+}
 
 function onSubmitCtrl(o, s) {
 	if(validForm()){
@@ -100,12 +74,6 @@ function onSubmitCtrl(o, s) {
 
 function done_validating(action){
 	refreshpage(25);
-}
-
-function init(){
-	show_menu(menu_hook);
-	conf_to_obj();
-	update_visibility();
 }
 
 function conf_to_obj(){
@@ -157,8 +125,8 @@ function validForm(){
 		return false;
 	}
 		$G(temp_ss[i]).value = rlt;
-		return true;
 	}
+	return true;
 }
 
 function openShutManager(oSourceObj,oTargetObj,shutAble,oOpenTip,oShutTip){
@@ -237,8 +205,8 @@ function update_visibility(){
 <input type="hidden" name="action_script" value=""/>
 <input type="hidden" name="action_wait" value="8"/>
 <input type="hidden" name="first_time" value=""/>
-<input type="hidden" id="ss_enable" name="ss_enable" value="1" />
-<input type="hidden" id="ss_mode" name="ss_mode" value="3" />
+<input type="hidden" id="ss_basic_enable" name="ss_basic_enable" value="1" />
+<input type="hidden" id="ss_basic_mode" name="ss_basic_mode" value="3" />
 <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
 <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value=""/>
 <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
@@ -295,6 +263,7 @@ function update_visibility(){
 														<option value="1">dnscrypt-proxy</option>
 														<option value="2">ss-tunnel</option>
 														<option value="3">ChinaDNS（CDN最优）</option>
+														<option value="5">PcapDNSProxy</option>
 													</select>
 													<select id="ss_game_opendns" name="ss_game_opendns" class="input_option">
 														<option value="opendns">OpenDNS1</option>
@@ -313,7 +282,7 @@ function update_visibility(){
 														<option value="ovpnto-se">ovpnto-se</option>
 														<option value="soltysiak">soltysiak</option>
 													</select>
-													<input type="text" class="ssconfig input_ss_table" id="ss_game_dns2socks_user" name="ss_game_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
+													<input type="text" class="ssconfig input_ss_table" id="ss_game_dns2socks_user" name="ss_game_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
 													<select id="ss_game_sstunnel" name="ss_game_sstunnel" class="input_option" onclick="update_visibility();" >
 														<option value="1">OpenDNS [208.67.220.220]</option>
 														<option value="2">Goole DNS1 [8.8.8.8]</option>
@@ -360,8 +329,7 @@ function update_visibility(){
 											<tr>
 											<th width="20%">自定义hosts</th>
 												<td>
-													
-													<textarea rows=12 style="width:99%; font-size:11px;background:#475A5F;color:#FFFFFF;border:1px solid gray;height:auto;" id="ss_game_host" name="ss_game_host" title="">address=/example1.com/2.2.2.2,address=/example2.com/3.3.3.3</textarea>
+													<textarea placeholder=" " rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_game_host" name="ss_game_host" title=""></textarea>
 												</td>
 											</tr>
 										</table>

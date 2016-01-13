@@ -1,15 +1,14 @@
 #!/bin/sh
 eval `dbus export shadowsocks`
 eval `dbus export ss`
-eval `dbus export game`
 chnroute="/koolshare/ss/redchn/chnroute.txt"
-black=$(echo $ss_black_lan | sed "s/,/ /g")
-white=$(echo $ss_white_lan | sed "s/,/ /g")
+black=$(echo $ss_basic_black_lan | sed "s/,/ /g")
+white=$(echo $ss_basic_white_lan | sed "s/,/ /g")
 lan_ipaddr=$(nvram get lan_ipaddr)
 SHADOWSOCKS_chian_exist=`iptables -t nat -L -n -v | grep SHADOWSOCKS`
 SHADOWSOCKS2_chian_exist=`iptables -t mangle -L -n -v | grep SHADOWSOCKS`
 ip_rule_exist=`ip rule show | grep "fwmark 0x1/0x1 lookup 300" | grep -c 300`
-server_ip=`resolvip $ss_server`
+server_ip=`resolvip $ss_basic_server`
 ip1=$(nvram get wan0_ipaddr | cut -d"." -f1)
 ip2=$(nvram get wan0_ipaddr | cut -d"." -f2)
 MODULES="nf_tproxy_core xt_TPROXY xt_socket xt_comment"
@@ -28,18 +27,18 @@ esac
 if [ -z "$shadowsocks_server_ip" ];then
         if [ ! -z "$server_ip" ];then
                 export shadowsocks_server_ip="$server_ip"
-                ss_server="$server_ip"
+                ss_basic_server="$server_ip"
                 dbus save shadowsocks
         fi
 else
         if [ "$shadowsocks_server_ip"x = "$server_ip"x ];then
-                ss_server="$shadowsocks_server_ip"
+                ss_basic_server="$shadowsocks_server_ip"
         elif [ "$shadowsocks_server_ip"x != "$server_ip"x ] && [ ! -z "$server_ip" ];then
-                ss_server="$server_ip"
+                ss_basic_server="$server_ip"
                 export shadowsocks_server_ip="$server_ip"
                 dbus save shadowsocks
         else
-                ss_server="$shadowsocks_server_ip"
+                ss_basic_server="$ss_basic_server"
         fi
 fi
 
@@ -115,7 +114,7 @@ iptables -t nat -A SHADOWSOCKS -d 192.168.0.0/16 -j RETURN
 iptables -t nat -A SHADOWSOCKS -d 224.0.0.0/4 -j RETURN
 iptables -t nat -A SHADOWSOCKS -d 240.0.0.0/4 -j RETURN
 iptables -t nat -A SHADOWSOCKS -d $ip1.$ip2.0.0/16 -j RETURN
-iptables -t nat -A SHADOWSOCKS -d $ss_server -j RETURN
+iptables -t nat -A SHADOWSOCKS -d $ss_basic_server -j RETURN
 
 # create ip rules
 ip rule add fwmark 0x01/0x01 table 300
@@ -134,7 +133,7 @@ iptables -t mangle -A SHADOWSOCKS2 -d 192.168.0.0/16 -j RETURN
 iptables -t mangle -A SHADOWSOCKS2 -d 224.0.0.0/4 -j RETURN
 iptables -t mangle -A SHADOWSOCKS2 -d 240.0.0.0/4 -j RETURN
 iptables -t mangle -A SHADOWSOCKS2 -d $ip1.$ip2.0.0/16 -j RETURN
-iptables -t mangle -A SHADOWSOCKS2 -d $ss_server -j RETURN
+iptables -t mangle -A SHADOWSOCKS2 -d $ss_basic_server -j RETURN
 
 
 # Apply the rules
@@ -145,8 +144,8 @@ iptables -t mangle -A PREROUTING -p udp -j SHADOWSOCKS2
 iptables -t nat -A OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 3333
 
 # lan control
-if [ "$ss_lan_control" == "1" ];then
-	if [ ! -z $ss_black_lan ];then
+if [ "$ss_basic_lan_control" == "1" ];then
+	if [ ! -z $ss_basic_black_lan ];then
 		for balck_ip in $black
 		do
 			iptables -t nat -A SHADOWSOCKS -p tcp -s $balck_ip -j RETURN
@@ -158,8 +157,8 @@ if [ "$ss_lan_control" == "1" ];then
 	iptables -t nat -A SHADOWSOCKS -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
 	iptables -t mangle -A SHADOWSOCKS2 -p udp -m set ! $MATCH_SET chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
 	fi
-elif [ "$ss_lan_control" == "2" ];then
-	if [ ! -z $ss_white_lan ];then
+elif [ "$ss_basic_lan_control" == "2" ];then
+	if [ ! -z $ss_basic_white_lan ];then
 		for white_ip in $white
 		do
 			iptables -t nat -A SHADOWSOCKS -p tcp -s $white_ip -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
@@ -174,7 +173,7 @@ else
 	iptables -t mangle -A SHADOWSOCKS2 -p udp -m set ! $MATCH_SET chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
 fi
 
-if [ "$ss_chromecast" == "1" ]; then
+if [ "$ss_basic_chromecast" == "1" ]; then
 	echo $(date): enable lan dns take over, i.e chromecast...
 	iptables -t nat -A PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 	echo $(date): done

@@ -103,7 +103,6 @@ function key_event(evt) {
 var refreshRate = 5;
 function init() {
     show_menu(menu_hook);
-    
     version_show();
     show_hide_table();
     buildswitch();
@@ -121,7 +120,7 @@ function init() {
     setTimeout("write_ss_install_status()", 1000);
 }
 function onSubmitCtrl(o, s) {
-	ssmode = document.getElementById("ss_mode").value;
+	ssmode = document.getElementById("ss_basic_mode").value;
 	global_status_enable=false;
 	checkSSStatus();
     if (validForm()) {
@@ -176,7 +175,7 @@ function done_validating(action) {
 	return true;
 }
 function save_ss_method(m) {
-    var o = document.getElementById("ss_method");
+    var o = document.getElementById("ss_basic_method");
     for (var c = 0; c < o.length; c++) {
         if (o.options[c].value == m) {
             o.options[c].selected = true;
@@ -185,128 +184,128 @@ function save_ss_method(m) {
     }
 }
 function update_ss_ui(obj) {
-    for (var field in obj) {
-        var el = document.getElementById("ss_" + field);
-        if (field == "method") {
-            continue;
-        } else if (field == "onetime_auth") {
-	        if (obj[field] != "1") {
-				$j("#ss_onetime_auth").val("0");
-        	} else {
-				$j("#ss_onetime_auth").val("1");
-        	}
-        	continue;
-        } else if (field == "rss_protocol") {
+	for (var field in obj) {
+		var el = document.getElementById(field);
+		if (field == "ss_basic_method") {
+			continue;
+		} else if (field == "ss_basic_onetime_auth") {
+			if (obj[field] != "1") {
+				$j("#ss_basic_onetime_auth").val("0");
+			} else {
+				$j("#ss_basic_onetime_auth").val("1");
+			}
+			continue;
+		} else if (field == "ss_basic_rss_protocol") {
 			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_deflate" &&  obj[field] != "auth_simple" && obj[field] != "auth_sha1"&& obj[field] != "verify_sha1" ) {
-				$j("#ss_rss_protocol").val("origin");
+				$j("#ss_basic_rss_protocol").val("origin");
 			} else {
-				$j("#ss_rss_protocol").val(obj.rss_protocol);
+				$j("#ss_basic_rss_protocol").val(obj.ss_basic_rss_protocol);
 			}
 			continue;
-        } else if (field == "rss_obfs") {
+		} else if (field == "ss_basic_rss_obfs") {
 			if (obj[field] != "plain" && obj[field] != "http_simple" && obj[field] != "tls_simple" &&  obj[field] != "random_head" &&  obj[field] != "tls1.0_session_auth" ) {
-				$j("#ss_rss_obfs").val("plain");
+				$j("#ss_basic_rss_obfs").val("plain");
 			} else {
-				$j("#ss_rss_obfs").val(obj.rss_obfs);
+				$j("#ss_basic_rss_obfs").val(obj.ss_basic_rss_obfs);
 			}
 			continue;
-        } else if (el != null && el.getAttribute("type") == "checkbox") {
-            if (obj[field] != "1") {
-                el.checked = false;
-                document.getElementById("hd_ss_" + field).value = "0";
-            } else {
-                el.checked = true;
-                document.getElementById("hd_ss_" + field).value = "1";
-            }
-            continue;
-        } 
-        if (el != null) {
-            el.value = obj[field];
-        }
-    }
-    $j("#ss_method").val(obj.method);
+		} else if (el != null && el.getAttribute("type") == "checkbox") {
+			if (obj[field] != "1") {
+				el.checked = false;
+				document.getElementById("hd_" + field).value = "0";
+			} else {
+				el.checked = true;
+				document.getElementById("hd_" + field).value = "1";
+			}
+			continue;
+		} 
+		if (el != null) {
+			el.value = obj[field];
+		}
+	}
+	$j("#ss_basic_method").val(obj.ss_basic_method);
 }
 
 function updateOptions() {
-    document.form.action = "/applydb.cgi?p=ss";
-    document.form.SystemCmd.value = "ssconfig basic";
-    document.form.submit();
+	document.form.action = "/applydb.cgi?p=ss";
+	document.form.SystemCmd.value = "ssconfig basic";
+	document.form.submit();
 }
 
 function hideS_Block(evt) {
-    if (typeof(evt) != "undefined") {
-        if (!evt.srcElement) evt.srcElement = evt.target; // for Firefox
-        if (evt.srcElement.id == "pull_arrow" || evt.srcElement.id == "Ss_node_list_Block") {
-            return;
-        }
-    }
-    $G("pull_arrow").src = "/images/arrow-down.gif";
-    $G('Ss_node_list_Block_PC').style.display = 'none';
-    isMenuopen = 0;
+	if (typeof(evt) != "undefined") {
+		if (!evt.srcElement) evt.srcElement = evt.target; // for Firefox
+		if (evt.srcElement.id == "pull_arrow" || evt.srcElement.id == "Ss_node_list_Block") {
+			return;
+		}
+	}
+	$G("pull_arrow").src = "/images/arrow-down.gif";
+	$G('Ss_node_list_Block_PC').style.display = 'none';
+	isMenuopen = 0;
 }
 function pullLANIPList(obj) {
-    if (isMenuopen == 0) {
-        obj.src = "/images/arrow-top.gif"
+	if (isMenuopen == 0) {
+		obj.src = "/images/arrow-top.gif"
 		$G("Ss_node_list_Block_PC").style.display = 'block';
-        isMenuopen = 1;
-    } else hideSS_Block();
+		isMenuopen = 1;
+	} else hideSS_Block();
 }
 function validForm() {
-    var is_ok = true;
-    return is_ok;
+	var is_ok = true;
+	return is_ok;
 }
 function openShutManager(oSourceObj, oTargetObj, shutAble, oOpenTip, oShutTip) {
-    var sourceObj = typeof oSourceObj == "string" ? document.getElementById(oSourceObj) : oSourceObj;
-    var targetObj = typeof oTargetObj == "string" ? document.getElementById(oTargetObj) : oTargetObj;
-    var openTip = oOpenTip || "";
-    var shutTip = oShutTip || "";
-    if (targetObj.style.display != "none") {
-        if (shutAble) return;
-        targetObj.style.display = "none";
-        if (openTip && shutTip) {
-            sourceObj.innerHTML = shutTip;
-        }
-    } else {
-        targetObj.style.display = "block";
-        if (openTip && shutTip) {
-            sourceObj.innerHTML = openTip;
-        }
-    }
+	var sourceObj = typeof oSourceObj == "string" ? document.getElementById(oSourceObj) : oSourceObj;
+	var targetObj = typeof oTargetObj == "string" ? document.getElementById(oTargetObj) : oTargetObj;
+	var openTip = oOpenTip || "";
+	var shutTip = oShutTip || "";
+	if (targetObj.style.display != "none") {
+		if (shutAble) return;
+		targetObj.style.display = "none";
+		if (openTip && shutTip) {
+			sourceObj.innerHTML = shutTip;
+		}
+	} else {
+		targetObj.style.display = "block";
+		if (openTip && shutTip) {
+		    sourceObj.innerHTML = openTip;
+		}
+	}
 }
 function update_visibility() {
-    ssmode = document.form.ss_mode.value;
-    crst = document.form.ss_chromecast.value;
-    cadb = document.form.ss_adblock.value;
-    sru = document.form.ss_rule_update.value;
-    slc = document.form.ss_lan_control.value;
-    std = readCookie("ss_table_detail");
-    srp = document.form.ss_rss_protocol.value;
-    sro = document.form.ss_rss_obfs.value;
-	sur = document.form.hd_ss_use_rss.value
+	ssmode = document.form.ss_basic_mode.value;
+	crst = document.form.ss_basic_chromecast.value;
+	cadb = document.form.ss_basic_adblock.value;
+	sru = document.form.ss_basic_rule_update.value;
+	slc = document.form.ss_basic_lan_control.value;
+	std = readCookie("ss_table_detail");
+	srp = document.form.ss_basic_rss_protocol.value;
+	sro = document.form.ss_basic_rss_obfs.value;
+	sur = document.form.hd_ss_basic_use_rss.value
 	if (srp == "origin"){
-		$j("#ss_rss_protocol_alert").html("原版协议");
+		$j("#ss_basic_rss_protocol_alert").html("原版协议");
 	} else if (srp == "verify_simple"){
-		$j("#ss_rss_protocol_alert").html("带校验的协议");
+		$j("#ss_basic_rss_protocol_alert").html("带校验的协议");
 	} else if (srp == "verify_deflate"){
-		$j("#ss_rss_protocol_alert").html("带压缩的协议");
+		$j("#ss_basic_rss_protocol_alert").html("带压缩的协议");
 	} else if (srp == "verify_sha1"){
-		$j("#ss_rss_protocol_alert").html("带验证抗CCA攻击的协议可兼容libev的OTA");
+		$j("#ss_basic_rss_protocol_alert").html("带验证抗CCA攻击的协议可兼容libev的OTA");
 	} else if (srp == "auth_simple"){
-		$j("#ss_rss_protocol_alert").html("带验证抗重放攻击的协议");
+		$j("#ss_basic_rss_protocol_alert").html("带验证抗重放攻击的协议");
 	} else if (srp == "auth_sha1"){
-		$j("#ss_rss_protocol_alert").html("抗重放攻击和抗CCA攻击");
+		$j("#ss_basic_rss_protocol_alert").html("抗重放攻击和抗CCA攻击");
 	}
 
 	if (sro == "plain"){
-		$j("#ss_rss_obfs_alert").html("不混淆");
+		$j("#ss_basic_rss_obfs_alert").html("不混淆");
 	} else if (sro == "http_simple"){
-		$j("#ss_rss_obfs_alert").html("伪装为http协议");
+		$j("#ss_basic_rss_obfs_alert").html("伪装为http协议");
 	} else if (sro == "tls_simple"){
-		$j("#ss_rss_obfs_alert").html("伪装为tls协议");
+		$j("#ss_basic_rss_obfs_alert").html("伪装为tls协议");
 	} else if (sro == "random_head"){
-		$j("#ss_rss_obfs_alert").html("发送一个随机包再通讯的协议");
+		$j("#ss_basic_rss_obfs_alert").html("发送一个随机包再通讯的协议");
 	} else if (sro == "tls1.0_session_auth"){
-		$j("#ss_rss_obfs_alert").html("伪装为tls session握手协议同时能抗重放攻击");
+		$j("#ss_basic_rss_obfs_alert").html("伪装为tls session握手协议同时能抗重放攻击");
 	}
 	
 	if (ssmode == "0"){
@@ -320,41 +319,41 @@ function update_visibility() {
 	} else if (ssmode == "4"){
 		$j("#mode_state").html("SS运行状态【全局模式】");
 	}
-    showhide("123", (ssmode !== "4"));
-    showhide("ss_state1", (ssmode == "0"));
-    showhide("ss_state2", (ssmode !== "0"));
-    showhide("ss_state3", (ssmode !== "0"));
-    showhide("update_rules", (ssmode !== "0"));
-    showhide("game_alert", (ssmode == "3"));
-    showhide("chromecast1", (crst == "0"));
-    showhide("gfw_number", (ssmode == "1"));
-    showhide("chn_number", (ssmode == "2" || ssmode == "3"));
-    showhide("cdn_number", (ssmode == "2" || ssmode == "3"));
-    showhide("adblock_nu", (cadb == "1" && ssmode !== "0"));
-    showhide("adblock_nu1", (cadb == "1"));
-    showhide("ss_rule_update_time", (sru == "1"));
-    showhide("update_choose", (sru == "1"));
-    showhide("help", (ssmode !== "0"));
-    showhide("help_mode1", (ssmode == "1"));
-    showhide("help_mode2", (ssmode == "2"));
-    showhide("help_mode3", (ssmode == "3"));
-    showhide("help_mode4", (ssmode == "4"));
-    showhide("ss_black_lan", (slc == "1"));
-    showhide("ss_white_lan", (slc == "2"));
-    showhide("onetime_auth", (sur !== "1"));
-    showhide("ss_rss_protocol_tr", (sur == "1"));
-    showhide("ss_rss_obfs_tr", (sur == "1"));
+	showhide("123", (ssmode !== "4"));
+	showhide("ss_state1", (ssmode == "0"));
+	showhide("ss_state2", (ssmode !== "0"));
+	showhide("ss_state3", (ssmode !== "0"));
+	showhide("update_rules", (ssmode !== "0"));
+	showhide("game_alert", (ssmode == "3"));
+	showhide("chromecast1", (crst == "0"));
+	showhide("gfw_number", (ssmode == "1"));
+	showhide("chn_number", (ssmode == "2" || ssmode == "3"));
+	showhide("cdn_number", (ssmode == "2" || ssmode == "3"));
+	showhide("adblock_nu", (cadb == "1" && ssmode !== "0"));
+	showhide("adblock_nu1", (cadb == "1"));
+	showhide("ss_basic_rule_update_time", (sru == "1"));
+	showhide("update_choose", (sru == "1"));
+	showhide("help", (ssmode !== "0"));
+	showhide("help_mode1", (ssmode == "1"));
+	showhide("help_mode2", (ssmode == "2"));
+	showhide("help_mode3", (ssmode == "3"));
+	showhide("help_mode4", (ssmode == "4"));
+	showhide("ss_black_lan", (slc == "1"));
+	showhide("ss_white_lan", (slc == "2"));
+	showhide("onetime_auth", (sur !== "1"));
+	showhide("ss_basic_rss_protocol_tr", (sur == "1"));
+	showhide("ss_basic_rss_obfs_tr", (sur == "1"));
 }
 function oncheckclick(obj) {
-    if (obj.checked) {
-        document.getElementById("hd_" + obj.id).value = "1";
-    } else {
-        document.getElementById("hd_" + obj.id).value = "0";
-    }
+	if (obj.checked) {
+		document.getElementById("hd_" + obj.id).value = "1";
+	} else {
+		document.getElementById("hd_" + obj.id).value = "0";
+	}
 }
 var global_status_enable = true;
 function checkSSStatus() {
-    if (db_ss['ss_enable'] !== "0") {
+    if (db_ss['ss_basic_enable'] !== "0") {
 	    if(!global_status_enable) {//not enabled
 		    if(refreshRate > 0) {
 			    setTimeout("checkSSStatus();", refreshRate * 10000);
@@ -379,7 +378,7 @@ function checkSSStatus() {
     } else {
         document.getElementById("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
         document.getElementById("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
-        setTimeout("checkSSStatus();", refreshRate * 1000);
+        //setTimeout("checkSSStatus();", refreshRate * 1000);
     }
 }
 function updatelist() {
@@ -402,21 +401,21 @@ function ssconf_node2obj(node_sel) {
     var p = "ssconf_basic";
     if (typeof db_ss[p + "_server_" + node_sel] == "undefined") {
         var obj = {
-            "server": "",
-            "port": "",
-            "password": "",
-            "method": "table",
-            "rss_protocol": "",
-            "rss_obfs": "",
-            "use_rss": "",
-            "onetime_auth": ""
+            "ss_basic_server": "",
+            "ss_basic_port": "",
+            "ss_basic_password": "",
+            "ss_basic_method": "table",
+            "ss_basic_rss_protocol": "",
+            "ss_basic_rss_obfs": "",
+            "ss_basic_use_rss": "",
+            "ss_basic_onetime_auth": ""
         };
         return obj;
     } else {
         var obj = {};
         var params = ["server", "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
         for (var i = 0; i < params.length; i++) {
-            obj[params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel];
+            obj["ss_basic_" + params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel];
         }
         return obj;
     }
@@ -454,15 +453,15 @@ function ss_node_object(node_sel, obj, isSubmit, end) {
 }
 function ssform2obj() {
     var obj = {};
-    obj["mode"] = $G("ss_mode").value;
-    obj["server"] = $G("ss_server").value;
-    obj["port"] = $G("ss_port").value;
-    obj["password"] = $G("ss_password").value;
-    obj["method"] = $G("ss_method").value;
-    obj["rss_protocol"] = $G("ss_rss_protocol").value;
-    obj["rss_obfs"] = $G("ss_rss_obfs").value;
-    obj["use_rss"] = $G("hd_ss_use_rss").value;
-    obj["onetime_auth"] = $G("ss_onetime_auth").value;
+    obj["mode"] = $G("ss_basic_mode").value;
+    obj["server"] = $G("ss_basic_server").value;
+    obj["port"] = $G("ss_basic_port").value;
+    obj["password"] = $G("ss_basic_password").value;
+    obj["method"] = $G("ss_basic_method").value;
+    obj["rss_protocol"] = $G("ss_basic_rss_protocol").value;
+    obj["rss_obfs"] = $G("ss_basic_rss_obfs").value;
+    obj["use_rss"] = $G("hd_ss_basic_use_rss").value;
+    obj["onetime_auth"] = $G("ss_basic_onetime_auth").value;
     return obj;
 }
 var ss_node_list_view_hide_flag = false;
@@ -564,7 +563,7 @@ function add_conf_in_table(o) {
         ns[p + "_" + params[i] + "_" + node_global_max] = $j('#ssconf_table_' + params[i]).val();
     }
     $j.ajax({
-        url: '/applydb.cgi?p=' + p,
+        url: '/applydb.cgi?p=ss',
         contentType: "application/x-www-form-urlencoded",
         dataType: 'text',
         data: $j.param(ns),
@@ -587,7 +586,7 @@ function remove_conf_table(o) {
         ns[p + "_" + params[i] + "_" + id] = "";
     }
     $j.ajax({
-        url: '/applydb.cgi?use_rm=1&p=' + p,
+        url: '/applydb.cgi?use_rm=1&p=ss',
         contentType: "application/x-www-form-urlencoded",
         dataType: 'text',
         data: $j.param(ns),
@@ -695,7 +694,7 @@ function create_ss_node_list_listview(confs) {
 }
 function updateSs_node_listView() {
     $j.ajax({
-        url: '/dbconf?p=ssconf_basic',
+        url: '/dbconf?p=ss',
         dataType: 'html',
         error: function(xhr) {            
 	        },
@@ -715,7 +714,7 @@ function show_detail(thisObj) {
         slideDown("help_mode", 350);
         slideDown("status_update_interval", 350);
         slideDown("boot_delay", 350);
-        thisObj.innerHTML = "<em>[ 简洁 ]</em>";
+        thisObj.innerHTML = "[ 简洁 ]";
         createCookie("ss_table_detail", 0, 365);
     } else {
         slideUp("detail_show", 350);
@@ -723,7 +722,7 @@ function show_detail(thisObj) {
         slideUp("help_mode", 350);
         slideUp("status_update_interval", 350);
         slideUp("boot_delay", 350);
-        thisObj.innerHTML = "<em>[ 详细 ]</em>";
+        thisObj.innerHTML = "[ 详细 ]";
         createCookie("ss_table_detail", 1, 365);
     }
 }
@@ -735,14 +734,14 @@ function init_detail() {
         document.getElementById("help_mode").style.display = "none";
         document.getElementById("status_update_interval").style.display = "none";
         document.getElementById("boot_delay").style.display = "none";
-        $j("#detail_show_hide").html("<em>[ 详细 ]</em>");
+        $j("#detail_show_hide").html("[ 详细 ]");
     } else {
         document.getElementById("detail_show").style.display = "";
         document.getElementById("add_fun").style.display = "";
         document.getElementById("help_mode").style.display = "";
         document.getElementById("status_update_interval").style.display = "";
         document.getElementById("boot_delay").style.display = "";
-        $j("#detail_show_hide").html("<em>[ 简洁 ]</em>");
+        $j("#detail_show_hide").html("[ 简洁 ]");
     }
 }
 function createCookie(name, value, days) {
@@ -813,7 +812,7 @@ function buildswitch(){
 		if(document.getElementById('switch').checked){
 			//document.form.ss_enable.value = 1;
 			document.form.action_mode.value = ' Refresh ';
-			document.getElementById('ss_enable').value = 1;
+			document.getElementById('ss_basic_enable').value = 1;
 			document.form.submit();
 			document.getElementById('basic_show').style.display = "";
 			document.getElementById('detail_show').style.display = "";	
@@ -827,7 +826,7 @@ function buildswitch(){
 			document.getElementById('line_image1').style.display = "";	
 			document.getElementById('help_note').style.display = "";	
 		}else{
-			document.form.ss_enable.value = 0;
+			document.form.ss_basic_enable.value = 0;
 			//document.getElementById('ss_enable').value = 0;
 			showSSLoadingBar(8);
 			document.form.action_mode.value = ' Refresh ';
@@ -852,7 +851,7 @@ function buildswitch(){
 function show_hide_table(){
 	//ssmode = document.form.ss_mode.value;
 	//if (ssmode == "1" || ssmode == "2" || ssmode == "3" || ssmode == "4"){
-	if (db_ss['ss_enable'] == "1"){
+	if (db_ss['ss_basic_enable'] == "1"){
 		document.getElementById("switch").checked = true;
     	update_visibility();
     	init_detail();
@@ -873,10 +872,10 @@ function show_hide_table(){
 }
 
 function version_show(){
-	if (db_ss['ssconf_basic_ss_version_local'] != db_ss['ssconf_basic_ss_version_web'] && db_ss['ssconf_basic_ss_version_web'] !== "undefined"){
-		$j("#ss_version_show").html("<i>有新版本：" + db_ss['ssconf_basic_ss_version_web']);
+	if (db_ss['ss_basic_version_local'] != db_ss['ss_basic_version_web'] && db_ss['ss_basic_version_web'] !== "undefined"){
+		$j("#ss_version_show").html("<i>有新版本：" + db_ss['ss_basic_version_web']);
 	} else {
-		$j("#ss_version_show").html("<i>当前版本：" + db_ss['ssconf_basic_ss_version_local']);
+		$j("#ss_version_show").html("<i>当前版本：" + db_ss['ss_basic_version_local']);
 	}
 }
 
@@ -886,28 +885,28 @@ function write_ss_install_status(){
 		url: "dbconf?p=ss",
 		dataType: "script",
 		success: function() {
-		if (db_ss['ss_install_status'] == "1"){
+		if (db_ss['ss_basic_install_status'] == "1"){
 			$j("#ss_install_show").html("<i>正在下载更新...</i>");
 			document.getElementById('ss_version_show').style.display = "none";
-		} else if (db_ss['ss_install_status'] == "2"){
+		} else if (db_ss['ss_basic_install_status'] == "2"){
 			$j("#ss_install_show").html("<i>正在安装更新...</i>");
 			document.getElementById('ss_version_show').style.display = "none";
-		} else if (db_ss['ss_install_status'] == "3"){
+		} else if (db_ss['ss_basic_install_status'] == "3"){
 			$j("#ss_install_show").html("<i>安装更新成功，5秒后刷新本页！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
 			//version_show();
 			//refreshpage(3);
-		} else if (db_ss['ss_install_status'] == "4"){
+		} else if (db_ss['ss_basic_install_status'] == "4"){
 			$j("#ss_install_show").html("<i>下载文件校验不一致！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
-		} else if (db_ss['ss_install_status'] == "5"){
+		} else if (db_ss['ss_basic_install_status'] == "5"){
 			$j("#ss_install_show").html("<i>然而并没有更新！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
-		} else if (db_ss['ss_install_status'] == "6"){
+		} else if (db_ss['ss_basic_install_status'] == "6"){
 			document.getElementById('ss_version_show').style.display = "none";
 			$j("#ss_install_show").html("<i>正在检查是否有更新~</i>");
 			document.getElementById('update_button').style.display = "none";
-		} else if (db_ss['ss_install_status'] == "7"){
+		} else if (db_ss['ss_basic_install_status'] == "7"){
 			$j("#ss_install_show").html("<i>检测更新错误！</i>");
 		} else {
 			$j("#ss_install_show").html("");
@@ -922,7 +921,7 @@ function write_ss_install_status(){
 function update_ss(o, s){
 	global_status_enable=false;
 	checkSSStatus();
-	document.form.ss_update_check.value = 1;
+	document.form.ss_basic_update_check.value = 1;
 	document.form.action_mode.value = s;
     document.form.SystemCmd.value = "ssconfig basic";
     document.form.submit();
@@ -961,9 +960,9 @@ function update_ss(o, s){
 <input type="hidden" name="action_script" value=""/>
 <input type="hidden" name="action_wait" value="25"/>
 <input type="hidden" name="first_time" value=""/>
-<input type="hidden" id="ss_enable" name="ss_enable" value="0" />
-<input type="hidden" id="ss_install_status" name="ss_install_status" value="0" />
-<input type="hidden" id="ss_update_check" name="ss_update_check" value="0" />
+<input type="hidden" id="ss_basic_enable" name="ss_basic_enable" value="0" />
+<input type="hidden" id="ss_basic_install_status" name="ss_basic_install_status" value="0" />
+<input type="hidden" id="ss_basic_update_check" name="ss_basic_update_check" value="0" />
 <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
 <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value=""/>
 <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
@@ -1012,7 +1011,7 @@ function update_ss(o, s){
 													<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-35px;float: left;">
 														<button id="updateBtn" class="button_gen" onclick="update_ss(this, ' Refresh ');">检查更新</button>						
 													</div>
-													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:-27px;"><i>当前版本：<% dbus_get_def("ssconf_basic_ss_version_local", "未知"); %></i></div>
+													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:-27px;"><i>当前版本：<% dbus_get_def("ss_version_local", "未知"); %></i></div>
 													<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:-29px;"></div>	
 												</td>
 											</tr>
@@ -1022,12 +1021,14 @@ function update_ss(o, s){
 												<thead>
 												<tr>
 													<td colspan="2">Shadowsocks信息
-														<a id="detail_show_hide" name="detail_show_hide" value="" class="clientlist_expander" style="margin-left: 530px;cursor:pointer;" onclick="show_detail(this);"><em>[ 简洁 ]</em></a>
+														<i id="detail_show_hide" name="detail_show_hide" value="" class="clientlist_expander" style="cursor:pointer;margin-left: 565px;" onclick="show_detail(this);">[ 简洁 ]</i>
 													</td>
 												</tr>
 												</thead>
+											</table>
+											<table style="margin:-1px 0px 0px 0px;" width="100%"  border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
 												<tr>
-													<th width="20%">节点选择</th>
+													<th width="35%">节点选择</th>
 													<td>
 														<div style="float:left; width:165px; height:25px">
 															<select id="ssconf_basic_node" name="ssconf_basic_node" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" onchange="ss_node_sel();update_visibility();" >
@@ -1037,9 +1038,9 @@ function update_ss(o, s){
 													</td>
 												</tr>
 												<tr>
-													<th width="20%">模式</th>
+													<th width="35%">模式</th>
 													<td>
-														<select id="ss_mode" name="ss_mode" style="width:164px;margin:0px 0px 0px 2px;" class="ssconfig input_option" onchange="update_visibility();" >
+														<select id="ss_basic_mode" name="ss_basic_mode" style="width:164px;margin:0px 0px 0px 2px;" class="ssconfig input_option" onchange="update_visibility();" >
 															<!--<option value="0">【0】 禁用</option>-->
 															<option value="1">【1】 GFWlist模式</option>
 															<option value="2">【2】 大陆白名单模式</option>
@@ -1047,8 +1048,8 @@ function update_ss(o, s){
 															<option value="4">【4】 全局代理模式</option>
 														</select>
 														<div style="margin-left:170px;margin-top:-20px;margin-bottom:0px;">
-															<input type="checkbox" id="ss_use_rss" onclick="oncheckclick(this);update_visibility();" />
-															<input type="hidden" id="hd_ss_use_rss" name="ss_use_rss" value="" />
+															<input type="checkbox" id="ss_basic_use_rss" onclick="oncheckclick(this);update_visibility();" />
+															<input type="hidden" id="hd_ss_basic_use_rss" name="ss_basic_use_rss" value="" />
 															使用ss-rss
 														</div>
 														<div id="game_alert" style="margin-left:270px;margin-top:-20px;margin-bottom:0px;">
@@ -1061,32 +1062,32 @@ function update_ss(o, s){
 										<div id="detail_show">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
 												<tr id="server_tr">
-													<th width="20%">服务器</th>
+													<th width="35%">服务器</th>
 													<td>
-														<input type="text" class="ssconfig input_ss_table" id="ss_server" name="ss_server" maxlength="100" value=""/>
+														<input type="text" class="ssconfig input_ss_table" id="ss_basic_server" name="ss_basic_server" maxlength="100" value=""/>
 													</td>
 												</tr>
 												<tr id="port_tr">
-													<th width="20%">服务器端口</th>
+													<th width="35%">服务器端口</th>
 													<td>
-														<input type="text" class="ssconfig input_ss_table" id="ss_port" name="ss_port" maxlength="100" value="" />
+														<input type="text" class="ssconfig input_ss_table" id="ss_basic_port" name="ss_basic_port" maxlength="100" value="" />
 														<!--<input readonly style="background:transparent;" name="ssconf_basic_time" id="ssconf_basic_time" class="input_ss_table" maxlength="100" value=""/>-->
 
 													</td>
 												</tr>
 												<tr id="pass_tr">
-													<th width="20%">密码</th>
+													<th width="35%">密码</th>
 													<td>
-														<input type="password" name="ss_password" id="ss_password" class="ssconfig input_ss_table" maxlength="100" value=""></input>
-														<div style="margin-left:170px;margin-top:-20px;margin-bottom:0px"><input type="checkbox" name="show_pass" onclick="pass_checked(document.form.ss_password);">
+														<input type="password" name="ss_basic_password" id="ss_basic_password" class="ssconfig input_ss_table" maxlength="100" value=""></input>
+														<div style="margin-left:170px;margin-top:-20px;margin-bottom:0px"><input type="checkbox" name="show_pass" onclick="pass_checked(document.form.ss_basic_password);">
 															显示密码
 														</div>
 													</td>
 												</tr>
 												<tr id="method_tr">
-													<th width="20%">加密方式</th>
+													<th width="35%">加密方式</th>
 													<td>
-														<select id="ss_method" name="ss_method" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
+														<select id="ss_basic_method" name="ss_basic_method" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
 															<option class="content_input_fd" value="table">table</option>
 															<option class="content_input_fd" value="rc4">rc4</option>
 															<option class="content_input_fd" value="rc4-md5">rc4-md5</option>
@@ -1109,19 +1110,19 @@ function update_ss(o, s){
 												</tr>
 
 												<tr id="onetime_auth">
-													<th width="20%"><a href="https://shadowsocks.org/en/spec/one-time-auth.html" target="_blank"><u>onetime authentication</font></u></a></th>
+													<th width="35%"><a href="https://shadowsocks.org/en/spec/one-time-auth.html" target="_blank"><u>onetime authentication</font></u></a></th>
 													<td>
-														<select id="ss_onetime_auth" name="ss_onetime_auth" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
+														<select id="ss_basic_onetime_auth" name="ss_basic_onetime_auth" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
 															<option class="content_input_fd" value="1">开启</option>
 															<option class="content_input_fd" value="0">关闭</option>
 														</select>
-														<span id="ss_onetime_auth_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
+														<span id="ss_basic_onetime_auth_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
 												</tr>
-												<tr id="ss_rss_protocol_tr">
-													<th width="20%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>协议 (protocol)</u></a></th>
+												<tr id="ss_basic_rss_protocol_tr">
+													<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>协议 (protocol)</u></a></th>
 													<td>
-														<select id="ss_rss_protocol" name="ss_rss_protocol" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" onchange="update_visibility();" >
+														<select id="ss_basic_rss_protocol" name="ss_basic_rss_protocol" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" onchange="update_visibility();" >
 															<option class="content_input_fd" value="origin">origin</option>
 															<option class="content_input_fd" value="verify_simple">verify_simple</option>
 															<option class="content_input_fd" value="verify_deflate">verify_deflate</option>
@@ -1129,20 +1130,20 @@ function update_ss(o, s){
 															<option class="content_input_fd" value="auth_simple">auth_simple</option>
 															<option class="content_input_fd" value="auth_sha1">auth_sha1</option>
 														</select>
-														<span id="ss_rss_protocol_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px">yuanben</span>
+														<span id="ss_basic_rss_protocol_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px">yuanben</span>
 													</td>
 												</tr>
-												<tr id="ss_rss_obfs_tr">
-													<th width="20%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>混淆插件 (obfs)</u></a></th>
+												<tr id="ss_basic_rss_obfs_tr">
+													<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>混淆插件 (obfs)</u></a></th>
 													<td>
-														<select id="ss_rss_obfs" name="ss_rss_obfs" style="width:164px;margin:0px 0px 0px 2px;" class="input_option"  onchange="update_visibility();" >
+														<select id="ss_basic_rss_obfs" name="ss_basic_rss_obfs" style="width:164px;margin:0px 0px 0px 2px;" class="input_option"  onchange="update_visibility();" >
 															<option class="content_input_fd" value="plain">plain</option>
 															<option class="content_input_fd" value="http_simple">http_simple</option>
 															<option class="content_input_fd" value="tls_simple">tls_simple</option>
 															<option class="content_input_fd" value="random_head">random_head</option>
 															<option class="content_input_fd" value="tls1.0_session_auth">tls1.0_session_auth</option>
 														</select>
-														<span id="ss_rss_obfs_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
+														<span id="ss_basic_rss_obfs_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
 												</tr>
 
@@ -1163,7 +1164,7 @@ function update_ss(o, s){
 										<div id="ss_status1">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
 												<tr id="ss_state">
-												<th id="mode_state" width="20%">SS运行状态</th>
+												<th id="mode_state" width="35%">SS运行状态</th>
 													<td>
 														<a>
 															<span style="display: none" id="ss_state1">尚未启用! </span>
@@ -1195,7 +1196,7 @@ function update_ss(o, s){
 										<div id="ss_rule_number">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >		
 												<tr  id="gfw_number">
-													<th id="gfw_nu1" width="20%">当前gfwlist域名数量</th>
+													<th id="gfw_nu1" width="35%">当前gfwlist域名数量</th>
 													<td id="gfw_nu2">
 															<% nvram_get("ipset_numbers"); %>&nbsp;条，最后更新版本：
 															<a href="https://github.com/koolshare/koolshare.github.io/blob/master/maintain_files/gfwlist.conf" target="_blank">
@@ -1204,7 +1205,7 @@ function update_ss(o, s){
 													</td>
 												</tr>
 												<tr  id="chn_number">
-													<th id="chn_nu1" width="20%">当前大陆白名单IP段数量</th>
+													<th id="chn_nu1" width="35%">当前大陆白名单IP段数量</th>
 												<td id="chn_nu2">
 													<p>
 														<% nvram_get("chnroute_numbers"); %>&nbsp;行，最后更新版本：
@@ -1215,7 +1216,7 @@ function update_ss(o, s){
 												</td>
 												</tr>
 												<tr  id="cdn_number">
-													<th id="cdn_nu1" width="20%">当前国内域名数量</th>
+													<th id="cdn_nu1" width="35%">当前国内域名数量</th>
 													<td id="cdn_nu2">
 														<p>
 														<% nvram_get("cdn_numbers"); %>&nbsp;条，最后更新版本：
@@ -1226,9 +1227,9 @@ function update_ss(o, s){
 													</td>
 												</tr>
 												<tr id="chromecast">
-													<th width="20%">Chromecast支持</th>
+													<th width="35%">Chromecast支持</th>
 													<td>
-														<select id="ss_chromecast" name="ss_chromecast" class="ssconfig input_option" onchange="update_visibility();" >
+														<select id="ss_basic_chromecast" name="ss_basic_chromecast" class="ssconfig input_option" onchange="update_visibility();" >
 															<option value="0">禁用</option>
 															<option value="1">开启</option>
 														</select>
@@ -1236,9 +1237,9 @@ function update_ss(o, s){
 													</td>
 												</tr>
 												<tr id="123">
-													<th width="20%">广告过滤</th>
+													<th width="35%">广告过滤</th>
 													<td>
-														<select id="ss_adblock" name="ss_adblock" class="ssconfig input_option" onchange="update_visibility();" >
+														<select id="ss_basic_adblock" name="ss_basic_adblock" class="ssconfig input_option" onchange="update_visibility();" >
 															<option value="0">禁用</option>
 															<option value="1">开启</option>
 														</select>
@@ -1250,13 +1251,13 @@ function update_ss(o, s){
 													</td>
 												</tr>
 												<tr id="update_rules">
-													<th width="20%">Shadowsocks规则自动更新</th>
+													<th width="35%">Shadowsocks规则自动更新</th>
 													<td>
-														<select id="ss_rule_update" name="ss_rule_update" class="ssconfig input_option" onchange="update_visibility();" >
+														<select id="ss_basic_rule_update" name="ss_basic_rule_update" class="ssconfig input_option" onchange="update_visibility();" >
 															<option value="0">禁用</option>
 															<option value="1">开启</option>
 														</select>
-														<select id="ss_rule_update_time" name="ss_rule_update_time" class="ssconfig input_option" title="选择规则列表自动更新时间，更新后将自动重启SS" onchange="update_visibility();" >
+														<select id="ss_basic_rule_update_time" name="ss_basic_rule_update_time" class="ssconfig input_option" title="选择规则列表自动更新时间，更新后将自动重启SS" onchange="update_visibility();" >
 															<option value="0">00:00点</option>
 															<option value="1">01:00点</option>
 															<option value="2">02:00点</option>
@@ -1284,23 +1285,23 @@ function update_ss(o, s){
 														</select>
 															&nbsp;
 															<a id="update_choose">
-																<input type="checkbox" id="ss_gfwlist_update" name="a" title="选择此项应用gfwlist自动更新" onclick="oncheckclick(this);">gfwlist
-																<input type="checkbox" id="ss_chnroute_update" name="a2" onclick="oncheckclick(this);">chnroute
-																<input type="checkbox" id="ss_cdn_update" name="a3" onclick="oncheckclick(this);">CDN
-																<input type="checkbox" id="ss_adblock_update" name="a4" onclick="oncheckclick(this);">adblock
-																<input type="hidden" id="hd_ss_gfwlist_update" name="ss_gfwlist_update" value=""/>
-																<input type="hidden" id="hd_ss_chnroute_update" name="ss_chnroute_update" value=""/>
-																<input type="hidden" id="hd_ss_cdn_update" name="ss_cdn_update" value=""/>
-																<input type="hidden" id="hd_ss_adblock_update" name="ss_adblock_update" value=""/>
+																<input type="checkbox" id="ss_basic_gfwlist_update" name="a" title="选择此项应用gfwlist自动更新" onclick="oncheckclick(this);">gfwlist
+																<input type="checkbox" id="ss_basic_chnroute_update" name="a2" onclick="oncheckclick(this);">chnroute
+																<input type="checkbox" id="ss_basic_cdn_update" name="a3" onclick="oncheckclick(this);">CDN
+																<input type="checkbox" id="ss_basic_adblock_update" name="a4" onclick="oncheckclick(this);">adblock
+																<input type="hidden" id="hd_ss_basic_gfwlist_update" name="ss_basic_gfwlist_update" value=""/>
+																<input type="hidden" id="hd_ss_basic_chnroute_update" name="ss_basic_chnroute_update" value=""/>
+																<input type="hidden" id="hd_ss_basic_cdn_update" name="ss_basic_cdn_update" value=""/>
+																<input type="hidden" id="hd_ss_basic_adblock_update" name="ss_basic_adblock_update" value=""/>
 															</a>
 																<input id="update_now" onclick="updatelist()" style="font-family:'Courier New'; Courier, mono; font-size:11px;" type="submit" value="立即更新" />
 															<a href="http://192.168.1.1/Main_SsLog_Content.asp" target="_blank"></a>
 													</td>
 												</tr>
 												<tr id="ss_lan_controls">
-													<th width="20%">局域网客户端控制</th>
+													<th width="35%">局域网客户端控制</th>
 													<td>
-														<select id="ss_lan_control" name="ss_lan_control" class="input_ss_table" style="width:auto;height:25px;margin-left: 0px;" onchange="update_visibility();" >
+														<select id="ss_basic_lan_control" name="ss_basic_lan_control" class="input_ss_table" style="width:auto;height:25px;margin-left: 0px;" onchange="update_visibility();" >
 															<option value="0">禁用</option>
 															<option value="1">黑名单模式</option>
 															<option value="2">白名单模式</option>
@@ -1314,9 +1315,9 @@ function update_ss(o, s){
 										<div id="boot_delay">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
 												<tr id="ss_sleep_tr">
-													<th width="20%">开机启动延时</th>
+													<th width="35%">开机启动延时</th>
 													<td>
-														<select id="ss_sleep" name="ss_sleep" class="ssconfig input_option" onchange="update_visibility();" >
+														<select id="ss_basic_sleep" name="ss_basic_sleep" class="ssconfig input_option" onchange="update_visibility();" >
 															<option value="0">0s</option>
 															<option value="5">5s</option>
 															<option value="10">10s</option>

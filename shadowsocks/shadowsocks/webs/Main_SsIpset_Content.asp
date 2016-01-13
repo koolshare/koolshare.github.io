@@ -80,8 +80,13 @@
 }
 #ss_ipset_black_domain_web::-webkit-input-placeholder::before {
     color:#999;
-    content:"此处填入需要强制走ss的域名，一行一个，格式如下：\A abc.com\A xyz.cn\A 填入过多可能导致页面崩溃！建议关闭gfwlist自动更新后，修改/jffs/ss/ipset/gfwlist.conf\A";
-)
+    content:"# 此处填入需要强制走ss的域名，一行一个，格式如下：\A koolshare.cn\A baidu.cn\A # 默认已经由gfwlist提供了上千条被墙域名，请勿重复添加!\A";
+}
+#ss_ipset_address::-webkit-input-placeholder::before {
+    color:#999;
+    content:"# 此处填入需要指定解析地址的域名，一行一个，格式如下：\A address=/koolshare.cn/2.2.2.2\A address=/baidu.com/3.3.3.3\A ";
+    address=/example1.com/2.2.2.2,address=/example2.com/3.3.3.3
+}
 </style>
 <script>
 var socks5 = 0
@@ -166,8 +171,8 @@ function validForm(){
 			return false;
 		}
 		$G(temp_ss[i]).value = rlt;
-		return true;
 	}	
+	return true;
 }
 
 function validForm2(){
@@ -193,8 +198,8 @@ function validForm2(){
 			return false;
 		}
 		$G(temp_ss[i]).value = rlt;
-		return true;
-	}	
+	}
+	return true;
 }
 
 function openShutManager(oSourceObj,oTargetObj,shutAble,oOpenTip,oShutTip){
@@ -260,8 +265,8 @@ function update_visibility() {
 <input type="hidden" name="action_script" value="">
 <input type="hidden" name="action_wait" value="8">
 <input type="hidden" name="first_time" value="">
-<input type="hidden" id="ss_enable" name="ss_enable" value="1" />
-<input type="hidden" id="ss_mode" name="ss_mode" value="1" />
+<input type="hidden" id="ss_basic_enable" name="ss_basic_enable" value="1" />
+<input type="hidden" id="ss_basic_mode" name="ss_basic_mode" value="1" />
 <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>">
 <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="">
 <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>">
@@ -272,7 +277,8 @@ function update_visibility() {
 			<div id="mainMenu"></div>
 			<div id="subMenu"></div>
 		</td>
-		<td valign="top"><div id="tabMenu" class="submenuBlock"></div>
+		<td valign="top">
+			<div id="tabMenu" class="submenuBlock"></div>
 			<table width="98%" border="0" align="left" cellpadding="0" cellspacing="0">
 				<tr>
 					<td align="left" valign="top">
@@ -359,13 +365,13 @@ function update_visibility() {
 													</a>
 												</th>
 												<td>
-													<textarea rows=12 style="width:99%; font-size:11px;background:#475A5F;color:#FFFFFF;border:1px solid gray;height:auto;" id="ss_ipset_black_domain_web" name="ss_ipset_black_domain_web" title="">example1.com,example2.cn</textarea>
+													<textarea placeholder=" " rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_ipset_black_domain_web" name="ss_ipset_black_domain_web" title=""></textarea>
 												</td>
 											</tr>
 											<tr>
 												<th width="20%">自定义hosts</th>
 												<td>
-													<textarea rows=12 style="width:99%; font-size:11px;background:#475A5F;color:#FFFFFF;border:1px solid gray;height:auto;" id="ss_ipset_address" name="ss_ipset_address" title="">address=/example1.com/2.2.2.2,address=/example2.com/3.3.3.3</textarea>
+													<textarea placeholder=" " rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_ipset_address" name="ss_ipset_address" title=""></textarea>
 												</td>
 											</tr>
 										</table>
