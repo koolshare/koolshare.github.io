@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+
+0.8.0 ( 14/01/2016 06:36:17 )
+   - FIX:	fix local version show
+
 0.7.9 ( 14/01/2016 06:26:06 )
    - ADD:	add some directions in the ost/black list aera
    - FIX:	complete of move ss conf to dbus

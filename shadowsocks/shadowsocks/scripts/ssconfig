@@ -67,7 +67,7 @@ if [ "$ss_basic_update_check" == "1" ];then
 				/tmp/shadowsocks/install.sh
 				sleep 2
 				dbus set ss_basic_install_status="3"
-				dbus set ss_basic_version_local=$ss_version_web1
+				dbus set ss_basic_version_local=$ss_basic_version_web1
 				sleep 2
 				dbus set ss_basic_install_status="0"
 				dbus set ss_basic_update_check="0"

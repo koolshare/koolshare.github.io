@@ -188,7 +188,7 @@ echo $(date):
 # start setvice
 
 # start ss-local on port 23456
-echo $(date): Sicks5 enable on port 23456 for DNS2SOCKS..
+echo $(date): Sicks5 enable on port 23456 \for DNS2SOCKS..
 if [ "$ss_basic_use_rss" == "1" ];then
 	rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 elif  [ "$ss_basic_use_rss" == "0" ];then
