@@ -1,6 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 
+0.8.1 ( 14/01/2016 06:36:17 )
+   - FIX:	fix software center
+		(software center's update now temporarily rely on ss)
+
 0.8.0 ( 14/01/2016 06:36:17 )
    - FIX:	fix local version show
 

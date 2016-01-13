@@ -347,7 +347,7 @@ $('#xware_div').fadeOut(100);
 
 													<tr bgcolor="#444f53" width="235px">
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="p2p" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_koolnet.asp'">></div>
+															<div id="p2p" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_koolnet.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">P2P穿透</div>
 														</td>
 														<td width="6px">
