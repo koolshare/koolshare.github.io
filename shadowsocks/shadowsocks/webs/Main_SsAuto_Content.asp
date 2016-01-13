@@ -18,219 +18,245 @@
 <script language="JavaScript" type="text/javascript" src="/validator.js"></script>
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
-<script type="text/javascript" src="/ss_conf?f=redchn&v=<% uptime(); %>"></script>
-<script type="text/javascript" src="/ss-menu.js"></script>
+<script type="text/javascript" src="/dbconf?p=ss&v=<% uptime(); %>"></script>
+<script type="text/javascript" src="/res/ss-menu.js"></script>
 <style>
 .Bar_container{
-width:85%;
-height:20px;
-border:1px inset #999;
-margin:0 auto;
-margin-top:20px \9;
-background-color:#FFFFFF;
-z-index:100;
+	width:85%;
+	height:20px;
+	border:1px inset #999;
+	margin:0 auto;
+	margin-top:20px \9;
+	background-color:#FFFFFF;
+	z-index:100;
 }
 #proceeding_img_text{
-position:absolute;
-z-index:101;
-font-size:11px; color:#000000;
-line-height:21px;
-width: 83%;
+	position:absolute;
+	z-index:101;
+	font-size:11px; color:#000000;
+	line-height:21px;
+	width: 83%;
 }
 #proceeding_img{
-height:21px;
-background:#C0D1D3 url(/images/ss_proceding.gif);
+	height:21px;
+	background:#C0D1D3 url(/images/ss_proceding.gif);
 }
 #ClientList_Block_PC {
-border: 1px outset #999;
-background-color: #576D73;
-position: absolute;
-*margin-top:26px;
-margin-left: 3px;
-*margin-left:-129px;
-width: 255px;
-text-align: left;
-height: auto;
-overflow-y: auto;
-z-index: 200;
-padding: 1px;
-display: none;
+	border: 1px outset #999;
+	background-color: #576D73;
+	position: absolute;
+	*margin-top:26px;
+	margin-left: 3px;
+	*margin-left:-129px;
+	width: 255px;
+	text-align: left;
+	height: auto;
+	overflow-y: auto;
+	z-index: 200;
+	padding: 1px;
+	display: none;
 }
 #ClientList_Block_PC div {
-background-color: #576D73;
-height: auto;
-*height:20px;
-line-height: 20px;
-text-decoration: none;
-font-family: Lucida Console;
-padding-left: 2px;
+	background-color: #576D73;
+	height: auto;
+	*height:20px;
+	line-height: 20px;
+	text-decoration: none;
+	font-family: Lucida Console;
+	padding-left: 2px;
 }
 #ClientList_Block_PC a {
-background-color: #EFEFEF;
-color: #FFF;
-font-size: 12px;
-font-family: Arial, Helvetica, sans-serif;
-text-decoration: none;
+	background-color: #EFEFEF;
+	color: #FFF;
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-decoration: none;
 }
 #ClientList_Block_PC div:hover, #ClientList_Block a:hover {
-background-color: #3366FF;
-color: #FFFFFF;
-cursor: default;
+	background-color: #3366FF;
+	color: #FFFFFF;
+	cursor: default;
 }
 </style>
 <script>
 var socks5 = 0
 var ssmode = 2
+var $j = jQuery.noConflict();
 var $G = function (id) {
-return document.getElementById(id);
+	return document.getElementById(id);
 };
-function key_event(evt){
-if(evt.keyCode != 27 || isMenuopen == 0)
-return false;
-pullLANIPList(document.getElementById("pull_arrow"));
-}
+
 function onSubmitCtrl(o, s) {
-if(validForm()){
-showSSLoadingBar(25);
-document.form.action_mode.value = s;
-updateOptions();
+	if(validForm() && validForm2() && validForm3()){
+		showSSLoadingBar(25);
+		document.form.action_mode.value = s;
+		updateOptions();
+	}
 }
-}
-/*
+
 function done_validating(action){
-refreshpage(8);
+refreshpage(25);
 }
-*/
+
 String.prototype.replaceAll = function(s1,s2){
 　　return this.replace(new RegExp(s1,"gm"),s2);
 }
 function init(){
-show_menu(menu_hook);
-if(typeof redchn != "undefined") {
-for(var field in redchn) {
-var el = document.getElementById("redchn_"+field);
-if(el != null) {
-el.value = redchn[field];
-}
-var temp_ss = ["redchn_isp_website_web","redchn_wan_blacklist","redchn_wan_whitelist"];
-for (var i = 0; i < temp_ss.length; i++) {
-temp_str = $G(temp_ss[i]).value;
-$G(temp_ss[i]).value = temp_str.replaceAll(",","\n");
-}
-}
-} else {
-document.getElementById("logArea").innerHTML = "无法读取配置,jffs为空或配置文件不存在?";
-}
-update_visibility()
+	show_menu(menu_hook);
+	if(typeof db_ss != "undefined") {
+		for(var field in db_ss) {
+			var el = document.getElementById(field);
+				if(el != null) {
+				el.value = db_ss[field];
+			}
+			var temp_ss = ["ss_redchn_isp_website_web","ss_redchn_wan_blacklist","ss_redchn_wan_whitelist"];
+			for (var i = 0; i < temp_ss.length; i++) {
+				temp_str = $G(temp_ss[i]).value;
+				$G(temp_ss[i]).value = temp_str.replaceAll(",","\n");
+			}
+		}
+	} else {
+		document.getElementById("logArea").innerHTML = "无法读取配置,jffs为空或配置文件不存在?";
+	}
+	update_visibility()
 }
 function updateOptions(){
-document.form.enctype = "";
-document.form.encoding = "";
-document.form.action = "/applyss.cgi?f=redchn";
-document.form.SystemCmd.value = "ssconfig redchn";
-document.form.submit();
+	document.form.enctype = "";
+	document.form.encoding = "";
+	document.form.action = "/applydb.cgi?p=ss_redchn_";
+	document.form.SystemCmd.value = "ssconfig redchn";
+	document.form.submit();
 }
-var $j = jQuery.noConflict();
-var _responseLen;
-var noChange = 0;
-var over_var = 0;
-var isMenuopen = 0;
-function hideClients_Block(evt){
-if(typeof(evt) != "undefined"){
-if(!evt.srcElement)
-evt.srcElement = evt.target; // for Firefox
-if(evt.srcElement.id == "pull_arrow" || evt.srcElement.id == "ClientList_Block"){
-return;
-}
-}
-$G("pull_arrow").src = "/images/arrow-down.gif";
-$G('ClientList_Block_PC').style.display='none';
-isMenuopen = 0;
-}
-function pullLANIPList(obj){
-if(isMenuopen == 0){
-obj.src = "/images/arrow-top.gif"
-$G("ClientList_Block_PC").style.display = 'block';
-isMenuopen = 1;
-}
-else
-hideClients_Block();
-}
+
 function validForm(){
-var is_ok = true;
-var temp_ss = ["redchn_isp_website_web","redchn_wan_blacklist","redchn_wan_whitelist"];
-for(var i = 0; i < temp_ss.length; i++) {
-var temp_str = $G(temp_ss[i]).value;
-if(temp_str == "") {
-continue;
+	var temp_ss = ["ss_redchn_isp_website_web"];
+	for(var i = 0; i < temp_ss.length; i++) {
+		var temp_str = $G(temp_ss[i]).value;
+		if(temp_str == "") {
+			continue;
+		}
+		var lines = temp_str.split("\n");
+		var rlt = "";
+		for(var j = 0; j < lines.length; j++) {
+			var nstr = lines[j].trim();
+			if(nstr != "") {
+				rlt = rlt + nstr + ",";
+			}
+		}
+		if(rlt.length > 0) {
+			rlt = rlt.substring(0, rlt.length-1);
+		}
+		if(rlt.length > 10000) {
+			alert(temp_ss[i] + " 不能超过10000个字符");
+			return false;
+		}
+		$G(temp_ss[i]).value = rlt;
+		return true;
+	}	
 }
-var lines = temp_str.split("\n");
-var rlt = "";
-for(var j = 0; j < lines.length; j++) {
-var nstr = lines[j].trim();
-if(nstr != "") {
-rlt = rlt + nstr + ",";
+
+function validForm2(){
+	var temp_ss = ["ss_redchn_wan_blacklist"];
+	for(var i = 0; i < temp_ss.length; i++) {
+		var temp_str = $G(temp_ss[i]).value;
+		if(temp_str == "") {
+			continue;
+		}
+		var lines = temp_str.split("\n");
+		var rlt = "";
+		for(var j = 0; j < lines.length; j++) {
+			var nstr = lines[j].trim();
+			if(nstr != "") {
+				rlt = rlt + nstr + ",";
+			}
+		}
+		if(rlt.length > 0) {
+			rlt = rlt.substring(0, rlt.length-1);
+		}
+		if(rlt.length > 10000) {
+			alert(temp_ss[i] + " 不能超过10000个字符");
+			return false;
+		}
+		$G(temp_ss[i]).value = rlt;
+		return true;
+	}	
 }
+
+function validForm3(){
+	var temp_ss = ["ss_redchn_wan_whitelist"];
+	for(var i = 0; i < temp_ss.length; i++) {
+		var temp_str = $G(temp_ss[i]).value;
+		if(temp_str == "") {
+			continue;
+		}
+		var lines = temp_str.split("\n");
+		var rlt = "";
+		for(var j = 0; j < lines.length; j++) {
+			var nstr = lines[j].trim();
+			if(nstr != "") {
+				rlt = rlt + nstr + ",";
+			}
+		}
+		if(rlt.length > 0) {
+			rlt = rlt.substring(0, rlt.length-1);
+		}
+		if(rlt.length > 10000) {
+			alert(temp_ss[i] + " 不能超过10000个字符");
+			return false;
+		}
+		$G(temp_ss[i]).value = rlt;
+		return true;
+	}	
 }
-if(rlt.length > 0) {
-rlt = rlt.substring(0, rlt.length-1);
-}
-if(rlt.length > 4000) {
-alert(temp_ss[i] + " 数字不能超过4000个字符");
-return false;
-}
-$G(temp_ss[i]).value = rlt;
-}
-return is_ok;
-}
+
 function openShutManager(oSourceObj,oTargetObj,shutAble,oOpenTip,oShutTip){
-var sourceObj = typeof oSourceObj == "string" ? document.getElementById(oSourceObj) : oSourceObj;
-var targetObj = typeof oTargetObj == "string" ? document.getElementById(oTargetObj) : oTargetObj;
-var openTip = oOpenTip || "";
-var shutTip = oShutTip || "";
-if(targetObj.style.display!="none"){
-if(shutAble) return;
-targetObj.style.display="none";
-if(openTip && shutTip){
-sourceObj.innerHTML = shutTip;
-}
-} else {
-targetObj.style.display="block";
-if(openTip && shutTip){
-sourceObj.innerHTML = openTip;
-}
-}
+	var sourceObj = typeof oSourceObj == "string" ? document.getElementById(oSourceObj) : oSourceObj;
+	var targetObj = typeof oTargetObj == "string" ? document.getElementById(oTargetObj) : oTargetObj;
+	var openTip = oOpenTip || "";
+	var shutTip = oShutTip || "";
+	if(targetObj.style.display!="none"){
+		if(shutAble) return;
+			targetObj.style.display="none";
+		if(openTip && shutTip){
+			sourceObj.innerHTML = shutTip;
+		}
+	} else {
+		targetObj.style.display="block";
+		if(openTip && shutTip){
+			sourceObj.innerHTML = openTip;
+		}
+	}
 }
 function update_visibility(){
-rdc = document.form.redchn_dns_china.value;
-rdf = document.form.redchn_dns_foreign.value;
-rs = document.form.redchn_sstunnel.value
-rcc = document.form.redchn_chinadns_china.value
-rcf = document.form.redchn_chinadns_foreign.value
-showhide("show_isp_dns", (rdc == "1"));
-showhide("redchn_dns_china_user", (rdc == "5"));
-showhide("redchn_dns_china_user_txt1", (rdc !== "5"));
-showhide("redchn_dns_china_user_txt2", (rdc == "5"));
-showhide("redchn_opendns", (rdf == "1"));
-showhide("redchn_sstunnel", (rdf == "2"));
-showhide("chinadns_china", (rdf == "3"));
-showhide("chinadns_foreign", (rdf == "3"));
-showhide("redchn_sstunnel_user", ((rdf == "2") && (rs == "4")));
-showhide("dns_plan_foreign1", (rdf == "1"));
-showhide("dns_plan_foreign2", ((rdf == "2") && (rs !== "4")));
-showhide("dns_plan_foreign3", ((rdf == "2") && (rs == "4")));
-showhide("redchn_chinadns_china_user", (rcc == "4"));
-showhide("chinadns_china1", (rcc !== "4"));
-showhide("chinadns_china2", (rcc == "4"));
-showhide("redchn_chinadns_foreign_user", (rcf == "4"));
-showhide("chinadns_foreign1", (rcf !== "4"));
-showhide("chinadns_foreign2", (rcf == "4"));
-showhide("redchn_dns2socks_user", (rdf == "4"));
-showhide("dns_plan_foreign0", (rdf == "4"));
+	rdc = document.form.ss_redchn_dns_china.value;
+	rdf = document.form.ss_redchn_dns_foreign.value;
+	rs = document.form.ss_redchn_sstunnel.value
+	rcc = document.form.ss_redchn_chinadns_china.value
+	rcf = document.form.ss_redchn_chinadns_foreign.value
+	showhide("show_isp_dns", (rdc == "1"));
+	showhide("ss_redchn_dns_china_user", (rdc == "5"));
+	showhide("ss_redchn_dns_china_user_txt1", (rdc !== "5"));
+	showhide("ss_redchn_dns_china_user_txt2", (rdc == "5"));
+	showhide("ss_redchn_opendns", (rdf == "1"));
+	showhide("ss_redchn_sstunnel", (rdf == "2"));
+	showhide("chinadns_china", (rdf == "3"));
+	showhide("chinadns_foreign", (rdf == "3"));
+	showhide("ss_redchn_sstunnel_user", ((rdf == "2") && (rs == "4")));
+	showhide("dns_plan_foreign1", (rdf == "1"));
+	showhide("dns_plan_foreign2", ((rdf == "2") && (rs !== "4")));
+	showhide("dns_plan_foreign3", ((rdf == "2") && (rs == "4")));
+	showhide("ss_redchn_chinadns_china_user", (rcc == "4"));
+	showhide("chinadns_china1", (rcc !== "4"));
+	showhide("chinadns_china2", (rcc == "4"));
+	showhide("ss_redchn_chinadns_foreign_user", (rcf == "4"));
+	showhide("chinadns_foreign1", (rcf !== "4"));
+	showhide("chinadns_foreign2", (rcf == "4"));
+	showhide("ss_redchn_dns2socks_user", (rdf == "4"));
+	showhide("dns_plan_foreign0", (rdf == "4"));
 }
 </script>
 </head>
-<body onkeydown="key_event(event);" onclick="if(isMenuopen){hideClients_Block(event)}" onload="init();">
+<body onload="init();">
 <div id="TopBanner"></div>
 <div id="Loading" class="popup_bg"></div>
 <div id="LoadingBar" class="popup_bar_bg">
@@ -249,7 +275,7 @@ showhide("dns_plan_foreign0", (rdf == "4"));
 <!--[if lte IE 6.5]><iframe class="hackiframe"></iframe><![endif]-->
 </div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
-<form method="post" name="form" action="/applyss.cgi" target="hidden_frame">
+<form method="post" name="form" action="/applydb.cgi?p=ss" target="hidden_frame">
 <input type="hidden" name="current_page" value="Main_SsAuto_Content.asp">
 <input type="hidden" name="next_page" value="Main_SsAuto_Content.asp">
 <input type="hidden" name="group_id" value="">
@@ -258,6 +284,8 @@ showhide("dns_plan_foreign0", (rdf == "4"));
 <input type="hidden" name="action_script" value="">
 <input type="hidden" name="action_wait" value="8">
 <input type="hidden" name="first_time" value="">
+<input type="hidden" id="ss_enable" name="ss_enable" value="1" />
+<input type="hidden" id="ss_mode" name="ss_mode" value="2" />
 <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>">
 <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="">
 <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>">
@@ -284,7 +312,7 @@ showhide("dns_plan_foreign0", (rdf == "4"));
 </thead>
 <tr id="dns_plan_china">
 <th width="20%">选择国内DNS</th>
-<td><select id="redchn_dns_china" name="redchn_dns_china" class="input_option" onclick="update_visibility();" >
+<td><select id="ss_redchn_dns_china" name="ss_redchn_dns_china" class="input_option" onclick="update_visibility();" >
 <option value="1">运营商DNS【自动获取】</option>
 <option value="2">阿里DNS1【223.5.5.5】</option>
 <option value="3">阿里DNS2【223.6.6.6】</option>
@@ -294,22 +322,22 @@ showhide("dns_plan_foreign0", (rdf == "4"));
 <option value="8">dnspod DNS【119.29.29.29】</option>
 <option value="5">自定义</option>
 </select>
-<input type="text" class="ssconfig input_ss_table" id="redchn_dns_china_user" name="redchn_dns_china_user" maxlength="100" value="">
+<input type="text" class="ssconfig input_ss_table" id="ss_redchn_dns_china_user" name="ss_redchn_dns_china_user" maxlength="100" value="">
 <span id="show_isp_dns">【
 <% nvram_get("wan0_dns"); %>
 】</span> <br/>
-<span id="redchn_dns_china_user_txt1">默认：运营商DNS【用于解析国内6000+个域名】</span> <span id="redchn_dns_china_user_txt2">确保你自定义输入的国内DNS在chnroute中</span></td>
+<span id="ss_redchn_dns_china_user_txt1">默认：运营商DNS【用于解析国内6000+个域名】</span> <span id="ss_redchn_dns_china_user_txt2">确保你自定义输入的国内DNS在chnroute中</span></td>
 </tr>
 <tr id="dns_plan_foreign">
 <th width="20%">选择国外DNS
 </center></th>
-<td><select id="redchn_dns_foreign" name="redchn_dns_foreign" class="input_option" onclick="update_visibility();" >
+<td><select id="ss_redchn_dns_foreign" name="ss_redchn_dns_foreign" class="input_option" onclick="update_visibility();" >
 <option value="4">DNS2SOCKS</option>
 <option value="1">dnscrypt-proxy</option>
 <option value="2">ss-tunnel</option>
 <option value="3">ChinaDNS（CDN最优）</option>
 </select>
-<select id="redchn_opendns" name="redchn_opendns" class="input_option">
+<select id="ss_redchn_opendns" name="ss_redchn_opendns" class="input_option">
 <option value="opendns">OpenDNS1</option>
 <option value="cisco-familyshield">OpenDNS2</option>
 <option value="cisco-port53">OpenDNS3</option>
@@ -326,14 +354,14 @@ showhide("dns_plan_foreign0", (rdf == "4"));
 <option value="ovpnto-se">ovpnto-se</option>
 <option value="soltysiak">soltysiak</option>
 </select>
-<input type="text" class="ssconfig input_ss_table" id="redchn_dns2socks_user" name="redchn_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
-<select id="redchn_sstunnel" name="redchn_sstunnel" class="input_option" onclick="update_visibility();" >
+<input type="text" class="ssconfig input_ss_table" id="ss_redchn_dns2socks_user" name="ss_redchn_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
+<select id="ss_redchn_sstunnel" name="ss_redchn_sstunnel" class="input_option" onclick="update_visibility();" >
 <option value="1">OpenDNS [208.67.220.220]</option>
 <option value="2">Goole DNS1 [8.8.8.8]</option>
 <option value="3">Goole DNS2 [8.8.4.4]</option>
 <option value="4">自定义</option>
 </select>
-<input type="text" class="ssconfig input_ss_table" id="redchn_sstunnel_user" name="redchn_sstunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
+<input type="text" class="ssconfig input_ss_table" id="ss_redchn_sstunnel_user" name="ss_redchn_sstunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
 <br/>
 <span id="dns_plan_foreign0">默认：DNS2SOCKS，用以解析国内6000+域名以外的国内域名和国外域名</span>
 <span id="dns_plan_foreign1">用dnscrypt-proxy解析国内6000+域名以外的国内域名和国外域名</span>
@@ -344,26 +372,26 @@ showhide("dns_plan_foreign0", (rdf == "4"));
 <tr id="chinadns_china">
 <th width="20%">ChinaDNS国内DNS
 </center></th>
-<td><select id="redchn_chinadns_china" name="redchn_chinadns_china" class="input_option" onclick="update_visibility();" >
+<td><select id="ss_redchn_chinadns_china" name="ss_redchn_chinadns_china" class="input_option" onclick="update_visibility();" >
 <option value="1">阿里DNS1【223.5.5.5】</option>
 <option value="2">阿里DNS2【223.6.6.6】</option>
 <option value="3">114DNS【114.114.114.114】</option>
 <option value="4">自定义</option>
 </select>
-<input type="text" class="ssconfig input_ss_table" id="redchn_chinadns_china_user" name="redchn_chinadns_china_user" placeholder="需端口号如：8.8.8.8:53" maxlength="100" value="">
+<input type="text" class="ssconfig input_ss_table" id="ss_redchn_chinadns_china_user" name="ss_redchn_chinadns_china_user" placeholder="需端口号如：8.8.8.8:53" maxlength="100" value="">
 <br/>
 <span id="chinadns_china1">默认：阿里DNS1【用于解析国内6000+个域名以外的域名】</span> <span id="chinadns_china2">自定义国内DNS【用于解析国内6000+个域名以外的域名】</span></td>
 </tr>
 <tr id="chinadns_foreign">
 <th width="20%">ChinaDNS国外DNS
 </center></th>
-<td><select id="redchn_chinadns_foreign" name="redchn_chinadns_foreign" class="input_option" onclick="update_visibility();" >
+<td><select id="ss_redchn_chinadns_foreign" name="ss_redchn_chinadns_foreign" class="input_option" onclick="update_visibility();" >
 <option value="1">OpenDNS [208.67.220.220]</option>
 <option value="2">Google DNS1 [8.8.8.8]</option>
 <option value="3">Google DNS2 [8.8.4.4]</option>
 <option value="4">自定义</option>
 </select>
-<input type="text" class="ssconfig input_ss_table" id="redchn_chinadns_foreign_user" name="redchn_chinadns_foreign_user" maxlength="100" value="">
+<input type="text" class="ssconfig input_ss_table" id="ss_redchn_chinadns_foreign_user" name="ss_redchn_chinadns_foreign_user" maxlength="100" value="">
 <span>此处DNS通过ss-tunnel转发给SS服务器解析</span> <br/>
 <span id="chinadns_foreign1">默认：Google DNS1【用于解析国外域名】<br/>
 ！！ss-tunnel需要ss账号支持udp转发才能使用！！</span> <span id="chinadns_foreign2">右侧输入框输入自定义国外【用于解析国外域名】</span></td>
@@ -374,22 +402,19 @@ showhide("dns_plan_foreign0", (rdf == "4"));
 <a href="https://github.com/koolshare/koolshare.github.io/blob/master/maintain_files/cdn.txt" target="_blank"><font color="#ffcc00"><u>查看默认添加的
 <% nvram_get("cdn_numbers"); %>
 条国内域名</u></font></a></th>
-<td><textarea cols="50" rows="8" id="redchn_isp_website_web" name="redchn_isp_website_web" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;">
-</textarea></td>
+<td><textarea cols="50" rows="8" id="ss_redchn_isp_website_web" name="ss_redchn_isp_website_web" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;">koolshare.com,baidu.com</textarea></td>
 </tr>
 <tr>
 <th width="20%">外网黑名单<br>
 <br>
 <font color="#ffcc00">添加不需要走代理的外网ip地址</font></th>
-<td><textarea cols="50" rows="8" id="redchn_wan_blacklist" name="redchn_wan_blacklist" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;">
-</textarea></td>
+<td><textarea cols="50" rows="8" id="ss_redchn_wan_blacklist" name="ss_redchn_wan_blacklist" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;"> </textarea></td>
 </tr>
 <tr>
 <th width="20%">外网白名单<br>
 <br>
 <font color="#ffcc00">添加需要强制走代理的外网ip地址</font></th>
-<td><textarea cols="50" rows="8" id="redchn_wan_whitelist" name="redchn_wan_whitelist" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;">
-</textarea></td>
+<td><textarea cols="50" rows="8" id="ss_redchn_wan_whitelist" name="ss_redchn_wan_whitelist" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;"> </textarea></td>
 </tr>
 </table>
 <div class="apply_gen">

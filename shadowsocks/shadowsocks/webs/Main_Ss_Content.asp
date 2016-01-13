@@ -20,8 +20,7 @@
 <script type="text/javascript" src="/general.js"></script>
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
 <script language="JavaScript" type="text/javascript" src="/client_function.js"></script>
-<script type="text/javascript" src="/ss_conf?v=<% uptime(); %>"></script>
-<script type="text/javascript" src="/dbconf?p=ssconf_basic&v=<% uptime(); %>"></script>
+<script type="text/javascript" src="/dbconf?p=ss&v=<% uptime(); %>"></script>
 <script type="text/javascript" src="/res/ss-menu.js"></script>
 <style>
 .Bar_container{
@@ -109,11 +108,11 @@ function init() {
     show_hide_table();
     buildswitch();
     refreshRate = getRefresh();
-    for(var field in db_ssconf_basic) {
-		$j('#'+field).val(db_ssconf_basic[field]);
+    for(var field in db_ss) {
+		$j('#'+field).val(db_ss[field]);
 	}
-    if (typeof ss != "undefined") {
-        update_ss_ui(ss);
+    if (typeof db_ss != "undefined") {
+        update_ss_ui(db_ss);
         loadAllConfigs();
     } else {
         document.getElementById("logArea").innerHTML = "无法读取配置,jffs为空或配置文件不存在?";
@@ -122,6 +121,7 @@ function init() {
     setTimeout("write_ss_install_status()", 1000);
 }
 function onSubmitCtrl(o, s) {
+	ssmode = document.getElementById("ss_mode").value;
 	global_status_enable=false;
 	checkSSStatus();
     if (validForm()) {
@@ -228,7 +228,7 @@ function update_ss_ui(obj) {
 }
 
 function updateOptions() {
-    document.form.action = "/applyss.cgi";
+    document.form.action = "/applydb.cgi?p=ss";
     document.form.SystemCmd.value = "ssconfig basic";
     document.form.submit();
 }
@@ -354,7 +354,7 @@ function oncheckclick(obj) {
 }
 var global_status_enable = true;
 function checkSSStatus() {
-    if (document.form.ss_mode.value !== "0") {
+    if (db_ss['ss_enable'] !== "0") {
 	    if(!global_status_enable) {//not enabled
 		    if(refreshRate > 0) {
 			    setTimeout("checkSSStatus();", refreshRate * 10000);
@@ -379,6 +379,7 @@ function checkSSStatus() {
     } else {
         document.getElementById("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
         document.getElementById("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
+        setTimeout("checkSSStatus();", refreshRate * 1000);
     }
 }
 function updatelist() {
@@ -399,7 +400,7 @@ function pass_checked(obj){
 }
 function ssconf_node2obj(node_sel) {
     var p = "ssconf_basic";
-    if (typeof db_ssconf_basic[p + "_server_" + node_sel] == "undefined") {
+    if (typeof db_ss[p + "_server_" + node_sel] == "undefined") {
         var obj = {
             "server": "",
             "port": "",
@@ -415,7 +416,7 @@ function ssconf_node2obj(node_sel) {
         var obj = {};
         var params = ["server", "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
         for (var i = 0; i < params.length; i++) {
-            obj[params[i]] = db_ssconf_basic[p + "_" + params[i] + "_" + node_sel];
+            obj[params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel];
         }
         return obj;
     }
@@ -432,11 +433,11 @@ function ss_node_object(node_sel, obj, isSubmit, end) {
     var params = ["server", "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
-        db_ssconf_basic[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
+        db_ss[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
     }
     if (isSubmit) {
         ns[p + "_node"] = node_sel;
-        db_ssconf_basic[p + "_node"] = node_sel;
+        db_ss[p + "_node"] = node_sel;
     }
     $j.ajax({
         url: '/applydb.cgi?p=' + p,
@@ -497,7 +498,7 @@ function pop_ss_node_list_listview() {
 function getAllConfigs() {
     var dic = {};
     node_global_max = 0;
-    for (var field in db_ssconf_basic) {
+    for (var field in db_ss) {
         names = field.split("_");
         dic[names[names.length - 1]] = 'ok';
     }
@@ -506,18 +507,18 @@ function getAllConfigs() {
     var params = ["name", "server", "port", "password", "method"];
     for (var field in dic) {
         var obj = {};
-        if (typeof db_ssconf_basic[p + "_name_" + field] == "undefined") {
+        if (typeof db_ss[p + "_name_" + field] == "undefined") {
             obj["name"] = '节点' + field;
         } else {
-            obj["name"] = db_ssconf_basic[p + "_name_" + field];
+            obj["name"] = db_ss[p + "_name_" + field];
         }
         for (var i = 1; i < params.length; i++) {
             var ofield = p + "_" + params[i] + "_" + field;
-            if (typeof db_ssconf_basic[ofield] == "undefined") {
+            if (typeof db_ss[ofield] == "undefined") {
                 obj = null;
                 break;
             }
-            obj[params[i]] = db_ssconf_basic[ofield];
+            obj[params[i]] = db_ss[ofield];
         }
         if (obj != null) {
             var node_i = parseInt(field);
@@ -542,8 +543,8 @@ function loadBasicOptions(confs) {
     }
     if (node_global_max > 0) {
         var node_sel = "1";
-        if (typeof db_ssconf_basic.ssconf_basic_node != "undefined") {
-            node_sel = db_ssconf_basic.ssconf_basic_node;
+        if (typeof db_ss.ssconf_basic_node != "undefined") {
+            node_sel = db_ss.ssconf_basic_node;
         }
         option.val(node_sel);
         ss_node_sel();
@@ -804,11 +805,16 @@ document.getElementById('loadingicon').style.display = "none";
 }
 */
 
+
+
 function buildswitch(){
 	$j("#switch").click(
 	function(){
 		if(document.getElementById('switch').checked){
-			document.form.ssconf_basic_ss_enable.value = 1;
+			//document.form.ss_enable.value = 1;
+			document.form.action_mode.value = ' Refresh ';
+			document.getElementById('ss_enable').value = 1;
+			document.form.submit();
 			document.getElementById('basic_show').style.display = "";
 			document.getElementById('detail_show').style.display = "";	
 			document.getElementById('add_fun').style.display = "";	
@@ -821,7 +827,13 @@ function buildswitch(){
 			document.getElementById('line_image1').style.display = "";	
 			document.getElementById('help_note').style.display = "";	
 		}else{
-			document.form.ssconf_basic_ss_enable.value = 0;
+			document.form.ss_enable.value = 0;
+			//document.getElementById('ss_enable').value = 0;
+			showSSLoadingBar(8);
+			document.form.action_mode.value = ' Refresh ';
+			document.form.action = "/applydb.cgi?p=ss";
+			document.form.SystemCmd.value = "ssconfig basic";
+			document.form.submit();
 			document.getElementById('basic_show').style.display = "none";
 			document.getElementById('detail_show').style.display = "none";	
 			document.getElementById('add_fun').style.display = "none";	
@@ -840,7 +852,7 @@ function buildswitch(){
 function show_hide_table(){
 	//ssmode = document.form.ss_mode.value;
 	//if (ssmode == "1" || ssmode == "2" || ssmode == "3" || ssmode == "4"){
-	if (db_ssconf_basic['ssconf_basic_ss_enable'] == "1"){
+	if (db_ss['ss_enable'] == "1"){
 		document.getElementById("switch").checked = true;
     	update_visibility();
     	init_detail();
@@ -860,56 +872,42 @@ function show_hide_table(){
 	}
 }
 
-function check_ss_version() {
-    $j.ajax({
-        url: 'apply.cgi?current_page=Main_Ss_Update.asp&next_page=Main_Ss_Content.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=update_ss.sh&firmver=3.0.0.4',
-        dataType: 'html',
-        error: function(xhr) {},
-        success: function(response) {
-            if (response == "ok") {
-                version_show();
-            }
-        }
-    });
-}
-
-
 function version_show(){
-	if (db_ssconf_basic['ssconf_basic_ss_version_local'] != db_ssconf_basic['ssconf_basic_ss_version_web'] && db_ssconf_basic['ssconf_basic_ss_version_web'] !== "undefined"){
-		$j("#ss_version_show").html("<i>有新版本：" + db_ssconf_basic['ssconf_basic_ss_version_web']);
+	if (db_ss['ssconf_basic_ss_version_local'] != db_ss['ssconf_basic_ss_version_web'] && db_ss['ssconf_basic_ss_version_web'] !== "undefined"){
+		$j("#ss_version_show").html("<i>有新版本：" + db_ss['ssconf_basic_ss_version_web']);
 	} else {
-		$j("#ss_version_show").html("<i>当前版本：" + db_ssconf_basic['ssconf_basic_ss_version_local']);
+		$j("#ss_version_show").html("<i>当前版本：" + db_ss['ssconf_basic_ss_version_local']);
 	}
 }
 
 function write_ss_install_status(){
 		$j.ajax({
 		type: "get",
-		url: "dbconf?p=ssconf_basic",
+		url: "dbconf?p=ss",
 		dataType: "script",
 		success: function() {
-		if (db_ssconf_basic['ssconf_basic_ss_install_status'] == "1"){
+		if (db_ss['ss_install_status'] == "1"){
 			$j("#ss_install_show").html("<i>正在下载更新...</i>");
 			document.getElementById('ss_version_show').style.display = "none";
-		} else if (db_ssconf_basic['ssconf_basic_ss_install_status'] == "2"){
+		} else if (db_ss['ss_install_status'] == "2"){
 			$j("#ss_install_show").html("<i>正在安装更新...</i>");
 			document.getElementById('ss_version_show').style.display = "none";
-		} else if (db_ssconf_basic['ssconf_basic_ss_install_status'] == "3"){
+		} else if (db_ss['ss_install_status'] == "3"){
 			$j("#ss_install_show").html("<i>安装更新成功，5秒后刷新本页！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
 			//version_show();
 			//refreshpage(3);
-		} else if (db_ssconf_basic['ssconf_basic_ss_install_status'] == "4"){
+		} else if (db_ss['ss_install_status'] == "4"){
 			$j("#ss_install_show").html("<i>下载文件校验不一致！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
-		} else if (db_ssconf_basic['ssconf_basic_ss_install_status'] == "5"){
+		} else if (db_ss['ss_install_status'] == "5"){
 			$j("#ss_install_show").html("<i>然而并没有更新！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
-		} else if (db_ssconf_basic['ssconf_basic_ss_install_status'] == "6"){
+		} else if (db_ss['ss_install_status'] == "6"){
 			document.getElementById('ss_version_show').style.display = "none";
 			$j("#ss_install_show").html("<i>正在检查是否有更新~</i>");
 			document.getElementById('update_button').style.display = "none";
-		} else if (db_ssconf_basic['ssconf_basic_ss_install_status'] == "7"){
+		} else if (db_ss['ss_install_status'] == "7"){
 			$j("#ss_install_show").html("<i>检测更新错误！</i>");
 		} else {
 			$j("#ss_install_show").html("");
@@ -924,13 +922,12 @@ function write_ss_install_status(){
 function update_ss(o, s){
 	global_status_enable=false;
 	checkSSStatus();
-	document.form.ssconf_basic_ss_update_check.value = 1;
-	//document.form.ssconf_basic_ss_enable.value = 0;
+	document.form.ss_update_check.value = 1;
 	document.form.action_mode.value = s;
-	document.form.action = "/applydb.cgi?p=ssconf_basic";
     document.form.SystemCmd.value = "ssconfig basic";
     document.form.submit();
 }
+
 
 
 </script>
@@ -955,7 +952,7 @@ function update_ss(o, s){
 <!--[if lte IE 6.5]><iframe class="hackiframe"></iframe><![endif]-->
 </div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
-<form method="post" name="form" action="/applyss.cgi" target="hidden_frame">
+<form method="post" name="form" action="/applydb.cgi?p=ss" target="hidden_frame">
 <input type="hidden" name="current_page" value="Main_Ss_Content.asp"/>
 <input type="hidden" name="next_page" value="Main_Ss_Content.asp"/>
 <input type="hidden" name="group_id" value=""/>
@@ -964,9 +961,9 @@ function update_ss(o, s){
 <input type="hidden" name="action_script" value=""/>
 <input type="hidden" name="action_wait" value="25"/>
 <input type="hidden" name="first_time" value=""/>
-<input type="hidden" id="ssconf_basic_ss_install_status" name="ssconf_basic_ss_install_status" value="0" />
-<input type="hidden" id="ssconf_basic_ss_update_check" name="ssconf_basic_ss_update_check" value="0" />
-<input type="hidden" id="ssconf_basic_ss_enable" name="ssconf_basic_ss_enable" value="0" />
+<input type="hidden" id="ss_enable" name="ss_enable" value="0" />
+<input type="hidden" id="ss_install_status" name="ss_install_status" value="0" />
+<input type="hidden" id="ss_update_check" name="ss_update_check" value="0" />
 <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
 <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value=""/>
 <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
@@ -1016,7 +1013,7 @@ function update_ss(o, s){
 														<button id="updateBtn" class="button_gen" onclick="update_ss(this, ' Refresh ');">检查更新</button>						
 													</div>
 													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:-27px;"><i>当前版本：<% dbus_get_def("ssconf_basic_ss_version_local", "未知"); %></i></div>
-													<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:-27px;"></div>	
+													<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:-29px;"></div>	
 												</td>
 											</tr>
                                     	</table>
@@ -1043,7 +1040,7 @@ function update_ss(o, s){
 													<th width="20%">模式</th>
 													<td>
 														<select id="ss_mode" name="ss_mode" style="width:164px;margin:0px 0px 0px 2px;" class="ssconfig input_option" onchange="update_visibility();" >
-															<option value="0">【0】 禁用</option>
+															<!--<option value="0">【0】 禁用</option>-->
 															<option value="1">【1】 GFWlist模式</option>
 															<option value="2">【2】 大陆白名单模式</option>
 															<option value="3">【3】 游戏模式</option>

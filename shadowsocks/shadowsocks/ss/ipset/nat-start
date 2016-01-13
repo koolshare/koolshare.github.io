@@ -1,6 +1,7 @@
 #!/bin/sh
 eval `dbus export shadowsocks`
-source /koolshare/configs/ss.sh
+eval `dbus export ss`
+#source /koolshare/configs/ss.sh
 black=$(echo $ss_black_lan | sed "s/,/ /g")
 white=$(echo $ss_white_lan | sed "s/,/ /g")
 lan_ipaddr=$(nvram get lan_ipaddr)

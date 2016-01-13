@@ -2,10 +2,11 @@
 #--------------------------------------------------------------------------------------
 # Variable definitions
 eval `dbus export shadowsocks`
-source /koolshare/configs/ss.sh
-source /koolshare/configs/redchn.sh
-source /koolshare/configs/ipset.sh
-source /koolshare/scripts/base.sh
+eval `dbus export ss`
+#source /koolshare/configs/ss.sh
+#source /koolshare/configs/redchn.sh
+#source /koolshare/configs/ipset.sh
+#source /koolshare/scripts/base.sh
 ISP_DNS=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
 lan_ipaddr=$(nvram get lan_ipaddr)
 server_ip=`resolvip $ss_server`
@@ -95,15 +96,15 @@ echo $(date):
 
 # create dnsmasq.conf.add
 
-[ "$redchn_dns_china" == "1" ] && [ ! -z "$ISP_DNS" ] && CDN="$ISP_DNS"
-[ "$redchn_dns_china" == "1" ] && [ -z "$ISP_DNS" ] && CDN="114.114.114.114"
-[ "$redchn_dns_china" == "2" ] && CDN="223.5.5.5"
-[ "$redchn_dns_china" == "3" ] && CDN="223.6.6.6"
-[ "$redchn_dns_china" == "4" ] && CDN="114.114.114.114"
-[ "$redchn_dns_china" == "5" ] && CDN="$redchn_dns_china_user"
-[ "$redchn_dns_china" == "6" ] && CDN="180.76.76.76"
-[ "$redchn_dns_china" == "7" ] && CDN="1.2.4.8"
-[ "$redchn_dns_china" == "8" ] && CDN="119.29.29.29"
+[ "$ss_redchn_dns_china" == "1" ] && [ ! -z "$ISP_DNS" ] && CDN="$ISP_DNS"
+[ "$ss_redchn_dns_china" == "1" ] && [ -z "$ISP_DNS" ] && CDN="114.114.114.114"
+[ "$ss_redchn_dns_china" == "2" ] && CDN="223.5.5.5"
+[ "$ss_redchn_dns_china" == "3" ] && CDN="223.6.6.6"
+[ "$ss_redchn_dns_china" == "4" ] && CDN="114.114.114.114"
+[ "$ss_redchn_dns_china" == "5" ] && CDN="$ss_redchn_dns_china_user"
+[ "$ss_redchn_dns_china" == "6" ] && CDN="180.76.76.76"
+[ "$ss_redchn_dns_china" == "7" ] && CDN="1.2.4.8"
+[ "$ss_redchn_dns_china" == "8" ] && CDN="119.29.29.29"
 
 mkdir -p /jffs/configs
 echo $(date): create dnsmasq.conf.add..
@@ -128,9 +129,9 @@ echo $(date): done
 echo $(date):
 
 # append user defined china site
-if [ ! -z "$redchn_isp_website_web" ];then
+if [ ! -z "$ss_redchn_isp_website_web" ];then
 echo $(date): append user defined domian
-echo "$redchn_isp_website_web" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" >> /jffs/configs/dnsmasq.conf.add
+echo "$ss_redchn_isp_website_web" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" >> /jffs/configs/dnsmasq.conf.add
 echo $(date): done
 echo $(date):
 fi
@@ -214,20 +215,20 @@ else
 	echo $(date):
 fi
 
-if [ "1" == "$redchn_dns_foreign" ];then
+if [ "1" == "$ss_redchn_dns_foreign" ];then
 	echo $(date): Starting dnscrypt-proxy...
-	dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$redchn_opendns"
+	dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_redchn_opendns"
 	echo $(date): done
 	echo $(date):
 fi
 
-[ "$redchn_sstunnel" == "1" ] && gs="208.67.220.220:53"
-[ "$redchn_sstunnel" == "2" ] && gs="8.8.8.8:53"
-[ "$redchn_sstunnel" == "3" ] && gs="8.8.4.4:53"
-[ "$redchn_sstunnel" == "4" ] && gs="$redchn_sstunnel_user"
+[ "$ss_redchn_sstunnel" == "1" ] && gs="208.67.220.220:53"
+[ "$ss_redchn_sstunnel" == "2" ] && gs="8.8.8.8:53"
+[ "$ss_redchn_sstunnel" == "3" ] && gs="8.8.4.4:53"
+[ "$ss_redchn_sstunnel" == "4" ] && gs="$ss_redchn_sstunnel_user"
 
 
-if [ "2" == "$redchn_dns_foreign" ];then
+if [ "2" == "$ss_redchn_dns_foreign" ];then
 	echo $(date): Starting ss-tunnel...
 	if [ "$ss_use_rss" == "1" ];then
 		rss-tunnel -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -l 1053 -L "$gs" -u -f /var/run/sstunnel.pid
@@ -242,16 +243,16 @@ if [ "2" == "$redchn_dns_foreign" ];then
 	echo $(date):
 fi
 
-[ "$redchn_chinadns_china" == "1" ] && rcc="223.5.5.5"
-[ "$redchn_chinadns_china" == "2" ] && rcc="223.6.6.6"
-[ "$redchn_chinadns_china" == "3" ] && rcc="114.114.114.114"
-[ "$redchn_chinadns_china" == "4" ] && rcc="$redchn_chinadns_china_user"
-[ "$redchn_chinadns_foreign" == "1" ] && rdf="208.67.220.220:53"
-[ "$redchn_chinadns_foreign" == "2" ] && rdf="8.8.8.8:53"
-[ "$redchn_chinadns_foreign" == "3" ] && rdf="8.8.4.4:53"
-[ "$redchn_chinadns_foreign" == "4" ] && rdf="$redchn_chinadns_foreign_user"
+[ "$ss_redchn_chinadns_china" == "1" ] && rcc="223.5.5.5"
+[ "$ss_redchn_chinadns_china" == "2" ] && rcc="223.6.6.6"
+[ "$ss_redchn_chinadns_china" == "3" ] && rcc="114.114.114.114"
+[ "$ss_redchn_chinadns_china" == "4" ] && rcc="$ss_redchn_chinadns_china_user"
+[ "$ss_redchn_chinadns_foreign" == "1" ] && rdf="208.67.220.220:53"
+[ "$ss_redchn_chinadns_foreign" == "2" ] && rdf="8.8.8.8:53"
+[ "$ss_redchn_chinadns_foreign" == "3" ] && rdf="8.8.4.4:53"
+[ "$ss_redchn_chinadns_foreign" == "4" ] && rdf="$ss_redchn_chinadns_foreign_user"
 
-if [ "3" == "$redchn_dns_foreign" ];then
+if [ "3" == "$ss_redchn_dns_foreign" ];then
 	echo $(date): Starting chinadns
 	if [ "$ss_use_rss" == "1" ];then
 		rss-tunnel -b 127.0.0.1 -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rdf" -u -f /var/run/sstunnel.pid
@@ -267,14 +268,14 @@ if [ "3" == "$redchn_dns_foreign" ];then
 	echo $(date):
 fi
 
-if [ "4" == "$redchn_dns_foreign" ]; then
+if [ "4" == "$ss_redchn_dns_foreign" ]; then
 	echo $(date): Starting DNS2SOCKS..
-	dns2socks 127.0.0.1:23456 "$redchn_dns2socks_user" 127.0.0.1:1053 > /dev/null 2>&1 &
+	dns2socks 127.0.0.1:23456 "$ss_redchn_dns2socks_user" 127.0.0.1:1053 > /dev/null 2>&1 &
 	echo $(date): done
 	echo $(date):
 fi
 # Start Pcap_DNSProxy
-if [ "5" == "$redchn_dns_foreign"  ]; then
+if [ "5" == "$ss_redchn_dns_foreign"  ]; then
 		echo $(date): Start Pcap_DNSProxy..
 		sed -i '/^Listen Port/c Listen Port = 1053' /koolshare/ss/dns/Config.conf
 		sed -i '/^Local Main/c Local Main = 0' /koolshare/ss/dns/Config.conf

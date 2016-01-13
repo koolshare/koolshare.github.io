@@ -100,21 +100,28 @@ function showSSLoadingBar(seconds){
 
 function LoadingSSProgress(seconds){
 	document.getElementById("LoadingBar").style.visibility = "visible";
-	if (ssmode == "4"){
-		document.getElementById("loading_block3").innerHTML = "全局模式启用中 ..."
-		$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>此模式非科学上网方式，会影响国内网页速度...</font></li><li><font color='#ffcc00'>注意：全局模式并非VPN，只支持TCP流量转发...</font></li>");
-	} else if (ssmode == "3"){
-		document.getElementById("loading_block3").innerHTML = "游戏模式启用中 ..."
-		$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>为确保游戏工作，请确保你的SS账号支持UDP转发...</font></li><font color='#ffcc00'><li>游戏模式加载时间较长，请等待进度条...</font></li>");
-	} else if (ssmode == "2"){
-		document.getElementById("loading_block3").innerHTML = "大陆白名单模式启用中 ..."
-		$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>模式加载时间较长，请耐心等待进度条...</font></li>");
-	} else if (ssmode == "1"){
-		document.getElementById("loading_block3").innerHTML = "gfwlist模式启用中 ..."
-		$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>尝试不同的DNS解析方案，可以达到最佳的效果哦...</font></li>");
-	} else if (ssmode == "0"){
+	ssmode = document.getElementById("ss_mode").value;
+	if (document.getElementById("ss_enable").value == "0"){
+	//if (db_ss['ss_enable'] == "0"){
 		document.getElementById("loading_block3").innerHTML = "SS服务关闭中 ..."
 		$j("#loading_block2").html("<li><font color='#ffcc00'><a href='http://www.koolshare.cn' target='_blank'></font>SS工作有问题？请来我们的<font color='#ffcc00'>论坛www.koolshare.cn</font>反应问题...</font></li>");
+	} else {
+		if (ssmode == "4"){
+			document.getElementById("loading_block3").innerHTML = "全局模式启用中 ..."
+			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>此模式非科学上网方式，会影响国内网页速度...</font></li><li><font color='#ffcc00'>注意：全局模式并非VPN，只支持TCP流量转发...</font></li>");
+		} else if (ssmode == "3"){
+			document.getElementById("loading_block3").innerHTML = "游戏模式启用中 ..."
+			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>为确保游戏工作，请确保你的SS账号支持UDP转发...</font></li><font color='#ffcc00'><li>游戏模式加载时间较长，请等待进度条...</font></li>");
+		} else if (ssmode == "2"){
+			document.getElementById("loading_block3").innerHTML = "大陆白名单模式启用中 ..."
+			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>模式加载时间较长，请耐心等待进度条...</font></li>");
+		} else if (ssmode == "1"){
+			document.getElementById("loading_block3").innerHTML = "gfwlist模式启用中 ..."
+			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>尝试不同的DNS解析方案，可以达到最佳的效果哦...</font></li>");
+		} else if (ssmode == "0"){
+			document.getElementById("loading_block3").innerHTML = "SS服务关闭中 ..."
+			$j("#loading_block2").html("<li><font color='#ffcc00'><a href='http://www.koolshare.cn' target='_blank'></font>SS工作有问题？请来我们的<font color='#ffcc00'>论坛www.koolshare.cn</font>反应问题...</font></li>");
+		}
 	}
 	y = y + progress;
 	if(typeof(seconds) == "number" && seconds >= 0){

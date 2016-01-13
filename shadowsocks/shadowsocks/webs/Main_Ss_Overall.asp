@@ -18,8 +18,8 @@
 <script language="JavaScript" type="text/javascript" src="/validator.js"></script>
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
-<script type="text/javascript" src="/ss_conf?f=overall&v=<% uptime(); %>"></script>
-<script type="text/javascript" src="/ss-menu.js"></script>
+<script type="text/javascript" src="/dbconf?p=ss&v=<% uptime(); %>"></script>
+<script type="text/javascript" src="/res/ss-menu.js"></script>
 <style>
 .Bar_container{
 	width:85%;
@@ -81,11 +81,7 @@
 <script>
 var socks5 = 0
 var ssmode = 4
-function key_event(evt){
-if(evt.keyCode != 27 || isMenuopen == 0)
-return false;
-pullLANIPList(document.getElementById("pull_arrow"));
-}
+var $j = jQuery.noConflict();
 function onSubmitCtrl(o, s) {
 if(validForm()){
 showSSLoadingBar(10);
@@ -100,11 +96,11 @@ refreshpage(10);
 
 function init(){
 show_menu();
-if(typeof overall != "undefined") {
-for(var field in overall) {
-var el = document.getElementById("overall_"+field);
+if(typeof db_ss != "undefined") {
+for(var field in db_ss) {
+var el = document.getElementById(field);
 if(el != null) {
-el.value = overall[field];
+el.value = db_ss[field];
 }
 }
 } else {
@@ -114,36 +110,11 @@ document.getElementById("logArea").innerHTML = "无法读取配置,jffs为空或
 function updateOptions(){
 document.form.enctype = "";
 document.form.encoding = "";
-document.form.action = "/applyss.cgi?f=overall";
+document.form.action = "/applydb.cgi?p=ss_overall_";
 document.form.SystemCmd.value = "ssconfig overall";
 document.form.submit();
 }
-var $j = jQuery.noConflict();
-var _responseLen;
-var noChange = 0;
-var over_var = 0;
-var isMenuopen = 0;
-function hideClients_Block(evt){
-if(typeof(evt) != "undefined"){
-if(!evt.srcElement)
-evt.srcElement = evt.target; // for Firefox
-if(evt.srcElement.id == "pull_arrow" || evt.srcElement.id == "ClientList_Block"){
-return;
-}
-}
-$("pull_arrow").src = "/images/arrow-down.gif";
-$('ClientList_Block_PC').style.display='none';
-isMenuopen = 0;
-}
-function pullLANIPList(obj){
-if(isMenuopen == 0){
-obj.src = "/images/arrow-top.gif"
-$("ClientList_Block_PC").style.display = 'block';
-isMenuopen = 1;
-}
-else
-hideClients_Block();
-}
+
 function validForm(){
 var is_ok = true;
 return is_ok;
@@ -191,7 +162,7 @@ sourceObj.innerHTML = openTip;
 }
 </script>
 </head>
-<body onkeydown="key_event(event);" onclick="if(isMenuopen){hideClients_Block(event)}" onload="init();">
+<body onload="init();">
 <div id="TopBanner"></div>
 <div id="Loading" class="popup_bg"></div>
 <div id="LoadingBar" class="popup_bar_bg">
@@ -210,7 +181,7 @@ sourceObj.innerHTML = openTip;
 </table>
 </div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
-<form method="post" name="form" action="/applyss.cgi" target="hidden_frame">
+<form method="post" name="form" action="/applydb.cgi?p=ss" target="hidden_frame">
   <input type="hidden" name="current_page" value="Main_Ss_Overall.asp">
   <input type="hidden" name="next_page" value="Main_Ss_Overall.asp">
   <input type="hidden" name="group_id" value="">
@@ -219,6 +190,8 @@ sourceObj.innerHTML = openTip;
   <input type="hidden" name="action_script" value="">
   <input type="hidden" name="action_wait" value="8">
   <input type="hidden" name="first_time" value="">
+  <input type="hidden" id="ss_enable" name="ss_enable" value="1" />
+  <input type="hidden" id="ss_mode" name="ss_mode" value="2" />
   <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>">
   <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="">
   <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>">
@@ -249,7 +222,7 @@ sourceObj.innerHTML = openTip;
                             <font color="#ffcc00">全局模式</font>
                           </center>
                           </b></th>
-                        <td><select id="overall_mode" name="overall_mode" class="input_option">
+                        <td><select id="ss_overall_mode" name="ss_overall_mode" class="input_option">
                             <option value="0">全局HTTP(s)</option>
                             <option value="1">全局TCP</option>
                           </select>
@@ -259,7 +232,7 @@ sourceObj.innerHTML = openTip;
                         <th width="20%"><center>
                             <b><font color="#ffcc00">全局模式DNS</font></b>
                           </center></th>
-                        <td><select id="overall_dns" name="overall_dns" class="input_option">
+                        <td><select id="ss_overall_dns" name="ss_overall_dns" class="input_option">
                             <option value="0">OpenDNS方式</option>
                             <option value="1">UDP转发方式</option>
                             <option value="2">OpenDNS方式 + UDP转发方式</option>

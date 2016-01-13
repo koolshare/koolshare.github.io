@@ -2,9 +2,10 @@
 #--------------------------------------------------------------------------------------
 # Variable definitions
 eval `dbus export shadowsocks`
-source /koolshare/configs/ss.sh
-source /koolshare/configs/overall.sh
-source /koolshare/scripts/base.sh
+eval `dbus export ss`
+#source /koolshare/configs/ss.sh
+#source /koolshare/configs/overall.sh
+#source /koolshare/scripts/base.sh
 lan_ipaddr=$(nvram get lan_ipaddr)
 ISP_DNS=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
 server_ip=`resolvip $ss_server`
@@ -70,12 +71,12 @@ mkdir -p /jffs/configs
 echo $(date): create dnsmasq.conf.add..
 touch /jffs/configs/dnsmasq.conf.add
 echo no-resolv >> /jffs/configs/dnsmasq.conf.add
-[ "$overall_dns" == "0" ] && echo "server=127.0.0.1#1053" >> /jffs/configs/dnsmasq.conf.add
-[ "$overall_dns" == "1" ] && echo "server=127.0.0.1#1053" >> /jffs/configs/dnsmasq.conf.add
-[ "$overall_dns" == "2" ] && echo "all-servers" >> /jffs/configs/dnsmasq.conf.add
-[ "$overall_dns" == "2" ] && echo "server=127.0.0.1#1053" >> /jffs/configs/dnsmasq.conf.add
-[ "$overall_dns" == "2" ] && echo "server=127.0.0.1#1054" >> /jffs/configs/dnsmasq.conf.add
-[ "$overall_dns" == "3" ] && echo "server=127.0.0.1#7913" >> /jffs/configs/dnsmasq.conf.add
+[ "$ss_overall_dns" == "0" ] && echo "server=127.0.0.1#1053" >> /jffs/configs/dnsmasq.conf.add
+[ "$ss_overall_dns" == "1" ] && echo "server=127.0.0.1#1053" >> /jffs/configs/dnsmasq.conf.add
+[ "$ss_overall_dns" == "2" ] && echo "all-servers" >> /jffs/configs/dnsmasq.conf.add
+[ "$ss_overall_dns" == "2" ] && echo "server=127.0.0.1#1053" >> /jffs/configs/dnsmasq.conf.add
+[ "$ss_overall_dns" == "2" ] && echo "server=127.0.0.1#1054" >> /jffs/configs/dnsmasq.conf.add
+[ "$ss_overall_dns" == "3" ] && echo "server=127.0.0.1#7913" >> /jffs/configs/dnsmasq.conf.add
 echo $(date): done
 echo $(date):
 
@@ -144,14 +145,14 @@ else
 fi
 
 # Start dnscrypt-proxy
-if [ "$overall_dns" == "0" ]; then
+if [ "$ss_overall_dns" == "0" ]; then
 echo $(date): Starting dnscrypt-proxy...
 dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R opendns
 echo $(date): done
 echo $(date):
 fi
 
-if [ "$overall_dns" == "1" ]; then
+if [ "$ss_overall_dns" == "1" ]; then
 echo $(date): Starting ss-tunnel...
 ss-tunnel -d 127.0.0.1 -c /koolshare/ss/overall/ss.json -l 1053 -L 8.8.8.8:53 -u -f /var/run/sstunnel.pid
 	if [ "$ss_use_rss" == "1" ];then
@@ -167,7 +168,7 @@ echo $(date): done
 echo $(date):
 fi
 
-if [ "$overall_dns" == "2" ]; then
+if [ "$ss_overall_dns" == "2" ]; then
 	echo $(date): Starting ss-tunnel...
 	dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R opendns
 	if [ "$ss_use_rss" == "1" ];then
@@ -184,7 +185,7 @@ if [ "$overall_dns" == "2" ]; then
 fi								
 
 # Start Pcap_DNSProxy
-if [ "$overall_dns" == "3" ]; then
+if [ "$ss_overall_dns" == "3" ]; then
 		echo $(date): Start Pcap_DNSProxy..
 		sed -i '/^Listen Port/c Listen Port = 7913' /koolshare/ss/dns/Config.conf
       	sed -i '/^Local Main/c Local Main = 1' /koolshare/ss/dns/Config.conf

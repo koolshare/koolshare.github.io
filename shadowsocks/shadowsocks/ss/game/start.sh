@@ -2,9 +2,11 @@
 #--------------------------------------------------------------------------------------
 # Variable definitions
 eval `dbus export shadowsocks`
-source /koolshare/configs/ss.sh
-source /koolshare/configs/game.sh
-source /koolshare/configs/ipset.sh
+eval `dbus export ss`
+# source /koolshare/configs/ss.sh
+# source /koolshare/configs/game.sh
+# source /koolshare/configs/ipset.sh
+
 source /koolshare/scripts/base.sh
 ISP_DNS=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
 lan_ipaddr=$(nvram get lan_ipaddr)
@@ -79,15 +81,15 @@ EOF
 echo $(date): done
 echo $(date):
 
-[ "$game_dns_china" == "1" ] && [ ! -z "$ISP_DNS" ] && CDN="$ISP_DNS"
-[ "$game_dns_china" == "1" ] && [ -z "$ISP_DNS" ] && CDN="114.114.114.114"
-[ "$game_dns_china" == "2" ] && CDN="223.5.5.5"
-[ "$game_dns_china" == "3" ] && CDN="223.6.6.6"
-[ "$game_dns_china" == "4" ] && CDN="114.114.114.114"
-[ "$game_dns_china" == "5" ] && CDN="$game_dns_china_user"
-[ "$game_dns_china" == "6" ] && CDN="180.76.76.76"
-[ "$game_dns_china" == "7" ] && CDN="1.2.4.8"
-[ "$game_dns_china" == "8" ] && CDN="119.29.29.29"
+[ "$ss_game_dns_china" == "1" ] && [ ! -z "$ISP_DNS" ] && CDN="$ISP_DNS"
+[ "$ss_game_dns_china" == "1" ] && [ -z "$ISP_DNS" ] && CDN="114.114.114.114"
+[ "$ss_game_dns_china" == "2" ] && CDN="223.5.5.5"
+[ "$ss_game_dns_china" == "3" ] && CDN="223.6.6.6"
+[ "$ss_game_dns_china" == "4" ] && CDN="114.114.114.114"
+[ "$ss_game_dns_china" == "5" ] && CDN="$ss_game_dns_china_user"
+[ "$ss_game_dns_china" == "6" ] && CDN="180.76.76.76"
+[ "$ss_game_dns_china" == "7" ] && CDN="1.2.4.8"
+[ "$ss_game_dns_china" == "8" ] && CDN="119.29.29.29"
 
 # append router output chain rules
 echo $(date): append router output chain rules
@@ -102,9 +104,9 @@ echo $(date): done
 echo $(date):
 
 # append custom host
-if [ ! -z "$game_host" ];then
+if [ ! -z "$ss_game_host" ];then
 echo $(date): append custom host
-echo "$game_host" | sed "s/,/\n/g" | sort >> /jffs/configs/dnsmasq.conf.add
+echo "$ss_game_host" | sed "s/,/\n/g" | sort >> /jffs/configs/dnsmasq.conf.add
 echo $(date): done
 echo $(date):
 fi
@@ -173,20 +175,20 @@ else
 	echo $(date):
 fi
 
-if [ "1" == "$game_dns_foreign" ];then
+if [ "1" == "$ss_game_dns_foreign" ];then
 	echo $(date): Starting dnscrypt-proxy...
-	dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$game_opendns"
+	dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_game_opendns"
 	echo $(date): done
 	echo $(date):
 fi
 
-[ "$game_sstunnel" == "1" ] && gs="208.67.220.220:53"
-[ "$game_sstunnel" == "2" ] && gs="8.8.8.8:53"
-[ "$game_sstunnel" == "3" ] && gs="8.8.4.4:53"
-[ "$game_sstunnel" == "4" ] && gs="$game_sstunnel_user"
+[ "$ss_game_sstunnel" == "1" ] && gs="208.67.220.220:53"
+[ "$ss_game_sstunnel" == "2" ] && gs="8.8.8.8:53"
+[ "$ss_game_sstunnel" == "3" ] && gs="8.8.4.4:53"
+[ "$ss_game_sstunnel" == "4" ] && gs="$ss_game_sstunnel_user"
 
 
-if [ "2" == "$game_dns_foreign" ];then
+if [ "2" == "$ss_game_dns_foreign" ];then
 	echo $(date): Starting ss-tunnel...
 	if [ "$ss_use_rss" == "1" ];then
 		rss-tunnel -b 0.0.0.0 -c /koolshare/ss/game/ss.json -l 1053 -L "$gs" -u -f /var/run/sstunnel.pid
@@ -201,16 +203,16 @@ if [ "2" == "$game_dns_foreign" ];then
 	echo $(date):
 fi
 
-[ "$game_chinadns_china" == "1" ] && gcc="223.5.5.5"
-[ "$game_chinadns_china" == "2" ] && gcc="223.6.6.6"
-[ "$game_chinadns_china" == "3" ] && gcc="114.114.114.114"
-[ "$game_chinadns_china" == "4" ] && gcc="$game_chinadns_china_user"
-[ "$game_chinadns_foreign" == "1" ] && cdf="208.67.220.220:53"
-[ "$game_chinadns_foreign" == "2" ] && cdf="8.8.8.8:53"
-[ "$game_chinadns_foreign" == "3" ] && cdf="8.8.4.4:53"
-[ "$game_chinadns_foreign" == "4" ] && cdf="$game_chinadns_foreign_user"
+[ "$ss_game_chinadns_china" == "1" ] && gcc="223.5.5.5"
+[ "$ss_game_chinadns_china" == "2" ] && gcc="223.6.6.6"
+[ "$ss_game_chinadns_china" == "3" ] && gcc="114.114.114.114"
+[ "$ss_game_chinadns_china" == "4" ] && gcc="$ss_game_chinadns_china_user"
+[ "$ss_game_chinadns_foreign" == "1" ] && cdf="208.67.220.220:53"
+[ "$ss_game_chinadns_foreign" == "2" ] && cdf="8.8.8.8:53"
+[ "$ss_game_chinadns_foreign" == "3" ] && cdf="8.8.4.4:53"
+[ "$ss_game_chinadns_foreign" == "4" ] && cdf="$ss_game_chinadns_foreign_user"
 
-if [ "3" == "$game_dns_foreign" ];then
+if [ "3" == "$ss_game_dns_foreign" ];then
 	if [ "$ss_use_rss" == "1" ];then
 		rss-tunnel -b 127.0.0.1 -c /koolshare/ss/game/ss.json -l 1055 -L "$rdf" -u -f /var/run/sstunnel.pid
 	elif  [ "$ss_use_rss" == "0" ];then
@@ -226,7 +228,7 @@ if [ "3" == "$game_dns_foreign" ];then
 	echo $(date):
 fi
 
-if [ "4" == "$game_dns_foreign" ]; then
+if [ "4" == "$ss_game_dns_foreign" ]; then
 	echo $(date): You have enabled DNS2SOCKS, Sicks5 will enable for DNS2SOCKS
 
 	if [ "$ss_use_rss" == "1" ];then
@@ -238,13 +240,13 @@ if [ "4" == "$game_dns_foreign" ]; then
 			ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/game/ss.json -u -f /var/run/sslocal1.pid
 		fi
 	fi
-	dns2socks 127.0.0.1:23456 "$game_dns2socks_user" 127.0.0.1:1053 > /dev/null 2>&1 &
+	dns2socks 127.0.0.1:23456 "$ss_game_dns2socks_user" 127.0.0.1:1053 > /dev/null 2>&1 &
 	echo $(date): done
 	echo $(date):
 fi
 
 # Start Pcap_DNSProxy
-if [ "5" == "$game_dns_foreign" ]; then
+if [ "5" == "$ss_game_dns_foreign" ]; then
 		echo $(date): Start Pcap_DNSProxy..
 		sed -i '/^Listen Port/c Listen Port = 1053' /koolshare/ss/dns/Config.conf
       	sed -i '/^Local Main/c Local Main = 0' /koolshare/ss/dns/Config.conf

@@ -2,9 +2,10 @@
 #--------------------------------------------------------------------------------------
 # Variable definitions
 eval `dbus export shadowsocks`
-source /koolshare/configs/ss.sh
-source /koolshare/configs/ipset.sh
-source /koolshare/scripts/base.sh
+eval `dbus export ss`
+#source /koolshare/configs/ss.sh
+#source /koolshare/configs/ipset.sh
+#source /koolshare/scripts/base.sh
 ISP_DNS=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
 lan_ipaddr=$(nvram get lan_ipaddr)
 server_ip=`resolvip $ss_server`
@@ -67,15 +68,15 @@ fi
 echo $(date): done
 echo $(date):
 #---------------------------------------------------------------------------------------------------------
-[ "$ipset_cdn_dns" == "1" ] && [ ! -z "$ISP_DNS" ] && dns="$ISP_DNS"
-[ "$ipset_cdn_dns" == "1" ] && [ -z "$ISP_DNS" ] && dns="114.114.114.114"
-[ "$ipset_cdn_dns" == "2" ] && dns="223.5.5.5"
-[ "$ipset_cdn_dns" == "3" ] && dns="223.6.6.6"
-[ "$ipset_cdn_dns" == "4" ] && dns="114.114.114.114"
-[ "$ipset_cdn_dns" == "5" ] && dns="$ipset_cdn_dns_user"
-[ "$ipset_cdn_dns" == "6" ] && dns="180.76.76.76"
-[ "$ipset_cdn_dns" == "7" ] && dns="1.2.4.8"
-[ "$ipset_cdn_dns" == "8" ] && dns="119.29.29.29"
+[ "$ss_ipset_cdn_dns" == "1" ] && [ ! -z "$ISP_DNS" ] && dns="$ISP_DNS"
+[ "$ss_ipset_cdn_dns" == "1" ] && [ -z "$ISP_DNS" ] && dns="114.114.114.114"
+[ "$ss_ipset_cdn_dns" == "2" ] && dns="223.5.5.5"
+[ "$ss_ipset_cdn_dns" == "3" ] && dns="223.6.6.6"
+[ "$ss_ipset_cdn_dns" == "4" ] && dns="114.114.114.114"
+[ "$ss_ipset_cdn_dns" == "5" ] && dns="$ss_ipset_cdn_dns_user"
+[ "$ss_ipset_cdn_dns" == "6" ] && dns="180.76.76.76"
+[ "$ss_ipset_cdn_dns" == "7" ] && dns="1.2.4.8"
+[ "$ss_ipset_cdn_dns" == "8" ] && dns="119.29.29.29"
 
 # create dnsmasq.conf.add
 if [ ! -d /jffs/configs/dnsmasq.d ]; then 
@@ -120,17 +121,17 @@ echo $(date):
 		fi
 	fi
 # append custom input domain
-	if [ ! -z "$ipset_black_domain_web" ];then
+	if [ ! -z "$ss_ipset_black_domain_web" ];then
 		echo $(date): append custom black domain into dnsmasq.conf
-		echo "$ipset_black_domain_web" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#7913/g" >> /tmp/custom.conf
-		echo "$ipset_black_domain_web" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/gfwlist/g" >> /tmp/custom.conf
+		echo "$ss_ipset_black_domain_web" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#7913/g" >> /tmp/custom.conf
+		echo "$ss_ipset_black_domain_web" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/gfwlist/g" >> /tmp/custom.conf
 		echo $(date): done
 		echo $(date):
 	fi
 # append custom host
-	if [ ! -z "$ipset_address" ];then
+	if [ ! -z "$ss_ipset_address" ];then
 		echo $(date): append custom host into dnsmasq.conf
-		echo "$ipset_address" | sed "s/,/\n/g" | sort -u >> /tmp/custom.conf
+		echo "$ss_ipset_address" | sed "s/,/\n/g" | sort -u >> /tmp/custom.conf
 		echo $(date): done
 		echo $(date):
 	fi
@@ -198,18 +199,18 @@ echo $(date):
 		echo $(date):
 	fi
 	# Start dnscrypt-proxy
-	if [ "$ipset_foreign_dns" == "0" ]; then
+	if [ "$ss_ipset_foreign_dns" == "0" ]; then
 		echo $(date): Starting dnscrypt-proxy...
 		dnscrypt-proxy --local-address=127.0.0.1:7913 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R opendns
 		echo $(date): done
 		echo $(date):
 	fi
-	[ "$ipset_tunnel" == "1" ] && it="208.67.220.220:53"
-	[ "$ipset_tunnel" == "2" ] && it="8.8.8.8:53"
-	[ "$ipset_tunnel" == "3" ] && it="8.8.4.4:53"
-	[ "$ipset_tunnel" == "4" ] && it="$ipset_tunnel_user"
+	[ "$ss_ipset_tunnel" == "1" ] && it="208.67.220.220:53"
+	[ "$ss_ipset_tunnel" == "2" ] && it="8.8.8.8:53"
+	[ "$ss_ipset_tunnel" == "3" ] && it="8.8.4.4:53"
+	[ "$ss_ipset_tunnel" == "4" ] && it="$ss_ipset_tunnel_user"
 	
-	if [ "$ipset_foreign_dns" == "1" ]; then
+	if [ "$ss_ipset_foreign_dns" == "1" ]; then
 		echo $(date): Starting ss-tunnel...
 		if [ "$ss_use_rss" == "1" ];then
 			rss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
@@ -225,7 +226,7 @@ echo $(date):
 	fi
 
 	# Start DNS2SOCKS
-	if [ "$ipset_foreign_dns" == "2" ]; then
+	if [ "$ss_ipset_foreign_dns" == "2" ]; then
 		echo $(date): Sicks5 enable on port 23456 for DNS2SOCKS..
 		if [ "$ss_use_rss" == "1" ];then
 			rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
@@ -236,13 +237,13 @@ echo $(date):
 				ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid
 			fi
 		fi
-			dns2socks 127.0.0.1:23456 "$ipset_dns2socks_user" 127.0.0.1:7913 > /dev/null 2>&1 &
+			dns2socks 127.0.0.1:23456 "$ss_ipset_dns2socks_user" 127.0.0.1:7913 > /dev/null 2>&1 &
 		echo $(date): done
 		echo $(date):
 	fi
 
 	# Start Pcap_DNSProxy
-	if [ "$ipset_foreign_dns" == "3" ]; then
+	if [ "$ss_ipset_foreign_dns" == "3" ]; then
 		echo $(date): Start Pcap_DNSProxy..
 		sed -i '/^Listen Port/c Listen Port = 7913' /koolshare/ss/dns/Config.conf
 		sed -i '/^Local Main/c Local Main = 0' /koolshare/ss/dns/Config.conf

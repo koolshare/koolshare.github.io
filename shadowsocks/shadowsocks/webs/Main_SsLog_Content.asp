@@ -18,7 +18,7 @@
 <script language="JavaScript" type="text/javascript" src="/validator.js"></script>
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
-<script type="text/javascript" src="/ss-menu.js"></script>
+<script type="text/javascript" src="/res/ss-menu.js"></script>
 <style>
 #ClientList_Block_PC {
 	border: 1px outset #999;
