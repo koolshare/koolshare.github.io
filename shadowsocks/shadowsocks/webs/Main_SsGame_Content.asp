@@ -49,6 +49,7 @@
 </style>
 <script>
 var socks5 = 0;
+var $j = jQuery.noConflict();
 var $G = function (id) {
 	return document.getElementById(id);
 };

@@ -1,6 +1,6 @@
 #!/bin/sh
-
-source /koolshare/configs/ss.sh
+eval `dbus export ss`
+#source /koolshare/configs/ss.sh
 LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")
 
 # version dectet
@@ -37,7 +37,7 @@ md5sum_cdn2=$(echo $git_line4 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 
 
 # update gfwlist
-if [ "$ss_gfwlist_update" == "1" ];then
+if [ "$ss_basic_gfwlist_update" == "1" ];then
 	if [ ! -z "$version_gfwlist2" ];then
 		if [ "$version_gfwlist1" != "$version_gfwlist2" ];then
 			echo $(date): new version decteted, will update gfwlist >> /tmp/syscmd.log
@@ -65,7 +65,7 @@ fi
 
 
    	# update chnroute
-if [ "$ss_chnroute_update" == "1" ];then
+if [ "$ss_basic_chnroute_update" == "1" ];then
 	if [ ! -z "$version_chnroute2" ];then
 		if [ "$version_chnroute1" != "$version_chnroute2" ];then
 			echo $(date): new version decteted, will update chnroute >> /tmp/syscmd.log
@@ -94,7 +94,7 @@ fi
 
 
 # update adblock
-if [ "$ss_adblock_update" == "1" ];then
+if [ "$ss_basic_adblock_update" == "1" ];then
 	if [ ! -z "$version_adblock2" ];then
 		if [ "$version_adblock1" != "$version_adblock2" ];then
 			echo $(date): new version decteted, will update adblock >> /tmp/syscmd.log
@@ -122,7 +122,7 @@ fi
 
 
 # update cdn file
-if [ "$ss_cdn_update" == "1" ];then
+if [ "$ss_basic_cdn_update" == "1" ];then
 	if [ ! -z "$version_cdn2" ];then
 		if [ "$version_cdn1" != "$version_cdn2" ];then
 			echo $(date): new version decteted, will update cdn >> /tmp/syscmd.log
