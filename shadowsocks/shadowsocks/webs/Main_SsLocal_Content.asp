@@ -218,7 +218,10 @@ function disable_input() {
 									<td bgcolor="#4D595D" colspan="3" valign="top"><div>&nbsp;</div>
 										<div class="formfonttitle">Shadowsocks - Socks5代理设置</div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
-										<div class="SimpleNote"><i>说明：</i>此页面允许配置第二个shadosocks账号，功能仅限于在路由器上打开一个连接到shadowsocks服务器的socks5端口。如果你使用chrome浏览器，你可以使用SwitchyOmega插件去连接这个socks5代理。</br><i>此页面功能独立于ss，单独开关。</i></div>
+										<div class="SimpleNote">
+											<li><i>说明：</i>此页面允许配置第二个shadosocks账号，功能仅限于在路由器上打开一个连接到shadowsocks服务器的socks5端口。如果你使用chrome浏览器，你可以使用SwitchyOmega插件去连接这个socks5代理。</li></br>
+											<li><i>此页面功能独立于ss，单独开关：</i>在以前的版本中，当ss启用了dns2socks，这里会自动设置，现在不会自动设置，而是dns2socks自己单独占用一个12345端口的socks5，而现在这里允许单独设置。</li>
+										</div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 										<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 											<thead>

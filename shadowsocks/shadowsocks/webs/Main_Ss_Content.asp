@@ -96,10 +96,7 @@ var isMenuopen = 0;
 var $G = function(id) {
     return document.getElementById(id);
 };
-function key_event(evt) {
-    if (evt.keyCode != 27 || isMenuopen == 0) return false;
-    pullLANIPList(document.getElementById("pull_arrow"));
-}
+
 var refreshRate = 5;
 function init() {
     show_menu(menu_hook);
@@ -107,7 +104,7 @@ function init() {
     show_hide_table();
     buildswitch();
     refreshRate = getRefresh();
-    for(var field in db_ss) {
+    for (var field in db_ss) {
 		$j('#'+field).val(db_ss[field]);
 	}
     if (typeof db_ss != "undefined") {
@@ -119,7 +116,7 @@ function init() {
     setTimeout("checkSSStatus();", 1000);
     setTimeout("write_ss_install_status()", 1000);
 }
-function onSubmitCtrl(o, s) {
+function onSubmitCtrl() {
 	ssmode = document.getElementById("ss_basic_mode").value;
 	global_status_enable=false;
 	checkSSStatus();
@@ -128,52 +125,54 @@ function onSubmitCtrl(o, s) {
             var obj = ssform2obj();
             ss_node_object("1", obj, true,
             function(a) {
-		setTimeout("checkSSStatus();", 50000); //make sure ss_status do not update during reloading
-	if (ssmode == "2" || ssmode == "3"){
-		showSSLoadingBar(25);
-	} else if (ssmode == "1"){
-		showSSLoadingBar(12);
-	} else if (ssmode == "0"){
-		showSSLoadingBar(8);
-	} else if (ssmode == "4"){
-		showSSLoadingBar(8);
-	}
-        document.form.action_mode.value = s;
-        updateOptions();
+			setTimeout("checkSSStatus();", 50000); //make sure ss_status do not update during reloading
+			if (ssmode == "2" || ssmode == "3"){
+				showSSLoadingBar(25);
+			} else if (ssmode == "1"){
+				showSSLoadingBar(12);
+			} else if (ssmode == "0"){
+				showSSLoadingBar(8);
+			} else if (ssmode == "4"){
+				showSSLoadingBar(8);
+			}
+        	document.form.action_mode.value = ' Refresh ';
+        	updateOptions();
             });
         } else {
             var node_sel = $j('#ssconf_basic_node').val();
             var obj = ssform2obj();
             ss_node_object(node_sel, obj, true,
             function(a) {
-	setTimeout("checkSSStatus();", 50000);
-	if (ssmode == "2" || ssmode == "3"){
-		showSSLoadingBar(25);
-	} else if (ssmode == "1"){
-		showSSLoadingBar(12);
-	} else if (ssmode == "0"){
-		showSSLoadingBar(8);
-	} else if (ssmode == "4"){
-		showSSLoadingBar(8);
-	}
-                document.form.action_mode.value = s;
-                updateOptions();
+			setTimeout("checkSSStatus();", 50000);
+			if (ssmode == "2" || ssmode == "3"){
+				showSSLoadingBar(25);
+			} else if (ssmode == "1"){
+				showSSLoadingBar(12);
+			} else if (ssmode == "0"){
+				showSSLoadingBar(8);
+			} else if (ssmode == "4"){
+				showSSLoadingBar(8);
+			}
+    		document.form.action_mode.value = ' Refresh ';
+    		updateOptions();
             });
         }
     }
 }
+
 function done_validating(action) {
-	// if (ssmode == "2" || ssmode == "3"){
-	// 	refreshpage(25);
-	// } else if (ssmode == "1"){
-	// 	refreshpage(12);
-	// } else if (ssmode == "0"){
-	// 	refreshpage(8);
-	// } else if (ssmode == "4"){
-	// 	refreshpage(8);
-	// }
-	return true;
+	if (ssmode == "2" || ssmode == "3"){
+		refreshpage(25);
+	} else if (ssmode == "1"){
+		refreshpage(12);
+	} else if (ssmode == "0"){
+		refreshpage(8);
+	} else if (ssmode == "4"){
+		refreshpage(8);
+	}
+	//return true;
 }
+
 function save_ss_method(m) {
     var o = document.getElementById("ss_basic_method");
     for (var c = 0; c < o.length; c++) {
@@ -183,6 +182,7 @@ function save_ss_method(m) {
         }
     }
 }
+
 function update_ss_ui(obj) {
 	for (var field in obj) {
 		var el = document.getElementById(field);
@@ -232,46 +232,11 @@ function updateOptions() {
 	document.form.submit();
 }
 
-function hideS_Block(evt) {
-	if (typeof(evt) != "undefined") {
-		if (!evt.srcElement) evt.srcElement = evt.target; // for Firefox
-		if (evt.srcElement.id == "pull_arrow" || evt.srcElement.id == "Ss_node_list_Block") {
-			return;
-		}
-	}
-	$G("pull_arrow").src = "/images/arrow-down.gif";
-	$G('Ss_node_list_Block_PC').style.display = 'none';
-	isMenuopen = 0;
-}
-function pullLANIPList(obj) {
-	if (isMenuopen == 0) {
-		obj.src = "/images/arrow-top.gif"
-		$G("Ss_node_list_Block_PC").style.display = 'block';
-		isMenuopen = 1;
-	} else hideSS_Block();
-}
 function validForm() {
 	var is_ok = true;
 	return is_ok;
 }
-function openShutManager(oSourceObj, oTargetObj, shutAble, oOpenTip, oShutTip) {
-	var sourceObj = typeof oSourceObj == "string" ? document.getElementById(oSourceObj) : oSourceObj;
-	var targetObj = typeof oTargetObj == "string" ? document.getElementById(oTargetObj) : oTargetObj;
-	var openTip = oOpenTip || "";
-	var shutTip = oShutTip || "";
-	if (targetObj.style.display != "none") {
-		if (shutAble) return;
-		targetObj.style.display = "none";
-		if (openTip && shutTip) {
-			sourceObj.innerHTML = shutTip;
-		}
-	} else {
-		targetObj.style.display = "block";
-		if (openTip && shutTip) {
-		    sourceObj.innerHTML = openTip;
-		}
-	}
-}
+
 function update_visibility() {
 	ssmode = document.form.ss_basic_mode.value;
 	crst = document.form.ss_basic_chromecast.value;
@@ -338,12 +303,13 @@ function update_visibility() {
 	showhide("help_mode2", (ssmode == "2"));
 	showhide("help_mode3", (ssmode == "3"));
 	showhide("help_mode4", (ssmode == "4"));
-	showhide("ss_black_lan", (slc == "1"));
-	showhide("ss_white_lan", (slc == "2"));
+	showhide("ss_basic_black_lan", (slc == "1"));
+	showhide("ss_basic_white_lan", (slc == "2"));
 	showhide("onetime_auth", (sur !== "1"));
 	showhide("ss_basic_rss_protocol_tr", (sur == "1"));
 	showhide("ss_basic_rss_obfs_tr", (sur == "1"));
 }
+
 function oncheckclick(obj) {
 	if (obj.checked) {
 		document.getElementById("hd_" + obj.id).value = "1";
@@ -351,7 +317,9 @@ function oncheckclick(obj) {
 		document.getElementById("hd_" + obj.id).value = "0";
 	}
 }
+
 var global_status_enable = true;
+/*
 function checkSSStatus() {
     if (db_ss['ss_basic_enable'] !== "0") {
 	    if(!global_status_enable) {//not enabled
@@ -381,6 +349,38 @@ function checkSSStatus() {
         //setTimeout("checkSSStatus();", refreshRate * 1000);
     }
 }
+*/
+function checkSSStatus() {
+	if (db_ss['ss_basic_enable'] !== "0" && db_ss['ss_basic_enable'] == "undefined") {
+	    if(!global_status_enable) {//not enabled
+		    if(refreshRate > 0) {
+			    setTimeout("checkSSStatus();", refreshRate * 100000);
+		    }
+		    return;
+	    }
+		$j.ajax({
+		url: '/ss_status',
+		dataType: "html",
+        error: function(xhr) {
+	        refreshRate = getRefresh();
+	        if (refreshRate > 0)
+            setTimeout("checkSSStatus();", refreshRate * 1000);
+        },
+		success: function() {
+			$j("#ss_state2").html("国内连接 - " + db_ss['ss_basic_state_foreign']);
+			$j("#ss_state3").html("国外连接 - " + db_ss['ss_basic_state_china']);
+			refreshRate = getRefresh();
+			if (refreshRate > 0)
+        	setTimeout("checkSSStatus();", refreshRate * 1000);
+		}
+		});
+	} else {
+		document.getElementById("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
+        document.getElementById("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
+	}
+}
+
+
 function updatelist() {
     $j.ajax({
         url: 'apply.cgi?current_page=Main_Ss_Update.asp&next_page=Main_Ss_Content.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=update.sh&firmver=3.0.0.4',
@@ -394,9 +394,7 @@ function updatelist() {
         }
     });
 }
-function pass_checked(obj){
-	switchType(obj, document.form.show_pass.checked, true);
-}
+
 function ssconf_node2obj(node_sel) {
     var p = "ssconf_basic";
     if (typeof db_ss[p + "_server_" + node_sel] == "undefined") {
@@ -420,12 +418,14 @@ function ssconf_node2obj(node_sel) {
         return obj;
     }
 }
+
 function ss_node_sel() {
     var node_sel = $G("ssconf_basic_node").value;
     var obj = ssconf_node2obj(node_sel);
     update_ss_ui(obj);
     update_visibility();
 }
+
 function ss_node_object(node_sel, obj, isSubmit, end) {
     var ns = {};
     var p = "ssconf_basic";
@@ -451,6 +451,7 @@ function ss_node_object(node_sel, obj, isSubmit, end) {
         }
     });
 }
+
 function ssform2obj() {
     var obj = {};
     obj["mode"] = $G("ss_basic_mode").value;
@@ -464,6 +465,7 @@ function ssform2obj() {
     obj["onetime_auth"] = $G("ss_basic_onetime_auth").value;
     return obj;
 }
+
 var ss_node_list_view_hide_flag = false;
 function hide_ss_node_list_view_block() {
     if (ss_node_list_view_hide_flag) {
@@ -475,18 +477,22 @@ function hide_ss_node_list_view_block() {
     }
     ss_node_list_view_hide_flag = true;
 }
+
 function show_ss_node_list_view_block() {
     ss_node_list_view_hide_flag = false;
 }
+
 function closeSs_node_listView() {
     fadeOut(document.getElementById("ss_node_list_viewlist_content"), 10, 0);
 }
+
 function refresh_popup_listview(confs) {
     $j("#ss_node_list_viewlist_content").remove();
     $j("<div class='ss_node_list_viewlist' id='ss_node_list_viewlist_content' style='display:none'>").appendTo(document.body);
     create_ss_node_list_listview(confs);
     registerIframeClick("statusframe", hide_ss_node_list_view_block);
 }
+
 function pop_ss_node_list_listview() {
     confs = getAllConfigs();
     refresh_popup_listview(confs);
@@ -494,6 +500,7 @@ function pop_ss_node_list_listview() {
     cal_panel_block_clientList("ss_node_list_viewlist_content", 0.045);
     ss_node_list_view_hide_flag = false;
 }
+
 function getAllConfigs() {
     var dic = {};
     node_global_max = 0;
@@ -530,6 +537,7 @@ function getAllConfigs() {
     }
     return confs;
 }
+
 function loadBasicOptions(confs) {
     var option = $j("#ssconf_basic_node");
     option.find('option').remove().end();
@@ -549,11 +557,13 @@ function loadBasicOptions(confs) {
         ss_node_sel();
     }
 }
+
 function loadAllConfigs() {
     confs = getAllConfigs();
     loadBasicOptions(confs);
     refresh_popup_listview(confs);
 }
+
 function add_conf_in_table(o) {
     var ns = {};
     var p = "ssconf_basic";
@@ -575,6 +585,7 @@ function add_conf_in_table(o) {
         }
     });
 }
+
 function remove_conf_table(o) {
     var id = $j(o).attr("id");
     var ids = id.split("_");
@@ -598,6 +609,7 @@ function remove_conf_table(o) {
         }
     });
 }
+
 function create_ss_node_list_listview(confs) {
     field_code = "";
     for (var field in confs) {
@@ -620,78 +632,129 @@ function create_ss_node_list_listview(confs) {
     var obj_width = stainfo_support ? obj_width_map[2] : obj_width_map[1];
     var wl_colspan = stainfo_support ? 8 : 5;
     var code = "";
+    code += "<form method='POST' name='file_form' action='/ssupload.cgi?a=/tmp/ss_conf_backup.txt' target='hidden_frame'>";
     code += "<div style='text-align:right;width:30px;position:relative;margin-top:0px;margin-left:96%;'><img src='/images/button-close.gif' style='width:30px;cursor:pointer' onclick='closeSs_node_listView();'></div>";
-    code += "<table width='100%' border='1' align='center' cellpadding='0' cellspacing='0' class='FormTable_table' style='margin-top:10px;'>"
-    code += "<thead>"
-    code += "<tr height='28px'>"
-    code += "<td id='td_all_list_title' colspan='" + wl_colspan + "'>Shadowsocks节点配置</td>"
-    code += "</tr>"
-    code += "</thead>"
-    code += "<tr id='tr_all_title' height='40px'>"
+    code += "<table width='100%' border='1' align='center' cellpadding='0' cellspacing='0' class='FormTable_table' style='margin-top:10px;'>";
+    code += "<thead>";
+    code += "<tr height='28px'>";
+    code += "<td id='td_all_list_title' colspan='" + wl_colspan + "'>Shadowsocks节点配置</td>";
+    code += "</tr>";
+    code += "</thead>";
+    code += "<tr id='tr_all_title' height='40px'>";
     code += "<th width=" + obj_width[0] + ">节点名称</th>";
     code += "<th width=" + obj_width[1] + ">服务器地址</th>";
     code += "<th width=" + obj_width[2] + ">端口</th>";
     code += "<th width=" + obj_width[3] + ">密码</th>";
     code += "<th width=" + obj_width[4] + ">加密方式</th>";
     code += "<th width=" + obj_width[5] + ">添加<br>删除</th>";
-    code += "</tr>"
+    code += "</tr>";
     code += "<tr height='40px'>";
     code += "<td><input type='text' class='input_ss_table' id='ssconf_table_name' name='ssconf_table_name' value='' /></td>";
     code += "<td><input type='text' class='input_ss_table' id='ssconf_table_server' name='ssconf_table_server' value='' /></td>";
     code += "<td><input type='text' class='input_ss_table' id='ssconf_table_port' name='ssconf_table_port' value='' /></td>";
     code += "<td><input type='text' class='input_ss_table' id='ssconf_table_password' name='ssconf_table_password' value='' /></td>";
     code += "<td><select id='ssconf_table_method' name='ssconf_table_method' style='width:164px;margin:0px 0px 0px 2px;' class='input_option' />"
-    code += "<option class='content_input_fd' value='table'>table</option>"
-    code += "<option class='content_input_fd' value='rc4'>rc4</option>"
-    code += "<option class='content_input_fd' value='rc4-md5'>rc4-md5</option>"
-    code += "<option class='content_input_fd' value='aes-128-cfb'>aes-128-cfb</option>"
-    code += "<option class='content_input_fd' value='aes-192-cfb'>aes-192-cfb</option>"
-    code += "<option class='content_input_fd' value='aes-256-cfb' selected=''>aes-256-cfb</option>"
-    code += "<option class='content_input_fd' value='bf-cfb'>bf-cfb</option>"
-    code += "<option class='content_input_fd' value='camellia-128-cfb'>camellia-128-cfb</option>"
-    code += "<option class='content_input_fd' value='camellia-192-cfb'>camellia-192-cfb</option>"
-    code += "<option class='content_input_fd' value='camellia-256-cfb'>camellia-256-cfb</option>"
-    code += "<option class='content_input_fd' value='cast5-cfb'>cast5-cfb</option>"
-    code += "<option class='content_input_fd' value='des-cfb'>des-cfb</option>"
-    code += "<option class='content_input_fd' value='idea-cfb'>idea-cfb</option>"
-    code += "<option class='content_input_fd' value='rc2-cfb'>rc2-cfb</option>"
-    code += "<option class='content_input_fd' value='seed-cfb'>seed-cfb</option>"
-    code += "<option class='content_input_fd' value='salsa20'>salsa20</option>"
-    code += "<option class='content_input_fd' value='chacha20'>chacha20</option>"
-    code += "</select>"
+    code += "<option class='content_input_fd' value='table'>table</option>";
+    code += "<option class='content_input_fd' value='rc4'>rc4</option>";
+    code += "<option class='content_input_fd' value='rc4-md5'>rc4-md5</option>";
+    code += "<option class='content_input_fd' value='aes-128-cfb'>aes-128-cfb</option>";
+    code += "<option class='content_input_fd' value='aes-192-cfb'>aes-192-cfb</option>";
+    code += "<option class='content_input_fd' value='aes-256-cfb' selected=''>aes-256-cfb</option>";
+    code += "<option class='content_input_fd' value='bf-cfb'>bf-cfb</option>";
+    code += "<option class='content_input_fd' value='camellia-128-cfb'>camellia-128-cfb</option>";
+    code += "<option class='content_input_fd' value='camellia-192-cfb'>camellia-192-cfb</option>";
+    code += "<option class='content_input_fd' value='camellia-256-cfb'>camellia-256-cfb</option>";
+    code += "<option class='content_input_fd' value='cast5-cfb'>cast5-cfb</option>";
+    code += "<option class='content_input_fd' value='des-cfb'>des-cfb</option>";
+    code += "<option class='content_input_fd' value='idea-cfb'>idea-cfb</option>";
+    code += "<option class='content_input_fd' value='rc2-cfb'>rc2-cfb</option>";
+    code += "<option class='content_input_fd' value='seed-cfb'>seed-cfb</option>";
+    code += "<option class='content_input_fd' value='salsa20'>salsa20</option>";
+    code += "<option class='content_input_fd' value='chacha20'>chacha20</option>";
+    code += "</select>";
     code += "<td><input class='add_btn' onclick='add_conf_in_table(this);' type='button' value=''></td>";
     code += "</tr>";
     code += field_code;
-    code += "<tr>"
-    code += "</tr>"
-    code += "</table>"
-    /* unfinished ss node backup function
-    code += "<div style='align:center;margin-left:240px;margin-top:15px'>"
-    code += "<table>"
-    code += "<tr>"
-    code += "<td style='border:1px'>"
-    code += "<input type='button' class='button_gen' onclick='download_SS_nnode();' value='导出配置'/>"
-    code += "</td>"
-    code += "<td style='border:1px'>"
-    code += "<input type='button' class='button_gen' onclick='upload_SS_nnode();' value='恢复配置'/>"
-    code += "</td>"
-    code += "<td style='border:1px'>"
-    code += "<input id='jffsfile' type='file' name='file2' style='color:#FFCC00;'/>"
-    code += "<span id='node_tatus' style='display:none;'><img id='LoadingIcon' style='margin-left:5px;margin-right:5px;' src='/images/InternetScan.gif'>Uploading, please wait...</span>"
-    code += "</td>"
-    code += "<td style='border:1px'>"
-    */
-    code += "<div style='text-align:center;margin-top:15px;'><input type='button' class='button_gen' onclick='closeSs_node_listView();' value='返回'></div>";
-    /*
-    code += "</td>"
-    code += "</tr>"
-    code += "</table>"
-    code += "</div>"
-	*/
+    code += "<tr>";
+    code += "</tr>";
+    code += "</table>";
+    code += "<div style='align:center;margin-left:220px;margin-top:15px'>";
+    code += "<table>";
+    code += "<tr>";
+    code += "<td style='border:1px'>";
+    code += "<input type='button' class='button_gen' onclick='remove_SS_node();' value='清空配置'/>";
+    code += "</td>";
+    code += "<td style='border:1px'>";
+    code += "<input style='margin-left:50px;' type='button' class='button_gen' onclick='download_SS_node();' value='导出配置'/>";
+    code += "</td>";
+    code += "<td style='border:1px'>";
+    code += "<input style='margin-left:50px;' type='button' id='upload_btn' class='button_gen' onclick='upload_SS_node();' value='恢复配置'/>";
+    code += "</td>";
+    code += "<td style='border:1px'>";
+    code += "<input style='color:#FFCC00;*color:#000;width: 200px;'id='ss_file' type='file' name='file'/>";
+    code += "<img id='loadingicon' style='margin-left:5px;margin-right:5px;display:none;' src='/images/InternetScan.gif'/>";
+    code += "<span id='ss_file_info' style='display:none;'>完成</span>";
+    code += "</td>";
+
+    //code += "<td style='border:1px'>";
+    
+    //code += "</td>";
+    code += "</tr>";
+    code += "</table>";
+    code += "<div style='align:center;margin-left:180px;margin-top:20px;margin-bottom:20px;'><input type='button' class='button_gen' onclick='closeSs_node_listView();' value='返回'></div>";
+    code += "</div>";
     code += "<div id='clientlist_all_list_Block'></div>";
+    code += "</form>";
     divObj.innerHTML = code;
     document.getElementById("ss_node_list_viewlist_content").appendChild(divObj);
 }
+
+function download_SS_node() {
+	location.href='ss_conf_backup.txt';
+}
+
+function upload_SS_node() {
+	if (document.getElementById('ss_file').value == "") return false;
+	document.getElementById('ss_file_info').style.display = "none";
+	document.getElementById('loadingicon').style.display = "block";
+	//document.form.action = "ssupload.cgi?a=/tmp/ss_conf_backup.txt";
+	document.file_form.enctype = "multipart/form-data";
+	document.file_form.encoding = "multipart/form-data";
+	//console.log(document.file_form);
+	//console.log(document.file_form[0]);
+	document.file_form.submit();
+	
+	}
+
+function upload_ok(isok) {
+	var info = document.getElementById('ss_file_info');
+	if(isok==1){
+		info.innerHTML="上传完成";
+		restore_ss_conf();
+	} else {
+		info.innerHTML="上传失败";
+	}
+	info.style.display = "block";
+	document.getElementById('loadingicon').style.display = "none";
+}
+
+function restore_ss_conf() {
+	document.form.action_mode.value = ' Refresh ';
+    document.form.SystemCmd.value = "ss_conf_restore.sh";
+    document.form.submit();
+    //setTimeout("onSubmitCtrl();", 2000);
+    refreshpage(2);
+}
+
+function remove_SS_node() {
+	global_status_enable=false;
+	checkSSStatus();
+	document.form.action_mode.value = ' Refresh ';
+    document.form.SystemCmd.value = "ss_conf_remove.sh";
+    document.form.submit();
+    refreshpage(2);
+}
+
 function updateSs_node_listView() {
     $j.ajax({
         url: '/dbconf?p=ss',
@@ -706,6 +769,7 @@ function updateSs_node_listView() {
         }
     });
 }
+
 function show_detail(thisObj) {
     var state1 = readCookie("ss_table_detail")
     if (state1 == "1") {
@@ -726,6 +790,7 @@ function show_detail(thisObj) {
         createCookie("ss_table_detail", 1, 365);
     }
 }
+
 function init_detail() {
     var std = readCookie("ss_table_detail")
     if (std == "1") {
@@ -744,6 +809,7 @@ function init_detail() {
         $j("#detail_show_hide").html("[ 简洁 ]");
     }
 }
+
 function createCookie(name, value, days) {
     var expires;
     if (days) {
@@ -755,6 +821,7 @@ function createCookie(name, value, days) {
     }
     document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
 }
+
 function readCookie(name) {
     var nameEQ = encodeURIComponent(name) + "=";
     var ca = document.cookie.split(';');
@@ -767,53 +834,26 @@ function readCookie(name) {
 }
 
 function setRefresh(obj) {
-refreshRate = obj.value;
-cookie.set('status_restart', refreshRate, 300);
-checkSSStatus();
+	refreshRate = obj.value;
+	cookie.set('status_restart', refreshRate, 300);
+	checkSSStatus();
 }
 function getRefresh() {
-val = parseInt(cookie.get('status_restart'));
-if ((val != 0) && (val != 5) && (val != 10) && (val != 15) && (val != 30) && (val != 60))
-val = 10;
-document.getElementById('refreshrate').value = val;
-return val;
+	val = parseInt(cookie.get('status_restart'));
+	if ((val != 0) && (val != 5) && (val != 10) && (val != 15) && (val != 30) && (val != 60))
+	val = 10;
+	document.getElementById('refreshrate').value = val;
+	return val;
 }
-/* unfinished ss node backup function
-function UploadFile() {
-if (document.getElementById('ss_file').value == "") return false;
-document.getElementById('ss_file_info').style.display = "none";
-document.getElementById('loadingicon').style.display = "block";
-if(document.getElementById('fileselect').value == "0") {
-document.form.action = "ssupload.cgi?a=/tmp/chnroute.txt";
-} else {
-document.form.action = "ssupload.cgi?a=/tmp/cdn.txt";
-}
-document.form.enctype = "multipart/form-data";
-document.form.encoding = "multipart/form-data";
-document.form.submit();
-}
-function upload_ok(isok) {
-var info = document.getElementById('ss_file_info');
-if(isok==1){
-info.innerHTML="上传完成";
-} else {
-info.innerHTML="上传失败";
-}
-info.style.display = "block";
-document.getElementById('loadingicon').style.display = "none";
-}
-*/
-
 
 
 function buildswitch(){
 	$j("#switch").click(
 	function(){
 		if(document.getElementById('switch').checked){
-			//document.form.ss_enable.value = 1;
 			document.form.action_mode.value = ' Refresh ';
 			document.getElementById('ss_basic_enable').value = 1;
-			document.form.submit();
+			update_visibility();
 			document.getElementById('basic_show').style.display = "";
 			document.getElementById('detail_show').style.display = "";	
 			document.getElementById('add_fun').style.display = "";	
@@ -827,7 +867,6 @@ function buildswitch(){
 			document.getElementById('help_note').style.display = "";	
 		}else{
 			document.form.ss_basic_enable.value = 0;
-			//document.getElementById('ss_enable').value = 0;
 			showSSLoadingBar(8);
 			document.form.action_mode.value = ' Refresh ';
 			document.form.action = "/applydb.cgi?p=ss";
@@ -849,8 +888,6 @@ function buildswitch(){
 }
 
 function show_hide_table(){
-	//ssmode = document.form.ss_mode.value;
-	//if (ssmode == "1" || ssmode == "2" || ssmode == "3" || ssmode == "4"){
 	if (db_ss['ss_basic_enable'] == "1"){
 		document.getElementById("switch").checked = true;
     	update_visibility();
@@ -892,10 +929,10 @@ function write_ss_install_status(){
 			$j("#ss_install_show").html("<i>正在安装更新...</i>");
 			document.getElementById('ss_version_show').style.display = "none";
 		} else if (db_ss['ss_basic_install_status'] == "3"){
-			$j("#ss_install_show").html("<i>安装更新成功，5秒后刷新本页！</i>");
+			$j("#ss_install_show").html("<i>安装更新成功，5秒自动重启SS！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
-			//version_show();
-			//refreshpage(3);
+			version_show();
+			setTimeout("onSubmitCtrl();", 4000);
 		} else if (db_ss['ss_basic_install_status'] == "4"){
 			$j("#ss_install_show").html("<i>下载文件校验不一致！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
@@ -918,11 +955,11 @@ function write_ss_install_status(){
 		});
 	}
 
-function update_ss(o, s){
+function update_ss(){
 	global_status_enable=false;
 	checkSSStatus();
 	document.form.ss_basic_update_check.value = 1;
-	document.form.action_mode.value = s;
+	document.form.action_mode.value = ' Refresh ';
     document.form.SystemCmd.value = "ssconfig basic";
     document.form.submit();
 }
@@ -948,7 +985,6 @@ function update_ss(o, s){
 		</td>
 	</tr>
 </table>
-<!--[if lte IE 6.5]><iframe class="hackiframe"></iframe><![endif]-->
 </div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
 <form method="post" name="form" action="/applydb.cgi?p=ss" target="hidden_frame">
@@ -1009,7 +1045,8 @@ function update_ss(o, s){
 														</label>
 													</div>
 													<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-35px;float: left;">
-														<button id="updateBtn" class="button_gen" onclick="update_ss(this, ' Refresh ');">检查更新</button>						
+														<button id="updateBtn" class="button_gen" onclick="update_ss();">检查更新</button>
+														<a style="margin-left: 185px;" href="https://github.com/koolshare/koolshare.github.io/tree/master/shadowsocks" target="_blank"><em>[<u>view code</u>]</em></a>
 													</div>
 													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:-27px;"><i>当前版本：<% dbus_get_def("ss_version_local", "未知"); %></i></div>
 													<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:-29px;"></div>	
@@ -1050,7 +1087,7 @@ function update_ss(o, s){
 														<div style="margin-left:170px;margin-top:-20px;margin-bottom:0px;">
 															<input type="checkbox" id="ss_basic_use_rss" onclick="oncheckclick(this);update_visibility();" />
 															<input type="hidden" id="hd_ss_basic_use_rss" name="ss_basic_use_rss" value="" />
-															使用ss-rss
+															使用SSR
 														</div>
 														<div id="game_alert" style="margin-left:270px;margin-top:-20px;margin-bottom:0px;">
 															<a href="http://koolshare.cn/thread-4519-1-1.html" target="_blank"><i>&nbsp;账号需支持UDP转发&nbsp;&nbsp;<u>FAQ</u></i></a>
@@ -1168,9 +1205,11 @@ function update_ss(o, s){
 													<td>
 														<a>
 															<span style="display: none" id="ss_state1">尚未启用! </span>
-															<span id="ss_state2">国外连接 - <% nvram_get("ss_foreign_state"); %></span>
+															<!--<span id="ss_state2">国外连接 - <% nvram_get("ss_foreign_state"); %></span>-->
+															<span id="ss_state2">国外连接 - Waiting...</span>
 															<br/>
-															<span id="ss_state3">国内连接 - <% nvram_get("ss_china_state"); %></span>
+															<!--<span id="ss_state3">国内连接 - <% nvram_get("ss_china_state"); %></span>-->
+															<span id="ss_state3">国内连接 - Waiting...</span>
 														</a>
 													</td>
 												</tr>
@@ -1306,8 +1345,8 @@ function update_ss(o, s){
 															<option value="1">黑名单模式</option>
 															<option value="2">白名单模式</option>
 														</select>
-															<input type="text" class="input_ss_table" style="width:auto;" id="ss_black_lan" name="ss_black_lan" maxlength="80" size="43" placeholder="需要限制客户端IP如:192.168.1.2,192.168.1.3" value="">
-															<input type="text" class="input_ss_table" style="width:auto;" id="ss_white_lan" name="ss_white_lan" maxlength="80" size="43" placeholder="仅允许的客户端IP如:192.168.1.2,192.168.1.3" value="">
+															<input type="text" class="input_ss_table" style="width:auto;display: none;" id="ss_basic_black_lan" name="ss_basic_black_lan" maxlength="80" size="43" placeholder="需要限制客户端IP如:192.168.1.2,192.168.1.3" value="">
+															<input type="text" class="input_ss_table" style="width:auto;display: none;" id="ss_basic_white_lan" name="ss_basic_white_lan" maxlength="80" size="43" placeholder="仅允许的客户端IP如:192.168.1.2,192.168.1.3" value="">
 													</td>
 												</tr>
 											</table>
@@ -1379,7 +1418,7 @@ function update_ss(o, s){
 											</table>									
 										</div>
 										<div id="apply_button"class="apply_gen">
-											<input class="button_gen" id="cmdBtn" onClick="onSubmitCtrl(this, ' Refresh ')" type="button" value="提交"/>
+											<input class="button_gen" id="cmdBtn" onClick="onSubmitCtrl()" type="button" value="提交"/>
 										</div>
 										<div id="line_image1" style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"/></div>
 										<div id="help_note" class="SimpleNote">

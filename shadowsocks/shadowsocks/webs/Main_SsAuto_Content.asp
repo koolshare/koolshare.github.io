@@ -91,15 +91,15 @@
 }
 </style>
 <script>
-var socks5 = 0
-var ssmode = 2
+var socks5 = 0;
 var $j = jQuery.noConflict();
 var $G = function (id) {
 	return document.getElementById(id);
 };
 
 function onSubmitCtrl(o, s) {
-	if(validForm() && validForm2() && validForm3()){
+	//if(validForm() && validForm2() && validForm3()){
+	if(validForm()){
 		showSSLoadingBar(25);
 		document.form.action_mode.value = s;
 		updateOptions();
@@ -141,7 +141,7 @@ function updateOptions(){
 }
 
 function validForm(){
-	var temp_ss = ["ss_redchn_isp_website_web"];
+	var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_wan_blacklist", "ss_redchn_wan_whitelist"];
 	for(var i = 0; i < temp_ss.length; i++) {
 		var temp_str = $G(temp_ss[i]).value;
 		if(temp_str == "") {
@@ -167,7 +167,7 @@ function validForm(){
 	}	
 	return true;
 }
-
+/*
 function validForm2(){
 	var temp_ss = ["ss_redchn_wan_blacklist"];
 	for(var i = 0; i < temp_ss.length; i++) {
@@ -221,25 +221,7 @@ function validForm3(){
 	}	
 	return true;
 }
-
-function openShutManager(oSourceObj,oTargetObj,shutAble,oOpenTip,oShutTip){
-	var sourceObj = typeof oSourceObj == "string" ? document.getElementById(oSourceObj) : oSourceObj;
-	var targetObj = typeof oTargetObj == "string" ? document.getElementById(oTargetObj) : oTargetObj;
-	var openTip = oOpenTip || "";
-	var shutTip = oShutTip || "";
-	if(targetObj.style.display!="none"){
-		if(shutAble) return;
-			targetObj.style.display="none";
-		if(openTip && shutTip){
-			sourceObj.innerHTML = shutTip;
-		}
-	} else {
-		targetObj.style.display="block";
-		if(openTip && shutTip){
-			sourceObj.innerHTML = openTip;
-		}
-	}
-}
+*/
 function update_visibility(){
 	rdc = document.form.ss_redchn_dns_china.value;
 	rdf = document.form.ss_redchn_dns_foreign.value;

@@ -42,42 +42,6 @@
 	height:21px;
 	background:#C0D1D3 url(/images/ss_proceding.gif);
 }
-#ClientList_Block_PC {
-	border: 1px outset #999;
-	background-color: #576D73;
-	position: absolute;
-	*margin-top:26px;
-	margin-left: 3px;
-	*margin-left:-129px;
-	width: 255px;
-	text-align: left;
-	height: auto;
-	overflow-y: auto;
-	z-index: 200;
-	padding: 1px;
-	display: none;
-}
-#ClientList_Block_PC div {
-	background-color: #576D73;
-	height: auto;
-	*height:20px;
-	line-height: 20px;
-	text-decoration: none;
-	font-family: Lucida Console;
-	padding-left: 2px;
-}
-#ClientList_Block_PC a {
-	background-color: #EFEFEF;
-	color: #FFF;
-	font-size: 12px;
-	font-family: Arial, Helvetica, sans-serif;
-	text-decoration: none;
-}
-#ClientList_Block_PC div:hover, #ClientList_Block a:hover {
-	background-color: #3366FF;
-	color: #FFFFFF;
-	cursor: default;
-}
 #ss_ipset_black_domain_web::-webkit-input-placeholder::before {
     color:#999;
     content:"# 此处填入需要强制走ss的域名，一行一个，格式如下：\A koolshare.cn\A baidu.cn\A # 默认已经由gfwlist提供了上千条被墙域名，请勿重复添加!\A";
@@ -90,8 +54,6 @@
 </style>
 <script>
 var socks5 = 0
-var ssmode = 1
-var $j = jQuery.noConflict();
 var $G = function (id) {
 	return document.getElementById(id);
 };
@@ -202,24 +164,6 @@ function validForm2(){
 	return true;
 }
 
-function openShutManager(oSourceObj,oTargetObj,shutAble,oOpenTip,oShutTip){
-	var sourceObj = typeof oSourceObj == "string" ? document.getElementById(oSourceObj) : oSourceObj;
-	var targetObj = typeof oTargetObj == "string" ? document.getElementById(oTargetObj) : oTargetObj;
-	var openTip = oOpenTip || "";
-	var shutTip = oShutTip || "";
-	if(targetObj.style.display!="none"){
-		if(shutAble) return;
-		targetObj.style.display="none";
-			if(openTip && shutTip){
-				sourceObj.innerHTML = shutTip;
-			}
-	} else {
-		targetObj.style.display="block";
-		if(openTip && shutTip){
-			sourceObj.innerHTML = openTip;
-		}
-	}
-}
 function update_visibility() {
     icd = document.form.ss_ipset_cdn_dns.value;
     ifd = document.form.ss_ipset_foreign_dns.value;
@@ -241,19 +185,18 @@ function update_visibility() {
 <div id="TopBanner"></div>
 <div id="Loading" class="popup_bg"></div>
 <div id="LoadingBar" class="popup_bar_bg">
-<table cellpadding="5" cellspacing="0" id="loadingBarBlock" class="loadingBarBlock" align="center">
-<tr>
-<td height="100">
-<div id="loading_block3" style="margin:10px auto;width:85%; font-size:12pt;"></div>
-<div id="loading_block1" class="Bar_container">
-<span id="proceeding_img_text"></span>
-<div id="proceeding_img"></div>
-</div>
-<div id="loading_block2" style="margin:10px auto; width:85%;">此期间请勿访问屏蔽网址，以免污染DNS进入缓存</div>
-</td>
-</tr>
-</table>
-<!--[if lte IE 6.5]><iframe class="hackiframe"></iframe><![endif]-->
+	<table cellpadding="5" cellspacing="0" id="loadingBarBlock" class="loadingBarBlock" align="center">
+		<tr>
+			<td height="100">
+				<div id="loading_block3" style="margin:10px auto;width:85%; font-size:12pt;"></div>
+				<div id="loading_block1" class="Bar_container">
+					<span id="proceeding_img_text"></span>
+					<div id="proceeding_img"></div>
+				</div>
+				<div id="loading_block2" style="margin:10px auto; width:85%;">此期间请勿访问屏蔽网址，以免污染DNS进入缓存</div>
+			</td>
+		</tr>
+	</table>
 </div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
 <form method="post" name="form" action="/applydb.cgi?p=ss" target="hidden_frame">

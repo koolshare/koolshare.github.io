@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+0.8.3 ( 14/01/2016 07:06:37 )
+   - ADD:	add ss conf remove/backup/restore
+   - FIX:	fix lan control don't work
+   - FIX:	using dbus ram to replace nvram for ss_status
+   - FIX:	now slide switch won't save unless apply bottom clicked
 
 0.8.2 ( 14/01/2016 07:06:37 )
    - FIX:	fix asp format

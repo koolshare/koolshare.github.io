@@ -48,9 +48,7 @@
 }
 </style>
 <script>
-var socks5 = 0
-var ssmode = 3
-var $j = jQuery.noConflict();
+var socks5 = 0;
 var $G = function (id) {
 	return document.getElementById(id);
 };
@@ -127,25 +125,6 @@ function validForm(){
 		$G(temp_ss[i]).value = rlt;
 	}
 	return true;
-}
-
-function openShutManager(oSourceObj,oTargetObj,shutAble,oOpenTip,oShutTip){
-	var sourceObj = typeof oSourceObj == "string" ? document.getElementById(oSourceObj) : oSourceObj;
-	var targetObj = typeof oTargetObj == "string" ? document.getElementById(oTargetObj) : oTargetObj;
-	var openTip = oOpenTip || "";
-	var shutTip = oShutTip || "";
-	if(targetObj.style.display!="none"){
-		if(shutAble) return;
-			targetObj.style.display="none";
-		if(openTip && shutTip){
-			sourceObj.innerHTML = shutTip;
-		}
-	} else {
-		targetObj.style.display="block";
-		if(openTip && shutTip){
-			sourceObj.innerHTML = openTip;
-		}
-	}
 }
 
 function update_visibility(){
