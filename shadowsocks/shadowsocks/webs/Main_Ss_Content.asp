@@ -98,7 +98,6 @@ var $G = function(id) {
 };
 
 var refreshRate = 5;
-ssmode = document.getElementById("ss_basic_mode").value;
 function init() {
     show_menu(menu_hook);
     version_show();
