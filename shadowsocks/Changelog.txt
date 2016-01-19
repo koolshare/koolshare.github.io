@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+0.8.6 ( 19/01/2016 21:38:04 )
+   - fix:	do not restore some values for better looking
+
 0.8.5 ( 19/01/2016 15:25:46 )
    - fix:	fix wrong var
 
