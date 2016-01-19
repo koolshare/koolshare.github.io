@@ -98,6 +98,7 @@ var $G = function(id) {
 };
 
 var refreshRate = 5;
+ssmode = document.getElementById("ss_basic_mode").value;
 function init() {
     show_menu(menu_hook);
     version_show();
@@ -117,7 +118,6 @@ function init() {
     setTimeout("write_ss_install_status()", 1000);
 }
 function onSubmitCtrl() {
-	ssmode = document.getElementById("ss_basic_mode").value;
 	global_status_enable=false;
 	checkSSStatus();
     if (validForm()) {
@@ -351,7 +351,7 @@ function checkSSStatus() {
 }
 */
 function checkSSStatus() {
-	if (db_ss['ss_basic_enable'] !== "0" && db_ss['ss_basic_enable'] == "undefined") {
+	if (db_ss['ss_basic_enable'] !== "0") {
 	    if(!global_status_enable) {//not enabled
 		    if(refreshRate > 0) {
 			    setTimeout("checkSSStatus();", refreshRate * 100000);
@@ -932,6 +932,7 @@ function write_ss_install_status(){
 			$j("#ss_install_show").html("<i>安装更新成功，5秒自动重启SS！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
 			version_show();
+			setTimeout("write_ss_install_status()", 200000);
 			setTimeout("onSubmitCtrl();", 4000);
 		} else if (db_ss['ss_basic_install_status'] == "4"){
 			$j("#ss_install_show").html("<i>下载文件校验不一致！</i>");
