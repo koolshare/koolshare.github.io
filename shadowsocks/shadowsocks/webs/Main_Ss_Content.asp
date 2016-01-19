@@ -118,6 +118,7 @@ function init() {
     setTimeout("write_ss_install_status()", 1000);
 }
 function onSubmitCtrl() {
+	ssmode = document.getElementById("ss_basic_mode").value;
 	global_status_enable=false;
 	checkSSStatus();
     if (validForm()) {
@@ -161,6 +162,7 @@ function onSubmitCtrl() {
 }
 
 function done_validating(action) {
+	ssmode = document.getElementById("ss_basic_mode").value;
 	if (ssmode == "2" || ssmode == "3"){
 		refreshpage(25);
 	} else if (ssmode == "1"){
