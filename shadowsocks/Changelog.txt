@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+0.9.3 ( 220/01/2016 16:01:42 )
+   - CHANGE:	update Pcap_DNSProxy version to 0.4.5.1
+
 0.9.2 ( 20/01/2016 11:01:01 )
    - CHANGE:	Using dns2socks as default foreign dns resolver
    - FIX:	fix early page refresh after ss updated
