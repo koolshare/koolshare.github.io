@@ -72,7 +72,7 @@ function onSubmitCtrl(o, s) {
 }
 
 function done_validating(action){
-	refreshpage(25);
+	return true;
 }
 
 function conf_to_obj(){

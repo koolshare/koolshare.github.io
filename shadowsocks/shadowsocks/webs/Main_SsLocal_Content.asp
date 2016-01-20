@@ -113,7 +113,7 @@ function onSubmitCtrl(o, s) {
 }
 
 function done_validating(action){
-	refreshpage(8);
+	return true;
 }
 
 function updateOptions(){

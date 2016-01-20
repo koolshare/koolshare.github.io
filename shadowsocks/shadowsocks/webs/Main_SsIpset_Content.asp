@@ -68,7 +68,7 @@ function onSubmitCtrl(o, s) {
 }
 
 function done_validating(action){
-	refreshpage(10);
+	return true;
 }
 
 String.prototype.replaceAll = function(s1,s2){

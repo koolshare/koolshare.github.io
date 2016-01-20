@@ -91,7 +91,7 @@ updateOptions();
 }
 
 function done_validating(action){
-refreshpage(10);
+	return true;
 }
 
 function init(){

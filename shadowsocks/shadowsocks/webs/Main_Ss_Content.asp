@@ -161,17 +161,7 @@ function onSubmitCtrl() {
 }
 
 function done_validating(action) {
-	ssmode = document.getElementById("ss_basic_mode").value;
-	if (ssmode == "2" || ssmode == "3"){
-		refreshpage(25);
-	} else if (ssmode == "1"){
-		refreshpage(12);
-	} else if (ssmode == "0"){
-		refreshpage(8);
-	} else if (ssmode == "4"){
-		refreshpage(8);
-	}
-	//return true;
+	return true;
 }
 
 function save_ss_method(m) {
