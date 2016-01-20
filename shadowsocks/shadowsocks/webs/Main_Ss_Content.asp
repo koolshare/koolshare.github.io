@@ -368,8 +368,8 @@ function checkSSStatus() {
             setTimeout("checkSSStatus();", refreshRate * 1000);
         },
 		success: function() {
-			$j("#ss_state2").html("国内连接 - " + db_ss['ss_basic_state_foreign']);
-			$j("#ss_state3").html("国外连接 - " + db_ss['ss_basic_state_china']);
+			$j("#ss_state2").html("国外连接 - " + db_ss['ss_basic_state_foreign']);
+			$j("#ss_state3").html("国内连接 - " + db_ss['ss_basic_state_china']);
 			refreshRate = getRefresh();
 			if (refreshRate > 0)
         	setTimeout("checkSSStatus();", refreshRate * 1000);

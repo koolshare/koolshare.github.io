@@ -1,9 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+0.8.8 ( 20/01/2016 08:33:03 )
+   - fix:	fix ss state show for china and foreign
+
 0.8.7 ( 20/01/2016 00:49:53 )
    - fix:	fix loading bar error
    - fix:	fix ss list update
-
 
 0.8.6 ( 19/01/2016 21:38:04 )
    - fix:	do not restore some values for better looking
