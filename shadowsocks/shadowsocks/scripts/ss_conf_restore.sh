@@ -1,11 +1,11 @@
 #!/bin/sh
 
 confs=`cat /tmp/ss_conf_backup.txt`
-
-for conf in $confs
+while read conf
 do
+# echo $conf
 dbus set $conf >/dev/null 2>&1
-done
+done </tmp/ss_conf_backup.txt
 
 dbus remove ss_basic_state_china
 dbus remove ss_basic_foreign_china
