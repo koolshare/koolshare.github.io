@@ -1,6 +1,6 @@
 #!/bin/sh
 eval `dbus export ss`
-#source /koolshare/configs/ss.sh
+source /koolshare/scripts/base.sh
 LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")
 
 # version dectet
@@ -173,7 +173,7 @@ nvram set cdn_numbers=$(cat /jffs/ss/redchn/cdn.txt | grep -c .)
 # reboot ss
 if [ "$reboot" == "1" ];then
 echo $(date): reboot shadowsocks service automaticly to apply newly updated list >> /tmp/syscmd.log
-sh /usr/bin/ssconfig
+ssconfig
 fi
 echo ========================================================================================================== >> /tmp/syscmd.log
 exit

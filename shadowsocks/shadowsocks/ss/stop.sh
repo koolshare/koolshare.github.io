@@ -7,8 +7,6 @@ eval `dbus export ss`
 redsocks2=$(ps | grep "redsocks2" | grep -v "grep")
 dnscrypt=$(ps | grep "dnscrypt-proxy" | grep -v "grep")
 sokcs5=$(ps|grep ss-local|grep -vw rss-local|grep -v 23456|cut -d " " -f 1)
-sslocal=$(ps|grep ss-local|grep -vw rss-local|grep 23456|cut -d " " -f 1)
-rsslocal=$(ps|grep rss-local|grep -vw ss-local|grep 23456|cut -d " " -f 1)
 ssredir=$(ps | grep "ss-redir" | grep -v "grep" | grep -vw "rss-redir")
 rssredir=$(ps | grep "rss-redir" | grep -v "grep" | grep -vw "ss-redir")
 sstunnel=$(ps | grep "ss-tunnel" | grep -v "grep" | grep -vw "rss-tunnel")
@@ -162,30 +160,8 @@ sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
 #--------------------------------------------------------------------------
 # kill ss-local
 
-	#if [ ! -z "$sslocal" ]; then 
-	#	echo $(date): kill ss-local...
-	#	kill -9 $sslocal >/dev/null 2>&1
-	#	echo $(date): done
-	#	echo $(date):
-	#fi
-
-
-	#if [ ! -z "$rsslocal" ]; then 
-	#	echo $(date): kill rss-local...
-	#	kill -9 $rsslocal >/dev/null 2>&1
-	#	echo $(date): done
-	#	echo $(date):
-	#fi
-	killall ss-local >/dev/null 2>&1
-	killall ss-local >/dev/null 2>&1
-	killall rss-local >/dev/null 2>&1
-	killall rss-local >/dev/null 2>&1
-	# if [ "$sslocal_enable" == "0" ]; then
-	#	echo $(date): disable sslocal...
-	#	kill -9 $sokcs5 >/dev/null 2>&1
-	#	echo $(date): done
-	#	echo $(date):
-	# fi
+	kill `ps | grep ss-local | grep -v "grep" | grep -w "$"|awk '{print $1}'`  >/dev/null 2>&1
+	kill `ps | grep rss-local | grep -v "grep" | grep -w "$"|awk '{print $1}'`  >/dev/null 2>&1
 #--------------------------------------------------------------------------
 # kill ss-tunnel
 	if [ ! -z "$sstunnel" ]; then 
