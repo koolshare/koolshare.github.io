@@ -12,6 +12,9 @@
 * <b>shadowsocks/res</b><br/>
 该文件夹用于存放shadowsocks和软件中心的网页元素。
 
+* <b>shadowsocks/bin</b><br/>
+该文件夹用于存放shadowsocks的二进制文件。
+
 * <b>shadowsocks.tar.gz</b><br/>
 此文件为shadowsocks文件夹的打包，通过路由器访问 [https://koolshare.github.io/shadowsocks/shadowsocks.tar.gz](https://koolshare.github.io/shadowsocks/shadowsocks.tar.gz) 获取安装包更新。
 

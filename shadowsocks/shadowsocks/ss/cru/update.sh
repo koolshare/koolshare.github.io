@@ -35,6 +35,11 @@ md5sum_chnroute2=$(echo $git_line2 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 md5sum_adblock2=$(echo $git_line3 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 md5sum_cdn2=$(echo $git_line4 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 
+# detect ss version
+ss_basic_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/version | sed -n 1p`
+if [ ! -z $ss_basic_version_web1 ];then
+	dbus set ss_basic_version_web=$ss_basic_version_web1
+fi
 
 # update gfwlist
 if [ "$ss_basic_gfwlist_update" == "1" ];then
@@ -64,7 +69,7 @@ else
 fi
 
 
-   	# update chnroute
+# update chnroute
 if [ "$ss_basic_chnroute_update" == "1" ];then
 	if [ ! -z "$version_chnroute2" ];then
 		if [ "$version_chnroute1" != "$version_chnroute2" ];then

@@ -158,4 +158,9 @@ else
 	echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
 fi
 
+# detect ss version after ss service applied.
+ss_basic_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/version | sed -n 1p`
+if [ ! -z $ss_basic_version_web1 ];then
+	dbus set ss_basic_version_web=$ss_basic_version_web1
+fi
 
