@@ -1,7 +1,8 @@
 #!/bin/sh
+
+source /koolshare/scripts/base.sh
 PROCS=Pcap_DNSProxy
-BIN=/usr/bin
-START=$BIN/$PROCS
+START=$PROCS
 CONFIG=/koolshare/ss/dns
 while true ; do
 sleep 18

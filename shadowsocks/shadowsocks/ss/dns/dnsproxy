@@ -1,8 +1,8 @@
 ﻿#!/bin/sh
 
+source /koolshare/scripts/base.sh
 PROCS=Pcap_DNSProxy
-BIN=/usr/bin
-START=$BIN/$PROCS
+START=$PROCS
 CONFIG=/jffs/ss/dns
 RESTART=/jffs/ss/dns/dnsproxy
 

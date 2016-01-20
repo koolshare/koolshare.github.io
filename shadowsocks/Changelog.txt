@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+0.9.4 ( 220/01/2016 16:01:42 )
+   - CHANGE:	change the absolute path of Pcap_DNSProxy
+
 0.9.3 ( 220/01/2016 16:01:42 )
    - CHANGE:	update Pcap_DNSProxy version to 0.4.5.1
 
