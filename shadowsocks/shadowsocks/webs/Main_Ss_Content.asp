@@ -1048,7 +1048,7 @@ function update_ss(){
 													</div>
 													<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-35px;float: left;">
 														<button id="updateBtn" class="button_gen" onclick="update_ss();">检查更新</button>
-														<a style="margin-left: 185px;" href="https://github.com/koolshare/koolshare.github.io/tree/master/shadowsocks" target="_blank"><em>[<u>view code</u>]</em></a>
+														<a style="margin-left: 185px;" href="https://github.com/koolshare/koolshare.github.io/blob/master/shadowsocks/Changelog.txt" target="_blank"><em>[<u>Changelog</u>]</em></a>
 													</div>
 													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:-27px;"><i>当前版本：<% dbus_get_def("ss_version_local", "未知"); %></i></div>
 													<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:-29px;"></div>	
