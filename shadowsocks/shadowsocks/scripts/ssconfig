@@ -85,7 +85,7 @@ if [ "$ss_basic_update_check" == "1" ];then
 		dbus set ss_basic_install_status="7"
 		sleep 5
 		dbus set ss_basic_install_status="0"
-		#bus set ss_basic_update_check="0"
+		dbus set ss_basic_update_check="0"
 		exit
 	fi
 fi
