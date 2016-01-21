@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+0.9.6 ( 21/01/2016 10:52:18 )
+   - CHANGE:	change the way of pcapDNSProxy start.
+   - CHANGE:	update inner ss rule list to newest.
+
 0.9.5 ( 20/01/2016 18:39:40 )
    - FIX:	change absolute path of ssocnfig for after ss rule update success.
    - FIX:	fix ss stop.sh stop the socks5 in socks5 page.
