@@ -941,6 +941,7 @@ function write_ss_install_status(){
 			document.getElementById('update_button').style.display = "none";
 		} else if (db_ss['ss_basic_install_status'] == "7"){
 			$j("#ss_install_show").html("<i>检测更新错误！</i>");
+			document.getElementById('update_button').style.display = "";
 		} else {
 			$j("#ss_install_show").html("");
 			//document.getElementById('update_button').style.display = "";

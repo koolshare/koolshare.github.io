@@ -1,7 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+0.9.9 ( 21/01/2016 20:35:28 )
+   - fix:	fix update bottom not show when ss version check failed
+
 0.9.8 ( 21/01/2016 20:35:28 )
-   - CHANGE:	fix type error may cause ss apply failed after version check failed
+   - FIX:	fix type error may cause ss apply failed after version check failed
 
 0.9.7 ( 21/01/2016 20:14:53 )
    - CHANGE:	now update bottom will not show when ss not enabled
