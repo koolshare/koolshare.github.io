@@ -360,6 +360,7 @@ function checkSSStatus() {
 		success: function() {
 			$j("#ss_state2").html("国外连接 - " + db_ss['ss_basic_state_foreign']);
 			$j("#ss_state3").html("国内连接 - " + db_ss['ss_basic_state_china']);
+			document.getElementById('update_button').style.display = "";
 			refreshRate = getRefresh();
 			if (refreshRate > 0)
         	setTimeout("checkSSStatus();", refreshRate * 1000);
@@ -885,6 +886,7 @@ function show_hide_table(){
     	init_detail();
 	} else {
 		document.getElementById("switch").checked = false;
+		document.getElementById('update_button').style.display = "none";
 		document.getElementById('basic_show').style.display = "none";
 		document.getElementById('detail_show').style.display = "none";	
 		document.getElementById('add_fun').style.display = "none";	
@@ -928,9 +930,11 @@ function write_ss_install_status(){
 		} else if (db_ss['ss_basic_install_status'] == "4"){
 			$j("#ss_install_show").html("<i>下载文件校验不一致！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
+			document.getElementById('update_button').style.display = "";
 		} else if (db_ss['ss_basic_install_status'] == "5"){
 			$j("#ss_install_show").html("<i>然而并没有更新！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
+			document.getElementById('update_button').style.display = "";
 		} else if (db_ss['ss_basic_install_status'] == "6"){
 			document.getElementById('ss_version_show').style.display = "none";
 			$j("#ss_install_show").html("<i>正在检查是否有更新~</i>");
@@ -939,7 +943,7 @@ function write_ss_install_status(){
 			$j("#ss_install_show").html("<i>检测更新错误！</i>");
 		} else {
 			$j("#ss_install_show").html("");
-			document.getElementById('update_button').style.display = "";
+			//document.getElementById('update_button').style.display = "";
 			document.getElementById('ss_version_show').style.display = "";
 		}
 		setTimeout("write_ss_install_status()", 2000);
@@ -1025,7 +1029,7 @@ function update_ss(){
 											<tr>
 											<th>ShadowSocks 开关</th>
 												<td colspan="2">
-													<div class="switch_field" style="display:table-cell">
+													<div class="switch_field" style="display:table-cell;float: left;">
 														<label for="switch">
 															<input id="switch" class="switch" type="checkbox" style="display: none;">
 															<div class="switch_container" >
@@ -1036,12 +1040,12 @@ function update_ss(){
 															</div>
 														</label>
 													</div>
-													<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-35px;float: left;">
+													<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-38px;float: left;">
 														<button id="updateBtn" class="button_gen" onclick="update_ss();">检查更新</button>
 														<a style="margin-left: 185px;" href="https://github.com/koolshare/koolshare.github.io/blob/master/shadowsocks" target="_blank"><em>[<u>view code</u>]</em></a>
 													</div>
-													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:-27px;"><i>当前版本：<% dbus_get_def("ss_version_local", "未知"); %></i></div>
-													<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:-29px;"></div>	
+													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("ss_version_local", "未知"); %></i></div>
+													<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"></div>	
 												</td>
 											</tr>
                                     	</table>

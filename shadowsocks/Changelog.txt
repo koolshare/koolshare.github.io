@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+0.9.7 ( 21/01/2016 20:14:53 )
+   - CHANGE:	now update bottom will not show when ss not enabled
+
 0.9.6 ( 21/01/2016 10:52:18 )
    - CHANGE:	change the way of pcapDNSProxy start.
    - CHANGE:	update inner ss rule list to newest.
