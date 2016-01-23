@@ -120,7 +120,7 @@ function updateOptions(){
 	document.form.enctype = "";
 	document.form.encoding = "";
 	document.form.action = "/applydb.cgi?p=ss_local_";
-	document.form.SystemCmd.value = "socks5config";
+	document.form.SystemCmd.value = "ss_socks5.sh";
 	document.form.submit();
 }
 

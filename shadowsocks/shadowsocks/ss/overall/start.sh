@@ -125,7 +125,7 @@ startss=$(cat /jffs/scripts/wan-start | grep "ssconfig")
 if [ -z "$startss" ];then
 echo $(date): Adding service to wan-start...
 sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/wan-start
-sed -i '3a sh /usr/bin/ssconfig' /jffs/scripts/wan-start
+sed -i '3a sh /koolshare/scripts/ss_config.sh' /jffs/scripts/wan-start
 fi
 chmod +x /jffs/scripts/wan-start
 echo $(date): done

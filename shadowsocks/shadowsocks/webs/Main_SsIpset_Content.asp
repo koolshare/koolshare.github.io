@@ -107,7 +107,7 @@ function updateOptions(){
 	document.form.enctype = "";
 	document.form.encoding = "";
 	document.form.action = "/applydb.cgi?p=ss_ipset_";
-	document.form.SystemCmd.value = "ssconfig ipset";
+	document.form.SystemCmd.value = "ss_config.sh";
 	document.form.submit();
 }
 

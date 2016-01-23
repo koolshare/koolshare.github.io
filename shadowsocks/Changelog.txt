@@ -1,5 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.0.0 ( 23/01/2016 22:03:48 )
+   - fix:	fix socks5 dot't auto start
+   - fix:	add backup update server
+   - fix:	fix ss start with system issue
+   - CHANGE:	change scripts location fir future working
+
 0.9.9 ( 21/01/2016 20:35:28 )
    - fix:	fix update bottom not show when ss version check failed
 

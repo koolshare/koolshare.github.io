@@ -97,7 +97,7 @@ function updateOptions(){
 	document.form.enctype = "";
 	document.form.encoding = "";
 	document.form.action = "/applydb.cgi?p=ss_game_";
-	document.form.SystemCmd.value = "ssconfig game";
+	document.form.SystemCmd.value = "ss_config.sh";
 	document.form.submit();
 }
 

@@ -219,7 +219,7 @@ function update_ss_ui(obj) {
 
 function updateOptions() {
 	document.form.action = "/applydb.cgi?p=ss";
-	document.form.SystemCmd.value = "ssconfig basic";
+	document.form.SystemCmd.value = "ss_config.sh";
 	document.form.submit();
 }
 
@@ -862,7 +862,7 @@ function buildswitch(){
 			showSSLoadingBar(8);
 			document.form.action_mode.value = ' Refresh ';
 			document.form.action = "/applydb.cgi?p=ss";
-			document.form.SystemCmd.value = "ssconfig basic";
+			document.form.SystemCmd.value = "ss_config.sh";
 			document.form.submit();
 			document.getElementById('basic_show').style.display = "none";
 			document.getElementById('detail_show').style.display = "none";	
@@ -930,7 +930,6 @@ function write_ss_install_status(){
 		} else if (db_ss['ss_basic_install_status'] == "4"){
 			$j("#ss_install_show").html("<i>下载文件校验不一致！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
-			document.getElementById('update_button').style.display = "";
 		} else if (db_ss['ss_basic_install_status'] == "5"){
 			$j("#ss_install_show").html("<i>然而并没有更新！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
@@ -941,8 +940,13 @@ function write_ss_install_status(){
 			document.getElementById('update_button').style.display = "none";
 		} else if (db_ss['ss_basic_install_status'] == "7"){
 			$j("#ss_install_show").html("<i>检测更新错误！</i>");
+		} else if (db_ss['ss_basic_install_status'] == "8"){
+			$j("#ss_install_show").html("<i>更换备用更新服务器1！</i>");
+		} else if (db_ss['ss_basic_install_status'] == "0"){
+			$j("#ss_install_show").html("");
 			document.getElementById('update_button').style.display = "";
-		} else {
+			document.getElementById('ss_version_show').style.display = "";
+		}else {
 			$j("#ss_install_show").html("");
 			//document.getElementById('update_button').style.display = "";
 			document.getElementById('ss_version_show').style.display = "";
@@ -955,9 +959,9 @@ function write_ss_install_status(){
 function update_ss(){
 	global_status_enable=false;
 	checkSSStatus();
-	document.form.ss_basic_update_check.value = 1;
+	//document.form.ss_basic_update_check.value = 1;
 	document.form.action_mode.value = ' Refresh ';
-    document.form.SystemCmd.value = "ssconfig basic";
+    document.form.SystemCmd.value = "ss_update.sh";
     document.form.submit();
 }
 
@@ -995,7 +999,6 @@ function update_ss(){
 <input type="hidden" name="first_time" value=""/>
 <input type="hidden" id="ss_basic_enable" name="ss_basic_enable" value="0" />
 <input type="hidden" id="ss_basic_install_status" name="ss_basic_install_status" value="0" />
-<input type="hidden" id="ss_basic_update_check" name="ss_basic_update_check" value="0" />
 <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
 <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value=""/>
 <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>

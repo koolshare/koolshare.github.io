@@ -152,7 +152,7 @@ echo $(date): Adding service to wan-start...
 startss=$(cat /jffs/scripts/wan-start | grep "/usr/bin/ssconfig")
 if [ -z "$startss" ];then
 sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/wan-start
-sed -i '3a sh /usr/bin/ssconfig' /jffs/scripts/wan-start
+sed -i '3a sh /koolshare/scripts/ss_config.sh' /jffs/scripts/wan-start
 fi
 chmod +x /jffs/scripts/wan-start
 echo $(date): done
@@ -225,7 +225,7 @@ if [ "3" == "$ss_game_dns_foreign" ];then
 fi
 
 if [ "4" == "$ss_game_dns_foreign" ]; then
-	echo $(date): You have enabled DNS2SOCKS, Sicks5 will enable for DNS2SOCKS
+	echo $(date): You have enabled DNS2SOCKS, Sicks5 will enable \for DNS2SOCKS
 
 	if [ "$ss_basic_use_rss" == "1" ];then
 		rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/game/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
