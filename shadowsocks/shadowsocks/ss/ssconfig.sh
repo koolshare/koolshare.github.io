@@ -61,7 +61,7 @@ update_ss(){
 	# ss_basic_install_status=8	#更换更新服务器
 	
 	dbus set ss_basic_install_status="6"
-	ss_basic_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/version1 | sed -n 1p`
+	ss_basic_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/version | sed -n 1p`
 	if [ ! -z $ss_basic_version_web1 ];then
 		dbus set ss_basic_version_web=$ss_basic_version_web1
 		if [ "$ss_basic_version_local" != "$ss_basic_version_web1" ];then
