@@ -232,13 +232,17 @@ detect_ss_version(){
 
 case $ACTION in
 start)
+	if [ "$ss_basic_enable" == "1" ];then
 	set_default_value
-    apply_ss
-    write_numbers
-    ;;
+    	apply_ss
+    	write_numbers
+	else
+    	echo ss not enabled
+	fi
+	;;
 stop | kill )
-    disable_ss
-    ;;
+	disable_ss
+	;;
 restart)
 	disable_ss
 	set_default_value
@@ -247,13 +251,13 @@ restart)
 	print_success_info
 	fire_ss_depend_scripts
 	detect_ss_version
-    ;;
+	;;
 update)
 	set_default_value
-    update_ss
-    ;;
+	update_ss
+	;;
 *)
-    echo "Usage: $0 (start|stop|restart|check|kill|reconfigure)"
-    exit 1
-    ;;
+	echo "Usage: $0 (start|stop|restart|check|kill|reconfigure)"
+	exit 1
+	;;
 esac

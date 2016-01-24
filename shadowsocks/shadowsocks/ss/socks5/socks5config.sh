@@ -21,7 +21,9 @@ start_socks5(){
 
 case $ACTION in
 start)
-    start_socks5
+    if [ "$ss_local_enable" == "1" ]
+        start_socks5
+    fi
     ;;
 stop | kill )
     kill_socks5
