@@ -944,7 +944,7 @@ function write_ss_install_status(){
 			$j("#ss_install_show").html("<i>更换备用更新服务器1！</i>");
 		} else if (db_ss['ss_basic_install_status'] == "0"){
 			$j("#ss_install_show").html("");
-			document.getElementById('update_button').style.display = "";
+			//document.getElementById('update_button').style.display = "";
 			document.getElementById('ss_version_show').style.display = "";
 		}else {
 			$j("#ss_install_show").html("");
