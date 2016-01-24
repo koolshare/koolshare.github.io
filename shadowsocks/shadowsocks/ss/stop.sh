@@ -118,11 +118,13 @@ echo $(date): --------------------Stopping Shadowsock service-------------------
 # restore nat-start file if any
 sed -i '/source/,/warning/d' /jffs/scripts/nat-start >/dev/null 2>&1
 sed -i '/nat-start/d' /jffs/scripts/nat-start >/dev/null 2>&1
+sed -i '/koolshare/d' /jffs/scripts/nat-start >/dev/null 2>&1
 sed -i '/sleep 5/d' /jffs/scripts/nat-start >/dev/null 2>&1
 #--------------------------------------------------------------------------
 # clear start up command line in wan-start
 sed -i '/start.sh/d' /jffs/scripts/wan-start >/dev/null 2>&1
 sed -i '/ssconfig/d' /jffs/scripts/wan-start >/dev/null 2>&1
+sed -i '/koolshare/d' /jffs/scripts/wan-start >/dev/null 2>&1
 sed -i '/sleep/d' /jffs/scripts/wan-start >/dev/null 2>&1
 sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
 #--------------------------------------------------------------------------

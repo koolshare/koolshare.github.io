@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.0.6 ( 24/01/2016 10:36:09 )
+   - fix:	fix ss start up
+
 1.0.5 ( 24/01/2016 10:36:09 )
    - fix:	fix ss-local/rss-local don't killed
    - fix:	fix socks5 start error
