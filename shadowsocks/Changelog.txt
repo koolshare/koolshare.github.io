@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.0.4 ( 24/01/2016 10:36:09 )
+   - fix:	try to fix md5
+
 1.0.3 ( 24/01/2016 10:36:09 )
    - fix:	fix update bpttom
 
