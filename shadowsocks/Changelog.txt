@@ -1,6 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 
+1.0.1 ( 24/01/2016 10:36:09 )
+   - fix:	fix dns2socks in CHN mode
+
 1.0.1 ( 24/01/2016 09:56:35 )
    - fix:	fix ss/socks5 start with system even ss not enabled
 

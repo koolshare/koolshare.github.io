@@ -267,7 +267,7 @@ fi
 
 if [ "4" == "$ss_redchn_dns_foreign" ]; then
 	echo $(date): Starting DNS2SOCKS..
-	dns2socks 127.0.0.1:23456 "$ss_basic_redchn_dns2socks_user" 127.0.0.1:1053 > /dev/null 2>&1 &
+	dns2socks 127.0.0.1:23456 "$ss_redchn_dns2socks_user" 127.0.0.1:1053 > /dev/null 2>&1 &
 	echo $(date): done
 	echo $(date):
 fi
