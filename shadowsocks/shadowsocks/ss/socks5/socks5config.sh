@@ -21,7 +21,7 @@ start_socks5(){
 
 case $ACTION in
 start)
-    if [ "$ss_local_enable" == "1" ]
+    if [ "$ss_local_enable" == "1" ];then
         start_socks5
     fi
     ;;

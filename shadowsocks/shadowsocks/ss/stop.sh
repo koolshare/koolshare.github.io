@@ -160,8 +160,8 @@ sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
 #--------------------------------------------------------------------------
 # kill ss-local
 
-	kill `ps | grep ss-local | grep -v "grep" | grep -w "$"|awk '{print $1}'`  >/dev/null 2>&1
-	kill `ps | grep rss-local | grep -v "grep" | grep -w "$"|awk '{print $1}'`  >/dev/null 2>&1
+	kill `ps | grep ss-local | grep -v "grep" | grep -w "23456"|awk '{print $1}'`  >/dev/null 2>&1
+	kill `ps | grep rss-local | grep -v "grep" | grep -w "23456"|awk '{print $1}'`  >/dev/null 2>&1
 #--------------------------------------------------------------------------
 # kill ss-tunnel
 	if [ ! -z "$sstunnel" ]; then 
