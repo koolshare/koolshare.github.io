@@ -218,9 +218,10 @@ do
         fi
         sleep 2
 done
-echo $(date): "Apppy nat rules!"
-echo $(date):
+echo $(date): "Apply nat rules!"
 sh /koolshare/ss/overall/nat-start
+echo $(date): done
+echo $(date):
 
 # Restart dnsmasq
 echo $(date): restarting dnsmasq...

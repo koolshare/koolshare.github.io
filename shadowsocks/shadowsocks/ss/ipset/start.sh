@@ -225,7 +225,7 @@ echo $(date):
 
 	# Start DNS2SOCKS
 	if [ "$ss_ipset_foreign_dns" == "2" ]; then
-		echo $(date): Sicks5 enable on port 23456 \for DNS2SOCKS..
+		echo $(date): Socks5 enable on port 23456 \for DNS2SOCKS..
 		if [ "$ss_basic_use_rss" == "1" ];then
 			rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_use_rss" == "0" ];then
@@ -276,9 +276,10 @@ echo $(date):
 	        fi
 	        sleep 2
 	done
-	echo $(date): "Apppy nat rules!"
-	echo $(date):
+	echo $(date): "Apply nat rules!"
 	sh /koolshare/ss/ipset/nat-start
+	echo $(date): done
+	echo $(date):
 
 # Restart dnsmasq
 	echo $(date): restarting dnsmasq...

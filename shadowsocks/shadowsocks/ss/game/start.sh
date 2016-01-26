@@ -225,7 +225,7 @@ if [ "3" == "$ss_game_dns_foreign" ];then
 fi
 
 if [ "4" == "$ss_game_dns_foreign" ]; then
-	echo $(date): You have enabled DNS2SOCKS, Sicks5 will enable \for DNS2SOCKS
+	echo $(date): You have enabled DNS2SOCKS, Socks5 will enable \for DNS2SOCKS
 
 	if [ "$ss_basic_use_rss" == "1" ];then
 		rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/game/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
@@ -282,9 +282,10 @@ fi
 	        fi
 	        sleep 2
 	done
-	echo $(date): "Apppy nat rules!"
-	echo $(date):
+	echo $(date): "Apply nat rules!"
 	sh /koolshare/ss/game/nat-start
+	echo $(date): done
+	echo $(date):
 
 echo $(date): -------------------- Shadowsock GAME mode Started------------------------
 

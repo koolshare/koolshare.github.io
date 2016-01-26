@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.0.7 ( 26/01/2016 10:19:55 )
+   - fix:	fix some type error!
+
 1.0.6 ( 24/01/2016 10:36:09 )
    - fix:	fix ss start up
 
