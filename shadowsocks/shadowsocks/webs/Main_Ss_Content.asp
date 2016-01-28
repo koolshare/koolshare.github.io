@@ -115,6 +115,7 @@ function init() {
     }
     setTimeout("checkSSStatus();", 1000);
     setTimeout("write_ss_install_status()", 1000);
+    setTimeout("check_ss()", 2000);
 }
 function onSubmitCtrl() {
 	ssmode = document.getElementById("ss_basic_mode").value;
@@ -936,6 +937,8 @@ function write_ss_install_status(){
 			$j("#ss_install_show").html("<i>然而并没有更新！</i>");
 			document.getElementById('ss_version_show').style.display = "none";
 			document.getElementById('update_button').style.display = "";
+			global_status_enable=true;
+			checkSSStatus();
 		} else if (db_ss['ss_basic_install_status'] == "6"){
 			document.getElementById('ss_version_show').style.display = "none";
 			$j("#ss_install_show").html("<i>正在检查是否有更新~</i>");
@@ -967,6 +970,12 @@ function update_ss(){
     document.form.submit();
 }
 
+function check_ss(){
+	document.form.action_mode.value = ' Refresh ';
+    document.form.SystemCmd.value = "ss_check.sh";
+    document.form.submit();
+    setTimeout("version_show()", 6000)
+}
 
 
 </script>

@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.0.9 ( 28/01/2016 11:58:28 )
+   - fix	fix ss_status don't update after version check
+
 1.0.8 ( 26/01/2016 10:19:55 )
    - rss add protocol auth_sha1_v2!
 
