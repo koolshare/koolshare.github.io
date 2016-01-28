@@ -187,7 +187,7 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		} else if (field == "ss_basic_rss_protocol") {
-			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_deflate" &&  obj[field] != "auth_simple" && obj[field] != "auth_sha1"&& obj[field] != "verify_sha1" ) {
+			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_deflate" &&  obj[field] != "auth_simple" && obj[field] != "auth_sha1" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1_v2" ) {
 				$j("#ss_basic_rss_protocol").val("origin");
 			} else {
 				$j("#ss_basic_rss_protocol").val(obj.ss_basic_rss_protocol);
@@ -249,7 +249,9 @@ function update_visibility() {
 	} else if (srp == "auth_simple"){
 		$j("#ss_basic_rss_protocol_alert").html("带验证抗重放攻击的协议");
 	} else if (srp == "auth_sha1"){
-		$j("#ss_basic_rss_protocol_alert").html("抗重放攻击和抗CCA攻击");
+		$j("#ss_basic_rss_protocol_alert").html("抗重放、CCA攻击协议");
+	} else if (srp == "auth_sha1_v2"){
+		$j("#ss_basic_rss_protocol_alert").html("抗重放、CCA攻击升级版协议");
 	}
 
 	if (sro == "plain"){
@@ -1166,6 +1168,7 @@ function update_ss(){
 															<option class="content_input_fd" value="verify_sha1">verify_sha1</option>
 															<option class="content_input_fd" value="auth_simple">auth_simple</option>
 															<option class="content_input_fd" value="auth_sha1">auth_sha1</option>
+															<option class="content_input_fd" value="auth_sha1_v2">auth_sha1_v2</option>
 														</select>
 														<span id="ss_basic_rss_protocol_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px">yuanben</span>
 													</td>
