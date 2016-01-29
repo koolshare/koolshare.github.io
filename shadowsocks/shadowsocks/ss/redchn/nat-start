@@ -1,13 +1,11 @@
 #!/bin/sh
 eval `dbus export shadowsocks`
 eval `dbus export ss`
-#source /koolshare/configs/ss.sh
-#source /koolshare/configs/redchn.sh
-black=$(echo $ss_basic_black_lan | sed "s/,/ /g")
-white=$(echo $ss_basic_white_lan | sed "s/,/ /g")
+black=$(echo $ss_basic_black_lan | sed "s/,/\n/g")
+white=$(echo $ss_basic_white_lan | sed "s/,/\n/g")
 lan_ipaddr=$(nvram get lan_ipaddr)
-wanblacklist=$(echo $redchn_wan_blacklist | sed "s/,/ /g")
-wanwhitelist=$(echo $redchn_wan_whitelist | sed "s/,/ /g")
+wanblacklist=$(echo $ss_redchn_wan_blacklist | sed 's/,/\n/g')
+wanwhitelist=$(echo $ss_redchn_wan_whitelist | sed "s/,/\n/g")
 use_chnroute="/koolshare/ss/redchn/chnroute.txt"
 server_ip=`resolvip $ss_basic_server`
 ip1=$(nvram get wan0_ipaddr | cut -d"." -f1)
@@ -78,7 +76,7 @@ iptables -t nat -A REDSOCKS2 -d $ip1.$ip2.0.0/16 -j RETURN
 
 
 # wan_blacklist 加入国外ip地址到不走代理名单 return
-if [ ! -z $redchn_wan_blacklist ];then
+if [ ! -z $ss_redchn_wan_blacklist ];then
 # sed -e "s/$/& -j RETURN/g"  sed -e "s/,/\n/g" /koolshare/ss/redchn/wan_blacklist | iptables -t nat -A REDSOCKS2 -d 
 # echo $redchn_wan_blacklist | sed "s/,/\n/g" | sed "s/^/iptables -t nat -A REDSOCKS2 -d &/g" | sed "s/$/& -j RETURN/g"
 for wan_black_ip in $wanblacklist
@@ -89,7 +87,7 @@ fi
 
 
 # wan_whitelist 加入国内ip地址到走代理名单 redirect
-if [ ! -z $redchn_wan_whitelist ];then
+if [ ! -z $ss_redchn_wan_whitelist ];then
 # echo $redchn_wan_whitelist | sed "s/,/\n/g" | sed "s/^/iptables -t nat -A REDSOCKS2 -d &/g" | sed "s/$/& -p tcp -j REDIRECT --to-ports 1089/g"
 for wan_white_ip in $wanwhitelist
 	do 
