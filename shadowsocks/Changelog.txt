@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.1.2 ( 30/01/2016 05:18:19 )
+   - fix	prevent ss version check run multiple times
+
 1.1.2 ( 30/01/2016 04:18:11 )
    - fix	fix typo cause ss restart when enter ss main page
 
