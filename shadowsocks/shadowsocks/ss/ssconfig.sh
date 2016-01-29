@@ -252,7 +252,7 @@ restart)
 	fire_ss_depend_scripts
 	detect_ss_version
 	;;
-restart)
+check)
 	detect_ss_version
 	;;
 update)
