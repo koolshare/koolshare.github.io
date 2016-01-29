@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.1.1 ( 30/01/2016 04:00:27 )
+   - fix	update ss-libev binary to newest
+
 1.1.0 ( 30/01/2016 03:10:19 )
    - fix	fix version check when entered ss main page
 
