@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.1.0 ( 30/01/2016 03:10:19 )
+   - fix	fix version check when entered ss main page
+
 1.0.9 ( 28/01/2016 11:58:28 )
    - fix	fix ss_status don't update after version check
 

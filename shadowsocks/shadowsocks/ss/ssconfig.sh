@@ -252,6 +252,9 @@ restart)
 	fire_ss_depend_scripts
 	detect_ss_version
 	;;
+restart)
+	detect_ss_version
+	;;
 update)
 	set_default_value
 	update_ss
