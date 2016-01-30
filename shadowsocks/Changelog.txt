@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.1.5 ( 31/01/2016 04:25:06 )
+   - CHANGE	update inner ss rule list to newest.
+
 1.1.4 ( 30/01/2016 06:51:59 )
    - fix	fix wrong process detect
    - fix	fix ss CHN mode wan balck list and wan white list doesn't work.
