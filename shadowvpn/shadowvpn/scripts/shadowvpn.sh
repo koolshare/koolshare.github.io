@@ -1,11 +1,12 @@
 #!/bin/sh
 eval `dbus export shadowvpn`
+source /koolshare/scripts/base.sh
 Pcap_DNSProxy=$(ps | grep "Pcap_DNSProxy" | grep -v "grep")
 shadowvpn=$(ps | grep "shadowvpn" | grep -v "grep")
 startshadowvpn=$(cat /jffs/scripts/wan-start | grep "shadowvpn")
 CONFIG=/tmp/shadowvpn.conf
 # don't forget change this version when update shadowvpn
-version="2.02"
+version="2.1"
 #time=$(cat /proc/uptime | sed 's/ /\n/g'|sed -n 1p)
 start_vpn() {
 	#mkdir -p $(dirname $CONFIG)
@@ -18,8 +19,8 @@ start_vpn() {
 		net=$shadowvpn_net
 		mtu=$shadowvpn_mtu
 		intf=$shadowvpn_tun
-		up=/jffs/scripts/shadowvpn_client_up.sh
-		down=/jffs/scripts/shadowvpn_client_down.sh
+		up=/koolshare/scripts/shadowvpn_client_up.sh
+		down=/koolshare/scripts/shadowvpn_client_down.sh
 		pidfile=/var/run/shadowvpn.pid
 		logfile=/var/log/shadowvpn.log
 EOF
@@ -44,9 +45,7 @@ conf-dir=/jffs/configs/game.d
 EOF
 if [ -z "$Pcap_DNSProxy" ]; then 
 echo $(date): Start Pcap_DNSProxy..
-sed -i '/^Listen Port/c Listen Port = 7913' /jffs/ss/dns/Config.conf
-sed -i '/^Local Main/c Local Main = 1' /jffs/ss/dns/Config.conf
-/jffs/ss/dns/dns.sh > /dev/null 2>&1 &
+/koolshare/ss/dns/dns.sh > /dev/null 2>&1 &
 fi
 echo $(date): restarting dnsmasq...
 service restart_dnsmasq >/dev/null 2>&1
@@ -64,10 +63,10 @@ EOF
 fi
 echo $(date): Adding service to wan-start...
 if [ -z "$startshadowvpn" ];then
-   if [ ! -f /jffs/scripts/shadowvpn.sh ]; then
+   if [ ! -f /koolshare/scripts/shadowvpn.sh ]; then
       sed -i '2a sh /usr/bin/shadowvpn.sh' /jffs/scripts/wan-start
    else
-      sed -i '2a sh /jffs/scripts/shadowvpn.sh' /jffs/scripts/wan-start
+      sed -i '2a sh /koolshare/scripts/shadowvpn.sh' /jffs/scripts/wan-start
    fi
 fi
 chmod +x /jffs/scripts/wan-start
@@ -97,7 +96,7 @@ stop_vpn() {
 # restore dnsmasq conf file
 	if [ -f /jffs/configs/dnsmasq.conf.add ]; then
 		echo $(date): restore dnsmasq conf file
-		rm -f /jffs/configs/dnsmasq.conf.add
+		rm -rf /jffs/configs/dnsmasq.conf.add
 		echo $(date): done
 		echo $(date):
 	fi
@@ -166,8 +165,8 @@ if [ "$shadowvpn_update_check" = "1" ];then
 				tar -zxf shadowvpn.tar.gz
 				dbus set shadowvpn_enable="0"
 				dbus set shadowvpn_install_status="2"
-        chmod a+x /tmp/shadowvpn/update.sh
-        /tmp/shadowvpn/update.sh
+				chmod a+x /tmp/shadowvpn/update.sh
+				sh /tmp/shadowvpn/update.sh
 				sleep 2
 				dbus set shadowvpn_install_status="3"
 				dbus set shadowvpn_version=$shadowvpn_version_web1

@@ -293,7 +293,7 @@ location.href = "/Main_Soft_center.asp";
                                     	    <tr>
 											    <th width="35%">路由文件</th>
 												<td>
-														<input  type="text" class="input_ss_table" style="width:auto; display:none;" size="45"   id="shadowvpn_file" name="shadowvpn_file" maxlength="50" placeholder="请输入绝对文件路径" value="/jffs/ss/dw/cnn.txt" />
+														<input  type="text" class="input_ss_table" style="width:auto; display:none;" size="45"   id="shadowvpn_file" name="shadowvpn_file" maxlength="50" placeholder="请输入绝对文件路径" value="/koolshare/dw/cnn.txt" />
 													<span class='software_action'><font color='#ffcc00'>全局模式无需设置</font></span>
 												</td>
 											</tr>

@@ -2,7 +2,7 @@
 
 # define variables
 eval `dbus export aria2`
-#old_token=$(cat /jffs/aria2/aria2.conf|grep rpc-secret|cut -d "=" -f2)
+#old_token=$(cat /koolshare/aria2/aria2.conf|grep rpc-secret|cut -d "=" -f2)
 token=$(head -200 /dev/urandom | md5sum | cut -d " " -f 1)
 ddns=$(nvram get ddns_hostname_x)
 usb_disk1=`/bin/mount | grep -E 'mnt' | sed -n 1p | cut -d" " -f3`
@@ -18,17 +18,17 @@ echo ""
 
 # start aria2c
 creat_conf(){
-cat > /jffs/aria2/aria2.conf <<EOF
+cat > /koolshare/aria2/aria2.conf <<EOF
 `dbus list aria2 | grep -vw aria2_enable | grep -vw aria2_binary| grep -vw aria2_binary_custom | grep -vw aria2_check | grep -vw aria2_check_time | grep -vw aria2_sleep | grep -vw aria2_update_enable| grep -vw aria2_update_sel | grep -vw aria2_version | grep -vw aria2_cpulimit_enable | grep -vw aria2_cpulimit_value| grep -vw aria2_version_web | grep -vw aria2_warning | grep -vw aria2_custom | grep -vw aria2_install_status|grep -vw aria2_restart | sed 's/aria2_//g' | sed 's/_/-/g'`
 EOF
 
-cat >> /jffs/aria2/aria2.conf <<EOF
+cat >> /koolshare/aria2/aria2.conf <<EOF
 `dbus list aria2|grep -w aria2_custom|sed 's/aria2_custom=//g'|sed 's/,/\n/g'`
 
 EOF
 
 # if [ "$aria2_enable_rpc" = "false" ];then
-# sed -i '/rpc/d' /jffs/aria2/aria2.conf
+# sed -i '/rpc/d' /koolshare/aria2/aria2.conf
 # fi
 }
 
@@ -38,30 +38,30 @@ start_aria2(){
 			export aria2_dir="$usb_disk1"
 			export aria2_warning="没有定义下载文件夹，默认使用$usb_disk1"
 			if [ "$aria2_binary" = "entware" ];then
-				/opt/bin/aria2c --conf-path=/jffs/aria2/aria2.conf -D >/dev/null 2>&1 &
+				/opt/bin/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
 			elif [ "$aria2_binary" = "custom" ];then
 				if [ ! -z "$aria2_binary_custom" ];then
-					"$aria2_binary_custom"/aria2c --conf-path=/jffs/aria2/aria2.conf -D >/dev/null 2>&1 &
+					"$aria2_binary_custom"/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
 				else 
 					export aria2_warning="当前目录没有找到aria2可执行文件"
 				fi
 			elif [ "$aria2_binary" = internal ];then
-				/jffs/aria2/aria2c --conf-path=/jffs/aria2/aria2.conf -D >/dev/null 2>&1 &
+				/koolshare/aria2/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
 			fi
 		else
 			export aria2_warning="没有找到可用的USB磁盘"
 		fi
 	else
 		if [ "$aria2_binary" = entware ];then
-			/opt/bin/aria2c --conf-path=/jffs/aria2/aria2.conf -D >/dev/null 2>&1 &
+			/opt/bin/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
 		elif [ "$aria2_binary" = custom ];then
 			if [ ! -z "$aria2_binary_custom" ];then
-				$aria2_binary_custom/aria2c --conf-path=/jffs/aria2/aria2.conf -D >/dev/null 2>&1 &
+				$aria2_binary_custom/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
 			else 
 				dbus set aria2_warning="当前目录没有找到aria2可执行文件"
 			fi
 		elif [ "$aria2_binary" = internal ];then
-			/jffs/aria2/aria2c --conf-path=/jffs/aria2/aria2.conf -D >/dev/null 2>&1 &
+			/koolshare/aria2/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
 		fi
 	fi
 
@@ -79,7 +79,7 @@ start_aria2(){
 start_lighttpd(){
 	# create tmp folder for lighttpd
 	mkdir -p /tmp/lighttpd
-	/usr/sbin/lighttpd -f /jffs/www/lighttpd.conf
+	/usr/sbin/lighttpd -f /koolshare/www/lighttpd.conf
 	lighttpd_run=$(ps|grep lighttpd|grep -v grep)
 	if [ ! -z "$lighttpd_run" ];then
 		echo lighttpd start success!
@@ -91,7 +91,7 @@ start_lighttpd(){
 # generate token
 generate_token(){
 	if [ -z $aria2_rpc_secret ];then
-		sed -i "s/rpc-secret=/rpc-secret=$token/g" "/jffs/aria2/aria2.conf"
+		sed -i "s/rpc-secret=/rpc-secret=$token/g" "/koolshare/aria2/aria2.conf"
 		export aria2_rpc_secret=$token
 	fi
 }
@@ -130,7 +130,6 @@ fi
 chmod +x /jffs/scripts/wan-start
 }
 
-# for auto start with wan
 stop_auto_start(){	
 # sed -i '/sleep/d' /jffs/scripts/wan-start >/dev/null 2>&1
 sed -i '/aria2_run/d' /jffs/scripts/wan-start >/dev/null 2>&1
@@ -172,12 +171,12 @@ sleep_a_while(){
 
 version_check(){
 if [ "1" == "$aria2_update_enable" ]; then
-	/bin/sh /jffs/scripts/aria2_version_check.sh
-	cru a aria2_version_check "0 $aria2_update_sel * * * /bin/sh /jffs/scripts/aria2_version_check.sh"
+	/bin/sh /koolshare/scripts/aria2_version_check.sh
+	cru a aria2_version_check "0 $aria2_update_sel * * * /bin/sh /koolshare/scripts/aria2_version_check.sh"
 else
 cru d aria2_version_check >/dev/null 2>&1
 
-version=`cat /jffs/aria2/version`
+version=`cat /koolshare/aria2/version`
 export aria2_version=$version
 
 
@@ -190,7 +189,7 @@ del_version_check(){
 add_process_check(){
 	if [ "$aria2_check" = "true" ];then
 		echo add_process_check
-		cru a aria2_process_check "*/$aria2_check_time * * * * /bin/sh /jffs/scripts/aria2_pros_check.sh"
+		cru a aria2_process_check "*/$aria2_check_time * * * * /bin/sh /koolshare/scripts/aria2_pros_check.sh"
 	fi
 }
 
@@ -202,22 +201,22 @@ add_shortcut(){
 	usb1_name=`/bin/mount | grep -E 'mnt' | sed -n 1p | cut -d" " -f3 |cut -d "/" -f 4`
 	usb2_name=`/bin/mount | grep -E 'mnt' | sed -n 2p | cut -d" " -f3 |cut -d "/" -f 4`
 	if [ ! -z $usb1_name ];then
-		mkdir -p /jffs/www/$usb1_name
-		ln -nsf /tmp/mnt/$usb1_name/ /jffs/www/$usb1_name
+		mkdir -p /koolshare/www/$usb1_name
+		ln -nsf /tmp/mnt/$usb1_name/ /koolshare/www/$usb1_name
 	fi
 	if [ ! -z $usb2_name ];then
-		mkdir -p /jffs/www/$usb2_name
-		ln -nsf /tmp/mnt/$usb2_name/ /jffs/www/$usb2_name
+		mkdir -p /koolshare/www/$usb2_name
+		ln -nsf /tmp/mnt/$usb2_name/ /koolshare/www/$usb2_name
 	fi
 }
 rm_shortcut(){
 	usb1_name=`/bin/mount | grep -E 'mnt' | sed -n 1p | cut -d" " -f3 |cut -d "/" -f 4`
 	usb2_name=`/bin/mount | grep -E 'mnt' | sed -n 2p | cut -d" " -f3 |cut -d "/" -f 4`
 	if [ ! -z $usb1_name ];then
-	rm -rf /jffs/www/$usb1_name
+	rm -rf /koolshare/www/$usb1_name
 	fi
 	if [ ! -z $usb2_name ];then
-	rm -rf /jffs/www/$usb2_name
+	rm -rf /koolshare/www/$usb2_name
 	fi
 }
 
@@ -302,25 +301,23 @@ eval `dbus export aria2`
 	export aria2_install_status="4"
 	dbus save aria2
 	tar -zxvf aria2.tar.gz
-	mkdir -p /jffs/scripts
-	mkdir -p /jffs/webs
 	echo moving files
-	mv -f /tmp/aria2/aria2 /jffs/
-	mv -f /tmp/aria2/www /jffs/
-	mv -f /tmp/aria2/scripts/* /jffs/scripts/
-	mv -f /tmp/aria2/webs/* /jffs/webs/
-	mv -f /tmp/aria2.session /jffs/aria2/ >/dev/null 2>&1
-	cd /jffs
-	chmod +x /jffs/aria2/*
-	chmod +x /jffs/www/php-cgi
-	chmod +x /jffs/scripts/*
-	chmod 777 /jffs/www/_h5ai/cache
+	mv -f /tmp/aria2/aria2 /koolshare/
+	mv -f /tmp/aria2/www /koolshare/
+	mv -f /tmp/aria2/scripts/* /koolshare/scripts/
+	mv -f /tmp/aria2/webs/* /koolshare/webs/
+	mv -f /tmp/aria2.session /koolshare/aria2/ >/dev/null 2>&1
+	cd /koolshare
+	chmod +x /koolshare/aria2/*
+	chmod +x /koolshare/www/php-cgi
+	chmod +x /koolshare/scripts/*
+	chmod 777 /koolshare/www/_h5ai/cache
 	rm -rf /tmp/aria2
 	rm -rf /tmp/aria2.tar.gz
 	sleep 2
 	export aria2_install_status="5"
 	dbus save aria2
-	version=`cat /jffs/aria2/version`
+	version=`cat /koolshare/aria2/version`
 	export aria2_version=$version
 	export set aria2_version_web=$version
 	dbus save aria2
@@ -355,10 +352,9 @@ uninstall_aria2(){
 	kill_aria2
 	kill_lighttpd
 	close_port
-	stop_auto_start
-	rm -rf /jffs/www
-	cp -r /jffs/aria2.session /tmp/
-	rm -rf /jffs/aria2
+	rm -rf /koolshare/www
+	cp -r /koolshare/aria2.session /tmp/
+	rm -rf /koolshare/aria2
 	sleep 2
 	export aria2_install_status="0"
 	dbus save aria2
@@ -374,7 +370,6 @@ load_default(){
 	kill_aria2
 	kill_lighttpd
 	close_port
-	stop_auto_start
 	dbus set tmp_aria2_version=`dbus get aria2_version`
 	dbus set tmp_aria2_version_web=`dbus get aria2_version_web`
 	for r in `dbus list aria2|cut -d"=" -f 1`
@@ -394,11 +389,10 @@ if [ $aria2_enable = 0 ];then
 	kill_aria2
 	kill_lighttpd
 	close_port
-	stop_auto_start
 	dbus remove aria2_custom
 	dbus save aria2
 	dbus set aria2_restart=0
-	version=`cat /jffs/aria2/version`
+	version=`cat /koolshare/aria2/version`
 	dbus set aria2_version=$version
 fi
 
@@ -411,7 +405,6 @@ if [ $aria2_enable = 1 ];then
 	kill_aria2
 	kill_lighttpd
 	close_port
-	stop_auto_start
 	creat_conf
 	generate_token
 	start_aria2
@@ -419,12 +412,11 @@ if [ $aria2_enable = 1 ];then
 	add_process_check
 	add_shortcut
 	open_port
-	auto_start
 	add_cpulimit
 	version_check
 	dbus save aria2
 	dbus set aria2_restart=0
-	version=`cat /jffs/aria2/version`
+	version=`cat /koolshare/aria2/version`
 	dbus set aria2_version=$version
 fi
 

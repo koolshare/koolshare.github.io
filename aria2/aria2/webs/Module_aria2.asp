@@ -1080,7 +1080,7 @@
 														</td>
 														<td>
 															<select class="input_ss_table" style="width:auto;height:25px;" name="aria2_binary" id="aria2_binary" onchange="update_visibility();">
-																<option value="internal" selected="">内置 (/jffs/aria2)</option>
+																<option value="internal" selected="">内置 (/koolshare/aria2)</option>
 																<option value="entware">外置 (/opt/bin)</option>
 																<option value="custom">自定义</option>
 															</select>
@@ -1575,7 +1575,7 @@
 															<label>&nbsp;&nbsp;&nbsp;&nbsp;下载的URIs 文件</label>
 														</td>
 														<td>
-															<input type="text" class="input_ss_table" style="width:auto;" name="aria2_input_file" value="/jffs/aria2/aria2.session" maxlength="50" size="50" id="aria2_input_file">
+															<input type="text" class="input_ss_table" style="width:auto;" name="aria2_input_file" value="/koolshare/aria2/aria2.session" maxlength="50" size="50" id="aria2_input_file">
 														</td>
 													</tr>
 													<tr id="aria2_save_session_tr">
@@ -1583,7 +1583,7 @@
 															<label>&nbsp;&nbsp;&nbsp;&nbsp;会话session保存文件</label>
 														</td>
 														<td>
-															<input type="text" class="input_ss_table" style="width:auto;" name="aria2_save_session" value="/jffs/aria2/aria2.session" maxlength="50" size="50" id="aria2_save_session">
+															<input type="text" class="input_ss_table" style="width:auto;" name="aria2_save_session" value="/koolshare/aria2/aria2.session" maxlength="50" size="50" id="aria2_save_session">
 														</td>
 													</tr>
 													<tr>
