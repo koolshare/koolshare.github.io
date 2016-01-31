@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.1.7 ( 31/01/2016 13:39:50 )
+   - fix	fix lan black list don't work in gfw list mode, yes, again!
+
 1.1.6 ( 31/01/2016 10:51:31 )
    - fix	fix lan black list don't work in gfw list mode
 

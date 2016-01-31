@@ -87,7 +87,7 @@ elif [ "$ss_basic_lan_control" == "2" ];then
 			iptables -t nat -A SHADOWSOCKS -p tcp -s $white_ip -m set $MATCH_SET gfwlist dst -j REDIRECT --to-ports 3333
 		done
 	else
-		iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SETg fwlist dst -j REDIRECT --to-ports 3333
+		iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-ports 3333
 	fi
 else
 	iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-ports 3333
