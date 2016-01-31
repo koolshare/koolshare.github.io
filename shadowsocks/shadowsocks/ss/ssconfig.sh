@@ -230,10 +230,16 @@ detect_ss_version(){
 	fi
 }
 
+
+set_ulimit(){
+	ulimit -n 8192
+}
+
 case $ACTION in
 start)
 	if [ "$ss_basic_enable" == "1" ];then
-	set_default_value
+		set_default_value
+		set_ulimit
     	apply_ss
     	write_numbers
 	else
@@ -244,8 +250,9 @@ stop | kill )
 	disable_ss
 	;;
 restart)
-	disable_ss
+	#disable_ss
 	set_default_value
+	set_ulimit
 	apply_ss
 	write_numbers
 	print_success_info
@@ -264,3 +271,4 @@ update)
 	exit 1
 	;;
 esac
+

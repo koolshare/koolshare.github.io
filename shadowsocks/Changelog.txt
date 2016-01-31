@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.1.8 ( 01/02/2016 07:24:26 )
+   - add	now ss use at most 8192 connections
+
 1.1.7 ( 31/01/2016 13:39:50 )
    - fix	fix lan black list don't work in gfw list mode, yes, again!
 
