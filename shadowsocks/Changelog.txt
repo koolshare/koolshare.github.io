@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.1.9 ( 03/02/2016 17:57:18 )
+   - changed	update shadowsocks-libev binary to newest 2.4.5
+
 1.1.8 ( 01/02/2016 07:24:26 )
    - add	now ss use at most 8192 connections
 
