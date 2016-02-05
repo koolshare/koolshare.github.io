@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.2.0 ( 05/02/2016 09:23:15 )
+   - fix	fix ss overall mode woking only in router.
+
 1.1.9 ( 03/02/2016 17:57:18 )
    - changed	update shadowsocks-libev binary to newest 2.4.5
 
