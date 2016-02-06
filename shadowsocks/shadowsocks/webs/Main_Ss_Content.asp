@@ -1153,6 +1153,7 @@ function check_ss(){
 															<option class="content_input_fd" value="seed-cfb">seed-cfb</option>
 															<option class="content_input_fd" value="salsa20">salsa20</option>
 															<option class="content_input_fd" value="chacha20">chacha20</option>
+															<option class="content_input_fd" value="chacha20-ietf">chacha20-ietf</option>
 														</select>
 													</td>
 												</tr>

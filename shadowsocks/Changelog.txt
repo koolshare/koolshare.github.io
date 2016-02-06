@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.2.1 ( 06/02/2016 20:22:20 )
+   - add	add chacha20-ietf encryption method.
+
 1.2.0 ( 05/02/2016 09:23:15 )
    - fix	fix ss overall mode woking only in router.
 
