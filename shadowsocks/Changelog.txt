@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.2.2 ( 09/02/2016 18:24:10 )
+   - add	add chacha20-ietf encryption method in ss node window.
+
 1.2.1 ( 06/02/2016 20:22:20 )
    - add	add chacha20-ietf encryption method.
 

@@ -666,6 +666,7 @@ function create_ss_node_list_listview(confs) {
     code += "<option class='content_input_fd' value='seed-cfb'>seed-cfb</option>";
     code += "<option class='content_input_fd' value='salsa20'>salsa20</option>";
     code += "<option class='content_input_fd' value='chacha20'>chacha20</option>";
+    code += "<option class='content_input_fd' value='chacha20-ietf'>chacha20-ietf</option>";
     code += "</select>";
     code += "<td><input class='add_btn' onclick='add_conf_in_table(this);' type='button' value=''></td>";
     code += "</tr>";
