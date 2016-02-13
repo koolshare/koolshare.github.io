@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.2.3 ( 13/02/2016 17:28:41 )
+   - fix	fix lan comtrol won't work in gfwlist mode
+
 1.2.2 ( 09/02/2016 18:24:10 )
    - add	add chacha20-ietf encryption method in ss node window.
 
