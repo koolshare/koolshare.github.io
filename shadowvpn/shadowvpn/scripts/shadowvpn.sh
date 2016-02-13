@@ -6,7 +6,7 @@ shadowvpn=$(ps | grep "shadowvpn" | grep -v "grep")
 startshadowvpn=$(cat /jffs/scripts/wan-start | grep "shadowvpn")
 CONFIG=/tmp/shadowvpn.conf
 # don't forget change this version when update shadowvpn
-version="2.1"
+version="2.2"
 #time=$(cat /proc/uptime | sed 's/ /\n/g'|sed -n 1p)
 start_vpn() {
 	#mkdir -p $(dirname $CONFIG)
@@ -27,7 +27,7 @@ EOF
 	if [ "$shadowvpn_token" != "" ]; then
 		echo "user_token=$shadowvpn_token" >>$CONFIG
 	fi
-	/usr/bin/shadowvpn -c $CONFIG -s start
+	shadowvpn -c $CONFIG -s start
 }
 start_dns() {
 if [ ! -d /jffs/configs ]; then 
@@ -37,14 +37,15 @@ if [ ! -d /jffs/configs/game.d ]; then
 mkdir -p /jffs/configs/game.d
 fi
 echo $(date): create dnsmasq.conf.add..
-cat > /jffs/configs/dnsmasq.conf.add <<EOF
-#min-cache-ttl=86400
+cat <<-EOF >/jffs/configs/dnsmasq.conf.add
 no-resolv
 server=127.0.0.1#7913
 conf-dir=/jffs/configs/game.d
 EOF
 if [ -z "$Pcap_DNSProxy" ]; then 
 echo $(date): Start Pcap_DNSProxy..
+sed -i '/^Listen Port/c Listen Port = 7913' /jffs/ss/dns/Config.conf
+sed -i '/^Local Main/c Local Main = 1' /koolshare/ss/dns/Config.conf
 /koolshare/ss/dns/dns.sh > /dev/null 2>&1 &
 fi
 echo $(date): restarting dnsmasq...
@@ -149,7 +150,8 @@ if [ "$shadowvpn_update_check" = "1" ];then
 	shadowvpn_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowvpn/version | sed -n 1p)`
 	if [ ! -z $shadowvpn_version_web1 ];then
 		dbus set shadowvpn_version_web=$shadowvpn_version_web1
-		if [ "$version" != "$shadowvpn_version_web1" ];then
+		cmp=`versioncmp $shadowvpn_version_web1 $shadowvpn_version_web`
+		if [ "$cmp" = "-1" ];then
 			dbus set shadowvpn_install_status="1"
 			cd /tmp
 			md5_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowvpn/version | sed -n 2p)`

@@ -193,7 +193,7 @@ location.href = "/Main_Soft_center.asp";
 										<div style="float:left;" class="formfonttitle">ShadowVPN</div>
 										<div style="float:right; width:15px; height:25px;margin-top:10px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
-										<div class="formfontdesc" style="padding-top:5px;margin-top:0px;float: left;" id="cmdDesc">轻量级无状态VPN，小巧，好用，支持UDP，游戏玩家首选，专为PSN、XBOX优化。</div>
+										<div class="formfontdesc" style="padding-top:5px;margin-top:0px;float: left;" id="cmdDesc">轻量级无状态VPN，小巧，好用，支持UDP，游戏玩家首选，专为PSN、XBOX优化。双WAN用户请关闭策略路由！</div>
 										<div id="shadowvpn_version_status" style="padding-top:5px;margin-left:30px;margin-top:0px;float: left;"><i>当前版本：<% dbus_get_def("shadowvpn_version", "0"); %></i></div>								
 										<div class="formfontdesc" id="cmdDesc"></div>
 										<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="routing_table">

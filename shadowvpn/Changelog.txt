@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin ShaowVpn Changelog
 ===========================================
+2.2 ( 13/02/2016 18:13:52 )
+   - sync code in the firmware
+
 2.1 (19/01/2016 16:10:03)
    - move svpn to /koolshare
 
