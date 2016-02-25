@@ -30,10 +30,10 @@ EOF
 	shadowvpn -c $CONFIG -s start
 }
 start_dns() {
-if [ ! -d /jffs/configs ]; then 
+if [ ! -d /jffs/configs ]; then
 mkdir -p /jffs/configs
 fi
-if [ ! -d /jffs/configs/game.d ]; then 
+if [ ! -d /jffs/configs/game.d ]; then
 mkdir -p /jffs/configs/game.d
 fi
 echo $(date): create dnsmasq.conf.add..
@@ -42,7 +42,7 @@ no-resolv
 server=127.0.0.1#7913
 conf-dir=/jffs/configs/game.d
 EOF
-if [ -z "$Pcap_DNSProxy" ]; then 
+if [ -z "$Pcap_DNSProxy" ]; then
 echo $(date): Start Pcap_DNSProxy..
 sed -i '/^Listen Port/c Listen Port = 7913' /jffs/ss/dns/Config.conf
 sed -i '/^Local Main/c Local Main = 1' /koolshare/ss/dns/Config.conf
@@ -81,12 +81,12 @@ sleep_a_while(){
 	fi
 }
 stop_vpn() {
-   if [ ! -z "$shadowvpn" ]; then 
+   if [ ! -z "$shadowvpn" ]; then
 	 echo $(date): stop shadowvpn...
    /usr/bin/shadowvpn -c $CONFIG -s stop >/dev/null 2>&1
 	 fi
 	# kill Pcap_DNSProxy
-	if [ ! -z "$Pcap_DNSProxy" ]; then 
+	if [ ! -z "$Pcap_DNSProxy" ]; then
 	echo $(date): kill Pcap_DNSProxy...
 	killall dns.sh >/dev/null 2>&1
 	killall Pcap_DNSProxy >/dev/null 2>&1
@@ -145,18 +145,18 @@ if [ "$shadowvpn_update_check" = "1" ];then
 	# shadowvpn_install_status=5	#然而并没有更新！
 	# shadowvpn_install_status=6	#正在检查是否有更新~
 	# shadowvpn_install_status=7	#检测更新错误！
-	
+
 	dbus set shadowvpn_install_status="6"
-	shadowvpn_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowvpn/version | sed -n 1p)`
+	shadowvpn_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowvpn/version | sed -n 1p`
 	if [ ! -z $shadowvpn_version_web1 ];then
 		dbus set shadowvpn_version_web=$shadowvpn_version_web1
-		cmp=`versioncmp $shadowvpn_version_web1 $shadowvpn_version_web`
+		cmp=`versioncmp $shadowvpn_version_web1 $version`
 		if [ "$cmp" = "-1" ];then
 			dbus set shadowvpn_install_status="1"
 			cd /tmp
-			md5_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowvpn/version | sed -n 2p)`
+			md5_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowvpn/version | sed -n 2p`
 			wget --no-check-certificate --tries=1 --timeout=15 https://koolshare.github.io/shadowvpn/shadowvpn.tar.gz
-			md5sum_gz=`md5sum /tmp/shadowvpn.tar.gz | sed 's/ /\n/g'| sed -n 1p)`
+			md5sum_gz=`md5sum /tmp/shadowvpn.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web1" ]; then
 				dbus set shadowvpn_install_status="4"
 				rm -rf /tmp/shadowvpn* >/dev/null 2>&1
