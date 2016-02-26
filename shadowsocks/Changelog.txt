@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.2.5 ( 26/02/2016 16:01:44 )
+   - fix	delete softerware center component in ss update (no ss code change)
+
 1.2.4 ( 26/02/2016 15:00:06 )
    - fix	fix a wrong variable in gfwlist mode
    - update	update inner ss rule to newest
