@@ -5,7 +5,7 @@ eval `dbus export ss`
 black=$(echo $ss_basic_black_lan | sed "s/,/ /g")
 white=$(echo $ss_basic_white_lan | sed "s/,/ /g")
 lan_ipaddr=$(nvram get lan_ipaddr)
-server_ip=`resolvip $ss_server`
+server_ip=`resolvip $ss_basic_server`
 ip1=$(nvram get wan0_ipaddr | cut -d"." -f1)
 ip2=$(nvram get wan0_ipaddr | cut -d"." -f2)
 
