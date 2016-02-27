@@ -1,11 +1,27 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.0.6"
+version="0.0.7"
 
 #定义请求函数
 HTTP_REQ="wget --no-check-certificate -O - "
 POST_ARG="--post-data="
+
+#获取加速API
+get_kuainiao_api(){
+	portal=`$HTTP_REQ http://api.portal.swjsq.vip.xunlei.com:81/v2/queryportal`
+	portal_ip=`echo $portal|grep -oE '([0-9]{1,3}[\.]){3}[0-9]{1,3}'`
+	portal_port_temp=`echo $portal|grep -oE "port...[0-9]{1,5}"`
+	portal_port=`echo $portal_port_temp|grep -oE '[0-9]{1,5}'`
+	if [ -z "$portal_ip" ]
+		then
+			dbus set kuainiao_warning="迅雷快鸟服务API获取失败，请检查网络环境，或稍后再试!"
+			#echo "迅雷快鸟服务API获取失败，请检查网络环境，或稍后再试!"
+		else
+			api_url="http://$portal_ip:$portal_port/v2"
+			dbus set kuainiao_config_api=$api_url
+	fi
+}
 
 #从dbus中获取uid，pwd等
 uid=$kuainiao_config_uid
@@ -84,6 +100,8 @@ if test $kuainiao_run_i -ge 6; then
 	#登陆完成重置计数器
 	dbus ram kuainiao_run_i=0
 	kuainiao_run_i=0
+	#登录完成重置下加速api
+	get_kuainiao_api
 	#开始加速
 	$HTTP_REQ "$api_url/upgrade?peerid=$peerid&userid=$uid&user_type=1&sessionid=$kuainiao_run_session"
 fi
