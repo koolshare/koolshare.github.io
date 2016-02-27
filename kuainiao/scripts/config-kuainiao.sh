@@ -1,7 +1,7 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.0.7"
+version="0.0.8"
 kuainiaocru=$(cru l | grep "kuainiao")
 startkuainiao=$(ls -l /koolshare/init.d/ | grep "S80Kuainiao")
 
@@ -151,7 +151,6 @@ auto_start(){
 		fi
 		cat > /koolshare/init.d/S80Kuainiao.sh <<EOF
 #!/bin/sh
-eval `dbus export kuainiao`
 cru a kuainiao "*/4 * * * * /koolshare/kuainiao/kuainiao.sh"
 dbus ram kuainiao_run_i=6
 sh /koolshare/kuainiao/kuainiao.sh

@@ -1,7 +1,7 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.0.7"
+version="0.0.8"
 
 #定义请求函数
 HTTP_REQ="wget --no-check-certificate -O - "
