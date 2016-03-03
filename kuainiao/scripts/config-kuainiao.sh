@@ -204,7 +204,7 @@ if [ "$kuainiao_update_check" == "1" ];then
 	kuainiao_version_web1=`curl -s $UPDATE_VERSION_URL | sed -n 1p`
 	if [ ! -z $kuainiao_version_web1 ];then
 		dbus set kuainiao_version_web=$kuainiao_version_web1
-		cmp=`versioncmp $kuainiao_version_web1 $kuainiao_version`
+		cmp=`versioncmp $kuainiao_version_web1 $version`
 		if [ "$cmp" = "-1" ];then
 			dbus set kuainiao_install_status="1"
 			cd /tmp
