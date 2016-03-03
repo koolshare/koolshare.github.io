@@ -112,6 +112,10 @@ echo $(date): --------------------Stopping Shadowsock service-------------------
 	ipset -X gfwlist >/dev/null 2>&1
 	ipset -X router >/dev/null 2>&1
 	ipset -X chnroute >/dev/null 2>&1
+	ipset -F white_domain >/dev/null 2>&1
+	ipset -F black_domain >/dev/null 2>&1
+	ipset -X white_domain >/dev/null 2>&1
+	ipset -X black_domain >/dev/null 2>&1
 	echo $(date): done
 	echo $(date):
 #--------------------------------------------------------------------------

@@ -1,5 +1,18 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.2.7 ( 03/03/2016 19:31:01 )
+   - update	update shadowsocks-ssr to latest;
+   - update	update PcapDNSproxy to latest
+   - add	add black domain control in CHN mode
+   - add	add white doamin control in CHN mode
+   - add	add dnsmasq conf customize in CHN mode
+   - changed	changed the tile of ip doamin (now black ip go through ss, 
+		white ip go directly)
+     By update this version 1.2.7, your old balck ip and white ip setting will lost,
+you can find it back by backup ss conf (in ss node definition page), the old walue 
+is "ss_redchn_wan_blacklist" (now "ss_redchn_wan_white_ip") and "ss_redchn_wan_whitelist" 
+(now "ss_redchn_wan_black_ip")
+
 1.2.6 ( 29/02/2016 16:03:25 )
    - fix	fix typo in ss update module (no ss code change)
 

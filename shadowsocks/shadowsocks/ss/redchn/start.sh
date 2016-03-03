@@ -8,6 +8,9 @@ ISP_DNS=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|se
 lan_ipaddr=$(nvram get lan_ipaddr)
 server_ip=`resolvip $ss_basic_server`
 nat_ready=$(iptables -t nat -L PREROUTING -v -n --line-numbers|grep -v PREROUTING|grep -v destination)
+wanwhitedomain=$(echo $ss_redchn_wan_white_domain | sed 's/,/\n/g')
+wanblackdomain=$(echo $ss_redchn_wan_black_domain | sed "s/,/\n/g")
+custom_dnsmasq=$(echo $ss_redchn_dnsmasq | sed "s/,/\n/g")
 i=120
 nvram set ss_mode=2
 nvram commit
@@ -113,6 +116,44 @@ EOF
 echo $(date): done
 echo $(date):
 
+# append domain white list
+if [ ! -z $ss_redchn_wan_white_domain ];then
+	echo $(date): append white_domain
+	echo "#for white_domain" >> /jffs/configs/dnsmasq.conf.add
+	for wan_white_domain in $wanwhitedomain
+	do 
+		echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /jffs/configs/dnsmasq.conf.add
+		echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_domain/g" >> /jffs/configs/dnsmasq.conf.add
+	done
+	echo $(date): done
+	echo $(date):
+fi
+
+# append domain black list
+if [ ! -z $ss_redchn_wan_black_domain ];then
+	echo $(date): append black_domain
+	echo "#for black_domain" >> /jffs/configs/dnsmasq.conf.add
+	for wan_black_domain in $wanblackdomain
+	do 
+		echo "$wan_black_domain" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /jffs/configs/dnsmasq.conf.add
+		echo "$wan_black_domain" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/black_domain/g" >> /jffs/configs/dnsmasq.conf.add
+	done
+	echo $(date): done
+	echo $(date):
+fi
+
+# append coustom dnsmasq settings
+if [ ! -z $ss_redchn_dnsmasq ];then
+	echo $(date): append coustom dnsmasq settings
+	echo "#for coustom dnsmasq settings" >> /jffs/configs/dnsmasq.conf.add
+	for line in $custom_dnsmasq
+	do 
+		echo "$line" >> /jffs/configs/dnsmasq.conf.add
+	done
+	echo $(date): done
+	echo $(date):
+fi
+
 # append router output chain rules
 echo $(date): append router output chain rules
 cat /koolshare/ss/redchn/output.conf >> /jffs/configs/dnsmasq.conf.add
@@ -121,6 +162,7 @@ echo $(date):
 
 # append china site
 echo $(date): append CDN list into dnsmasq conf \file
+echo "#for china site CDN acclerate" >> /jffs/configs/dnsmasq.conf.add
 cat /koolshare/ss/redchn/cdn.txt | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" | sort | awk '{if ($0!=line) print;line=$0}' >> /jffs/configs/dnsmasq.conf.add
 echo $(date): done
 echo $(date):
@@ -128,6 +170,7 @@ echo $(date):
 # append user defined china site
 if [ ! -z "$ss_redchn_isp_website_web" ];then
 echo $(date): append user defined domian
+echo "#for user defined china site CDN acclerate" >> /jffs/configs/dnsmasq.conf.add
 echo "$ss_redchn_isp_website_web" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" >> /jffs/configs/dnsmasq.conf.add
 echo $(date): done
 echo $(date):
@@ -136,6 +179,7 @@ fi
 # append adblock rules
 	if [ "1" == "$ss_basic_adblock" ];then
 		echo $(date): enable adblock in gfwlist mode
+		echo "#for adblcok" >> /jffs/configs/dnsmasq.conf.add
 		cat /koolshare/ss/ipset/adblock.conf >> /jffs/configs/dnsmasq.conf.add
 		echo $(date): done
 		echo $(date):
