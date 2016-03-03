@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.2.8 ( 03/03/2016 22:32:37 )
+   - fix	revert shadowsocks-ssr binary to previous version
+
 1.2.7 ( 03/03/2016 19:31:01 )
    - update	update shadowsocks-ssr to latest;
    - update	update PcapDNSproxy to latest
