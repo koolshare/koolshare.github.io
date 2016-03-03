@@ -70,7 +70,7 @@ update_ss(){
 			cd /tmp
 			md5_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/version | sed -n 2p`
 			wget --no-check-certificate --timeout=15 https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/shadowsocks.tar.gz
-			md5sum_gz=`md5sum /tmp/shadowsocks.tar.gz | sed 's/ /\n/g'| sed -n 1p)`
+			md5sum_gz=`md5sum /tmp/shadowsocks.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web1" ]; then
 				dbus set ss_basic_install_status="4"
 				rm -rf /tmp/shadowsocks* >/dev/null 2>&1
@@ -119,7 +119,7 @@ update_ss2(){
 			cd /tmp
 			md5_web2=`curl -s http://file.mjy211.com/koolshare.github.io/shadowsocks/version | sed -n 2p`
 			wget --no-check-certificate --timeout=15 http://file.mjy211.com/koolshare.github.io/shadowsocks/shadowsocks.tar.gz
-			md5sum_gz=`md5sum /tmp/shadowsocks.tar.gz | sed 's/ /\n/g'| sed -n 1p)`
+			md5sum_gz=`md5sum /tmp/shadowsocks.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web2" ]; then
 				dbus set ss_basic_install_status="4"
 				rm -rf /tmp/shadowsocks* >/dev/null 2>&1
@@ -231,10 +231,17 @@ detect_ss_version(){
 	fi
 }
 
+
+set_ulimit(){
+	ulimit -n 8192
+}
+
+
 case $ACTION in
 start)
 	if [ "$ss_basic_enable" == "1" ];then
 	set_default_value
+	set_ulimit
     	apply_ss
     	write_numbers
 	else
@@ -245,12 +252,16 @@ stop | kill )
 	disable_ss
 	;;
 restart)
-	disable_ss
+	#disable_ss
 	set_default_value
+	set_ulimit
 	apply_ss
 	write_numbers
 	print_success_info
 	fire_ss_depend_scripts
+	detect_ss_version
+	;;
+check)
 	detect_ss_version
 	;;
 update)
@@ -262,3 +273,4 @@ update)
 	exit 1
 	;;
 esac
+
