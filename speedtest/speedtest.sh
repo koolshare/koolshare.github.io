@@ -1,7 +1,7 @@
 #!/bin/sh
 eval `dbus export speedtest`
 source /koolshare/scripts/base.sh
-version="0.0.9"
+version="0.1.0"
 dbus set speedtest_version=$version
 
 #定义更新相关地址
@@ -16,8 +16,6 @@ check_version(){
 		dbus set speedtest_version_web=$speedtest_version_web1
 	fi
 }
-
-check_version
 
 ##更新插件
 
@@ -90,15 +88,17 @@ dbus set speedtest_status=1
 dbus ram speedtest_download=0
 dbus ram speedtest_upload=0
 
-#定义测速脚本
-#SPEEDTEST_CLI=`/koolshare/bin/speedtest 1 2 1 2 2>/dev/null`
+check_version
 
-#echo "$SPEEDTEST_CLI" | while
-/koolshare/bin/speedtest 1 2 1 2 2>/dev/null | while
+#定义测速脚本
+SPEEDTEST_CLI=`/koolshare/bin/speedtest 1 2 1 2 2>/dev/null`
+
+echo "$SPEEDTEST_CLI" | while
+#/koolshare/bin/speedtest 1 2 1 2 2>/dev/null | while
 read line
 do
-	download=$(echo $line | awk -F 'Download = ' '{print $2}' | grep -oE "[0-9]{1,5}[\.][0-9]{1,2}")
-	upload=$(echo $line | awk -F 'Upload = ' '{print $2}' | grep -oE "[0-9]{1,5}[\.][0-9]{1,2}")
+	download=$(echo $line | awk -F 'Download = ' '{print $2}' | grep -oE "[0-9]{1,5}[\.][0-9]{1,2}" | head -n 1)
+	upload=$(echo $line | awk -F 'Upload = ' '{print $2}' | grep -oE "[0-9]{1,5}[\.][0-9]{1,2}" | head -n 1)
 	if [[ ! -z $download ]]; then
 		#echo "download : "$download
 		dbus ram speedtest_download=$download

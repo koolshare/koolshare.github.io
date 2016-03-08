@@ -325,8 +325,22 @@
         <script type="text/javascript">
             function init() {
                 show_menu();
-                TestModule.updateView('upload', <% dbus_get_def("speedtest_upload", "0"); %>);
-                TestModule.updateView('download', <% dbus_get_def("speedtest_download", "0"); %>);
+                var testStatus = <% dbus_get_def("speedtest_status", "0"); %>;
+                if (+testStatus === 1) {
+                    $("#updateBtn").attr("disabled", true);
+                    $("#updateBtn").hide();
+                    $("#cmdBtn").attr("disabled", true);
+                    $("#cmdBtn").html("测速中...");
+                    TestModule.polling(function () {
+                        $("#cmdBtn").attr("disabled", false);
+                        $("#updateBtn").attr("disabled", false);
+                        $("#updateBtn").show();
+                        $("#cmdBtn").html("开始测速");
+                    });
+                } else {
+                    TestModule.updateView('upload', <% dbus_get_def("speedtest_upload", "0"); %>);
+                    TestModule.updateView('download', <% dbus_get_def("speedtest_download", "0"); %>);
+                }
             }
             function update_visibility() {
                 //不满足快鸟条件的显示异常信息
@@ -428,13 +442,17 @@
                 return {
                     polling: function (oncomplete) {
                         if (!timer) {
+                            //一般第一次不可能就结束了，所以这里偷懒了，没有判断第一次是否成功才去做下面的操作
+                            setTimeout(function () {
+                                loopFn(oncomplete);
+                            }, 1000);
                             timer = setInterval(function () {
                                 loopFn(oncomplete);
                             }, freq);
                         }
                     },
                     updateView: update,
-                    init: function (download, upload) {
+                    reset: function (download, upload) {
                         update('upload', upload || 0);
                         update('download', download || 0);
                     }
@@ -543,6 +561,10 @@
                 return {
                     polling: function (oncomplete) {
                         if (!timer) {
+                            //一般第一次不可能就结束了，所以这里偷懒了，没有判断第一次是否成功才去做下面的操作
+                            setTimeout(function () {
+                                loopFn(oncomplete);
+                            }, 1000);
                             timer = setInterval(function () {
                                 loopFn(oncomplete);
                             }, freq);
@@ -555,13 +577,15 @@
             function onSubmitCtrl(o, s) {
                 document.form.action_mode.value = s;
                 $("#updateBtn").attr("disabled", true);
+                $("#updateBtn").hide();
                 $("#cmdBtn").attr("disabled", true);
                 $("#cmdBtn").html("测速中...");
                 document.form.submit();
-                TestModule.init();
+                TestModule.reset();
                 TestModule.polling(function () {
                     $("#cmdBtn").attr("disabled", false);
                     $("#updateBtn").attr("disabled", false);
+                    $("#updateBtn").show();
                     $("#cmdBtn").html("开始测速");
                 });
             }
@@ -571,11 +595,15 @@
                 document.form.speedtest_update_check.value = 1;
                 $("#updateBtn").attr("disabled", true);
                 $("#cmdBtn").attr("disabled", true);
+                $("#cmdBtn").hide();
+                $("#updateBtn").html('检查中...');
                 document.form.action_mode.value = s;
                 document.form.submit();
                 UpdateModule.polling(function () {
                     $("#cmdBtn").attr("disabled", false);
                     $("#updateBtn").attr("disabled", false);
+                    $("#cmdBtn").show();
+                    $("#updateBtn").html('检查更新');
                 });
             }
 
