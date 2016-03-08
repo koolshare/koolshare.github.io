@@ -1,7 +1,7 @@
 #!/bin/sh
 eval `dbus export speedtest`
 source /koolshare/scripts/base.sh
-version="0.0.8"
+version="0.0.9"
 dbus set speedtest_version=$version
 
 #定义更新相关地址
@@ -97,8 +97,8 @@ dbus ram speedtest_upload=0
 /koolshare/bin/speedtest 1 2 1 2 2>/dev/null | while
 read line
 do
-	download=$(echo $line | awk -F 'download = ' '{print $2}' | grep -oE "[0-9]{1,5}[\.][0-9]{1,2}")
-	upload=$(echo $line | awk -F 'upload = ' '{print $2}' | grep -oE "[0-9]{1,5}[\.][0-9]{1,2}")
+	download=$(echo $line | awk -F 'Download = ' '{print $2}' | grep -oE "[0-9]{1,5}[\.][0-9]{1,2}")
+	upload=$(echo $line | awk -F 'Upload = ' '{print $2}' | grep -oE "[0-9]{1,5}[\.][0-9]{1,2}")
 	if [[ ! -z $download ]]; then
 		#echo "download : "$download
 		dbus ram speedtest_download=$download
