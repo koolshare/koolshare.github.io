@@ -350,7 +350,7 @@
 
 
 		 										</table>
-		 										<div id="warn" style="display: none;margin-top: 20px;text-align: center;font-size: 20px;margin-bottom: 20px;"class="formfontdesc" ><i>你已经开启shadowsocks,请先关闭后才能开启shadowvpn</i></div>
+		 										<div id="warn" style="display: none;margin-top: 20px;text-align: center;font-size: 20px;margin-bottom: 20px;"class="formfontdesc" ></div>
 												<div class="apply_gen">
 													<button id="cmdBtn" class="button_gen" onclick="onSubmitCtrl(this, ' Refresh ')">提交</button>
 												</div>
