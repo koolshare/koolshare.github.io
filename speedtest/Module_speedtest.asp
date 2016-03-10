@@ -227,7 +227,7 @@
             }
             .opt-bar{
                 padding: 10px;
-                background-color:#4E5659;
+                background-color:#4D595D;
                 margin-top: 20px;
             }
             .dashboard-info{
