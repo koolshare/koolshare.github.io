@@ -77,30 +77,6 @@
 	color: #FFFFFF;
 	cursor: default;
 }
-#ss_redchn_isp_website_web::-webkit-input-placeholder::before {
-    color:#999;
-    content:"填入需要强制用国内DNS解析的域名，一行一个，格式如下：\A koolshare.cn\A baidu.com\A 默认已经添加了1万多条国内域名，请勿重复添加！\A 不支持通配符。\A";
-}
-#ss_redchn_wan_white_ip::-webkit-input-placeholder::before {
-    color:#999;
-    content:"填入不需要走代理的外网ip地址，一行一个，支持如下格式如下：\A 2.2.2.2\A 3.3.3.3\A 4.4.4.4/24\A 因为默认大陆的ip都不会走SS，所以此处填入国外IP更有意义！\A";
-}
-#ss_redchn_wan_black_ip::-webkit-input-placeholder::before {
-    color:#999;
-    content:"填入需要强制走代理的外网ip地址，一行一个，支持如下格式如下：\A 5.5.5.5\A 6.6.6.6\A 7.7.7.7/8\A 因为默认大陆以外ip都会走SS，所以此处填入国内IP更有意义！\A";
-}
-#ss_redchn_wan_white_domain::-webkit-input-placeholder::before {
-    color:#999;
-    content:"填入不需要走代理的域名，一行一个，格式如下：\A google.com\A facebook.com\A 因为默认大陆的ip都不会走SS，所以此处填入国外域名更有意义！\A 需要清空电脑DNS缓存，才能立即看到效果\A";
-}
-#ss_redchn_wan_black_domain::-webkit-input-placeholder::before {
-    color:#999;
-    content:"填入需要强制走代理的域名，一行一个，格式如下：\A baidu.com\A taobao.com\A 因为默认大陆以外的ip都会走SS，所以此处填入国内域名更有意义！\A 需要清空电脑DNS缓存，才能立即看到效果\A";
-}
-#ss_redchn_dnsmasq::-webkit-input-placeholder::before {
-    color:#999;
-    content:"填入自定义的dnsmasq设置，一行一个。\A 例如hosts设置：\A address=/koolshare.cn/2.2.2.2\A 防DNS劫持设置\A bogus-nxdomain=220.250.64.18\A";
-}
 </style>
 <script>
 var socks5 = 0;
@@ -153,7 +129,7 @@ function updateOptions(){
 }
 
 function validForm(){
-	var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_wan_white_ip", "ss_redchn_wan_black_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_domain", "ss_redchn_dnsmasq"];
+	var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_wan_white_ip", "ss_redchn_wan_black_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_domain" , "ss_redchn_dnsmasq"];
 	for(var i = 0; i < temp_ss.length; i++) {
 		var temp_str = $G(temp_ss[i]).value;
 		if(temp_str == "") {
@@ -363,7 +339,11 @@ function update_visibility(){
 													<a href="https://github.com/koolshare/koolshare.github.io/blob/master/maintain_files/cdn.txt" target="_blank"><font color="#ffcc00"><u>查看默认添加的<% nvram_get("cdn_numbers"); %>条国内域名</u></font></a>
 												</th>
 												<td>
-													<textarea placeholder=" " cols="50" rows="8" id="ss_redchn_isp_website_web" name="ss_redchn_isp_website_web" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
+													<textarea placeholder="# 填入需要强制用国内DNS解析的域名，一行一个，格式如下：
+koolshare.cn
+baidu.com
+# 默认已经添加了1万多条国内域名，请勿重复添加！
+# 注意：不支持通配符！" cols="50" rows="8" id="ss_redchn_isp_website_web" name="ss_redchn_isp_website_web" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
 												</td>
 											</tr>
 										</table>
@@ -379,7 +359,11 @@ function update_visibility(){
 													<font color="#ffcc00">添加不需要走代理的外网ip地址</font>
 												</th>
 												<td>
-													<textarea placeholder=" " cols="50" rows="8" id="ss_redchn_wan_white_ip" name="ss_redchn_wan_white_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
+													<textarea placeholder="# 填入不需要走代理的外网ip地址，一行一个，格式（IP/CIDR）如下
+2.2.2.2
+3.3.3.3
+4.4.4.4/24
+# 因为默认大陆的ip都不会走SS，所以此处填入国外IP/CIDR更有意义！" cols="50" rows="8" id="ss_redchn_wan_white_ip" name="ss_redchn_wan_white_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
 												</td>
 											</tr>
 											<tr>
@@ -388,7 +372,11 @@ function update_visibility(){
 													<font color="#ffcc00">添加不需要走代理的域名</font>
 												</th>
 												<td>
-													<textarea placeholder=" " cols="50" rows="8" id="ss_redchn_wan_white_domain" name="ss_redchn_wan_white_domain" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
+													<textarea placeholder="# 填入不需要走代理的域名，一行一个，格式如下：
+google.com
+facebook.com
+# 因为默认大陆的ip都不会走SS，所以此处填入国外域名更有意义！
+# 需要清空电脑DNS缓存，才能立即看到效果。" cols="50" rows="8" id="ss_redchn_wan_white_domain" name="ss_redchn_wan_white_domain" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
 												</td>
 											</tr>
 										</table>
@@ -404,7 +392,11 @@ function update_visibility(){
 													<font color="#ffcc00">添加需要强制走代理的外网ip地址</font>
 												</th>
 												<td>
-													<textarea placeholder=" " cols="50" rows="8" id="ss_redchn_wan_black_ip" name="ss_redchn_wan_black_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
+													<textarea placeholder="# 填入需要强制走代理的外网ip地址，一行一个，格式（IP/CIDR）如下：
+5.5.5.5
+6.6.6.6
+7.7.7.7/8
+# 因为默认大陆以外ip都会走SS，所以此处填入国内IP/CIDR更有意义！" cols="50" rows="8" id="ss_redchn_wan_black_ip" name="ss_redchn_wan_black_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
 												</td>
 											</tr>
 											<tr>
@@ -413,7 +405,11 @@ function update_visibility(){
 													<font color="#ffcc00">添加需要强制走代理的域名</font>
 												</th>
 												<td>
-													<textarea placeholder=" " cols="50" rows="8" id="ss_redchn_wan_black_domain" name="ss_redchn_wan_black_domain" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
+													<textarea placeholder="# 填入需要强制走代理的域名，一行一个，格式如下：
+baidu.com
+taobao.com
+# 因为默认大陆以外的ip都会走SS，所以此处填入国内域名更有意义！
+# 需要清空电脑DNS缓存，才能立即看到效果。" cols="50" rows="8" id="ss_redchn_wan_black_domain" name="ss_redchn_wan_black_domain" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
 												</td>
 											</tr>
 										</table>
@@ -426,7 +422,11 @@ function update_visibility(){
 											<tr>
 											<th width="20%">自定义dnsmasq</th>
 												<td>
-													<textarea placeholder=" " rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" id="ss_redchn_dnsmasq" name="ss_redchn_dnsmasq" title=""></textarea>
+													<textarea placeholder="# 填入自定义的dnsmasq设置，一行一个
+# 例如hosts设置：
+address=/koolshare.cn/2.2.2.2
+# 防DNS劫持设置：
+bogus-nxdomain=220.250.64.18" rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" id="ss_redchn_dnsmasq" name="ss_redchn_dnsmasq" title=""></textarea>
 												</td>
 											</tr>
 										</table>

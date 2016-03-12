@@ -10,6 +10,7 @@ server_ip=`resolvip $ss_basic_server`
 nat_ready=$(iptables -t nat -L PREROUTING -v -n --line-numbers|grep -v PREROUTING|grep -v destination)
 version_gfwlist=$(cat /koolshare/ss/cru/version | sed -n 1p | sed 's/ /\n/g'| sed -n 3p)
 md5sum_gfwlist=$(md5sum /jffs/configs/dnsmasq.d/gfwlist.conf | sed 's/ /\n/g'| sed -n 1p)
+wanwhitedomain=$(echo $ss_ipset_white_domain_web | sed 's/,/\n/g')
 i=120
 nvram set ss_mode=1
 nvram commit
@@ -86,7 +87,6 @@ cat > /jffs/configs/dnsmasq.conf.add <<EOF
 #min-cache-ttl=86400
 no-resolv
 server=$dns
-conf-dir=/jffs/configs/dnsmasq.d
 EOF
 echo $(date): done
 echo $(date):
@@ -96,6 +96,23 @@ echo $(date): append router output chain rules
 cat /koolshare/ss/redchn/output.conf >> /jffs/configs/dnsmasq.conf.add
 echo $(date): done
 echo $(date):
+
+# append domain white list
+if [ ! -z $ss_ipset_white_domain_web ];then
+	echo $(date): append white_domain
+	echo "#for white_domain" >> /jffs/configs/dnsmasq.conf.add
+	for wan_white_domain in $wanwhitedomain
+	do 
+		echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /jffs/configs/dnsmasq.conf.add
+		echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_domain/g" >> /jffs/configs/dnsmasq.conf.add
+	done
+	echo $(date): done
+	echo $(date):
+fi
+
+# append custom conf dir
+echo "conf-dir=/jffs/configs/dnsmasq.d" >> /jffs/configs/dnsmasq.conf.add
+
 # append gfwlist
 	if [ "$version_gfwlist" != "$md5sum_gfwlist" ];then
 		echo $(date): append gfwlist into dnsmasq.conf
@@ -103,21 +120,7 @@ echo $(date):
 		echo $(date): done
 		echo $(date):
 	fi
-# append adblock rules
-	if [ "1" == "$ss_basic_adblock" ];then
-		echo $(date): enable adblock in gfwlist mode
-		md5sum_adblock=$(md5sum /jffs/configs/dnsmasq.d/adblock.conf | sed 's/ /\n/g'| sed -n 1p)
-		version_adblock=$(cat /koolshare/ss/cru/version | sed -n 3p | sed 's/ /\n/g'| sed -n 3p)
-		if [ "$version_adblock" != "$md5sum_adblock" ];then
-			cp -fr /koolshare/ss/ipset/adblock.conf  /jffs/configs/dnsmasq.d/
-		fi
-		echo $(date): done
-		echo $(date):
-	else
-		if [ -f /jffs/configs/dnsmasq.d/adblock.conf ];then
-			rm -rf /jffs/configs/dnsmasq.d/adblock.conf
-		fi
-	fi
+
 # append custom input domain
 	if [ ! -z "$ss_ipset_black_domain_web" ];then
 		echo $(date): append custom black domain into dnsmasq.conf
@@ -127,9 +130,9 @@ echo $(date):
 		echo $(date):
 	fi
 # append custom host
-	if [ ! -z "$ss_ipset_address" ];then
+	if [ ! -z "$ss_ipset_dnsmasq" ];then
 		echo $(date): append custom host into dnsmasq.conf
-		echo "$ss_ipset_address" | sed "s/,/\n/g" | sort -u >> /tmp/custom.conf
+		echo "$ss_ipset_dnsmasq" | sed "s/,/\n/g" | sort -u >> /tmp/custom.conf
 		echo $(date): done
 		echo $(date):
 	fi
@@ -175,7 +178,7 @@ dbus fire onwanstart
 
 EOF
 fi
-startss=$(cat /jffs/scripts/wan-start | grep "ssconfig")
+startss=$(cat /jffs/scripts/wan-start | grep "/koolshare/scripts/ss_config.sh")
 if [ -z "$startss" ];then
 echo $(date): Add service to wan-start...
 sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/wan-start

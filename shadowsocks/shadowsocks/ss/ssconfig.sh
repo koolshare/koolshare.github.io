@@ -7,7 +7,7 @@ dbus set ss_basic_version_local=$ss_basic_version_local
 
 # set default vaule
 set_default_value(){
-	if [ -z $ss_ipset_cdn_dns ];then
+if [ -z $ss_ipset_cdn_dns ];then
 	dbus set ss_ipset_cdn_dns="1"
 	dbus set ss_ipset_foreign_dns="2"
 	dbus set ss_ipset_dns2socks_user="8.8.8.8:53"
@@ -31,7 +31,12 @@ set_default_value(){
 	dbus set ss_overall_dns="0"
 	dbus set ss_basic_adblock="0"
 fi
+if [ -z $ss_gameV2_dns2ss_user ];then
+	dbus set ss_gameV2_dns2ss_user="8.8.8.8:53"
+	dbus set ss_gameV2_dns_china="1"
+fi
 }
+
 
 install_ss(){
 	tar -zxf shadowsocks.tar.gz
@@ -180,6 +185,9 @@ apply_ss(){
 		. /koolshare/ss/game/start.sh
 	elif [ "4" == "$ss_basic_mode" ]; then
 		. /koolshare/ss/stop.sh
+		. /koolshare/ss/koolgame/start.sh
+	elif [ "5" == "$ss_basic_mode" ]; then
+		. /koolshare/ss/stop.sh
 		. /koolshare/ss/overall/start.sh
 	fi
 }
@@ -202,6 +210,7 @@ write_numbers(){
 }
 
 fire_ss_depend_scripts(){
+	#sh /koolshare/scripts/onssstart.sh
 	dbus fire onssstart
 }
 
@@ -241,6 +250,7 @@ case $ACTION in
 start)
 	if [ "$ss_basic_enable" == "1" ];then
 	set_default_value
+	mount_js
 	set_ulimit
     	apply_ss
     	write_numbers

@@ -176,15 +176,6 @@ echo $(date): done
 echo $(date):
 fi
 
-# append adblock rules
-	if [ "1" == "$ss_basic_adblock" ];then
-		echo $(date): enable adblock in gfwlist mode
-		echo "#for adblcok" >> /jffs/configs/dnsmasq.conf.add
-		cat /koolshare/ss/ipset/adblock.conf >> /jffs/configs/dnsmasq.conf.add
-		echo $(date): done
-		echo $(date):
-	fi
-
 # create dnsmasq postconf
 echo $(date): create dnsmasq.postconf
 cp /koolshare/ss/redchn/dnsmasq.postconf /jffs/scripts/dnsmasq.postconf
@@ -219,7 +210,7 @@ dbus fire onwanstart
 
 EOF
 fi
-startss=$(cat /jffs/scripts/wan-start | grep "ssconfig")
+startss=$(cat /jffs/scripts/wan-start | grep "/koolshare/scripts/ss_config.sh")
 if [ -z "$startss" ];then
 echo $(date): Adding service to wan-start...
 sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/wan-start

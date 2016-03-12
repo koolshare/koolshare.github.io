@@ -134,6 +134,8 @@ function onSubmitCtrl() {
 			} else if (ssmode == "0"){
 				showSSLoadingBar(8);
 			} else if (ssmode == "4"){
+				showSSLoadingBar(25);
+			} else if (ssmode == "5"){
 				showSSLoadingBar(8);
 			}
         	document.form.action_mode.value = ' Refresh ';
@@ -152,6 +154,8 @@ function onSubmitCtrl() {
 			} else if (ssmode == "0"){
 				showSSLoadingBar(8);
 			} else if (ssmode == "4"){
+				showSSLoadingBar(25);
+			} else if (ssmode == "5"){
 				showSSLoadingBar(8);
 			}
     		document.form.action_mode.value = ' Refresh ';
@@ -232,7 +236,6 @@ function validForm() {
 function update_visibility() {
 	ssmode = document.form.ss_basic_mode.value;
 	crst = document.form.ss_basic_chromecast.value;
-	cadb = document.form.ss_basic_adblock.value;
 	sru = document.form.ss_basic_rule_update.value;
 	slc = document.form.ss_basic_lan_control.value;
 	std = readCookie("ss_table_detail");
@@ -271,14 +274,24 @@ function update_visibility() {
 		$j("#mode_state").html("SS运行状态");
 	} else if (ssmode == "1"){
 		$j("#mode_state").html("SS运行状态【gfwlist模式】");
+		//remove_chacha20_ietf();
+		//add_chacha20_ietf();
 	} else if (ssmode == "2"){
 		$j("#mode_state").html("SS运行状态【大陆白名单模式】");
+		//remove_chacha20_ietf();
+		//add_chacha20_ietf();
 	} else if (ssmode == "3"){
 		$j("#mode_state").html("SS运行状态【游戏模式】");
+		//remove_chacha20_ietf();
+		//add_chacha20_ietf();
 	} else if (ssmode == "4"){
+		$j("#mode_state").html("SS运行状态【游戏模式V2】");
+		//remove_chacha20_ietf();
+	} else if (ssmode == "5"){
 		$j("#mode_state").html("SS运行状态【全局模式】");
+		//remove_chacha20_ietf();
+		//add_chacha20_ietf();
 	}
-	showhide("123", (ssmode !== "4"));
 	showhide("ss_state1", (ssmode == "0"));
 	showhide("ss_state2", (ssmode !== "0"));
 	showhide("ss_state3", (ssmode !== "0"));
@@ -288,8 +301,6 @@ function update_visibility() {
 	showhide("gfw_number", (ssmode == "1"));
 	showhide("chn_number", (ssmode == "2" || ssmode == "3"));
 	showhide("cdn_number", (ssmode == "2" || ssmode == "3"));
-	showhide("adblock_nu", (cadb == "1" && ssmode !== "0"));
-	showhide("adblock_nu1", (cadb == "1"));
 	showhide("ss_basic_rule_update_time", (sru == "1"));
 	showhide("update_choose", (sru == "1"));
 	showhide("help", (ssmode !== "0"));
@@ -297,11 +308,17 @@ function update_visibility() {
 	showhide("help_mode2", (ssmode == "2"));
 	showhide("help_mode3", (ssmode == "3"));
 	showhide("help_mode4", (ssmode == "4"));
+	showhide("game_alertV2", (ssmode == "4"));
+	showhide("ss_koolgame_udp_tr", (ssmode == "4"));
+	showhide("help_mode5", (ssmode == "5"));
 	showhide("ss_basic_black_lan", (slc == "1"));
 	showhide("ss_basic_white_lan", (slc == "2"));
-	showhide("onetime_auth", (sur !== "1"));
-	showhide("ss_basic_rss_protocol_tr", (sur == "1"));
-	showhide("ss_basic_rss_obfs_tr", (sur == "1"));
+	showhide("onetime_auth", (sur !== "1" && ssmode!== "4"));
+	showhide("SSR_name", (ssmode!== "4"));	
+	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode!== "4"));
+	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode!== "4"));
+
+	
 }
 
 function oncheckclick(obj) {
@@ -361,12 +378,20 @@ function checkSSStatus() {
             setTimeout("checkSSStatus();", refreshRate * 1000);
         },
 		success: function() {
-			$j("#ss_state2").html("国外连接 - " + db_ss['ss_basic_state_foreign']);
-			$j("#ss_state3").html("国内连接 - " + db_ss['ss_basic_state_china']);
-			document.getElementById('update_button').style.display = "";
-			refreshRate = getRefresh();
-			if (refreshRate > 0)
-        	setTimeout("checkSSStatus();", refreshRate * 1000);
+			if (db_ss['ss_basic_state_foreign'] == undefined){
+				document.getElementById("ss_state2").innerHTML = "国外连接 - " + "Waiting for first refresh...";
+        		document.getElementById("ss_state3").innerHTML = "国内连接 - " + "Waiting for first refresh...";
+        		refreshRate = getRefresh();
+				if (refreshRate > 0)
+        		setTimeout("checkSSStatus();", refreshRate * 1000);
+			} else {
+				$j("#ss_state2").html("国外连接 - " + db_ss['ss_basic_state_foreign']);
+				$j("#ss_state3").html("国内连接 - " + db_ss['ss_basic_state_china']);
+				document.getElementById('update_button').style.display = "";
+				refreshRate = getRefresh();
+				if (refreshRate > 0)
+        		setTimeout("checkSSStatus();", refreshRate * 1000);
+    		}
 		}
 		});
 	} else {
@@ -406,7 +431,7 @@ function ssconf_node2obj(node_sel) {
         return obj;
     } else {
         var obj = {};
-        var params = ["server", "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
+        var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
         for (var i = 0; i < params.length; i++) {
             obj["ss_basic_" + params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel];
         }
@@ -417,14 +442,15 @@ function ssconf_node2obj(node_sel) {
 function ss_node_sel() {
     var node_sel = $G("ssconf_basic_node").value;
     var obj = ssconf_node2obj(node_sel);
-    update_ss_ui(obj);
     update_visibility();
+    update_ss_ui(obj);
+
 }
 
 function ss_node_object(node_sel, obj, isSubmit, end) {
     var ns = {};
     var p = "ssconf_basic";
-    var params = ["server", "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
+    var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
         db_ss[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
@@ -494,6 +520,8 @@ function pop_ss_node_list_listview() {
     fadeIn(document.getElementById("ss_node_list_viewlist_content"));
     cal_panel_block_clientList("ss_node_list_viewlist_content", 0.045);
     ss_node_list_view_hide_flag = false;
+    var obj1=document.getElementById('ssconf_table_method');
+    obj1.options.remove(17);
 }
 
 function getAllConfigs() {
@@ -563,7 +591,7 @@ function add_conf_in_table(o) {
     var ns = {};
     var p = "ssconf_basic";
     node_global_max += 1;
-    var params = ["name", "server", "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
+    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + node_global_max] = $j('#ssconf_table_' + params[i]).val();
     }
@@ -587,7 +615,7 @@ function remove_conf_table(o) {
     var p = "ssconf_basic";
     id = ids[ids.length - 1];
     var ns = {};
-    var params = ["name", "mode", "server", "port", "password", "method", "rss_protocol", "rss_obfs", "onetime_auth"];
+    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "onetime_auth"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + id] = "";
     }
@@ -907,7 +935,8 @@ function show_hide_table(){
 
 function version_show(){
 	if (db_ss['ss_basic_version_local'] != db_ss['ss_basic_version_web'] && db_ss['ss_basic_version_web'] !== "undefined"){
-		$j("#ss_version_show").html("<i>有新版本：" + db_ss['ss_basic_version_web']);
+		//$j("#ss_version_show").html("<i>有新版本：" + db_ss['ss_basic_version_web']);
+		$j("#ss_version_show").html("<i>当前版本：" + db_ss['ss_basic_version_local']);
 		$j("#updateBtn").html("<i>升级到：" + db_ss['ss_basic_version_web']);
 	} else {
 		$j("#ss_version_show").html("<i>当前版本：" + db_ss['ss_basic_version_local']);
@@ -978,7 +1007,15 @@ function check_ss(){
     document.form.submit();
     setTimeout("version_show()", 6000)
 }
+function remove_chacha20_ietf(){
+    var obj=document.getElementById('ss_basic_method');
+    obj.options.remove(17);
+}
 
+function add_chacha20_ietf(){
+    var obj=document.getElementById('ss_basic_method');
+    obj.options.add(new Option("chacha20-ietf","chacha20-ietf"));
+}
 
 </script>
 </head>
@@ -1059,7 +1096,7 @@ function check_ss(){
 													</div>
 													<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-38px;float: left;">
 														<button id="updateBtn" class="button_gen" onclick="update_ss();">检查更新</button>
-														<a style="margin-left: 185px;" href="https://github.com/koolshare/koolshare.github.io/blob/master/shadowsocks" target="_blank"><em>[<u>view code</u>]</em></a>
+														<a style="margin-left: 178px;" href="https://github.com/koolshare/koolshare.github.io/blob/master/shadowsocks/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
 													</div>
 													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("ss_version_local", "未知"); %></i></div>
 													<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"></div>	
@@ -1091,19 +1128,22 @@ function check_ss(){
 													<th width="35%">模式</th>
 													<td>
 														<select id="ss_basic_mode" name="ss_basic_mode" style="width:164px;margin:0px 0px 0px 2px;" class="ssconfig input_option" onchange="update_visibility();" >
-															<!--<option value="0">【0】 禁用</option>-->
 															<option value="1">【1】 GFWlist模式</option>
 															<option value="2">【2】 大陆白名单模式</option>
 															<option value="3">【3】 游戏模式</option>
-															<option value="4">【4】 全局代理模式</option>
+															<option value="4">【4】 游戏模式V2</option>
+															<option value="4">【5】 全局代理模式</option>
 														</select>
-														<div style="margin-left:170px;margin-top:-20px;margin-bottom:0px;">
+														<div id="SSR_name"style="margin-left:170px;margin-top:-20px;margin-bottom:0px;">
 															<input type="checkbox" id="ss_basic_use_rss" onclick="oncheckclick(this);update_visibility();" />
 															<input type="hidden" id="hd_ss_basic_use_rss" name="ss_basic_use_rss" value="" />
 															使用SSR
 														</div>
 														<div id="game_alert" style="margin-left:270px;margin-top:-20px;margin-bottom:0px;">
 															<a href="http://koolshare.cn/thread-4519-1-1.html" target="_blank"><i>&nbsp;账号需支持UDP转发&nbsp;&nbsp;<u>FAQ</u></i></a>
+														</div>
+														<div id="game_alertV2" style="margin-left:180px;margin-top:-20px;margin-bottom:0px;">
+															<a href="http://koolshare.cn/thread-36167-1-1.html" target="_blank"><i>&nbsp;不兼容原版SS账号&nbsp;&nbsp;<u>FAQ</u></i></a>
 														</div>
 													</td>
 												</tr>
@@ -1159,7 +1199,15 @@ function check_ss(){
 														</select>
 													</td>
 												</tr>
-
+												<tr id="ss_koolgame_udp_tr" >
+													<th width="35%">UDP通道</th>
+													<td>
+														<select id="ss_basic_koolgame_udp" name="ss_basic_koolgame_udp" style="width:164px;margin:0px 0px 0px 2px;" class="ssconfig input_option" onchange="update_visibility();" >
+															<option value="0">udp in udp</option>
+															<option value="1">udp in tcp</option>
+														</select>
+													</td>
+												</tr>
 												<tr id="onetime_auth">
 													<th width="35%"><a href="https://shadowsocks.org/en/spec/one-time-auth.html" target="_blank"><u>onetime authentication</font></u></a></th>
 													<td>
@@ -1198,10 +1246,6 @@ function check_ss(){
 														<span id="ss_basic_rss_obfs_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
 												</tr>
-
-
-												
-												
 											</table>
 										</div>
 										<div id="add_fun">
@@ -1290,20 +1334,6 @@ function check_ss(){
 															<span id="chromecast1"> 建议开启chromecast支持 </span>
 													</td>
 												</tr>
-												<tr id="123">
-													<th width="35%">广告过滤</th>
-													<td>
-														<select id="ss_basic_adblock" name="ss_basic_adblock" class="ssconfig input_option" onchange="update_visibility();" >
-															<option value="0">禁用</option>
-															<option value="1">开启</option>
-														</select>
-															<span id="adblock_nu" >当前规则条数 ：<% nvram_get("adblock_numbers"); %>，最后更新版本：
-																		<a id="adblock_nu1" href="https://github.com/koolshare/koolshare.github.io/blob/master/maintain_files/adblock.conf" target="_blank">
-																			<i><% nvram_get("update_adblock"); %></i>
-																		</a>
-															</span>
-													</td>
-												</tr>
 												<tr id="update_rules">
 													<th width="35%">Shadowsocks规则自动更新</th>
 													<td>
@@ -1342,11 +1372,9 @@ function check_ss(){
 																<input type="checkbox" id="ss_basic_gfwlist_update" name="a" title="选择此项应用gfwlist自动更新" onclick="oncheckclick(this);">gfwlist
 																<input type="checkbox" id="ss_basic_chnroute_update" name="a2" onclick="oncheckclick(this);">chnroute
 																<input type="checkbox" id="ss_basic_cdn_update" name="a3" onclick="oncheckclick(this);">CDN
-																<input type="checkbox" id="ss_basic_adblock_update" name="a4" onclick="oncheckclick(this);">adblock
 																<input type="hidden" id="hd_ss_basic_gfwlist_update" name="ss_basic_gfwlist_update" value=""/>
 																<input type="hidden" id="hd_ss_basic_chnroute_update" name="ss_basic_chnroute_update" value=""/>
 																<input type="hidden" id="hd_ss_basic_cdn_update" name="ss_basic_cdn_update" value=""/>
-																<input type="hidden" id="hd_ss_basic_adblock_update" name="ss_basic_adblock_update" value=""/>
 															</a>
 																<input id="update_now" onclick="updatelist()" style="font-family:'Courier New'; Courier, mono; font-size:11px;" type="submit" value="立即更新" />
 															<a href="http://192.168.1.1/Main_SsLog_Content.asp" target="_blank"></a>
@@ -1422,14 +1450,24 @@ function check_ss(){
 												</tr>
 												<tr id="help_mode4">
 													<th>
-														<h3>【4】 全局代理模式【Redsocks2】</h3>
+														<h3>【4】 游戏模式V2</h3>
+													</th>
+													<td>
+														<p> 游戏模式V2是koolshare小宝专为游戏玩家打造的游戏加速利器。 </p>
+														<p><b> 优点：</b>主机游戏玩家福音。 </p>
+														<p><b> 缺点：</b>需要配合良好的线路和自己搭建服务端；路由器端最好设置足够的<u><i><a href="http://koolshare.cn/thread-37494-1-1.html" target="_blank">虚拟内存</a></i></u></p>
+													</td>
+												</tr>
+												<tr id="help_mode5">
+													<th>
+														<h3>【5】 全局代理模式【Redsocks2】</h3>
 													</th>
 													<td>
 														<p> 该除局域网和ss服务器等流量不走代理，其它都走代理，高级设置中提供了对代理协议的选择。 </p>
 														<p><b> 优点：</b>简单暴力，全部出国。 </p>
 														<p><b> 缺点：</b>国内网站全部走ss，迅雷下载和BT全部走SS流量。</p>
 													</td>
-													</tr>
+												</tr>
 											</table>									
 										</div>
 										<div id="apply_button"class="apply_gen">
@@ -1456,7 +1494,11 @@ function check_ss(){
 												<p> 游戏模式较于其它模式最大的特点就是支持UDP代理，能让游戏的UDP链接走SS，主机玩家用此模式可以实现TCP+UDP走SS代理 。 </p>
 												<p><b> 优点：</b>除了具有大陆白名单模式的优点外，还能代理UDP链接，并且实现主机游戏<b> NAT2!</b> </p>
 												<p><b> 缺点：</b>由于UDP链接也走SS，而迅雷等BT下载多为UDP链接，如果下载资源的P2P链接中有国外链接，这部分流量就会走SS！</p>
-											<h3>【4】 全局代理模式【Redsocks2】</h3>
+											<h3>【4】 游戏模式V2</h3>
+												<p> 该除局域网和ss服务器等流量不走代理，其它都走代理，高级设置中提供了对代理协议的选择。 </p>
+												<p><b> 优点：</b>主机游戏玩家福音。 </p>
+												<p><b> 缺点：</b>需要配合良好的线路和自己搭建服务端。</p>
+											<h3>【5】 全局代理模式【Redsocks2】</h3>
 												<p> 该除局域网和ss服务器等流量不走代理，其它都走代理，高级设置中提供了对代理协议的选择。 </p>
 												<p><b> 优点：</b>简单暴力，全部出国；可选仅web浏览走ss，还是全部tcp代理走ss </p>
 												<p><b> 缺点：</b>国内网站全部走ss，迅雷下载和BT全部走SS流量。</p>
@@ -1479,8 +1521,6 @@ function check_ss(){
 												<p> 只有你激活了大陆白名单模式或者游戏模式，才会显示该项目。</p>
 											<h4>chromecast支持</h4>
 												<p> 启用该项可以将局域网内客户端自定义的DNS进行接管，强制转发到路由器DNS，对于chromecast这样的设备非常有用。</p>
-											<h4>广告过滤</h4>
-												<p> 启用该项将会使用预定义的adblock文件，使用dnsmasq的host功能对指定域名进行过滤，达到去除广告的功能。</p>
 											<h4>Shadowsocks规则自动更新</h4>
 												<p> 开启此功能并选择你需要自动更新的文件，这些文件我们放在 &nbsp;<a href="https://github.com/koolshare/koolshare.github.io" target="_blank"><i><u>https://github.com/koolshare/koolshare.github.io</u></i></a></p>
 												<p> 项目中，欢迎大家去提交自己的list，我们会选择合并，然后你就能自动更新到你的路由器。</p>

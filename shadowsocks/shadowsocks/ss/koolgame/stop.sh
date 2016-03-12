@@ -14,7 +14,6 @@ rsstunnel=$(ps | grep "rss-tunnel" | grep -v "grep" | grep -vw "ss-tunnel")
 pdnsd=$(ps | grep "pdnsd" | grep -v "grep")
 chinadns=$(ps | grep "chinadns" | grep -v "grep")
 DNS2SOCK=$(ps | grep "dns2socks" | grep -v "grep")
-koolgame=$(ps | grep "koolgame" | grep -v "grep")
 Pcap_DNSProxy=$(ps | grep "Pcap_DNSProxy" | grep -v "grep")
 lan_ipaddr=$(nvram get lan_ipaddr)
 ip_rule_exist=`ip rule show | grep "fwmark 0x1/0x1 lookup 300" | grep -c 300`
@@ -35,7 +34,11 @@ esac
 echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
 echo $(date):
 echo $(date): --------------------Stopping Shadowsock service--------------------------
-#--------------------------------------------------------------------------		
+#--------------------------------------------------------------------------	
+# erase ss state
+	dbus remove ss_basic_state_foreign
+	dbus remove ss_basic_state_china
+
 # dectect disable or switching mode
     if [ "$ss_mode" == "0" ];then
     	echo $(date): Shadowsocks service will be disabled !!
@@ -60,13 +63,6 @@ echo $(date): --------------------Stopping Shadowsock service-------------------
 		echo $(date):
 	fi
 #--------------------------------------------------------------------------
-# delete custom.conf
-	if [ -f /jffs/configs/dnsmasq.d/custom.conf ];then
-		echo $(date): delete custom.conf file
-		rm -rf /jffs/configs/dnsmasq.d/custom.conf
-		echo $(date): done
-		echo $(date):
-	fi
 # Bring up dnsmasq
 	echo $(date): Bring up dnsmasq service
 	service restart_dnsmasq >/dev/null 2>&1
@@ -225,13 +221,9 @@ sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
 		echo $(date): done
 		echo $(date):
 	fi
-# kill all koolgame
-	if [ ! -z "$koolgame" ]; then 
-		echo $(date): kill koolgame...
-		killall koolgame >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
-	fi
+
+killall koolgame
+
 #--------------------------------------------------------------------------
 # kill crontab job
 	echo $(date): kill crontab job

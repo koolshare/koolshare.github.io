@@ -125,7 +125,7 @@ $j.ajax({
 url: '/cmdRet_check.htm',
 dataType: 'html',
 error: function(xhr){
-setTimeout("checkCmdRet();", 1000);
+setTimeout("checkCmdRet();", 2000);
 },
 success: function(response){
 if(response.search("XU6J03M6") != -1){
@@ -144,11 +144,11 @@ if(noChange > 30){
 document.getElementById("loadingIcon").style.display = "none";
 retArea.scrollTop = retArea.scrollHeight;
 document.form.SystemCmd.focus();
-setTimeout("checkCmdRet();", 1000);
+setTimeout("checkCmdRet();", 2000);
 }
 else{
 document.getElementById("loadingIcon").style.display = "";
-setTimeout("checkCmdRet();", 1000);
+setTimeout("checkCmdRet();", 2000);
 }
 var retArea = document.getElementById('textarea');
 retArea.value = response;
@@ -209,12 +209,4 @@ retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
 </form>
 <div id="footer"></div>
 </body>
-<script type="text/javascript">
-<!--[if !IE]>-->
-jQuery.noConflict();
-(function($){
-var i = 0;
-})(jQuery);
-<!--<![endif]-->
-</script>
 </html>

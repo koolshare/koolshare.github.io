@@ -1,31 +1,44 @@
 ﻿function menu_hook(title, tab) {
 var ss_mode = '<% nvram_get("ss_mode"); %>';
+tabtitle[16] = new Array("", "基本设置", "【1】GFWlist模式", "【2】大陆白名单模式", "【3】游戏模式", "【4】游戏模式V2", "【5】全局模式", "Socks5设置", "日志");
+tablink[16] = new Array("", "Main_Ss_Content.asp", "Main_SsIpset_Content.asp", "Main_SsAuto_Content.asp", "Main_SsGame_Content.asp", "Main_Ss_koolgame.asp", "Main_Ss_Overall.asp", "Main_SsLocal_Content.asp",  "Main_SsLog_Content.asp");
 if(ss_mode == '0'){
 	remove_menu_item("Main_SsIpset_Content.asp");
 	remove_menu_item("Main_SsAuto_Content.asp");
 	remove_menu_item("Main_SsGame_Content.asp");
+	remove_menu_item("Main_Ss_koolgame.asp");
 	remove_menu_item("Main_Ss_Overall.asp");
 	remove_menu_item("Main_SsLog_Content.asp");
 } else if(ss_mode == '1'){
 	remove_menu_item("Main_SsAuto_Content.asp");
 	remove_menu_item("Main_SsGame_Content.asp");
+	remove_menu_item("Main_Ss_koolgame.asp");
 	remove_menu_item("Main_Ss_Overall.asp");
 } else if(ss_mode == '2'){
 	remove_menu_item("Main_SsIpset_Content.asp");
 	remove_menu_item("Main_SsGame_Content.asp");
+	remove_menu_item("Main_Ss_koolgame.asp");
 	remove_menu_item("Main_Ss_Overall.asp");
 } else if(ss_mode == '3'){
 	remove_menu_item("Main_SsIpset_Content.asp");
 	remove_menu_item("Main_SsAuto_Content.asp");
+	remove_menu_item("Main_Ss_koolgame.asp");
 	remove_menu_item("Main_Ss_Overall.asp");
 } else if(ss_mode == '4'){
 	remove_menu_item("Main_SsIpset_Content.asp");
 	remove_menu_item("Main_SsAuto_Content.asp");
 	remove_menu_item("Main_SsGame_Content.asp");
+	remove_menu_item("Main_Ss_Overall.asp");
+} else if(ss_mode == '5'){
+	remove_menu_item("Main_SsIpset_Content.asp");
+	remove_menu_item("Main_SsAuto_Content.asp");
+	remove_menu_item("Main_SsGame_Content.asp");
+	remove_menu_item("Main_Ss_koolgame.asp");
 } else {
 	remove_menu_item("Main_SsIpset_Content.asp");
 	remove_menu_item("Main_SsAuto_Content.asp");
 	remove_menu_item("Main_SsGame_Content.asp");
+	remove_menu_item("Main_Ss_koolgame.asp");
 	remove_menu_item("Main_Ss_Overall.asp");
 	remove_menu_item("Main_SsLog_Content.asp");
 }
@@ -105,9 +118,12 @@ function LoadingSSProgress(seconds){
 		document.getElementById("loading_block3").innerHTML = "SS服务关闭中 ..."
 		$j("#loading_block2").html("<li><font color='#ffcc00'><a href='http://www.koolshare.cn' target='_blank'></font>SS工作有问题？请来我们的<font color='#ffcc00'>论坛www.koolshare.cn</font>反应问题...</font></li>");
 	} else {
-		if (document.form.ss_basic_mode.value == 4){
+		if (document.form.ss_basic_mode.value == 5){
 			document.getElementById("loading_block3").innerHTML = "全局模式启用中 ..."
 			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>此模式非科学上网方式，会影响国内网页速度...</font></li><li><font color='#ffcc00'>注意：全局模式并非VPN，只支持TCP流量转发...</font></li>");
+		} else if (document.form.ss_basic_mode.value == 4){
+			document.getElementById("loading_block3").innerHTML = "游戏模式V2启用中 ..."
+			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>游戏模式V2模式使用内建的DNS防污染解决方案...</font></li><li><font color='#ffcc00'>游戏模式加载时间较长，请等待进度条...</font></li>");
 		} else if (document.form.ss_basic_mode.value == 3){
 			document.getElementById("loading_block3").innerHTML = "游戏模式启用中 ..."
 			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>为确保游戏工作，请确保你的SS账号支持UDP转发...</font></li><font color='#ffcc00'><li>游戏模式加载时间较长，请等待进度条...</font></li>");

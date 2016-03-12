@@ -6,7 +6,6 @@ LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")
 # version dectet
 version_gfwlist1=$(cat /jffs/ss/cru/version | sed -n 1p | sed 's/ /\n/g'| sed -n 1p)
 version_chnroute1=$(cat /jffs/ss/cru/version | sed -n 2p | sed 's/ /\n/g'| sed -n 1p)
-version_adblock1=$(cat /jffs/ss/cru/version | sed -n 3p | sed 's/ /\n/g'| sed -n 1p)
 version_cdn1=$(cat /jffs/ss/cru/version | sed -n 4p | sed 's/ /\n/g'| sed -n 1p)
 
 echo ========================================================================================================== >> /tmp/syscmd.log
@@ -22,17 +21,14 @@ fi
 
 git_line1=$(cat /tmp/version1 | sed -n 1p)
 git_line2=$(cat /tmp/version1 | sed -n 2p)
-git_line3=$(cat /tmp/version1 | sed -n 3p)
 git_line4=$(cat /tmp/version1 | sed -n 4p)
 
 version_gfwlist2=$(echo $git_line1 | sed 's/ /\n/g'| sed -n 1p)
 version_chnroute2=$(echo $git_line2 | sed 's/ /\n/g'| sed -n 1p)
-version_adblock2=$(echo $git_line3 | sed 's/ /\n/g'| sed -n 1p)
 version_cdn2=$(echo $git_line4 | sed 's/ /\n/g'| sed -n 1p)
 
 md5sum_gfwlist2=$(echo $git_line1 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 md5sum_chnroute2=$(echo $git_line2 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
-md5sum_adblock2=$(echo $git_line3 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 md5sum_cdn2=$(echo $git_line4 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 
 # detect ss version
@@ -97,35 +93,6 @@ else
 fi
 
 
-
-# update adblock
-if [ "$ss_basic_adblock_update" == "1" ];then
-	if [ ! -z "$version_adblock2" ];then
-		if [ "$version_adblock1" != "$version_adblock2" ];then
-			echo $(date): new version decteted, will update adblock >> /tmp/syscmd.log
-			echo $(date): downloading adblock list to tmp file >> /tmp/syscmd.log
-			wget --no-check-certificate --tries=1 --timeout=15 -qO - https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/maintain_files/adblock.conf > /tmp/adblock.conf
-			md5sum_adblock1=$(md5sum /tmp/adblock.conf | sed 's/ /\n/g'| sed -n 1p)
-			if [ "$md5sum_adblock1"x = "$md5sum_adblock2"x ];then
-				echo $(date): md5sum check succeed \for adblock, apply tmp file to the original file >> /tmp/syscmd.log
-				mv /tmp/adblock.conf /jffs/ss/ipset/adblock.conf
-				sed -i "3s/.*/$git_line3/" /jffs/ss/cru/version
-				reboot="1"
-				echo $(date): your adblock is up to date >> /tmp/syscmd.log
-			else
-				echo $(date): md5sum check failed \for adblock >> /tmp/syscmd.log
-			fi
-		else
-			echo $(date): same version decteted,will not update adblock >> /tmp/syscmd.log
-		fi
-	else
-		echo $(date): file down load failed \for gfwlist >> /tmp/syscmd.log
-	fi
-else
-	echo $(date): adblock update not enabled >> /tmp/syscmd.log
-fi
-
-
 # update cdn file
 if [ "$ss_basic_cdn_update" == "1" ];then
 	if [ ! -z "$version_cdn2" ];then
@@ -154,7 +121,6 @@ else
 fi
 
 rm -rf /tmp/gfwlist.conf1
-rm -rf /tmp/adblock.conf1
 rm -rf /tmp/chnroute.txt1
 rm -rf /tmp/cdn.txt1
 rm -rf /tmp/version1
@@ -163,11 +129,9 @@ echo $(date): Shadowsocks rules update complete! >> /tmp/syscmd.log
 # write number
 nvram set update_ipset="$(cat /jffs/ss/cru/version | sed -n 1p | sed 's/#/\n/g'| sed -n 1p)"
 nvram set update_chnroute="$(cat /jffs/ss/cru/version | sed -n 2p | sed 's/#/\n/g'| sed -n 1p)"
-nvram set update_adblock="$(cat /jffs/ss/cru/version | sed -n 3p | sed 's/#/\n/g'| sed -n 1p)"
 nvram set update_cdn="$(cat /jffs/ss/cru/version | sed -n 4p | sed 's/#/\n/g'| sed -n 1p)"
 nvram set ipset_numbers=$(cat /jffs/ss/ipset/gfwlist.conf | grep -c ipset)
 nvram set chnroute_numbers=$(cat /jffs/ss/redchn/chnroute.txt | grep -c .)
-nvram set adblock_numbers=$(cat /jffs/ss/ipset/adblock.conf | grep -c address)
 nvram set cdn_numbers=$(cat /jffs/ss/redchn/cdn.txt | grep -c .)
 
 # reboot ss

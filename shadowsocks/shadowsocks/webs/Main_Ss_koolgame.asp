@@ -41,11 +41,6 @@
  	height:21px;
 	background:#C0D1D3 url(/images/ss_proceding.gif);
 }
-#ss_game_dnsmasq::-webkit-input-placeholder::before {
-    color:#999;
-    content:"# 此处填入需要指定解析地址的域名，一行一个，格式如下：\A address=/koolshare.cn/2.2.2.2\A address=/baidu.com/3.3.3.3\A ";
-    address=/example1.com/2.2.2.2,address=/example2.com/3.3.3.3
-}
 </style>
 <script>
 var socks5 = 0;
@@ -82,7 +77,7 @@ function conf_to_obj(){
 			if(el != null) {
 				el.value = db_ss[field];
 			}
-			var temp_ss = ["ss_game_dnsmasq"];
+			var temp_ss = ["ss_gameV2_dnsmasq"];
 			for (var i = 0; i < temp_ss.length; i++) {
 				temp_str = $G(temp_ss[i]).value;
 				$G(temp_ss[i]).value = temp_str.replaceAll(",","\n");
@@ -96,13 +91,13 @@ function conf_to_obj(){
 function updateOptions(){
 	document.form.enctype = "";
 	document.form.encoding = "";
-	document.form.action = "/applydb.cgi?p=ss_game_";
+	document.form.action = "/applydb.cgi?p=ss_gameV2_";
 	document.form.SystemCmd.value = "ss_config.sh";
 	document.form.submit();
 }
 
 function validForm(){
-	var temp_ss = ["ss_game_dnsmasq"];
+	var temp_ss = ["ss_gameV2_dnsmasq"];
 	for(var i = 0; i < temp_ss.length; i++) {
 		var temp_str = $G(temp_ss[i]).value;
 		if(temp_str == "") {
@@ -129,31 +124,12 @@ function validForm(){
 }
 
 function update_visibility(){
-	gdc = document.form.ss_game_dns_china.value;
-	gdf = document.form.ss_game_dns_foreign.value;
-	gs = document.form.ss_game_sstunnel.value
-	gcc = document.form.ss_game_chinadns_china.value
-	gcf = document.form.ss_game_chinadns_foreign.value
+	gdc = document.form.ss_gameV2_dns_china.value;
+	gdf = document.form.ss_gameV2_dns_foreign.value;
 	showhide("show_isp_dns", (gdc == "1"));
-	showhide("ss_game_dns_china_user", (gdc == "5"));
-	showhide("ss_game_dns_china_user_txt1", (gdc !== "5"));
-	showhide("ss_game_dns_china_user_txt2", (gdc == "5"));
-	showhide("ss_game_opendns", (gdf == "1"));
-	showhide("ss_game_sstunnel", (gdf == "2"));
-	showhide("chinadns_china", (gdf == "3"));
-	showhide("chinadns_foreign", (gdf == "3"));
-	showhide("ss_game_sstunnel_user", ((gdf == "2") && (gs == "4")));
-	showhide("dns_plan_foreign1", (gdf == "1"));
-	showhide("dns_plan_foreign2", ((gdf == "2") && (gs !== "4")));
-	showhide("dns_plan_foreign3", ((gdf == "2") && (gs == "4")));
-	showhide("ss_game_chinadns_china_user", (gcc == "4"));
-	showhide("chinadns_china1", (gcc !== "4"));
-	showhide("chinadns_china2", (gcc == "4"));
-	showhide("ss_game_chinadns_foreign_user", (gcf == "4"));
-	showhide("chinadns_foreign1", (gcf !== "4"));
-	showhide("chinadns_foreign2", (gcf == "4"));
-	showhide("ss_game_dns2socks_user", (gdf == "4"));
-	showhide("dns_plan_foreign0", (gdf == "4"));
+	showhide("ss_gameV2_dns_china_user", (gdc == "5"));
+	showhide("ss_gameV2_dns_china_user_txt1", (gdc !== "5"));
+	showhide("ss_gameV2_dns_china_user_txt2", (gdc == "5"));
 }
 </script>
 </head>
@@ -176,7 +152,7 @@ function update_visibility(){
 </table>
 </div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
-<form method="post" name="form" action="/applydb.cgi?p=ss_game_" target="hidden_frame">
+<form method="post" name="form" action="/applydb.cgi?p=ss_gameV2_" target="hidden_frame">
 <input type="hidden" name="current_page" value="Main_SsGame_Content.asp"/>
 <input type="hidden" name="next_page" value="Main_SsGame_Content.asp"/>
 <input type="hidden" name="group_id" value=""/>
@@ -210,7 +186,7 @@ function update_visibility(){
 									<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 									<div class="SimpleNote"><i>说明：</i>当你在基本设置中选择了<i>游戏模式</i>，你可以在此页面进行高级设置。</br>请务必确认你的shadowsocks账号支持<i>UDP转发</i>，如果你的账号不支持UDP转发启用了该模式，所有连接国外的UDP链接都将失效。</br>如果你需要实现<b>NAT2</b>，请配置python版本的shadowsocks服务端，版本号需大于或等于2.6.11</div>
 									<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
-										<table id="ss_game_table"width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
+										<table id="ss_gameV2_table"width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 											<thead>
 											<tr>
 												<td colspan="2">Shadowsocks - 游戏模式 - 高级设置</td>
@@ -219,7 +195,7 @@ function update_visibility(){
 											<tr id="dns_plan_china">
 											<th width="20%">选择国内DNS</th>
 												<td>
-													<select id="ss_game_dns_china" name="ss_game_dns_china" class="input_option" onclick="update_visibility();" >
+													<select id="ss_gameV2_dns_china" name="ss_gameV2_dns_china" class="input_option" onclick="update_visibility();" >
 														<option value="1">运营商DNS【自动获取】</option>
 														<option value="2">阿里DNS1【223.5.5.5】</option>
 														<option value="3">阿里DNS2【223.6.6.6】</option>
@@ -229,81 +205,21 @@ function update_visibility(){
 														<option value="8">dnspod DNS【119.29.29.29】</option>
 														<option value="5">自定义</option>
 													</select>
-													<input type="text" class="ssconfig input_ss_table" id="ss_game_dns_china_user" name="ss_game_dns_china_user" maxlength="100" value=""></input>
+													<input type="text" class="ssconfig input_ss_table" id="ss_gameV2_dns_china_user" name="ss_gameV2_dns_china_user" maxlength="100" value=""></input>
 													<span id="show_isp_dns">【<% nvram_get("wan0_dns"); %>】</span> <br/>
-													<span id="ss_game_dns_china_user_txt1">默认：运营商DNS【用于解析国内6000+个域名】</span> 
-													<span id="ss_game_dns_china_user_txt2">确保你自定义输入的国内DNS在chnroute中</span>
+													<span id="ss_gameV2_dns_china_user_txt1">默认：运营商DNS【用于解析国内6000+个域名】</span> 
+													<span id="ss_gameV2_dns_china_user_txt2">确保你自定义输入的国内DNS在chnroute中</span>
 												</td>
 											</tr>
 											<tr id="dns_plan_foreign">
 											<th width="20%">选择国外DNS</th>
 												<td>
-													<select id="ss_game_dns_foreign" name="ss_game_dns_foreign" class="input_option" onclick="update_visibility();" >
-														<option value="4">DNS2SOCKS</option>
-														<option value="1">dnscrypt-proxy</option>
-														<option value="2">ss-tunnel</option>
-														<option value="3">ChinaDNS（CDN最优）</option>
-														<option value="5">PcapDNSProxy</option>
+													<select id="ss_gameV2_dns_foreign" name="ss_gameV2_dns_foreign" class="input_option" onclick="update_visibility();" >
+														<option value="1" disabled>DNS2SS</option>
 													</select>
-													<select id="ss_game_opendns" name="ss_game_opendns" class="input_option">
-														<option value="opendns">OpenDNS1</option>
-														<option value="cisco-familyshield">OpenDNS2</option>
-														<option value="cisco-port53">OpenDNS3</option>
-														<option value="cloudns-can">cloudns-can</option>
-														<option value="cloudns-syd">cloudns-syd</option>
-														<option value="d0wn-sg-ns1">d0wn-sg-ns1</option>
-														<option value="ipredator">ipredator</option>
-														<option value="okturtles">okturtles</option>
-														<option value="opennic-fvz-rec-hk-nt-01">opennic-hk</option>
-														<option value="opennic-fvz-rec-jp-tk-01">opennic-jp</option>
-														<option value="opennic-fvz-rec-sg-ea-01">opennic-sg</option>
-														<option value="ovpnto-lat">ovpnto-lat</option>
-														<option value="ovpnto-ro">ovpnto-ro</option>
-														<option value="ovpnto-se">ovpnto-se</option>
-														<option value="soltysiak">soltysiak</option>
-													</select>
-													<input type="text" class="ssconfig input_ss_table" id="ss_game_dns2socks_user" name="ss_game_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
-													<select id="ss_game_sstunnel" name="ss_game_sstunnel" class="input_option" onclick="update_visibility();" >
-														<option value="1">OpenDNS [208.67.220.220]</option>
-														<option value="2">Goole DNS1 [8.8.8.8]</option>
-														<option value="3">Goole DNS2 [8.8.4.4]</option>
-														<option value="4">自定义</option>
-													</select>
-													<input type="text" class="ssconfig input_ss_table" id="ss_game_sstunnel_user" name="ss_game_sstunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
+													<input type="text" class="ssconfig input_ss_table" id="ss_gameV2_dns2ss_user" name="ss_gameV2_dns2ss_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
 													<br/>
-														<span id="dns_plan_foreign0">默认：DNS2SOCKS，用以解析国内6000+域名以外的国内域名和国外域名</span>
-														<span id="dns_plan_foreign1">用dnscrypt-proxy解析国内6000+域名以外的国内域名和国外域名</span>
-														<span id="dns_plan_foreign2">选择由ss-tunnel通过udp转发给SS服务器解析的DNS，默认【Goole DNS1】</span>
-														<span id="dns_plan_foreign3">在上面自定义由ss-tunnel通过udp转发给SS服务器解析的DNS</span>
-												</td>
-											</tr>
-											<tr id="chinadns_china">
-											<th width="20%">ChinaDNS国内DNS</th>
-												<td>
-													<select id="ss_game_chinadns_china" name="ss_game_chinadns_china" class="input_option" onclick="update_visibility();" >
-														<option value="1">阿里DNS1【223.5.5.5】</option>
-														<option value="2">阿里DNS2【223.6.6.6】</option>
-														<option value="3">114DNS【114.114.114.114】</option>
-														<option value="4">自定义</option>
-													</select>
-													<input type="text" class="ssconfig input_ss_table" id="ss_game_chinadns_china_user" name="ss_game_chinadns_china_user" placeholder="需端口号如：8.8.8.8:53" maxlength="100" value="">
-													<br/>
-														<span id="chinadns_china1">默认：阿里DNS1【用于解析国内6000+个域名以外的域名】</span> <span id="chinadns_china2">自定义国内DNS【用于解析国内6000+个域名以外的域名】</span>
-												</td>
-											</tr>
-											<tr id="chinadns_foreign">
-											<th width="20%">ChinaDNS国外DNS</th>
-												<td>
-													<select id="ss_game_chinadns_foreign" name="ss_game_chinadns_foreign" class="input_option" onclick="update_visibility();" >
-														<option value="1">OpenDNS [208.67.220.220]</option>
-														<option value="2">Google DNS1 [8.8.8.8]</option>
-														<option value="3">Google DNS2 [8.8.4.4]</option>
-														<option value="4">自定义</option>
-													</select>
-													<input type="text" class="ssconfig input_ss_table" id="ss_game_chinadns_foreign_user" name="ss_game_chinadns_foreign_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
-														<span>此处DNS通过ss-tunnel转发给SS服务器解析</span> 
-														<br/>
-														<span id="chinadns_foreign1">默认：Google DNS1【用于解析国外域名】</span> <span id="chinadns_foreign2">右侧输入框输入自定义国外【用于解析国外域名】</span>
+														<span id="dns_plan_foreign0">默认：koolgame内置DNS2SS，用以解析国内6000+域名以外的国内域名和国外域名</span>
 												</td>
 											</tr>
 											<tr>
@@ -313,7 +229,7 @@ function update_visibility(){
 # 例如hosts设置：
 address=/koolshare.cn/2.2.2.2
 # 防DNS劫持设置：
-bogus-nxdomain=220.250.64.18" rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_game_dnsmasq" name="ss_game_dnsmasq" title=""></textarea>
+bogus-nxdomain=220.250.64.18" rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_gameV2_dnsmasq" name="ss_gameV2_dnsmasq" title=""></textarea>
 												</td>
 											</tr>
 										</table>

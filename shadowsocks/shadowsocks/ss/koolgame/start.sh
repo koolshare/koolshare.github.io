@@ -9,10 +9,19 @@ lan_ipaddr=$(nvram get lan_ipaddr)
 server_ip=`resolvip $ss_basic_server`
 nat_ready=$(iptables -t nat -L PREROUTING -v -n --line-numbers|grep -v PREROUTING|grep -v destination)
 i=120
-nvram set ss_mode=3
+nvram set ss_mode=4
 nvram commit
 #--------------------------------------------------------------------------------------
-echo $(date): ------------------- Shadowsock GAME mode Starting------------------------
+echo $(date): ------------------- Shadowsock GAME mode V2 Starting---------------------
+
+#ulimit -s 4096                                   
+                    
+SERVICE_DEBUG=1
+PROCS=/koolshare/ss/koolgame/koolgame
+SERVICE_DAEMONIZE=1                  
+SERVICE_WRITE_PID=1
+SERVICE_PID_FILE=/tmp/var/koolgame.pid
+ARGS="-c /koolshare/ss/koolgame/ss.json"
 
 if [ -z "$shadowsocks_server_ip" ];then
         if [ ! -z "$server_ip" ];then
@@ -34,33 +43,23 @@ fi
 
 # create shadowsocks config file...
 echo $(date): create shadowsocks config file...
-if [ "$ss_basic_use_rss" == "0" ];then
-cat > /koolshare/ss/game/ss.json <<EOF
+cat > /koolshare/ss/koolgame/ss.json <<EOF
 {
     "server":"$ss_basic_server",
     "server_port":$ss_basic_port,
     "local_port":3333,
+    "sock5_port":23456,
+    "dns2ss":1053,
+    "adblock_addr":"",
+    "adblock_path":"/koolshare/ss/koolgame/xwhycadblock.txt",
+    "dns_server":"$ss_gameV2_dns2ss_user",
     "password":"$ss_basic_password",
     "timeout":600,
-    "method":"$ss_basic_method"
+    "method":"$ss_basic_method",
+    "use_tcp":$ss_basic_koolgame_udp
 }
 
 EOF
-elif [ "$ss_basic_use_rss" == "1" ];then
-cat > /koolshare/ss/game/ss.json <<EOF
-{
-    "server":"$ss_basic_server",
-    "server_port":$ss_basic_port,
-    "local_port":3333,
-    "password":"$ss_basic_password",
-    "timeout":600,
-    "protocol":"$ss_basic_rss_protocol",
-    "obfs":"$ss_basic_rss_obfs",
-    "method":"$ss_basic_method"
-}
-
-EOF
-fi
 echo $(date): done
 echo $(date):
 #--------------------------------------------------------------------------------------
@@ -100,9 +99,9 @@ echo $(date): done
 echo $(date):
 
 # append custom dnsmasq
-if [ ! -z "$ss_game_dnsmasq" ];then
+if [ ! -z "$ss_gameV2_dnsmasq" ];then
 echo $(date): append custom dnsmasq
-echo "$ss_game_dnsmasq" | sed "s/,/\n/g" | sort >> /jffs/configs/dnsmasq.conf.add
+echo "$ss_gameV2_dnsmasq" | sed "s/,/\n/g" | sort >> /jffs/configs/dnsmasq.conf.add
 echo $(date): done
 echo $(date):
 fi
@@ -127,7 +126,7 @@ writenat=$(cat /jffs/scripts/nat-start | grep "nat-start")
 if [ -z "$writenat" ];then
 echo $(date): Creating iptables rules \for game mode
 sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/nat-start
-sed -i '3a sh /koolshare/ss/game/nat-start' /jffs/scripts/nat-start
+sed -i '3a sh /koolshare/ss/koolgame/nat-start' /jffs/scripts/nat-start
 chmod +x /jffs/scripts/nat-start
 fi
 echo $(date): done
@@ -164,97 +163,17 @@ else
 	echo $(date):
 fi
 
-if [ "1" == "$ss_game_dns_foreign" ];then
-	echo $(date): Starting dnscrypt-proxy...
-	dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_game_opendns"
-	echo $(date): done
-	echo $(date):
-fi
-
-[ "$ss_game_sstunnel" == "1" ] && gs="208.67.220.220:53"
-[ "$ss_game_sstunnel" == "2" ] && gs="8.8.8.8:53"
-[ "$ss_game_sstunnel" == "3" ] && gs="8.8.4.4:53"
-[ "$ss_game_sstunnel" == "4" ] && gs="$ss_game_sstunnel_user"
-
-
-if [ "2" == "$ss_game_dns_foreign" ];then
-	echo $(date): Starting ss-tunnel...
-	if [ "$ss_basic_use_rss" == "1" ];then
-		rss-tunnel -b 0.0.0.0 -c /koolshare/ss/game/ss.json -l 1053 -L "$gs" -u -f /var/run/sstunnel.pid
-	elif  [ "$ss_basic_use_rss" == "0" ];then
-		if [ "$ss_basic_onetime_auth" == "1" ];then
-			ss-tunnel -b 0.0.0.0 -c /koolshare/ss/game/ss.json -l 1053 -L "$gs" -u -A -f /var/run/sstunnel.pid
-		elif [ "$ss_basic_onetime_auth" == "0" ];then
-			ss-tunnel -b 0.0.0.0 -c /koolshare/ss/game/ss.json -l 1053 -L "$gs" -u -f /var/run/sstunnel.pid
-		fi
+# Start koolgame
+	echo $(date): Starting koolgame...
+	#kservice_start $PROCS $ARGS
+	pdu=`ps|grep pdu|grep -v grep`
+	if [ -z $pdu ]; then
+		/koolshare/ss/koolgame/pdu br0 /tmp/var/pdu.pid
+		sleep 1
 	fi
-	echo $(date): done
-	echo $(date):
-fi
-
-[ "$ss_game_chinadns_china" == "1" ] && gcc="223.5.5.5"
-[ "$ss_game_chinadns_china" == "2" ] && gcc="223.6.6.6"
-[ "$ss_game_chinadns_china" == "3" ] && gcc="114.114.114.114"
-[ "$ss_game_chinadns_china" == "4" ] && gcc="$ss_game_chinadns_china_user"
-[ "$ss_game_chinadns_foreign" == "1" ] && cdf="208.67.220.220:53"
-[ "$ss_game_chinadns_foreign" == "2" ] && cdf="8.8.8.8:53"
-[ "$ss_game_chinadns_foreign" == "3" ] && cdf="8.8.4.4:53"
-[ "$ss_game_chinadns_foreign" == "4" ] && cdf="$ss_game_chinadns_foreign_user"
-
-if [ "3" == "$ss_game_dns_foreign" ];then
-	if [ "$ss_basic_use_rss" == "1" ];then
-		rss-tunnel -b 127.0.0.1 -c /koolshare/ss/game/ss.json -l 1055 -L "$cdf" -u -f /var/run/sstunnel.pid
-	elif  [ "$ss_basic_use_rss" == "0" ];then
-		if [ "$ss_basic_onetime_auth" == "1" ];then
-			ss-tunnel -b 127.0.0.1 -c /koolshare/ss/game/ss.json -l 1055 -L "$cdf" -u -A -f /var/run/sstunnel.pid
-		elif [ "$ss_basic_onetime_auth" == "0" ];then
-			ss-tunnel -b 127.0.0.1 -c /koolshare/ss/game/ss.json -l 1055 -L "$cdf" -u -f /var/run/sstunnel.pid
-		fi
-	fi
-	echo $(date): Starting chinadns
-	chinadns -p 1053 -s "$gcc",127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt &
-	echo $(date): done
-	echo $(date):
-fi
-
-if [ "4" == "$ss_game_dns_foreign" ]; then
-	echo $(date): You have enabled DNS2SOCKS, Socks5 will enable \for DNS2SOCKS
-
-	if [ "$ss_basic_use_rss" == "1" ];then
-		rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/game/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
-	elif  [ "$ss_basic_use_rss" == "0" ];then
-		if [ "$ss_basic_onetime_auth" == "1" ];then
-			ss-local -b 0.0.0.0 -l 23456 -A -c /koolshare/ss/game/ss.json -u -f /var/run/sslocal1.pid
-		elif [ "$ss_basic_onetime_auth" == "0" ];then
-			ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/game/ss.json -u -f /var/run/sslocal1.pid
-		fi
-	fi
-	dns2socks 127.0.0.1:23456 "$ss_game_dns2socks_user" 127.0.0.1:1053 > /dev/null 2>&1 &
-	echo $(date): done
-	echo $(date):
-fi
-
-# Start Pcap_DNSProxy
-if [ "5" == "$ss_game_dns_foreign" ]; then
-		echo $(date): Start Pcap_DNSProxy..
-		sed -i '/^Listen Port/c Listen Port = 1053' /koolshare/ss/dns/Config.conf
-      	sed -i '/^Local Main/c Local Main = 0' /koolshare/ss/dns/Config.conf
-		/koolshare/ss/dns/dns.sh > /dev/null 2>&1 &
-		echo $(date): done
-		echo $(date):
-fi
-
-# Start ss-redir
-	echo $(date): Starting ss-redir...
-	if [ "$ss_basic_use_rss" == "1" ];then
-		rss-redir -b 0.0.0.0 -u -c /koolshare/ss/game/ss.json -f /var/run/shadowsocks.pid >/dev/null 2>&1
-	elif  [ "$ss_basic_use_rss" == "0" ];then
-		if [ "$ss_basic_onetime_auth" == "1" ];then
-			ss-redir -b 0.0.0.0 -u -A -c /koolshare/ss/game/ss.json -f /var/run/shadowsocks.pid
-		elif [ "$ss_basic_onetime_auth" == "0" ];then
-			ss-redir -b 0.0.0.0 -u -c /koolshare/ss/game/ss.json -f /var/run/shadowsocks.pid
-		fi
-	fi
+	start-stop-daemon -S -q -b -m -p $SERVICE_PID_FILE -x $PROCS -- -c /koolshare/ss/koolgame/ss.json
+	start-stop-daemon -S -q -b -m -p $SERVICE_PID_FILE -x $PROCS -- -c /koolshare/ss/koolgame/ss.json
+	#/koolshare/ss/koolgame/koolgame -c /koolshare/ss/koolgame/ss.json >/dev/null 2>&1 &
 	echo $(date): done
 	echo $(date):
 
@@ -276,7 +195,7 @@ fi
 	        sleep 2
 	done
 	echo $(date): "Apply nat rules!"
-	sh /koolshare/ss/game/nat-start
+	sh /koolshare/ss/koolgame/nat-start
 	echo $(date): done
 	echo $(date):
 

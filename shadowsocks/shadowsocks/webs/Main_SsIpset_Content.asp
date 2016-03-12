@@ -42,25 +42,15 @@
 	height:21px;
 	background:#C0D1D3 url(/images/ss_proceding.gif);
 }
-#ss_ipset_black_domain_web::-webkit-input-placeholder::before {
-    color:#999;
-    content:"# 此处填入需要强制走ss的域名，一行一个，格式如下：\A koolshare.cn\A baidu.cn\A # 默认已经由gfwlist提供了上千条被墙域名，请勿重复添加!\A";
-}
-#ss_ipset_address::-webkit-input-placeholder::before {
-    color:#999;
-    content:"# 此处填入需要指定解析地址的域名，一行一个，格式如下：\A address=/koolshare.cn/2.2.2.2\A address=/baidu.com/3.3.3.3\A ";
-    address=/example1.com/2.2.2.2,address=/example2.com/3.3.3.3
-}
 </style>
 <script>
 var socks5 = 0
 var $j = jQuery.noConflict();
 var $G = function (id) {
 	return document.getElementById(id);
-};
-	
+}
 function onSubmitCtrl(o, s) {
-	if(validForm() && validForm2()){
+	if(validForm()){
 		showSSLoadingBar(10);
 		document.form.action_mode.value = s;
 		updateOptions();
@@ -88,15 +78,10 @@ function conf_to_obj(){
 				el.value = db_ss[field];
 			}
 		}
-		var temp_ss = ["ss_ipset_black_domain_web"];
+		var temp_ss = ["ss_ipset_black_domain_web", "ss_ipset_white_domain_web", "ss_ipset_dnsmasq"];
 		for (var i = 0; i < temp_ss.length; i++) {
 			temp_str = $G(temp_ss[i]).value;
 			$G(temp_ss[i]).value = temp_str.replaceAll(",","\n");
-		}
-		var temp_ss2 = ["ss_ipset_address"];
-		for (var j = 0; j < temp_ss2.length; j++) {
-			temp_str2 = $G(temp_ss2[j]).value;
-			$G(temp_ss2[j]).value = temp_str2.replaceAll(",","\n");
 		}
 	} else {
 		document.getElementById("logArea").innerHTML = "无法读取配置,jffs为空或配置文件不存在?";
@@ -112,7 +97,7 @@ function updateOptions(){
 }
 
 function validForm(){
-	var temp_ss = ["ss_ipset_black_domain_web"];
+	var temp_ss = ["ss_ipset_black_domain_web", "ss_ipset_white_domain_web", "ss_ipset_dnsmasq"];
 	for(var i = 0; i < temp_ss.length; i++) {
 		var temp_str = $G(temp_ss[i]).value;
 		if(temp_str == "") {
@@ -135,33 +120,6 @@ function validForm(){
 		}
 		$G(temp_ss[i]).value = rlt;
 	}	
-	return true;
-}
-
-function validForm2(){
-	var temp_ss = ["ss_ipset_address"];
-	for(var i = 0; i < temp_ss.length; i++) {
-		var temp_str = $G(temp_ss[i]).value;
-		if(temp_str == "") {
-			continue;
-		}
-		var lines = temp_str.split("\n");
-		var rlt = "";
-		for(var j = 0; j < lines.length; j++) {
-			var nstr = lines[j].trim();
-			if(nstr != "") {
-				rlt = rlt + nstr + ",";
-			}
-		}
-		if(rlt.length > 0) {
-			rlt = rlt.substring(0, rlt.length-1);
-		}
-		if(rlt.length > 10000) {
-			alert(temp_ss[i] + " 不能超过10000个字符");
-			return false;
-		}
-		$G(temp_ss[i]).value = rlt;
-	}
 	return true;
 }
 
@@ -200,7 +158,7 @@ function update_visibility() {
 	</table>
 </div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
-<form method="post" name="form" action="/applydb.cgi?p=ss" target="hidden_frame">
+<form method="post" name="form" action="/applydb.cgi?p=software" target="hidden_frame">
 <input type="hidden" name="current_page" value="Main_SsIpset_Content.asp">
 <input type="hidden" name="next_page" value="Main_SsIpset_Content.asp">
 <input type="hidden" name="group_id" value="">
@@ -301,6 +259,17 @@ function update_visibility() {
 												</td>
 											</tr>
 											<tr>
+												<th width="20%">域名白名单（新增）</th>
+												<td>
+													<textarea placeholder="# 此处填入不需要走ss的域名，一行一个，格式如下：
+google.com.sg
+youtube.com
+# 默认gfwlist以外的域名都不会走ss，故添加gfwlist内的域名才有意义!
+# 屏蔽一个域名可能导致其他网址被屏蔽，例如解析结果一致的youtube.com和google.com.
+# 只有域名污染，没有IP未阻断的网站，不能被屏蔽，例如twitter.com." rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_ipset_white_domain_web" name="ss_ipset_white_domain_web" title=""></textarea>
+												</td>
+											</tr>
+											<tr>
 												<th width="20%">域名黑名单
 													<br/>
 													<br/>
@@ -309,13 +278,21 @@ function update_visibility() {
 													</a>
 												</th>
 												<td>
-													<textarea placeholder=" " rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_ipset_black_domain_web" name="ss_ipset_black_domain_web" title=""></textarea>
+													<textarea placeholder="# 此处填入需要强制走ss的域名，一行一个，格式如下：
+koolshare.cn
+baidu.com
+# 默认已经由gfwlist提供了上千条被墙域名，请勿重复添加!" rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_ipset_black_domain_web" name="ss_ipset_black_domain_web" title=""></textarea>
 												</td>
-											</tr>
+											</tr>	
 											<tr>
-												<th width="20%">自定义hosts</th>
+												<th width="20%">自定义dnsmasq</th>
 												<td>
-													<textarea placeholder=" " rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_ipset_address" name="ss_ipset_address" title=""></textarea>
+													<textarea placeholder="# 填入自定义的dnsmasq设置，一行一个
+# 例如hosts设置：
+address=/koolshare.cn/2.2.2.2
+# 防DNS劫持设置：
+bogus-nxdomain=220.250.64.18
+# 如果填入了错误的格式，可能会导致页面错乱，请用命令：dbus remove ss_ipset_dnsmasq，手动清除此项配置。" rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_ipset_dnsmasq" name="ss_ipset_dnsmasq" title=""></textarea>
 												</td>
 											</tr>
 										</table>
