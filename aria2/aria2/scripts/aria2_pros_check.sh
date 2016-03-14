@@ -6,7 +6,7 @@ if [ ! -z "$lighttpd_run" ];then
 	logger [ '$LOGTIME' ] lighttpd is running!
 else
 	logger [ '$LOGTIME' ] start lighttpd...
-	/usr/sbin/lighttpd -f /jffs/www/aria2c.conf
+	/usr/sbin/lighttpd -f /koolshare/www/lighttpd.conf
 fi
 
 aria2_run=$(ps|grep aria2c|grep -v grep)
