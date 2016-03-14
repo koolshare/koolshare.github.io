@@ -19,7 +19,8 @@ echo ""
 # start aria2c
 creat_conf(){
 cat > /koolshare/aria2/aria2.conf <<EOF
-`dbus list aria2 | grep -vw aria2_enable | grep -vw aria2_binary| grep -vw aria2_binary_custom | grep -vw aria2_check | grep -vw aria2_check_time | grep -vw aria2_sleep | grep -vw aria2_update_enable| grep -vw aria2_update_sel | grep -vw aria2_version | grep -vw aria2_cpulimit_enable | grep -vw aria2_cpulimit_value| grep -vw aria2_version_web | grep -vw aria2_warning | grep -vw aria2_custom | grep -vw aria2_install_status|grep -vw aria2_restart | sed 's/aria2_//g' | sed 's/_/-/g'`
+`dbus list aria2 | grep -vw aria2_enable | grep -vw aria2_binary| grep -vw aria2_binary_custom | grep -vw aria2_check | grep -vw aria2_check_time | grep -vw aria2_sleep | grep -vw aria2_update_enable| grep -vw aria2_update_sel | grep -vw aria2_version | grep -vw aria2_cpulimit_enable | grep -vw aria2_cpulimit_value| grep -vw aria2_version_web | grep -vw aria2_warning | grep -vw aria2_custom | grep -vw aria2_install_status|grep -vw aria2_restart |grep -vw aria2_dir| sed 's/aria2_//g' | sed 's/_/-/g'`
+`dbus list aria2|grep -w aria2_dir|sed 's/aria2_=//g'`
 EOF
 
 cat >> /koolshare/aria2/aria2.conf <<EOF
@@ -42,7 +43,7 @@ start_aria2(){
 			elif [ "$aria2_binary" = "custom" ];then
 				if [ ! -z "$aria2_binary_custom" ];then
 					"$aria2_binary_custom"/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
-				else 
+				else
 					export aria2_warning="当前目录没有找到aria2可执行文件"
 				fi
 			elif [ "$aria2_binary" = internal ];then
@@ -57,7 +58,7 @@ start_aria2(){
 		elif [ "$aria2_binary" = custom ];then
 			if [ ! -z "$aria2_binary_custom" ];then
 				$aria2_binary_custom/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
-			else 
+			else
 				dbus set aria2_warning="当前目录没有找到aria2可执行文件"
 			fi
 		elif [ "$aria2_binary" = internal ];then
@@ -66,7 +67,7 @@ start_aria2(){
 	fi
 
 
-	
+
 	aria2_run=$(ps|grep aria2c|grep -v grep)
 	if [ ! -z "$aria2_run" ];then
 		echo aria2c start success!
@@ -130,7 +131,7 @@ fi
 chmod +x /jffs/scripts/wan-start
 }
 
-stop_auto_start(){	
+stop_auto_start(){
 # sed -i '/sleep/d' /jffs/scripts/wan-start >/dev/null 2>&1
 sed -i '/aria2_run/d' /jffs/scripts/wan-start >/dev/null 2>&1
 }
@@ -141,7 +142,7 @@ kill_aria2(){
     killall aria2c >/dev/null 2>&1
     sleep 2
     aria2_run1=$(ps|grep aria2c|grep -v grep|grep -v killall)
-    
+
 	if [ -z "$aria2_run1" ];then
 		echo aria2c stoped!
 	else
@@ -234,7 +235,7 @@ eval `dbus export aria2`
 	#md5_web2=$(curl http://file.mjy211.com/aria2/version | sed -n 2p)
 	#md5_web3=$(curl http://file.fancyss.com/aria2/version | sed -n 2p)
 	#md5sum_gz=$(md5sum /tmp/aria2.tar.gz | sed 's/ /\n/g'| sed -n 1p)
-	
+
 	# aria2_install_status=		#Aria2尚未安装
 	# aria2_install_status=0	#Aria2尚未安装
 	# aria2_install_status=1	#Aria2已安装***
@@ -245,13 +246,13 @@ eval `dbus export aria2`
 	# aria2_install_status=6	#Aria2卸载中......
 	# aria2_install_status=7	#Aria2卸载成功！
 	# aria2_install_status=8	#Aria2下载文件校验不一致！
-	
+
 	kill all aria2c  >/dev/null 2>&1
 	killall lighttpd >/dev/null 2>&1
-	
+
 	case $(uname -m) in
 	  armv7l)
-	    echo your router is suitable \for aria2 install 
+	    echo your router is suitable \for aria2 install
 	    ;;
 	  mips)
 	    echo "This is unsupported platform, sorry."
@@ -262,8 +263,8 @@ eval `dbus export aria2`
 	    exit
 	    ;;
 	esac
-	
-	
+
+
 	# Aria2将被安装到jffs分区...
 	cd /tmp
 	export aria2_install_status="2"
@@ -296,7 +297,7 @@ eval `dbus export aria2`
 			fi
 		fi
 	fi
-	
+
 	# 正在安装Aria2中...
 	export aria2_install_status="4"
 	dbus save aria2
@@ -333,7 +334,7 @@ eval `dbus export aria2`
 
 uninstall_aria2(){
 	eval `dbus export aria2`
-	
+
 	# aria2_install_status=		#Aria2尚未安装
 	# aria2_install_status=0	#Aria2尚未安装
 	# aria2_install_status=1	#Aria2已安装***
@@ -344,7 +345,7 @@ uninstall_aria2(){
 	# aria2_install_status=6	#Aria2卸载中......
 	# aria2_install_status=7	#Aria2卸载成功！
 	# aria2_install_status=8	#Aria2下载文件校验不一致！
-	
+
 	export aria2_install_status="6"
 	dbus save aria2
 	del_version_check
@@ -436,5 +437,3 @@ fi
 if [ $aria2_enable = 5 ];then
 	load_default
 fi
-
-
