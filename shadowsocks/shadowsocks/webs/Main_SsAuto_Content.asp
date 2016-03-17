@@ -133,7 +133,7 @@ function init(){
 				if(el != null) {
 				el.value = db_ss[field];
 			}
-			var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_wan_white_ip", "ss_redchn_wan_black_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_domain"];
+			var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_wan_white_ip", "ss_redchn_wan_black_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_domain", "ss_redchn_dnsmasq"];
 			for (var i = 0; i < temp_ss.length; i++) {
 				temp_str = $G(temp_ss[i]).value;
 				$G(temp_ss[i]).value = temp_str.replaceAll(",","\n");
@@ -153,7 +153,7 @@ function updateOptions(){
 }
 
 function validForm(){
-	var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_wan_white_ip", "ss_redchn_wan_black_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_domain"];
+	var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_wan_white_ip", "ss_redchn_wan_black_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_domain", "ss_redchn_dnsmasq"];
 	for(var i = 0; i < temp_ss.length; i++) {
 		var temp_str = $G(temp_ss[i]).value;
 		if(temp_str == "") {
