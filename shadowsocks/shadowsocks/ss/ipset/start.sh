@@ -175,13 +175,13 @@ dbus fire onwanstart
 
 EOF
 fi
-startss=$(cat /jffs/scripts/wan-start | grep "ssconfig")
+startss=$(cat /jffs/scripts/wan-start | grep "ss_config")
 if [ -z "$startss" ];then
 echo $(date): Add service to wan-start...
 sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/wan-start
 sed -i '3a sh /koolshare/scripts/ss_config.sh' /jffs/scripts/wan-start
-fi
 chmod +x /jffs/scripts/wan-start
+fi
 echo $(date): done
 echo $(date):
 #=========================================================================================================
