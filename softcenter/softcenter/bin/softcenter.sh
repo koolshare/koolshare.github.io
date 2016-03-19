@@ -3,7 +3,7 @@
 eval `dbus export softcenter`
 source /koolshare/scripts/base.sh
 
-VER=1.0.1
+VER=1.0.2
 
 UPDATE_VERSION_URL="https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/softcenter/version"
 UPDATE_TAR_URL="https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/softcenter/softcenter.tar.gz"
@@ -41,7 +41,8 @@ module_xunlei_set() {
 }
 
 module_v2ray_set() {
-	export softcenter_module_v2ray=0
+	#develop
+	export softcenter_module_v2ray=2
 }
 
 module_aria2_set() {
@@ -50,6 +51,26 @@ module_aria2_set() {
 
 module_policy_set() {
 	export softcenter_module_policy=0
+}
+
+module_transmission_set() {
+	export softcenter_module_transmission=2
+}
+
+module_entware_set() {
+	export softcenter_module_entware=2
+}
+
+module_adm_set() {
+	export softcenter_module_adm=0
+}
+
+module_speedtest_set() {
+	export softcenter_module_speedtest=0
+}
+
+module_ssserver_set() {
+	export softcenter_module_ssserver=0
 }
 
 module_check_and_set() {
@@ -66,6 +87,11 @@ module_check_and_set() {
 	module_v2ray_set
 	module_aria2_set
 	module_policy_set
+	module_transmission_set
+	module_entware_set
+	module_adm_set
+	module_speedtest_set
+	module_ssserver_set
 	export softcenter_curr_version=$VER
 	dbus save softcenter
 	fi
@@ -80,7 +106,7 @@ softcenter_install() {
 		if [ ! -f "/koolshare/init.d/S10Softcenter.sh" ]; then
 		ln -sf /koolshare/bin/softcenter.sh /koolshare/init.d/S10Softcenter.sh
 		fi
-		echo "install ok"
+		#echo "install ok"
 	fi
 }
 
@@ -93,6 +119,7 @@ update_softcenter() {
 			cd /tmp
 			md5_web1=`curl -s $UPDATE_VERSION_URL | sed -n 2p`
 			rm -f softcenter.tar.gz*
+			rm -rf softcenter
 			wget --no-check-certificate --tries=1 --timeout=15 $UPDATE_TAR_URL
 			md5sum_gz=`md5sum /tmp/softcenter.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web1" ]; then

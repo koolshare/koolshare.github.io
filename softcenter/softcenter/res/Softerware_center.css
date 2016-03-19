@@ -145,3 +145,13 @@
 	font-size: 12px;
 	cursor:pointer;
 	color: #999;
+}
+.softcenter_tr1{
+	display: none;
+}
+.softcenter_tr2{
+	display: none;
+}
+.link_hidden{
+	font-size: 11px;
+}
