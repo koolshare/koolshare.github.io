@@ -103,16 +103,17 @@ module_check_and_set() {
 
 softcenter_install() {
 	if [ -d "/tmp/softcenter" ]; then
-		dbus set softcenter_curr_version=$VER
 		cp -rf /tmp/softcenter/webs/* /koolshare/webs
 		cp -rf /tmp/softcenter/res/* /koolshare/res/
 		rm -rf /tmp/softcenter
 		if [ ! -f "/koolshare/init.d/S10Softcenter.sh" ]; then
 		ln -sf /koolshare/bin/softcenter.sh /koolshare/init.d/S10Softcenter.sh
 		fi
-		#set all params
+
+		#force to set all params
 		module_set
-		#echo "install ok"
+		export softcenter_curr_version=$VER
+		dbus save softcenter
 	fi
 }
 
@@ -137,7 +138,6 @@ update_softcenter() {
 				dbus ram softcenter_install_status=5
 				cp /tmp/softcenter/bin/softcenter.sh /koolshare/bin/
 				chmod 755 /koolshare/bin/softcenter.sh
-				#softcenter_install
 				exec /koolshare/bin/softcenter.sh install
 			fi
 		fi
