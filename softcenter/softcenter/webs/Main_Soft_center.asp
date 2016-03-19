@@ -23,10 +23,120 @@
 <script type="text/javascript" src="/form.js"></script>
 <script type="text/javascript" src="/dbconf?p=softcenter_&v=<% uptime(); %>"></script>
 <script>
+var softcenter_modules = {};
+function parse_softcenter() {
+    var sm = "softcenter_module_";
+    for(o in db_softcenter_) {
+        if(o.indexOf(sm) != -1) {
+            var pos = o.indexOf("_", sm.length);
+            if(pos == -1) {
+             continue;
+            }
+            var name = o.substring(sm.length, pos);
+            //console.log(name);
+            var ob = null;
+            if (typeof(softcenter_modules[name]) != "undefined") {
+                ob = softcenter_modules[name];
+            } else {
+                ob = {};
+                softcenter_modules[name] = ob;
+            }
+            var name_op = o.substring(pos+1);
+            //console.log("name_op:"+name_op);
+            if(name_op.length == 0) {
+                 continue;
+            }
+            ob[name_op]=db_softcenter_[o];
+        }
+    }
 
+    //alert(softcenter_modules);
+    //console.log(softcenter_modules);
+}
+
+function onModuleHide(tr) {
+    var id = $(tr).attr("id");
+    if(typeof(id) != "undefined") {
+        var ob = id.substring(0, id.indexOf("_"));
+        if(ob.length == 0) {
+            return;
+        }
+
+        var visible = "softcenter_module_"+ob+"_visible";
+        var data = {"SystemCmd":"echo softccenter", "current_page":"Module_koolnet.asp", "action_mode":" Refresh ", "action_script":""};
+        data[visible] = "0";
+        $.ajax({
+                type: "POST",
+                url: "applydb.cgi?p=softcenter_",
+                dataType: "text",
+                data: data,
+                success: function() {
+                    $(tr).hide();
+                    var nel = $(tr).next("tr");
+                    if(typeof(nel) != "undefined" && $(nel).attr("class") == "softcenter_tr2") {
+                        $(nel).hide();
+                    }
+                },
+                error: function() {
+                    console.log("error");
+                }
+            });
+    }
+}
 
 function init(){
   show_menu();
+
+    parse_softcenter();
+
+    var curr_user = 0;
+    if (typeof(db_softcenter_["softcenter_curr_user"]) != "undefined") {
+        curr_user = parseInt(db_softcenter_["softcenter_curr_user"]);
+        if(typeof(curr_user) == "undefined") {
+            curr_user = 0;
+        }
+    }
+
+    $("#softcenter_td tr.softcenter_tr1").each(function(index, ell){
+        var el = $(ell);
+        var show = true;
+        var id = el.attr("id");
+        if(typeof(id) != "undefined") {
+            var ob = id.substring(0, id.indexOf("_"));
+            if(ob.length > 0) {
+
+                var status = db_softcenter_["softcenter_module_"+ob];
+                var mo = softcenter_modules[ob];
+
+                if(typeof(status) != "undefined") {
+                    status = parseInt(status);
+                } else {
+                    status = 0;
+                }
+
+                console.log("ob "+ ob + " status "+status + " curr_user " + curr_user);
+
+                //curr_user < status: status: 2==develop, curr_user: 1==testor, not show this module.
+                if((curr_user < status) || (typeof(mo) != "undefined" && mo.visible === "0")) {
+                    show = false;
+                }
+            }
+        }
+
+        if(show) {
+            el.show();
+            var nel = el.next("tr");
+            if(typeof(nel) != "undefined" && $(nel).attr("class") == "softcenter_tr2") {
+                $(nel).show();
+            }
+        }
+    });
+
+        $(".link_hidden").click(function(e){
+            e.preventDefault();
+            var tr = $(this).closest("tr");
+            onModuleHide(tr);
+    });
 }
 
 </script>
@@ -54,7 +164,7 @@ function init(){
 		</td>
 		<td valign="top">
 			<div id="tabMenu" class="submenuBlock"></div>
-				<table width="98%" border="0" align="left" cellpadding="0" cellspacing="0">
+				<table id="softcenter_td" width="98%" border="0" align="left" cellpadding="0" cellspacing="0">
 					<tr>
 						<td align="left" valign="top">
 							<div>
@@ -95,10 +205,11 @@ function init(){
 														<td colspan="3"></td>
 													</tr>
 
-													<tr bgcolor="#444f53" width="235px">
+													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="tunnel_tr1">
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="ngrokd" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_tunnel.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">穿透DDNS</div>
+                                                            <a class="link_hidden" >隐藏</a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -111,14 +222,17 @@ function init(){
 															</div>
 														</td>
 													</tr>
-													<tr height="10px">
+													<tr class="softcenter_tr2" height="10px" id="tunnel_tr2">
 														<td colspan="3"></td>
 													</tr>
 
-													<tr bgcolor="#444f53" width="235px">
+													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="koolnet_tr1">
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="p2p" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_koolnet.asp'"></div>
-															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">P2P穿透</div>
+															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">
+                                                                P2P穿透
+															</div>
+                                                            <a class="link_hidden" >隐藏</a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -131,16 +245,17 @@ function init(){
 															</div>
 														</td>
 													</tr>
-													<tr height="10px">
+													<tr height="10px" class="softcenter_tr2">
 														<td colspan="3"></td>
 													</tr>
 
 													
-													<tr bgcolor="#444f53" width="235px">
+													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="xunlei_tr1">
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="thunder" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_xunlei.asp'"></div>
 														<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">迅雷远程</div>
-														</td>
+														<a class="link_hidden" >隐藏</a>
+                                                        </td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
 														</td>
@@ -153,17 +268,18 @@ function init(){
 															</div>
 														</td>
 													</tr>
-													<tr height="10px">
+													<tr height="10px" class="softcenter_tr2">
 														<td colspan="3"></td>
 													</tr>
 
-													<tr bgcolor="#444f53" width="235px">
+													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="aria2_tr1">
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="aria2" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_aria2.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">Aria2</div>
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="aria2_install();"></span>
 															</div>
+                                                            <a class="link_hidden" >隐藏</a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -176,18 +292,19 @@ function init(){
 															</div>
 														</td>
 													</tr>
-													<tr height="10px">
+													<tr height="10px" class="softcenter_tr2">
 														<td colspan="3">
 														</td>
 													</tr>
 
-													<tr bgcolor="#444f53" width="235px">
+													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="transmission_tr1"> 
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="Transmission" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_transmission.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">Transmission</div>
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="transmission_install();"></span>
 															</div>
+                                                            <a class="link_hidden" >隐藏</a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -200,16 +317,17 @@ function init(){
 															</div>
 														</td>
 													</tr>
-													<tr height="10px">
+													<tr height="10px" class="softcenter_tr2">
 														<td colspan="3">
 														</td>
 													</tr>
 
 													
-													<tr bgcolor="#444f53" width="235px">
+													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="ssserver_tr1">
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="ss-server" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"  onclick="location.href = '/Module_ss_server.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">ss-server</div>
+                                                            <a class="link_hidden" >隐藏</a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -222,14 +340,16 @@ function init(){
 															</div>
 														</td>
 													</tr>
-													<tr height="10px">
+													<tr height="10px" class="softcenter_tr2">
 														<td colspan="3">
 														</td>
 													</tr>
-													<tr bgcolor="#444f53" width="235px">
+
+													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="shadowvpn_tr1">
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="shadowvpn" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"  onclick="location.href = '/Module_shadowVPN.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">shadowvpn</div>
+                                                            <a class="link_hidden" >隐藏</a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -242,16 +362,17 @@ function init(){
 															</div>
 														</td>
 													</tr>
-													<tr height="10px">
+													<tr height="10px" class="softcenter_tr2">
 														<td colspan="3">
 														</td>
 													</tr>
 
-													<tr bgcolor="#444f53" width="235px">
+													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="v2ray_tr1">
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="v2ray" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"  onclick="location.href = '/Module_v2ray.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">v2ray</div>
-														</td>
+														    <a class="link_hidden" >隐藏</a>
+                                                        </td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
 														</td>
@@ -263,19 +384,20 @@ function init(){
 															</div>
 														</td>
 													</tr>
-													<tr height="10px">
+													<tr height="10px" class="softcenter_tr2">
 														<td colspan="3">
 														</td>
 													</tr>
 
 													
-													<tr bgcolor="#444f53" width="235px">
+													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="entware_tr1">
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="entware" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">Entware-ng</div>
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="entware_install();"></span>
 															</div>
+                                                            <a class="link_hidden" >隐藏</a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -288,17 +410,19 @@ function init(){
 															</div>
 														</td>
 													</tr>
-													<tr height="10px">
+													<tr height="10px" class="softcenter_tr2">
 														<td colspan="3">
 														</td>
 													</tr>
-													<tr bgcolor="#444f53" width="235px">
+
+													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="policy_tr1">
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="dualwan_policy" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_policy_route.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">策略路由</div>
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="dualwan_policy_install();"></span>
 															</div>
+                                                            <a class="link_hidden" >隐藏</a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -311,18 +435,19 @@ function init(){
 															</div>
 														</td>
 													</tr>
-
-													<tr height="10px">
+													<tr height="10px" class="softcenter_tr2">
 														<td colspan="3">
 														</td>
 													</tr>
-													<tr bgcolor="#444f53" width="235px">
+
+													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="kuainiao_tr1">
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="thunder_bird" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_kuainiao.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">迅雷快鸟</div>
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="thunder_bird();"></span>
 															</div>
+                                                            <a class="link_hidden" >隐藏</a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -335,15 +460,17 @@ function init(){
 															</div>
 														</td>
 													</tr>
-													<tr height="10px">
+													<tr height="10px" class="softcenter_tr2">
 														<td colspan="3">
 														</td>
 													</tr>
-													<tr bgcolor="#444f53" width="235px">
+
+													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="speedtest_tr1">
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="speedtest" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_speedtest.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">Speedtest</div>
-														</td>
+														    <a class="link_hidden" >隐藏</a>
+                                                        </td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
 														</td>
@@ -355,15 +482,17 @@ function init(){
 															</div>
 														</td>
 													</tr>
-													<tr height="10px">
+													<tr height="10px" class="softcenter_tr2">
 														<td colspan="3">
 														</td>
 													</tr>
-													<tr bgcolor="#444f53" width="235px">
+
+													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="adm_tr1">
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="adm" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_adm.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">阿呆喵</div>
-														</td>
+														    <a class="link_hidden" >隐藏</a>
+                                                        </td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
 														</td>
@@ -375,10 +504,11 @@ function init(){
 															</div>
 														</td>
 													</tr>
-													<tr height="10px">
+													<tr height="10px" class="softcenter_tr2">
 														<td colspan="3">
 														</td>
 													</tr>
+
 													<tr bgcolor="#444f53" width="235px">
 															<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 																<div style="padding:10px;" align="left">
