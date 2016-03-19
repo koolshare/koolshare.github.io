@@ -71,6 +71,19 @@ module_check_and_set() {
 	fi
 }
 
+softcenter_install() {
+	if [ -d "/tmp/softcenter" ]; then
+		dbus set softcenter_curr_version=$VER
+		cp -rf /tmp/softcenter/webs/* /koolshare/webs
+		cp -rf /tmp/softcenter/res/* /koolshare/res/
+		rm -rf /tmp/softcenter
+		if [ ! -f "/koolshare/init.d/S10Softcenter.sh" ]; then
+		ln -sf /koolshare/bin/softcenter.sh /koolshare/init.d/S10Softcenter.sh
+		fi
+		echo "install ok"
+	fi
+}
+
 update_softcenter() {
 	version_web1=`curl -s $UPDATE_VERSION_URL | sed -n 1p`
 	if [ ! -z $version_web1 ]; then
@@ -79,28 +92,20 @@ update_softcenter() {
 		if [ "$cmp" = "-1" ];then
 			cd /tmp
 			md5_web1=`curl -s $UPDATE_VERSION_URL | sed -n 2p`
+			rm -f softcenter.tar.gz*
 			wget --no-check-certificate --tries=1 --timeout=15 $UPDATE_TAR_URL
 			md5sum_gz=`md5sum /tmp/softcenter.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web1" ]; then
 				dbus set softcenter_install_status=4
 			else
 				tar -zxf softcenter.tar.gz 
+				rm -f softcenter.tar.gz
 				dbus set softcenter_install_status=5
 				cp /tmp/softcenter/bin/softcenter.sh /koolshare/bin/
 				chmod 755 /koolshare/bin/softcenter.sh
-				/koolshare/bin/softcenter.sh install
+				#softcenter_install
+				sh /koolshare/bin/softcenter.sh install
 			fi
-		fi
-	fi
-}
-
-softcenter_install() {
-	if [ -d "/tmp/softcenter" ]; then
-		cp -rf /tmp/softcenter/webs/* /koolshare/webs
-		cp -rf /tmp/softcenter/res/* /koolshare/res/
-		rm -rf /tmp/softcenter
-		if [ ! -f "/koolshare/init.d/S10Softcenter.sh" ]; then
-		ln -sf /koolshare/bin/softcenter.sh /koolshare/init.d/S10Softcenter.sh
 		fi
 	fi
 }
