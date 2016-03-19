@@ -73,12 +73,7 @@ module_ssserver_set() {
 	export softcenter_module_ssserver=0
 }
 
-module_check_and_set() {
-	if [ -z $softcenter_curr_version ]; then
-		export softcenter_curr_version=0.0.1
-	fi
-	cmp=`versioncmp $VER $softcenter_curr_version`
-	if [ "$cmp" = "-1" ]; then
+module_set() {
 	module_tunnel_set
 	module_koolnet_set
 	module_shadowvpn_set
@@ -92,6 +87,15 @@ module_check_and_set() {
 	module_adm_set
 	module_speedtest_set
 	module_ssserver_set
+}
+
+module_check_and_set() {
+	if [ -z $softcenter_curr_version ]; then
+		export softcenter_curr_version=0.0.1
+	fi
+	cmp=`versioncmp $VER $softcenter_curr_version`
+	if [ "$cmp" = "-1" ]; then
+	module_set
 	export softcenter_curr_version=$VER
 	dbus save softcenter
 	fi
@@ -106,6 +110,8 @@ softcenter_install() {
 		if [ ! -f "/koolshare/init.d/S10Softcenter.sh" ]; then
 		ln -sf /koolshare/bin/softcenter.sh /koolshare/init.d/S10Softcenter.sh
 		fi
+		#set all params
+		module_set
 		#echo "install ok"
 	fi
 }
@@ -114,20 +120,21 @@ update_softcenter() {
 	version_web1=`curl -s $UPDATE_VERSION_URL | sed -n 1p`
 	if [ ! -z $version_web1 ]; then
 		cmp=`versioncmp $version_web1 $VER`
-		dbus set softcenter_install_status=0
+		dbus ram softcenter_install_status=0
 		if [ "$cmp" = "-1" ];then
 			cd /tmp
 			md5_web1=`curl -s $UPDATE_VERSION_URL | sed -n 2p`
-			rm -f softcenter.tar.gz*
+			rm -f softcenter.tar.gz
+			rm -f softcenter.tar.gz.*
 			rm -rf softcenter
 			wget --no-check-certificate --tries=1 --timeout=15 $UPDATE_TAR_URL
 			md5sum_gz=`md5sum /tmp/softcenter.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web1" ]; then
-				dbus set softcenter_install_status=4
+				dbus ram softcenter_install_status=4
 			else
 				tar -zxf softcenter.tar.gz 
 				rm -f softcenter.tar.gz
-				dbus set softcenter_install_status=5
+				dbus ram softcenter_install_status=5
 				cp /tmp/softcenter/bin/softcenter.sh /koolshare/bin/
 				chmod 755 /koolshare/bin/softcenter.sh
 				#softcenter_install
