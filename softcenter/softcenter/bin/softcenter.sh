@@ -138,7 +138,7 @@ update_softcenter() {
 				cp /tmp/softcenter/bin/softcenter.sh /koolshare/bin/
 				chmod 755 /koolshare/bin/softcenter.sh
 				#softcenter_install
-				sh /koolshare/bin/softcenter.sh install
+				exec /koolshare/bin/softcenter.sh install
 			fi
 		fi
 	fi
