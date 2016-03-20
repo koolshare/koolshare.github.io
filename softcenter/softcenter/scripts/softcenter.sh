@@ -158,7 +158,6 @@ install)
 	softcenter_install
 	;;
 *)
-        echo "Usage: $0 (start|update|install)" 
-        exit 1                                                                                                   
+	update_softcenter
         ;;                                                                                                       
 esac  
