@@ -8,10 +8,8 @@ EOF
 cat version
 
 cat > ./config.js <<EOF
-var db_softcenter_online=(function() {
-var o={};
-o['version']='1.0.2';
-o['md5']='$md5value';
-return o;
-})();
+{
+'version':'1.0.2',
+'md5':'$md5value'
+}
 EOF
