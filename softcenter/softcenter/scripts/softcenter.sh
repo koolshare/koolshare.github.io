@@ -121,11 +121,13 @@ update_softcenter() {
 	if [ -z $softcenter_curr_version ]; then
 		softcenter_curr_version=0.0.1
 	fi
+	dbus ram softcenter_install_status=0
 	version_web1=`curl -s $UPDATE_VERSION_URL | sed -n 1p`
 	if [ ! -z $version_web1 ]; then
 		cmp=`versioncmp $version_web1 $softcenter_curr_version`
-		dbus ram softcenter_install_status=0
+		dbus ram softcenter_install_status=1
 		if [ "$cmp" = "-1" ];then
+			dbus ram softcenter_install_status=2
 			cd /tmp
 			md5_web1=`curl -s $UPDATE_VERSION_URL | sed -n 2p`
 			rm -f softcenter.tar.gz

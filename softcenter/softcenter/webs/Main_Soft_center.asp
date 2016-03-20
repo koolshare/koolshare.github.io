@@ -202,13 +202,13 @@ function init(){
     });
 
         $(".link_hidden").click(function(e){
-            e.preventDefault();
+            //e.preventDefault();
             var tr = $(this).closest("tr");
             onModuleHide(tr);
     });
 
         $("#updateBtn").click(function(e){
-            e.preventDefault();
+            //e.preventDefault();
             var data = {"SystemCmd":"softcenter.sh", "current_page":"Module_koolnet.asp", "action_mode":" Refresh ", "action_script":""};
             data["softcenter_install_status"] = "0";
             $.ajax({
@@ -218,6 +218,7 @@ function init(){
                     data: data,
                     success: function() {
                         //location.reload();
+                        setTimeout("location.reload();", 3000);
                     },
                     error: function() {
                         console.log("error");
