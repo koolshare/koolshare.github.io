@@ -9,7 +9,7 @@ cat version
 
 cat > ./config.json.js <<EOF
 {
-'version':'1.0.2',
-'md5':'$md5value'
+"version':"1.0.2",
+"md5":"$md5value"
 }
 EOF
