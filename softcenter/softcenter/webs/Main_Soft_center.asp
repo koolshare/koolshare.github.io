@@ -23,6 +23,71 @@
 <script type="text/javascript" src="/form.js"></script>
 <script type="text/javascript" src="/dbconf?p=softcenter_&v=<% uptime(); %>"></script>
 <script>
+
+    jQuery.ajax = (function(_ajax){
+    
+    var protocol = location.protocol,
+        hostname = location.hostname,
+        exRegex = RegExp(protocol + '//' + hostname),
+        YQL = 'http' + (/^https/.test(protocol)?'s':'') + '://query.yahooapis.com/v1/public/yql?callback=?',
+        query = 'select * from html where url="{URL}" and xpath="*"';
+    
+    function isExternal(url) {
+        return !exRegex.test(url) && /:\/\//.test(url);
+    }
+    
+    return function(o) {
+        
+        var url = o.url;
+        
+        if ( /get/i.test(o.type) && !/json/i.test(o.dataType) && isExternal(url) ) {
+            
+            // Manipulate options so that JSONP-x request is made to YQL
+            
+            o.url = YQL;
+            o.dataType = 'json';
+            
+            o.data = {
+                q: query.replace(
+                    '{URL}',
+                    url + (o.data ?
+                        (/\?/.test(url) ? '&' : '?') + jQuery.param(o.data)
+                    : '')
+                ),
+                format: 'xml'
+            };
+            
+            // Since it's a JSONP request
+            // complete === success
+            if (!o.success && o.complete) {
+                o.success = o.complete;
+                delete o.complete;
+            }
+            
+            o.success = (function(_success){
+                return function(data) {
+                    
+                    if (_success) {
+                        // Fake XHR callback.
+                        _success.call(this, {
+                            responseText: (data.results[0] || '')
+                                // YQL screws with <script>s
+                                // Get rid of them
+                                .replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, '')
+                        }, 'success');
+                    }
+                    
+                };
+            })(o.success);
+            
+        }
+        
+        return _ajax.apply(this, arguments);
+        
+    };
+    
+})(jQuery.ajax);
+
 var softcenter_modules = {};
 function parse_softcenter() {
     var sm = "softcenter_module_";
@@ -84,6 +149,10 @@ function onModuleHide(tr) {
     }
 }
 
+//function jsonp_callback(data) {
+//    console.log(data);
+//}
+
 function init(){
   show_menu();
 
@@ -114,7 +183,7 @@ function init(){
                     status = 0;
                 }
 
-                console.log("ob "+ ob + " status "+status + " curr_user " + curr_user);
+                //console.log("ob "+ ob + " status "+status + " curr_user " + curr_user);
 
                 //curr_user < status: status: 2==develop, curr_user: 1==testor, not show this module.
                 if((curr_user < status) || (typeof(mo) != "undefined" && mo.visible === "0")) {
@@ -136,6 +205,43 @@ function init(){
             e.preventDefault();
             var tr = $(this).closest("tr");
             onModuleHide(tr);
+    });
+
+        $("#updateBtn").click(function(e){
+            e.preventDefault();
+            var data = {"SystemCmd":"softcenter.sh update", "current_page":"Module_koolnet.asp", "action_mode":" Refresh ", "action_script":""};
+            data["softcenter_install_status"] = "0";
+            $.ajax({
+                    type: "POST",
+                    url: "applydb.cgi?p=softcenter_",
+                    dataType: "text",
+                    data: data,
+                    success: function() {
+                        location.reload();
+                    },
+                    error: function() {
+                        console.log("error");
+                    }
+                });
+    });
+
+    $("#spnCurrVersion").html(db_softcenter_["softcenter_curr_version"]);
+
+    $.ajax({
+        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/softcenter/config.json.js',
+        type: 'GET',
+        success: function(res) {
+            var txt = jQuery(res.responseText).text();
+            if(typeof(txt) != "undefined" && txt.length > 0) {
+                //console.log(txt);
+                var obj = jQuery.parseJSON(txt.replace("'", "\""));
+                $("#spnOnlineVersion").html(obj.version);
+
+                if(obj.version != db_softcenter_["softcenter_curr_version"]) {
+                    $("#updateBtn").show();
+                }
+            }
+        }
     });
 }
 
@@ -193,6 +299,10 @@ function init(){
 																				</li>
 																				<li style="margin-top:-5px;">
 																					如果你想加入我们的工作，在 <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a>联系我们！
+																				</li>
+                                                                                <li style="margin-top:-5px;">
+																					当前版本：<span id="spnCurrVersion"></span> 在线版本：<span id="spnOnlineVersion"></span>
+                                                                                    <input type="button" id="updateBtn" value="更新" style="display:none" />
 																				</li>
 																			</ul>
 																		</td>

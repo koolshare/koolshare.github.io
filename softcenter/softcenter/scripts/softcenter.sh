@@ -107,7 +107,7 @@ softcenter_install() {
 		cp -rf /tmp/softcenter/res/* /koolshare/res/
 		rm -rf /tmp/softcenter
 		if [ ! -f "/koolshare/init.d/S10Softcenter.sh" ]; then
-		ln -sf /koolshare/bin/softcenter.sh /koolshare/init.d/S10Softcenter.sh
+		ln -sf /koolshare/scripts/softcenter.sh /koolshare/init.d/S10Softcenter.sh
 		fi
 
 		#force to set all params
@@ -118,9 +118,12 @@ softcenter_install() {
 }
 
 update_softcenter() {
+	if [ -z $softcenter_curr_version ]; then
+		softcenter_curr_version=0.0.1
+	fi
 	version_web1=`curl -s $UPDATE_VERSION_URL | sed -n 1p`
 	if [ ! -z $version_web1 ]; then
-		cmp=`versioncmp $version_web1 $VER`
+		cmp=`versioncmp $version_web1 $softcenter_curr_version`
 		dbus ram softcenter_install_status=0
 		if [ "$cmp" = "-1" ];then
 			cd /tmp
@@ -136,9 +139,9 @@ update_softcenter() {
 				tar -zxf softcenter.tar.gz 
 				rm -f softcenter.tar.gz
 				dbus ram softcenter_install_status=5
-				cp /tmp/softcenter/bin/softcenter.sh /koolshare/bin/
-				chmod 755 /koolshare/bin/softcenter.sh
-				exec /koolshare/bin/softcenter.sh install
+				cp /tmp/softcenter/scripts/softcenter.sh /koolshare/scripts/
+				chmod 755 /koolshare/scripts/softcenter.sh
+				exec /koolshare/scripts/softcenter.sh install
 			fi
 		fi
 	fi
