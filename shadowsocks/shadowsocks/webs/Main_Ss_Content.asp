@@ -1132,7 +1132,7 @@ function add_chacha20_ietf(){
 															<option value="2">【2】 大陆白名单模式</option>
 															<option value="3">【3】 游戏模式</option>
 															<option value="4">【4】 游戏模式V2</option>
-															<option value="4">【5】 全局代理模式</option>
+															<option value="5">【5】 全局代理模式</option>
 														</select>
 														<div id="SSR_name"style="margin-left:170px;margin-top:-20px;margin-bottom:0px;">
 															<input type="checkbox" id="ss_basic_use_rss" onclick="oncheckclick(this);update_visibility();" />
