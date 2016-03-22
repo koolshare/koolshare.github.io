@@ -9,7 +9,7 @@ ISP_DNS=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|se
 server_ip=`resolvip $ss_basic_server`
 nat_ready=$(iptables -t nat -L PREROUTING -v -n --line-numbers|grep -v PREROUTING|grep -v destination)
 i=120
-nvram set ss_mode=4
+nvram set ss_mode=5
 nvram commit
 #--------------------------------------------------------------------------------------
 echo $(date): ------------------ Shadowsock Overall mode Starting----------------------
