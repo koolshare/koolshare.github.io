@@ -1,0 +1,30 @@
+//ADM 需要清理的路径写在此处, 支持%环境变量%  支持 *  or  *.*  or  文件绝对路径
+// -s 表示清理  路径 \ 某个文件    会以这个路径为基准, 递归查询子目录来找那个文件删除
+//
+//qq
+%APPDATA%\Tencent\QQ\Misc\com.tencent.advertisement\*.*
+%APPDATA%\Tencent\QQ\Misc\com.tencent.advertisement\GDT_0\*.*
+
+//letv
+-s%APPDATA%\Macromedia\Flash Player\#SharedObjects\com.letv.sol
+
+//iqiyi
+-s%APPDATA%\Macromedia\Flash Player\#SharedObjects\qiyi_statistics.sol
+
+//chrome LeTv
+-s%USERPROFILE%\AppData\Local\Google\Chrome\User Data\Default\Pepper Data\Shockwave Flash\WritableRoot\#SharedObjects\com.letv.sol
+
+//chrome iqiyi
+-s%USERPROFILE%\AppData\Local\Google\Chrome\User Data\Default\Pepper Data\Shockwave Flash\WritableRoot\#SharedObjects\qiyi_statistics.sol
+
+//360 letv
+-s%USERPROFILE%\AppData\Local\360Chrome\Chrome\User Data\Default\Pepper Data\Shockwave Flash\WritableRoot\#SharedObjects\com.letv.sol
+
+//360 iqiyi
+-s%USERPROFILE%\AppData\Local\360Chrome\Chrome\User Data\Default\Pepper Data\Shockwave Flash\WritableRoot\#SharedObjects\qiyi_statistics.sol
+
+-s%APPDATA%\Local\360Chrome\Chrome\User Data\Default\Pepper Data\Shockwave Flash\WritableRoot\#SharedObjects\qiyi_statistics.sol
+
+
+
+

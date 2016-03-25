@@ -1,0 +1,151 @@
+[ADM]
+!  Title: Only-Https-Below-ADM
+!  --------------------------------------------------------------------------------------------
+!  QQ反馈群: 157495855
+!  --------  By-Mr.Yan
+!  Homepage: http://update2.admflt.com/https_ruler/https-below-adm.txt
+!  --------------------------------------------------------------------------------------------
+||ad.12306.cn
+! ------------------------------------------------------
+!https://www.youtube.com/
+||www.youtube.com/ad_frame?*
+||www.youtube.com/ad_data_*
+www.youtube.com###video-masthead
+||google.com/jsapi?autoload=*%22ads%22$script,domain=youtube.com
+||ytimg.com^*/new_watch_background.jpg?$domain=youtube.com
+||ytimg.com^*/new_watch_background_*.jpg?$domain=youtube.com
+||ytimg.com^*_banner$domain=youtube.com
+||phobos.apple.com^$image,domain=dailymotion.com|youtube.com
+||ytimg.com^*/new_watch_background.jpg?$domain=youtube.com
+||ytimg.com^*/new_watch_background_*.jpg?$domain=youtube.com
+||ytimg.com^*_banner$domain=youtube.com
+@@||youtube.com/iframe_api$script,third-party
+@@||youtube.com/player_api$script,third-party
+||youtube.com/yva_video?adformat=
+youtube.com###feed-pyv-container
+www.youtube.com##.masthead-ad-control
+www.youtube.com##.ad-div
+youtube.com###feedmodule-PRO
+youtube.com###homepage-chrome-side-promo
+youtube.com###premium-yva
+youtube.com###search-pva
+youtube.com###shelf-pyv-container
+youtube.com###video-masthead
+youtube.com###watch-branded-actions
+youtube.com###watch-buy-urls
+youtube.com###watch-channel-brand-div
+youtube.com##.ad-container
+youtube.com##.ads
+youtube.com##.carousel-offer-url-container
+youtube.com##.list-view[style="margin: 7px 0pt;"]
+youtube.com##.promoted-videos
+youtube.com##.searchView.list-view
+youtube.com##.watch-extra-info-column
+youtube.com##.watch-extra-info-right
+youtube.com##div.ytp-iv-video-content
+youtube.com##a[href^="http://www.youtube.com/cthru?"]
+youtube.com##a[href^="https://www.youtube.com/cthru?"]
+m.youtube.com##a[onclick*="\"ping_url\":\"http://www.google.com/aclk?"]
+@@||s.ytimg.com/yts/swfbin/player-*/watch_as3.swf$object,domain=youtube.com
+@@||youtube.com/yt/advertise/medias/images/$image
+@@||youtube.com/yt/css/www-advertise.css
+@@||youtube.com^*_adsense_$STYLESHEET
+@@||ytimg.com/yts/img/channels/*_banner-*.jpg$domain=youtube.com
+@@||ytimg.com/yts/img/channels/*_banner-*.png$domain=youtube.com
+@@||ytimg.com^*/channels4_banner.jpg?*$domain=youtube.com
+@@||ytimg.com^*/channels4_banner_hd.jpg?*$domain=youtube.com
+www.youtube.com###movie_player > .iv-promo-video.iv-promo.annotation-type-custom.annotation
+www.youtube.com###movie_player > .html5-video-content > .iv-module.video-annotations
+www.youtube.com###movie_player > .iv-drawer
+
+!https://www.facebook.com/
+facebook.com##[id^="PageAdsPagelet"]
+facebook.com##.ego_unit_container>[data-ad]
+www.facebook.com##[data-ad]
+facebook.com,japantoday.com#@##sidebar_ads
+facebook.com###MessagingNetegoWrapper
+facebook.com###home_sponsor_nile
+facebook.com###pagelet_ads_when_no_friend_list_suggestion
+facebook.com##.adv
+facebook.com##.ego_spo
+facebook.com##.fbAdUnit
+facebook.com##.fbEmu
+facebook.com##.fbEmuBlock
+facebook.com##.fbEmuComboList
+facebook.com##.fbEmuEgo
+facebook.com##.fbEmuEgoUnit
+facebook.com##.fbEmuLink
+facebook.com##.fbPhotoAdsCol
+facebook.com##.fbTimelineSideAds
+facebook.com##.fixedAux .pbm
+facebook.com##.muffin.group
+facebook.com##.ownsection[role="option"]
+facebook.com##[data-referrer="pagelet_side_ads"]
+facebook.com##[href^="/ads/adboard/"]
+facebook.com##a[ajaxify^="/ajax/emu/end.php?"]
+insidefacebook.com##a[href="/advertise"]
+facebook.com##a[href^="/ajax/emu/end.php?"]
+facebook.com##div[class="ego_column pagelet"]
+facebook.com##div[class="ego_column"]
+facebook.com##div[id^="sponsoredTickerStory_"]
+@@||www.facebook.com/ad.*^ajaxpipe^
+@@||www.facebook.com/ads/
+@@||www.facebook.com/ajax/ads/$domain=www.facebook.com
+
+!https://twitter.com/
+||platform.twitter.com/widgets.js$script
+twitter.com##.is-promoted,.promoted-account,.promoted-trend,.promoted-tweet,.promotion,[label="promoted"]
+
+
+||a.kat.cr/adx.*
+||.google.com/pagead/
+||ad-*.doubleclick.net/
+||ad.doubleclick.net/*
+||.adap.tv/$third-party
+||.teads.tv/$third-party
+||.doubleclick.net/$third-party
+||ad.turn.com/$third-party
+||loadm.exelator.com/$third-party
+||secure.adnxs.com/$third-party
+||adserver.exoticads.com/$third-party
+||ssl.google-analytics.com/$third-party
+||cdn.exoticads.com/$third-party
+||ads.exoclick.com/$third-party
+||rad.reporo.net/$third-party
+||.google-analytics.com/$third-party
+||player.005.tv:60000/ad.*
+||hm.baidu.com/hm.js?
+||i.supfree.net/*.js$script
+||www.google.com/uds/api/ads/
+||*/template/default/ads/*.js$script
+||*/activity/advert_static/*.js$script
+||ss*.bdstatic.com/*/tam-ogel/*.js$script
+||oauth.googleusercontent.com/gadgets/js/
+||pagead*.googlesyndication.com/pagead/
+||projectwonderful.com/active.php?*&adboxid=
+||s.ssl.qhimg.com/static/*/MMPlugin.js$script
+||syndication.exoclick.com/ads-iframe-display.php?
+|http://*/main/s?user=AllyesNetwork|TppAd|*
+
+!google
+google.com###ad-target,.id-ad-target.ads-300-250,#ad-label,.id-ad-label,#ad
+www.google.*##.commercial-unit-desktop-top,#resultspanel > #topads,#ssmiwdiv[jsdisplay],#tads + div + .c,#tads.c,#tadsb.c,#tadsto.c,#topstuff > #tads,.ch[onclick="ga(this,event)"],.commercial-unit-desktop-rhs
+mail.google.com##.aeF > .nH > .nH[role="main"] > .aKB
+www.google.*##&.ads-ad,div#bottomads,div#tadsb
+
+!yahoo.com
+||ads.yahoo.com
+||s^.2mdn.net/ads/*
+||partnerads.ysm.yahoo.com/
+||.yimg.com/uq/syndication/yad.js
+||.yimg.com/gs/apex/mediastore/
+||syndication.streamads.yahoo.com/
+||.yimg.com/uq/syndication/yad-iframe*.html
+||bs.serving-sys.com/BurstingPipe/adServer.bs?*
+||.yimg.com/rq/darla/*.html$domain=yahoo.com
+||.yimg.com/ja/ap/*/RichGutter_^_edge.js$SCRIPT
+search.yahoo.com###main > div > style + ol
+.yahoo.com##.rmx-ad,.ad-tl1,#ad-north-base,#ad-north,#ad,#my-adsFPAD,#my-adsFPL,#my-adsFPT,#fpad2,.yom-ad,div#my-adsMAST,div.darla-ad,div#TopAd,div[id^="dmRosAdWrapper-"],div#ya-darla-LREC
+
+
+!----------------------------------------遇到情况请反馈--------------------------------------------------

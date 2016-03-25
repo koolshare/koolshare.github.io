@@ -1,0 +1,3 @@
+#!/bin/sh
+LOGDIR=/var/log/perpd
+exec tinylog -k 8 -s 100000 -t ${LOGDIR}

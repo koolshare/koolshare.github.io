@@ -1,0 +1,41 @@
+!说明
+!此文件为adm智能代理配置文件, 写入此文件一行代表一个域名
+!比如www.baidu.com  如果这个网站我需要使用代理访问, 那么我写 ".baidu.com" (去掉引号), 这样baidu.com 下面的所有地址都将通过代理访问
+!仅支持使用域名, 不支持 * ? 等通配符, 不支持 / 这些字符
+
+!.google.com.hk
+!.baidu.com
+!.admflt.com
+!.tw   这种也是可以的.
+
+!google系列
+google.com
+google.com.hk
+google.co.jp
+google.cn
+gmail.com
+googleapis.com
+googlepages.com
+googlesile.com
+googledrive.com
+gaeproxy.googlecode.com
+googleusercontent.com
+googlecode.com
+googlevideo.com
+ggpht.com
+appspot.com
+gstatic.com
+gstatic.cn
+googlesource.com
+g.co
+goo.gl
+googlelabs.com
+googlehosted.com
+!youtube
+youtube.com
+ytimg.com
+!Google 广告 追踪
+googleadservices.com
+google-analytics.com
+googlesyndication.com
+!Google end
