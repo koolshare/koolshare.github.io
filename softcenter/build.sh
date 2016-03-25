@@ -1,4 +1,5 @@
 cat version
+rm -f softcenter.tar.gz
 tar -zcvf softcenter.tar.gz softcenter
 md5value=`md5sum softcenter.tar.gz|tr " " "\n"|sed -n 1p`
 cat > ./version <<EOF

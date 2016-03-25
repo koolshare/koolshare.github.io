@@ -6,8 +6,8 @@ cp -rf /tmp/adm/bin/* /koolshare/bin/
 cp -rf /tmp/adm/scripts/* /koolshare/scripts/
 cp -rf /tmp/adm/webs/* /koolshare/webs/
 cp -rf /tmp/adm/init.d/* /koolshare/init.d/
-rm -rf /tmp/adm* >/dev/null 2>&1
 cd /
+rm -rf /tmp/adm* >/dev/null 2>&1
 
 
 
