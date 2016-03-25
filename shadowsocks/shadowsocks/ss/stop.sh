@@ -239,3 +239,9 @@ sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
 	echo $(date): done
 	echo $(date): -------------------- Shadowsock service Stopped--------------------------
 	echo $(date):
+
+# remove ss state
+	dbus remove ss_basic_state_china
+	dbus remove ss_basic_state_foreign
+
+

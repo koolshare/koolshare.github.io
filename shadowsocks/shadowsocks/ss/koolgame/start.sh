@@ -167,11 +167,10 @@ fi
 	echo $(date): Starting koolgame...
 	#kservice_start $PROCS $ARGS
 	pdu=`ps|grep pdu|grep -v grep`
-	if [ -z $pdu ]; then
+	if [ -z "$pdu" ]; then
 		/koolshare/ss/koolgame/pdu br0 /tmp/var/pdu.pid
 		sleep 1
 	fi
-	start-stop-daemon -S -q -b -m -p $SERVICE_PID_FILE -x $PROCS -- -c /koolshare/ss/koolgame/ss.json
 	start-stop-daemon -S -q -b -m -p $SERVICE_PID_FILE -x $PROCS -- -c /koolshare/ss/koolgame/ss.json
 	#/koolshare/ss/koolgame/koolgame -c /koolshare/ss/koolgame/ss.json >/dev/null 2>&1 &
 	echo $(date): done
