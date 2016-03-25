@@ -154,7 +154,6 @@ function write_adm_install_status(){
 	success: function() {
 	if (db_adm_['adm_install_status'] == "0"){
 		$j("#adm_install_status").html("<i>ADM尚未安装</i>");
-		//document.adm_form.adm_enable.value = 0;
 		document.getElementById('switch_tr').style.display = "none";
 		document.getElementById('adm_status').style.display = "none";
 		document.getElementById('adm_user').style.display = "none";
@@ -164,11 +163,13 @@ function write_adm_install_status(){
 		document.getElementById('adm_version_status').style.display = "none";
 		document.getElementById('update_button').style.display = "none";
 	} else if (db_adm_['adm_install_status'] == "1"){
-		//document.adm_form.adm_enable.value = 0;
 		$j("#adm_install_status").html("<i>ADM已安装</i>");
 		document.getElementById('switch_tr').style.display = "";
+		document.getElementById('adm_status').style.display = "";
+		document.getElementById('adm_user').style.display = "";
 		document.getElementById('cmdBtn').style.display = "";
 		document.getElementById('uninstall_button').style.display = "";
+		document.getElementById('update_button').style.display = "";
 		document.getElementById('install_button').style.display = "none";
 		document.getElementById('adm_version_status').style.display = "";
 	} else if (db_adm_['adm_install_status'] == "2"){
