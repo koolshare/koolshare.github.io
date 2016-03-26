@@ -32,7 +32,7 @@ var $G = function(id) {
 };
 
 //跨域请求支持
-    jQuery.ajax = (function(_ajax){
+    $j.ajax = (function(_ajax){
     
     var protocol = location.protocol,
         hostname = location.hostname,
@@ -94,7 +94,7 @@ var $G = function(id) {
         
     };
     
-})(jQuery.ajax);
+})($j.ajax);
 
 function init() {
 	show_menu();
@@ -132,7 +132,7 @@ function line_show() {
 				if(el != null) {
 				el.value = db_ss[field];
 			}
-			var temp_ss = ["adm_user"];
+			var temp_ss = ["adm_user_txt"];
 			for (var i = 0; i < temp_ss.length; i++) {
 				temp_str = $G(temp_ss[i]).value;
 				$G(temp_ss[i]).value = temp_str.replaceAll(",","\n");
@@ -142,7 +142,7 @@ function line_show() {
 }
 
 function validForm(){
-	var temp_ss = ["adm_user"];
+	var temp_ss = ["adm_user_txt"];
 	for(var i = 0; i < temp_ss.length; i++) {
 		var temp_str = $G(temp_ss[i]).value;
 		if(temp_str == "") {
@@ -367,14 +367,15 @@ function version_show(){
 	}*/
 
 	$j("#adm_version_status").html("<i>当前版本：" + db_adm_['adm_version']);
-    $.ajax({
+
+    $j.ajax({
         url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/adm/config.json.js',
         type: 'GET',
         success: function(res) {
-            var txt = jQuery(res.responseText).text();
+            var txt = $j(res.responseText).text();
             if(typeof(txt) != "undefined" && txt.length > 0) {
                 //console.log(txt);
-                var obj = jQuery.parseJSON(txt.replace("'", "\""));
+                var obj = $j.parseJSON(txt.replace("'", "\""));
 		$j("#adm_version_status").html("<i>当前版本：" + obj.version);
 		if(obj.version != db_adm_["adm_version"]) {
 			$j("#update_button").html("<i>升级到：" + obj.version);
@@ -533,7 +534,7 @@ location.href = "/Main_Soft_center.asp";
 !样例1 使用正则删除某地方(替换 "<p...</p>" 字符串为 "http://www.admflt.com")
 !<p id="lg"><img src="http://www.baidu.com/img/bdlogo.gif" width="270" height="129"></p>
 !||www.baidu.com$S@<p.*<\/p>@http://www.admflt.com@
-!||kafan.cn$s@<div id="hd">@<div id="hd" style="display:none!important">@' cols="50" rows="20" id="adm_user" name="adm_user" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
+!||kafan.cn$s@<div id="hd">@<div id="hd" style="display:none!important">@' cols="50" rows="20" id="adm_user_txt" name="adm_user" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
 												</td>
 											</tr>
                                     	</table>

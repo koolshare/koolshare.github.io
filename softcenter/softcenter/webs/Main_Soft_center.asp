@@ -209,6 +209,7 @@ function init(){
 
         $("#updateBtn").click(function(e){
             //e.preventDefault();
+	    $("#updateBtn").hide();
             var data = {"SystemCmd":"softcenter.sh", "current_page":"Module_koolnet.asp", "action_mode":" Refresh ", "action_script":""};
             data["softcenter_install_status"] = "0";
             $.ajax({
