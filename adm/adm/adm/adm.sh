@@ -35,13 +35,15 @@ remove_ss_event(){
 
 # 启动ADM主程序
 start_adm(){
-	/koolshare/adm/ADM >/dev/null 2>&1 &
+#	/koolshare/adm/ADM >/dev/null 2>&1 &
+	perpctl A adm
 }
 
 # 停止ADM主程序
 stop_adm(){
-	#killall ADM >/dev/null 2>&1 &
-	kill -9 `pidof ADM` >/dev/null 2>&1 &
+	perpctl X adm
+#	killall ADM >/dev/null 2>&1 &
+#	kill -9 `pidof ADM` >/dev/null 2>&1 &
 }
 
 # 添加进程守护
@@ -377,9 +379,9 @@ start)
 	if [ "$adm_enable" == "1" ] && [ "$ss_basic_enable" == "0" ];then
 	set_ulimit
 	start_adm
-    update_nat_rules
-    add_ss_event
-    add_process_protect
+	update_nat_rules
+	add_ss_event
+	add_process_protect
 	fi
 	;;
 stop | kill )
@@ -399,10 +401,10 @@ restart)
 	set_ulimit
 	add_user_rule
 	add_process_protect
-	#start_adm
-    update_nat_rules
-    add_ss_event
-    write_adm_version
+	start_adm
+	update_nat_rules
+	add_ss_event
+	write_adm_version
 	;;
 check)
 	detect_adm_version
