@@ -1,17 +1,28 @@
-# koolshare.github.io
-For koolshare.cn 小宝merlin改版固件
+小宝开源插件
+=========
 
-<b>此项目的以下文件用于小宝merlin改版固件内文件的自动更新</b>
+目前仅支持小宝改版本的 Merlin 固件的插件。未来有望支持 Tomato/Ddwrt 等 arm 系列路由器的插件而成为类似 Entware 可以让大家安装并且有配置界面的插件列表。目前还远远达不到我们心中的设计目标，时间有限，只能一跳一跳的去完成，希望能有更多兄弟参与。
 
-<b>gfwlist.conf</b><br/>
-该文件用于gfwlist模式中，其中的域名用国外dns解析，且走ss流量。
+插件支持列表
+========
+* 穿透 DDNS
+* P2P 远程控制 [项目地址](https://github.com/jannson/koolnet)
+* 讯雷下载
+* Aria2 下载
+* 讯雷快鸟
+* Adm 去广告
+* 策略路由
 
-<b>chnroute.txt</b><br/>
-该文件用于大陆白名单模式和游戏模式中，文件内的IP段不走ss流量。
+存储核心
+=======
+* Skipdbv2 [项目地址](https://github.com/koolshare/skipdbv2)
 
-<b>cdn.txt</b><br/>
-该文件用于大陆白名单模式和游戏模式中，文件内的域名由国内DNS解析。
+感谢人员
+======
+* 排名不分先后
+* TODO
 
-<b>adblock.conf</b><br/>
-该文件用于dnsmasq添加host，过滤列表内的域名，达到过滤广告的效果。
+交流场地
+======
+* 目前我们在 [Koolshare 论坛](https://koolshare.cn)
 
