@@ -354,7 +354,7 @@ uninstall_adm(){
 
 # 检查是否有更新，每次网页开启后10s后检测
 detect_adm_version(){
-	adm_version_web1=`curl -s $UPDATE_VERSION_URL | sed -n 2p`
+	adm_version_web1=`curl -s $UPDATE_VERSION_URL | sed -n 1p`
 	if [ ! -z $adm_version_web1 ];then
 		dbus set adm_version_web="$adm_version_web1"
 	fi
