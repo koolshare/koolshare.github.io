@@ -378,10 +378,10 @@ start)
 	#当ss开启时，adm不通过此处启动，而是通过ss内dbus fire启动adm
 	if [ "$adm_enable" == "1" ] && [ "$ss_basic_enable" == "0" ];then
 	set_ulimit
+	add_process_protect
 	start_adm
 	update_nat_rules
 	add_ss_event
-	add_process_protect
 	fi
 	;;
 stop | kill )
