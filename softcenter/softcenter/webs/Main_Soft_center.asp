@@ -209,6 +209,7 @@ function init(){
 
         $("#updateBtn").click(function(e){
             //e.preventDefault();
+            //TODO better here
 	    $("#updateBtn").hide();
             var data = {"SystemCmd":"softcenter.sh", "current_page":"Module_koolnet.asp", "action_mode":" Refresh ", "action_script":""};
             data["softcenter_install_status"] = "0";
@@ -219,7 +220,7 @@ function init(){
                     data: data,
                     success: function() {
                         //location.reload();
-                        setTimeout("location.reload();", 3000);
+                        setTimeout("location.reload();", 8000);
                     },
                     error: function() {
                         console.log("error");
