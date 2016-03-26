@@ -141,8 +141,8 @@ update_softcenter() {
 				tar -zxf softcenter.tar.gz 
 				rm -f softcenter.tar.gz
 				dbus ram softcenter_install_status=5
-				cp /tmp/softcenter/scripts/softcenter.sh /koolshare/scripts/
-				chmod 755 /koolshare/scripts/softcenter.sh
+				cp /tmp/softcenter/scripts/*.sh /koolshare/scripts/
+				chmod 755 /koolshare/scripts/*.sh
 				exec /koolshare/scripts/softcenter.sh install
 			fi
 		fi

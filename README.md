@@ -17,6 +17,11 @@
 =======
 * Skipdbv2 [项目地址](https://github.com/koolshare/skipdbv2)
 
+开发与调试方式
+======
+* 最好在 linux 环境下进行开发
+* TODO
+
 感谢人员
 ======
 * 排名不分先后
