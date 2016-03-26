@@ -250,7 +250,6 @@ case $ACTION in
 start)
 	if [ "$ss_basic_enable" == "1" ];then
 	set_default_value
-	mount_js
 	set_ulimit
     	apply_ss
     	write_numbers

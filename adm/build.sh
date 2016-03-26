@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=adm
-VERSION=0.3
+VERSION=0.5
 
 cat version
 rm -f ${MODULE}.tar.gz
