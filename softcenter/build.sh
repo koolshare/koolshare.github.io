@@ -2,8 +2,14 @@ VERSION=1.0.2
 
 cat version
 rm -f softcenter.tar.gz
+mkdir -p ./softcenter/res
 
 python ./gen_install.py
+#TODO for kuainiao
+#cp ../kuainiao/webs/* ./softcenter/webs/
+#cp ../kuainiao/scripts/* ./softcenter/scripts/
+#cp ../kuainiao/res/* ./softcenter/res/
+
 chmod 755 ./softcenter/scripts/*.sh
 
 tar -zcvf softcenter.tar.gz softcenter
