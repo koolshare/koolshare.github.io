@@ -51,6 +51,8 @@ def check_and_cp():
     for module, path in work_parent():
         check_subdir(module, path, "scripts", ".sh", os.path.join(curr_path, "softcenter", "scripts"))
         check_subdir(module, path, "webs", ".asp", os.path.join(curr_path, "softcenter", "webs"))
+        check_subdir(module, path, "scripts", ".sh", os.path.join(curr_path, "softcenter", "scripts"))
+        check_subdir(module, path, "res", "*", os.path.join(curr_path, "softcenter", "res"))
 
 
 check_and_cp()
