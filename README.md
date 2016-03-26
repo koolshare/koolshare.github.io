@@ -24,5 +24,5 @@
 
 交流场地
 ======
-* 目前我们在 [Koolshare 论坛](https://koolshare.cn)
+* 目前我们在 [Koolshare 论坛](https://koolshare.cn/forum.php)
 
