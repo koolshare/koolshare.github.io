@@ -1,7 +1,7 @@
 #! /bin/sh
 cd /tmp
 cp -rf /tmp/adm/adm /koolshare/
-cp -rf /tmp/adm/perp /koolshare/
+cp -rf /tmp/adm/perp/adm /koolshare/perp/
 cp -rf /tmp/adm/bin/* /koolshare/bin/
 cp -rf /tmp/adm/scripts/* /koolshare/scripts/
 cp -rf /tmp/adm/webs/* /koolshare/webs/
