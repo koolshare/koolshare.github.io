@@ -208,7 +208,7 @@ update_adm(){
 				dbus set adm_install_status="12"
 				rm -rf /tmp/adm* >/dev/null 2>&1
 				sleep 5
-				dbus set adm_install_status="0"
+				dbus set adm_install_status="1"
 			else
 				tar -zxf adm.tar.gz
 				dbus set adm_install_status="10"
@@ -223,12 +223,12 @@ update_adm(){
 		else
 			dbus set adm_install_status="13"
 			sleep 2
-			dbus set adm_install_status="0"
+			dbus set adm_install_status="1"
 		fi
 	else
 		dbus set adm_install_status="15"
 		sleep 5
-		dbus set adm_install_status="0"
+		dbus set adm_install_status="1"
 	fi
 	exit 0
 }
