@@ -386,7 +386,7 @@
 				} */
 				
     $.ajax({
-        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/adm/config.json.js',
+        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/aria2/config.json.js',
         type: 'GET',
         success: function(res) {
             var txt = jQuery(res.responseText).text();
