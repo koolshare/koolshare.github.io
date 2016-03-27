@@ -22,6 +22,19 @@
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
 <script type="text/javascript" src="/form.js"></script>
 <script type="text/javascript" src="/dbconf?p=softcenter_&v=<% uptime(); %>"></script>
+<style>
+
+.cloud_main_radius_left{
+	-webkit-border-radius: 10px 0 0 10px;
+	-moz-border-radius: 10px 0 0 10px;	
+	border-radius: 10px 0 0 10px;
+}
+.cloud_main_radius{
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;	
+	border-radius: 10px;
+}
+</style>
 <script>
 
     jQuery.ajax = (function(_ajax){
@@ -322,7 +335,7 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="ngrokd" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_tunnel.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">穿透DDNS</div>
-                                                            <a class="link_hidden" >隐藏</a>
+                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -345,7 +358,7 @@ function init(){
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">
                                                                 P2P穿透
 															</div>
-                                                            <a class="link_hidden" >隐藏</a>
+                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -367,7 +380,7 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="thunder" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_xunlei.asp'"></div>
 														<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">迅雷远程</div>
-														<a class="link_hidden" >隐藏</a>
+														<a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
                                                         </td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -392,7 +405,7 @@ function init(){
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="aria2_install();"></span>
 															</div>
-                                                            <a class="link_hidden" >隐藏</a>
+                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -417,7 +430,7 @@ function init(){
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="transmission_install();"></span>
 															</div>
-                                                            <a class="link_hidden" >隐藏</a>
+                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -440,7 +453,7 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="ss-server" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"  onclick="location.href = '/Module_ss_server.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">ss-server</div>
-                                                            <a class="link_hidden" >隐藏</a>
+                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -462,7 +475,7 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="shadowvpn" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"  onclick="location.href = '/Module_shadowVPN.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">shadowvpn</div>
-                                                            <a class="link_hidden" >隐藏</a>
+                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -484,7 +497,7 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="v2ray" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"  onclick="location.href = '/Module_v2ray.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">v2ray</div>
-														    <a class="link_hidden" >隐藏</a>
+														   <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
                                                         </td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -510,7 +523,7 @@ function init(){
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="entware_install();"></span>
 															</div>
-                                                            <a class="link_hidden" >隐藏</a>
+                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -535,7 +548,7 @@ function init(){
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="dualwan_policy_install();"></span>
 															</div>
-                                                            <a class="link_hidden" >隐藏</a>
+                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -560,7 +573,7 @@ function init(){
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="thunder_bird();"></span>
 															</div>
-                                                            <a class="link_hidden" >隐藏</a>
+                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -582,7 +595,7 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="speedtest" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_speedtest.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">Speedtest</div>
-														    <a class="link_hidden" >隐藏</a>
+														   <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
                                                         </td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -604,7 +617,7 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="adm" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_adm.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">阿呆喵</div>
-														    <a class="link_hidden" >隐藏</a>
+														   <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
                                                         </td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
