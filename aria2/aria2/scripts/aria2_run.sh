@@ -274,7 +274,7 @@ eval `dbus export aria2`
 	export aria2_install_status="3"
 	dbus save aria2
 	md5_web1=$(curl https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/aria2/version | sed -n 2p)
-	wget --no-check-certificate --tries=1 --timeout=15 https://koolshare.github.io/aria2/aria2.tar.gz
+	wget --no-check-certificate --tries=1 --timeout=15 https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/aria2/aria2.tar.gz
 	md5sum_gz=$(md5sum /tmp/aria2.tar.gz | sed 's/ /\n/g'| sed -n 1p)
 	if [ "$md5sum_gz"x != "$md5_web1"x ]; then
 		rm -rf /tmp/aria*
