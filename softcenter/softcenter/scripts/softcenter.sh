@@ -8,6 +8,8 @@ VER=1.0.3
 UPDATE_VERSION_URL="https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/softcenter/version"
 UPDATE_TAR_URL="https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/softcenter/softcenter.tar.gz"
 
+export PERP_BASE=/koolshare/perp
+
 module_tunnel_set() {
 	#0: release, 1: beta, 2: devel
 	export softcenter_module_tunnel=0
@@ -99,12 +101,15 @@ module_check_and_set() {
 	export softcenter_curr_version=$VER
 	dbus save softcenter
 	fi
+
+	sh /koolshare/perp/perp.sh start
 }
 
 softcenter_install() {
 	if [ -d "/tmp/softcenter" ]; then
 		cp -rf /tmp/softcenter/webs/* /koolshare/webs
 		cp -rf /tmp/softcenter/res/* /koolshare/res/
+		cp -rf /tmp/softcenter/perp /koolshare/
 		rm -rf /tmp/softcenter
 		if [ ! -f "/koolshare/init.d/S10Softcenter.sh" ]; then
 		ln -sf /koolshare/scripts/softcenter.sh /koolshare/init.d/S10Softcenter.sh
