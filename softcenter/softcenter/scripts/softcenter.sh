@@ -109,6 +109,7 @@ softcenter_install() {
 	if [ -d "/tmp/softcenter" ]; then
 		cp -rf /tmp/softcenter/webs/* /koolshare/webs
 		cp -rf /tmp/softcenter/res/* /koolshare/res/
+		cp -rf /tmp/softcenter/bin/* /koolshare/bin/*
 		cp -rf /tmp/softcenter/perp /koolshare/
 		rm -rf /tmp/softcenter
 		if [ ! -f "/koolshare/init.d/S10Softcenter.sh" ]; then
