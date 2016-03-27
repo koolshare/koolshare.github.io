@@ -3,7 +3,7 @@
 eval `dbus export softcenter`
 source /koolshare/scripts/base.sh
 
-VER=1.0.3
+VER=1.0.4
 
 UPDATE_VERSION_URL="https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/softcenter/version"
 UPDATE_TAR_URL="https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/softcenter/softcenter.tar.gz"
