@@ -2,7 +2,7 @@
 
 # ====================================变量定义====================================
 # 版本号定义
-version="0.1"
+version="0.5"
 
 # 导入skipd数据
 eval `dbus export adm`
@@ -105,112 +105,6 @@ del_user_rule(){
 	sed -i '29,$d' /koolshare/adm/user.txt
 }
 
-
-install_adm(){
-eval `dbus export adm`
-	HOME_URL=https://koolshare.github.io
-	#md5_web1=$(curl https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/adm/version | sed -n 2p)
-	#md5_web2=$(curl http://file.mjy211.com/adm/version | sed -n 2p)
-	#md5_web3=$(curl http://file.fancyss.com/adm/version | sed -n 2p)
-	#md5sum_gz=$(md5sum /tmp/adm.tar.gz | sed 's/ /\n/g'| sed -n 1p)
-	
-	# adm_install_status=		#adm尚未安装
-	# adm_install_status=0	#adm尚未安装
-	# adm_install_status=1	#adm已安装***
-	# adm_install_status=2	#adm将被安装到jffs分区...
-	# adm_install_status=3	#正在下载adm中...请耐心等待...
-	# adm_install_status=4	#正在安装adm中...
-	# adm_install_status=5	#adm安装成功！请5秒后刷新本页面！...
-	# adm_install_status=6	#adm卸载中......
-	# adm_install_status=7	#adm卸载成功！
-	# adm_install_status=8	#adm下载文件校验不一致！
-	
-	kill all admc  >/dev/null 2>&1
-	killall lighttpd >/dev/null 2>&1
-	
-	case $(uname -m) in
-	  armv7l)
-	    echo your router is suitable \for adm install 
-	    ;;
-	  mips)
-	    echo "This is unsupported platform, sorry."
-	    exit
-	    ;;
-	  *)
-	    echo "This is unsupported platform, sorry."
-	    exit
-	    ;;
-	esac
-	
-	
-	# adm将被安装到jffs分区...
-	cd /tmp
-	dbus set adm_install_status="2"
-	dbus save adm
-	sleep 2
-	# 正在下载adm中...请耐心等待...
-	dbus set adm_install_status="3"
-	dbus save adm
-	md5_web1=$(curl https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/adm/version | sed -n 2p)
-	wget --no-check-certificate --tries=1 --timeout=15 https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/adm/adm.tar.gz
-	md5sum_gz=$(md5sum /tmp/adm.tar.gz | sed 's/ /\n/g'| sed -n 1p)
-	if [ "$md5sum_gz"x != "$md5_web1"x ]; then
-		rm -rf /tmp/aria*
-		md5_web2=$(curl http://file.mjy211.com/adm/version | sed -n 2p)
-		wget --no-check-certificate --tries=1 --timeout=15 http://file.mjy211.com/adm/adm.tar.gz
-		md5sum_gz=$(md5sum /tmp/adm.tar.gz | sed 's/ /\n/g'| sed -n 1p)
-		if [ "$md5sum_gz"x != "$md5_web2"x ]; then
-			rm -rf /tmp/aria*
-			md5_web3=$(curl http://file.fancyss.com/adm/version | sed -n 2p)
-			wget --no-check-certificate --tries=1 --timeout=15 http://file.fancyss.com/adm/adm.tar.gz
-			md5sum_gz=$(md5sum /tmp/adm.tar.gz | sed 's/ /\n/g'| sed -n 1p)
-			if [ "$md5sum_gz"x != "$md5_web3"x ]; then
-				dbus set adm_install_status="8"
-				dbus save adm
-				rm -rf /tmp/aria*
-				sleep 5
-				dbus set adm_install_status="0"
-				dbus save adm
-				exit
-			fi
-		fi
-	fi
-	
-	# 正在安装adm中...
-	dbus set adm_install_status="4"
-	dbus save adm
-	tar -zxvf adm.tar.gz
-	mkdir -p /jffs/scripts
-	mkdir -p /jffs/webs
-	echo moving files
-	mv -f /tmp/adm/adm /jffs/
-	mv -f /tmp/adm/www /jffs/
-	mv -f /tmp/adm/scripts/* /jffs/scripts/
-	mv -f /tmp/adm/webs/* /jffs/webs/
-	mv -f /tmp/adm.session /jffs/adm/ >/dev/null 2>&1
-	cd /jffs
-	chmod +x /jffs/adm/*
-	chmod +x /jffs/www/php-cgi
-	chmod +x /jffs/scripts/*
-	chmod 777 /jffs/www/_h5ai/cache
-	rm -rf /tmp/adm
-	rm -rf /tmp/adm.tar.gz
-	sleep 2
-	dbus set adm_install_status="5"
-	dbus save adm
-	version=`cat /jffs/adm/version`
-	dbus set adm_version=$version
-	dbus set set adm_version_web=$version
-	dbus save adm
-	sleep 2
-	dbus set adm_install_status="1"
-	dbus save adm
-	sleep 10
-	if [ $adm_install_status != "0" ] && [ $adm_install_status != "1" ] ;then
-		dbus set adm_install_status="0"
-		dbus save adm
-	fi
-}
 
 
 #安装插件模块
@@ -317,15 +211,14 @@ update_adm(){
 				dbus set adm_install_status="0"
 			else
 				tar -zxf adm.tar.gz
-				dbus set adm_enable="0"
 				dbus set adm_install_status="10"
-				chmod a+x /tmp/adm/update.sh
-				sh /tmp/adm/update.sh
+				chmod a+x /tmp/adm/install.sh
+				sh /tmp/adm/install.sh
 				sleep 2
 				dbus set adm_install_status="11"
 				dbus set adm_version=$adm_version_web1
 				sleep 2
-				dbus set adm_install_status="0"
+				dbus set adm_install_status="1"
 			fi
 		else
 			dbus set adm_install_status="13"
