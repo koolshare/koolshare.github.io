@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=aria2
-VERSION=1.5.6
+VERSION=`cat aria2/aria2/version`
 
 cat version
 rm -f ${MODULE}.tar.gz
