@@ -1,1 +1,4 @@
-TODO
+Koolshare Asuswrt-Merlin softeware center Changelog
+===========================================
+1.0.5
+   - fix	插件隐藏按钮移动到右侧

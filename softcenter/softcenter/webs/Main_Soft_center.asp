@@ -29,6 +29,11 @@
 	-moz-border-radius: 10px 0 0 10px;	
 	border-radius: 10px 0 0 10px;
 }
+.cloud_main_radius_right{
+	-webkit-border-radius: 0 10px 10px 0;
+	-moz-border-radius: 0 10px 10px 0;	
+	border-radius: 0 10px 10px 0;
+}
 .cloud_main_radius{
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;	
@@ -335,7 +340,6 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="ngrokd" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_tunnel.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">穿透DDNS</div>
-                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -345,8 +349,13 @@ function init(){
 														<td>
 															<div style="padding:10px;width:95%;font-size:14px;">
 																穿透DDNS，服务器转发方式！<a href="http://koolshare.cn/thread-6312-1-3.html" target="_blank"> <i><u>教程</u></i> </a>
+															</div>															
+														</td>		
+                                                        <td class="cloud_main_radius_right">
+															<div style="padding:10px;width:95%;font-size:14px;">
+															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
 															</div>
-														</td>
+														</td>								
 													</tr>
 													<tr class="softcenter_tr2" height="10px" id="tunnel_tr2">
 														<td colspan="3"></td>
@@ -358,7 +367,6 @@ function init(){
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">
                                                                 P2P穿透
 															</div>
-                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -368,6 +376,11 @@ function init(){
 														<td>
 															<div style="padding:10px;width:95%;font-size:14px;">
 																P2P穿透~
+															</div>
+														</td>
+														<td class="cloud_main_radius_right">
+															<div style="padding:10px;width:95%;font-size:14px;">
+															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
 															</div>
 														</td>
 													</tr>
@@ -380,7 +393,6 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="thunder" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_xunlei.asp'"></div>
 														<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">迅雷远程</div>
-														<a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
                                                         </td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -391,6 +403,11 @@ function init(){
 															<div id="xunlei_info1" style="padding:10px;width:95%;font-size:14px;">
 																<li>点击安装后会自动下载并安装到USB设备中.</li>
 																<li>默认下载目录也位于相同的USB设备内.</li>
+															</div>
+														</td>
+														<td class="cloud_main_radius_right">
+															<div style="padding:10px;width:95%;font-size:14px;">
+															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
 															</div>
 														</td>
 													</tr>
@@ -405,7 +422,6 @@ function init(){
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="aria2_install();"></span>
 															</div>
-                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -415,6 +431,11 @@ function init(){
 														<td>
 															<div style="padding:10px;width:95%;font-size:14px;">
 																楼上不给力？来我这里试试~
+															</div>
+														</td>
+														<td class="cloud_main_radius_right">
+															<div style="padding:10px;width:95%;font-size:14px;">
+															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
 															</div>
 														</td>
 													</tr>
@@ -430,7 +451,6 @@ function init(){
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="transmission_install();"></span>
 															</div>
-                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -440,6 +460,11 @@ function init(){
 														<td>
 															<div style="padding:10px;width:95%;font-size:14px;">
 																我方了~<i></i>
+															</div>
+														</td>
+														<td class="cloud_main_radius_right">
+															<div style="padding:10px;width:95%;font-size:14px;">
+															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
 															</div>
 														</td>
 													</tr>
@@ -453,7 +478,6 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="ss-server" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"  onclick="location.href = '/Module_ss_server.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">ss-server</div>
-                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -463,6 +487,11 @@ function init(){
 														<td>
 															<div style="padding:10px;width:95%;font-size:14px;">
 																在路由器上开一个ss服务器，将你的网络共享到公网~很有卵用~
+															</div>
+														</td>
+														<td class="cloud_main_radius_right">
+															<div style="padding:10px;width:95%;font-size:14px;">
+															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
 															</div>
 														</td>
 													</tr>
@@ -475,7 +504,6 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="shadowvpn" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"  onclick="location.href = '/Module_shadowVPN.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">shadowvpn</div>
-                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -485,6 +513,11 @@ function init(){
 														<td>
 															<div style="padding:10px;width:95%;font-size:14px;">
 																轻量级无状态VPN，小巧，好用~
+															</div>
+														</td>
+														<td class="cloud_main_radius_right">
+															<div style="padding:10px;width:95%;font-size:14px;">
+															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
 															</div>
 														</td>
 													</tr>
@@ -497,7 +530,6 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="v2ray" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"  onclick="location.href = '/Module_v2ray.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">v2ray</div>
-														   <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
                                                         </td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -507,6 +539,11 @@ function init(){
 														<td>
 															<div style="padding:10px;width:95%;font-size:14px;">
 																Yet another tool help your through great firewall!</i>
+															</div>
+														</td>
+														<td class="cloud_main_radius_right">
+															<div style="padding:10px;width:95%;font-size:14px;">
+															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
 															</div>
 														</td>
 													</tr>
@@ -523,7 +560,6 @@ function init(){
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="entware_install();"></span>
 															</div>
-                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -533,6 +569,11 @@ function init(){
 														<td>
 															<div style="padding:10px;width:95%;font-size:14px;">
 																有了Enterware，还有什么路由器不能做的？<i>（你猜我做好没有？）</i>
+															</div>
+														</td>
+														<td class="cloud_main_radius_right">
+															<div style="padding:10px;width:95%;font-size:14px;">
+															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
 															</div>
 														</td>
 													</tr>
@@ -548,7 +589,6 @@ function init(){
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="dualwan_policy_install();"></span>
 															</div>
-                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -558,6 +598,11 @@ function init(){
 														<td>
 															<div style="padding:10px;width:95%;font-size:14px;">
 																你有双线接入？来试试策略路由吧~
+															</div>
+														</td>
+														<td class="cloud_main_radius_right">
+															<div style="padding:10px;width:95%;font-size:14px;">
+															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
 															</div>
 														</td>
 													</tr>
@@ -573,7 +618,6 @@ function init(){
 															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
 																<span class="software_action" onclick="thunder_bird();"></span>
 															</div>
-                                                           <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
 														</td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -583,6 +627,11 @@ function init(){
 														<td>
 															<div style="padding:10px;width:95%;font-size:14px;">
 																迅雷快鸟~
+															</div>
+														</td>
+														<td class="cloud_main_radius_right">
+															<div style="padding:10px;width:95%;font-size:14px;">
+															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
 															</div>
 														</td>
 													</tr>
@@ -595,7 +644,6 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="speedtest" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_speedtest.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">Speedtest</div>
-														   <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
                                                         </td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -605,6 +653,11 @@ function init(){
 														<td>
 															<div style="padding:10px;width:95%;font-size:14px;">
 																Speedtest~
+															</div>
+														</td>
+														<td class="cloud_main_radius_right">
+															<div style="padding:10px;width:95%;font-size:14px;">
+															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
 															</div>
 														</td>
 													</tr>
@@ -617,7 +670,6 @@ function init(){
 														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
 															<div id="adm" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_adm.asp'"></div>
 															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">阿呆喵</div>
-														   <a class="link_hidden" ><img style="cursor:pointer;margin-top:-37px;margin-bottom:20px;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""></a>
                                                         </td>
 														<td width="6px">
 															<div align="center"><img src="/images/cloudsync/line.png"></div>
@@ -627,6 +679,11 @@ function init(){
 														<td>
 															<div style="padding:10px;width:95%;font-size:14px;">
 																去广告，看疗效~
+															</div>
+														</td>
+														<td class="cloud_main_radius_right">
+															<div style="padding:10px;width:95%;font-size:14px;">
+															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
 															</div>
 														</td>
 													</tr>
@@ -657,6 +714,8 @@ function init(){
 																<div style="padding:10px;width:95%;font-size:14px;">
 																	然而并没有...请随时关注固件更新哦~<i>（上古天坑区）</i>
 																</div>
+															</td>
+															<td class="cloud_main_radius_right">
 															</td>
 														</tr>
 												</table>
