@@ -199,6 +199,10 @@
 			document.form.submit();
 		}
 
+		function done_validating(action) {
+			return true;
+		}
+
 		function reload_Soft_Center() {
 			location.href = "/Main_Soft_center.asp";
 		}
