@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -39,6 +39,70 @@
 	-moz-border-radius: 10px;	
 	border-radius: 10px;
 }
+</style>
+<style>
+    /* 软件中心icon新样式 by acelan */
+    dl,dt,dd{
+        padding:0;
+        margin:0;
+    }
+    .icon{
+        float:left;
+        position:relative;
+        margin: 10px 0px 30px 0px;
+    }
+    .icon-title{
+        line-height: 3em;
+        text-align:center;
+    }
+    .icon-pic{
+        background: url(/res/software_center.png) no-repeat 0px 0px;
+        width: 64px;
+        height: 64px;
+        margin: 0px 30px 10px 30px;
+    }
+    .icon-desc{
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-size:0;
+        width: 119px;
+        border-radius: 8px;
+        font-size: 16px;
+        opacity: 0;
+        background-color:#000;
+        line-height: 84px;
+        margin:5px;
+        text-overflow:ellipsis;
+        transition: opacity .5s ease-in;
+    }
+    .icon-desc .text{
+        font-size: 12px;
+        line-height: 1.4em;
+        vertical-align:middle;
+        display: inline-block;
+        margin: 10px;
+    }
+    .icon:hover .icon-desc{
+        opacity: .8;
+    }
+    .icon-desc .opt{
+        font-size: 0;
+        line-height: 0;
+    }
+    .icon-desc .install-btn,
+    .icon-desc .hide-btn{
+        display: inline-block;
+        border: none;
+        width: 60%;
+        margin-top: 20px;
+        border-radius: 0px 0px 0px 5px;
+    }
+    .icon-desc .hide-btn{
+        border-radius: 0px 0px 5px 0px;
+        width:40%;
+        border-left: 1px solid #000;
+    }
 </style>
 <script>
 
@@ -337,359 +401,183 @@ function init(){
 													</tr>
 
 													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="tunnel_tr1">
-														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="ngrokd" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_tunnel.asp'"></div>
-															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">穿透DDNS</div>
-														</td>
-														<td width="6px">
-															<div align="center"><img src="/images/cloudsync/line.png"></div>
-														</td>
-														<td width="1px">
-														</td>
-														<td>
-															<div style="padding:10px;width:95%;font-size:14px;">
-																穿透DDNS，服务器转发方式！<a href="http://koolshare.cn/thread-6312-1-3.html" target="_blank"> <i><u>教程</u></i> </a>
-															</div>															
-														</td>		
-                                                        <td class="cloud_main_radius_right">
-															<div style="padding:10px;width:95%;font-size:14px;">
-															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
-															</div>
-														</td>								
-													</tr>
-													<tr class="softcenter_tr2" height="10px" id="tunnel_tr2">
-														<td colspan="3"></td>
-													</tr>
-
-													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="koolnet_tr1">
-														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="p2p" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_koolnet.asp'"></div>
-															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">
-                                                                P2P穿透
-															</div>
-														</td>
-														<td width="6px">
-															<div align="center"><img src="/images/cloudsync/line.png"></div>
-														</td>
-														<td width="1px">
-														</td>
-														<td>
-															<div style="padding:10px;width:95%;font-size:14px;">
-																P2P穿透~
-															</div>
-														</td>
-														<td class="cloud_main_radius_right">
-															<div style="padding:10px;width:95%;font-size:14px;">
-															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
-															</div>
-														</td>
-													</tr>
-													<tr height="10px" class="softcenter_tr2">
-														<td colspan="3"></td>
-													</tr>
-
-													
-													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="xunlei_tr1">
-														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="thunder" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_xunlei.asp'"></div>
-														<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">迅雷远程</div>
+                                                        <td colspan="4">
+                                                            <dl class="icon">
+                                                                <dt class="icon-title">穿透DDNS</dt>
+                                                                <dd class="icon-pic"></dd>
+                                                                <dd class="icon-desc">
+                                                                    <div class="text">
+                                                                        <a href="/Module_tunnel.asp">穿透DDNS，服务器转发方式！</a>
+                                                                        <a href="http://koolshare.cn/thread-6312-1-3.html" target="_blank">教程</a>
+                                                                    </div>
+                                                                    <div class="opt">
+                                                                        <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
+                                                                    </div>
+                                                                </dd>
+                                                            </dl>
+                                                            <dl class="icon">
+                                                                <dt class="icon-title">P2P穿透</dt>
+                                                                <dd class="icon-pic" style="background-position: 0px -67px;"></dd>
+                                                                <dd class="icon-desc">
+                                                                    <div class="text">
+                                                                        <a href="/Module_koolnet.asp">P2P穿透~</a>
+                                                                    </div>
+                                                                    <div class="opt">
+                                                                        <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
+                                                                    </div>
+                                                                </dd>
+                                                            </dl>
+                                                            <dl class="icon">
+                                                                <dt class="icon-title">迅雷远程</dt>
+                                                                <dd class="icon-pic" style="background-position: 0px -134px;"></dd>
+                                                                <dd class="icon-desc">
+                                                                    <div class="text">
+                                                                        <a href="/Module_xunlei.asp">
+                                                                            点击安装后会自动下载并安装到USB设备中.<br/>
+                                                                            默认下载目录也位于相同的USB设备内.
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="opt">
+                                                                        <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
+                                                                    </div>
+                                                                </dd>
+                                                            </dl>
+                                                            <dl class="icon">
+                                                                <dt class="icon-title">Aria2</dt>
+                                                                <dd class="icon-pic" style="background-position: 0px -201px;"></dd>
+                                                                <dd class="icon-desc">
+                                                                    <div class="text">
+                                                                        <a href="/Module_aria2.asp">
+                                                                            楼上不给力？来我这里试试~
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="opt">
+                                                                        <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
+                                                                    </div>
+                                                                </dd>
+                                                            </dl>
+                                                            <dl class="icon">
+                                                                <dt class="icon-title">Transmission</dt>
+                                                                <dd class="icon-pic" style="background-position: 0px -268px;"></dd>
+                                                                <dd class="icon-desc">
+                                                                    <div class="text">
+                                                                        <a href="/Module_transmission.asp">我方了~</a>
+                                                                    </div>
+                                                                    <div class="opt">
+                                                                        <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
+                                                                    </div>
+                                                                </dd>
+                                                            </dl>
+                                                            <dl class="icon">
+                                                                <dt class="icon-title">ss-server</dt>
+                                                                <dd class="icon-pic" style="background-position: 0px -335px;"></dd>
+                                                                <dd class="icon-desc">
+                                                                    <div class="text">
+                                                                        <a href="/Module_ss_server.asp">在路由器上开一个ss服务器，将你的网络共享到公网~很有卵用~</a>
+                                                                    </div>
+                                                                    <div class="opt">
+                                                                        <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
+                                                                    </div>
+                                                                </dd>
+                                                            </dl>
+                                                            <dl class="icon">
+                                                                <dt class="icon-title">shadowvpn</dt>
+                                                                <dd class="icon-pic" style="background-position: 0px -399px;"></dd>
+                                                                <dd class="icon-desc">
+                                                                    <div class="text">
+                                                                        <a href="/Module_shadowVPN.asp">轻量级无状态VPN，小巧，好用~</a>
+                                                                    </div>
+                                                                    <div class="opt">
+                                                                        <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
+                                                                    </div>
+                                                                </dd>
+                                                            </dl>
+                                                            <dl class="icon">
+                                                                <dt class="icon-title">v2ray</dt>
+                                                                <dd class="icon-pic" style="background-position: 0px -466px;"></dd>
+                                                                <dd class="icon-desc">
+                                                                    <div class="text">
+                                                                        <a href="/Module_v2ray.asp">Yet another tool help your through great firewall!</a>
+                                                                    </div>
+                                                                    <div class="opt">
+                                                                        <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
+                                                                    </div>
+                                                                </dd>
+                                                            </dl>
+                                                            <dl class="icon">
+                                                                <dt class="icon-title">Entware-ng</dt>
+                                                                <dd class="icon-pic" style="background-position: 0px -532px;"></dd>
+                                                                <dd class="icon-desc">
+                                                                    <div class="text">
+                                                                        有了Enterware，还有什么路由器不能做的？<i>（你猜我做好没有？）</i>
+                                                                    </div>
+                                                                    <div class="opt">
+                                                                        <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
+                                                                    </div>
+                                                                </dd>
+                                                            </dl>
+                                                            <dl class="icon">
+                                                                <dt class="icon-title">策略路由</dt>
+                                                                <dd class="icon-pic" style="background-position: 0px -598px;"></dd>
+                                                                <dd class="icon-desc">
+                                                                    <div class="text">
+                                                                        <a href="/Module_policy_route.asp">你有双线接入？来试试策略路由吧~</a>
+                                                                    </div>
+                                                                    <div class="opt">
+                                                                        <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
+                                                                    </div>
+                                                                </dd>
+                                                            </dl>
+                                                            <dl class="icon">
+                                                                <dt class="icon-title">迅雷快鸟</dt>
+                                                                <dd class="icon-pic" style="background-position: 0px -730px;"></dd>
+                                                                <dd class="icon-desc">
+                                                                    <div class="text">
+                                                                        <a href="/Module_kuainiao.asp">迅雷快鸟，不解释~</a>
+                                                                    </div>
+                                                                    <div class="opt">
+                                                                        <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
+                                                                    </div>
+                                                                </dd>
+                                                            </dl>
+                                                            <dl class="icon">
+                                                                <dt class="icon-title">speedtest</dt>
+                                                                <dd class="icon-pic" style="background-position: -67px -2px;"></dd>
+                                                                <dd class="icon-desc">
+                                                                    <div class="text">
+                                                                        <a href="/Module_speedtest.asp">speedtest~</a>
+                                                                    </div>
+                                                                    <div class="opt">
+                                                                        <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
+                                                                    </div>
+                                                                </dd>
+                                                            </dl>
+                                                            <dl class="icon">
+                                                                <dt class="icon-title">阿呆猫</dt>
+                                                                <dd class="icon-pic" style="background-position: -67px -67px;"></dd>
+                                                                <dd class="icon-desc">
+                                                                    <div class="text">
+                                                                        <a href="/Module_adm.asp">去广告，看疗效~</a>
+                                                                    </div>
+                                                                    <div class="opt">
+                                                                        <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
+                                                                    </div>
+                                                                </dd>
+                                                            </dl>
                                                         </td>
-														<td width="6px">
-															<div align="center"><img src="/images/cloudsync/line.png"></div>
-														</td>
-														<td width="1px">
-														</td>
-														<td>
-															<div id="xunlei_info1" style="padding:10px;width:95%;font-size:14px;">
-																<li>点击安装后会自动下载并安装到USB设备中.</li>
-																<li>默认下载目录也位于相同的USB设备内.</li>
-															</div>
-														</td>
-														<td class="cloud_main_radius_right">
-															<div style="padding:10px;width:95%;font-size:14px;">
-															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
-															</div>
-														</td>
-													</tr>
-													<tr height="10px" class="softcenter_tr2">
-														<td colspan="3"></td>
-													</tr>
-
-													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="aria2_tr1">
-														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="aria2" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_aria2.asp'"></div>
-															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">Aria2</div>
-															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
-																<span class="software_action" onclick="aria2_install();"></span>
-															</div>
-														</td>
-														<td width="6px">
-															<div align="center"><img src="/images/cloudsync/line.png"></div>
-														</td>
-														<td width="1px">
-														</td>
-														<td>
-															<div style="padding:10px;width:95%;font-size:14px;">
-																楼上不给力？来我这里试试~
-															</div>
-														</td>
-														<td class="cloud_main_radius_right">
-															<div style="padding:10px;width:95%;font-size:14px;">
-															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
-															</div>
-														</td>
-													</tr>
-													<tr height="10px" class="softcenter_tr2">
-														<td colspan="3">
-														</td>
-													</tr>
-
-													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="transmission_tr1"> 
-														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="Transmission" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_transmission.asp'"></div>
-															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">Transmission</div>
-															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
-																<span class="software_action" onclick="transmission_install();"></span>
-															</div>
-														</td>
-														<td width="6px">
-															<div align="center"><img src="/images/cloudsync/line.png"></div>
-														</td>
-														<td width="1px">
-														</td>
-														<td>
-															<div style="padding:10px;width:95%;font-size:14px;">
-																我方了~<i></i>
-															</div>
-														</td>
-														<td class="cloud_main_radius_right">
-															<div style="padding:10px;width:95%;font-size:14px;">
-															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
-															</div>
-														</td>
-													</tr>
-													<tr height="10px" class="softcenter_tr2">
-														<td colspan="3">
-														</td>
-													</tr>
-
-													
-													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="ssserver_tr1">
-														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="ss-server" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"  onclick="location.href = '/Module_ss_server.asp'"></div>
-															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">ss-server</div>
-														</td>
-														<td width="6px">
-															<div align="center"><img src="/images/cloudsync/line.png"></div>
-														</td>
-														<td width="1px">
-														</td>
-														<td>
-															<div style="padding:10px;width:95%;font-size:14px;">
-																在路由器上开一个ss服务器，将你的网络共享到公网~很有卵用~
-															</div>
-														</td>
-														<td class="cloud_main_radius_right">
-															<div style="padding:10px;width:95%;font-size:14px;">
-															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
-															</div>
-														</td>
-													</tr>
-													<tr height="10px" class="softcenter_tr2">
-														<td colspan="3">
-														</td>
-													</tr>
-
-													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="shadowvpn_tr1">
-														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="shadowvpn" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"  onclick="location.href = '/Module_shadowVPN.asp'"></div>
-															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">shadowvpn</div>
-														</td>
-														<td width="6px">
-															<div align="center"><img src="/images/cloudsync/line.png"></div>
-														</td>
-														<td width="1px">
-														</td>
-														<td>
-															<div style="padding:10px;width:95%;font-size:14px;">
-																轻量级无状态VPN，小巧，好用~
-															</div>
-														</td>
-														<td class="cloud_main_radius_right">
-															<div style="padding:10px;width:95%;font-size:14px;">
-															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
-															</div>
-														</td>
-													</tr>
-													<tr height="10px" class="softcenter_tr2">
-														<td colspan="3">
-														</td>
-													</tr>
-
-													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="v2ray_tr1">
-														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="v2ray" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"  onclick="location.href = '/Module_v2ray.asp'"></div>
-															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">v2ray</div>
-                                                        </td>
-														<td width="6px">
-															<div align="center"><img src="/images/cloudsync/line.png"></div>
-														</td>
-														<td width="1px">
-														</td>
-														<td>
-															<div style="padding:10px;width:95%;font-size:14px;">
-																Yet another tool help your through great firewall!</i>
-															</div>
-														</td>
-														<td class="cloud_main_radius_right">
-															<div style="padding:10px;width:95%;font-size:14px;">
-															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
-															</div>
-														</td>
-													</tr>
-													<tr height="10px" class="softcenter_tr2">
-														<td colspan="3">
-														</td>
-													</tr>
-
-													
-													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="entware_tr1">
-														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="entware" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center"></div>
-															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">Entware-ng</div>
-															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
-																<span class="software_action" onclick="entware_install();"></span>
-															</div>
-														</td>
-														<td width="6px">
-															<div align="center"><img src="/images/cloudsync/line.png"></div>
-														</td>
-														<td width="1px">
-														</td>
-														<td>
-															<div style="padding:10px;width:95%;font-size:14px;">
-																有了Enterware，还有什么路由器不能做的？<i>（你猜我做好没有？）</i>
-															</div>
-														</td>
-														<td class="cloud_main_radius_right">
-															<div style="padding:10px;width:95%;font-size:14px;">
-															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
-															</div>
-														</td>
-													</tr>
-													<tr height="10px" class="softcenter_tr2">
-														<td colspan="3">
-														</td>
-													</tr>
-
-													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="policy_tr1">
-														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="dualwan_policy" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_policy_route.asp'"></div>
-															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">策略路由</div>
-															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
-																<span class="software_action" onclick="dualwan_policy_install();"></span>
-															</div>
-														</td>
-														<td width="6px">
-															<div align="center"><img src="/images/cloudsync/line.png"></div>
-														</td>
-														<td width="1px">
-														</td>
-														<td>
-															<div style="padding:10px;width:95%;font-size:14px;">
-																你有双线接入？来试试策略路由吧~
-															</div>
-														</td>
-														<td class="cloud_main_radius_right">
-															<div style="padding:10px;width:95%;font-size:14px;">
-															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
-															</div>
-														</td>
-													</tr>
-													<tr height="10px" class="softcenter_tr2">
-														<td colspan="3">
-														</td>
-													</tr>
-
-													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="kuainiao_tr1">
-														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="thunder_bird" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_kuainiao.asp'"></div>
-															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">迅雷快鸟</div>
-															<div align="left" style="width:130px;margin-top:2px;margin-left:95px;">
-																<span class="software_action" onclick="thunder_bird();"></span>
-															</div>
-														</td>
-														<td width="6px">
-															<div align="center"><img src="/images/cloudsync/line.png"></div>
-														</td>
-														<td width="1px">
-														</td>
-														<td>
-															<div style="padding:10px;width:95%;font-size:14px;">
-																迅雷快鸟~
-															</div>
-														</td>
-														<td class="cloud_main_radius_right">
-															<div style="padding:10px;width:95%;font-size:14px;">
-															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
-															</div>
-														</td>
-													</tr>
-													<tr height="10px" class="softcenter_tr2">
-														<td colspan="3">
-														</td>
-													</tr>
-
-													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="speedtest_tr1">
-														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="speedtest" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_speedtest.asp'"></div>
-															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">Speedtest</div>
-                                                        </td>
-														<td width="6px">
-															<div align="center"><img src="/images/cloudsync/line.png"></div>
-														</td>
-														<td width="1px">
-														</td>
-														<td>
-															<div style="padding:10px;width:95%;font-size:14px;">
-																Speedtest~
-															</div>
-														</td>
-														<td class="cloud_main_radius_right">
-															<div style="padding:10px;width:95%;font-size:14px;">
-															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
-															</div>
-														</td>
-													</tr>
-													<tr height="10px" class="softcenter_tr2">
-														<td colspan="3">
-														</td>
-													</tr>
-
-													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="adm_tr1">
-														<td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-															<div id="adm" style="padding:10px;margin-left:20px;margin-right:150px;cursor:pointer;" align="center" onclick="location.href = '/Module_adm.asp'"></div>
-															<div align="left" style="width:130px;margin-top:-40px;margin-bottom:21px;margin-left:105px;font-size:18px;text-shadow: 1px 1px 0px black;">阿呆喵</div>
-                                                        </td>
-														<td width="6px">
-															<div align="center"><img src="/images/cloudsync/line.png"></div>
-														</td>
-														<td width="1px">
-														</td>
-														<td>
-															<div style="padding:10px;width:95%;font-size:14px;">
-																去广告，看疗效~
-															</div>
-														</td>
-														<td class="cloud_main_radius_right">
-															<div style="padding:10px;width:95%;font-size:14px;">
-															<a class="link_hidden" ><img style="cursor:pointer;margin-left:88px" title="点击隐藏" src="/res/hide.png" width="" height="" border="0" alt=""/a>
-															</div>
-														</td>
-													</tr>
-													<tr height="10px" class="softcenter_tr2">
-														<td colspan="3">
-														</td>
 													</tr>
 
 													<tr bgcolor="#444f53" width="235px">
