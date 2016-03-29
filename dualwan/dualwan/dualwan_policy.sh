@@ -141,7 +141,7 @@ if [ $dualwanpolicy_update_check = "1" ];then
 			dbus set dualwanpolicy_install_status="1"
 			cd /tmp
 			md5_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/dualwan/version | sed -n 2p`
-			wget --no-check-certificate --tries=1 --timeout=15 https://koolshare.github.io/dualwan/dualwan.tar.gz
+			wget --no-check-certificate --tries=1 --timeout=15 https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/dualwan/dualwan.tar.gz
 			md5sum_gz=`md5sum /tmp/dualwan.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web1" ]; then
 				dbus set dualwanpolicy_install_status="4"
