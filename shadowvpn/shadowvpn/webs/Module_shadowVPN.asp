@@ -129,10 +129,11 @@ function write_shadowvpn_install_status(){
 	}
 
 function version_show(){
-	if (db_shadowvpn_['shadowvpn_version'] != db_shadowvpn_['shadowvpn_version_web'] && db_shadowvpn_['shadowvpn_version_web'] !== "undefined"){
-		$("#shadowvpn_version_status").html("<i>有新版本：" + db_shadowvpn_['shadowvpn_version_web']);
+	if (db_shadowvpn_['shadowvpn_version_local'] != db_shadowvpn_['shadowvpn_version_web'] && db_shadowvpn_['shadowvpn_version_web'] !== "undefined"){
+		$("#shadowvpn_version_status").html("<i>当前版本：" + db_shadowvpn_['shadowvpn_version_local']);
+		$("#updateBtn").html("<i>升级到：" + db_shadowvpn_['shadowvpn_version_web']);
 	} else {
-		$("#shadowvpn_version_status").html("<i>当前版本：" + db_shadowvpn_['shadowvpn_version']);
+		$("#shadowvpn_version_status").html("<i>当前版本：" + db_shadowvpn_['shadowvpn_version_local']);
 	}
 }
 function update_shadowvpn(o, s){
@@ -193,9 +194,8 @@ location.href = "/Main_Soft_center.asp";
 										<div style="float:left;" class="formfonttitle">ShadowVPN</div>
 										<div style="float:right; width:15px; height:25px;margin-top:10px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
-										<div class="formfontdesc" style="padding-top:5px;margin-top:0px;float: left;" id="cmdDesc">轻量级无状态VPN，小巧，好用，支持UDP，游戏玩家首选，专为PSN、XBOX优化。双WAN用户请关闭策略路由！</div>
-										<div id="shadowvpn_version_status" style="padding-top:5px;margin-left:30px;margin-top:0px;float: left;"><i>当前版本：<% dbus_get_def("shadowvpn_version", "0"); %></i></div>								
-										<div class="formfontdesc" id="cmdDesc"></div>
+										<div class="formfontdesc" style="padding-top:5px;margin-top:0px;float: left;" id="cmdDesc">轻量级无状态VPN，小巧，好用，支持UDP，双WAN用户请关闭策略路由！</div>
+										
 										<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="routing_table">
 											<thead>
 											<tr>
@@ -205,7 +205,7 @@ location.href = "/Main_Soft_center.asp";
 											<tr>
 											<th>开启ShadowVPN</th>
 												<td colspan="2">
-													<div class="switch_field" style="display:table-cell">
+													<div class="switch_field" style="display:table-cell;float: left;">
 														<label for="switch">
 															<input id="switch" class="switch" type="checkbox" style="display: none;">
 															<div class="switch_container" >
@@ -216,10 +216,13 @@ location.href = "/Main_Soft_center.asp";
 															</div>
 														</label>
 													</div>
-													<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-35px;float: left;">
-														<button id="updateBtn" class="button_gen" onclick="update_shadowvpn(this, ' Refresh ');">检查更新</button>						
-													</div>
-													<div id="shadowvpn_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>	
+													<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-38px;float: left;">
+														<button id="updateBtn" class="button_gen" onclick="update_shadowvpn(this, ' Refresh ');">检查更新</button>
+                                                 <a style="margin-left: 178px;" href="https://github.com/koolshare/koolshare.github.io/blob/master/shadowvpn/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>														
+													</div>														
+											<div id="shadowvpn_version_status" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("shadowvpn_version_local", "0"); %></i></div>
+                                         <div id="shadowvpn_install_show" style="padding-top:5px;margin-left:330px;margin-top:-25px;"></div>											
+										 
 											</td>
 											</tr>
                                     	</table>

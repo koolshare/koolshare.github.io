@@ -6,7 +6,7 @@ shadowvpn=$(ps | grep "shadowvpn" | grep -v "grep")
 startshadowvpn=$(cat /jffs/scripts/wan-start | grep "shadowvpn")
 CONFIG=/tmp/shadowvpn.conf
 # don't forget change this version when update shadowvpn
-version="2.3"
+version="2.4"
 #time=$(cat /proc/uptime | sed 's/ /\n/g'|sed -n 1p)
 start_vpn() {
 	#mkdir -p $(dirname $CONFIG)
@@ -127,7 +127,7 @@ if [ "$shadowvpn_enable" = "1" ];then
    start_dns
    auto_start
    check_version
-   dbus set shadowvpn_version=$version
+   dbus set shadowvpn_version_local=$version
    dbus set shadowvpn_poweron=0
   else
    stop_vpn
@@ -155,7 +155,7 @@ if [ "$shadowvpn_update_check" = "1" ];then
 			dbus set shadowvpn_install_status="1"
 			cd /tmp
 			md5_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowvpn/version | sed -n 2p`
-			wget --no-check-certificate --tries=1 --timeout=15 https://koolshare.github.io/shadowvpn/shadowvpn.tar.gz
+			wget --no-check-certificate --tries=1 --timeout=15 https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowvpn/shadowvpn.tar.gz
 			md5sum_gz=`md5sum /tmp/shadowvpn.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web1" ]; then
 				dbus set shadowvpn_install_status="4"
@@ -171,7 +171,7 @@ if [ "$shadowvpn_update_check" = "1" ];then
 				sh /tmp/shadowvpn/update.sh
 				sleep 2
 				dbus set shadowvpn_install_status="3"
-				dbus set shadowvpn_version=$shadowvpn_version_web1
+				dbus set shadowvpn_version_local=$shadowvpn_version_web1
 				sleep 2
 				dbus set shadowvpn_install_status="0"
 			fi
