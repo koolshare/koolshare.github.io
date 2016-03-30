@@ -1,10 +1,10 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.1.0"
+version="0.1.1"
 
 #定义请求函数
-HTTP_REQ="wget --no-check-certificate -O - "
+HTTP_REQ="wget --no-check-certificate --header User-Agent: swjsq/0.0.1 -O - "
 POST_ARG="--post-data="
 
 #获取加速API
