@@ -60,7 +60,7 @@ EOF
    writenat=$(cat /jffs/scripts/firewall-start | grep "dualwan_policy")
    if [ -z "$writenat" ];then
 	   sed -i "1a sleep 30" /jffs/scripts/firewall-start
-	   sed -i '2a dualwan_policy.sh' /jffs/scripts/firewall-start
+	   sed -i '2a /koolshare/scripts/dualwan_policy.sh' /jffs/scripts/firewall-start
 	   chmod +x /jffs/scripts/firewall-start
    fi
 }
