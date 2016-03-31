@@ -240,6 +240,10 @@ sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
 	echo $(date): -------------------- Shadowsock service Stopped--------------------------
 	echo $(date):
 
+# remove conf under /jffs/configs/dnsmasq.d
+	rm -rf /jffs/configs/dnsmasq.d/gfwlist.conf
+
+
 # remove ss state
 	dbus remove ss_basic_state_china
 	dbus remove ss_basic_state_foreign

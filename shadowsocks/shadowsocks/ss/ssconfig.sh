@@ -37,6 +37,12 @@ if [ -z $ss_gameV2_dns2ss_user ];then
 fi
 }
 
+# creat dnsmasq.d folder
+creat_folder(){
+if [ ! -d /koolshare/configs/dnsmasq.d ];then
+	mkdir /koolshare/configs/dnsmasq.d
+fi
+{
 
 install_ss(){
 	tar -zxf shadowsocks.tar.gz
@@ -249,6 +255,7 @@ set_ulimit(){
 case $ACTION in
 start)
 	if [ "$ss_basic_enable" == "1" ];then
+	creat_folder
 	set_default_value
 	set_ulimit
     	apply_ss
@@ -262,6 +269,7 @@ stop | kill )
 	;;
 restart)
 	#disable_ss
+	creat_folder
 	set_default_value
 	set_ulimit
 	apply_ss

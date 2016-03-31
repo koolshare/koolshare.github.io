@@ -1,10 +1,18 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.3.4
+   - fix	更新了gfwlist模式内/jffs/configs/dnsmasq.conf.add文件夹配置，
+   		现在固件版本小于6.5.1的,该配置由start.sh生成，大于或者等于6.5.1
+   		改配置由dnsmasq默认提供。
+   		更新此版本ss，能解决6.5.1最新测试固件除了gfwlist模式外其它模式不能使用的问题；
+   		需要注意的是，如果你使用的是6.5.1前几个版本的测试固件（beta1-3），gfwlist模式可能会出现问题，
+   		6.5及之前版本和6.5.1beta4及其以后版本正常。
+
 1.3.3 ( 25/03/2016 08:28:20 )
    - fix	修复游戏模式V2可能出现的日志错误
    - fix	修复游戏模式V2中，koolgame启动两次的错误
    - add	为了保证提交后第一时间看到正确的SS状态，现在切换模式后，
-   			上一个SS状态会被清除，重新进入页面后，下一个状态会等到刷新时间后才更新。
+   		上一个SS状态会被清除，重新进入页面后，下一个状态会等到刷新时间后才更新。
 
 1.3.2 ( 22/03/2016 16:29:41 )
    - fix	修复切换全局模式后显示游戏模式V2的问题
@@ -23,7 +31,7 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    - fix	修复textarea的水印文字说明的浏览器兼容问题
    - fix	修复大陆白名单模式自定义dnsmasq页面错乱问题
    - add	增加了游戏模式V2，游戏模式V2使用小宝开发的程序koolgame，需要配合同是小宝开发的game-server
-			服务器端 http://koolshare.cn/thread-37086-1-1.html
+		服务器端 http://koolshare.cn/thread-37086-1-1.html
    - change	所有模式里的address功能改为dnsmasq自定义	
    - del	去除了ss自带的去广告功能，因为此功能可能会导致dnsmasq不能正常启动，而使路由器失去dns解析能力
 		
@@ -41,10 +49,10 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    - add	add dnsmasq conf customize in CHN mode
    - changed	changed the tile of ip doamin (now black ip go through ss, 
 		white ip go directly)
-     By update this version 1.2.7, your old balck ip and white ip setting will lost,
-you can find it back by backup ss conf (in ss node definition page), the old walue 
-is "ss_redchn_wan_blacklist" (now "ss_redchn_wan_white_ip") and "ss_redchn_wan_whitelist" 
-(now "ss_redchn_wan_black_ip")
+     		By update this version 1.2.7, your old balck ip and white ip setting will lost,
+		you can find it back by backup ss conf (in ss node definition page), the old walue 
+		is "ss_redchn_wan_blacklist" (now "ss_redchn_wan_white_ip") and "ss_redchn_wan_whitelist" 
+		(now "ss_redchn_wan_black_ip")
 
 1.2.6 ( 29/02/2016 16:03:25 )
    - fix	fix typo in ss update module (no ss code change)

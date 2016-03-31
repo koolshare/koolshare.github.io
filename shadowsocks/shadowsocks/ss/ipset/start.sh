@@ -111,12 +111,18 @@ if [ ! -z $ss_ipset_white_domain_web ];then
 fi
 
 # append custom conf dir
-echo "conf-dir=/jffs/configs/dnsmasq.d" >> /jffs/configs/dnsmasq.conf.add
+	fm_version=`nvram get extendno|sed 's/alpha[0-9]-//g'|sed 's/beta[0-9]-//g'|cut -d "-" -f1|sed 's/X//g'`
+	cmp=`versioncmp $fm_version "6.5.1"`
+	if [ "$cmp" = "1" ];then
+		#from KOOLSHARE firmware version 6.5.1,this line is default in dnsmasq.conf
+		echo "conf-dir=/jffs/configs/dnsmasq.d" >> /jffs/configs/dnsmasq.conf.add
+	fi
 
 # append gfwlist
-	if [ "$version_gfwlist" != "$md5sum_gfwlist" ];then
-		echo $(date): append gfwlist into dnsmasq.conf
-		cp -rf /koolshare/ss/ipset/gfwlist.conf  /jffs/configs/dnsmasq.d/
+	if [ ! -f /jffs/configs/dnsmasq.d/gfwlist.conf ];then
+		echo $(date): creat gfwlist conf to dnsmasq.conf
+		#cp -rf /koolshare/ss/ipset/gfwlist.conf  /jffs/configs/dnsmasq.d/
+		ln -sf /koolshare/ss/ipset/gfwlist.conf /jffs/configs/dnsmasq.d/gfwlist.conf
 		echo $(date): done
 		echo $(date):
 	fi
