@@ -42,7 +42,7 @@ creat_folder(){
 if [ ! -d /koolshare/configs/dnsmasq.d ];then
 	mkdir /koolshare/configs/dnsmasq.d
 fi
-{
+}
 
 install_ss(){
 	tar -zxf shadowsocks.tar.gz
