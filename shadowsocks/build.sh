@@ -5,7 +5,7 @@ VERSION=`cat ./shadowsocks/ss/version`
 old_version=`cat version | sed -n 1p`
 old_md5sum=`cat version | sed -n 2p`
 
-if [ $old_version !== $VERSION ];then
+if [ "$old_version" !== "$VERSION" ];then
   mv ${MODULE}.tar.gz ./history/"${MODULE}"_"$old_version".tar.gz
   echo $old_version $old_md5sum >> ./history/version
 fi
