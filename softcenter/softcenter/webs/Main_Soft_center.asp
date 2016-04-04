@@ -46,6 +46,9 @@
         padding:0;
         margin:0;
     }
+    input[type=button]:focus {
+        outline: none;
+    }
     .icon{
         float:left;
         position:relative;
@@ -59,7 +62,7 @@
         background: url(/res/software_center.png) no-repeat 0px 0px;
         width: 64px;
         height: 64px;
-        margin: 0px 30px 10px 30px;
+        margin: 10px 30px 0px 30px;
     }
     .icon-desc{
         position: absolute;
@@ -91,6 +94,7 @@
         line-height: 0;
     }
     .icon-desc .install-btn,
+    .icon-desc .uninstall-btn,
     .icon-desc .hide-btn{
         display: inline-block;
         border: none;
@@ -98,10 +102,30 @@
         margin-top: 20px;
         border-radius: 0px 0px 0px 5px;
     }
+    .icon-desc .uninstall-btn{
+        display: none;
+    }
     .icon-desc .hide-btn{
         border-radius: 0px 0px 5px 0px;
         width:40%;
         border-left: 1px solid #000;
+    }
+    .show-install-btn,
+    .show-uninstall-btn{
+        border: none;
+        background: #444;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px 5px 0px 0px;
+    }
+    .active-btn{
+        background: #444f53;
+    }
+    .is-install .uninstall-btn{
+        display: inline-block;
+    }
+    .is-install .install-btn{
+        display: none;
     }
 </style>
 <script>
@@ -331,6 +355,129 @@ function init(){
 }
 
 </script>
+<script>
+    var db_softcenter_ = {
+        "softcenter_curr_version": "1.0.5",
+        "softcenter_install_status": "0",
+        "softcenter_module_adm": "0",
+        "softcenter_module_adm_install": "1",
+        "softcenter_module_adm_ver": "0",
+        "softcenter_module_adm_url": "0",
+        "softcenter_module_aria2": "0",
+        "softcenter_module_aria2_install": "0",
+        "softcenter_module_aria2_ver": "0",
+        "softcenter_module_aria2_url": "0",
+        "softcenter_module_entware": "2",
+        "softcenter_module_entware_install": "0",
+        "softcenter_module_entware_ver": "0",
+        "softcenter_module_entware_url": "0",
+        "softcenter_module_koolnet": "0",
+        "softcenter_module_koolnet_ver": "0",
+        "softcenter_module_koolnet_install": "1",
+        "softcenter_module_koolnet_url": "0",
+        "softcenter_module_koolnet_visible": "0",
+        "softcenter_module_kuainiao": "0",
+        "softcenter_module_kuainiao_install": "0",
+        "softcenter_module_kuainiao_ver": "0",
+        "softcenter_module_kuainiao_url": "0",
+        "softcenter_module_policy": "0",
+        "softcenter_module_policy_install": "0",
+        "softcenter_module_policy_ver": "0",
+        "softcenter_module_policy_url": "0",
+        "softcenter_module_shadowvpn": "0",
+        "softcenter_module_shadowvpn_install": "0",
+        "softcenter_module_shadowvpn_ver": "0",
+        "softcenter_module_shadowvpn_ur": "0",
+        "softcenter_module_speedtest": "0",
+        "softcenter_module_speedtest_install": "0",
+        "softcenter_module_speedtest_ver": "0",
+        "softcenter_module_speedtest_url": "0",
+        "softcenter_module_ssserver": "0",
+        "softcenter_module_ssserver_install": "1",
+        "softcenter_module_ssserver_ver": "0",
+        "softcenter_module_ssserver_url": "0",
+        "softcenter_module_transmission": "2",
+        "softcenter_module_transmission_install": "2",
+        "softcenter_module_transmission_ver": "2",
+        "softcenter_module_transmission_url": "2",
+        "softcenter_module_tunnel": "0",
+        "softcenter_module_tunnel_install": "1",
+        "softcenter_module_tunnel_url": "",
+        "softcenter_module_tunnel_ver": "1.0.0",
+        "softcenter_module_tunnel_ver_url": "",
+        "softcenter_module_tunnel_visible": "0",
+        "softcenter_module_v2ray": "2",
+        "softcenter_module_v2ray_install": "2",
+        "softcenter_module_v2ray_ver": "2",
+        "softcenter_module_v2ray_url": "2",
+        "softcenter_module_xunlei": "0",
+        "softcenter_module_xunlei_install": "0",
+        "softcenter_module_xunlei_ver": "0",
+        "softcenter_module_xunlei_url": "0",
+        "softcenter_module_xunlei_visible": "0"
+    };
+
+    //格式化数据
+    var softInfo = (function formatDBSoftcenterData(data) {
+        var result = {};
+        $.map(db_softcenter_, function (item, key) {
+            key = key.split('_');
+            if ('module' === key[1]) {
+                var app = [key[0], key[1], key[2]].join('_');
+                var prop = key[3] || 'status';
+                if (!result[app]) {
+                    result[app] = {};
+                    result[app].name = key[2];
+                }
+                result[app][prop] = item;
+            } else {
+                result[key.join('_')] = item;
+            }
+        });
+        return result;
+    })(db_softcenter_);
+
+    function initAppStatus() {
+        var installCount = 0;
+        var uninstallCount = 0;
+        $('#IconContainer dl').each(function (i, app) {
+            app = $(app);
+            var name = 'softcenter_module_' + app.data('name');
+            if (1 === parseInt(softInfo[name].install, 10)) {
+                app.addClass('is-install');
+                installCount++;
+            } else {
+                uninstallCount++;
+            }
+        });
+        $('.show-install-btn').val('已安装(' + installCount + ')');
+        $('.show-uninstall-btn').val('未安装(' + uninstallCount + ')');
+    }
+
+    function showInstall(bInstall) {
+        $('.show-install-btn').removeClass('active-btn');
+        $('.show-uninstall-btn').removeClass('active-btn');
+        if (1 === bInstall) {
+            $('.show-install-btn').addClass('active-btn');
+        } else {
+            $('.show-uninstall-btn').addClass('active-btn');
+        }
+        var apps = $('#IconContainer dl');
+        apps.each(function (i, app) {
+            app = $(app);
+            var name = 'softcenter_module_' + app.data('name');
+            if (bInstall === parseInt(softInfo[name].install, 10)) {
+                app.show();
+            } else {
+                app.hide();
+            }
+        });
+    }
+    $(function () {
+        showInstall(1);
+        initAppStatus();
+    });
+</script>
 </head>
 <body onload="init();">
 	<div id="TopBanner"></div>
@@ -400,11 +547,18 @@ function init(){
 														<td colspan="3"></td>
 													</tr>
 
-													<tr bgcolor="#444f53" width="235px" class="softcenter_tr1" id="tunnel_tr1">
-                                                        <td colspan="4">
-                                                            <dl class="icon">
-                                                                <dt class="icon-title">穿透DDNS</dt>
+                                                    <tr width="235px">
+                                                        <td colspan="4" cellpadding="0" cellspacing="0" style="padding:0">
+                                                            <input class="show-install-btn" type="button" value="已安装" onclick="showInstall(1);" />
+                                                            <input class="show-uninstall-btn" type="button" value="未安装" onclick="showInstall(0);" />
+                                                        </td>
+                                                    </tr>
+
+													<tr bgcolor="#444f53" width="235px">
+                                                        <td colspan="4" id="IconContainer">
+                                                            <dl class="icon" data-name="tunnel">
                                                                 <dd class="icon-pic"></dd>
+                                                                <dt class="icon-title">穿透DDNS</dt>
                                                                 <dd class="icon-desc">
                                                                     <div class="text">
                                                                         <a href="/Module_tunnel.asp">穿透DDNS，服务器转发方式！</a>
@@ -412,26 +566,28 @@ function init(){
                                                                     </div>
                                                                     <div class="opt">
                                                                         <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
                                                                         <button type="button" class="hide-btn"onclick="">隐藏</button>
                                                                     </div>
                                                                 </dd>
                                                             </dl>
-                                                            <dl class="icon">
-                                                                <dt class="icon-title">P2P穿透</dt>
+                                                            <dl class="icon" data-name="koolnet">
                                                                 <dd class="icon-pic" style="background-position: 0px -67px;"></dd>
+                                                                <dt class="icon-title">P2P穿透</dt>
                                                                 <dd class="icon-desc">
                                                                     <div class="text">
                                                                         <a href="/Module_koolnet.asp">P2P穿透~</a>
                                                                     </div>
                                                                     <div class="opt">
                                                                         <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
                                                                         <button type="button" class="hide-btn"onclick="">隐藏</button>
                                                                     </div>
                                                                 </dd>
                                                             </dl>
-                                                            <dl class="icon">
-                                                                <dt class="icon-title">迅雷远程</dt>
+                                                            <dl class="icon" data-name="xunlei">
                                                                 <dd class="icon-pic" style="background-position: 0px -134px;"></dd>
+                                                                <dt class="icon-title">迅雷远程</dt>
                                                                 <dd class="icon-desc">
                                                                     <div class="text">
                                                                         <a href="/Module_xunlei.asp">
@@ -441,13 +597,14 @@ function init(){
                                                                     </div>
                                                                     <div class="opt">
                                                                         <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
                                                                         <button type="button" class="hide-btn"onclick="">隐藏</button>
                                                                     </div>
                                                                 </dd>
                                                             </dl>
-                                                            <dl class="icon">
-                                                                <dt class="icon-title">Aria2</dt>
+                                                            <dl class="icon" data-name="aria2">
                                                                 <dd class="icon-pic" style="background-position: 0px -201px;"></dd>
+                                                                <dt class="icon-title">Aria2</dt>
                                                                 <dd class="icon-desc">
                                                                     <div class="text">
                                                                         <a href="/Module_aria2.asp">
@@ -456,123 +613,133 @@ function init(){
                                                                     </div>
                                                                     <div class="opt">
                                                                         <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
                                                                         <button type="button" class="hide-btn"onclick="">隐藏</button>
                                                                     </div>
                                                                 </dd>
                                                             </dl>
-                                                            <dl class="icon">
-                                                                <dt class="icon-title">Transmission</dt>
+                                                            <dl class="icon" data-name="transmission">
                                                                 <dd class="icon-pic" style="background-position: 0px -268px;"></dd>
+                                                                <dt class="icon-title">Transmission</dt>
                                                                 <dd class="icon-desc">
                                                                     <div class="text">
                                                                         <a href="/Module_transmission.asp">我方了~</a>
                                                                     </div>
                                                                     <div class="opt">
                                                                         <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
                                                                         <button type="button" class="hide-btn"onclick="">隐藏</button>
                                                                     </div>
                                                                 </dd>
                                                             </dl>
-                                                            <dl class="icon">
-                                                                <dt class="icon-title">ss-server</dt>
+                                                            <dl class="icon" data-name="ssserver">
                                                                 <dd class="icon-pic" style="background-position: 0px -335px;"></dd>
+                                                                <dt class="icon-title">ss-server</dt>
                                                                 <dd class="icon-desc">
                                                                     <div class="text">
                                                                         <a href="/Module_ss_server.asp">在路由器上开一个ss服务器，将你的网络共享到公网~很有卵用~</a>
                                                                     </div>
                                                                     <div class="opt">
                                                                         <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
                                                                         <button type="button" class="hide-btn"onclick="">隐藏</button>
                                                                     </div>
                                                                 </dd>
                                                             </dl>
-                                                            <dl class="icon">
-                                                                <dt class="icon-title">shadowvpn</dt>
+                                                            <dl class="icon" data-name="shadowvpn">
                                                                 <dd class="icon-pic" style="background-position: 0px -399px;"></dd>
+                                                                <dt class="icon-title">shadowvpn</dt>
                                                                 <dd class="icon-desc">
                                                                     <div class="text">
                                                                         <a href="/Module_shadowVPN.asp">轻量级无状态VPN，小巧，好用~</a>
                                                                     </div>
                                                                     <div class="opt">
                                                                         <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
                                                                         <button type="button" class="hide-btn"onclick="">隐藏</button>
                                                                     </div>
                                                                 </dd>
                                                             </dl>
-                                                            <dl class="icon">
-                                                                <dt class="icon-title">v2ray</dt>
+                                                            <dl class="icon" data-name="v2ray">
                                                                 <dd class="icon-pic" style="background-position: 0px -466px;"></dd>
+                                                                <dt class="icon-title">v2ray</dt>
                                                                 <dd class="icon-desc">
                                                                     <div class="text">
                                                                         <a href="/Module_v2ray.asp">Yet another tool help your through great firewall!</a>
                                                                     </div>
                                                                     <div class="opt">
                                                                         <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
                                                                         <button type="button" class="hide-btn"onclick="">隐藏</button>
                                                                     </div>
                                                                 </dd>
                                                             </dl>
-                                                            <dl class="icon">
-                                                                <dt class="icon-title">Entware-ng</dt>
+                                                            <dl class="icon" data-name="entware">
                                                                 <dd class="icon-pic" style="background-position: 0px -532px;"></dd>
+                                                                <dt class="icon-title">Entware-ng</dt>
                                                                 <dd class="icon-desc">
                                                                     <div class="text">
                                                                         有了Enterware，还有什么路由器不能做的？<i>（你猜我做好没有？）</i>
                                                                     </div>
                                                                     <div class="opt">
                                                                         <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
                                                                         <button type="button" class="hide-btn"onclick="">隐藏</button>
                                                                     </div>
                                                                 </dd>
                                                             </dl>
-                                                            <dl class="icon">
-                                                                <dt class="icon-title">策略路由</dt>
+                                                            <dl class="icon" data-name="policy">
                                                                 <dd class="icon-pic" style="background-position: 0px -598px;"></dd>
+                                                                <dt class="icon-title">策略路由</dt>
                                                                 <dd class="icon-desc">
                                                                     <div class="text">
                                                                         <a href="/Module_policy_route.asp">你有双线接入？来试试策略路由吧~</a>
                                                                     </div>
                                                                     <div class="opt">
                                                                         <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
                                                                         <button type="button" class="hide-btn"onclick="">隐藏</button>
                                                                     </div>
                                                                 </dd>
                                                             </dl>
-                                                            <dl class="icon">
-                                                                <dt class="icon-title">迅雷快鸟</dt>
+                                                            <dl class="icon" data-name="kuainiao">
                                                                 <dd class="icon-pic" style="background-position: 0px -730px;"></dd>
+                                                                <dt class="icon-title">迅雷快鸟</dt>
                                                                 <dd class="icon-desc">
                                                                     <div class="text">
                                                                         <a href="/Module_kuainiao.asp">迅雷快鸟，不解释~</a>
                                                                     </div>
                                                                     <div class="opt">
                                                                         <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
                                                                         <button type="button" class="hide-btn"onclick="">隐藏</button>
                                                                     </div>
                                                                 </dd>
                                                             </dl>
-                                                            <dl class="icon">
-                                                                <dt class="icon-title">speedtest</dt>
+                                                            <dl class="icon" data-name="speedtest">
                                                                 <dd class="icon-pic" style="background-position: -67px -2px;"></dd>
+                                                                <dt class="icon-title">speedtest</dt>
                                                                 <dd class="icon-desc">
                                                                     <div class="text">
                                                                         <a href="/Module_speedtest.asp">speedtest~</a>
                                                                     </div>
                                                                     <div class="opt">
                                                                         <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
                                                                         <button type="button" class="hide-btn"onclick="">隐藏</button>
                                                                     </div>
                                                                 </dd>
                                                             </dl>
-                                                            <dl class="icon">
-                                                                <dt class="icon-title">阿呆猫</dt>
+                                                            <dl class="icon" data-name="adm">
                                                                 <dd class="icon-pic" style="background-position: -67px -67px;"></dd>
+                                                                <dt class="icon-title">阿呆猫</dt>
                                                                 <dd class="icon-desc">
                                                                     <div class="text">
                                                                         <a href="/Module_adm.asp">去广告，看疗效~</a>
                                                                     </div>
                                                                     <div class="opt">
                                                                         <button type="button" class="install-btn" onclick="">安装</button>
+                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
                                                                         <button type="button" class="hide-btn"onclick="">隐藏</button>
                                                                     </div>
                                                                 </dd>
