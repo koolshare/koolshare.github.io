@@ -77,9 +77,10 @@ echo $(date): --------------------Stopping Shadowsock service-------------------
 	echo $(date): flush iptables and destory chain...
 	iptables -t nat -D PREROUTING -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p udp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
+	iptables -t nat -D PREROUTING -p tcp -j REDSOCKS2 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -i br0 -p tcp -j REDSOCKS2 >/dev/null 2>&1
-	iptables -t nat -D PREROUTING -i br0 -p tcp -j SHADOWSOCKS >/dev/null 2>&1
-	iptables -t nat -D PREROUTING -i br0 -j SHADOWSOCKS >/dev/null 2>&1
+	iptables -t nat -D PREROUTING -p tcp -j SHADOWSOCKS >/dev/null 2>&1
+	iptables -t nat -D PREROUTING -j SHADOWSOCKS >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j REDSOCKS2 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j SHADOWSOCKS >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -j SHADOWSOCKS >/dev/null 2>&1

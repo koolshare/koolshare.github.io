@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.3.6
+   - fix	去除大陆白名单模式br0网卡限制
+   - update	更新ss和ssr二进制文件为最新源码编译
+   - update	更新内置的gfwlist，chnroute，cnd规则文件为最新
+
 1.3.5
    - fix	fix a type error!
 

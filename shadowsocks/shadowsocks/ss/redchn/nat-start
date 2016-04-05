@@ -43,7 +43,7 @@ fi
 
 # flush rules and set if any
 iptables -t nat -F REDSOCKS2 > /dev/null 2>&1
-iptables -t nat -D PREROUTING -i br0 -p tcp -j REDSOCKS2 >/dev/null 2>&1
+iptables -t nat -D PREROUTING -p tcp -j REDSOCKS2 >/dev/null 2>&1
 iptables -t nat -X REDSOCKS2 > /dev/null 2>&1
 iptables -t nat -D OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 1089 >/dev/null 2>&1
 iptables -t nat -D PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
@@ -64,7 +64,7 @@ ipset -N black_domain iphash
 iptables -t nat -N REDSOCKS2
 
 # 重定所有流量到 REDSOCKS2
-iptables -t nat -A PREROUTING -i br0 -p tcp -j REDSOCKS2
+iptables -t nat -A PREROUTING -p tcp -j REDSOCKS2
 
 # default wan_blacklist 强制局域网ip，DNS ip地址不走代理
 iptables -t nat -A REDSOCKS2 -d $ss_basic_server -j RETURN
