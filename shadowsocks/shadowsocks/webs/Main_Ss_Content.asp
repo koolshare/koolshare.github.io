@@ -274,23 +274,14 @@ function update_visibility() {
 		$j("#mode_state").html("SS运行状态");
 	} else if (ssmode == "1"){
 		$j("#mode_state").html("SS运行状态【gfwlist模式】");
-		//remove_chacha20_ietf();
-		//add_chacha20_ietf();
 	} else if (ssmode == "2"){
 		$j("#mode_state").html("SS运行状态【大陆白名单模式】");
-		//remove_chacha20_ietf();
-		//add_chacha20_ietf();
 	} else if (ssmode == "3"){
 		$j("#mode_state").html("SS运行状态【游戏模式】");
-		//remove_chacha20_ietf();
-		//add_chacha20_ietf();
 	} else if (ssmode == "4"){
 		$j("#mode_state").html("SS运行状态【游戏模式V2】");
-		//remove_chacha20_ietf();
 	} else if (ssmode == "5"){
 		$j("#mode_state").html("SS运行状态【全局模式】");
-		//remove_chacha20_ietf();
-		//add_chacha20_ietf();
 	}
 	showhide("ss_state1", (ssmode == "0"));
 	showhide("ss_state2", (ssmode !== "0"));
@@ -520,8 +511,6 @@ function pop_ss_node_list_listview() {
     fadeIn(document.getElementById("ss_node_list_viewlist_content"));
     cal_panel_block_clientList("ss_node_list_viewlist_content", 0.045);
     ss_node_list_view_hide_flag = false;
-    var obj1=document.getElementById('ssconf_table_method');
-    obj1.options.remove(17);
 }
 
 function getAllConfigs() {
@@ -1006,15 +995,6 @@ function check_ss(){
     document.form.SystemCmd.value = "ss_check.sh";
     document.form.submit();
     setTimeout("version_show()", 6000)
-}
-function remove_chacha20_ietf(){
-    var obj=document.getElementById('ss_basic_method');
-    obj.options.remove(17);
-}
-
-function add_chacha20_ietf(){
-    var obj=document.getElementById('ss_basic_method');
-    obj.options.add(new Option("chacha20-ietf","chacha20-ietf"));
 }
 
 </script>
