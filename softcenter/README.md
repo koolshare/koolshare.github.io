@@ -25,4 +25,10 @@
 
 软件中心设计初步想法
 ======
-TODO
+* 所有的图标存于./softcenter/res/software_center.png
+* 所有的 APP 信息存于 app.json.js
+* 已安装的数据,存于路由器内部
+* 未安装部分,实时从 github 拿到数据
+* 问题
+  * 未安装部分的图片,如何实时从github当中拿?
+  * 未安装部分的 css 如何实时从 github 动态拉取拿?
