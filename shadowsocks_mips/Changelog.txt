@@ -1,5 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks_mips Changelog
 ===========================================
+1.4.0
+   - add	fix install.sh
+
+1.3.9
+   - add	fix tab older
+
 1.3.8
    - add	add 'raw.githubusercontent.com' to router ipset for better online version check
 
