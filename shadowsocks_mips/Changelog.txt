@@ -1,0 +1,4 @@
+Koolshare Asuswrt-Merlin shadowsocks_mips Changelog
+===========================================
+1.3.7
+   - add	add koolshare shadowsocks mipsel support
