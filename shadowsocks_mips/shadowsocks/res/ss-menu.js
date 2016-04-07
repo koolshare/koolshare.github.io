@@ -1,6 +1,6 @@
 ﻿function menu_hook(title, tab) {
 var ss_mode = '<% nvram_get("ss_mode"); %>';
-tabtitle[16] = new Array("", "基本设置", "【1】GFWlist模式", "【2】大陆白名单模式", "【3】全局模式", "日志");
+tabtitle[16] = new Array("", "基本设置", "【1】GFWlist模式", "【2】大陆白名单模式", "【3】全局模式", "Socks5","日志");
 tablink[16] = new Array("", "Main_Ss_Content.asp", "Main_SsIpset_Content.asp", "Main_SsAuto_Content.asp",  "Main_Ss_Overall.asp", "Main_SsLocal_Content.asp",  "Main_SsLog_Content.asp");
 if(ss_mode == '0'){
 	remove_menu_item("Main_SsIpset_Content.asp");
