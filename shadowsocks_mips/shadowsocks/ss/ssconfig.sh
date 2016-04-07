@@ -234,7 +234,7 @@ print_success_info(){
 
 # detect ss version after ss service applied.
 detect_ss_version(){
-	ss_basic_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/version | sed -n 1p`
+	ss_basic_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks_mips/version | sed -n 1p`
 	if [ ! -z $ss_basic_version_web1 ];then
 		dbus set ss_basic_version_web=$ss_basic_version_web1
 	else
