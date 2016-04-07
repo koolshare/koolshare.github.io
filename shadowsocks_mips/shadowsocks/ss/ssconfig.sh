@@ -237,6 +237,11 @@ detect_ss_version(){
 	ss_basic_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/version | sed -n 1p`
 	if [ ! -z $ss_basic_version_web1 ];then
 		dbus set ss_basic_version_web=$ss_basic_version_web1
+	else
+		ss_basic_version_web2=`curl -s http://file.mjy211.com/koolshare.github.io/shadowsocks_mips/version | sed -n 1p`
+		if [ ! -z $ss_basic_version_web2 ];then
+			dbus set ss_basic_version_web=$ss_basic_version_web1
+		fi
 	fi
 }
 

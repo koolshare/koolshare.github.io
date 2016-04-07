@@ -1,5 +1,6 @@
 #!/bin/sh
 LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")
+resolvip www.google.com.tw >/dev/null 2>&1
 wget -4 --spider --quiet --tries=2 --timeout=2 www.google.com.tw
 if [ "$?" == "0" ]; then
 log='[ '$LOGTIME' ] working...'
