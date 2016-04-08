@@ -66,8 +66,9 @@ String.prototype.replaceAll = function(s1,s2){
 }
 function init(){
 	show_menu(menu_hook);
+	generate_options();
 	conf_to_obj();
-	update_visibility()
+	update_visibility();
 }
 
 function conf_to_obj(){
@@ -137,6 +138,14 @@ function update_visibility() {
     showhide("ss_ipset_tunnel_user", ((ifd == "1") && (it == "4")));
     showhide("ss_ipset_dns2socks_user", (ifd == "2"));
     showhide("DNS2SOCKS1", (ifd == "2"));
+}
+
+function generate_options(){
+	var confs = ["4armed",  "cisco(opendns)",  "cisco-familyshield",  "cisco-ipv6",  "cisco-port53",  "cloudns-can",  "cloudns-syd",  "cs-cawest",  "cs-cfi",  "cs-cfii",  "cs-ch",  "cs-de",  "cs-fr",  "cs-fr2",  "cs-rome",  "cs-useast",  "cs-usnorth",  "cs-ussouth",  "cs-ussouth2",  "cs-uswest",  "cs-uswest2",  "d0wn-bg-ns1",  "d0wn-ch-ns1",  "d0wn-de-ns1",  "d0wn-fr-ns2",  "d0wn-gr-ns1",  "d0wn-hk-ns1",  "d0wn-it-ns1",  "d0wn-lv-ns1",  "d0wn-nl-ns1",  "d0wn-nl-ns2",  "d0wn-random-ns1",  "d0wn-random-ns2",  "d0wn-ro-ns1",  "d0wn-ru-ns1",  "d0wn-tz-ns1",  "d0wn-ua-ns1",  "dnscrypt.eu-dk",  "dnscrypt.eu-dk-ipv6",  "dnscrypt.eu-nl",  "dnscrypt.eu-nl-ipv6",  "dnscrypt.org-fr",  "fvz-rec-at-vie-01",  "fvz-rec-ca-tor-01",  "fvz-rec-ca-tor-01-ipv6",  "fvz-rec-de-fra-01",  "fvz-rec-gb-brs-01",  "fvz-rec-gb-lon-01",  "fvz-rec-gb-lon-03",  "fvz-rec-hk-ztw-01",  "fvz-rec-ie-du-01",  "fvz-rec-no-osl-01",  "fvz-rec-nz-akl-01",  "fvz-rec-nz-akl-01-ipv6",  "fvz-rec-us-ler-01",  "fvz-rec-us-mia-01",  "ipredator",  "ns0.dnscrypt.is",  "okturtles",  "opennic-tumabox",  "ovpnto-ro",  "ovpnto-se",  "ovpnto-se-ipv6",  "shea-us-noads",  "shea-us-noads-ipv6",  "soltysiak",  "soltysiak-ipv6",  "yandex"];
+	var obj=document.getElementById('ss_ipset_opendns'); 
+	for(var i = 0; i < confs.length; i++) {
+		obj.options.add(new Option(confs[i],confs[i]));
+	}
 }
 </script>
 </head>
@@ -225,23 +234,7 @@ function update_visibility() {
 														<option value="1">ss-tunnel</option>
 														<option value="3">Pcap_DNSProxy</option>
 													</select>
-													<select id="ss_ipset_opendns" name="ss_ipset_opendns" class="input_option">
-														<option value="opendns">OpenDNS1</option>
-														<option value="cisco-familyshield">OpenDNS2</option>
-														<option value="cisco-port53">OpenDNS3</option>
-														<option value="cloudns-can">cloudns-can</option>
-														<option value="cloudns-syd">cloudns-syd</option>
-														<option value="d0wn-sg-ns1">d0wn-sg-ns1</option>
-														<option value="ipredator">ipredator</option>
-														<option value="okturtles">okturtles</option>
-														<option value="opennic-fvz-rec-hk-nt-01">opennic-hk</option>
-														<option value="opennic-fvz-rec-jp-tk-01">opennic-jp</option>
-														<option value="opennic-fvz-rec-sg-ea-01">opennic-sg</option>
-														<option value="ovpnto-lat">ovpnto-lat</option>
-														<option value="ovpnto-ro">ovpnto-ro</option>
-														<option value="ovpnto-se">ovpnto-se</option>
-														<option value="soltysiak">soltysiak</option>
-													</select>
+													<select id="ss_ipset_opendns" name="ss_ipset_opendns" class="input_option"></select>
 													<select id="ss_ipset_tunnel" name="ss_ipset_tunnel" class="input_option" onclick="update_visibility();" >
 														<option value="1">OpenDNS [208.67.220.220]</option>
 														<option value="2">Goole DNS1 [8.8.8.8]</option>
