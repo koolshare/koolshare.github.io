@@ -276,8 +276,9 @@
 															</div>
 															<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-38px;float: left;">
 																<button id="updateBtn" class="button_gen" onclick="update_kuainiao(this, ' Refresh ');">检查更新</button>
+																<a style="margin-left: 178px;" href="https://github.com/koolshare/koolshare.github.io/blob/master/kuainiao/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
 															</div>
-															<div id="kuainiao_version_status" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"><i>当前版本：<% dbus_get_def("kuainiao_version", "未知"); %></i></div>
+															<div id="kuainiao_version_status" style="padding-top:5px;margin-left:230px;margin-top:0px;float: left;"><i>当前版本：<% dbus_get_def("kuainiao_version", "未知"); %></i></div>
 															<div id="kuainiao_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>
 													</td>
 													</tr>
