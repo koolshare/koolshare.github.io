@@ -22,10 +22,10 @@
 
 * <b>shadowsocks.tar.gz</b><br/>
 此文件为shadowsocks文件夹的打包，通过路由器访问 [https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/shadowsocks.tar.gz](https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/shadowsocks.tar.gz) 获取安装包更新。
-如果你更新出现问题，请按照以下方式手动更新：
-手动下载https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/shadowsocks.tar.gz或者需要的历史版本，将压缩包放在路由器的/tmp目录，然后运行
 
+如果你更新出现问题，请按照以下方式手动更新：
 <pre>cd /tmp
+wget --no-check-certificate --timeout=15 https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/shadowsocks.tar.gz
 tar -zxvf shadowsocks.tar.gz
 cd shadowsocks
 chmod +x install.sh
@@ -40,8 +40,11 @@ sh install.sh
 
 <b>怎样提交修改</b>
 需要再次说明的是，ss的在线更新是通过请求shadowsocks.tar.gz文件进行的，如果你有发现bug，并希望提交你的更改，需要做以下几点：<br/>
-1. 发现bug，修改需要修改的文件；
-2. 更新shadowsocks/ss/version，更新版本号；
-3. 修改Changelog.txt文件，添加更新日志；
-4. 运行build.sh文件，这样会自动打包shadowsocks文件夹，并且更新versionn内的版本号和md5值，同时会把就版本丢进history中；
-5. 运行git status，查看被修改的文件，然后添加，评论，提交.
+1. 发现bug，修改需要修改的文件；<br/>
+2. 更新shadowsocks/ss/version，更新版本号；<br/>
+3. 修改Changelog.txt文件，添加更新日志；<br/>
+4. 运行build.sh文件，这样会自动打包shadowsocks文件夹，并且更新versionn内的版本号和md5值，同时会把就版本丢进history中；<br/>
+5. 运行git status，查看被修改的文件，然后添加，评论，提交；<br/>
+
+
+
