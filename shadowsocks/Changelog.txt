@@ -1,8 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 1.3.9
-   - fix	fix dns resolve problem in overall mode
-   - change	update redsocks2 binary to version release-0.65-55-g2a93e7e
+   - fix	修复全局模式下DNS解析问题导致的不能出墙
+   - change	更新redsocks2二进制文件到最新版本：release-0.65-55-g2a93e7e
 
 1.3.8
    - add	为了更好的更新，增加'raw.githubusercontent.com'到output.conf
