@@ -89,6 +89,15 @@ cd /tmp
 rm -f $FNAME
 rm -rf "/tmp/$softcenter_installing_module"
 wget --no-check-certificate --tries=1 --timeout=15 $TAR_URL
+RETURN_CODE=$?
+
+if [ "$RETURN_CODE" != "0" ]; then
+dbus ram softcenter_installing_status="0"
+dbus ram softcenter_installing_module=""
+LOGGER "wget error, $RETURN_CODE"
+exit 4
+fi
+
 md5sum_gz=$(md5sum /tmp/$FNAME | sed 's/ /\n/g'| sed -n 1p)
 if [ "$md5sum_gz"x != "$softcenter_installing_md5"x ]; then
 	LOGGER "md5 not equal"
@@ -106,7 +115,7 @@ else
 		dbus ram softcenter_installing_status="0"
 		dbus ram softcenter_installing_module=""
 		LOGGER "package hasn't install.sh"
-		exit 4
+		exit 5
 	fi
 
 	chmod a+x /tmp/$softcenter_installing_module/install.sh

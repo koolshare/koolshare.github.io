@@ -255,6 +255,93 @@ function onModuleHide(tr) {
     }
 }
 
+function checkField(o, f, d) {
+	if(typeof o[f] == "undefined") {
+		o[f] = d;
+	}
+	
+	return o[f];
+}
+
+function appInstallTest() {
+	//Check if the installing is exists
+	$.ajax({
+	type: "get",
+	url: "dbconf?p=softcenter_installing_",
+	dataType: "script",
+	success: function(xhr) {
+		console.log("request ok");
+		var o = db_softcenter_installing_;
+		var d = new Date();
+		var curr = d.getTime()/1000 - 20;
+		tick = parseInt(checkField(o, "softcenter_installing_tick", "0"));
+		curr_module = checkField(o, "softcenter_installing_module", "");
+		if(tick > curr && curr_module != "") {
+			console.log("previous install exists");
+			return;
+		}
+
+		moduleInfo = {
+		    "description": "去广告，看疗效~", 
+		    "home_url": "Module_adm.asp", 
+		    "md5": "a9148835ab402d8f1ba920aea40011a3", 
+		    "name": "adm", 
+		    "tar_url": "adm/adm.tar.gz", 
+		    "title": "阿呆猫", 
+		    "version": "0.5"
+		}; 
+
+		appInstall(moduleInfo);
+		
+	}
+	});
+
+}
+
+function appInstall(moduleInfo) {
+	//Current page must has prefix of "Module_"
+        var data = {"SystemCmd":"app_install.sh", "current_page":"Module_koolnet.asp", "action_mode":" Refresh ", "action_script":""};
+	data["softcenter_installing_todo"] = moduleInfo.name;
+	data["softcenter_installing_version"] = moduleInfo.version;
+	data["softcenter_installing_md5"] = moduleInfo.md5;
+	data["softcenter_installing_tar_url"] = moduleInfo.tar_url;
+
+	//TODO auto choose for home_url
+	data["softcenter_home_url"] = "http://koolshare.ngrok.wang:5000";
+
+	//Update title for this module
+	data[moduleInfo.name + "_title"] = moduleInfo.title;
+
+        $.ajax({
+                type: "POST",
+                url: "applydb.cgi?p=softcenter_,"+moduleInfo.name,
+                dataType: "text",
+                data: data,
+                success: function() {
+			console.log("install ok");
+
+			//TODO update installing status
+			//setTimeout("udpateInstallStatus()");
+                },
+                error: function() {
+			console.log("install error");
+                }
+        });
+
+}
+
+function updateInstallStatus() {
+	$.ajax({
+	type: "get",
+	url: "dbconf?p=softcenter_installing_",
+	dataType: "script",
+	success: function(xhr) {
+		//check install timeout/error/ok
+		console.log("install ok");
+	}
+	});
+}
+
 //function jsonp_callback(data) {
 //    console.log(data);
 //}
@@ -473,9 +560,19 @@ function init(){
             }
         });
     }
+
+    //Just for test
+    function attachEventForApp() {
+	$('.install-btn').click(function(e) {
+		appInstallTest();
+	});
+    }
+
     $(function () {
         showInstall(1);
         initAppStatus();
+	
+	attachEventForApp();
     });
 </script>
 </head>
