@@ -88,14 +88,14 @@ var $G = function (id) {
 function onSubmitCtrl(o, s) {
 	//if(validForm() && validForm2() && validForm3()){
 	if(validForm()){
-		showSSLoadingBar(25);
+		showSSLoadingBar(45);
 		document.form.action_mode.value = s;
 		updateOptions();
 	}
 }
 
 function done_validating(action){
-refreshpage(25);
+refreshpage(45);
 }
 
 String.prototype.replaceAll = function(s1,s2){
