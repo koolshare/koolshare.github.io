@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks_mips Changelog
 ===========================================
+1.4.2
+   - fix	更新dnscryp-proxy解析文件，和arm机型保持一致
+   - change	更新redsocks2二进制文件到最：release-0.65-4-g02a53ce
+   - add	添加PcapDNSproxy支持
+
 1.4.1
    - fix	fix dns2socks won't work
 

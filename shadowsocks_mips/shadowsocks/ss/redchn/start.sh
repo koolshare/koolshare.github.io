@@ -306,6 +306,15 @@ if [ "4" == "$ss_redchn_dns_foreign" ]; then
 	echo $(date): done
 	echo $(date):
 fi
+# Start Pcap_DNSProxy
+if [ "5" == "$ss_redchn_dns_foreign"  ]; then
+		echo $(date): Start Pcap_DNSProxy..
+		sed -i '/^Listen Port/c Listen Port = 1053' /koolshare/ss/dns/Config.conf
+		sed -i '/^Local Main/c Local Main = 0' /koolshare/ss/dns/Config.conf
+		/koolshare/ss/dns/dns.sh > /dev/null 2>&1 &
+		echo $(date): done
+		echo $(date):
+fi
 
 #---------------------------------------------------------------------------------------------------------
 

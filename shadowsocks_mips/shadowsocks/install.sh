@@ -6,6 +6,7 @@ cp -rf /tmp/shadowsocks/res/* /koolshare/res/
 cp -rf /tmp/shadowsocks/scripts/* /koolshare/scripts/
 cp -rf /tmp/shadowsocks/bin/* /koolshare/bin/
 cp -rf /tmp/shadowsocks/init.d/* /koolshare/init.d/
+cd /
 rm -rf /tmp/shadowsocks* >/dev/null 2>&1
 
 
@@ -19,5 +20,4 @@ chmod 755 /koolshare/ss/*.sh
 chmod 755 /koolshare/scripts/*
 chmod 755 /koolshare/bin/*
 
-cd /
 
