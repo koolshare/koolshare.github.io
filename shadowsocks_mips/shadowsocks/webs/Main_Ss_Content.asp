@@ -128,13 +128,13 @@ function onSubmitCtrl() {
             function(a) {
 			setTimeout("checkSSStatus();", 50000); //make sure ss_status do not update during reloading
 			if (ssmode == "2" || ssmode == "3"){
-				showSSLoadingBar(25);
+				showSSLoadingBar(45);
 			} else if (ssmode == "1"){
 				showSSLoadingBar(12);
 			} else if (ssmode == "0"){
 				showSSLoadingBar(8);
 			} else if (ssmode == "4"){
-				showSSLoadingBar(25);
+				showSSLoadingBar(45);
 			} else if (ssmode == "5"){
 				showSSLoadingBar(8);
 			}
@@ -148,13 +148,13 @@ function onSubmitCtrl() {
             function(a) {
 			setTimeout("checkSSStatus();", 50000);
 			if (ssmode == "2" || ssmode == "3"){
-				showSSLoadingBar(25);
+				showSSLoadingBar(45);
 			} else if (ssmode == "1"){
 				showSSLoadingBar(12);
 			} else if (ssmode == "0"){
 				showSSLoadingBar(8);
 			} else if (ssmode == "4"){
-				showSSLoadingBar(25);
+				showSSLoadingBar(45);
 			} else if (ssmode == "5"){
 				showSSLoadingBar(8);
 			}
