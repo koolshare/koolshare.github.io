@@ -159,15 +159,15 @@
 						version_show();
 						refreshpage(3);
 					} else if (db_kuainiao_['kuainiao_install_status'] == "4"){
-					   document.getElementById('updateBtn').style.display = "";
+					   document.getElementById('update_button').style.display = "";
 						$("#kuainiao_install_show").html("<i>下载文件校验不一致！</i>");
 					} else if (db_kuainiao_['kuainiao_install_status'] == "5"){
-						document.getElementById('updateBtn').style.display = "";
+						document.getElementById('update_button').style.display = "";
 						$("#kuainiao_install_show").html("<i>然而并没有更新！</i>");
 					} else if (db_kuainiao_['kuainiao_install_status'] == "6"){
 			      		$("#kuainiao_install_show").html("<i>正在检查是否有更新~</i>");
 					} else if (db_kuainiao_['kuainiao_install_status'] == "7"){
-					   document.getElementById('updateBtn').style.display = "";
+					   document.getElementById('update_button').style.display = "";
 						$("#kuainiao_install_show").html("<i>检测更新错误！</i>");
 					} else {
 						$("#kuainiao_install_show").html("");
@@ -203,7 +203,7 @@
 		}
 		function update_kuainiao(o, s){
 			document.form.kuainiao_update_check.value = 1;
-			document.getElementById('updateBtn').style.display = "none";
+			document.getElementById('update_button').style.display = "none";
 			document.form.action_mode.value = s;
 			document.form.submit();
 		}
