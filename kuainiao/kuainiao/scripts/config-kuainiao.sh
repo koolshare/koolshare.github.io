@@ -1,13 +1,38 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.1.2"
+version="0.2.0"
 kuainiaocru=$(cru l | grep "kuainiao")
 startkuainiao=$(ls -l /koolshare/init.d/ | grep "S80Kuainiao")
 
+#双WAN判断
+wans_mode=$(nvram get wans_mode)
+if [ "$kuainiao_config_wan" == "1" ] && [ "$wans_mode" == "lb" ]; then
+	wan_selected=$(nvram get wan0_gateway)
+	if [ "$wan_selected" != "0.0.0.0" ]; then
+		bind_address=$wan_selected
+	else
+		bind_address=""
+	fi
+elif [ "$kuainiao_config_wan" == "2" ] && [ "$wans_mode" == "lb" ]; then
+	wan_selected=$(nvram get wan1_gateway)
+	if [ "$wan_selected" != "0.0.0.0" ]; then
+		bind_address=$wan_selected
+	else
+		bind_address=""
+	fi
+else
+	bind_address=""
+fi
+
 #定义请求函数
-HTTP_REQ="wget --no-check-certificate -O - "
-POST_ARG="--post-data="
+if [ -n "$bind_address" ]; then
+	HTTP_REQ="wget --bind-address=$bind_address --no-check-certificate -O - "
+	POST_ARG="--post-data="
+else
+	HTTP_REQ="wget --no-check-certificate -O - "
+	POST_ARG="--post-data="
+fi
 
 #定义更新相关地址
 UPDATE_VERSION_URL="https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/kuainiao/version"

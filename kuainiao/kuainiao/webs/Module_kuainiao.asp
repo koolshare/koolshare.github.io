@@ -36,6 +36,15 @@
 		        rrt.checked = true;
 		        document.getElementById('Kuainiao_detail_table').style.display = "";
 		    }
+			//双wan开始判断
+			var lb_mode = '<% nvram_get("wans_mode"); %>';
+			if(lb_mode !== "lb"){
+				document.getElementById('double_wan_set').style.display = "none";
+				document.getElementById('select_wan').style.display = "none";
+				document.form.kuainiao_config_wan.value = 0;
+			} else {
+				check_selected("kuainiao_config_wan", db_kuainiao_.kuainiao_config_wan);
+			}
 			//conf2obj();
 			//var conf_ajax = setInterval("conf2obj();", 60000);
 			version_show();
@@ -352,6 +361,20 @@
 														</td>
 													</tr>
 
+													<thead id="double_wan_set">
+													<tr>
+														<td colspan="4">双WAN设置</td>
+													</tr>
+													</thead>
+													<tr id="select_wan">
+													    <th width="35%">加速WAN口</th>
+														<td>
+															<select id="kuainiao_config_wan" name="kuainiao_config_wan" class="input_option"  >
+																<option value="1">WAN1</option>
+																<option value="2">WAN2</option>
+															</select>
+														</td>
+													</tr>
 
 		 										</table>
 		 										<div id="warn" style="display: none;margin-top: 20px;text-align: center;font-size: 20px;margin-bottom: 20px;"class="formfontdesc" ></div>
