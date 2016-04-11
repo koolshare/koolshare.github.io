@@ -208,7 +208,7 @@ echo $(date):
 	# Start dnscrypt-proxy
 	if [ "$ss_ipset_foreign_dns" == "0" ]; then
 		echo $(date): Starting dnscrypt-proxy...
-		dnscrypt-proxy --local-address=127.0.0.1:7913 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "cisco(opendns)"
+		dnscrypt-proxy --local-address=127.0.0.1:7913 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_ipset_opendns"
 		echo $(date): done
 		echo $(date):
 	fi
