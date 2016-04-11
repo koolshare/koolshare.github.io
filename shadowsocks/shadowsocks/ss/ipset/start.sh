@@ -78,7 +78,7 @@ echo $(date):
 [ "$ss_ipset_cdn_dns" == "8" ] && dns="119.29.29.29"
 
 # create dnsmasq.conf.add
-if [ ! -d /jffs/configs/dnsmasq.d ]; then 
+if [ ! -d /jffs/configs/dnsmasq.d ]; then
 mkdir -p /jffs/configs/dnsmasq.d
 fi
 
@@ -102,7 +102,7 @@ if [ ! -z $ss_ipset_white_domain_web ];then
 	echo $(date): append white_domain
 	echo "#for white_domain" >> /jffs/configs/dnsmasq.conf.add
 	for wan_white_domain in $wanwhitedomain
-	do 
+	do
 		echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /jffs/configs/dnsmasq.conf.add
 		echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_domain/g" >> /jffs/configs/dnsmasq.conf.add
 	done
@@ -208,7 +208,7 @@ echo $(date):
 	# Start dnscrypt-proxy
 	if [ "$ss_ipset_foreign_dns" == "0" ]; then
 		echo $(date): Starting dnscrypt-proxy...
-		dnscrypt-proxy --local-address=127.0.0.1:7913 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R opendns
+		dnscrypt-proxy --local-address=127.0.0.1:7913 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "cisco(opendns)"
 		echo $(date): done
 		echo $(date):
 	fi
@@ -216,7 +216,7 @@ echo $(date):
 	[ "$ss_ipset_tunnel" == "2" ] && it="8.8.8.8:53"
 	[ "$ss_ipset_tunnel" == "3" ] && it="8.8.4.4:53"
 	[ "$ss_ipset_tunnel" == "4" ] && it="$ss_ipset_tunnel_user"
-	
+
 	if [ "$ss_ipset_foreign_dns" == "1" ]; then
 		echo $(date): Starting ss-tunnel...
 		if [ "$ss_basic_use_rss" == "1" ];then
@@ -295,6 +295,5 @@ echo $(date):
 	/sbin/service restart_dnsmasq >/dev/null 2>&1
 	echo $(date): done
 	echo $(date):
-	
-echo $(date): ------------------ Shadowsock gfwlist mode Started-----------------------
 
+echo $(date): ------------------ Shadowsock gfwlist mode Started-----------------------
