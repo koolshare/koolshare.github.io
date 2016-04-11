@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=kuainiao
-VERSION=0.2.0
+VERSION=0.2.1
 
 cat version
 rm -f ${MODULE}.tar.gz

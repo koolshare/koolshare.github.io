@@ -1,21 +1,21 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.2.0"
+version="0.2.1"
 kuainiaocru=$(cru l | grep "kuainiao")
 startkuainiao=$(ls -l /koolshare/init.d/ | grep "S80Kuainiao")
 
 #双WAN判断
 wans_mode=$(nvram get wans_mode)
 if [ "$kuainiao_config_wan" == "1" ] && [ "$wans_mode" == "lb" ]; then
-	wan_selected=$(nvram get wan0_gateway)
+	wan_selected=$(nvram get wan0_ipaddr)
 	if [ "$wan_selected" != "0.0.0.0" ]; then
 		bind_address=$wan_selected
 	else
 		bind_address=""
 	fi
 elif [ "$kuainiao_config_wan" == "2" ] && [ "$wans_mode" == "lb" ]; then
-	wan_selected=$(nvram get wan1_gateway)
+	wan_selected=$(nvram get wan1_ipaddr)
 	if [ "$wan_selected" != "0.0.0.0" ]; then
 		bind_address=$wan_selected
 	else
@@ -41,8 +41,21 @@ UPDATE_TAR_URL="https://raw.githubusercontent.com/koolshare/koolshare.github.io/
 #数据mock
 uname=$kuainiao_config_uname
 pwd=$kuainiao_config_pwd
-nic=eth0
-peerid=$(ifconfig $nic|grep $nic|awk 'gsub(/:/, "") {print $5}')004V
+
+#获取用户真实MAC地址
+get_mac_addr(){
+	if [ -n "$bind_address" ] && [ "$kuainiao_config_wan" == "1" ]; then
+		nic=wan0_hwaddr
+	elif [ -n "$bind_address" ] && [ "$kuainiao_config_wan" == "2" ]; then
+		nic=wan1_hwaddr
+	else
+		nic=wan_hwaddr
+	fi
+	peerid=$(nvram get $nic|awk 'gsub(/:/, "") {printf("%s", toupper($1))}')004V
+}
+get_mac_addr
+#nic=eth0
+#peerid=$(ifconfig $nic|grep $nic|awk 'gsub(/:/, "") {print $5}')004V
 
 #转存参数
 dbus set kuainiao_config_nic=$nic
