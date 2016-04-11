@@ -249,6 +249,16 @@ echo $(date):
 		echo $(date):
 	fi
 
+	# Start Pcap_DNSProxy
+	if [ "$ss_ipset_foreign_dns" == "3" ]; then
+		echo $(date): Start Pcap_DNSProxy..
+		sed -i '/^Listen Port/c Listen Port = 7913' /koolshare/ss/dns/Config.conf
+		sed -i '/^Local Main/c Local Main = 0' /koolshare/ss/dns/Config.conf
+		/koolshare/ss/dns/dns.sh > /dev/null 2>&1 &
+		echo $(date): done
+		echo $(date):
+	fi
+
 	# Start ss-redir
 	echo $(date): Starting ss-redir...
 	if [ "$ss_basic_use_rss" == "1" ];then

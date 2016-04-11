@@ -88,14 +88,14 @@ var $G = function (id) {
 function onSubmitCtrl(o, s) {
 	//if(validForm() && validForm2() && validForm3()){
 	if(validForm()){
-		showSSLoadingBar(25);
+		showSSLoadingBar(45);
 		document.form.action_mode.value = s;
 		updateOptions();
 	}
 }
 
 function done_validating(action){
-refreshpage(25);
+refreshpage(45);
 }
 
 String.prototype.replaceAll = function(s1,s2){
@@ -103,6 +103,11 @@ String.prototype.replaceAll = function(s1,s2){
 }
 function init(){
 	show_menu(menu_hook);
+	generate_options();
+	conf_to_obj();
+	update_visibility();
+}
+function conf_to_obj(){
 	if(typeof db_ss != "undefined") {
 		for(var field in db_ss) {
 			var el = document.getElementById(field);
@@ -118,8 +123,9 @@ function init(){
 	} else {
 		document.getElementById("logArea").innerHTML = "无法读取配置,jffs为空或配置文件不存在?";
 	}
-	update_visibility()
 }
+
+	
 function updateOptions(){
 	document.form.enctype = "";
 	document.form.encoding = "";
@@ -182,7 +188,18 @@ function update_visibility(){
 	showhide("chinadns_foreign2", (rcf == "4"));
 	showhide("ss_redchn_dns2socks_user", (rdf == "4"));
 	showhide("dns_plan_foreign0", (rdf == "4"));
+	generate_options();
 }
+
+function generate_options(){
+	var confs = ["4armed",  "cisco(opendns)",  "cisco-familyshield",  "cisco-ipv6",  "cisco-port53",  "cloudns-can",  "cloudns-syd",  "cs-cawest",  "cs-cfi",  "cs-cfii",  "cs-ch",  "cs-de",  "cs-fr",  "cs-fr2",  "cs-rome",  "cs-useast",  "cs-usnorth",  "cs-ussouth",  "cs-ussouth2",  "cs-uswest",  "cs-uswest2",  "d0wn-bg-ns1",  "d0wn-ch-ns1",  "d0wn-de-ns1",  "d0wn-fr-ns2",  "d0wn-gr-ns1",  "d0wn-hk-ns1",  "d0wn-it-ns1",  "d0wn-lv-ns1",  "d0wn-nl-ns1",  "d0wn-nl-ns2",  "d0wn-random-ns1",  "d0wn-random-ns2",  "d0wn-ro-ns1",  "d0wn-ru-ns1",  "d0wn-tz-ns1",  "d0wn-ua-ns1",  "dnscrypt.eu-dk",  "dnscrypt.eu-dk-ipv6",  "dnscrypt.eu-nl",  "dnscrypt.eu-nl-ipv6",  "dnscrypt.org-fr",  "fvz-rec-at-vie-01",  "fvz-rec-ca-tor-01",  "fvz-rec-ca-tor-01-ipv6",  "fvz-rec-de-fra-01",  "fvz-rec-gb-brs-01",  "fvz-rec-gb-lon-01",  "fvz-rec-gb-lon-03",  "fvz-rec-hk-ztw-01",  "fvz-rec-ie-du-01",  "fvz-rec-no-osl-01",  "fvz-rec-nz-akl-01",  "fvz-rec-nz-akl-01-ipv6",  "fvz-rec-us-ler-01",  "fvz-rec-us-mia-01",  "ipredator",  "ns0.dnscrypt.is",  "okturtles",  "opennic-tumabox",  "ovpnto-ro",  "ovpnto-se",  "ovpnto-se-ipv6",  "shea-us-noads",  "shea-us-noads-ipv6",  "soltysiak",  "soltysiak-ipv6",  "yandex"];
+	var obj=document.getElementById('ss_redchn_opendns'); 
+	for(var i = 0; i < confs.length; i++) {
+		obj.options.add(new Option(confs[i],confs[i]));
+	}
+}
+
+
 </script>
 </head>
 <body onload="init();">
@@ -269,24 +286,9 @@ function update_visibility(){
 														<option value="1">dnscrypt-proxy</option>
 														<option value="2">ss-tunnel</option>
 														<option value="3">ChinaDNS</option>
+														<option value="5">Pcap_DNSProxy</option>
 													</select>
-													<select id="ss_redchn_opendns" name="ss_redchn_opendns" class="input_option">
-														<option value="opendns">OpenDNS1</option>
-														<option value="cisco-familyshield">OpenDNS2</option>
-														<option value="cisco-port53">OpenDNS3</option>
-														<option value="cloudns-can">cloudns-can</option>
-														<option value="cloudns-syd">cloudns-syd</option>
-														<option value="d0wn-sg-ns1">d0wn-sg-ns1</option>
-														<option value="ipredator">ipredator</option>
-														<option value="okturtles">okturtles</option>
-														<option value="opennic-fvz-rec-hk-nt-01">opennic-hk</option>
-														<option value="opennic-fvz-rec-jp-tk-01">opennic-jp</option>
-														<option value="opennic-fvz-rec-sg-ea-01">opennic-sg</option>
-														<option value="ovpnto-lat">ovpnto-lat</option>
-														<option value="ovpnto-ro">ovpnto-ro</option>
-														<option value="ovpnto-se">ovpnto-se</option>
-														<option value="soltysiak">soltysiak</option>
-													</select>
+													<select id="ss_redchn_opendns" name="ss_redchn_opendns" class="input_option"></select>
 													<input type="text" class="ssconfig input_ss_table" id="ss_redchn_dns2socks_user" name="ss_redchn_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
 													<select id="ss_redchn_sstunnel" name="ss_redchn_sstunnel" class="input_option" onclick="update_visibility();" >
 														<option value="1">OpenDNS [208.67.220.220]</option>
@@ -296,8 +298,8 @@ function update_visibility(){
 													</select>
 													<input type="text" class="ssconfig input_ss_table" id="ss_redchn_sstunnel_user" name="ss_redchn_sstunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
 													<br/>
-													<span id="dns_plan_foreign0">默认：DNS2SOCKS，用以解析国内6000+域名以外的国内域名和国外域名</span>
-													<span id="dns_plan_foreign1">用dnscrypt-proxy解析国内6000+域名以外的国内域名和国外域名</span>
+													<span id="dns_plan_foreign0">默认：DNS2SOCKS，用以解析国内1W+域名以外的国内外域名。</span>
+													<span id="dns_plan_foreign1">用dnscrypt-proxy解析国内1W+域名以外的国内外域名<a href="https://github.com/koolshare/koolshare.github.io/blob/master/shadowsocks/shadowsocks/ss/dnscrypt-resolvers.csv" target="_blank"><em> [<u> 查看解析列表 </u>]</em></a></span>
 													<span id="dns_plan_foreign2">选择由ss-tunnel通过udp转发给SS服务器解析的DNS，默认【Goole DNS1】<br/>！！ss-tunnel需要ss账号支持udp转发才能使用！！</span>
 													<span id="dns_plan_foreign3">在上面自定义由ss-tunnel通过udp转发给SS服务器解析的DNS</span>
 												</td>

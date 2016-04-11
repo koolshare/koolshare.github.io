@@ -145,7 +145,7 @@ fi
 # Start dnscrypt-proxy
 if [ "$ss_overall_dns" == "0" ]; then
 echo $(date): Starting dnscrypt-proxy...
-dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R opendns
+dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "cisco(opendns)"
 echo $(date): done
 echo $(date):
 fi
@@ -168,7 +168,7 @@ fi
 
 if [ "$ss_overall_dns" == "2" ]; then
 	echo $(date): Starting ss-tunnel...
-	dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R opendns
+	dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "cisco(opendns)"
 	if [ "$ss_basic_use_rss" == "1" ];then
 		rss-tunnel -b 0.0.0.0 -c /koolshare/ss/overall/ss.json -l 1054 -L 8.8.8.8:53 -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 	elif  [ "$ss_basic_use_rss" == "0" ];then
