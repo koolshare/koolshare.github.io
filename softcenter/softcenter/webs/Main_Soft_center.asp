@@ -197,7 +197,7 @@
 
 String.prototype.format = String.prototype.f = function() {
     var s = this,
-        i = arguments.length;
+    i = arguments.length;
 
     while (i--) {
         s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), arguments[i]);
@@ -205,12 +205,25 @@ String.prototype.format = String.prototype.f = function() {
     return s;
 };
 
+function formatString(s, args) {
+    i = args.length;
+
+    while (i--) {
+        s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), args[i]);
+    }
+    return s;
+}
+
 String.prototype.endsWith = function (suffix) {
   return (this.substr(this.length - suffix.length) === suffix);
 }
 
 String.prototype.startsWith = function(prefix) {
   return (this.substr(0, prefix.length) === prefix);
+}
+
+String.prototype.capitalizeFirstLetter = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
 var softcenter_modules = {};
@@ -480,71 +493,71 @@ function init(){
         "softcenter_module_aria2_tar_url": "",
         "softcenter_module_aria2_title": "Aria2",
 
-        "softcenter_module_entware": "2",
+        "softcenter_module_entware_status": "2",
         "softcenter_module_entware_install": "0",
         "softcenter_module_entware_version": "0",
         "softcenter_module_entware_tar_url": "",
         "softcenter_module_entware_title": "Entware-ng",
 
-        "softcenter_module_koolnet": "0",
+        "softcenter_module_koolnet_status": "0",
         "softcenter_module_koolnet_version": "0",
         "softcenter_module_koolnet_install": "1",
         "softcenter_module_koolnet_tar_url": "",
         "softcenter_module_koolnet_title": "P2P穿透",
 
-        "softcenter_module_kuainiao": "0",
+        "softcenter_module_kuainiao_status": "0",
         "softcenter_module_kuainiao_install": "0",
         "softcenter_module_kuainiao_version": "0",
         "softcenter_module_kuainiao_tar_url": "",
         "softcenter_module_kuainiao_title": "快鸟",
 
-        "softcenter_module_policy": "0",
+        "softcenter_module_policy_status": "0",
         "softcenter_module_policy_install": "0",
         "softcenter_module_policy_version": "0",
         "softcenter_module_policy_tar_url": "",
         "softcenter_module_policy_title": "策略路由",
 
-        "softcenter_module_shadowvpn": "0",
+        "softcenter_module_shadowvpn_status": "0",
         "softcenter_module_shadowvpn_install": "0",
         "softcenter_module_shadowvpn_version": "0",
         "softcenter_module_shadowvpn_tar_url": "",
         "softcenter_module_shadowvpn_title": "ShadowVPN",
 
-        "softcenter_module_speedtest": "0",
+        "softcenter_module_speedtest_status": "0",
         "softcenter_module_speedtest_install": "0",
         "softcenter_module_speedtest_version": "0",
         "softcenter_module_speedtest_tar_url": "",
         "softcenter_module_speedtest_title": "网络测速",
 
-        "softcenter_module_ssserver": "0",
+        "softcenter_module_ssserver_status": "0",
         "softcenter_module_ssserver_install": "1",
         "softcenter_module_ssserver_version": "0",
         "softcenter_module_ssserver_tar_url": "",
         "softcenter_module_ssserver_title": "SS服务器",
 
-        "softcenter_module_transmission": "2",
+        "softcenter_module_transmission_status": "2",
         "softcenter_module_transmission_install": "2",
         "softcenter_module_transmission_version": "2",
         "softcenter_module_transmission_tar_url": "",
         "softcenter_module_transmission_title": "Transmission",
 
-        "softcenter_module_tunnel": "0",
+        "softcenter_module_tunnel_status": "0",
         "softcenter_module_tunnel_install": "1",
         "softcenter_module_tunnel_tar_url": "",
         "softcenter_module_tunnel_version": "1.0.0",
         "softcenter_module_tunnel_title": "穿透DDNS",
 
-        "softcenter_module_v2ray": "2",
+        "softcenter_module_v2ray_status": "2",
         "softcenter_module_v2ray_install": "2",
         "softcenter_module_v2ray_version": "2",
         "softcenter_module_v2ray_url": "2",
         "softcenter_module_v2ray_title": "V2Ray",
 
-        "softcenter_module_xunlei": "0",
+        "softcenter_module_xunlei_status": "0",
         "softcenter_module_xunlei_install": "0",
         "softcenter_module_xunlei_version": "0",
         "softcenter_module_xunlei_url": "0",
-        "softcenter_module_xunlei_title": "Xunlei下载",
+        "softcenter_module_xunlei_title": "Xunlei下载"
     };
 
     //格式化数据
@@ -554,17 +567,31 @@ function init(){
             key = key.split('_');
             if ('module' === key[1]) {
                 var app = [key[0], key[1], key[2]].join("_");
-                var prop = (key.length >= 4 ? key.slice(3, key.length).join("_") : 'status');
+                //var prop = (key.length >= 4 ? key.slice(3, key.length).join("_") : 'status');
+                var prop = key.slice(3, key.length).join("_");
                 if (!result[app]) {
                     result[app] = {};
                     result[app].name = key[2];
                 }
                 result[app][prop] = item;
-            } else {
-                result[key.join('_')] = item;
             }
         });
-        return result;
+
+        $.map(result, function (item, key) {
+		if("" == checkField(item, "home_url", "")) {
+			item["home_url"] = "Module_" + item.name + ".asp";
+		}
+		if("" == checkField(item, "title", "")) {
+			item["title"] = item.name.capitalizeFirstLetter()
+		}
+		if("" == checkField(item, "tar_url", "")) {
+			item["tar_url"] = "{0}/{0}.tar.gz".format(item.name);
+		}
+		//The description should be update online
+		item["description"] = "";
+	});
+
+	return result;
     })(db_softcenter_);
 
     function initAppStatus() {
@@ -593,7 +620,9 @@ function init(){
             $('.show-uninstall-btn').addClass('active-btn');
         }
 
-	//TODO
+	//first clear all
+	$("#IconContainer").empty();
+
 	var fnEnd = function() {
 		var apps = $('#IconContainer dl');
 		apps.each(function (i, app) {
@@ -607,7 +636,6 @@ function init(){
 		});
 	}
 
-	//TODO auto generator APP from router or server
 	if(1 == bInstall) {
 		loadFromRouter(fnEnd);
 	} else {
@@ -615,9 +643,16 @@ function init(){
 	}
 
 	//console.log("aa-{0}-bb-{1}".format("test1", "test2"));
+    }
 
-	//Just for test, append a new app
-	var oApp = $('<dl class="icon is-install" data-name="{0}">\
+    //Just for test
+    function attachEventForApp() {
+	$('.install-btn').click(function(e) {
+		appInstallTest();
+	});
+    }
+
+	var appTemplate = '<dl class="icon is-install" data-name="{0}">\
 	<dd class="icon-pic"></dd>\
 	<dt class="icon-title">{1}</dt>\
 	<dd class="icon-desc">\
@@ -630,19 +665,22 @@ function init(){
 		<button type="button" class="hide-btn" onclick="">隐藏</button>\
 	    </div>\
 	</dd>\
-	</dl>');
-	$("#IconContainer").append(oApp);
-    }
+	</dl>';
 
-    //Just for test
-    function attachEventForApp() {
-	$('.install-btn').click(function(e) {
-		appInstallTest();
+    function loadFromRouter(fn) {
+
+	//update description online
+	var orders = ["name", "title", "home_url", "description"];
+
+	//console.log(softInfo);
+        $.map(softInfo, function (item, key) {
+		var arr = [];
+		for(var i = 0; i < orders.length; i++) {
+			arr.push(item[orders[i]]);
+		}
+		$("#IconContainer").append($(formatString(appTemplate, arr)));
 	});
-    }
-
-    function loadFromRouter() {
-    console.log(softInfo);
+	fn();
     }
 
     function loadFromServer() {
