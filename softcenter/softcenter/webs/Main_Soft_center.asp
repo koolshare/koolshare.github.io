@@ -130,6 +130,7 @@
 </style>
 <script>
 
+//TODO move this to common javascript files
     jQuery.ajax = (function(_ajax){
     
     var protocol = location.protocol,
@@ -193,6 +194,24 @@
     };
     
 })(jQuery.ajax);
+
+String.prototype.format = String.prototype.f = function() {
+    var s = this,
+        i = arguments.length;
+
+    while (i--) {
+        s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), arguments[i]);
+    }
+    return s;
+};
+
+String.prototype.endsWith = function (suffix) {
+  return (this.substr(this.length - suffix.length) === suffix);
+}
+
+String.prototype.startsWith = function(prefix) {
+  return (this.substr(0, prefix.length) === prefix);
+}
 
 var softcenter_modules = {};
 function parse_softcenter() {
@@ -443,65 +462,89 @@ function init(){
 
 </script>
 <script>
+    // home_url/tar_url 可能不存在,不存在时默认为 Module_{module}.asp/{module}/{module}.tar.gz
     var db_softcenter_ = {
         "softcenter_curr_version": "1.0.5",
         "softcenter_install_status": "0",
-        "softcenter_module_adm": "0",
+
+        "softcenter_module_adm_status": "0",
         "softcenter_module_adm_install": "1",
-        "softcenter_module_adm_ver": "0",
-        "softcenter_module_adm_url": "0",
-        "softcenter_module_aria2": "0",
+        "softcenter_module_adm_version": "0",
+        "softcenter_module_adm_tar_url": "",
+        "softcenter_module_adm_home_url": "Module_adm.asp",
+        "softcenter_module_adm_title": "阿呆猫",
+
+        "softcenter_module_aria2_status": "0",
         "softcenter_module_aria2_install": "0",
-        "softcenter_module_aria2_ver": "0",
-        "softcenter_module_aria2_url": "0",
+        "softcenter_module_aria2_version": "0",
+        "softcenter_module_aria2_tar_url": "",
+        "softcenter_module_aria2_title": "Aria2",
+
         "softcenter_module_entware": "2",
         "softcenter_module_entware_install": "0",
-        "softcenter_module_entware_ver": "0",
-        "softcenter_module_entware_url": "0",
+        "softcenter_module_entware_version": "0",
+        "softcenter_module_entware_tar_url": "",
+        "softcenter_module_entware_title": "Entware-ng",
+
         "softcenter_module_koolnet": "0",
-        "softcenter_module_koolnet_ver": "0",
+        "softcenter_module_koolnet_version": "0",
         "softcenter_module_koolnet_install": "1",
-        "softcenter_module_koolnet_url": "0",
-        "softcenter_module_koolnet_visible": "0",
+        "softcenter_module_koolnet_tar_url": "",
+        "softcenter_module_koolnet_title": "P2P穿透",
+
         "softcenter_module_kuainiao": "0",
         "softcenter_module_kuainiao_install": "0",
-        "softcenter_module_kuainiao_ver": "0",
-        "softcenter_module_kuainiao_url": "0",
+        "softcenter_module_kuainiao_version": "0",
+        "softcenter_module_kuainiao_tar_url": "",
+        "softcenter_module_kuainiao_title": "快鸟",
+
         "softcenter_module_policy": "0",
         "softcenter_module_policy_install": "0",
-        "softcenter_module_policy_ver": "0",
-        "softcenter_module_policy_url": "0",
+        "softcenter_module_policy_version": "0",
+        "softcenter_module_policy_tar_url": "",
+        "softcenter_module_policy_title": "策略路由",
+
         "softcenter_module_shadowvpn": "0",
         "softcenter_module_shadowvpn_install": "0",
-        "softcenter_module_shadowvpn_ver": "0",
-        "softcenter_module_shadowvpn_ur": "0",
+        "softcenter_module_shadowvpn_version": "0",
+        "softcenter_module_shadowvpn_tar_url": "",
+        "softcenter_module_shadowvpn_title": "ShadowVPN",
+
         "softcenter_module_speedtest": "0",
         "softcenter_module_speedtest_install": "0",
-        "softcenter_module_speedtest_ver": "0",
-        "softcenter_module_speedtest_url": "0",
+        "softcenter_module_speedtest_version": "0",
+        "softcenter_module_speedtest_tar_url": "",
+        "softcenter_module_speedtest_title": "网络测速",
+
         "softcenter_module_ssserver": "0",
         "softcenter_module_ssserver_install": "1",
-        "softcenter_module_ssserver_ver": "0",
-        "softcenter_module_ssserver_url": "0",
+        "softcenter_module_ssserver_version": "0",
+        "softcenter_module_ssserver_tar_url": "",
+        "softcenter_module_ssserver_title": "SS服务器",
+
         "softcenter_module_transmission": "2",
         "softcenter_module_transmission_install": "2",
-        "softcenter_module_transmission_ver": "2",
-        "softcenter_module_transmission_url": "2",
+        "softcenter_module_transmission_version": "2",
+        "softcenter_module_transmission_tar_url": "",
+        "softcenter_module_transmission_title": "Transmission",
+
         "softcenter_module_tunnel": "0",
         "softcenter_module_tunnel_install": "1",
-        "softcenter_module_tunnel_url": "",
-        "softcenter_module_tunnel_ver": "1.0.0",
-        "softcenter_module_tunnel_ver_url": "",
-        "softcenter_module_tunnel_visible": "0",
+        "softcenter_module_tunnel_tar_url": "",
+        "softcenter_module_tunnel_version": "1.0.0",
+        "softcenter_module_tunnel_title": "穿透DDNS",
+
         "softcenter_module_v2ray": "2",
         "softcenter_module_v2ray_install": "2",
-        "softcenter_module_v2ray_ver": "2",
+        "softcenter_module_v2ray_version": "2",
         "softcenter_module_v2ray_url": "2",
+        "softcenter_module_v2ray_title": "V2Ray",
+
         "softcenter_module_xunlei": "0",
         "softcenter_module_xunlei_install": "0",
-        "softcenter_module_xunlei_ver": "0",
+        "softcenter_module_xunlei_version": "0",
         "softcenter_module_xunlei_url": "0",
-        "softcenter_module_xunlei_visible": "0"
+        "softcenter_module_xunlei_title": "Xunlei下载",
     };
 
     //格式化数据
@@ -510,8 +553,8 @@ function init(){
         $.map(db_softcenter_, function (item, key) {
             key = key.split('_');
             if ('module' === key[1]) {
-                var app = [key[0], key[1], key[2]].join('_');
-                var prop = key[3] || 'status';
+                var app = [key[0], key[1], key[2]].join("_");
+                var prop = (key.length >= 4 ? key.slice(3, key.length).join("_") : 'status');
                 if (!result[app]) {
                     result[app] = {};
                     result[app].name = key[2];
@@ -549,16 +592,46 @@ function init(){
         } else {
             $('.show-uninstall-btn').addClass('active-btn');
         }
-        var apps = $('#IconContainer dl');
-        apps.each(function (i, app) {
-            app = $(app);
-            var name = 'softcenter_module_' + app.data('name');
-            if (bInstall === parseInt(softInfo[name].install, 10)) {
-                app.show();
-            } else {
-                app.hide();
-            }
-        });
+
+	//TODO
+	var fnEnd = function() {
+		var apps = $('#IconContainer dl');
+		apps.each(function (i, app) {
+		    app = $(app);
+		    var name = 'softcenter_module_' + app.data('name');
+		    if (bInstall === parseInt(softInfo[name].install, 10)) {
+			app.show();
+		    } else {
+			app.hide();
+		    }
+		});
+	}
+
+	//TODO auto generator APP from router or server
+	if(1 == bInstall) {
+		loadFromRouter(fnEnd);
+	} else {
+		loadFromServer(fnEnd);
+	}
+
+	//console.log("aa-{0}-bb-{1}".format("test1", "test2"));
+
+	//Just for test, append a new app
+	var oApp = $('<dl class="icon is-install" data-name="{0}">\
+	<dd class="icon-pic"></dd>\
+	<dt class="icon-title">{1}</dt>\
+	<dd class="icon-desc">\
+	    <div class="text">\
+		<a href="/{2}">{3}</a>\
+	    </div>\
+	    <div class="opt">\
+		<button type="button" class="install-btn" onclick="">安装</button>\
+		<button type="button" class="uninstall-btn" onclick="">卸载</button>\
+		<button type="button" class="hide-btn" onclick="">隐藏</button>\
+	    </div>\
+	</dd>\
+	</dl>');
+	$("#IconContainer").append(oApp);
     }
 
     //Just for test
@@ -566,6 +639,13 @@ function init(){
 	$('.install-btn').click(function(e) {
 		appInstallTest();
 	});
+    }
+
+    function loadFromRouter() {
+    console.log(softInfo);
+    }
+
+    function loadFromServer() {
     }
 
     $(function () {

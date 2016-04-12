@@ -62,6 +62,7 @@ export softcenter_installing_tick=`date +%s`
 
 VER_SUFFIX=_version
 MD5_SUFFIX=_md5
+INSTALL_SUFFIX=_install
 URL_SPLIT="/"
 OLD_MD5=`dbus get $softcenter_installing_module$MD5_SUFFIX`
 OLD_VERSION=`dbus get $softcenter_installing_module$VER_SUFFIX`
@@ -126,6 +127,7 @@ else
 	dbus set softcenter_installing_status="1"
 	dbus set "$softcenter_installing_module$MD5_SUFFIX=$softcenter_installing_md5"
 	dbus set "$softcenter_installing_module$VER_SUFFIX=$softcenter_installing_version"
+	dbus set "$softcenter_installing_module$INSTALL_SUFFIX=1"
 fi
 
 else
