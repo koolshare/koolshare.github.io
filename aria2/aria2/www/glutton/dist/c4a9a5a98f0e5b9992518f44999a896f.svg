@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="8px" height="9px" viewBox="0 0 8 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.5.2 (25235) - http://www.bohemiancoding.com/sketch -->
+    <title>icon_play</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Welcome" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Temp" sketch:type="MSArtboardGroup" transform="translate(-111.000000, -386.000000)" fill="#FFFFFF">
+            <g id="Header-Copy-2" sketch:type="MSLayerGroup" transform="translate(0.000000, 362.000000)">
+                <g id="Add-Button-Copy" transform="translate(97.000000, 13.000000)" sketch:type="MSShapeGroup">
+                    <g id="Group" transform="translate(9.000000, 6.000000)">
+                        <path d="M12.8636364,9.58720372 L5.31818182,13.7803855 C5.23106017,13.8296282 5.15625031,13.83531 5.09375,13.797431 C5.03124969,13.759552 5,13.6913709 5,13.5928855 L5,5.22924917 C5,5.13076383 5.03124969,5.06258269 5.09375,5.02470372 C5.15625031,4.98682474 5.23106017,4.9925065 5.31818182,5.04174917 L12.8636364,9.23493099 C12.950758,9.28417366 12.9943182,9.34288519 12.9943182,9.41106735 C12.9943182,9.47924951 12.950758,9.53796104 12.8636364,9.58720372 L12.8636364,9.58720372 Z" id="icon_play"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

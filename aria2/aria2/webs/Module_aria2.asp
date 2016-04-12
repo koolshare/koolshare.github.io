@@ -173,6 +173,7 @@
               document.getElementById('h5ai').style.display = "";
               document.getElementById('aria2-webui').style.display = "";
               document.getElementById('yaaw').style.display = "";
+              document.getElementById('glutton').style.display = "";
               document.getElementById('aria2_base_table').style.display = "";
               document.getElementById('aria2_rpc_table').style.display = "";
               document.getElementById('aria2_limit_table').style.display = "";
@@ -183,6 +184,7 @@
               document.getElementById('h5ai').style.display = "none";
               document.getElementById('aria2-webui').style.display = "none";
               document.getElementById('yaaw').style.display = "none";
+              document.getElementById('glutton').style.display = "none";
               document.getElementById('aria2_base_table').style.display = "none";
               document.getElementById('aria2_rpc_table').style.display = "none";
               document.getElementById('aria2_limit_table').style.display = "none";
@@ -198,6 +200,7 @@
               document.getElementById('h5ai').style.display = "none";
               document.getElementById('aria2-webui').style.display = "none";
               document.getElementById('yaaw').style.display = "none";
+              document.getElementById('glutton').style.display = "none";
               document.getElementById('aria2_base_table').style.display = "none";
               document.getElementById('aria2_rpc_table').style.display = "none";
               document.getElementById('aria2_limit_table').style.display = "none";
@@ -208,6 +211,7 @@
               document.getElementById('h5ai').style.display = "";
               document.getElementById('aria2-webui').style.display = "";
               document.getElementById('yaaw').style.display = "";
+              document.getElementById('glutton').style.display = "";
               document.getElementById('aria2_base_table').style.display = "";
               document.getElementById('aria2_rpc_table').style.display = "";
               document.getElementById('aria2_limit_table').style.display = "";
@@ -221,6 +225,8 @@
           document.getElementById("link2.1").href = "http://"+lan_ipaddr+":8088/aria2";
           document.getElementById("link3.1").innerHTML = "<i><u>http://"+lan_ipaddr+":8088/yaaw</u></i>";
           document.getElementById("link3.1").href = "http://"+lan_ipaddr+":8088/yaaw";
+          document.getElementById("link4.1").innerHTML = "<i><u>http://"+lan_ipaddr+":8088/glutton</u></i>";
+          document.getElementById("link4.1").href = "http://"+lan_ipaddr+":8088/glutton";
           showhide("aria2_binary_custom", (document.aria2_form.aria2_binary.value == "custom"));
           showhide("aria2_check_time_tr", (document.aria2_form.f_aria2_check.value !== "false"));
           showhide("aria2_rpc_listen_port_tr", (document.aria2_form.f_aria2_enable_rpc.value !== "false"));
@@ -1145,6 +1151,14 @@
                             <td>
                               <div id="link3" style="padding-top:5px;">
                                 <a id="link3.1" href="http://192.168.100.1:808/yaaw" target="_blank"><i><u>http://192.168.100.1:808/yaaw</u></i></a>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr id="glutton">
+                            <th style="width:25%;">Glutton控制台</th>
+                            <td>
+                              <div id="link4" style="padding-top:5px;">
+                                <a id="link4.1" href="http://192.168.100.1:808/glutton" target="_blank"><i><u>http://192.168.100.1:808/glutton</u></i></a>
                               </div>
                             </td>
                           </tr>
