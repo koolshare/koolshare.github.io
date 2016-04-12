@@ -159,15 +159,15 @@
 						version_show();
 						refreshpage(3);
 					} else if (db_kuainiao_['kuainiao_install_status'] == "4"){
-					   document.getElementById('updateBtn').style.display = "";
+					   document.getElementById('update_button').style.display = "";
 						$("#kuainiao_install_show").html("<i>下载文件校验不一致！</i>");
 					} else if (db_kuainiao_['kuainiao_install_status'] == "5"){
-						document.getElementById('updateBtn').style.display = "";
+						document.getElementById('update_button').style.display = "";
 						$("#kuainiao_install_show").html("<i>然而并没有更新！</i>");
 					} else if (db_kuainiao_['kuainiao_install_status'] == "6"){
 			      		$("#kuainiao_install_show").html("<i>正在检查是否有更新~</i>");
 					} else if (db_kuainiao_['kuainiao_install_status'] == "7"){
-					   document.getElementById('updateBtn').style.display = "";
+					   document.getElementById('update_button').style.display = "";
 						$("#kuainiao_install_show").html("<i>检测更新错误！</i>");
 					} else {
 						$("#kuainiao_install_show").html("");
@@ -203,7 +203,7 @@
 		}
 		function update_kuainiao(o, s){
 			document.form.kuainiao_update_check.value = 1;
-			document.getElementById('updateBtn').style.display = "none";
+			document.getElementById('update_button').style.display = "none";
 			document.form.action_mode.value = s;
 			document.form.submit();
 		}
@@ -262,7 +262,6 @@
 												<div style="float:right; width:15px; height:25px;margin-top:10px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
 												<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 												<div class="formfontdesc" style="padding-top:5px;margin-top:0px;float: left;" id="cmdDesc">迅雷快鸟加速服务，带宽平均提升5倍，最高可达100M</div>
-												<div id="kuainiao_version_status" style="padding-top:5px;margin-left:30px;margin-top:0px;float: left;"><i>当前版本：<% dbus_get_def("kuainiao_version", "0"); %></i></div>
 												<div class="formfontdesc" id="cmdDesc"></div>
 												<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="routing_table">
 													<thead>
@@ -273,7 +272,7 @@
 													<tr>
 													<th>开启快鸟加速</th>
 														<td colspan="2">
-															<div class="switch_field" style="display:table-cell">
+															<div class="switch_field" style="display:table-cell;float: left;">
 																<label for="switch">
 																	<input id="switch" class="switch" type="checkbox" style="display: none;">
 																	<div class="switch_container" >
@@ -284,10 +283,14 @@
 																	</div>
 																</label>
 															</div>
-															<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-35px;float: left;">
+															<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-38px;float: left;">
 																<button id="updateBtn" class="button_gen" onclick="update_kuainiao(this, ' Refresh ');">检查更新</button>
+																<a style="margin-left: 178px;" href="https://github.com/koolshare/koolshare.github.io/blob/master/kuainiao/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
 															</div>
-															<div id="kuainiao_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>
+															<div id="kuainiao_version_status" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("kuainiao_version", "未知"); %></i>
+															</div>
+															<div id="kuainiao_install_show" style="padding-top:5px;margin-left:330px;margin-top:-25px;">
+															</div>
 													</td>
 													</tr>
 		                                    	</table>

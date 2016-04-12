@@ -25,5 +25,3 @@ chmod 755 /koolshare/ss/*.sh
 chmod 755 /koolshare/scripts/*
 chmod 755 /koolshare/bin/*
 
-cd /
-

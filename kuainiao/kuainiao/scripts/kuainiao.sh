@@ -1,19 +1,19 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.2.0"
+version="0.2.1"
 
 #双WAN判断
 wans_mode=$(nvram get wans_mode)
 if [ "$kuainiao_config_wan" == "1" ] && [ "$wans_mode" == "lb" ]; then
-	wan_selected=$(nvram get wan0_gateway)
+	wan_selected=$(nvram get wan0_ipaddr)
 	if [ "$wan_selected" != "0.0.0.0" ]; then
 		bind_address=$wan_selected
 	else
 		bind_address=""
 	fi
 elif [ "$kuainiao_config_wan" == "2" ] && [ "$wans_mode" == "lb" ]; then
-	wan_selected=$(nvram get wan1_gateway)
+	wan_selected=$(nvram get wan1_ipaddr)
 	if [ "$wan_selected" != "0.0.0.0" ]; then
 		bind_address=$wan_selected
 	else

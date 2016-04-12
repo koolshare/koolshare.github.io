@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.4.1
+   - fix	修复初始化时gfwlist模式dnscrypt-proxy错误的默认节点
+   - fix	gfwlist模式中选择dnscrypt-proxy节点，实际无效的问题
+   - change	更新游戏模式v2中koolgame客户端为最新.
+
 1.4.0
    - fix	修复全局模式下dnscrypt-proxy不能启动的问题
    - fix	修复SS初始化时，错误的dnscrypt-proxy节点设置问题
