@@ -479,6 +479,7 @@ function init(){
     var db_softcenter_ = {
         "softcenter_curr_version": "1.0.5",
         "softcenter_install_status": "0",
+	"softcenter_home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui",
 
         "softcenter_module_adm_status": "0",
         "softcenter_module_adm_install": "1",
@@ -578,6 +579,7 @@ function init(){
         });
 
         $.map(result, function (item, key) {
+		//fixup for some lost fields
 		if("" == checkField(item, "home_url", "")) {
 			item["home_url"] = "Module_" + item.name + ".asp";
 		}
@@ -587,8 +589,13 @@ function init(){
 		if("" == checkField(item, "tar_url", "")) {
 			item["tar_url"] = "{0}/{0}.tar.gz".format(item.name);
 		}
-		//The description should be update online
+		if(!item["install"]) {
+			item["install"] = "0";
+		}
+
+		//Initial to default value
 		item["description"] = "";
+		item["new_version"] = false;
 	});
 
 	return result;
@@ -683,7 +690,42 @@ function init(){
 	fn();
     }
 
-    function loadFromServer() {
+    function loadFromServer(fn) {
+            //console.log(db_softcenter_["softcenter_home_url"] + '/softcenter/app.json.js');
+	    $.ajax({
+		url: db_softcenter_["softcenter_home_url"] + '/softcenter/app.json.js',
+		type: 'GET',
+		success: function(res) {
+		    var txt = jQuery(res.responseText).text();
+		    if(typeof(txt) != "undefined" && txt.length > 0) {
+			var appConf = jQuery.parseJSON(txt.replace("'", "\""));
+			console.log(appConf);
+			mergeToSoftInfo(appConf.apps);
+
+			//TODO use a new function for it
+			loadFromRouter(fn);
+		    }
+		}
+	    });
+    }
+
+    //merge online app configs to local softInfo
+    function mergeToSoftInfo(onlineInfo) {
+	for(var i = 0; i < onlineInfo.length; i++) {
+		var item = onlineInfo[i];
+		var key = "softcenter_module_" + item.name;
+		var oldItem = softInfo[key]
+		if(oldItem) {
+			if(oldItem.version != item.version) {
+				// Has new version
+				oldItem["new_version"] = true
+			}
+		} else {
+			item["install"] = "0";
+			//merge to softInfo
+			softInfo[key] = item;
+		}
+	}
     }
 
     $(function () {
