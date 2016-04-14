@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks_mips Changelog
 ===========================================
+1.4.3
+   - fix	修改版本号显示前缀，以区分ARM机型和mipsel机型
+
 1.4.2
    - fix	更新dnscrypt-proxy解析列表，和arm机型保持一致
    - fix	因为mipsel机型性能原因，增大大陆白名单提交时间到45秒
