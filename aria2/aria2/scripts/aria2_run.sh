@@ -385,10 +385,12 @@ load_default(){
 }
 # ============================================
 if [ $aria2_enable = 0 ];then
+	del_process_check
 	del_version_check
 	rm_shortcut
 	kill_aria2
 	kill_lighttpd
+	killall cpulimit
 	close_port
 	dbus remove aria2_custom
 	dbus save aria2
