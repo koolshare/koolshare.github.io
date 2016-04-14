@@ -3,6 +3,7 @@
 #From dbus to local variable
 eval `dbus export softcenter_installing_`
 source /koolshare/scripts/base.sh
+export PERP_BASE=/koolshare/perp
 
 #softcenter_installing_module 	#正在安装的模块
 #softcenter_installing_todo 	#希望安装的模块
@@ -160,16 +161,21 @@ uninstall_module() {
 		exit 3
 	fi
 
+	if [ -f "/koolshare/$softcenter_installing_todo/uninstall.sh" ]; then
+	sh /koolshare/$softcenter_installing_todo/uninstall.sh
+	fi
+
 	txt=`dbus list $softcenter_installing_todo`
 	printf %s "$txt" |
 	while IFS= read -r line; do
 		line2="${line%=*}"
-		echo $line2
+		dbus remove $line2
 	done
 }
 
 case $BIN_NAME in
 start)
+	sh /koolshare/perp/perp.sh start
 	;;
 update)
 	;;
