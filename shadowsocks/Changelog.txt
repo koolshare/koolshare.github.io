@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.4.2
+   - add	增加大陆白名单模式pdnsd解析软件选项
+   - fix	修改版本号显示前缀，以区分ARM机型和mipsel机型
+
 1.4.1
    - fix	修复初始化时gfwlist模式dnscrypt-proxy错误的默认节点
    - fix	gfwlist模式中选择dnscrypt-proxy节点，实际无效的问题
