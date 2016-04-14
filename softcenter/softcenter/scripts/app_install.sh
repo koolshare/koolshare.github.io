@@ -2,6 +2,7 @@
 
 #From dbus to local variable
 eval `dbus export softcenter_installing_`
+source /koolshare/scripts/base.sh
 
 #softcenter_installing_module 	#正在安装的模块
 #softcenter_installing_todo 	#希望安装的模块
@@ -30,109 +31,154 @@ eval `dbus export softcenter_installing_`
 
 softcenter_home_url=`dbus get softcenter_home_url`
 CURR_TICK=`date +%s`
+BIN_NAME=$(basename "$0")
+BIN_NAME="${BIN_NAME%.*}"
+if [ "$ACTION" != "" ]; then
+	BIN_NAME=$ACTION
+fi
 
 LOGGER() {
 	echo $1
 #	logger $1
 }
 
-if [ "$softcenter_home_url" = "" -o "$softcenter_installing_md5" = "" -o "$softcenter_installing_version" = "" ]; then
-	LOGGER "input error, something not found"
-	exit 1
-fi
-
-if [ "$softcenter_installing_tick" = "" ]; then
-	export softcenter_installing_tick=0
-fi
-LAST_TICK=`expr $softcenter_installing_tick + 20`
-if [ "$LAST_TICK" -ge "$CURR_TICK" -a "$softcenter_installing_module" != "" ]; then
-	LOGGER "module $softcenter_installing_module is installing"
-	exit 2
-fi
-
-if [ "$softcenter_installing_todo" = "" ]; then
-	#curr module name not found
-	LOGGER "module name not found"
-	exit 3
-fi
-
-# Just ignore the old installing_module
-export softcenter_installing_module=$softcenter_installing_todo
-export softcenter_installing_tick=`date +%s`
-
-VER_SUFFIX=_version
-MD5_SUFFIX=_md5
-INSTALL_SUFFIX=_install
-URL_SPLIT="/"
-OLD_MD5=`dbus get $softcenter_installing_module$MD5_SUFFIX`
-OLD_VERSION=`dbus get $softcenter_installing_module$VER_SUFFIX`
-HOME_URL=`dbus get softcenter_home_url`
-TAR_URL=$HOME_URL$URL_SPLIT$softcenter_installing_tar_url
-FNAME=`basename $softcenter_installing_tar_url`
-
-#if ["$OLD_MD5" = "$softcenter_installing_md5"]; then
-#	LOGGER "md5 not changed $OLD_MD5"
-#	exit 0
-#fi
-
-if [ "$OLD_VERSION" = "" ]; then
-	OLD_VERSION=0
-fi
-
-CMP=`versioncmp $softcenter_installing_version $OLD_VERSION`
-if [ "$CMP" = "-1" ]; then
-
-#save state
-export softcenter_installing_status="2"
-dbus save softcenter_installing_
-
-cd /tmp
-rm -f $FNAME
-rm -rf "/tmp/$softcenter_installing_module"
-wget --no-check-certificate --tries=1 --timeout=15 $TAR_URL
-RETURN_CODE=$?
-
-if [ "$RETURN_CODE" != "0" ]; then
-dbus ram softcenter_installing_status="0"
-dbus ram softcenter_installing_module=""
-LOGGER "wget error, $RETURN_CODE"
-exit 4
-fi
-
-md5sum_gz=$(md5sum /tmp/$FNAME | sed 's/ /\n/g'| sed -n 1p)
-if [ "$md5sum_gz"x != "$softcenter_installing_md5"x ]; then
-	LOGGER "md5 not equal"
-	dbus ram softcenter_installing_status="12"
-	rm -f $FNAME
-	sleep 2
-	dbus ram softcenter_installing_status="0"
-	dbus set softcenter_installing_module=""
-	exit
-else
-	tar -zxf $FNAME
-	dbus ram softcenter_installing_status="4"
-
-	if [ ! -f /tmp/$softcenter_installing_module/install.sh ]; then
-		dbus ram softcenter_installing_status="0"
-		dbus ram softcenter_installing_module=""
-		LOGGER "package hasn't install.sh"
-		exit 5
+install_module() {
+	if [ "$softcenter_home_url" = "" -o "$softcenter_installing_md5" = "" -o "$softcenter_installing_version" = "" ]; then
+		LOGGER "input error, something not found"
+		exit 1
 	fi
 
-	chmod a+x /tmp/$softcenter_installing_module/install.sh
-	sh /tmp/$softcenter_installing_module/install.sh
-	sleep 2
+	if [ "$softcenter_installing_tick" = "" ]; then
+		export softcenter_installing_tick=0
+	fi
+	LAST_TICK=`expr $softcenter_installing_tick + 20`
+	if [ "$LAST_TICK" -ge "$CURR_TICK" -a "$softcenter_installing_module" != "" ]; then
+		LOGGER "module $softcenter_installing_module is installing"
+		exit 2
+	fi
 
-	dbus set softcenter_installing_module=""
-	dbus set softcenter_installing_status="1"
-	dbus set "$softcenter_installing_module$MD5_SUFFIX=$softcenter_installing_md5"
-	dbus set "$softcenter_installing_module$VER_SUFFIX=$softcenter_installing_version"
-	dbus set "$softcenter_installing_module$INSTALL_SUFFIX=1"
-fi
+	if [ "$softcenter_installing_todo" = "" ]; then
+		#curr module name not found
+		LOGGER "module name not found"
+		exit 3
+	fi
 
-else
-	LOGGER "current version is newest version"
+	# Just ignore the old installing_module
+	export softcenter_installing_module=$softcenter_installing_todo
+	export softcenter_installing_tick=`date +%s`
+
+	VER_SUFFIX=_version
+	MD5_SUFFIX=_md5
+	INSTALL_SUFFIX=_install
+	URL_SPLIT="/"
+	OLD_MD5=`dbus get $softcenter_installing_module$MD5_SUFFIX`
+	OLD_VERSION=`dbus get $softcenter_installing_module$VER_SUFFIX`
+	HOME_URL=`dbus get softcenter_home_url`
+	TAR_URL=$HOME_URL$URL_SPLIT$softcenter_installing_tar_url
+	FNAME=`basename $softcenter_installing_tar_url`
+
+	#if ["$OLD_MD5" = "$softcenter_installing_md5"]; then
+	#	LOGGER "md5 not changed $OLD_MD5"
+	#	exit 0
+	#fi
+
+	if [ "$OLD_VERSION" = "" ]; then
+		OLD_VERSION=0
+	fi
+
+	CMP=`versioncmp $softcenter_installing_version $OLD_VERSION`
+	if [ "$CMP" = "-1" ]; then
+
+	#save state
+	export softcenter_installing_status="2"
+	dbus save softcenter_installing_
+
+	cd /tmp
+	rm -f $FNAME
+	rm -rf "/tmp/$softcenter_installing_module"
+	wget --no-check-certificate --tries=1 --timeout=15 $TAR_URL
+	RETURN_CODE=$?
+
+	if [ "$RETURN_CODE" != "0" ]; then
 	dbus ram softcenter_installing_status="0"
 	dbus ram softcenter_installing_module=""
-fi
+	LOGGER "wget error, $RETURN_CODE"
+	exit 4
+	fi
 
+	md5sum_gz=$(md5sum /tmp/$FNAME | sed 's/ /\n/g'| sed -n 1p)
+	if [ "$md5sum_gz"x != "$softcenter_installing_md5"x ]; then
+		LOGGER "md5 not equal"
+		dbus ram softcenter_installing_status="12"
+		rm -f $FNAME
+		sleep 2
+		dbus ram softcenter_installing_status="0"
+		dbus set softcenter_installing_module=""
+		exit
+	else
+		tar -zxf $FNAME
+		dbus ram softcenter_installing_status="4"
+
+		if [ ! -f /tmp/$softcenter_installing_module/install.sh ]; then
+			dbus ram softcenter_installing_status="0"
+			dbus ram softcenter_installing_module=""
+			LOGGER "package hasn't install.sh"
+			exit 5
+		fi
+
+		chmod a+x /tmp/$softcenter_installing_module/install.sh
+		sh /tmp/$softcenter_installing_module/install.sh
+		sleep 2
+
+		dbus set softcenter_installing_module=""
+		dbus set softcenter_installing_status="1"
+		dbus set "$softcenter_installing_module$MD5_SUFFIX=$softcenter_installing_md5"
+		dbus set "$softcenter_installing_module$VER_SUFFIX=$softcenter_installing_version"
+		dbus set "$softcenter_installing_module$INSTALL_SUFFIX=1"
+	fi
+
+	else
+		LOGGER "current version is newest version"
+		dbus ram softcenter_installing_status="0"
+		dbus ram softcenter_installing_module=""
+	fi
+}
+
+uninstall_module() {
+	if [ "$softcenter_installing_tick" = "" ]; then
+		export softcenter_installing_tick=0
+	fi
+	LAST_TICK=`expr $softcenter_installing_tick + 20`
+	if [ "$LAST_TICK" -ge "$CURR_TICK" -a "$softcenter_installing_module" != "" ]; then
+		LOGGER "module $softcenter_installing_module is installing"
+		exit 2
+	fi
+
+	if [ "$softcenter_installing_todo" = "" ]; then
+		#curr module name not found
+		LOGGER "module name not found"
+		exit 3
+	fi
+
+	txt=`dbus list $softcenter_installing_todo`
+	printf %s "$txt" |
+	while IFS= read -r line; do
+		line2="${line%=*}"
+		echo $line2
+	done
+}
+
+case $BIN_NAME in
+start)
+	;;
+update)
+	;;
+install)
+	;;
+app_remove)
+	uninstall_module
+	;;
+*)
+	install_module
+	;;
+esac
