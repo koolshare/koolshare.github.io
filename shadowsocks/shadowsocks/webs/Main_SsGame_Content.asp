@@ -62,6 +62,7 @@ function init(){
 	generate_options();
 	conf_to_obj();
 	update_visibility();
+	show_develop_function();
 }
 
 function onSubmitCtrl(o, s) {
@@ -135,6 +136,7 @@ function update_visibility(){
 	gs = document.form.ss_game_sstunnel.value
 	gcc = document.form.ss_game_chinadns_china.value
 	gcf = document.form.ss_game_chinadns_foreign.value
+	grpm= document.form.ss_game_pdnsd_method.value
 	showhide("show_isp_dns", (gdc == "1"));
 	showhide("ss_game_dns_china_user", (gdc == "5"));
 	showhide("ss_game_dns_china_user_txt1", (gdc !== "5"));
@@ -155,15 +157,33 @@ function update_visibility(){
 	showhide("chinadns_foreign2", (gcf == "4"));
 	showhide("ss_game_dns2socks_user", (gdf == "4"));
 	showhide("dns_plan_foreign0", (gdf == "4"));
+	showhide("pdnsd_up_stream_tcp", (gdf == "6" && grpm == "2"));
+	showhide("pdnsd_up_stream_udp", (gdf == "6" && grpm == "1"));
+	showhide("ss_game_pdnsd_udp_server_dns2socks", (gdf == "6" && grpm == "1" && document.form.ss_game_pdnsd_udp_server.value == 1));
+	showhide("ss_game_pdnsd_udp_server_dnscrypt", (gdf == "6" && grpm == "1" && document.form.ss_game_pdnsd_udp_server.value == 2));
+	showhide("ss_game_pdnsd_udp_server_ss_tunnel", (gdf == "6" && grpm == "1" && document.form.ss_game_pdnsd_udp_server.value == 3));
+	showhide("ss_game_pdnsd_udp_server_ss_tunnel_user", (gdf == "6" && grpm == "1" && document.form.ss_game_pdnsd_udp_server.value == 3 && document.form.ss_game_pdnsd_udp_server_ss_tunnel.value == 4));
+	showhide("pdnsd_cache", (gdf == "6"));
+	showhide("pdnsd_method", (gdf == "6"));
 }
 
 function generate_options(){
 	var confs = ["4armed",  "cisco(opendns)",  "cisco-familyshield",  "cisco-ipv6",  "cisco-port53",  "cloudns-can",  "cloudns-syd",  "cs-cawest",  "cs-cfi",  "cs-cfii",  "cs-ch",  "cs-de",  "cs-fr",  "cs-fr2",  "cs-rome",  "cs-useast",  "cs-usnorth",  "cs-ussouth",  "cs-ussouth2",  "cs-uswest",  "cs-uswest2",  "d0wn-bg-ns1",  "d0wn-ch-ns1",  "d0wn-de-ns1",  "d0wn-fr-ns2",  "d0wn-gr-ns1",  "d0wn-hk-ns1",  "d0wn-it-ns1",  "d0wn-lv-ns1",  "d0wn-nl-ns1",  "d0wn-nl-ns2",  "d0wn-random-ns1",  "d0wn-random-ns2",  "d0wn-ro-ns1",  "d0wn-ru-ns1",  "d0wn-tz-ns1",  "d0wn-ua-ns1",  "dnscrypt.eu-dk",  "dnscrypt.eu-dk-ipv6",  "dnscrypt.eu-nl",  "dnscrypt.eu-nl-ipv6",  "dnscrypt.org-fr",  "fvz-rec-at-vie-01",  "fvz-rec-ca-tor-01",  "fvz-rec-ca-tor-01-ipv6",  "fvz-rec-de-fra-01",  "fvz-rec-gb-brs-01",  "fvz-rec-gb-lon-01",  "fvz-rec-gb-lon-03",  "fvz-rec-hk-ztw-01",  "fvz-rec-ie-du-01",  "fvz-rec-no-osl-01",  "fvz-rec-nz-akl-01",  "fvz-rec-nz-akl-01-ipv6",  "fvz-rec-us-ler-01",  "fvz-rec-us-mia-01",  "ipredator",  "ns0.dnscrypt.is",  "okturtles",  "opennic-tumabox",  "ovpnto-ro",  "ovpnto-se",  "ovpnto-se-ipv6",  "shea-us-noads",  "shea-us-noads-ipv6",  "soltysiak",  "soltysiak-ipv6",  "yandex"];
 	var obj=document.getElementById('ss_game_opendns'); 
+	var obj1=document.getElementById('ss_game_pdnsd_udp_server_dnscrypt'); 
 	for(var i = 0; i < confs.length; i++) {
 		obj.options.add(new Option(confs[i],confs[i]));
+		obj1.options.add(new Option(confs[i],confs[i]));
 	}
 }
+
+function show_develop_function(){
+	if (db_ss['ss_basic_user'] == undefined){
+		var obj2=document.getElementById('ss_game_dns_foreign');
+    	obj2.options.remove(5);
+	}
+}
+
 </script>
 </head>
 <body onload="init();">
@@ -253,6 +273,7 @@ function generate_options(){
 														<option value="2">ss-tunnel</option>
 														<option value="3">ChinaDNS（CDN最优）</option>
 														<option value="5">PcapDNSProxy</option>
+														<option value="6">pdnsd</option>
 													</select>
 													<select id="ss_game_opendns" name="ss_game_opendns" class="input_option"></select>
 													<input type="text" class="ssconfig input_ss_table" id="ss_game_dns2socks_user" name="ss_game_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
@@ -297,6 +318,54 @@ function generate_options(){
 														<span>此处DNS通过ss-tunnel转发给SS服务器解析</span> 
 														<br/>
 														<span id="chinadns_foreign1">默认：Google DNS1【用于解析国外域名】</span> <span id="chinadns_foreign2">右侧输入框输入自定义国外【用于解析国外域名】</span>
+												</td>
+											</tr>
+											<tr id="pdnsd_method">
+												<th width="20%" ><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd查询方式</font></th>
+												<td>
+													<select id="ss_game_pdnsd_method" name="ss_game_pdnsd_method" class="input_option" onclick="update_visibility();" >
+														<option value="1" selected >仅udp查询</option>
+														<option value="2">仅tcp查询</option>
+													</select>
+												</td>
+											</tr>
+											<tr id="pdnsd_up_stream_tcp">
+												<th width="20%" ><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（TCP）</font></th>
+												<td>
+													<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_server_ip" name="ss_game_pdnsd_server_ip" placeholder="DNS地址：8.8.4.4" style="width:128px;" maxlength="100" value="8.8.4.4">
+													：
+													<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_server_port" name="ss_game_pdnsd_server_port" placeholder="DNS端口" style="width:50px;" maxlength="6" value="53">
+													
+													<span id="pdnsd1">请填写支持TCP查询的DNS服务器</span>
+												</td>
+											</tr>
+											<tr id="pdnsd_up_stream_udp">
+												<th width="20%" ><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（UDP）</font></th>
+												<td>
+													<select id="ss_game_pdnsd_udp_server" name="ss_game_pdnsd_udp_server" class="input_option" onclick="update_visibility();" >
+														<option value="1">DNS2SOCKS</option>
+														<option value="2">dnscrypt-proxy</option>
+														<option value="3">ss-tunnel</option>
+													</select>
+													<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_udp_server_dns2socks" name="ss_game_pdnsd_udp_server_dns2socks" style="width:128px;" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
+													<select id="ss_game_pdnsd_udp_server_dnscrypt" name="ss_game_pdnsd_udp_server_dnscrypt" class="input_option"></select>
+													<select id="ss_game_pdnsd_udp_server_ss_tunnel" name="ss_game_pdnsd_udp_server_ss_tunnel" class="input_option" onclick="update_visibility();" >
+														<option value="1">OpenDNS [208.67.220.220]</option>
+														<option value="2">Goole DNS1 [8.8.8.8]</option>
+														<option value="3">Goole DNS2 [8.8.4.4]</option>
+														<option value="4">自定义</option>
+													</select>
+													<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_udp_server_ss_tunnel_user" name="ss_game_pdnsd_udp_server_ss_tunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8">
+												</td>
+											</tr>
+											<tr id="pdnsd_cache">
+												<th width="20%"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd缓存设置</font></th>
+												<td>
+													<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_server_cache_min" name="ss_game_pdnsd_server_cache_min" title="最小TTL时间" style="width:30px;" maxlength="100" value="24h">
+													→
+													<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_server_cache_max" name="ss_game_pdnsd_server_cache_max" title="最长TTL时间" style="width:30px;" maxlength="100" value="1w">
+													
+													<span id="pdnsd1">填写最小TTL时间与最长TTL时间</span>
 												</td>
 											</tr>
 											<tr>

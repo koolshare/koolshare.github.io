@@ -925,7 +925,7 @@ function show_hide_table(){
 function version_show(){
 	if (db_ss['ss_basic_version_local'] != db_ss['ss_basic_version_web'] && db_ss['ss_basic_version_web'] !== "undefined"){
 		//$j("#ss_version_show").html("<i>有新版本：ARM " + db_ss['ss_basic_version_web']);
-		$j("#ss_version_show").html("<i>当前版本：" + db_ss['ss_basic_version_local']);
+		$j("#ss_version_show").html("<i>当前版本：ARM " + db_ss['ss_basic_version_local']);
 		$j("#updateBtn").html("<i>升级到：" + db_ss['ss_basic_version_web']);
 	} else {
 		$j("#ss_version_show").html("<i>当前版本：ARM " + db_ss['ss_basic_version_local']);
