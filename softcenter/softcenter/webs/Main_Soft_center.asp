@@ -124,11 +124,11 @@
     .is-install .uninstall-btn{
         display: inline-block;
     }
-    .is-install .install-btn{
-        display: none;
-    }
 </style>
 <script>
+    /*.is-install .install-btn{
+        display: none;
+    }*/
 
 //TODO move this to common javascript files
     jQuery.ajax = (function(_ajax){
@@ -328,6 +328,20 @@ function appInstallTest() {
 	}
 	});
 
+}
+
+function oninstall(el) {
+	var app = $(el).closest("dl");
+	var name = 'softcenter_module_' + $(app).data('name');
+	var appInfo = softInfo[name];
+	if(appInfo.install == "1") {
+		alert("already installed");
+	}
+	console.log(appInfo);
+}
+
+function onuninstall(el) {
+	console.log(el);
 }
 
 function appInstall(moduleInfo) {
@@ -561,6 +575,9 @@ function init(){
         "softcenter_module_xunlei_title": "Xunlei下载"
     };
 
+    //Global state
+    var currState = {"needUpdate": true};
+
     //格式化数据
     var softInfo = (function formatDBSoftcenterData(data) {
         var result = {};
@@ -601,62 +618,42 @@ function init(){
 	return result;
     })(db_softcenter_);
 
-    function initAppStatus() {
-        var installCount = 0;
-        var uninstallCount = 0;
-        $('#IconContainer dl').each(function (i, app) {
-            app = $(app);
-            var name = 'softcenter_module_' + app.data('name');
-            if (1 === parseInt(softInfo[name].install, 10)) {
-                app.addClass('is-install');
-                installCount++;
-            } else {
-                uninstallCount++;
-            }
-        });
-        $('.show-install-btn').val('已安装(' + installCount + ')');
-        $('.show-uninstall-btn').val('未安装(' + uninstallCount + ')');
-    }
-
     function showInstall(bInstall) {
-        $('.show-install-btn').removeClass('active-btn');
-        $('.show-uninstall-btn').removeClass('active-btn');
-        if (1 === bInstall) {
-            $('.show-install-btn').addClass('active-btn');
-        } else {
-            $('.show-uninstall-btn').addClass('active-btn');
-        }
-
-	//first clear all
-	$("#IconContainer").empty();
-
 	var fnEnd = function() {
+		/*$('.show-install-btn').removeClass('active-btn');
+		$('.show-uninstall-btn').removeClass('active-btn');
+		if (1 === bInstall) {
+		    $('.show-install-btn').addClass('active-btn');
+		} else {
+		    $('.show-uninstall-btn').addClass('active-btn');
+		}*/
+
+		var installCount = 0;
+		var uninstallCount = 0;
+
 		var apps = $('#IconContainer dl');
 		apps.each(function (i, app) {
 		    app = $(app);
 		    var name = 'softcenter_module_' + app.data('name');
 		    if (bInstall === parseInt(softInfo[name].install, 10)) {
+                	app.addClass('is-install');
+                	installCount++;
 			app.show();
 		    } else {
 			app.hide();
+                	uninstallCount++;
 		    }
+
+		    $('.show-install-btn').val('已安装(' + installCount + ')');
+		    $('.show-uninstall-btn').val('未安装(' + uninstallCount + ')');
 		});
 	}
 
 	if(1 == bInstall) {
-		loadFromRouter(fnEnd);
+		refreshApps(fnEnd);
 	} else {
 		loadFromServer(fnEnd);
 	}
-
-	//console.log("aa-{0}-bb-{1}".format("test1", "test2"));
-    }
-
-    //Just for test
-    function attachEventForApp() {
-	$('.install-btn').click(function(e) {
-		appInstallTest();
-	});
     }
 
 	var appTemplate = '<dl class="icon is-install" data-name="{0}">\
@@ -667,31 +664,36 @@ function init(){
 		<a href="/{2}">{3}</a>\
 	    </div>\
 	    <div class="opt">\
-		<button type="button" class="install-btn" onclick="">安装</button>\
-		<button type="button" class="uninstall-btn" onclick="">卸载</button>\
-		<button type="button" class="hide-btn" onclick="">隐藏</button>\
+		<button type="button" class="install-btn" onclick="oninstall(this)">安装</button>\
+		<button type="button" class="uninstall-btn" onclick="onuninstall(this)">卸载</button>\
 	    </div>\
 	</dd>\
 	</dl>';
 
-    function loadFromRouter(fn) {
+    function refreshApps(fn) {
+	if(currState.needUpdate) {
+		$("#IconContainer").empty();
 
-	//update description online
-	var orders = ["name", "title", "home_url", "description"];
+		//update description online
+		var orders = ["name", "title", "home_url", "description"];
 
-	//console.log(softInfo);
-        $.map(softInfo, function (item, key) {
-		var arr = [];
-		for(var i = 0; i < orders.length; i++) {
-			arr.push(item[orders[i]]);
-		}
-		$("#IconContainer").append($(formatString(appTemplate, arr)));
-	});
+		//console.log(softInfo);
+		$.map(softInfo, function (item, key) {
+			var arr = [];
+			for(var i = 0; i < orders.length; i++) {
+				arr.push(item[orders[i]]);
+			}
+			$("#IconContainer").append($(formatString(appTemplate, arr)));
+		});
+	}
+
 	fn();
     }
 
     function loadFromServer(fn) {
-            //console.log(db_softcenter_["softcenter_home_url"] + '/softcenter/app.json.js');
+	    //show the old items first
+	    fn();
+
 	    $.ajax({
 		url: db_softcenter_["softcenter_home_url"] + '/softcenter/app.json.js',
 		type: 'GET',
@@ -699,11 +701,13 @@ function init(){
 		    var txt = jQuery(res.responseText).text();
 		    if(typeof(txt) != "undefined" && txt.length > 0) {
 			var appConf = jQuery.parseJSON(txt.replace("'", "\""));
-			console.log(appConf);
-			mergeToSoftInfo(appConf.apps);
-
-			//TODO use a new function for it
-			loadFromRouter(fn);
+			//console.log(appConf);
+			
+			//if has new apps or needUpdate, refresh all apps
+			if(mergeToSoftInfo(appConf.apps) || currState.needUpdate) {
+				refreshApps(fn);
+				currState.needUpdate = false
+			}
 		    }
 		}
 	    });
@@ -711,6 +715,7 @@ function init(){
 
     //merge online app configs to local softInfo
     function mergeToSoftInfo(onlineInfo) {
+	var changed = false
 	for(var i = 0; i < onlineInfo.length; i++) {
 		var item = onlineInfo[i];
 		var key = "softcenter_module_" + item.name;
@@ -719,20 +724,59 @@ function init(){
 			if(oldItem.version != item.version) {
 				// Has new version
 				oldItem["new_version"] = true
+				changed = true
 			}
 		} else {
 			item["install"] = "0";
 			//merge to softInfo
 			softInfo[key] = item;
+			changed = true
 		}
 	}
     }
 
+    function showInstallStatus() {
+	$.ajax({
+	type: "get",
+	url: "dbconf?p=softcenter_installing_",
+	dataType: "script",
+	success: function(xhr) {
+		var o = db_softcenter_installing_;
+		var d = new Date();
+		var curr = d.getTime()/1000 - 20;
+		tick = parseInt(checkField(o, "softcenter_installing_tick", "0"));
+		curr_module = checkField(o, "softcenter_installing_module", "");
+		if(tick > curr && curr_module != "") {
+		}
+	   }
+	})
+    }
+    
+    function showInstallInfo(module, scode) {
+	var code = parseInt(scode);
+	var s = module.capitalizeFirstLetter();
+	var infoTxt = "尚未安装 \
+		已安装 \
+		将被安装到jffs分区... \
+		正在下载中...请耐心等待... \
+		正在安装中... \
+		安装成功！请5秒后刷新本页面！... \
+		卸载中...... \
+		卸载成功！ \
+		没有检测到在线版本号！ \
+		正在下载更新...... \
+		正在安装更新... \
+		安装更新成功，5秒后刷新本页！ \
+		下载文件校验不一致！ \
+		然而并没有更新！ \
+		正在检查是否有更新~ \
+		检测更新错误！"
+	var infos = infoTxt.split(" ");
+	$("#appInstallInfo").html(s + infos[code]);
+    }
+
     $(function () {
         showInstall(1);
-        initAppStatus();
-	
-	attachEventForApp();
     });
 </script>
 </head>
@@ -828,165 +872,7 @@ function init(){
                                                                     </div>
                                                                 </dd>
                                                             </dl>
-                                                            <dl class="icon" data-name="koolnet">
-                                                                <dd class="icon-pic" style="background-position: 0px -67px;"></dd>
-                                                                <dt class="icon-title">P2P穿透</dt>
-                                                                <dd class="icon-desc">
-                                                                    <div class="text">
-                                                                        <a href="/Module_koolnet.asp">P2P穿透~</a>
-                                                                    </div>
-                                                                    <div class="opt">
-                                                                        <button type="button" class="install-btn" onclick="">安装</button>
-                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
-                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
-                                                                    </div>
-                                                                </dd>
-                                                            </dl>
-                                                            <dl class="icon" data-name="xunlei">
-                                                                <dd class="icon-pic" style="background-position: 0px -134px;"></dd>
-                                                                <dt class="icon-title">迅雷远程</dt>
-                                                                <dd class="icon-desc">
-                                                                    <div class="text">
-                                                                        <a href="/Module_xunlei.asp">
-                                                                            点击安装后会自动下载并安装到USB设备中.<br/>
-                                                                            默认下载目录也位于相同的USB设备内.
-                                                                        </a>
-                                                                    </div>
-                                                                    <div class="opt">
-                                                                        <button type="button" class="install-btn" onclick="">安装</button>
-                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
-                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
-                                                                    </div>
-                                                                </dd>
-                                                            </dl>
-                                                            <dl class="icon" data-name="aria2">
-                                                                <dd class="icon-pic" style="background-position: 0px -201px;"></dd>
-                                                                <dt class="icon-title">Aria2</dt>
-                                                                <dd class="icon-desc">
-                                                                    <div class="text">
-                                                                        <a href="/Module_aria2.asp">
-                                                                            楼上不给力？来我这里试试~
-                                                                        </a>
-                                                                    </div>
-                                                                    <div class="opt">
-                                                                        <button type="button" class="install-btn" onclick="">安装</button>
-                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
-                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
-                                                                    </div>
-                                                                </dd>
-                                                            </dl>
-                                                            <dl class="icon" data-name="transmission">
-                                                                <dd class="icon-pic" style="background-position: 0px -268px;"></dd>
-                                                                <dt class="icon-title">Transmission</dt>
-                                                                <dd class="icon-desc">
-                                                                    <div class="text">
-                                                                        <a href="/Module_transmission.asp">我方了~</a>
-                                                                    </div>
-                                                                    <div class="opt">
-                                                                        <button type="button" class="install-btn" onclick="">安装</button>
-                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
-                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
-                                                                    </div>
-                                                                </dd>
-                                                            </dl>
-                                                            <dl class="icon" data-name="ssserver">
-                                                                <dd class="icon-pic" style="background-position: 0px -335px;"></dd>
-                                                                <dt class="icon-title">ss-server</dt>
-                                                                <dd class="icon-desc">
-                                                                    <div class="text">
-                                                                        <a href="/Module_ss_server.asp">在路由器上开一个ss服务器，将你的网络共享到公网~很有卵用~</a>
-                                                                    </div>
-                                                                    <div class="opt">
-                                                                        <button type="button" class="install-btn" onclick="">安装</button>
-                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
-                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
-                                                                    </div>
-                                                                </dd>
-                                                            </dl>
-                                                            <dl class="icon" data-name="shadowvpn">
-                                                                <dd class="icon-pic" style="background-position: 0px -399px;"></dd>
-                                                                <dt class="icon-title">shadowvpn</dt>
-                                                                <dd class="icon-desc">
-                                                                    <div class="text">
-                                                                        <a href="/Module_shadowVPN.asp">轻量级无状态VPN，小巧，好用~</a>
-                                                                    </div>
-                                                                    <div class="opt">
-                                                                        <button type="button" class="install-btn" onclick="">安装</button>
-                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
-                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
-                                                                    </div>
-                                                                </dd>
-                                                            </dl>
-                                                            <dl class="icon" data-name="v2ray">
-                                                                <dd class="icon-pic" style="background-position: 0px -466px;"></dd>
-                                                                <dt class="icon-title">v2ray</dt>
-                                                                <dd class="icon-desc">
-                                                                    <div class="text">
-                                                                        <a href="/Module_v2ray.asp">Yet another tool help your through great firewall!</a>
-                                                                    </div>
-                                                                    <div class="opt">
-                                                                        <button type="button" class="install-btn" onclick="">安装</button>
-                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
-                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
-                                                                    </div>
-                                                                </dd>
-                                                            </dl>
-                                                            <dl class="icon" data-name="entware">
-                                                                <dd class="icon-pic" style="background-position: 0px -532px;"></dd>
-                                                                <dt class="icon-title">Entware-ng</dt>
-                                                                <dd class="icon-desc">
-                                                                    <div class="text">
-                                                                        有了Enterware，还有什么路由器不能做的？<i>（你猜我做好没有？）</i>
-                                                                    </div>
-                                                                    <div class="opt">
-                                                                        <button type="button" class="install-btn" onclick="">安装</button>
-                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
-                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
-                                                                    </div>
-                                                                </dd>
-                                                            </dl>
-                                                            <dl class="icon" data-name="policy">
-                                                                <dd class="icon-pic" style="background-position: 0px -598px;"></dd>
-                                                                <dt class="icon-title">策略路由</dt>
-                                                                <dd class="icon-desc">
-                                                                    <div class="text">
-                                                                        <a href="/Module_policy_route.asp">你有双线接入？来试试策略路由吧~</a>
-                                                                    </div>
-                                                                    <div class="opt">
-                                                                        <button type="button" class="install-btn" onclick="">安装</button>
-                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
-                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
-                                                                    </div>
-                                                                </dd>
-                                                            </dl>
-                                                            <dl class="icon" data-name="kuainiao">
-                                                                <dd class="icon-pic" style="background-position: 0px -730px;"></dd>
-                                                                <dt class="icon-title">迅雷快鸟</dt>
-                                                                <dd class="icon-desc">
-                                                                    <div class="text">
-                                                                        <a href="/Module_kuainiao.asp">迅雷快鸟，不解释~</a>
-                                                                    </div>
-                                                                    <div class="opt">
-                                                                        <button type="button" class="install-btn" onclick="">安装</button>
-                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
-                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
-                                                                    </div>
-                                                                </dd>
-                                                            </dl>
-                                                            <dl class="icon" data-name="speedtest">
-                                                                <dd class="icon-pic" style="background-position: -67px -2px;"></dd>
-                                                                <dt class="icon-title">speedtest</dt>
-                                                                <dd class="icon-desc">
-                                                                    <div class="text">
-                                                                        <a href="/Module_speedtest.asp">speedtest~</a>
-                                                                    </div>
-                                                                    <div class="opt">
-                                                                        <button type="button" class="install-btn" onclick="">安装</button>
-                                                                        <button type="button" class="uninstall-btn" onclick="">卸载</button>
-                                                                        <button type="button" class="hide-btn"onclick="">隐藏</button>
-                                                                    </div>
-                                                                </dd>
-                                                            </dl>
+
                                                             <dl class="icon" data-name="adm">
                                                                 <dd class="icon-pic" style="background-position: -67px -67px;"></dd>
                                                                 <dt class="icon-title">阿呆猫</dt>
@@ -1023,7 +909,7 @@ function init(){
 															<td width="1px">
 															</td>
 															<td>
-																<div style="padding:10px;width:95%;font-size:14px;">
+																<div style="padding:10px;width:95%;font-size:14px;" id="appInstallInfo">
 																	然而并没有...请随时关注固件更新哦~<i>（上古天坑区）</i>
 																</div>
 															</td>
