@@ -336,8 +336,10 @@ function oninstall(el) {
 	var appInfo = softInfo[name];
 	if(appInfo.install == "1") {
 		alert("already installed");
+		return;
 	}
-	console.log(appInfo);
+	
+	appIntall(appInfo);
 }
 
 function onuninstall(el) {
@@ -747,6 +749,8 @@ function init(){
 		tick = parseInt(checkField(o, "softcenter_installing_tick", "0"));
 		curr_module = checkField(o, "softcenter_installing_module", "");
 		if(tick > curr && curr_module != "") {
+			showInstallInfo(curr_module, o["softcenter_installing_status"]);
+			setTimeout("showInstallStatus()", 1500);
 		}
 	   }
 	})
@@ -777,6 +781,8 @@ function init(){
 
     $(function () {
         showInstall(1);
+
+	showInstallStatus();
     });
 </script>
 </head>
