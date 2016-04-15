@@ -171,6 +171,8 @@ uninstall_module() {
 		line2="${line%=*}"
 		dbus remove $line2
 	done
+	dbus set softcenter_installing_module=""
+	dbus set softcenter_installing_status="1"
 }
 
 case $BIN_NAME in
