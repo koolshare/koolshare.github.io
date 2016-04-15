@@ -345,7 +345,7 @@ server {
 EOF
 	if [ "$ss_redchn_pdnsd_udp_server" == "1" ];then
 		echo $(date): Starting DNS2SOCKS for pdnsd..
-		dns2socks 127.0.0.1:23456 "$ss_redchn_dns2socks_user" 127.0.0.1:1099 > /dev/null 2>&1 &
+		dns2socks 127.0.0.1:23456 "$ss_redchn_pdnsd_udp_server_dns2socks" 127.0.0.1:1099 > /dev/null 2>&1 &
 		echo $(date): done
 		echo $(date):
 	elif [ "$ss_redchn_pdnsd_udp_server" == "2" ];then

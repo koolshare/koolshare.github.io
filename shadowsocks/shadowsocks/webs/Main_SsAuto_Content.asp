@@ -215,7 +215,7 @@ function show_develop_function(){
 	if (db_ss['ss_basic_user'] == undefined){
 		var obj2=document.getElementById('ss_redchn_dns_foreign');
     	obj2.options.remove(5);
-}
+	}
 }
 
 </script>
