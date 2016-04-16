@@ -289,6 +289,14 @@ function parse_softcenter() {
     //console.log(softcenter_modules);
 }
 
+// function checkField(o, f, d) {
+//     if(typeof o[f] == "undefined") {
+//         o[f] = d;
+//     }
+    
+//     return o[f];
+// }
+
 // function onModuleHide(tr) {
 //     var id = $(tr).attr("id");
 //     if(typeof(id) != "undefined") {
@@ -317,14 +325,6 @@ function parse_softcenter() {
 //                 }
 //             });
 //     }
-// }
-
-// function checkField(o, f, d) {
-//     if(typeof o[f] == "undefined") {
-//         o[f] = d;
-//     }
-    
-//     return o[f];
 // }
 
 // function appInstallTest() {
@@ -399,84 +399,15 @@ function parse_softcenter() {
 //             console.log("install ok");
 
 //             //TODO update installing status
-//             //setTimeout("udpateInstallStatus()");
+//             		setTimeout("showInstallStatus()");
 //                 },
 //                 error: function() {
-//             console.log("install error");
+//             		console.log("install error");
 //                 }
 //         });
 
 // }
 
-// function updateInstallStatus() {
-//     $.ajax({
-//     type: "get",
-//     url: "dbconf?p=softcenter_installing_",
-//     dataType: "script",
-//     success: function(xhr) {
-//         //check install timeout/error/ok
-//         console.log("install ok");
-//     }
-//     });
-// }
-
-//function jsonp_callback(data) {
-//    console.log(data);
-//}
-
-// function init(){
-//   show_menu();
-
-//     parse_softcenter();
-
-//     var curr_user = 0;
-//     if (typeof(db_softcenter_["softcenter_curr_user"]) != "undefined") {
-//         curr_user = parseInt(db_softcenter_["softcenter_curr_user"]);
-//         if(typeof(curr_user) == "undefined") {
-//             curr_user = 0;
-//         }
-//     }
-
-//     $("#softcenter_td tr.softcenter_tr1").each(function(index, ell){
-//         var el = $(ell);
-//         var show = true;
-//         var id = el.attr("id");
-//         if(typeof(id) != "undefined") {
-//             var ob = id.substring(0, id.indexOf("_"));
-//             if(ob.length > 0) {
-
-//                 var status = db_softcenter_["softcenter_module_"+ob];
-//                 var mo = softcenter_modules[ob];
-
-//                 if(typeof(status) != "undefined") {
-//                     status = parseInt(status);
-//                 } else {
-//                     status = 0;
-//                 }
-
-//                 //console.log("ob "+ ob + " status "+status + " curr_user " + curr_user);
-
-//                 //curr_user < status: status: 2==develop, curr_user: 1==testor, not show this module.
-//                 if((curr_user < status) || (typeof(mo) != "undefined" && mo.visible === "0")) {
-//                     show = false;
-//                 }
-//             }
-//         }
-
-//         if(show) {
-//             el.show();
-//             var nel = el.next("tr");
-//             if(typeof(nel) != "undefined" && $(nel).attr("class") == "softcenter_tr2") {
-//                 $(nel).show();
-//             }
-//         }
-//     });
-
-//         $(".link_hidden").click(function(e){
-//             //e.preventDefault();
-//             var tr = $(this).closest("tr");
-//             onModuleHide(tr);
-//     });
 
 //         $("#updateBtn").click(function(e){
 //             //e.preventDefault();
@@ -497,27 +428,6 @@ function parse_softcenter() {
 //                         console.log("error");
 //                     }
 //                 });
-//     });
-
-//     $("#spnCurrVersion").html(db_softcenter_["softcenter_curr_version"]);
-
-//     $.ajax({
-//         url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/softcenter/config.json.js',
-//         type: 'GET',
-//         success: function(res) {
-//             var txt = jQuery(res.responseText).text();
-//             if(typeof(txt) != "undefined" && txt.length > 0) {
-//                 //console.log(txt);
-//                 var obj = jQuery.parseJSON(txt.replace("'", "\""));
-//                 $("#spnOnlineVersion").html(obj.version);
-
-//                 if(obj.version != db_softcenter_["softcenter_curr_version"]) {
-//                     $("#updateBtn").show();
-//                 }
-//             }
-//         }
-//     });
-// }
 
 </script>
 <script>
@@ -609,166 +519,6 @@ function parse_softcenter() {
 
     //Global state
     var currState = {"needUpdate": true};
-
-    //格式化数据
-    // var softInfo = (function formatDBSoftcenterData(data) {
-    //     var result = {};
-    //     $.map(db_softcenter_, function (item, key) {
-    //         key = key.split('_');
-    //         if ('module' === key[1]) {
-    //             var app = [key[0], key[1], key[2]].join("_");
-    //             //var prop = (key.length >= 4 ? key.slice(3, key.length).join("_") : 'status');
-    //             var prop = key.slice(3, key.length).join("_");
-    //             if (!result[app]) {
-    //                 result[app] = {};
-    //                 result[app].name = key[2];
-    //             }
-    //             result[app][prop] = item;
-    //         }
-    //     });
-
-    //     $.map(result, function (item, key) {
-    //     //fixup for some lost fields
-    //     if("" == checkField(item, "home_url", "")) {
-    //         item["home_url"] = "Module_" + item.name + ".asp";
-    //     }
-    //     if("" == checkField(item, "title", "")) {
-    //         item["title"] = item.name.capitalizeFirstLetter()
-    //     }
-    //     if("" == checkField(item, "tar_url", "")) {
-    //         item["tar_url"] = "{0}/{0}.tar.gz".format(item.name);
-    //     }
-    //     if(!item["install"]) {
-    //         item["install"] = "0";
-    //     }
-
-    //     //Initial to default value
-    //     item["description"] = "";
-    //     item["new_version"] = false;
-    // });
-
-    // return result;
-    // })(db_softcenter_);
-
-    // function showInstall(bInstall) {
-    //     var fnEnd = function() {
-    //         /*$('.show-install-btn').removeClass('active-btn');
-    //         $('.show-uninstall-btn').removeClass('active-btn');
-    //         if (1 === bInstall) {
-    //             $('.show-install-btn').addClass('active-btn');
-    //         } else {
-    //             $('.show-uninstall-btn').addClass('active-btn');
-    //         }*/
-
-    //         var installCount = 0;
-    //         var uninstallCount = 0;
-
-    //         var apps = $('#IconContainer dl');
-    //         apps.each(function (i, app) {
-    //             app = $(app);
-    //             var name = 'softcenter_module_' + app.data('name');
-    //             if (bInstall === parseInt(softInfo[name].install, 10)) {
-    //                     app.addClass('is-install');
-    //                     installCount++;
-    //             app.show();
-    //             } else {
-    //             app.hide();
-    //                     uninstallCount++;
-    //             }
-
-    //             $('.show-install-btn').val('已安装(' + installCount + ')');
-    //             $('.show-uninstall-btn').val('未安装(' + uninstallCount + ')');
-    //         });
-    //     }
-
-    //     if(1 == bInstall) {
-    //         refreshApps(fnEnd);
-    //     } else {
-    //         loadFromServer(fnEnd);
-    //     }
-    // }
-
-    // var appTemplate = ['',
-    //     '<dl class="icon is-install" data-name="{0}">',
-    //         '<dd class="icon-pic"></dd>',
-    //         '<dt class="icon-title">{1}</dt>',
-    //         '<dd class="icon-desc">',
-    //             '<div class="text">',
-    //                 '<a href="/{2}">{3}</a>',
-    //             '</div>',
-    //             '<div class="opt">',
-    //                 '<button type="button" class="install-btn" onclick="oninstall(this)">安装</button>',
-    //                 '<button type="button" class="uninstall-btn" onclick="onuninstall(this)">卸载</button>',
-    //             '</div>',
-    //         '</dd>',
-    //     '</dl>'
-    // ].join('');
-
-    // function refreshApps(fn) {
-    //     if(currState.needUpdate) {
-    //         $("#IconContainer").empty();
-
-    //         //update description online
-    //         var orders = ["name", "title", "home_url", "description"];
-
-    //         //console.log(softInfo);
-    //         $.map(softInfo, function (item, key) {
-    //             var arr = [];
-    //             for(var i = 0; i < orders.length; i++) {
-    //                 arr.push(item[orders[i]]);
-    //             }
-    //             $("#IconContainer").append($(formatString(appTemplate, arr)));
-    //         });
-    //     }
-
-    //     fn();
-    // }
-
-    // function loadFromServer(fn) {
-    //     //show the old items first
-    //     fn();
-
-    //     $.ajax({
-    //         url: db_softcenter_["softcenter_home_url"] + '/softcenter/app.json.js',
-    //         type: 'GET',
-    //         dataType: 'json',
-    //         success: function(appConf) {
-    //             // var txt = jQuery(res.responseText).text();
-    //             // if(typeof(txt) != "undefined" && txt.length > 0) {
-    //             //var appConf = jQuery.parseJSON(txt.replace("'", "\""));
-    //             //console.log(appConf);
-                
-    //             //if has new apps or needUpdate, refresh all apps
-    //             if(appConf && (mergeToSoftInfo(appConf.apps) || currState.needUpdate)) {
-    //                 refreshApps(fn);
-    //                 currState.needUpdate = false
-    //             }
-    //             //}
-    //         }
-    //     });
-    // }
-
-    //merge online app configs to local softInfo
-    // function mergeToSoftInfo(onlineInfo) {
-    //     var changed = false
-    //     for(var i = 0; i < onlineInfo.length; i++) {
-    //         var item = onlineInfo[i];
-    //         var key = "softcenter_module_" + item.name;
-    //         var oldItem = softInfo[key]
-    //         if(oldItem) {
-    //             if(oldItem.version != item.version) {
-    //                 // Has new version
-    //                 oldItem["new_version"] = true
-    //                 changed = true
-    //             }
-    //         } else {
-    //             item["install"] = "0";
-    //             //merge to softInfo
-    //             softInfo[key] = item;
-    //             changed = true
-    //         }
-    //     }
-    // }
 
     // function showInstallStatus() {
     //     $.ajax({
