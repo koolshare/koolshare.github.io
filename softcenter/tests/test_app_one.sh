@@ -11,10 +11,10 @@ dbus remove adm_md5
 
 #export softcenter_installing_module
 #export softcenter_installing_tick
-export softcenter_installing_todo=adm
+export softcenter_installing_todo=softcenter
 export softcenter_installing_version=0.5
-export softcenter_installing_md5=80c31ec3377795247a8da134062cd255
-export softcenter_installing_tar_url="adm/adm.tar.gz"
+export softcenter_installing_md5=a16640f5a0df9186897be0de52e6629a
+export softcenter_installing_tar_url="softcenter/softcenter.tar.gz"
 dbus save softcenter_installing
 
 sh /koolshare/scripts/app_install.sh

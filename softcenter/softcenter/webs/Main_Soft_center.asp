@@ -521,7 +521,7 @@ function parse_softcenter() {
 
 </script>
 <script>
-    // home_url/tar_url 可能不存在,不存在时默认为 Module_{module}.asp/{module}/{module}.tar.gz
+    // home_url 与 tar_url 可能不存在,不存在时默认为 Module_{module}.asp 与 {module}/{module}.tar.gz
     var db_softcenter_ = {
         "softcenter_curr_version": "1.0.5",
         "softcenter_install_status": "0",
@@ -965,6 +965,9 @@ function parse_softcenter() {
     //当初始化过程获取软件列表失败时候，用本地的模块进行渲染
     //只要一次获取成功，以后不在重新获取，知道页面刷新重入
     $(function () {
+	//梅林要求用这个函数来显示左测菜单
+	show_menu();
+
         init(function () {
             toggleAppPanel(1);
         });
