@@ -327,6 +327,7 @@ function parse_softcenter() {
 //     }
 // }
 
+//先提交一个请求检测有没有插件正在安装，如果有但安装超时了，或者没有正在安装的，则拿到当前用户提交的moduleInfo信息，交给appInstall函数再产生一个提交，后台会进行安装，同时异常更新当前的安装状态。
 // function appInstallTest() {
 //     //Check if the installing is exists
 //     $.ajax({
