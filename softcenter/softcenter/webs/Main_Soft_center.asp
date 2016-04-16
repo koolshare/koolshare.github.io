@@ -597,6 +597,10 @@ function parse_softcenter() {
             return source;
         }
         //app 模板
+	// icon 规则: 
+	// 如果已安装的插件,那图标必定在 /koolshare/res 目录, 通过 /res/icon-{name}.png 请求路径得到图标
+	// 如果是未安装的插件,则必定在 http://koolshare.ngrok.wang:5000/{name}/{name}/icon-{name}.png
+	// TODO 如果因为一些错误导致没有图标, 有可能显示一张默认图标吗?
         var tpl = ['',
             '<dl class="icon install-status-#{install}" data-name="#{name}">',
                 '<dd class="icon-pic"></dd>',
