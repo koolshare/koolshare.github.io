@@ -25,3 +25,6 @@ cat > ./config.json.js <<EOF
 "description":"$DESCRIPTION"
 }
 EOF
+
+#update md5
+python ../softcenter/gen_install.py stage2

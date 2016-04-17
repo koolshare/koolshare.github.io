@@ -49,9 +49,13 @@
             "title": "xunlei"
         }, 
         {
+            "description": "", 
+            "home_url": "Module_tunnel.asp", 
+            "md5": "dd4aa88f953c9b8abfbb352c2a43e424", 
             "name": "tunnel", 
             "tar_url": "tunnel/tunnel.tar.gz", 
-            "title": "tunnel"
+            "title": "穿透DDNS", 
+            "version": "0.2"
         }, 
         {
             "home_url": "Module_speedtest.asp", 
