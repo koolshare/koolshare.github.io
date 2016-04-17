@@ -74,9 +74,9 @@ def check_and_cp(modules):
             m = {"name":module, "title":module, "tar_url": module + "/" + module + ".tar.gz"}
         modules.append(m)
 
-        check_subdir(module, path, "scripts", ".sh", os.path.join(curr_path, "softcenter", "scripts"))
-        check_subdir(module, path, "webs", ".asp", os.path.join(curr_path, "softcenter", "webs"))
-        check_subdir(module, path, "scripts", ".sh", os.path.join(curr_path, "softcenter", "scripts"))
+        #check_subdir(module, path, "scripts", ".sh", os.path.join(curr_path, "softcenter", "scripts"))
+        #check_subdir(module, path, "webs", ".asp", os.path.join(curr_path, "softcenter", "webs"))
+        #check_subdir(module, path, "scripts", ".sh", os.path.join(curr_path, "softcenter", "scripts"))
         check_subdir(module, path, "res", "*", os.path.join(curr_path, "softcenter", "res"))
 
 

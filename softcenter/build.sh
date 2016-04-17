@@ -6,7 +6,7 @@ mkdir -p ./softcenter/res
 
 python ./gen_install.py
 
-chmod 755 ./softcenter/scripts/*.sh
+chmod 755 ./softcenter/scripts/app_install.sh
 
 tar -zcvf softcenter.tar.gz softcenter
 md5value=`md5sum softcenter.tar.gz|tr " " "\n"|sed -n 1p`

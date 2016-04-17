@@ -49,6 +49,11 @@
             "title": "xunlei"
         }, 
         {
+            "name": "tunnel", 
+            "tar_url": "tunnel/tunnel.tar.gz", 
+            "title": "tunnel"
+        }, 
+        {
             "name": "speedtest", 
             "tar_url": "speedtest/speedtest.tar.gz", 
             "title": "speedtest"
@@ -56,6 +61,6 @@
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
     "md5": "a16640f5a0df9186897be0de52e6629a", 
-    "vers": "1.0.5", 
-    "tar_url": "softcenter/softcenter.tar.gz"
+    "tar_url": "softcenter/softcenter.tar.gz", 
+    "ver": "1.0.5"
 }
