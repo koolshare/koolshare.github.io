@@ -67,6 +67,8 @@ install_module() {
 	# Just ignore the old installing_module
 	export softcenter_installing_module=$softcenter_installing_todo
 	export softcenter_installing_tick=`date +%s`
+	export softcenter_installing_status="2"
+	dbus save softcenter_installing_
 
 	VER_SUFFIX=_version
 	MD5_SUFFIX=_md5
@@ -78,21 +80,12 @@ install_module() {
 	TAR_URL=$HOME_URL$URL_SPLIT$softcenter_installing_tar_url
 	FNAME=`basename $softcenter_installing_tar_url`
 
-	#if ["$OLD_MD5" = "$softcenter_installing_md5"]; then
-	#	LOGGER "md5 not changed $OLD_MD5"
-	#	exit 0
-	#fi
-
 	if [ "$OLD_VERSION" = "" ]; then
 		OLD_VERSION=0
 	fi
 
 	CMP=`versioncmp $softcenter_installing_version $OLD_VERSION`
 	if [ "$CMP" = "-1" ]; then
-
-	#save state
-	export softcenter_installing_status="2"
-	dbus save softcenter_installing_
 
 	cd /tmp
 	rm -f $FNAME
@@ -101,6 +94,9 @@ install_module() {
 	RETURN_CODE=$?
 
 	if [ "$RETURN_CODE" != "0" ]; then
+	dbus ram softcenter_installing_status="12"
+	sleep 3
+
 	dbus ram softcenter_installing_status="0"
 	dbus ram softcenter_installing_module=""
 	LOGGER "wget error, $RETURN_CODE"
@@ -109,10 +105,11 @@ install_module() {
 
 	md5sum_gz=$(md5sum /tmp/$FNAME | sed 's/ /\n/g'| sed -n 1p)
 	if [ "$md5sum_gz"x != "$softcenter_installing_md5"x ]; then
-		LOGGER "md5 not equal"
+		LOGGER "md5 not equal $md5sum_gz"
 		dbus ram softcenter_installing_status="12"
 		rm -f $FNAME
-		sleep 2
+		sleep 3
+
 		dbus ram softcenter_installing_status="0"
 		dbus set softcenter_installing_module=""
 		exit
@@ -123,13 +120,20 @@ install_module() {
 		if [ ! -f /tmp/$softcenter_installing_module/install.sh ]; then
 			dbus ram softcenter_installing_status="0"
 			dbus ram softcenter_installing_module=""
+
+			#rm -f $FNAME
+			#rm -rf "/tmp/$softcenter_installing_module"
+
 			LOGGER "package hasn't install.sh"
 			exit 5
 		fi
 
 		chmod a+x /tmp/$softcenter_installing_module/install.sh
 		sh /tmp/$softcenter_installing_module/install.sh
-		sleep 2
+		sleep 3
+
+		rm -f $FNAME
+		rm -rf "/tmp/$softcenter_installing_module"
 
 		dbus set softcenter_installing_module=""
 		dbus set softcenter_installing_status="1"
@@ -140,6 +144,9 @@ install_module() {
 
 	else
 		LOGGER "current version is newest version"
+		dbus ram softcenter_installing_status="13"
+		sleep 3
+
 		dbus ram softcenter_installing_status="0"
 		dbus ram softcenter_installing_module=""
 	fi

@@ -289,14 +289,6 @@ function parse_softcenter() {
     //console.log(softcenter_modules);
 }
 
-// function checkField(o, f, d) {
-//     if(typeof o[f] == "undefined") {
-//         o[f] = d;
-//     }
-    
-//     return o[f];
-// }
-
 // function onModuleHide(tr) {
 //     var id = $(tr).attr("id");
 //     if(typeof(id) != "undefined") {
@@ -327,115 +319,59 @@ function parse_softcenter() {
 //     }
 // }
 
-//先提交一个请求检测有没有插件正在安装，如果有但安装超时了，或者没有正在安装的，则拿到当前用户提交的moduleInfo信息，交给appInstall函数再产生一个提交，后台会进行安装，同时异常更新当前的安装状态。
-// function appInstallTest() {
-//     //Check if the installing is exists
-//     $.ajax({
-//         type: "get",
-//         url: "dbconf?p=softcenter_installing_",
-//         dataType: "script",
-//         success: function(xhr) {
-//             console.log("request ok");
-//             var o = db_softcenter_installing_;
-//             var d = new Date();
-//             var curr = d.getTime()/1000 - 20;
-//             tick = parseInt(checkField(o, "softcenter_installing_tick", "0"));
-//             curr_module = checkField(o, "softcenter_installing_module", "");
-//             if(tick > curr && curr_module != "") {
-//                 console.log("previous install exists");
-//                 return;
-//             }
+function checkField(o, f, d) {
+    if(typeof o[f] == "undefined") {
+        o[f] = d;
+    }
+ 
+    return o[f];
+}
 
-//             moduleInfo = {
-//                 "description": "去广告，看疗效~", 
-//                 "home_url": "Module_adm.asp", 
-//                 "md5": "a9148835ab402d8f1ba920aea40011a3", 
-//                 "name": "adm", 
-//                 "tar_url": "adm/adm.tar.gz", 
-//                 "title": "阿呆猫", 
-//                 "version": "0.5"
-//             }; 
+function appInstallModule(moduleInfo) {
+    if(currState.installing) {
+	console.log("current is in installing state");
+	return;
+    }
 
-//             appInstall(moduleInfo);
-            
-//         }
-//     });
+    //Current page must has prefix of "Module_"
+    var data = {"SystemCmd":"app_install.sh", "current_page":"Module_koolnet.asp", "action_mode":" Refresh ", "action_script":""};
+    data["softcenter_installing_todo"] = moduleInfo.name;
+    data["softcenter_installing_version"] = moduleInfo.version;
+    data["softcenter_installing_md5"] = moduleInfo.md5;
+    data["softcenter_installing_tar_url"] = moduleInfo.tar_url;
+    //currState.name = moduleInfo.name;
 
-// }
+    //TODO auto choose for home_url
+    data["softcenter_home_url"] = "http://koolshare.ngrok.wang:5000";
 
-// function oninstall(el) {
-//     var app = $(el).closest("dl");
-//     var name = 'softcenter_module_' + $(app).data('name');
-//     var appInfo = softInfo[name];
-//     if(appInfo.install == "1") {
-//         alert("already installed");
-//     }
-//     console.log(appInfo);
-// }
+    //Update title for this module
+    data[moduleInfo.name + "_title"] = moduleInfo.title;
 
-// function onuninstall(el) {
-//     console.log(el);
-// }
+        $.ajax({
+                type: "POST",
+                url: "applydb.cgi?p=softcenter_,"+moduleInfo.name,
+                dataType: "text",
+                data: data,
+                success: function() {
+            		var d = new Date();
+			//持续更新 10s
+			currState.lastChangeTick = d/1000 + TIMEOUT_SECONDS;
+			currState.installing = true;
+			showInstallStatus(true);
+                },
+                error: function() {
+			currState.installing = false;
+            		console.log("install error");
+                }
+        });
 
-// function appInstall(moduleInfo) {
-//     //Current page must has prefix of "Module_"
-//         var data = {"SystemCmd":"app_install.sh", "current_page":"Module_koolnet.asp", "action_mode":" Refresh ", "action_script":""};
-//     data["softcenter_installing_todo"] = moduleInfo.name;
-//     data["softcenter_installing_version"] = moduleInfo.version;
-//     data["softcenter_installing_md5"] = moduleInfo.md5;
-//     data["softcenter_installing_tar_url"] = moduleInfo.tar_url;
-
-//     //TODO auto choose for home_url
-//     data["softcenter_home_url"] = "http://koolshare.ngrok.wang:5000";
-
-//     //Update title for this module
-//     data[moduleInfo.name + "_title"] = moduleInfo.title;
-
-//         $.ajax({
-//                 type: "POST",
-//                 url: "applydb.cgi?p=softcenter_,"+moduleInfo.name,
-//                 dataType: "text",
-//                 data: data,
-//                 success: function() {
-//             console.log("install ok");
-
-//             //TODO update installing status
-//             		setTimeout("showInstallStatus()");
-//                 },
-//                 error: function() {
-//             		console.log("install error");
-//                 }
-//         });
-
-// }
-
-
-//         $("#updateBtn").click(function(e){
-//             //e.preventDefault();
-//             //TODO better here
-//         $("#updateBtn").hide();
-//             var data = {"SystemCmd":"softcenter.sh", "current_page":"Module_koolnet.asp", "action_mode":" Refresh ", "action_script":""};
-//             data["softcenter_install_status"] = "0";
-//             $.ajax({
-//                     type: "POST",
-//                     url: "applydb.cgi?p=softcenter_",
-//                     dataType: "text",
-//                     data: data,
-//                     success: function() {
-//                         //location.reload();
-//                         setTimeout("location.reload();", 8000);
-//                     },
-//                     error: function() {
-//                         console.log("error");
-//                     }
-//                 });
-
+}
 </script>
 <script>
     // home_url 与 tar_url 可能不存在,不存在时默认为 Module_{module}.asp 与 {module}/{module}.tar.gz
     var db_softcenter_ = {
-        "softcenter_curr_version": "1.0.5",
-        "softcenter_install_status": "0",
+        "softcenter_version": "1.0.5",
+	"softcenter_md5": "d7f321a4c3e814eaf217c1e4d71d2336",
         "softcenter_home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui",
 
         "softcenter_module_adm_status": "0",
@@ -518,52 +454,94 @@ function parse_softcenter() {
         "softcenter_module_xunlei_title": "Xunlei下载"
     };
 
-    //Global state
-    var currState = {"needUpdate": true};
+    // 安装信息更新策略: 
+    // 当软件安装的时候,安装进程内部会有超时时间. 超过超时时间 没安装成功,则认为失败.
+    // 但是路由内部的绝对时间与浏览器上的时间可能不同步,所以无法使用路由器内的时间. 浏览器的策略是,
+    // 安装的时候会有一个同样的计时,若这个超时时间内,安装状态有变化,则更新安装状态.从而可以实时更新安装进程.
+    var currState = {"installing": false, "lastChangeTick": 0, "lastStatus": "-1", "module":""};
+    var TIMEOUT_SECONDS = 10;
 
-    // function showInstallStatus() {
-    //     $.ajax({
-    //     type: "get",
-    //     url: "dbconf?p=softcenter_installing_",
-    //     dataType: "script",
-    //     success: function(xhr) {
-    //         var o = db_softcenter_installing_;
-    //         var d = new Date();
-    //         var curr = d.getTime()/1000 - 20;
-    //         tick = parseInt(checkField(o, "softcenter_installing_tick", "0"));
-    //         curr_module = checkField(o, "softcenter_installing_module", "");
-    //         if(tick > curr && curr_module != "") {
-    //         }
-    //        }
-    //     })
-    // }
+    // TODO 如何避免实用全局变量?
+    var softInfo = null;
+
+    function initInstallStatus() {
+	var o = db_softcenter_;
+	var base = "softcenter_installing_";
+	if(o[base+"status"]) {
+		//状态不是0, 并且不是1,则当前正处于安装状态,实时更新安装信息
+		if((o[base+"status"] != "0") && (o[base+"status"] != "1")) {
+            		var d = new Date();
+			currState.lastChangeTick = d/1000 + TIMEOUT_SECONDS;
+			currState.lastStatus = o[base+"status"];
+			currState.installing = true;
+			//currState.name = o[base+"module"];
+			showInstallStatus(true);
+		}
+	}
+    }
+
+    function showInstallStatus(isInit) {
+        $.ajax({
+        type: "get",
+        url: "dbconf?p=softcenter_installing_",
+        dataType: "script",
+        success: function(xhr) {
+            var o = db_softcenter_installing_;
+	    var base = "softcenter_installing_";
+
+            if(isInit) {
+            	currState.lastStatus = o[base+"status"];
+	    }
+
+            var d = new Date();
+            var curr = d.getTime()/1000;
+            curr_module = checkField(o, "softcenter_installing_module", "");
+            if(o[base+"status"] != currState.lastStatus) {
+		currState.lastStatus = o[base+"status"];
+		showInstallInfo(curr_module, currState.lastStatus);
+		
+		// Install ok now
+		if(currState.lastStatus == "1") {
+			currState.installing = false;
+			setTimeout("window.location.reload()", 1000);
+			return;
+		} else if(currState.lastStatus == "0") {
+			currState.installing = false;
+		}
+            }
+
+	    if(currState.lastChangeTick > curr) {
+		setTimeout("showInstallStatus()", 1500);
+	    } else {
+		currState.installing = false;
+		showInstallInfo("", currState.lastStatus);
+	    }
+
+           }
+        })
+    }
     
-    // function showInstallInfo(module, scode) {
-    //     var code = parseInt(scode);
-    //     var s = module.capitalizeFirstLetter();
-    //     var infoTxt = "尚未安装 \
-    //         已安装 \
-    //         将被安装到jffs分区... \
-    //         正在下载中...请耐心等待... \
-    //         正在安装中... \
-    //         安装成功！请5秒后刷新本页面！... \
-    //         卸载中...... \
-    //         卸载成功！ \
-    //         没有检测到在线版本号！ \
-    //         正在下载更新...... \
-    //         正在安装更新... \
-    //         安装更新成功，5秒后刷新本页！ \
-    //         下载文件校验不一致！ \
-    //         然而并没有更新！ \
-    //         正在检查是否有更新~ \
-    //         检测更新错误！"
-    //     var infos = infoTxt.split(" ");
-    //     $("#appInstallInfo").html(s + infos[code]);
-    // }
-
-    // $(function () {
-    //     showInstall(1);
-    // });
+    function showInstallInfo(module, scode) {
+        var code = parseInt(scode);
+        var s = module.capitalizeFirstLetter();
+        var infos = ["尚未安装",
+            "已安装",
+            "将被安装到jffs分区...",
+            "正在下载中...请耐心等待...",
+            "正在安装中...",
+            "安装成功！请5秒后刷新本页面！...",
+            "卸载中......",
+            "卸载成功！",
+            "没有检测到在线版本号！",
+            "正在下载更新......",
+            "正在安装更新...",
+            "安装更新成功，5秒后刷新本页！ ",
+            "下载文件校验不一致！",
+            "然而并没有更新！",
+            "正在检查是否有更新~",
+            "检测更新错误！"];
+        $("#appInstallInfo").html(s + infos[code]);
+    }
 
     //切换安装未安装面板
     function toggleAppPanel(showInstall) {
@@ -576,6 +554,10 @@ function parse_softcenter() {
      * 渲染apps，安装和未安装按照class hook进行显示隐藏，存在同一个面板中
      */
     function renderView(apps) {
+
+	// set apps to global variable of softInfo
+	softInfo = apps;
+
         //简单模板函数
         function _format(source, opts) {
             var source = source.valueOf(),
@@ -725,6 +707,9 @@ function parse_softcenter() {
 
         init(function () {
             toggleAppPanel(1);
+
+	    //一刷新界面是否就正在插件在安装.
+	    initInstallStatus();
         });
         //挂接tab切换安装状态事件
         $('.show-install-btn').click(function () {
@@ -741,6 +726,8 @@ function parse_softcenter() {
         $('#IconContainer').on('click', '.install-btn', function () {
             var name = $(this).data('name');
             console.log('install', name);
+
+	    appInstallModule(softInfo[name]);
         });
         $('#IconContainer').on('click', '.uninstall-btn', function () {
             var name = $(this).data('name');
@@ -750,6 +737,7 @@ function parse_softcenter() {
             var name = $(this).data('name');
             console.log('update', name);
         });
+	
     });
 </script>
 </head>
