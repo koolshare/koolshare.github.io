@@ -128,6 +128,10 @@ install_module() {
 			exit 5
 		fi
 
+		if [ -f /tmp/$softcenter_installing_module/uninstall.sh ]; then
+			mv /tmp/$softcenter_installing_module/uninstall.sh /koolshare/scripts/uninstall_$softcenter_installing_todo.sh
+		fi
+
 		chmod a+x /tmp/$softcenter_installing_module/install.sh
 		sh /tmp/$softcenter_installing_module/install.sh
 		sleep 3
@@ -168,8 +172,8 @@ uninstall_module() {
 		exit 3
 	fi
 
-	if [ -f "/koolshare/$softcenter_installing_todo/uninstall.sh" ]; then
-	sh /koolshare/$softcenter_installing_todo/uninstall.sh
+	if [ -f "/koolshare/scripts/uninstall_$softcenter_installing_todo.sh" ]; then
+	sh /koolshare/scripts/uninstall_$softcenter_installing_todo.sh
 	fi
 
 	txt=`dbus list $softcenter_installing_todo`

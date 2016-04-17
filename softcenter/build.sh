@@ -4,7 +4,7 @@ cat version
 rm -f softcenter.tar.gz
 mkdir -p ./softcenter/res
 
-python ./gen_install_stage1.py
+python ./gen_install.py stage1
 
 chmod 755 ./softcenter/scripts/app_install.sh
 
@@ -23,7 +23,7 @@ cat > ./config.json.js <<EOF
 }
 EOF
 
-python ./gen_install_stage2.py
+python ./gen_install.py stage2
 
 cat to_remove.txt|xargs rm -f
 rm to_remove.txt

@@ -54,13 +54,15 @@
             "title": "tunnel"
         }, 
         {
+            "home_url": "Module_speedtest.asp", 
+            "md5": "83f5d2076f598f175288f1bd87dbeff5", 
             "name": "speedtest", 
             "tar_url": "speedtest/speedtest.tar.gz", 
-            "title": "speedtest"
+            "version": "0.2.0"
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "322a735a32ba608abd93873b3f590d12", 
+    "md5": "371aecb8d5d00cc1b9e76bb5fc914b7a", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.0.5"
 }
