@@ -452,7 +452,10 @@ function appInstallModule(moduleInfo) {
         "softcenter_module_xunlei_version": "0",
         "softcenter_module_xunlei_url": "0",
         "softcenter_module_xunlei_title": "Xunlei下载"
-    };
+    }; 
+
+    //TODO auto detect home url
+    //db_softcenter_["softcenter_home_url"] = "http://koolshare.ngrok.wang:4999";
 
     // 安装信息更新策略: 
     // 当软件安装的时候,安装进程内部会有超时时间. 超过超时时间 没安装成功,则认为失败.
