@@ -67,7 +67,7 @@
         }, 
         {
             "home_url": "Module_speedtest.asp", 
-            "md5": "83f5d2076f598f175288f1bd87dbeff5", 
+            "md5": "ec660c4a55f259452295f09dcea3789b", 
             "name": "speedtest", 
             "tar_url": "speedtest/speedtest.tar.gz", 
             "version": "0.2.0"
