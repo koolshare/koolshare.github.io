@@ -522,90 +522,90 @@ function parse_softcenter() {
 </script>
 <script>
     // home_url/tar_url 可能不存在,不存在时默认为 Module_{module}.asp/{module}/{module}.tar.gz
-    var db_softcenter_ = {
-        "softcenter_curr_version": "1.0.5",
-        "softcenter_install_status": "0",
-        "softcenter_home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui",
+    // var db_softcenter_ = {
+    //     "softcenter_curr_version": "1.0.5",
+    //     "softcenter_install_status": "0",
+    //     "softcenter_home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui",
 
-        "softcenter_module_adm_status": "0",
-        "softcenter_module_adm_install": "1",
-        "softcenter_module_adm_version": "0",
-        "softcenter_module_adm_tar_url": "",
-        "softcenter_module_adm_home_url": "Module_adm.asp",
-        "softcenter_module_adm_title": "阿呆猫",
+    //     "softcenter_module_adm_status": "0",
+    //     "softcenter_module_adm_install": "1",
+    //     "softcenter_module_adm_version": "0",
+    //     "softcenter_module_adm_tar_url": "",
+    //     "softcenter_module_adm_home_url": "Module_adm.asp",
+    //     "softcenter_module_adm_title": "阿呆猫",
 
-        "softcenter_module_aria2_status": "0",
-        "softcenter_module_aria2_install": "0",
-        "softcenter_module_aria2_version": "0",
-        "softcenter_module_aria2_tar_url": "",
-        "softcenter_module_aria2_title": "Aria2",
+    //     "softcenter_module_aria2_status": "0",
+    //     "softcenter_module_aria2_install": "0",
+    //     "softcenter_module_aria2_version": "0",
+    //     "softcenter_module_aria2_tar_url": "",
+    //     "softcenter_module_aria2_title": "Aria2",
 
-        "softcenter_module_entware_status": "2",
-        "softcenter_module_entware_install": "0",
-        "softcenter_module_entware_version": "0",
-        "softcenter_module_entware_tar_url": "",
-        "softcenter_module_entware_title": "Entware-ng",
+    //     "softcenter_module_entware_status": "2",
+    //     "softcenter_module_entware_install": "0",
+    //     "softcenter_module_entware_version": "0",
+    //     "softcenter_module_entware_tar_url": "",
+    //     "softcenter_module_entware_title": "Entware-ng",
 
-        "softcenter_module_koolnet_status": "0",
-        "softcenter_module_koolnet_version": "0",
-        "softcenter_module_koolnet_install": "1",
-        "softcenter_module_koolnet_tar_url": "",
-        "softcenter_module_koolnet_title": "P2P穿透",
+    //     "softcenter_module_koolnet_status": "0",
+    //     "softcenter_module_koolnet_version": "0",
+    //     "softcenter_module_koolnet_install": "1",
+    //     "softcenter_module_koolnet_tar_url": "",
+    //     "softcenter_module_koolnet_title": "P2P穿透",
 
-        "softcenter_module_kuainiao_status": "0",
-        "softcenter_module_kuainiao_install": "0",
-        "softcenter_module_kuainiao_version": "0",
-        "softcenter_module_kuainiao_tar_url": "",
-        "softcenter_module_kuainiao_title": "快鸟",
+    //     "softcenter_module_kuainiao_status": "0",
+    //     "softcenter_module_kuainiao_install": "0",
+    //     "softcenter_module_kuainiao_version": "0",
+    //     "softcenter_module_kuainiao_tar_url": "",
+    //     "softcenter_module_kuainiao_title": "快鸟",
 
-        "softcenter_module_policy_status": "0",
-        "softcenter_module_policy_install": "0",
-        "softcenter_module_policy_version": "0",
-        "softcenter_module_policy_tar_url": "",
-        "softcenter_module_policy_title": "策略路由",
+    //     "softcenter_module_policy_status": "0",
+    //     "softcenter_module_policy_install": "0",
+    //     "softcenter_module_policy_version": "0",
+    //     "softcenter_module_policy_tar_url": "",
+    //     "softcenter_module_policy_title": "策略路由",
 
-        "softcenter_module_shadowvpn_status": "0",
-        "softcenter_module_shadowvpn_install": "0",
-        "softcenter_module_shadowvpn_version": "0",
-        "softcenter_module_shadowvpn_tar_url": "",
-        "softcenter_module_shadowvpn_title": "ShadowVPN",
+    //     "softcenter_module_shadowvpn_status": "0",
+    //     "softcenter_module_shadowvpn_install": "0",
+    //     "softcenter_module_shadowvpn_version": "0",
+    //     "softcenter_module_shadowvpn_tar_url": "",
+    //     "softcenter_module_shadowvpn_title": "ShadowVPN",
 
-        "softcenter_module_speedtest_status": "0",
-        "softcenter_module_speedtest_install": "0",
-        "softcenter_module_speedtest_version": "0",
-        "softcenter_module_speedtest_tar_url": "",
-        "softcenter_module_speedtest_title": "网络测速",
+    //     "softcenter_module_speedtest_status": "0",
+    //     "softcenter_module_speedtest_install": "0",
+    //     "softcenter_module_speedtest_version": "0",
+    //     "softcenter_module_speedtest_tar_url": "",
+    //     "softcenter_module_speedtest_title": "网络测速",
 
-        "softcenter_module_ssserver_status": "0",
-        "softcenter_module_ssserver_install": "1",
-        "softcenter_module_ssserver_version": "0",
-        "softcenter_module_ssserver_tar_url": "",
-        "softcenter_module_ssserver_title": "SS服务器",
+    //     "softcenter_module_ssserver_status": "0",
+    //     "softcenter_module_ssserver_install": "1",
+    //     "softcenter_module_ssserver_version": "0",
+    //     "softcenter_module_ssserver_tar_url": "",
+    //     "softcenter_module_ssserver_title": "SS服务器",
 
-        "softcenter_module_transmission_status": "2",
-        "softcenter_module_transmission_install": "2",
-        "softcenter_module_transmission_version": "2",
-        "softcenter_module_transmission_tar_url": "",
-        "softcenter_module_transmission_title": "Transmission",
+    //     "softcenter_module_transmission_status": "2",
+    //     "softcenter_module_transmission_install": "2",
+    //     "softcenter_module_transmission_version": "2",
+    //     "softcenter_module_transmission_tar_url": "",
+    //     "softcenter_module_transmission_title": "Transmission",
 
-        "softcenter_module_tunnel_status": "0",
-        "softcenter_module_tunnel_install": "1",
-        "softcenter_module_tunnel_tar_url": "",
-        "softcenter_module_tunnel_version": "1.0.0",
-        "softcenter_module_tunnel_title": "穿透DDNS",
+    //     "softcenter_module_tunnel_status": "0",
+    //     "softcenter_module_tunnel_install": "1",
+    //     "softcenter_module_tunnel_tar_url": "",
+    //     "softcenter_module_tunnel_version": "1.0.0",
+    //     "softcenter_module_tunnel_title": "穿透DDNS",
 
-        "softcenter_module_v2ray_status": "2",
-        "softcenter_module_v2ray_install": "2",
-        "softcenter_module_v2ray_version": "2",
-        "softcenter_module_v2ray_url": "2",
-        "softcenter_module_v2ray_title": "V2Ray",
+    //     "softcenter_module_v2ray_status": "2",
+    //     "softcenter_module_v2ray_install": "2",
+    //     "softcenter_module_v2ray_version": "2",
+    //     "softcenter_module_v2ray_url": "2",
+    //     "softcenter_module_v2ray_title": "V2Ray",
 
-        "softcenter_module_xunlei_status": "0",
-        "softcenter_module_xunlei_install": "0",
-        "softcenter_module_xunlei_version": "0",
-        "softcenter_module_xunlei_url": "0",
-        "softcenter_module_xunlei_title": "Xunlei下载"
-    };
+    //     "softcenter_module_xunlei_status": "0",
+    //     "softcenter_module_xunlei_install": "0",
+    //     "softcenter_module_xunlei_version": "0",
+    //     "softcenter_module_xunlei_url": "0",
+    //     "softcenter_module_xunlei_title": "Xunlei下载"
+    // };
 
     //Global state
     var currState = {"needUpdate": true};
@@ -965,6 +965,10 @@ function parse_softcenter() {
     //当初始化过程获取软件列表失败时候，用本地的模块进行渲染
     //只要一次获取成功，以后不在重新获取，知道页面刷新重入
     $(function () {
+
+        show_menu();
+
+        //获取远程数据并展现
         init(function () {
             toggleAppPanel(1);
         });
