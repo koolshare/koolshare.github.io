@@ -403,7 +403,7 @@ function appInstallModule(moduleInfo) {
         $('#IconContainer').html(html.join(''));
         //更新安装数
         $('.show-install-btn').val('已安装(' + installCount + ')');
-        $('.show-uninstall-btn').val('已安装(' + uninstallCount + ')');
+        $('.show-uninstall-btn').val('未安装(' + uninstallCount + ')');
     }
     var syncRemoteSuccess = 0; //判断是否进入页面后已经成功进行远端同步
     function getRemoteData() {
@@ -456,7 +456,7 @@ function appInstallModule(moduleInfo) {
                 // TODO 如果因为一些错误导致没有图标, 有可能显示一张默认图标吗?
                 item.icon = parseInt(item.install, 10) !== 0
                     ? (new Array(3).join('/' + item.name) + '/res/icon-' + item.name + '.png')
-                    : ('http://koolshare.ngrok.wang:5000' + new Array(3).join('/' + item.name) + '/icon-' + item.name + '.png');
+                    : ('http://koolshare.ngrok.wang:5000' + new Array(3).join('/softcenter') + '/res/icon-' + item.name + '.png');
             });
             return result;
         }
