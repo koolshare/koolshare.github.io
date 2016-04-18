@@ -140,11 +140,13 @@ install_module() {
 		rm -f $FNAME
 		rm -rf "/tmp/$softcenter_installing_module"
 
+		if [ "$softcenter_installing_module" != "softcenter" ]; then
+			dbus set "softcenter_module_$softcenter_installing_module$MD5_SUFFIX=$softcenter_installing_md5"
+			dbus set "softcenter_module_$softcenter_installing_module$VER_SUFFIX=$softcenter_installing_version"
+			dbus set "softcenter_module_$softcenter_installing_module$INSTALL_SUFFIX=1"
+		fi
 		dbus set softcenter_installing_module=""
 		dbus set softcenter_installing_status="1"
-		dbus set "softcenter_module_$softcenter_installing_module$MD5_SUFFIX=$softcenter_installing_md5"
-		dbus set "softcenter_module_$softcenter_installing_module$VER_SUFFIX=$softcenter_installing_version"
-		dbus set "softcenter_module_$softcenter_installing_module$INSTALL_SUFFIX=1"
 	fi
 
 	else
