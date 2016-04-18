@@ -378,7 +378,8 @@ function appInstallModule(moduleInfo) {
         var tpl = ['',
             '<dl class="icon install-status-#{install}" data-name="#{name}">',
                 '<dd class="icon-pic">',
-                    '<img src="#{icon}" onerror="this.src=\'/koolshare/res/icon-default.png\';" />',
+                    //当图标娶不到的时候，使用默认图标，如果已经是默认图标且娶不到，就狗带了，不管
+                    '<img src="#{icon}" onerror="this.src.indexOf(\'icon-default.png\')!==-1 && (this.src=\'/koolshare/res/icon-default.png\');" alt="图标出走了～"/>',
                 '</dd>',
                 '<dt class="icon-title">#{title}</dt>',
                 '<dd class="icon-desc">',
