@@ -38,6 +38,10 @@ if [ "$ACTION" != "" ]; then
 	BIN_NAME=$ACTION
 fi
 
+VER_SUFFIX=_version
+MD5_SUFFIX=_md5
+INSTALL_SUFFIX=_install
+
 LOGGER() {
 	echo $1
 #	logger $1
@@ -67,21 +71,15 @@ install_module() {
 	# Just ignore the old installing_module
 	export softcenter_installing_module=$softcenter_installing_todo
 	export softcenter_installing_tick=`date +%s`
+	export softcenter_installing_status="2"
+	dbus save softcenter_installing_
 
-	VER_SUFFIX=_version
-	MD5_SUFFIX=_md5
-	INSTALL_SUFFIX=_install
 	URL_SPLIT="/"
-	OLD_MD5=`dbus get $softcenter_installing_module$MD5_SUFFIX`
-	OLD_VERSION=`dbus get $softcenter_installing_module$VER_SUFFIX`
+	OLD_MD5=`dbus get softcenter_module_$softcenter_installing_module$MD5_SUFFIX`
+	OLD_VERSION=`dbus get softcenter_module_$softcenter_installing_module$VER_SUFFIX`
 	HOME_URL=`dbus get softcenter_home_url`
 	TAR_URL=$HOME_URL$URL_SPLIT$softcenter_installing_tar_url
 	FNAME=`basename $softcenter_installing_tar_url`
-
-	#if ["$OLD_MD5" = "$softcenter_installing_md5"]; then
-	#	LOGGER "md5 not changed $OLD_MD5"
-	#	exit 0
-	#fi
 
 	if [ "$OLD_VERSION" = "" ]; then
 		OLD_VERSION=0
@@ -90,10 +88,6 @@ install_module() {
 	CMP=`versioncmp $softcenter_installing_version $OLD_VERSION`
 	if [ "$CMP" = "-1" ]; then
 
-	#save state
-	export softcenter_installing_status="2"
-	dbus save softcenter_installing_
-
 	cd /tmp
 	rm -f $FNAME
 	rm -rf "/tmp/$softcenter_installing_module"
@@ -101,6 +95,9 @@ install_module() {
 	RETURN_CODE=$?
 
 	if [ "$RETURN_CODE" != "0" ]; then
+	dbus ram softcenter_installing_status="12"
+	sleep 3
+
 	dbus ram softcenter_installing_status="0"
 	dbus ram softcenter_installing_module=""
 	LOGGER "wget error, $RETURN_CODE"
@@ -109,10 +106,11 @@ install_module() {
 
 	md5sum_gz=$(md5sum /tmp/$FNAME | sed 's/ /\n/g'| sed -n 1p)
 	if [ "$md5sum_gz"x != "$softcenter_installing_md5"x ]; then
-		LOGGER "md5 not equal"
+		LOGGER "md5 not equal $md5sum_gz"
 		dbus ram softcenter_installing_status="12"
 		rm -f $FNAME
-		sleep 2
+		sleep 3
+
 		dbus ram softcenter_installing_status="0"
 		dbus set softcenter_installing_module=""
 		exit
@@ -123,23 +121,37 @@ install_module() {
 		if [ ! -f /tmp/$softcenter_installing_module/install.sh ]; then
 			dbus ram softcenter_installing_status="0"
 			dbus ram softcenter_installing_module=""
+
+			#rm -f $FNAME
+			#rm -rf "/tmp/$softcenter_installing_module"
+
 			LOGGER "package hasn't install.sh"
 			exit 5
 		fi
 
+		if [ -f /tmp/$softcenter_installing_module/uninstall.sh ]; then
+			mv /tmp/$softcenter_installing_module/uninstall.sh /koolshare/scripts/uninstall_$softcenter_installing_todo.sh
+		fi
+
 		chmod a+x /tmp/$softcenter_installing_module/install.sh
 		sh /tmp/$softcenter_installing_module/install.sh
-		sleep 2
+		sleep 3
+
+		rm -f $FNAME
+		rm -rf "/tmp/$softcenter_installing_module"
 
 		dbus set softcenter_installing_module=""
 		dbus set softcenter_installing_status="1"
-		dbus set "$softcenter_installing_module$MD5_SUFFIX=$softcenter_installing_md5"
-		dbus set "$softcenter_installing_module$VER_SUFFIX=$softcenter_installing_version"
-		dbus set "$softcenter_installing_module$INSTALL_SUFFIX=1"
+		dbus set "softcenter_module_$softcenter_installing_module$MD5_SUFFIX=$softcenter_installing_md5"
+		dbus set "softcenter_module_$softcenter_installing_module$VER_SUFFIX=$softcenter_installing_version"
+		dbus set "softcenter_module_$softcenter_installing_module$INSTALL_SUFFIX=1"
 	fi
 
 	else
 		LOGGER "current version is newest version"
+		dbus ram softcenter_installing_status="13"
+		sleep 3
+
 		dbus ram softcenter_installing_status="0"
 		dbus ram softcenter_installing_module=""
 	fi
@@ -161,9 +173,15 @@ uninstall_module() {
 		exit 3
 	fi
 
-	if [ -f "/koolshare/$softcenter_installing_todo/uninstall.sh" ]; then
-	sh /koolshare/$softcenter_installing_todo/uninstall.sh
-	fi
+	# Just ignore the old installing_module
+	export softcenter_installing_module=$softcenter_installing_todo
+	export softcenter_installing_tick=`date +%s`
+	export softcenter_installing_status="2"
+	dbus save softcenter_installing_
+
+	dbus remove "softcenter_module_$softcenter_installing_module$MD5_SUFFIX"
+	dbus remove "softcenter_module_$softcenter_installing_module$VER_SUFFIX"
+	dbus remove "softcenter_module_$softcenter_installing_module$INSTALL_SUFFIX"
 
 	txt=`dbus list $softcenter_installing_todo`
 	printf %s "$txt" |
@@ -171,8 +189,15 @@ uninstall_module() {
 		line2="${line%=*}"
 		dbus remove $line2
 	done
+
+	sleep 3
 	dbus set softcenter_installing_module=""
 	dbus set softcenter_installing_status="1"
+
+	#try to call uninstall script
+	if [ -f "/koolshare/scripts/uninstall_$softcenter_installing_todo.sh" ]; then
+	sh /koolshare/scripts/uninstall_$softcenter_installing_todo.sh
+	fi
 }
 
 case $BIN_NAME in

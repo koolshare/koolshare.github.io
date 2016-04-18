@@ -2,6 +2,7 @@
 
 MODULE=aria2
 VERSION=`cat aria2/aria2/version`
+DESCRIPTION=迅雷不好,试试这个
 
 cat version
 rm -f ${MODULE}.tar.gz
@@ -16,6 +17,12 @@ cat version
 cat > ./config.json.js <<EOF
 {
 "version":"$VERSION",
-"md5":"$md5value"
+"md5":"$md5value",
+"home_url":"$HOME_URL",
+"title":"$TITLE",
+"description":"$DESCRIPTION"
 }
 EOF
+
+#update md5
+python ../softcenter/gen_install.py stage2

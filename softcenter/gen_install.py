@@ -6,11 +6,16 @@ import json
 import hashlib
 import codecs
 from shutil import copyfile
+import sys
+
+stage = "stage1"
+if len(sys.argv) > 1:
+    stage = sys.argv[1]
 
 curr_path = os.path.dirname(os.path.realpath(__file__))
 parent_path = os.path.realpath(os.path.join(curr_path, ".."))
 
-to_remove = open(os.path.join(curr_path, "to_remove.txt"), "w")
+to_remove = None
 
 def md5sum(full_path):
     with open(full_path, 'rb') as rf:
@@ -51,9 +56,17 @@ def check_subdir(module, path, name, ext, target_path):
             target_file = os.path.join(target_path, os.path.basename(f))
             #print "copy", f, "-->", target_file
             copyfile(f, target_file)
-            to_remove.write(target_file+"\n")
+            if to_remove:
+                to_remove.write(target_file+"\n")
 
-def check_and_cp(modules):
+def check_and_cp():
+    for module, path in work_parent():
+        #check_subdir(module, path, "scripts", ".sh", os.path.join(curr_path, "softcenter", "scripts"))
+        #check_subdir(module, path, "webs", ".asp", os.path.join(curr_path, "softcenter", "webs"))
+        #check_subdir(module, path, "scripts", ".sh", os.path.join(curr_path, "softcenter", "scripts"))
+        check_subdir(module, path, "res", "*", os.path.join(curr_path, "softcenter", "res"))
+
+def gen_modules(modules):
     for module, path in work_parent():
         conf = os.path.join(path, "config.json.js")
 
@@ -74,20 +87,21 @@ def check_and_cp(modules):
             m = {"name":module, "title":module, "tar_url": module + "/" + module + ".tar.gz"}
         modules.append(m)
 
-        check_subdir(module, path, "scripts", ".sh", os.path.join(curr_path, "softcenter", "scripts"))
-        check_subdir(module, path, "webs", ".asp", os.path.join(curr_path, "softcenter", "webs"))
-        check_subdir(module, path, "scripts", ".sh", os.path.join(curr_path, "softcenter", "scripts"))
-        check_subdir(module, path, "res", "*", os.path.join(curr_path, "softcenter", "res"))
+if stage == "stage1":
+    to_remove = open(os.path.join(curr_path, "to_remove.txt"), "w")
+    check_and_cp()
+    to_remove.close()
+else:
+    gmodules = None
+    with codecs.open(os.path.join(curr_path, "app.template.json.js"), "r", "utf-8") as fg:
+        gmodules = json.loads(fg.read())
+        gmodules["apps"] = []
+    gen_modules(gmodules["apps"])
 
+    with codecs.open(os.path.join(curr_path, "config.json.js"), "r", "utf-8") as fc:
+        conf = json.loads(fc.read())
+        gmodules["version"] = conf["version"]
+        gmodules["md5"] = conf["md5"]
 
-gmodules = None
-with codecs.open(os.path.join(curr_path, "app.template.json.js"), "r", "utf-8") as fg:
-    gmodules = json.loads(fg.read())
-    gmodules["apps"] = []
-
-check_and_cp(gmodules["apps"])
-
-with codecs.open(os.path.join(curr_path, "app.json.js"), "w", "utf-8") as fw:
-    json.dump(gmodules, fw, sort_keys = True, indent = 4, ensure_ascii=False, encoding='utf8')
-
-to_remove.close()
+        with codecs.open(os.path.join(curr_path, "app.json.js"), "w", "utf-8") as fw:
+            json.dump(gmodules, fw, sort_keys = True, indent = 4, ensure_ascii=False, encoding='utf8')
