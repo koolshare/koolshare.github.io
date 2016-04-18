@@ -274,7 +274,7 @@ function appInstallModule(moduleInfo) {
     if(o[base+"status"]) {
         //状态不是0, 并且不是1,则当前正处于安装状态,实时更新安装信息
         if((o[base+"status"] != "0") && (o[base+"status"] != "1")) {
-                    var d = new Date();
+            var d = new Date();
             currState.lastChangeTick = d/1000 + TIMEOUT_SECONDS;
             currState.lastStatus = o[base+"status"];
             currState.installing = true;
@@ -323,7 +323,8 @@ function appInstallModule(moduleInfo) {
     function showInstallInfo(module, scode) {
         var code = parseInt(scode);
         var s = module.capitalizeFirstLetter();
-        var infos = ["尚未安装",
+        var infos = [
+            "尚未安装",
             "已安装",
             "将被安装到jffs分区...",
             "正在下载中...请耐心等待...",
@@ -338,7 +339,8 @@ function appInstallModule(moduleInfo) {
             "下载文件校验不一致！",
             "然而并没有更新！",
             "正在检查是否有更新~",
-            "检测更新错误！"];
+            "检测更新错误！"
+        ];
         $("#appInstallInfo").html(s + infos[code]);
     }
     //切换安装未安装面板
@@ -352,8 +354,8 @@ function appInstallModule(moduleInfo) {
      * 渲染apps，安装和未安装按照class hook进行显示隐藏，存在同一个面板中
      */
     function renderView(apps) {
-    // set apps to global variable of softInfo
-    softInfo = apps;
+        // set apps to global variable of softInfo
+        softInfo = apps;
         //简单模板函数
         function _format(source, opts) {
             var source = source.valueOf(),
@@ -379,7 +381,7 @@ function appInstallModule(moduleInfo) {
             '<dl class="icon install-status-#{install}" data-name="#{name}">',
                 '<dd class="icon-pic">',
                     //当图标娶不到的时候，使用默认图标，如果已经是默认图标且娶不到，就狗带了，不管
-                    '<img src="#{icon}" onerror="this.src.indexOf(\'icon-default.png\')!==-1 && (this.src=\'/koolshare/res/icon-default.png\');" alt="图标出走了～"/>',
+                    '<img src="#{icon}" onerror="this.src.indexOf(\'icon-default.png\')!==-1 && (this.src=\'/res/icon-default.png\');" alt="图标出走了～"/>',
                 '</dd>',
                 '<dt class="icon-title">#{title}</dt>',
                 '<dd class="icon-desc">',
