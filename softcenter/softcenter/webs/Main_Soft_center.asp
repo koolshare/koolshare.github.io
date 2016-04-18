@@ -381,7 +381,7 @@ function appInstallModule(moduleInfo) {
             '<dl class="icon install-status-#{install}" data-name="#{name}">',
                 '<dd class="icon-pic">',
                     //当图标娶不到的时候，使用默认图标，如果已经是默认图标且娶不到，就狗带了，不管
-                    '<img src="#{icon}" onerror="this.src.indexOf(\'icon-default.png\')!==-1 && (this.src=\'/res/icon-default.png\');" alt="图标出走了～"/>',
+                    '<img src="#{icon}" onerror="this.src.indexOf(\'icon-default.png\')===-1 && (this.src=\'/res/icon-default.png\');" alt="图标出走了～"/>',
                 '</dd>',
                 '<dt class="icon-title">#{title}</dt>',
                 '<dd class="icon-desc">',
@@ -438,7 +438,9 @@ function appInstallModule(moduleInfo) {
                         result[name] = {};
                         result[name].name = name;
                     }
-                    result[name][prop] = item;
+                    if (!prop) {
+                        result[name][prop] = item;
+                    }
                 }
             });
             //设置默认值和设置icon的路径
