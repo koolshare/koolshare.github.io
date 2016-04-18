@@ -23,6 +23,12 @@ cat version
 cat > ./config.json.js <<EOF
 {
 "version":"$VERSION",
-"md5":"$md5value"
+"md5":"$md5value",
+"home_url":"$HOME_URL",
+"title":"$TITLE",
+"description":"$DESCRIPTION"
 }
 EOF
+
+#update md5
+python ../softcenter/gen_install.py stage2

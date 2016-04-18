@@ -1,17 +1,21 @@
 {
     "apps": [
         {
+            "description": "迅雷快鸟，不解释~", 
             "home_url": "Module_kuainiao.asp", 
-            "md5": "b2d8a8a03b45fcd92c5aab07e3a02d6b", 
+            "md5": "b61ee3682f0dfe51c91b4ed9aac98395", 
             "name": "kuainiao", 
             "tar_url": "kuainiao/kuainiao.tar.gz", 
+            "title": "讯雷快鸟", 
             "version": "0.1.0"
         }, 
         {
-            "home_url": "Module_aria2.asp", 
-            "md5": "5b4b6291a133fa6d9d11db695373c874", 
+            "description": "迅雷不好,试试这个", 
+            "home_url": "", 
+            "md5": "167ab07a513df44612bd0140084829d3", 
             "name": "aria2", 
             "tar_url": "aria2/aria2.tar.gz", 
+            "title": "", 
             "version": "1.5.8"
         }, 
         {

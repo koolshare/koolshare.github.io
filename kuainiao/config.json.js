@@ -1,4 +1,7 @@
 {
 "version":"0.1.0",
-"md5":"b2d8a8a03b45fcd92c5aab07e3a02d6b"
+"md5":"b61ee3682f0dfe51c91b4ed9aac98395",
+"home_url":"Module_kuainiao.asp",
+"title":"讯雷快鸟",
+"description":"迅雷快鸟，不解释~"
 }
