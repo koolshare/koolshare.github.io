@@ -85,6 +85,21 @@
 	width: 30px;
 	height: 35px;
 }
+.ss_node_list_viewlist {
+	position: absolute;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	z-index: 200;
+	background-color:#444f53;
+	margin-left: 40px;
+	margin-top: -1100px;
+	width:950px;
+	height:auto;
+	box-shadow: 3px 3px 10px #000;
+	display:block;
+	overflow: auto;
+}
 </style>
 <script>
 var socks5 = 0
@@ -116,6 +131,7 @@ function init() {
     setTimeout("checkSSStatus();", 1000);
     setTimeout("write_ss_install_status()", 1000);
     setTimeout("check_ss()", 2000);
+    updateSs_node_listView();
 }
 function onSubmitCtrl() {
 	ssmode = document.getElementById("ss_basic_mode").value;
@@ -321,37 +337,7 @@ function oncheckclick(obj) {
 }
 
 var global_status_enable = true;
-/*
-function checkSSStatus() {
-    if (db_ss['ss_basic_enable'] !== "0") {
-	    if(!global_status_enable) {//not enabled
-		    if(refreshRate > 0) {
-			    setTimeout("checkSSStatus();", refreshRate * 10000);
-		    }
-		    return;
-	    }
-        $j.ajax({
-            url: '/ss_status',
-            dataType: 'html',
-            error: function(xhr) {
-	            if (refreshRate > 0)
-                setTimeout("checkSSStatus();", refreshRate * 1000);
-            },
-            success: function(response) {
-                var arr = JSON.parse(response);
-                document.getElementById("ss_state2").innerHTML = "国外连接 - " + arr[0];
-                document.getElementById("ss_state3").innerHTML = "国内连接 - " + arr[1];
-                if (refreshRate > 0)
-                setTimeout("checkSSStatus();", refreshRate * 1000);
-            }
-        });
-    } else {
-        document.getElementById("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
-        document.getElementById("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
-        //setTimeout("checkSSStatus();", refreshRate * 1000);
-    }
-}
-*/
+
 function checkSSStatus() {
 	if (db_ss['ss_basic_enable'] !== "0") {
 	    if(!global_status_enable) {//not enabled
@@ -495,6 +481,7 @@ function show_ss_node_list_view_block() {
 }
 
 function closeSs_node_listView() {
+	global_ss_node_refresh=false;
     fadeOut(document.getElementById("ss_node_list_viewlist_content"), 10, 0);
 }
 
@@ -511,6 +498,8 @@ function pop_ss_node_list_listview() {
     fadeIn(document.getElementById("ss_node_list_viewlist_content"));
     cal_panel_block_clientList("ss_node_list_viewlist_content", 0.045);
     ss_node_list_view_hide_flag = false;
+   	global_ss_node_refresh=true;
+   	updateSs_node_listView();
 }
 
 function getAllConfigs() {
@@ -522,7 +511,7 @@ function getAllConfigs() {
     }
     confs = {};
     var p = "ssconf_basic";
-    var params = ["name", "server", "port", "password", "method"];
+    var params = ["name", "server", "port", "password", "method" ];
     for (var field in dic) {
         var obj = {};
         if (typeof db_ss[p + "_name_" + field] == "undefined") {
@@ -530,11 +519,21 @@ function getAllConfigs() {
         } else {
             obj["name"] = db_ss[p + "_name_" + field];
         }
+        if (typeof db_ss[p + "_ping_" + field] == "undefined") {
+            obj["ping"] = '<img id="loadingicon1" style="margin-left:57px;margin-right:5px;display:none;" src="/images/InternetScan.gif"/>';
+        } else {
+            obj["ping"] = db_ss[p + "_ping_" + field];
+        }
+        if (typeof db_ss[p + "_google_" + field] == "undefined") {
+            obj["google"] = '<font color="#66FF00">ok</font>';
+        } else {
+            obj["google"] = db_ss[p + "_google_" + field];
+        }
         for (var i = 1; i < params.length; i++) {
             var ofield = p + "_" + params[i] + "_" + field;
             if (typeof db_ss[ofield] == "undefined") {
                 obj = null;
-                break;
+                break; 
             }
             obj[params[i]] = db_ss[ofield];
         }
@@ -547,7 +546,34 @@ function getAllConfigs() {
             confs[field] = obj;
         }
     }
-    return confs;
+    return confs;    
+}
+
+function ping_test(){
+    global_ss_node_refresh = true;
+	updateSs_node_listView();
+    document.node_form.submit();
+    //if(document.getElementById("XXX")) { 
+    //    document.getElementById('loadingicon1').style.display = "block";
+    //}
+    setTimeout("ping_test2()", 1000)
+}
+
+function ping_test2(){
+    document.form.SystemCmd.value = "ss_ping.sh";
+    document.form.submit();
+}
+
+function web_test(){
+    global_ss_node_refresh = true;
+	updateSs_node_listView();
+    document.node_form.submit();
+    setTimeout("web_test2()", 1000)
+}
+
+function web_test2(){
+    document.form.SystemCmd.value = "ss_webtest.sh";
+    document.form.submit();
 }
 
 function loadBasicOptions(confs) {
@@ -593,7 +619,7 @@ function add_conf_in_table(o) {
             console.log("error in posting config of table");
         },
         success: function(response) {
-            updateSs_node_listView();
+            updateSs_node_listView1();
         }
     });
 }
@@ -604,7 +630,7 @@ function remove_conf_table(o) {
     var p = "ssconf_basic";
     id = ids[ids.length - 1];
     var ns = {};
-    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "onetime_auth"];
+    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + id] = "";
     }
@@ -617,7 +643,7 @@ function remove_conf_table(o) {
             console.log("error in posting config of table");
         },
         success: function(response) {
-            updateSs_node_listView();
+            updateSs_node_listView1();
         }
     });
 }
@@ -632,6 +658,8 @@ function create_ss_node_list_listview(confs) {
         field_code += "<td>" + c["port"] + "</td>";
         field_code += "<td>" + c["password"] + "</td>";
         field_code += "<td>" + c["method"] + "</td>";
+        field_code += "<td>" + c["ping"] + "</td>";
+        //field_code += "<td>" + c["google"] + "</td>";
         field_code += "<td><input id='td_node_" + c["node"] + "' class='remove_btn' type='button' onclick='return remove_conf_table(this);' value=''></td>";
         field_code += "</tr>";
     }
@@ -640,12 +668,13 @@ function create_ss_node_list_listview(confs) {
     }
     var divObj = document.createElement("div");
     divObj.setAttribute("id", "ss_node_list_viewlist_block");
-    var obj_width_map = [["15%", "45%", "20%", "20%"], ["10%", "45%", "19%", "19%", "7%"], ["20%", "20%", "20%", "20%", "20%", "12%"]];
+    var obj_width_map = [["15%", "45%", "20%", "20%"], ["10%", "45%", "19%", "19%", "7%"], ["14%", "14%", "10%", "14%", "14%", "14%", "10%", "10%"]];
     var obj_width = stainfo_support ? obj_width_map[2] : obj_width_map[1];
     var wl_colspan = stainfo_support ? 8 : 5;
     var code = "";
-    code += "<form method='POST' name='file_form' action='/ssupload.cgi?a=/tmp/ss_conf_backup.txt' target='hidden_frame'>";
+   
     code += "<div style='text-align:right;width:30px;position:relative;margin-top:0px;margin-left:96%;'><img src='/images/button-close.gif' style='width:30px;cursor:pointer' onclick='closeSs_node_listView();'></div>";
+    code += "<form method='POST' name='node_form' action='/applydb.cgi?p=ssconf_basic_' target='hidden_frame'>";
     code += "<table width='100%' border='1' align='center' cellpadding='0' cellspacing='0' class='FormTable_table' style='margin-top:10px;'>";
     code += "<thead>";
     code += "<tr height='28px'>";
@@ -658,14 +687,16 @@ function create_ss_node_list_listview(confs) {
     code += "<th width=" + obj_width[2] + ">端口</th>";
     code += "<th width=" + obj_width[3] + ">密码</th>";
     code += "<th width=" + obj_width[4] + ">加密方式</th>";
-    code += "<th width=" + obj_width[5] + ">添加<br>删除</th>";
+    code += "<th width=" + obj_width[5] + "><input type='button' id='ping_btn' name='ping_btn' class='button_gen' onclick='ping_test();' value='ping test'/></th>";
+    //code += "<th width=" + obj_width[6] + "><input type='button' id='connec_btn' name='connec_btn' class='button_gen'  onclick='web_test();' value='web test'/></th>";
+    code += "<th width=" + obj_width[7] + ">添加<br>删除</th>";
     code += "</tr>";
     code += "<tr height='40px'>";
-    code += "<td><input type='text' class='input_ss_table' id='ssconf_table_name' name='ssconf_table_name' value='' /></td>";
-    code += "<td><input type='text' class='input_ss_table' id='ssconf_table_server' name='ssconf_table_server' value='' /></td>";
-    code += "<td><input type='text' class='input_ss_table' id='ssconf_table_port' name='ssconf_table_port' value='' /></td>";
-    code += "<td><input type='text' class='input_ss_table' id='ssconf_table_password' name='ssconf_table_password' value='' /></td>";
-    code += "<td><select id='ssconf_table_method' name='ssconf_table_method' style='width:164px;margin:0px 0px 0px 2px;' class='input_option' />"
+    code += "<td><input type='text' class='input_ss_table' id='ssconf_table_name' style='width:120px' onclick='disable_ss_node_list_refresh();' name='ssconf_table_name' value='' ></td>";
+    code += "<td><input type='text' class='input_ss_table' id='ssconf_table_server' style='width:120px' onclick='disable_ss_node_list_refresh();' name='ssconf_table_server' value='' ></td>";
+    code += "<td><input type='text' class='input_ss_table' id='ssconf_table_port' style='width:120px' onclick='disable_ss_node_list_refresh();' name='ssconf_table_port' value='' ></td>";
+    code += "<td><input type='text' class='input_ss_table' id='ssconf_table_password' style='width:120px' onclick='disable_ss_node_list_refresh();' name='ssconf_table_password' value='' ></td>";
+    code += "<td><select id='ssconf_table_method' name='ssconf_table_method' style='width:130px;margin:0px 0px 0px 2px;' onclick='disable_ss_node_list_refresh();' class='input_option' />"
     code += "<option class='content_input_fd' value='table'>table</option>";
     code += "<option class='content_input_fd' value='rc4'>rc4</option>";
     code += "<option class='content_input_fd' value='rc4-md5'>rc4-md5</option>";
@@ -685,13 +716,30 @@ function create_ss_node_list_listview(confs) {
     code += "<option class='content_input_fd' value='chacha20'>chacha20</option>";
     code += "<option class='content_input_fd' value='chacha20-ietf'>chacha20-ietf</option>";
     code += "</select>";
+    code += "</td>"; 
+    code += "<input type='hidden' name='action_mode' value=''/>"
+    code += "<input type='hidden' name='SystemCmd' onkeydown='ping_test()' value=''/>"
+    code += "<td><select id='ssconf_basic_Ping_Method' name='ssconf_basic_Ping_Method' style='width:130px;margin:0px 0px 0px 2px;' onclick='disable_ss_node_list_refresh();' class='input_option' />"
+    code += "<option class='content_input_fd' value='1'>单线ping(10次/节点)</option>";
+    code += "<option class='content_input_fd' value='2'>并发ping(10次/节点)</option>";
+    code += "<option class='content_input_fd' value='3'>并发ping(20次/节点)</option>";
+    code += "<option class='content_input_fd' value='4'>并发ping(50次/节点)</option>";
+    code += "</select>";
+    code += "</td>";
+    //code += "<td><select id='ssconf_basic_connect_test' name='ssconf_basic_connect_test' style='width:auto;margin:0px 0px 0px 2px;' onclick='disable_ss_node_list_refresh();' class='input_option' />"
+    //code += "<option class='content_input_fd' value='google.com'>google.com</option>";
+    //code += "<option class='content_input_fd' value='youtube.com'>youtube.com</option>";
+    //code += "</select>";
+    //code += "</td>";
     code += "<td><input class='add_btn' onclick='add_conf_in_table(this);' type='button' value=''></td>";
     code += "</tr>";
     code += field_code;
     code += "<tr>";
     code += "</tr>";
     code += "</table>";
+    code += "</form>";
     code += "<div style='align:center;margin-left:220px;margin-top:15px'>";
+    code += "<form method='POST' name='file_form' action='/ssupload.cgi?a=/tmp/ss_conf_backup.txt' target='hidden_frame'>";
     code += "<table>";
     code += "<tr>";
     code += "<td style='border:1px'>";
@@ -704,20 +752,17 @@ function create_ss_node_list_listview(confs) {
     code += "<input style='margin-left:50px;' type='button' id='upload_btn' class='button_gen' onclick='upload_SS_node();' value='恢复配置'/>";
     code += "</td>";
     code += "<td style='border:1px'>";
-    code += "<input style='color:#FFCC00;*color:#000;width: 200px;'id='ss_file' type='file' name='file'/>";
+    code += "<input style='color:#FFCC00;*color:#000;width: 200px;'id='ss_file' onclick='disable_ss_node_list_refresh();' type='file' name='file'/>";
     code += "<img id='loadingicon' style='margin-left:5px;margin-right:5px;display:none;' src='/images/InternetScan.gif'/>";
     code += "<span id='ss_file_info' style='display:none;'>完成</span>";
     code += "</td>";
-
-    //code += "<td style='border:1px'>";
-    
-    //code += "</td>";
     code += "</tr>";
     code += "</table>";
+    code += "</form>";
     code += "<div style='align:center;margin-left:180px;margin-top:20px;margin-bottom:20px;'><input type='button' class='button_gen' onclick='closeSs_node_listView();' value='返回'></div>";
     code += "</div>";
     code += "<div id='clientlist_all_list_Block'></div>";
-    code += "</form>";
+    
     divObj.innerHTML = code;
     document.getElementById("ss_node_list_viewlist_content").appendChild(divObj);
 }
@@ -728,15 +773,12 @@ function download_SS_node() {
 
 function upload_SS_node() {
 	if (document.getElementById('ss_file').value == "") return false;
+	global_ss_node_refresh = false;
 	document.getElementById('ss_file_info').style.display = "none";
 	document.getElementById('loadingicon').style.display = "block";
-	//document.form.action = "ssupload.cgi?a=/tmp/ss_conf_backup.txt";
 	document.file_form.enctype = "multipart/form-data";
 	document.file_form.encoding = "multipart/form-data";
-	//console.log(document.file_form);
-	//console.log(document.file_form[0]);
-	document.file_form.submit();
-	
+	document.file_form.submit();	
 	}
 
 function upload_ok(isok) {
@@ -768,7 +810,11 @@ function remove_SS_node() {
     refreshpage(2);
 }
 
+var global_ss_node_refresh = false;
 function updateSs_node_listView() {
+    if(!global_ss_node_refresh) {
+	   	return;
+	}
     $j.ajax({
         url: '/dbconf?p=ss',
         dataType: 'html',
@@ -777,10 +823,87 @@ function updateSs_node_listView() {
         success: function(response) {
             $j.globalEval(response);
             loadAllConfigs();
-            cal_panel_block_clientList("ss_node_list_viewlist_content", 0.045);
+
+            cal_panel_block_clientList("ss_node_list_viewlist_content", 0.037);
             $j("#ss_node_list_viewlist_content").show();
         }
     });
+    setTimeout("updateSs_node_listView()", 2000);
+}
+
+function disable_ss_node_list_refresh(){
+	global_ss_node_refresh = false;
+	updateSs_node_listView();
+}
+
+function updateSs_node_listView1() {
+    $j.ajax({
+        url: '/dbconf?p=ss',
+        dataType: 'html',
+        error: function(xhr) {            
+	        },
+        success: function(response) {
+            $j.globalEval(response);
+            loadAllConfigs();
+            cal_panel_block_clientList("ss_node_list_viewlist_content", 0.037);
+            $j("#ss_node_list_viewlist_content").show();
+        }
+    });
+}
+
+function cal_panel_block_clientList(obj, multiple) {
+	var isMobile = function() {
+		var tmo_support = ('<% nvram_get("rc_support"); %>'.search("tmo") == -1) ? false : true;
+		if(!tmo_support)
+			return false;
+		
+		if(	navigator.userAgent.match(/iPhone/i)	|| 
+			navigator.userAgent.match(/iPod/i)		||
+			navigator.userAgent.match(/iPad/i)		||
+			(navigator.userAgent.match(/Android/i) && (navigator.userAgent.match(/Mobile/i) || navigator.userAgent.match(/Tablet/i))) ||
+			(navigator.userAgent.match(/Opera/i) && (navigator.userAgent.match(/Mobi/i) || navigator.userAgent.match(/Mini/i))) ||	// Opera mobile or Opera Mini
+			navigator.userAgent.match(/IEMobile/i)	||	// IE Mobile
+			navigator.userAgent.match(/BlackBerry/i)	//BlackBerry
+		 ) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	};
+	var blockmarginLeft;
+	if (window.innerWidth) {
+		winWidth = window.innerWidth;
+	}
+	else if ((document.body) && (document.body.clientWidth)) {
+		winWidth = document.body.clientWidth;
+	}
+	//if (document.documentElement  && document.documentElement.clientHeight && document.documentElement.clientWidth) {
+	//	winWidth = document.documentElement.clientWidth;
+	//}
+	if(winWidth > 1050) {
+		winPadding = (winWidth - 1050) / 2;
+		winWidth = 1105;
+		blockmarginLeft = (winWidth * multiple) + winPadding;
+	}
+	else if(winWidth <= 1050) {
+		if(isMobile()) {
+			if(document.body.scrollLeft < 50) {
+				blockmarginLeft= (winWidth) * multiple + document.body.scrollLeft;
+			}
+			else if(document.body.scrollLeft >320) {
+				blockmarginLeft = 320;
+			}
+			else {
+				blockmarginLeft = document.body.scrollLeft;
+			}	
+		}
+		else {
+			blockmarginLeft = (winWidth) * multiple + document.body.scrollLeft;	
+		}
+	}
+
+	document.getElementById(obj).style.marginLeft = blockmarginLeft + "px";
 }
 
 function show_detail(thisObj) {
@@ -925,7 +1048,7 @@ function show_hide_table(){
 function version_show(){
 	if (db_ss['ss_basic_version_local'] != db_ss['ss_basic_version_web'] && db_ss['ss_basic_version_web'] !== "undefined"){
 		//$j("#ss_version_show").html("<i>有新版本：ARM " + db_ss['ss_basic_version_web']);
-		$j("#ss_version_show").html("<i>当前版本：ARM " + db_ss['ss_basic_version_local']);
+		$j("#ss_version_show").html("<i>当前版本：" + db_ss['ss_basic_version_local']);
 		$j("#updateBtn").html("<i>升级到：" + db_ss['ss_basic_version_web']);
 	} else {
 		$j("#ss_version_show").html("<i>当前版本：ARM " + db_ss['ss_basic_version_local']);
