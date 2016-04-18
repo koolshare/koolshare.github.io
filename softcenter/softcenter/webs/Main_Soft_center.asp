@@ -457,7 +457,7 @@ function appInstallModule(moduleInfo) {
                 // 如果是未安装的插件,则必定在 http://koolshare.ngrok.wang:5000/{name}/{name}/icon-{name}.png
                 // TODO 如果因为一些错误导致没有图标, 有可能显示一张默认图标吗?
                 item.icon = parseInt(item.install, 10) !== 0
-                    ? (new Array(3).join('/' + item.name) + '/res/icon-' + item.name + '.png')
+                    ? ('/res/icon-' + item.name + '.png')
                     : ('http://koolshare.ngrok.wang:5000' + new Array(3).join('/softcenter') + '/res/icon-' + item.name + '.png');
             });
             return result;
