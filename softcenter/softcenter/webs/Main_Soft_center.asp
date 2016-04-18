@@ -163,7 +163,7 @@
 </style>
 <script>
 //TODO move this to common javascript files
-    jQuery.ajax = (function(_ajax){
+    /* jQuery.ajax = (function(_ajax){
     
     var protocol = location.protocol,
         hostname = location.hostname,
@@ -225,7 +225,7 @@
         
     };
     
-})(jQuery.ajax);
+})(jQuery.ajax); */
 
 String.prototype.format = String.prototype.f = function() {
     var s = this,
@@ -369,7 +369,7 @@ function appInstallModule(moduleInfo) {
 </script>
 <script>
     // home_url 与 tar_url 可能不存在,不存在时默认为 Module_{module}.asp 与 {module}/{module}.tar.gz
-    var db_softcenter_ = {
+    /* var db_softcenter_ = {
         "softcenter_version": "1.0.5",
 	"softcenter_md5": "d7f321a4c3e814eaf217c1e4d71d2336",
         "softcenter_home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui",
@@ -452,7 +452,7 @@ function appInstallModule(moduleInfo) {
         "softcenter_module_xunlei_version": "0",
         "softcenter_module_xunlei_url": "0",
         "softcenter_module_xunlei_title": "Xunlei下载"
-    }; 
+    }; */ 
 
     //TODO auto detect home url
     //db_softcenter_["softcenter_home_url"] = "http://koolshare.ngrok.wang:4999";
@@ -623,7 +623,7 @@ function appInstallModule(moduleInfo) {
         return $.ajax({
             url: remoteURL,
             method: 'GET',
-            dataType: 'json',
+            dataType: 'jsonp',
             timeout: 1 * 1000
         });
     }
