@@ -19,9 +19,13 @@
             "version": "1.5.8"
         }, 
         {
+            "description": "点对点建立连接,下载更快", 
+            "home_url": "", 
+            "md5": "6e44ab0b7620137928af400b75cdae56", 
             "name": "koolnet", 
             "tar_url": "koolnet/koolnet.tar.gz", 
-            "title": "koolnet"
+            "title": "", 
+            "version": "0.2"
         }, 
         {
             "name": "shadowvpn", 
