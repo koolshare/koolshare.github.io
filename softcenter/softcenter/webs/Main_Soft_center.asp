@@ -58,10 +58,13 @@
         text-align:center;
     }
     .icon-pic{
-        background: url(/res/software_center.png) no-repeat center center;
-        width: 64px;
-        height: 64px;
         margin: 10px 30px 0px 30px;
+    }
+    .icon-pic img{
+        border:0;
+        width: 60px;
+        height: 60px;
+        margin:4px;
     }
     .icon-desc{
         position: absolute;
@@ -374,7 +377,9 @@ function appInstallModule(moduleInfo) {
         //app 模板
         var tpl = ['',
             '<dl class="icon install-status-#{install}" data-name="#{name}">',
-                '<dd class="icon-pic" style="background-image:url(#{icon});"></dd>',
+                '<dd class="icon-pic">',
+                    '<img src="#{icon}" onerror="this.src=\'/koolshare/res/icon-default.png\';" />',
+                '</dd>',
                 '<dt class="icon-title">#{title}</dt>',
                 '<dd class="icon-desc">',
                     '<div class="text">',
@@ -449,8 +454,8 @@ function appInstallModule(moduleInfo) {
                 // 如果是未安装的插件,则必定在 http://koolshare.ngrok.wang:5000/{name}/{name}/icon-{name}.png
                 // TODO 如果因为一些错误导致没有图标, 有可能显示一张默认图标吗?
                 item.icon = parseInt(item.install, 10) !== 0
-                    ? ('/res/icon-' + item.name + '.png')
-                    : ('http://koolshare.ngrok.wang:5000/' + item.name + '/' + item.name + '/icon-' + item.name + '.png');
+                    ? (new Array(3).join('/' + item.name) + '/res/icon-' + item.name + '.png')
+                    : ('http://koolshare.ngrok.wang:5000' + new Array(3).join('/' + item.name) + '/icon-' + item.name + '.png');
             });
             return result;
         }
