@@ -438,9 +438,27 @@ function appInstallModule(moduleInfo) {
                         result[name] = {};
                         result[name].name = name;
                     }
-                    if (!prop) {
+                    if (prop) {
                         result[name][prop] = item;
                     }
+                }
+            });
+            return result;
+        }
+        //将本地和远程进行一次对比合并
+        function _mergeData(remoteData) {
+            var result = {};
+            var localData = _formatLocalData(db_softcenter_);
+            $.each(remoteData, function (i, app) {
+                var name = app.name;
+                var oldApp = localData[name] || {};
+                var install = (parseInt(oldApp.install, 10) === 1 && app.version !== oldApp.version) ? 2 : oldApp.install || "0"; 
+                result[name] = $.extend(oldApp, app);
+                result[name].install = install;
+            });
+            $.map(localData, function (app, name) {
+                if (!result[name]) {
+                    result[name] = app;
                 }
             });
             //设置默认值和设置icon的路径
@@ -461,24 +479,6 @@ function appInstallModule(moduleInfo) {
                 item.icon = parseInt(item.install, 10) !== 0
                     ? ('/res/icon-' + item.name + '.png')
                     : ('http://koolshare.ngrok.wang:5000' + new Array(3).join('/softcenter') + '/res/icon-' + item.name + '.png');
-            });
-            return result;
-        }
-        //将本地和远程进行一次对比合并
-        function _mergeData(remoteData) {
-            var result = {};
-            var localData = _formatLocalData(db_softcenter_);
-            $.each(remoteData, function (i, app) {
-                var name = app.name;
-                var oldApp = localData[name] || {};
-                var install = (parseInt(oldApp.install, 10) === 1 && app.version !== oldApp.version) ? 2 : oldApp.install || "0"; 
-                result[name] = $.extend(oldApp, app);
-                result[name].install = install;
-            });
-            $.map(localData, function (app, name) {
-                if (!result[name]) {
-                    result[name] = app;
-                }
             });
             return result;
         };
