@@ -237,7 +237,7 @@ function appPostScript(moduleInfo, script) {
     data["softcenter_home_url"] = "http://koolshare.ngrok.wang:5000";
 
     data["softcenter_installing_todo"] = moduleInfo.name;
-    if(script == "app_intsall.sh") {
+    if(script == "app_install.sh") {
 	data["softcenter_installing_tar_url"] = moduleInfo.tar_url;
 	data["softcenter_installing_md5"] = moduleInfo.md5;
 	data["softcenter_installing_version"] = moduleInfo.version;
@@ -434,6 +434,24 @@ function appUninstallModule(moduleInfo) {
             timeout: 1 * 1000
         });
     }
+
+function softceterInitData(data) {
+    var remoteData = data;
+    $("#spnOnlineVersion").html(remoteData.version);
+    if(remoteData.version != db_softcenter_["softcenter_version"]) {
+	 $("#updateBtn").show();
+	 $("#updateBtn").click(function () {
+	      var moduleInfo = {
+		"name":"softcenter",
+		"md5": remoteData.md5, 
+		"tar_url": remoteData.tar_url, 
+		"version": remoteData.version
+		};
+	      appPostScript(moduleInfo, "app_install.sh");
+	 });
+    }
+}
+
     function init(cb) {
         //设置默认值
         function _setDefault(source, defaults) {
@@ -507,22 +525,7 @@ function appUninstallModule(moduleInfo) {
                 .done(function (remoteData) {
                     //远端更新成功
                     syncRemoteSuccess = 1;
-console.log(remoteData);
-
-                    //TODO remove to where???
-                    $("#spnOnlineVersion").html(remoteData.version);
-                    if(remoteData.version != db_softcenter_["softcenter_version"]) {
-                         $("#updateBtn").show();
-                         $("#updateBtn").click(function () {
-                              var moduleInfo = {
-                                "name":"softcenter",
-				"md5": remoteData.md5, 
-				"tar_url": remoteData.tar_url, 
-				"version": remoteData.version
-				};
-                              appPostScript(moduleInfo, "app_install.sh");
-                         });
-                    }
+                    softceterInitData(remoteData);
 
                     remoteData = remoteData.apps || [];
                     renderView(_mergeData(remoteData));
