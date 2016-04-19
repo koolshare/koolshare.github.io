@@ -132,6 +132,16 @@ function init() {
     setTimeout("write_ss_install_status()", 1000);
     setTimeout("check_ss()", 2000);
     updateSs_node_listView();
+    var jffs2_scripts = '<% nvram_get("jffs2_scripts"); %>';
+	if(jffs2_scripts == "0"){
+		$j("#warn").html("<i>发现Enab JFFS custom scripts and configs选项未开启！</br></br>请开启并重启路由器后才能正常使用SS。<a href='/Advanced_System_Content.asp'><em><u> 前往设置 </u></em></a> </i>");
+		document.form.ss_basic_enable.value = 0;
+		inputCtrl(document.form.switch,0);
+	}
+}
+
+function go_settings(){
+location.href = "/Advanced_System_Content.asp";
 }
 function onSubmitCtrl() {
 	ssmode = document.getElementById("ss_basic_mode").value;
@@ -520,14 +530,21 @@ function getAllConfigs() {
             obj["name"] = db_ss[p + "_name_" + field];
         }
         if (typeof db_ss[p + "_ping_" + field] == "undefined") {
-            obj["ping"] = '<img id="loadingicon1" style="margin-left:57px;margin-right:5px;display:none;" src="/images/InternetScan.gif"/>';
-        } else {
-            obj["ping"] = db_ss[p + "_ping_" + field];
+            obj["ping"] = '';
+        } else if (db_ss[p + "_ping_" + field] == "failed") {
+	        obj["ping"] = '<font color="#FFCC00">failed</font>';
+	    } else {
+            obj["ping"] = parseFloat(db_ss[p + "_ping_" + field].split(" ")[0]).toPrecision(3) + " ms / " + parseFloat(db_ss[p + "_ping_" + field].split(" ")[3]) + "%";
         }
-        if (typeof db_ss[p + "_google_" + field] == "undefined") {
-            obj["google"] = '<font color="#66FF00">ok</font>';
+        if (typeof db_ss[p + "_webtest_" + field] == "undefined") {
+            obj["webtest"] = '';
         } else {
-            obj["google"] = db_ss[p + "_google_" + field];
+	        var time_total = parseFloat(db_ss[p + "_webtest_" + field].split(":")[0]).toFixed(2);
+	        if (time_total == 0.00){
+		        obj["webtest"] = '<font color=#FFCC00">failed</font>';
+	        }else{
+		         obj["webtest"] = parseFloat(db_ss[p + "_webtest_" + field].split(":")[0]).toFixed(2) + " s";
+	        }
         }
         for (var i = 1; i < params.length; i++) {
             var ofield = p + "_" + params[i] + "_" + field;
@@ -553,9 +570,6 @@ function ping_test(){
     global_ss_node_refresh = true;
 	updateSs_node_listView();
     document.node_form.submit();
-    //if(document.getElementById("XXX")) { 
-    //    document.getElementById('loadingicon1').style.display = "block";
-    //}
     setTimeout("ping_test2()", 1000)
 }
 
@@ -658,8 +672,8 @@ function create_ss_node_list_listview(confs) {
         field_code += "<td>" + c["port"] + "</td>";
         field_code += "<td>" + c["password"] + "</td>";
         field_code += "<td>" + c["method"] + "</td>";
-        field_code += "<td>" + c["ping"] + "</td>";
-        //field_code += "<td>" + c["google"] + "</td>";
+        field_code += "<td title='延迟/丢包'>" + c["ping"] + "</td>";
+        field_code += "<td title='请求网页总时间'>" + c["webtest"] + "</td>";
         field_code += "<td><input id='td_node_" + c["node"] + "' class='remove_btn' type='button' onclick='return remove_conf_table(this);' value=''></td>";
         field_code += "</tr>";
     }
@@ -688,7 +702,7 @@ function create_ss_node_list_listview(confs) {
     code += "<th width=" + obj_width[3] + ">密码</th>";
     code += "<th width=" + obj_width[4] + ">加密方式</th>";
     code += "<th width=" + obj_width[5] + "><input type='button' id='ping_btn' name='ping_btn' class='button_gen' onclick='ping_test();' value='ping test'/></th>";
-    //code += "<th width=" + obj_width[6] + "><input type='button' id='connec_btn' name='connec_btn' class='button_gen'  onclick='web_test();' value='web test'/></th>";
+    code += "<th width=" + obj_width[6] + "><input type='button' id='connec_btn' name='connec_btn' class='button_gen'  onclick='web_test();' value='web test'/></th>";
     code += "<th width=" + obj_width[7] + ">添加<br>删除</th>";
     code += "</tr>";
     code += "<tr height='40px'>";
@@ -718,7 +732,7 @@ function create_ss_node_list_listview(confs) {
     code += "</select>";
     code += "</td>"; 
     code += "<input type='hidden' name='action_mode' value=''/>"
-    code += "<input type='hidden' name='SystemCmd' onkeydown='ping_test()' value=''/>"
+    code += "<input type='hidden' name='SystemCmd1' onkeydown='ping_test()' value=''/>"
     code += "<td><select id='ssconf_basic_Ping_Method' name='ssconf_basic_Ping_Method' style='width:130px;margin:0px 0px 0px 2px;' onclick='disable_ss_node_list_refresh();' class='input_option' />"
     code += "<option class='content_input_fd' value='1'>单线ping(10次/节点)</option>";
     code += "<option class='content_input_fd' value='2'>并发ping(10次/节点)</option>";
@@ -726,11 +740,11 @@ function create_ss_node_list_listview(confs) {
     code += "<option class='content_input_fd' value='4'>并发ping(50次/节点)</option>";
     code += "</select>";
     code += "</td>";
-    //code += "<td><select id='ssconf_basic_connect_test' name='ssconf_basic_connect_test' style='width:auto;margin:0px 0px 0px 2px;' onclick='disable_ss_node_list_refresh();' class='input_option' />"
-    //code += "<option class='content_input_fd' value='google.com'>google.com</option>";
-    //code += "<option class='content_input_fd' value='youtube.com'>youtube.com</option>";
-    //code += "</select>";
-    //code += "</td>";
+    code += "<td><select id='ssconf_basic_test_domain' name='ssconf_basic_test_domain' style='width:auto;margin:0px 0px 0px 2px;' onclick='disable_ss_node_list_refresh();' class='input_option' />"
+    code += "<option class='content_input_fd' value='https://www.google.com/'>goolge.com</option>";
+    code += "<option class='content_input_fd' value='https://www.youtube.com/'>youtube.com</option>";
+    code += "</select>";
+    code += "</td>";
     code += "<td><input class='add_btn' onclick='add_conf_in_table(this);' type='button' value=''></td>";
     code += "</tr>";
     code += field_code;
@@ -881,6 +895,7 @@ function cal_panel_block_clientList(obj, multiple) {
 	//if (document.documentElement  && document.documentElement.clientHeight && document.documentElement.clientWidth) {
 	//	winWidth = document.documentElement.clientWidth;
 	//}
+
 	if(winWidth > 1050) {
 		winPadding = (winWidth - 1050) / 2;
 		winWidth = 1105;
@@ -1177,6 +1192,7 @@ function check_ss(){
 										<div class="formfonttitle">Shadowsocks - 账号信息配置</div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 										<div class="SimpleNote"><i>说明：</i>请在下面的<em>Shadowsocks信息</em>表格中填入你的Shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。</div>
+										<div id="warn" style="margin-top: 20px;text-align: center;font-size: 18px;margin-bottom: 20px;"class="formfontdesc" id="cmdDesc"></div>
 										<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="ss_switch_table">
 											<thead>
 											<tr>
@@ -1609,7 +1625,7 @@ function check_ss(){
 											<h4>Shadowsocks运行状态</h4>
 												<p> 此处会显示Shadowsocks到国内和到国外的联通状况，如果出现问题，会显示错误； </p>
 												<p> 该运行状态5秒更新一次，此状态显示可以用于故障检测 ； </p>
-												<li> 如果国外是working...状态，而你电脑不能访问google，请检查你的电脑设置（DNS,HOST）； </li>
+												<li> 如果国外是working...状态，而你电脑不能访问webtest，请检查你的电脑设置（DNS,HOST）； </li>
 												<li> 如果国外是problem detected！状态，那么请检查国外DNS设置，SS服务器状态 ； </li>
 												<li> 如果国内是problem detected！状态，那么请检查国内DNS设置，你的网络连通状态 ；</li>
 													<p> </p>
