@@ -325,7 +325,7 @@ cat > /koolshare/ss/pdnsd/pdnsd.conf <<EOF
 global {
 	perm_cache=2048;
 	cache_dir="/koolshare/ss/pdnsd/";
-	run_as="admin";
+	run_as="nobody";
 	server_port = 1053;
 	server_ip = 127.0.0.1;
 	status_ctl = on;
@@ -344,12 +344,12 @@ server {
 }
 EOF
 	if [ "$ss_redchn_pdnsd_udp_server" == "1" ];then
-		echo $(date): Starting DNS2SOCKS for pdnsd..
+		echo $(date): Starting DNS2SOCKS \for pdnsd..
 		dns2socks 127.0.0.1:23456 "$ss_redchn_pdnsd_udp_server_dns2socks" 127.0.0.1:1099 > /dev/null 2>&1 &
 		echo $(date): done
 		echo $(date):
 	elif [ "$ss_redchn_pdnsd_udp_server" == "2" ];then
-		echo $(date): Starting dnscrypt-proxy for pdnsd...
+		echo $(date): Starting dnscrypt-proxy \for pdnsd...
 		dnscrypt-proxy --local-address=127.0.0.1:1099 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_redchn_pdnsd_udp_server_dnscrypt"
 		echo $(date): done
 		echo $(date):
@@ -358,7 +358,7 @@ EOF
 		[ "$ss_redchn_pdnsd_udp_server_ss_tunnel" == "2" ] && dns1="8.8.8.8:53"
 		[ "$ss_redchn_pdnsd_udp_server_ss_tunnel" == "3" ] && dns1="8.8.4.4:53"
 		[ "$ss_redchn_pdnsd_udp_server_ss_tunnel" == "4" ] && dns1="$ss_redchn_pdnsd_udp_server_ss_tunnel_user"
-		echo $(date): Starting ss-tunnel for pdnsd...
+		echo $(date): Starting ss-tunnel \for pdnsd...
 		if [ "$ss_basic_use_rss" == "1" ];then
 			rss-tunnel -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid
 		elif  [ "$ss_basic_use_rss" == "0" ];then
@@ -376,7 +376,7 @@ cat > /koolshare/ss/pdnsd/pdnsd.conf <<EOF
 global {
 	perm_cache=2048;
 	cache_dir="/koolshare/ss/pdnsd/";
-	run_as="admin";
+	run_as="nobody";
 	server_port = 1053;
 	server_ip = 127.0.0.1;
 	status_ctl = on;
@@ -398,9 +398,9 @@ EOF
 fi
 
 chmod 644 /koolshare/ss/pdnsd/pdnsd.conf
-CACHEDIR=/jffs/pdnsd
-CACHE=/jffs/pdnsd/pdnsd.cache
-USER=admin
+CACHEDIR=/koolshare/ss/pdnsd
+CACHE=/koolshare/ss/pdnsd/pdnsd.cache
+USER=nobody
 GROUP=nogroup
 
 if ! test -f "$CACHE"; then
