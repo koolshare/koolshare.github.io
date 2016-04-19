@@ -222,25 +222,34 @@ function checkField(o, f, d) {
  
     return o[f];
 }
-function appInstallModule(moduleInfo) {
+function appPostScript(moduleInfo, script) {
     if(currState.installing) {
     console.log("current is in installing state");
     return;
     }
     //Current page must has prefix of "Module_"
-    var data = {"SystemCmd":"app_install.sh", "current_page":"Module_koolnet.asp", "action_mode":" Refresh ", "action_script":""};
-    data["softcenter_installing_todo"] = moduleInfo.name;
-    data["softcenter_installing_version"] = moduleInfo.version;
-    data["softcenter_installing_md5"] = moduleInfo.md5;
-    data["softcenter_installing_tar_url"] = moduleInfo.tar_url;
+    var data = {"SystemCmd":script, "current_page":"Module_koolnet.asp", "action_mode":" Refresh ", "action_script":""};
+
+    var applyUrl = "applydb.cgi?p=softcenter_";
+
     //currState.name = moduleInfo.name;
     //TODO auto choose for home_url
     data["softcenter_home_url"] = "http://koolshare.ngrok.wang:5000";
-    //Update title for this module
-    data[moduleInfo.name + "_title"] = moduleInfo.title;
+
+    data["softcenter_installing_todo"] = moduleInfo.name;
+    if(script == "app_intsall.sh") {
+	data["softcenter_installing_tar_url"] = moduleInfo.tar_url;
+	data["softcenter_installing_md5"] = moduleInfo.md5;
+	data["softcenter_installing_version"] = moduleInfo.version;
+
+	//Update title for this module
+	data[moduleInfo.name + "_title"] = moduleInfo.title;
+        applyUrl = applyUrl + "," + moduleInfo.name;
+    }
+
         $.ajax({
                 type: "POST",
-                url: "applydb.cgi?p=softcenter_,"+moduleInfo.name,
+                url: applyUrl,
                 dataType: "text",
                 data: data,
                 success: function() {
@@ -255,6 +264,12 @@ function appInstallModule(moduleInfo) {
                     console.log("install error");
                 }
         });
+}
+function appInstallModule(moduleInfo) {
+    appPostScript(moduleInfo, "app_install.sh");
+}
+function appUninstallModule(moduleInfo) {
+    appPostScript(moduleInfo, "app_remove.sh");
 }
 </script>
 <script>

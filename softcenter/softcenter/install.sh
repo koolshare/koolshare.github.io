@@ -6,6 +6,7 @@ softcenter_install() {
 		cp -rf /tmp/softcenter/res/* /koolshare/res/
 		cp -rf /tmp/softcenter/bin/* /koolshare/bin/
 		cp -rf /tmp/softcenter/perp /koolshare/
+		cp -rf /tmp/softcenter/scripts /koolshare/
 		chmod 755 /koolshare/bin/*
 		chmod 755 /koolshare/perp/*
 		chmod 755 /koolshare/perp/.boot/*
