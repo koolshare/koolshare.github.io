@@ -42,11 +42,6 @@
             "version": "0.5"
         }, 
         {
-            "name": "ngrokd", 
-            "tar_url": "ngrokd/ngrokd.tar.gz", 
-            "title": "ngrokd"
-        }, 
-        {
             "name": "v2ray", 
             "tar_url": "v2ray/v2ray.tar.gz", 
             "title": "v2ray"
@@ -74,7 +69,7 @@
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "e8247d8bd98c7ee3e184f68980be0a20", 
+    "md5": "b0d6be877f524b7366649ac616aa4535", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.0.5"
 }

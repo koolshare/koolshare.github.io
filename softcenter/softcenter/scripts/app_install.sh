@@ -118,6 +118,9 @@ install_module() {
 		dbus set softcenter_installing_status="0"
 		dbus set softcenter_installing_module=""
 		dbus set softcenter_installing_todo=""
+
+		rm -f $FNAME
+		rm -rf "/tmp/$softcenter_installing_module"
 		exit
 	else
 		tar -zxf $FNAME
