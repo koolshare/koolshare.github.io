@@ -75,7 +75,7 @@ install_module() {
 	dbus save softcenter_installing_
 
 	URL_SPLIT="/"
-	OLD_MD5=`dbus get softcenter_module_$softcenter_installing_module$MD5_SUFFIX`
+	#OLD_MD5=`dbus get softcenter_module_$softcenter_installing_module$MD5_SUFFIX`
 	OLD_VERSION=`dbus get softcenter_module_$softcenter_installing_module$VER_SUFFIX`
 	HOME_URL=`dbus get softcenter_home_url`
 	TAR_URL=$HOME_URL$URL_SPLIT$softcenter_installing_tar_url
@@ -86,7 +86,7 @@ install_module() {
 	fi
 
 	CMP=`versioncmp $softcenter_installing_version $OLD_VERSION`
-	if [ -f /koolshare/webs/Module_$softcenter_installing_module.sh ]; then
+	if [ -f /koolshare/webs/Module_$softcenter_installing_module.sh -o "$softcenter_installing_todo" = "softcenter" ]; then
 		CMP="-1"
 	fi
 	if [ "$CMP" = "-1" ]; then
@@ -150,6 +150,9 @@ install_module() {
 			dbus set "softcenter_module_$softcenter_installing_module$MD5_SUFFIX=$softcenter_installing_md5"
 			dbus set "softcenter_module_$softcenter_installing_module$VER_SUFFIX=$softcenter_installing_version"
 			dbus set "softcenter_module_$softcenter_installing_module$INSTALL_SUFFIX=1"
+		else
+			dbus set softcenter_version=$softcenter_installing_version;
+			dbus set softcenter_md5=$softcenter_installing_md5
 		fi
 		dbus set softcenter_installing_module=""
 		dbus set softcenter_installing_todo=""
@@ -177,7 +180,7 @@ uninstall_module() {
 		exit 2
 	fi
 
-	if [ "$softcenter_installing_todo" = "" ]; then
+	if [ "$softcenter_installing_todo" = "" -o "$softcenter_installing_todo" = "softcenter" ]; then
 		#curr module name not found
 		LOGGER "module name not found"
 		exit 3

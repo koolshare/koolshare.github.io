@@ -371,6 +371,8 @@ function appUninstallModule(moduleInfo) {
     function renderView(apps) {
         // set apps to global variable of softInfo
         softInfo = apps;
+        //console.log(softInfo);
+
         //简单模板函数
         function _format(source, opts) {
             var source = source.valueOf(),
@@ -505,6 +507,23 @@ function appUninstallModule(moduleInfo) {
                 .done(function (remoteData) {
                     //远端更新成功
                     syncRemoteSuccess = 1;
+console.log(remoteData);
+
+                    //TODO remove to where???
+                    $("#spnOnlineVersion").html(remoteData.version);
+                    if(remoteData.version != db_softcenter_["softcenter_version"]) {
+                         $("#updateBtn").show();
+                         $("#updateBtn").click(function () {
+                              var moduleInfo = {
+                                "name":"softcenter",
+				"md5": remoteData.md5, 
+				"tar_url": remoteData.tar_url, 
+				"version": remoteData.version
+				};
+                              appPostScript(moduleInfo, "app_install.sh");
+                         });
+                    }
+
                     remoteData = remoteData.apps || [];
                     renderView(_mergeData(remoteData));
                     cb();
@@ -522,6 +541,12 @@ function appUninstallModule(moduleInfo) {
     $(function () {
     //梅林要求用这个函数来显示左测菜单
     show_menu();
+
+    if(!db_softcenter_["softcenter_version"]) {
+        db_softcenter_["softcenter_version"] = "0.0";
+    }
+    $("#spnCurrVersion").html(db_softcenter_["softcenter_version"]);
+
         init(function () {
             toggleAppPanel(1);
         //一刷新界面是否就正在插件在安装.
