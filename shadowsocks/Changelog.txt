@@ -1,6 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 1.4.2
+   - 说明	此次更新仅为ss功能个性更新，并不涉及到SS核心部分(ss二进制文件，规则文件，iptables规则)，基本亮点总结为:
+   		1	添加了新的DNS解析软件
+   		2	增加了ss节点的测试功能
+   		3	实用性上增加了未开启jffs分区的自定义脚本的提醒
+   			所以较之1.4.1，稳定性应该不会有区别。
    - fix	修复pdnsd运行权限问题
    - add	增加未开启Enable JFFS custom scripts and configs选项提醒
    - add	增加节点google、youtube连通性测试
