@@ -317,7 +317,7 @@ function appUninstallModule(moduleInfo) {
         showInstallInfo(curr_module, currState.lastStatus);
         
         // Install ok now
-        if(currState.lastStatus == "1") {
+        if(currState.lastStatus == "1" || currState.lastStatus == "7") {
             currState.installing = false;
             setTimeout("window.location.reload()", 1000);
             return;
@@ -339,7 +339,7 @@ function appUninstallModule(moduleInfo) {
         var code = parseInt(scode);
         var s = module.capitalizeFirstLetter();
         var infos = [
-            "尚未安装",
+            "操作失败",
             "已安装",
             "将被安装到jffs分区...",
             "正在下载中...请耐心等待...",
@@ -547,10 +547,13 @@ function appUninstallModule(moduleInfo) {
         $('#IconContainer').on('click', '.uninstall-btn', function () {
             var name = $(this).data('name');
             console.log('uninstall', name);
+            appUninstallModule(softInfo[name]);
         });
         $('#IconContainer').on('click', '.update-btn', function () {
             var name = $(this).data('name');
             console.log('update', name);
+            appInstallModule(softInfo[name]);
+
         });
     
     });
