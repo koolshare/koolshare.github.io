@@ -2,7 +2,7 @@
 
 # ====================================变量定义====================================
 # 版本号定义
-version="0.5"
+version="0.6"
 
 # 导入skipd数据
 eval `dbus export adm`
@@ -14,10 +14,6 @@ export PERP_BASE=/koolshare/perp
 
 # ss模式判断
 ssmode=`nvram get ss_mode`
-
-# 相关链接定义
-UPDATE_VERSION_URL="https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/adm/version"
-UPDATE_TAR_URL="https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/adm/adm.tar.gz"
 
 # ====================================函数定义====================================
 # 添加随ss启动（兼容SS）
@@ -36,12 +32,12 @@ remove_ss_event(){
 # 启动ADM主程序
 start_adm(){
 #	/koolshare/adm/ADM >/dev/null 2>&1 &
-	perpctl A adm
+	perpctl A adm  >/dev/null 2>&1
 }
 
 # 停止ADM主程序
 stop_adm(){
-	perpctl X adm
+	perpctl X adm  >/dev/null 2>&1
 #	killall ADM >/dev/null 2>&1 &
 #	kill -9 `pidof ADM` >/dev/null 2>&1 &
 }
@@ -101,156 +97,9 @@ add_user_rule(){
 	done
 }
 
+# 删除用户自定义规则
 del_user_rule(){
 	sed -i '29,$d' /koolshare/adm/user.txt
-}
-
-
-
-#安装插件模块
-install_adm(){
-	# adm_install_status=	#adm尚未安装
-	# adm_install_status=0	#adm尚未安装
-	# adm_install_status=1	#adm已安装
-	# adm_install_status=2	#adm将被安装到jffs分区...
-	# adm_install_status=3	#正在下载adm中...请耐心等待...
-	# adm_install_status=4	#正在安装adm中...
-	# adm_install_status=5	#adm安装成功！请5秒后刷新本页面！...
-	# adm_install_status=6	#adm卸载中......
-	# adm_install_status=7	#adm卸载成功！
-	# adm_install_status=8	#没有检测到在线版本号！
-
-	# adm_install_status=9	#正在下载adm更新......
-	# adm_install_status=10	#正在安装adm更新...
-	# adm_install_status=11	#安装更新成功，5秒后刷新本页！
-	# adm_install_status=12	#下载文件校验不一致！
-	# adm_install_status=13	#然而并没有更新！
-	# adm_install_status=14	#正在检查是否有更新~
-	# adm_install_status=15	#检测更新错误！
-
-	# adm_install_status=2	#adm将被安装到jffs分区...
-	dbus set adm_install_status="2"
-	adm_version_web1=`curl -s $UPDATE_VERSION_URL | sed -n 1p`
-	if [ ! -z $adm_version_web1 ];then
-		dbus set adm_version_web=$adm_version_web1
-		# adm_install_status=3	#正在下载adm中...请耐心等待...
-		dbus set adm_install_status="3"
-		cd /tmp
-		md5_web1=$(curl $UPDATE_VERSION_URL | sed -n 2p)
-		wget --no-check-certificate --tries=1 --timeout=15 $UPDATE_TAR_URL
-		md5sum_gz=$(md5sum /tmp/adm.tar.gz | sed 's/ /\n/g'| sed -n 1p)
-		if [ "$md5sum_gz"x != "$md5_web1"x ]; then
-			# adm_install_status=12	#下载文件校验不一致！
-			dbus set adm_install_status="12"
-			rm -rf /tmp/adm*
-			sleep 3
-			# adm_install_status=0	#adm尚未安装
-			dbus set adm_install_status="0"
-			exit
-		else
-			tar -zxf adm.tar.gz
-			dbus set adm_enable="0"
-			# adm_install_status=4	#正在安装adm中...
-			dbus set adm_install_status="4"
-			chmod a+x /tmp/adm/install.sh
-			sh /tmp/adm/install.sh
-			sleep 2
-			# adm_install_status=5	#adm安装成功！请5秒后刷新本页面！...
-			dbus set adm_install_status="5"
-			dbus set adm_version=$adm_version_web1
-			sleep 2
-			# adm_install_status=1	#adm已安装
-			dbus set adm_install_status="1"
-		fi
-	else
-		dbus set adm_install_status="8"
-		sleep 3
-		# adm_install_status=0	#adm尚未安装
-		dbus set adm_install_status="0"
-		exit
-	fi
-}
-
-# 更新插件模块
-update_adm(){
-	# adm_install_status=	#adm尚未安装
-	# adm_install_status=0	#adm尚未安装
-	# adm_install_status=1	#adm已安装
-	# adm_install_status=2	#adm将被安装到jffs分区...
-	# adm_install_status=3	#正在下载adm中...请耐心等待...
-	# adm_install_status=4	#正在安装adm中...
-	# adm_install_status=5	#adm安装成功！请5秒后刷新本页面！...
-	# adm_install_status=6	#adm卸载中......
-	# adm_install_status=7	#adm卸载成功！
-	# adm_install_status=8	#没有检测到在线版本号！
-
-	# adm_install_status=9	#正在下载adm更新......
-	# adm_install_status=10	#正在安装adm更新...
-	# adm_install_status=11	#安装更新成功，5秒后刷新本页！
-	# adm_install_status=12	#下载文件校验不一致！
-	# adm_install_status=13	#然而并没有更新！
-	# adm_install_status=14	#正在检查是否有更新~
-	# adm_install_status=15	#检测更新错误！
-
-	# adm_install_status=14	#正在检查是否有更新~
-	dbus set adm_install_status="14"
-	adm_version_web1=`curl -s $UPDATE_VERSION_URL | sed -n 1p`
-	if [ ! -z $adm_version_web1 ];then
-		dbus set adm_version_web=$adm_version_web1
-		cmp=`versioncmp $adm_version_web1 $version`
-		if [ "$cmp" = "-1" ];then
-			dbus set adm_install_status="9"
-			cd /tmp
-			md5_web1=`curl -s $UPDATE_VERSION_URL | sed -n 2p`
-			wget --no-check-certificate --tries=1 --timeout=15 $UPDATE_TAR_URL
-			md5sum_gz=`md5sum /tmp/adm.tar.gz | sed 's/ /\n/g'| sed -n 1p`
-			if [ "$md5sum_gz" != "$md5_web1" ]; then
-				dbus set adm_install_status="12"
-				rm -rf /tmp/adm* >/dev/null 2>&1
-				sleep 5
-				dbus set adm_install_status="1"
-			else
-				tar -zxf adm.tar.gz
-				dbus set adm_install_status="10"
-				chmod a+x /tmp/adm/install.sh
-				sh /tmp/adm/install.sh
-				sleep 2
-				dbus set adm_install_status="11"
-				dbus set adm_version=$adm_version_web1
-				sleep 2
-				dbus set adm_install_status="1"
-			fi
-		else
-			dbus set adm_install_status="13"
-			sleep 2
-			dbus set adm_install_status="1"
-		fi
-	else
-		dbus set adm_install_status="15"
-		sleep 5
-		dbus set adm_install_status="1"
-	fi
-	exit 0
-}
-
-uninstall_adm(){
-	rm -rf /koolshare/adm
-	rm -rf /koolshare/perp
-	rm -rf /koolshare/adm_config
-	rm -rf /koolshare/adm_update
-	for value in `dbus list adm|cut -d "=" -f 1`
-	do
-		dbus remove $value
-	done
-}
-	
-
-# 检查是否有更新，每次网页开启后10s后检测
-detect_adm_version(){
-	adm_version_web1=`curl -s $UPDATE_VERSION_URL | sed -n 1p`
-	if [ ! -z $adm_version_web1 ];then
-		dbus set adm_version_web="$adm_version_web1"
-	fi
 }
 
 # 没有版本号时
@@ -262,8 +111,19 @@ write_adm_version(){
 
 # 为ADM进程设置更多的连接数
 set_ulimit(){
-	ulimit -n 8192
+	ulimit -n 16384
 }
+
+# 每天凌晨删除adm的日志文件
+add_remove_log(){
+	cru a adm_log_remove "0 3 * * * /bin/sh /koolshare/adm/remove_adm_log.sh" >/dev/null 2>&1
+}
+
+# 每天凌晨删除adm的日志文件
+remove_log(){
+	sed -i '/adm_log_remove/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
+}
+
 
 case $ACTION in
 start)
@@ -275,6 +135,7 @@ start)
 	start_adm
 	update_nat_rules
 	add_ss_event
+	add_remove_log
 	fi
 	;;
 stop | kill )
@@ -283,6 +144,7 @@ stop | kill )
 	stop_adm
 	remove_ss_event
 	del_user_rule
+	rm -rf /koolshare/adm/*.log
 	;;
 restart)
 	remove_nat_rules
@@ -290,6 +152,7 @@ restart)
 	del_process_protect
 	stop_adm
 	remove_ss_event
+	remove_log
 	sleep 1
 	set_ulimit
 	add_user_rule
@@ -298,26 +161,11 @@ restart)
 	update_nat_rules
 	add_ss_event
 	write_adm_version
-	;;
-check)
-	detect_adm_version
-	;;
-update)
-	update_adm
-	;;
-install)
-	install_adm
-	;;
-uninstall)
-	remove_nat_rules
-	del_process_protect
-	stop_adm
-	remove_ss_event
-	del_user_rule
-	uninstall_adm
+	add_remove_log
 	;;
 *)
 	echo "Usage: $0 (start|stop|restart|check|kill|update)"
 	exit 1
 	;;
 esac
+

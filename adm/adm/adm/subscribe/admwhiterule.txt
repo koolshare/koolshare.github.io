@@ -6,9 +6,8 @@
 !如果需要过滤某电商的广告, 请删除对应的域名, 或者在规则订阅里取消勾选此文件的更新及生效!
 !白名单规则提出来,全局规则中将没有如下几条规则, 但为了慎重起见, 如果您没有特殊的要求, 请不要取消此规则生效. 避免屏蔽一些不必要的内容. 
 
-@@|http:/$domain=.yeepay.com|taoke.alimama.com|club.alimama.com|.tenpay.com|.tbcdn.cn|.ct10000.com|.etao.com|.hitao.com|.paipai.com|.meishichina.com|vip.xunlei.com|lixian.xunlei.com|www.vmall.com|www.1688.com|www.mm111.net|jifen.qq.com
-@@|http://$domain=.taobao.com|.tmall.com|.jd.com|code.taobao.org|exmail.qq.com|cnki.net|fav.sync.mathon.cn|.hrbeu.edu.cn|.suning.com|.51buy.com|gome.com.cn|
-@@|https://$domain=.taobao.com|.tmall.com|
+@@|http:/$domain=.yeepay.com|taoke.alimama.com|club.alimama.com|.tenpay.com|.tbcdn.cn|.suning.com|.51buy.com|.ct10000.com|.etao.com|.hitao.com|.paipai.com|.meishichina.com|vip.xunlei.com|lixian.xunlei.com|www.vmall.com|www.1688.com|www.mm111.net|jifen.qq.com|
+@@|http://$domain=.taobao.com|.tmall.com|.jd.com|code.taobao.org|exmail.qq.com|cnki.net|fav.sync.mathon.cn|
 
 !例如
 !如果你有其他不想过滤的论坛或者网站类的, 可以在自定义里面仿造上面的规则写一条

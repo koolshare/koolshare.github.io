@@ -1,1 +1,6 @@
-TODO
+Koolshare Asuswrt-Merlin adm Changelog
+===========================================
+0.6
+   - fix	适配新版软件中心
+   - fix	修复adm日志文件积累
+   - change	ADM二进制文件更新到最新

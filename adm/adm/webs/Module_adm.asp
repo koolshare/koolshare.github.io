@@ -22,101 +22,22 @@
 <script type="text/javascript" src="/general.js"></script>
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
 <script type="text/javascript" src="/dbconf?p=adm_&v=<% uptime(); %>"></script>
+<script type="text/javascript" src="/res/softcenter.js"></script>
 <script language="JavaScript" type="text/javascript" src="/client_function.js"></script>
 
 
 <script>
-var $j = jQuery.noConflict();
-var $G = function (id) {
-	return document.getElementById(id);
-};
-
-//跨域请求支持
-    $j.ajax = (function(_ajax){
-    
-    var protocol = location.protocol,
-        hostname = location.hostname,
-        exRegex = RegExp(protocol + '//' + hostname),
-        YQL = 'http' + (/^https/.test(protocol)?'s':'') + '://query.yahooapis.com/v1/public/yql?callback=?',
-        query = 'select * from html where url="{URL}" and xpath="*"';
-    
-    function isExternal(url) {
-        return !exRegex.test(url) && /:\/\//.test(url);
-    }
-    
-    return function(o) {
-        
-        var url = o.url;
-        
-        if ( /get/i.test(o.type) && !/json/i.test(o.dataType) && isExternal(url) ) {
-            
-            // Manipulate options so that JSONP-x request is made to YQL
-            
-            o.url = YQL;
-            o.dataType = 'json';
-            
-            o.data = {
-                q: query.replace(
-                    '{URL}',
-                    url + (o.data ?
-                        (/\?/.test(url) ? '&' : '?') + jQuery.param(o.data)
-                    : '')
-                ),
-                format: 'xml'
-            };
-            
-            // Since it's a JSONP request
-            // complete === success
-            if (!o.success && o.complete) {
-                o.success = o.complete;
-                delete o.complete;
-            }
-            
-            o.success = (function(_success){
-                return function(data) {
-                    
-                    if (_success) {
-                        // Fake XHR callback.
-                        _success.call(this, {
-                            responseText: (data.results[0] || '')
-                                // YQL screws with <script>s
-                                // Get rid of them
-                                .replace(/<script[^>]+?\/>|<script(.|\s)*?\/script>/gi, '')
-                        }, 'success');
-                    }
-                    
-                };
-            })(o.success);
-            
-        }
-        
-        return _ajax.apply(this, arguments);
-        
-    };
-    
-})($j.ajax);
-
 function init() {
 	show_menu();
 	line_show();
 	buildswitch();
-    //conf2obj();
-    //line_show();
     version_show();
-    write_adm_install_status();
+    setTimeout("version_show()", 3000);
     var ss_mode = '<% nvram_get("ss_mode"); %>';
 	if(ss_mode != "0" && ss_mode != 'undefined'){
 		$j("#warn").html("<i>你开启了shadowsocks, 阿呆喵将只过滤国内广告</i>");
 	}else{
 		$j("#warn").html("<i>阿呆喵将过滤全部广告</i>");
-	}
-	if (db_adm_['adm_install_status'] !== "1"){
-		document.getElementById('update_button').style.display = "none";
-		document.getElementById('install_button').style.display = "";
-		inputCtrl(document.form.switch,0);
-	} else {
-		document.getElementById('update_button').style.display = "";
-		document.getElementById('install_button').style.display = "none";
 	}
     var rrt = document.getElementById("switch");
     if (document.form.adm_enable.value != "1") {
@@ -125,12 +46,6 @@ function init() {
         rrt.checked = true;
     }
 }
-
-
-String.prototype.replaceAll = function(s1,s2){
-　　return this.replace(new RegExp(s1,"gm"),s2);
-}
-
 
 function line_show() {
 	if(typeof db_adm_ != "undefined") {
@@ -176,9 +91,6 @@ function validForm(){
 	return true;
 }
 
-function done_validating() {
-	return true;
-}
 
 function buildswitch(){
 	$j("#switch").click(
@@ -219,130 +131,13 @@ function conf2obj(){
 	});
 }
 
-function write_adm_install_status(){
-	$j.ajax({
-	type: "get",
-	url: "dbconf?p=adm_",
-	dataType: "script",
-	success: function() {
-	if (db_adm_['adm_install_status'] == "0"){
-		$j("#adm_install_status").html("<i>ADM尚未安装</i>");
-		document.getElementById('switch_tr').style.display = "none";
-		document.getElementById('adm_status').style.display = "none";
-		document.getElementById('adm_user').style.display = "none";
-		document.getElementById('cmdBtn').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('install_button').style.display = "";
-		document.getElementById('adm_version_status').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else if (db_adm_['adm_install_status'] == "1"){
-		$j("#adm_install_status").html("<i>ADM已安装</i>");
-		document.getElementById('switch_tr').style.display = "";
-		document.getElementById('adm_status').style.display = "";
-		document.getElementById('adm_user').style.display = "";
-		document.getElementById('cmdBtn').style.display = "";
-		document.getElementById('uninstall_button').style.display = "";
-		document.getElementById('update_button').style.display = "";
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('adm_version_status').style.display = "";
-	} else if (db_adm_['adm_install_status'] == "2"){
-		$j("#adm_install_status").html("<i>ADM将被安装到jffs分区</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else if (db_adm_['adm_install_status'] == "3"){
-		$j("#adm_install_status").html("<i>正在下载ADM中...请耐心等待...</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else if (db_adm_['adm_install_status'] == "4"){
-		$j("#adm_install_status").html("<i>正在安装ADM中...</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else if (db_adm_['adm_install_status'] == "5"){
-		$j("#adm_install_status").html("<i>ADM安装成功！请等待页面刷新！</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-		version_show();
-	} else if (db_adm_['adm_install_status'] == "6"){
-		$j("#adm_install_status").html("<i>ADM卸载中...</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else if (db_adm_['adm_install_status'] == "7"){
-		$j("#adm_install_status").html("<i>ADM卸载成功！</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else if (db_adm_['adm_install_status'] == "8"){
-		$j("#adm_install_status").html("<i>没有检测到在线版本号！</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else if (db_adm_['adm_install_status'] == "9"){
-		$j("#adm_install_status").html("<i>正在下载adm更新...</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else if (db_adm_['adm_install_status'] == "10"){
-		$j("#adm_install_status").html("<i>正在安装adm更新...</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else if (db_adm_['adm_install_status'] == "11"){
-		$j("#adm_install_status").html("<i>安装更新成功，5秒后刷新本页！</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else if (db_adm_['adm_install_status'] == "12"){
-		$j("#adm_install_status").html("<i>下载文件校验不一致!</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else if (db_adm_['adm_install_status'] == "13"){
-		$j("#adm_install_status").html("<i>然而并没有更新！</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else if (db_adm_['adm_install_status'] == "14"){
-		$j("#adm_install_status").html("<i>正在检查是否有更新~</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else if (db_adm_['adm_install_status'] == "15"){
-		$j("#adm_install_status").html("<i>检测更新错误！</i>");
-		document.getElementById('install_button').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('update_button').style.display = "none";
-	} else {
-		$j("#adm_install_status").html("<i>ADM尚未安装</i>");
-		//document.adm_form.adm_enable.value = 0;
-		document.getElementById('switch').style.display = "none";
-		document.getElementById('cmdBtn').style.display = "none";
-		document.getElementById('uninstall_button').style.display = "none";
-		document.getElementById('install_button').style.display = "";
-		document.getElementById('adm_version_status').style.display = "none";
-	}
-	setTimeout("write_adm_install_status()", 1000);
-	}
-	});
-}
 
 
 function version_show(){
-	/*if (db_adm_['adm_version'] != db_adm_['adm_version_web'] && db_adm_['adm_version_web'] != "undefined"){
-		$j("#adm_version_status").html("<i>当前版本：" + db_adm_['adm_version']);
-		$j("#update_button").html("<i>升级到：" + db_adm_['adm_basic_version_web']);
-	} else {
-		$j("#adm_version_status").html("<i>当前版本：" + db_adm_['adm_version']);
-	}*/
-
 	$j("#adm_version_status").html("<i>当前版本：" + db_adm_['adm_version']);
 
     $j.ajax({
-        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/adm/config.json.js',
+        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/adm/config.json.js',
         type: 'GET',
         success: function(res) {
             var txt = $j(res.responseText).text();
@@ -351,35 +146,11 @@ function version_show(){
                 var obj = $j.parseJSON(txt.replace("'", "\""));
 		$j("#adm_version_status").html("<i>当前版本：" + obj.version);
 		if(obj.version != db_adm_["adm_version"]) {
-			$j("#update_button").html("<i>升级到：" + obj.version);
+			$j("#adm_version_status").html("<i>有新版本：" + obj.version);
 		}
             }
         }
     });
-}
-
-
-function update_adm(){
-	document.form.action_mode.value = ' Refresh ';
-	document.form.SystemCmd.value = "adm_update.sh";
-	document.getElementById('update_button').style.display = "none";
-	document.form.submit();
-	write_adm_install_status();
-}
-
-function adm_install(){
-	document.form.action_mode.value = ' Refresh ';
-	document.form.SystemCmd.value = "adm_install.sh";
-	document.getElementById('update_button').style.display = "none";
-	document.form.submit();
-	write_adm_install_status();
-}
-function adm_uninstall(){
-	document.form.action_mode.value = ' Refresh ';
-	document.form.SystemCmd.value = "adm_uninstall.sh";
-	document.getElementById('update_button').style.display = "none";
-	document.form.submit();
-	write_adm_install_status();
 }
 
 function reload_Soft_Center(){
@@ -450,21 +221,7 @@ location.href = "/Main_Soft_center.asp";
 													</div>
 													<div id="adm_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>	
 												</td>
-											</tr>
-
-											<tr>
-												<th style="width:25%;">ADM安装</th>
-												<td>
-													
-													<div id="adm_install_status" style="padding-top:5px;float: left;"></div>													
-													<div style="padding-top:0px;margin-left:30px;margin-top:0px;float: left;">
-														<button id="install_button" class="button_gen" onclick="adm_install();">安装</button>
-														<button id="uninstall_button" class="button_gen" onclick="adm_uninstall();">卸载</button>
-														<button id="update_button" class="button_gen" onclick="update_adm();">更新</button>
-													</div>
-												</td>
-											</tr>
-											
+											</tr>											
 											<tr id="adm_status">
 												<td style="background-color: #2F3A3E;width:15%;">
 													<label>ADM状态</label>
