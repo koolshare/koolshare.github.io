@@ -269,6 +269,10 @@ function appInstallModule(moduleInfo) {
     appPostScript(moduleInfo, "app_install.sh");
 }
 function appUninstallModule(moduleInfo) {
+
+	if (!window.confirm('确定卸载吗')) {
+	    return;
+	}
     appPostScript(moduleInfo, "app_remove.sh");
 }
 </script>
