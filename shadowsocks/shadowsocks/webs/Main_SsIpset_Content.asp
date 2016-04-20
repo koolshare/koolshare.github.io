@@ -163,7 +163,7 @@ function generate_options(){
 function show_develop_function(){
 	if (db_ss['ss_basic_user'] == undefined){
 		var obj2=document.getElementById('ss_ipset_foreign_dns');
-    	obj2.options.remove(3);
+    	obj2.options.remove(4);
 	}
 }
 </script>

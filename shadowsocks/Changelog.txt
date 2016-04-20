@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.4.3
+   - fix	修复gfwlist内，PcapDNSProxy可能不显示的bug
+   - add	更新ssr客户端为最新，支持tls1.2_ticket_auth
+
 1.4.2
    - 说明	此次更新仅为ss功能个性更新，并不涉及到SS核心部分(ss二进制文件，规则文件，iptables规则)，基本亮点总结为:
    		1	添加了新的DNS解析软件

@@ -225,7 +225,7 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		} else if (field == "ss_basic_rss_obfs") {
-			if (obj[field] != "plain" && obj[field] != "http_simple" && obj[field] != "tls_simple" &&  obj[field] != "random_head" &&  obj[field] != "tls1.0_session_auth" ) {
+			if (obj[field] != "plain" && obj[field] != "http_simple" && obj[field] != "tls_simple" &&  obj[field] != "random_head" && obj[field] != "tls1.0_session_auth" && obj[field] != "tls1.2_ticket_auth" ) {
 				$j("#ss_basic_rss_obfs").val("plain");
 			} else {
 				$j("#ss_basic_rss_obfs").val(obj.ss_basic_rss_obfs);
@@ -267,7 +267,7 @@ function update_visibility() {
 	std = readCookie("ss_table_detail");
 	srp = document.form.ss_basic_rss_protocol.value;
 	sro = document.form.ss_basic_rss_obfs.value;
-	sur = document.form.hd_ss_basic_use_rss.value
+	sur = document.form.hd_ss_basic_use_rss.value;
 	if (srp == "origin"){
 		$j("#ss_basic_rss_protocol_alert").html("原版协议");
 	} else if (srp == "verify_simple"){
@@ -289,11 +289,13 @@ function update_visibility() {
 	} else if (sro == "http_simple"){
 		$j("#ss_basic_rss_obfs_alert").html("伪装为http协议");
 	} else if (sro == "tls_simple"){
-		$j("#ss_basic_rss_obfs_alert").html("伪装为tls协议");
+		$j("#ss_basic_rss_obfs_alert").html("模拟https/TLS1.2的握手过程，不建议使用");
 	} else if (sro == "random_head"){
 		$j("#ss_basic_rss_obfs_alert").html("发送一个随机包再通讯的协议");
 	} else if (sro == "tls1.0_session_auth"){
-		$j("#ss_basic_rss_obfs_alert").html("伪装为tls session握手协议同时能抗重放攻击");
+		$j("#ss_basic_rss_obfs_alert").html("模拟tls1.0，不建议使用");
+	} else if (sro == "tls1.2_ticket_auth"){
+		$j("#ss_basic_rss_obfs_alert").html("模拟TLS1.2，强烈推荐");
 	}
 	
 	if (ssmode == "0"){
@@ -334,8 +336,6 @@ function update_visibility() {
 	showhide("SSR_name", (ssmode!== "4"));	
 	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode!== "4"));
 	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode!== "4"));
-
-	
 }
 
 function oncheckclick(obj) {
@@ -1361,10 +1361,11 @@ function check_ss(){
 															<option class="content_input_fd" value="tls_simple">tls_simple</option>
 															<option class="content_input_fd" value="random_head">random_head</option>
 															<option class="content_input_fd" value="tls1.0_session_auth">tls1.0_session_auth</option>
+															<option class="content_input_fd" value="tls1.2_ticket_auth">tls1.2_ticket_auth</option>
 														</select>
 														<span id="ss_basic_rss_obfs_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
-												</tr>
+												</tr>											
 											</table>
 										</div>
 										<div id="add_fun">
