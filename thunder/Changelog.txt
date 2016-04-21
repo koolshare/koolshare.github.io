@@ -1,0 +1,4 @@
+Koolshare Asuswrt-Merlin adm Changelog
+===========================================
+0.6
+   - fix	add thunder todo
