@@ -2,7 +2,7 @@
 
 # ====================================变量定义====================================
 # 版本号定义
-version="0.6"
+version="0.7"
 
 # 导入skipd数据
 eval `dbus export adm`
@@ -38,7 +38,7 @@ start_adm(){
 # 停止ADM主程序
 stop_adm(){
 	perpctl X adm  >/dev/null 2>&1
-#	killall ADM >/dev/null 2>&1 &
+	killall ADM >/dev/null 2>&1 &
 #	kill -9 `pidof ADM` >/dev/null 2>&1 &
 }
 

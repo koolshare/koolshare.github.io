@@ -24,11 +24,11 @@
         {
             "description": "去广告，看疗效~", 
             "home_url": "Module_adm.asp", 
-            "md5": "142b0edc77cdff8027fbb7fdaba43a36", 
+            "md5": "df4a1af0117b14658cb17937c7685b54", 
             "name": "adm", 
             "tar_url": "adm/adm.tar.gz", 
             "title": "阿呆猫", 
-            "version": "0.6"
+            "version": "0.7"
         }, 
         {
             "name": "v2ray", 
