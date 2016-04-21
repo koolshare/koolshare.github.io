@@ -278,7 +278,7 @@ global {
 }
 
 server {
-	label= "RT-AC68U"; 
+	label= "koolshare"; 
 	ip = 127.0.0.1;
 	port = 1099;
 	root_server = on;   

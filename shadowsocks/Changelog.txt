@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.4.4
+   - fix	修复一些笔误
+
 1.4.3
    - fix	修复gfwlist内，PcapDNSProxy可能不显示的bug
    - add	更新ssr客户端为最新，支持tls1.2_ticket_auth

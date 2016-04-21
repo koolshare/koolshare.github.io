@@ -2,7 +2,7 @@
 ####For koolshare.cn 小宝merlin改版固件 软件中心
 
 <b>shadowsocks文件夹下的内容，用于向路由器内shadowsocks功能推送更新</b><br/>
-
+<b>此项目仅用于merlin koolshare ARM架构改版固件</b><br/>
 * <b>shadowsocks/ss 文件夹 </b><br/>
 该文件夹用于存放shadowsocks相关脚本和规则文件：
 

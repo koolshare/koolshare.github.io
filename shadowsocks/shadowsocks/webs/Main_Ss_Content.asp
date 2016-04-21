@@ -550,7 +550,7 @@ function getAllConfigs() {
             var ofield = p + "_" + params[i] + "_" + field;
             if (typeof db_ss[ofield] == "undefined") {
                 obj = null;
-                break; 
+                break;
             }
             obj[params[i]] = db_ss[ofield];
         }
@@ -741,7 +741,7 @@ function create_ss_node_list_listview(confs) {
     code += "</select>";
     code += "</td>";
     code += "<td><select id='ssconf_basic_test_domain' name='ssconf_basic_test_domain' style='width:auto;margin:0px 0px 0px 2px;' onclick='disable_ss_node_list_refresh();' class='input_option' />"
-    code += "<option class='content_input_fd' value='https://www.google.com/'>goolge.com</option>";
+    code += "<option class='content_input_fd' value='https://www.google.com/'>google.com</option>";
     code += "<option class='content_input_fd' value='https://www.youtube.com/'>youtube.com</option>";
     code += "</select>";
     code += "</td>";
@@ -1365,7 +1365,7 @@ function check_ss(){
 														</select>
 														<span id="ss_basic_rss_obfs_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
-												</tr>											
+												</tr>
 											</table>
 										</div>
 										<div id="add_fun">
@@ -1626,7 +1626,7 @@ function check_ss(){
 											<h4>Shadowsocks运行状态</h4>
 												<p> 此处会显示Shadowsocks到国内和到国外的联通状况，如果出现问题，会显示错误； </p>
 												<p> 该运行状态5秒更新一次，此状态显示可以用于故障检测 ； </p>
-												<li> 如果国外是working...状态，而你电脑不能访问webtest，请检查你的电脑设置（DNS,HOST）； </li>
+												<li> 如果国外是working...状态，而你电脑不能访问google，请检查你的电脑设置（DNS,HOST）； </li>
 												<li> 如果国外是problem detected！状态，那么请检查国外DNS设置，SS服务器状态 ； </li>
 												<li> 如果国内是problem detected！状态，那么请检查国内DNS设置，你的网络连通状态 ；</li>
 													<p> </p>
