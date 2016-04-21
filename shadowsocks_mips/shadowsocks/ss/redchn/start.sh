@@ -307,6 +307,104 @@ if [ "4" == "$ss_redchn_dns_foreign" ]; then
 	echo $(date):
 fi
 
+# Start pdnsd
+if [ "6" == "$ss_redchn_dns_foreign"  ]; then
+		echo $(date): Start pdnsd..
+mkdir -p /koolshare/ss/pdnsd
+if [ "$ss_redchn_pdnsd_method" == "1" ];then
+cat > /koolshare/ss/pdnsd/pdnsd.conf <<EOF
+global {
+	perm_cache=2048;
+	cache_dir="/koolshare/ss/pdnsd/";
+	run_as="nobody";
+	server_port = 1053;
+	server_ip = 127.0.0.1;
+	status_ctl = on;
+	query_method=udp_only;
+	min_ttl=$ss_redchn_pdnsd_server_cache_min;
+	max_ttl=$ss_redchn_pdnsd_server_cache_max;
+	timeout=10;
+}
+
+server {
+	label= "RT-AC68U"; 
+	ip = 127.0.0.1;
+	port = 1099;
+	root_server = on;   
+	uptest = none;    
+}
+EOF
+	if [ "$ss_redchn_pdnsd_udp_server" == "1" ];then
+		echo $(date): Starting DNS2SOCKS \for pdnsd..
+		dns2socks 127.0.0.1:23456 "$ss_redchn_pdnsd_udp_server_dns2socks" 127.0.0.1:1099 > /dev/null 2>&1 &
+		echo $(date): done
+		echo $(date):
+	elif [ "$ss_redchn_pdnsd_udp_server" == "2" ];then
+		echo $(date): Starting dnscrypt-proxy \for pdnsd...
+		dnscrypt-proxy --local-address=127.0.0.1:1099 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_redchn_pdnsd_udp_server_dnscrypt"
+		echo $(date): done
+		echo $(date):
+	elif [ "$ss_redchn_pdnsd_udp_server" == "3" ];then
+		[ "$ss_redchn_pdnsd_udp_server_ss_tunnel" == "1" ] && dns1="208.67.220.220:53"
+		[ "$ss_redchn_pdnsd_udp_server_ss_tunnel" == "2" ] && dns1="8.8.8.8:53"
+		[ "$ss_redchn_pdnsd_udp_server_ss_tunnel" == "3" ] && dns1="8.8.4.4:53"
+		[ "$ss_redchn_pdnsd_udp_server_ss_tunnel" == "4" ] && dns1="$ss_redchn_pdnsd_udp_server_ss_tunnel_user"
+		echo $(date): Starting ss-tunnel \for pdnsd...
+		if [ "$ss_basic_use_rss" == "1" ];then
+			rss-tunnel -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid
+		elif  [ "$ss_basic_use_rss" == "0" ];then
+			if [ "$ss_basic_onetime_auth" == "1" ];then
+				ss-tunnel -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -l 1099 -L "$dns1" -u -A -f /var/run/sstunnel.pid
+			elif [ "$ss_basic_onetime_auth" == "0" ];then
+				ss-tunnel -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid
+			fi
+		fi
+		echo $(date): done
+		echo $(date):
+	fi
+elif [ "$ss_redchn_pdnsd_method" == "2" ];then
+cat > /koolshare/ss/pdnsd/pdnsd.conf <<EOF
+global {
+	perm_cache=2048;
+	cache_dir="/koolshare/ss/pdnsd/";
+	run_as="nobody";
+	server_port = 1053;
+	server_ip = 127.0.0.1;
+	status_ctl = on;
+	query_method=$ss_redchn_pdnsd_method;
+	min_ttl=$ss_redchn_pdnsd_server_cache_min;
+	max_ttl=$ss_redchn_pdnsd_server_cache_max;
+	timeout=10;
+}
+
+server {
+	label= "RT-AC68U"; 
+	ip = $ss_redchn_pdnsd_server_ip;
+	port = $ss_redchn_pdnsd_server_port;
+	root_server = on;   
+	uptest = none;    
+}
+EOF
+
+fi
+
+chmod 644 /koolshare/ss/pdnsd/pdnsd.conf
+CACHEDIR=/koolshare/ss/pdnsd
+CACHE=/koolshare/ss/pdnsd/pdnsd.cache
+USER=nobody
+GROUP=nogroup
+
+if ! test -f "$CACHE"; then
+        dd if=/dev/zero of=/koolshare/ss/pdnsd/pdnsd.cache bs=1 count=4 2> /dev/null
+        chown -R $USER.$GROUP $CACHEDIR 2> /dev/null
+fi
+
+	pdnsd --daemon -c /koolshare/ss/pdnsd/pdnsd.conf -p /var/run/pdnsd.pid
+	echo $(date): done
+	echo $(date):
+fi
+
+
 #---------------------------------------------------------------------------------------------------------
 
 # Start REDSOCKS2
