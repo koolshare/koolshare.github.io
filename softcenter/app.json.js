@@ -45,9 +45,13 @@
             "version": "0.2"
         }, 
         {
-            "name": "xunlei", 
-            "tar_url": "xunlei/xunlei.tar.gz", 
-            "title": "xunlei"
+            "name": "thunder", 
+            "tar_url": "thunder/thunder.tar.gz", 
+            "version": "1.0",
+            "md5": "a862231c9ef985762fdd2881826e7db3",
+            "home_url": "Module_thunder.asp", 
+            "title": "迅雷远程", 
+            "description": "迅雷远程~", 
         }, 
         {
             "description": "迅雷快鸟，不解释~", 

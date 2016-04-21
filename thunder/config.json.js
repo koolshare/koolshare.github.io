@@ -1,7 +1,7 @@
 {
-"version":"0.7",
-"md5":"df4a1af0117b14658cb17937c7685b54",
-"home_url":"Module_adm.asp",
-"title":"阿呆猫",
-"description":"去广告，看疗效~"
+"version":"1.0",
+"md5":"a862231c9ef985762fdd2881826e7db3",
+"home_url":"Module_thunder.asp",
+"title":"迅雷远程",
+"description":"迅雷远程~"
 }
