@@ -18,6 +18,17 @@ getInfo() {
 	fi
 }
 
+# add_cpulimit(){
+# 	if [ "$thunder_cpulimit_enable" = "1" ];then
+# 		pids=`pidof EmbedThunderManager`
+# 		limit=`expr $thunder_cpulimit_value \* 2`
+# 		for pid in $pids
+# 		do 
+# 			cpulimit -p $pid -l 20  >/dev/null 2>&1 &
+# 		done
+# 	fi
+# }
+
 if [ "$thunder_basic_request" = "20" ]; then
 	if [ -e $thunderPath/portal ] && [ -x $thunderPath/portal ]; then
 		dbus set thunder_basic_status="020"
@@ -31,6 +42,7 @@ if [ "$thunder_basic_request" = "20" ]; then
 elif [ "$thunder_basic_request" = "10" ]; then
 	if [ -e $thunderPath/portal ] && [ -x $thunderPath/portal ]; then
 		dbus set thunder_basic_status="010"
+		# add_cpulimit
 		$thunderPath/portal &
 		#dbus event onwanstart_thunder /jffs/scripts/start-thunder.sh
 	else
@@ -56,5 +68,5 @@ else
 fi
 
 
-dbus save thunder
+#dbus save thunder
 

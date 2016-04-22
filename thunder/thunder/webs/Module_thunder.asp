@@ -18,6 +18,7 @@
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/general.js"></script>
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
+<script type="text/javascript" src="/dbconf?p=thunder_&v=<% uptime(); %>"></script>
 <script>
 var checkTime = 0;
 var thunderEnable = 0;
@@ -42,7 +43,7 @@ function submitData(r) {
 		dataType: "text",
 		data: submitDatas,
 		success: function() {
-			setTimeout("getDataStatus()", 200)
+			setTimeout("getDataStatus()", 1000)
 		},
 		error: function() {
 			$("#thunder_info").html("系统不合理异常Ajax:" + r);
@@ -84,11 +85,13 @@ function getDataStatus() {
 				checkTime = 0;
 				setTimeout("submitData('01')", 1000);
 				if(db_thunder_basic['thunder_basic_info'].length!=0) {
-					var infoArr = eval(db_thunder_basic['thunder_basic_info']);
-					if(infoArr[4].length!=0) {
-						$("#thunder_info").html("激活码：" + infoArr[4]);
-					} else if(infoArr[7].length!=0) {
-						$("#thunder_info").html("已绑定账户：" + infoArr[7]);
+					//var infoArr = eval(db_thunder_basic['thunder_basic_info']);
+					var active_code = eval(db_thunder_basic['thunder_basic_info'].split(", ")[4]);
+					var user_name = eval(db_thunder_basic['thunder_basic_info'].split(", ")[7]);
+					if(active_code.length!=0) {
+						$("#thunder_info").html("激活码：" + active_code);
+					} else if(user_name.length!=0) {
+						$("#thunder_info").html("已绑定账户：" + user_name);
 					} else {
 						$("#thunder_info").html("明明都正常启动了，居然获取信息异常");
 					}
@@ -102,6 +105,7 @@ function getDataStatus() {
 function buildIphoneSwitch(x) {
 	thunderEnable = x;
 	$('#radio_enable').iphoneSwitch(x, function() {
+		document.form.submit();
 		thunderEnable = 1;
 		submitData("10");
 	}, function() {
@@ -112,73 +116,106 @@ function buildIphoneSwitch(x) {
 function reload_Soft_Center(){
 location.href = "/Main_Soft_center.asp";
 }
+
+function update_visibility(){
+showhide("thunder_cpulimit_value", (document.form.f_thunder_cpulimit_enable.value !== "0"));
+//showhide("aria2_cpulimit_value", (document.aria2_form.f_aria2_cpulimit_enable.value !== "false"));
+}
+
+function oncheckclick(obj) {
+    if (obj.checked) {
+        document.getElementById("f_" + obj.id).value = "1";
+    } else {
+        document.getElementById("f_" + obj.id).value = "0";
+    }
+}
+
 </script>
 </head>
-<body onload="init();">
-<div id="TopBanner"></div>
-<div id="Loading" class="popup_bg"></div>
-<input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
-<table class="content" align="center" cellpadding="0" cellspacing="0">
-<tr>
-<td width="17">&nbsp;</td>
-<td valign="top" width="202">
-<div id="mainMenu"></div>
-<div id="subMenu"></div>
-</td>
-<td valign="top">
-<div id="tabMenu" class="submenuBlock"></div>
-<table width="98%" border="0" align="left" cellpadding="0" cellspacing="0">
-<tr>
-<td align="left" valign="top">
-<table width="760px" border="0" cellpadding="5" cellspacing="0" bordercolor="#6b8fa3" class="FormTitle" id="FormTitle">
-<tr>
-<td bgcolor="#4D595D" colspan="3" valign="top">
-<div class="formfonttitle">迅雷远程下载插件(v1.0)  -  Xware(2.219.3.310)</div>
-<div style="float:right; width:15px; height:25px;margin-top:10px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
-<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
-<div class="formfontdesc" id="cmdDesc"></div>
-<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
-<tr>
-<tr>
-<th width="20%">启用迅雷远程</th>
-<td>
-<div class="left" style="width:94px; float:left; cursor:pointer;" id="radio_enable"></div>
-</td>
-</tr>
-<tr>
-<th width="20%">信息提示</th>
-<td><span id="thunder_info"></span>
-</td>
-</tr>
-</table>
-<div class="apply_gen">
-<button class="button_gen" onclick="window.open('http://yuancheng.xunlei.com/')">迅雷远程管理页面</button>
-</div>
-<div class="apply_gen"> <img id="loadingIcon" style="display:none;" src="/images/InternetScan.gif"></span> </div>
-<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
-<div class="KoolshareBottom">
-<br/>论坛技术支持： <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a> <br/>
-后台技术支持： <i>Xiaobao</i> <br/>
-Shell, Web by： <a href="http://ganky.vicp.net" target="_blank"><i>Ganky</i></a><br/></div>
-</td>
-</tr>
-</table>
-</td>
-<td width="10" align="center" valign="top"></td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-</td>
-<td width="10" align="center" valign="top"></td>
-</tr>
-</table>
-<div id="footer"></div>
-</body>
-
+	<body onload="init();">
+		<div id="TopBanner"></div>
+		<div id="Loading" class="popup_bg"></div>
+		<iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
+		<form method="post" name="form" action="/applydb.cgi?p=thunder_" target="hidden_frame">
+		<input type="hidden" name="current_page" value="Main_Ss_Content.asp"/>
+		<input type="hidden" name="next_page" value="Main_Ss_Content.asp"/>
+		<input type="hidden" name="group_id" value=""/>
+		<input type="hidden" name="modified" value="0"/>
+		<input type="hidden" name="action_mode" value=""/>
+		<input type="hidden" name="action_script" value=""/>
+		<input type="hidden" name="action_wait" value="25"/>
+		<input type="hidden" name="first_time" value=""/>
+		<input type="hidden" id="ss_basic_enable" name="ss_basic_enable" value="0" />
+		<input type="hidden" id="ss_basic_install_status" name="ss_basic_install_status" value="0" />
+		<input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
+		<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value=""/>
+		<input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
+		<table class="content" align="center" cellpadding="0" cellspacing="0">
+			<tr>
+				<td width="17">&nbsp;</td>
+				<td valign="top" width="202">
+					<div id="mainMenu"></div>
+					<div id="subMenu"></div>
+				</td>
+				<td valign="top">
+					<div id="tabMenu" class="submenuBlock"></div>
+					<table width="98%" border="0" align="left" cellpadding="0" cellspacing="0">
+					<tr>
+						<td align="left" valign="top">
+							<table width="760px" border="0" cellpadding="5" cellspacing="0" bordercolor="#6b8fa3" class="FormTitle" id="FormTitle">
+								<tr>
+									<td bgcolor="#4D595D" colspan="3" valign="top">
+										<div class="formfonttitle">迅雷远程下载插件(v1.0)  -  Xware(2.219.3.310)</div>
+										<div style="float:right; width:15px; height:25px;margin-top:10px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
+										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
+										<div class="formfontdesc" id="cmdDesc"></div>
+											<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
+												<tr>
+													<th width="20%">启用迅雷远程</th>
+													<td>
+														<div class="left" style="width:94px; float:left; cursor:pointer;" id="radio_enable"></div>
+													</td>
+												</tr>
+												<tr>
+													<th width="20%">信息提示</th>
+													<td>
+														<span id="thunder_info"></span>
+													</td>
+												</tr>
+												<!--
+												<tr>
+													<th width="20%">启用CPU占用限制</th>
+                            						<td>
+                            						  <input type="checkbox" id="thunder_cpulimit_enable" onclick="oncheckclick(this)" onchange="update_visibility();" />
+                            						  <input type="hidden" id="f_thunder_cpulimit_enable" name="thunder_cpulimit_enable" value="" />
+                            						  <input style="display: none;" type="text" class="input_ss_table" style="width:auto;" name="thunder_cpulimit_value" value="30" maxlength="40" size="40" id="thunder_cpulimit_value">
+                            						  <small>(范围: 1 - 100; 默认: 30)</small>
+                            						</td>
+												</tr>
+												-->
+ 											</table>
+										<div class="apply_gen">
+											<button class="button_gen" onclick="window.open('http://yuancheng.xunlei.com/')">迅雷远程管理页面</button>
+										</div>
+										<div class="apply_gen"> <img id="loadingIcon" style="display:none;" src="/images/InternetScan.gif"></span> </div>
+										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
+										<div class="KoolshareBottom">
+											<br/>论坛技术支持： <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a> <br/>
+											后台技术支持： <i>Xiaobao</i> <br/>
+											Shell, Web by： <a href="http://ganky.vicp.net" target="_blank"><i>Ganky</i></a><br/>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td width="10" align="center" valign="top"></td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		</form>
+		<div id="footer"></div>
+	</body>
 </html>
 
