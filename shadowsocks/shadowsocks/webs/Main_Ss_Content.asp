@@ -231,6 +231,14 @@ function update_ss_ui(obj) {
 				$j("#ss_basic_rss_obfs").val(obj.ss_basic_rss_obfs);
 			}
 			continue;
+		} 
+		else if (field == "ss_basic_rss_obfs_param") {
+			if (obj[field] == "undefied") {
+				$j("#ss_basic_rss_obfs_param").val("");
+			} else {
+				$j("#ss_basic_rss_obfs_param").val(obj.ss_basic_rss_obfs_param);
+			}
+			continue;
 		} else if (el != null && el.getAttribute("type") == "checkbox") {
 			if (obj[field] != "1") {
 				el.checked = false;
@@ -336,6 +344,7 @@ function update_visibility() {
 	showhide("SSR_name", (ssmode!== "4"));	
 	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode!== "4"));
 	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode!== "4"));
+	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode!== "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple"));
 }
 
 function oncheckclick(obj) {
@@ -413,12 +422,13 @@ function ssconf_node2obj(node_sel) {
             "ss_basic_rss_protocol": "",
             "ss_basic_rss_obfs": "",
             "ss_basic_use_rss": "",
+            "ss_basic_rss_obfs_param": "",
             "ss_basic_onetime_auth": ""
         };
         return obj;
     } else {
         var obj = {};
-        var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
+        var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth"];
         for (var i = 0; i < params.length; i++) {
             obj["ss_basic_" + params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel];
         }
@@ -437,7 +447,7 @@ function ss_node_sel() {
 function ss_node_object(node_sel, obj, isSubmit, end) {
     var ns = {};
     var p = "ssconf_basic";
-    var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
+    var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
         db_ss[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
@@ -469,6 +479,7 @@ function ssform2obj() {
     obj["method"] = $G("ss_basic_method").value;
     obj["rss_protocol"] = $G("ss_basic_rss_protocol").value;
     obj["rss_obfs"] = $G("ss_basic_rss_obfs").value;
+    obj["rss_obfs_param"] = $G("ss_basic_rss_obfs_param").value;
     obj["use_rss"] = $G("hd_ss_basic_use_rss").value;
     obj["onetime_auth"] = $G("ss_basic_onetime_auth").value;
     return obj;
@@ -550,7 +561,7 @@ function getAllConfigs() {
             var ofield = p + "_" + params[i] + "_" + field;
             if (typeof db_ss[ofield] == "undefined") {
                 obj = null;
-                break; 
+                break;
             }
             obj[params[i]] = db_ss[ofield];
         }
@@ -620,7 +631,7 @@ function add_conf_in_table(o) {
     var ns = {};
     var p = "ssconf_basic";
     node_global_max += 1;
-    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
+    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + node_global_max] = $j('#ssconf_table_' + params[i]).val();
     }
@@ -644,7 +655,7 @@ function remove_conf_table(o) {
     var p = "ssconf_basic";
     id = ids[ids.length - 1];
     var ns = {};
-    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "use_rss", "onetime_auth"];
+    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + id] = "";
     }
@@ -741,7 +752,7 @@ function create_ss_node_list_listview(confs) {
     code += "</select>";
     code += "</td>";
     code += "<td><select id='ssconf_basic_test_domain' name='ssconf_basic_test_domain' style='width:auto;margin:0px 0px 0px 2px;' onclick='disable_ss_node_list_refresh();' class='input_option' />"
-    code += "<option class='content_input_fd' value='https://www.google.com/'>goolge.com</option>";
+    code += "<option class='content_input_fd' value='https://www.google.com/'>google.com</option>";
     code += "<option class='content_input_fd' value='https://www.youtube.com/'>youtube.com</option>";
     code += "</select>";
     code += "</td>";
@@ -1365,6 +1376,13 @@ function check_ss(){
 														</select>
 														<span id="ss_basic_rss_obfs_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
+												</tr>
+												<tr id="ss_basic_ticket_tr">
+													<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md" target="_blank"><u>自定义参数 (obfs_param)</u></a></th>
+													<td>
+														<input type="text" name="ss_basic_rss_obfs_param" id="ss_basic_rss_obfs_param" placeholder="cloudflare.com"  class="ssconfig input_ss_table" maxlength="100" value=""></input>
+														<span id="ss_basic_ticket_tr_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px">不知道如何填写请留空</span>
+													</td>
 												</tr>											
 											</table>
 										</div>
@@ -1626,7 +1644,7 @@ function check_ss(){
 											<h4>Shadowsocks运行状态</h4>
 												<p> 此处会显示Shadowsocks到国内和到国外的联通状况，如果出现问题，会显示错误； </p>
 												<p> 该运行状态5秒更新一次，此状态显示可以用于故障检测 ； </p>
-												<li> 如果国外是working...状态，而你电脑不能访问webtest，请检查你的电脑设置（DNS,HOST）； </li>
+												<li> 如果国外是working...状态，而你电脑不能访问google，请检查你的电脑设置（DNS,HOST）； </li>
 												<li> 如果国外是problem detected！状态，那么请检查国外DNS设置，SS服务器状态 ； </li>
 												<li> 如果国内是problem detected！状态，那么请检查国内DNS设置，你的网络连通状态 ；</li>
 													<p> </p>

@@ -58,6 +58,7 @@ cat > /koolshare/ss/ipset/ss.json <<EOF
     "timeout":600,
     "protocol":"$ss_basic_rss_protocol",
     "obfs":"$ss_basic_rss_obfs",
+    "obfs_param":"$ss_basic_rss_obfs_param",
     "method":"$ss_basic_method"
 }
 
@@ -278,7 +279,7 @@ global {
 }
 
 server {
-	label= "RT-AC68U"; 
+	label= "koolshare"; 
 	ip = 127.0.0.1;
 	port = 1099;
 	root_server = on;   
