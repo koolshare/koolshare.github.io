@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=adm
-VERSION=0.7
+VERSION=0.8
 TITLE=阿呆猫
 DESCRIPTION=去广告，看疗效~
 HOME_URL=Module_adm.asp
