@@ -1,5 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks_mips Changelog
 ===========================================
+1.4.5
+   - change	更新shadowsocks-libev客户端到2.4.6
+   - change	更新shadowsocks-libev-ssr客户端为最新，支持tls1.2_ticket_auth自定义参数(不支持多个域名)
+   - fix	增加ssr中http_simple的自定义参数
+   - fix	增加socks5页面的chacha20-ietf加密方式
+
 1.4.4
    - 说明	此次更新仅为ss功能个性更新，并不涉及到SS核心部分(ss二进制文件，规则文件，iptables规则)，基本亮点总结为:
    		1	添加了新的DNS解析软件
