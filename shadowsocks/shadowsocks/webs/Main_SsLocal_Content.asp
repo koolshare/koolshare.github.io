@@ -280,6 +280,7 @@ function disable_input() {
 														<option value="seed-cfb">seed-cfb</option>
 														<option value="salsa20">salsa20</option>
 														<option value="chacha20">chacha20</option>
+														<option value="chacha20-ietf">chacha20-ietf</option>
 													</select>
 												</td>
 											</tr>

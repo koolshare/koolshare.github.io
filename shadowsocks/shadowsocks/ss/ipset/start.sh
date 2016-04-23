@@ -58,6 +58,7 @@ cat > /koolshare/ss/ipset/ss.json <<EOF
     "timeout":600,
     "protocol":"$ss_basic_rss_protocol",
     "obfs":"$ss_basic_rss_obfs",
+    "obfs_param":"$ss_basic_rss_obfs_param",
     "method":"$ss_basic_method"
 }
 
