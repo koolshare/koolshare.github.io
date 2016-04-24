@@ -11,13 +11,13 @@ dbus set softcenter_home_url="http://koolshare.ngrok.wang:5000"
 
 #export softcenter_installing_module
 #export softcenter_installing_tick
-export softcenter_installing_todo=softcenter
+export softcenter_installing_todo=adm
 export softcenter_installing_version=0.5
-export softcenter_installing_md5=bece216cff0dd25702d49e7b5d093f73
-export softcenter_installing_tar_url="softcenter/softcenter.tar.gz"
+export softcenter_installing_md5=153ca93835ad7ac6a8fecd55f5b9bac5
+export softcenter_installing_tar_url="adm/adm.tar.gz"
 dbus save softcenter_installing
 
-sh /koolshare/scripts/app_install.sh
+sh /koolshare/scripts/ks_app_install.sh
 
 rlt=`dbus get softcenter_installing_status`
 if [ "$rlt" != "1" ]; then

@@ -164,6 +164,7 @@
     }
 </style>
 <script>
+//set tabstop=4 set shiftwidth=4 set expandtab
 String.prototype.format = String.prototype.f = function() {
     var s = this,
     i = arguments.length;
@@ -254,13 +255,13 @@ function appPostScript(moduleInfo, script) {
                 data: data,
                 success: function() {
                     var d = new Date();
-            //持续更新 10s
-            currState.lastChangeTick = d/1000 + TIMEOUT_SECONDS;
-            currState.installing = true;
-            showInstallStatus(true);
+                    //持续更新
+                    currState.lastChangeTick = d/1000 + TIMEOUT_SECONDS;
+                    currState.installing = true;
+                    showInstallStatus(true);
                 },
                 error: function() {
-            currState.installing = false;
+                    currState.installing = false;
                     console.log("install error");
                 }
         });
@@ -284,15 +285,15 @@ function appUninstallModule(moduleInfo) {
     // 但是路由内部的绝对时间与浏览器上的时间可能不同步,所以无法使用路由器内的时间. 浏览器的策略是,
     // 安装的时候会有一个同样的计时,若这个超时时间内,安装状态有变化,则更新安装状态.从而可以实时更新安装进程.
     var currState = {"installing": false, "lastChangeTick": 0, "lastStatus": "-1", "module":""};
-    var TIMEOUT_SECONDS = 10;
+    var TIMEOUT_SECONDS = 18;
     // TODO 如何避免实用全局变量?
     var softInfo = null;
     function initInstallStatus() {
     var o = db_softcenter_;
     var base = "softcenter_installing_";
     if(o[base+"status"]) {
-        //状态不是0, 并且不是1,则当前正处于安装状态,实时更新安装信息
-        if((o[base+"status"] != "0") && (o[base+"status"] != "1")) {
+        //状态不是0/1/7,则当前正处于安装状态,实时更新安装信息
+        if((o[base+"status"] != "0") && (o[base+"status"] != "1") && (o[base+"status"] != "7")) {
             var d = new Date();
             currState.lastChangeTick = d/1000 + TIMEOUT_SECONDS;
             currState.lastStatus = o[base+"status"];
@@ -309,32 +310,34 @@ function appUninstallModule(moduleInfo) {
         dataType: "script",
         success: function(xhr) {
             var o = db_softcenter_installing_;
-        var base = "softcenter_installing_";
+            var base = "softcenter_installing_";
+            console.log("status: " + o[base+"status"]);
             if(isInit) {
                 currState.lastStatus = o[base+"status"];
-        }
+            }
             var d = new Date();
             var curr = d.getTime()/1000;
             curr_module = checkField(o, "softcenter_installing_module", "");
             if(o[base+"status"] != currState.lastStatus) {
-        currState.lastStatus = o[base+"status"];
-        showInstallInfo(curr_module, currState.lastStatus);
+                currState.lastStatus = o[base+"status"];
+                showInstallInfo(curr_module, currState.lastStatus);
         
-        // Install ok now
-        if(currState.lastStatus == "1" || currState.lastStatus == "7") {
-            currState.installing = false;
-            setTimeout("window.location.reload()", 1000);
-            return;
-        } else if(currState.lastStatus == "0") {
-            currState.installing = false;
-        }
+                // Install ok now
+                if(currState.lastStatus == "1" || currState.lastStatus == "7") {
+                    currState.installing = false;
+                    setTimeout("window.location.reload()", 1000);
+                    return;
+                } else if(currState.lastStatus == "0") {
+                    currState.installing = false;
+                }
             }
-        if(currState.lastChangeTick > curr) {
-        setTimeout("showInstallStatus()", 1500);
-        } else {
-        currState.installing = false;
-        showInstallInfo("", currState.lastStatus);
-        }
+            if(currState.lastChangeTick > curr) {
+                    setTimeout("showInstallStatus()", 1500);
+            } else {
+                    currState.installing = false;
+                    $("#appInstallInfo").html("等待超时,可尝试手动刷新");
+                    //showInstallInfo("", currState.lastStatus);
+            }
            }
         })
     }
@@ -451,7 +454,7 @@ function softceterInitData(data) {
 		"tar_url": remoteData.tar_url, 
 		"version": remoteData.version
 		};
-	      appPostScript(moduleInfo, "app_install.sh");
+	      appPostScript(moduleInfo, "ks_app_install.sh");
 	 });
     }
 }

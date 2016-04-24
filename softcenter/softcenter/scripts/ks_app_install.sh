@@ -209,7 +209,9 @@ uninstall_module() {
 	printf "%s\n" "$txt" |
 	while IFS= read -r line; do
 		line2="${line%=*}"
-		dbus remove $line2
+		if [ "$line2" != "" ]; then
+			dbus remove $line2
+		fi
 	done
 
 	sleep 3
