@@ -237,7 +237,7 @@ function appPostScript(moduleInfo, script) {
     data["softcenter_home_url"] = "http://koolshare.ngrok.wang:5000";
 
     data["softcenter_installing_todo"] = moduleInfo.name;
-    if(script == "app_install.sh") {
+    if(script == "ks_app_install.sh") {
 	data["softcenter_installing_tar_url"] = moduleInfo.tar_url;
 	data["softcenter_installing_md5"] = moduleInfo.md5;
 	data["softcenter_installing_version"] = moduleInfo.version;
@@ -266,14 +266,14 @@ function appPostScript(moduleInfo, script) {
         });
 }
 function appInstallModule(moduleInfo) {
-    appPostScript(moduleInfo, "app_install.sh");
+    appPostScript(moduleInfo, "ks_app_install.sh");
 }
 function appUninstallModule(moduleInfo) {
 
 	if (!window.confirm('确定卸载吗')) {
 	    return;
 	}
-    appPostScript(moduleInfo, "app_remove.sh");
+    appPostScript(moduleInfo, "ks_app_remove.sh");
 }
 </script>
 <script>

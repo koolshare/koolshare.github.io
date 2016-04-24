@@ -189,6 +189,12 @@ uninstall_module() {
 		exit 3
 	fi
 
+	ENABLED=`dbus get "$softcenter_installing_todo""_enable"`
+	if [ "$ENABLED" = "1" ]; then
+		LOGGER "please disable this module than try again"
+		exit 4
+	fi
+
 	# Just ignore the old installing_module
 	export softcenter_installing_module=$softcenter_installing_todo
 	export softcenter_installing_tick=`date +%s`
@@ -200,7 +206,7 @@ uninstall_module() {
 	dbus remove "softcenter_module_$softcenter_installing_module$INSTALL_SUFFIX"
 
 	txt=`dbus list $softcenter_installing_todo`
-	printf %s "$txt" |
+	printf "%s\n" "$txt" |
 	while IFS= read -r line; do
 		line2="${line%=*}"
 		dbus remove $line2
@@ -225,10 +231,15 @@ start)
 	sh /koolshare/perp/perp.sh start
 	;;
 update)
+	install_module
 	;;
 install)
+	install_module
 	;;
-app_remove)
+ks_app_install)
+	install_module
+	;;
+ks_app_remove)
 	uninstall_module
 	;;
 *)
