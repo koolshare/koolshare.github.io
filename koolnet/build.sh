@@ -5,25 +5,24 @@ VERSION=0.2
 TITLE=P2P 穿透
 DESCRIPTION=点对点建立连接,下载更快
 
-cat version
-rm -f ${MODULE}.tar.gz
-tar -zcvf ${MODULE}.tar.gz $MODULE
-md5value=`md5sum ${MODULE}.tar.gz|tr " " "\n"|sed -n 1p`
-cat > ./version <<EOF
-$VERSION
-$md5value
-EOF
-cat version
+# Check and include base
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+if [ "$MODULE" == "" ]; then
+	echo "module not found"
+	exit 1
+fi
 
-cat > ./config.json.js <<EOF
-{
-"version":"$VERSION",
-"md5":"$md5value",
-"home_url":"$HOME_URL",
-"title":"$TITLE",
-"description":"$DESCRIPTION"
-}
-EOF
+if [ -f "$DIR/$MODULE/$MODULE/install.sh" ]; then
+	echo "install script not found"
+	exit 2
+fi
 
-#update md5
-python ../softcenter/gen_install.py stage2
+# now include build_base.sh
+. $DIR/../softcenter/build_base.sh
+
+# change to module directory
+cd $DIR
+
+# do something here
+
+do_build_result

@@ -1,11 +1,10 @@
 #!/bin/sh
 
-
-MODULE=adm
-VERSION=0.9
-TITLE=阿呆猫
-DESCRIPTION=去广告，看疗效~
-HOME_URL=Module_adm.asp
+MODULE=shadowvpn
+VERSION=2.3
+TITLE=Shadowvpn
+DESCRIPTION=VPN让游戏更畅快
+HOME_URL=Module_shadowvpn.asp
 
 # Check and include base
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
