@@ -99,7 +99,7 @@ install_module() {
 
 	if [ "$RETURN_CODE" != "0" ]; then
 	dbus set softcenter_installing_status="12"
-	sleep 3
+	sleep 2
 
 	dbus set softcenter_installing_status="0"
 	dbus set softcenter_installing_module=""
@@ -113,7 +113,7 @@ install_module() {
 		LOGGER "md5 not equal $md5sum_gz"
 		dbus set softcenter_installing_status="12"
 		rm -f $FNAME
-		sleep 3
+		sleep 2
 
 		dbus set softcenter_installing_status="0"
 		dbus set softcenter_installing_module=""
@@ -144,7 +144,7 @@ install_module() {
 
 		chmod a+x /tmp/$softcenter_installing_module/install.sh
 		sh /tmp/$softcenter_installing_module/install.sh
-		sleep 3
+		sleep 2
 
 		rm -f $FNAME
 		rm -rf "/tmp/$softcenter_installing_module"
@@ -153,6 +153,7 @@ install_module() {
 			dbus set "softcenter_module_$softcenter_installing_module$MD5_SUFFIX=$softcenter_installing_md5"
 			dbus set "softcenter_module_$softcenter_installing_module$VER_SUFFIX=$softcenter_installing_version"
 			dbus set "softcenter_module_$softcenter_installing_module$INSTALL_SUFFIX=1"
+			dbus set "$softcenter_installing_module$VER_SUFFIX=$softcenter_installing_version"
 		else
 			dbus set softcenter_version=$softcenter_installing_version;
 			dbus set softcenter_md5=$softcenter_installing_md5
