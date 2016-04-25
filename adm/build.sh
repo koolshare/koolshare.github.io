@@ -2,7 +2,7 @@
 
 
 MODULE=adm
-VERSION=0.9
+VERSION=1.0
 TITLE=阿呆猫
 DESCRIPTION=去广告，看疗效~
 HOME_URL=Module_adm.asp
