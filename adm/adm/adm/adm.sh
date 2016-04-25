@@ -2,7 +2,7 @@
 
 # ====================================变量定义====================================
 # 版本号定义
-version="1.0"
+version="1.1"
 
 # 导入skipd数据
 eval `dbus export adm`
@@ -113,11 +113,11 @@ del_user_rule(){
 	sed -i '29,$d' /koolshare/adm/user.txt
 }
 
-# 没有版本号时
+# 写入版本号
 write_adm_version(){
-	if [ -z $adm_version ];then
+	#if [ -z $adm_version ];then
 		dbus set adm_version="$version"
-	fi
+	#fi
 }
 
 # 为ADM进程设置更多的连接数

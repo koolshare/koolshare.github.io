@@ -22,14 +22,14 @@
             "title": "shadowvpn"
         }, 
         {
-            "build_date": "2016-04-25_09:16:17", 
+            "build_date": "2016-04-25_11:15:34", 
             "description": "去广告，看疗效~", 
             "home_url": "Module_adm.asp", 
-            "md5": "60f535ea87cfea382d7a6ee22920bfc5", 
+            "md5": "3dfe70e6551f6441e559b2ffde321606", 
             "name": "adm", 
             "tar_url": "adm/adm.tar.gz", 
             "title": "阿呆猫", 
-            "version": "1.0"
+            "version": "1.1"
         }, 
         {
             "description": "迅雷远程~", 

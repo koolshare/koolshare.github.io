@@ -29,7 +29,7 @@
 <script>
 function init() {
 	show_menu();
-	line_show();
+	//line_show();
 	buildswitch();
     version_show();
     setTimeout("version_show()", 3000);
@@ -46,7 +46,7 @@ function init() {
         rrt.checked = true;
     }
 }
-
+/*
 function line_show() {
 	if(typeof db_adm_ != "undefined") {
 		for(var field in db_adm_) {
@@ -90,7 +90,7 @@ function validForm(){
 	}	
 	return true;
 }
-
+*/
 
 function buildswitch(){
 	$j("#switch").click(
@@ -107,11 +107,11 @@ function buildswitch(){
 }
 
 function onSubmitCtrl(o, s) {
-	if(validForm()){
+	//if(validForm()){
 		document.form.action_mode.value = s;
 		showLoading(7);
 		document.form.submit();
-	}
+	//}
 }
 
 function conf2obj(){
@@ -195,7 +195,11 @@ location.href = "/Main_Soft_center.asp";
 										<div style="float:right; width:15px; height:25px;margin-top:10px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 										<div class="formfontdesc" style="padding-top:5px;margin-top:0px;float: left;" id="cmdDesc">使用ADM，你就知道，去广告，原来是如此简单</div>
-										<div id="adm_version_status" style="padding-top:5px;margin-left:30px;margin-top:0px;float: left;"><i>当前版本：<% dbus_get_def("adm_version", "0"); %></i></div>								
+										<div id="adm_version_status" style="padding-top:5px;margin-left:30px;margin-top:0px;float: left;"><i>当前版本：<% dbus_get_def("adm_version", "0"); %></i></div>
+										<div style="padding-top:5px;margin-top:0px;float: left;" id="NoteBox" >
+											<li>由于adm(阿呆猫)路由器版本性能问题，导致可能会出现卡网，因此我们对广告过滤做了限制：adm将专注过滤视频广告。 </li>
+										</div>
+																	
 										<div class="formfontdesc" id="cmdDesc"></div>
 										<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="routing_table">
 											<thead>
@@ -204,9 +208,9 @@ location.href = "/Main_Soft_center.asp";
 											</tr>
 											</thead>
 											<tr id="switch_tr">
-												<td style="background-color: #2F3A3E;width:15%;">
+												<th>
 													<label>开启ADM</label>
-												</td>
+												</th>
 												<td colspan="2">
 													<div class="switch_field" style="display:table-cell">
 														<label for="switch">
@@ -223,13 +227,14 @@ location.href = "/Main_Soft_center.asp";
 												</td>
 											</tr>											
 											<tr id="adm_status">
-												<td style="background-color: #2F3A3E;width:15%;">
+												<th>
 													<label>ADM状态</label>
-												</td>
+												</th>
 												<td>
  													<div id="warn" style="margin-top: 20px;text-align: center;font-size: 18px;margin-bottom: 20px;"class="formfontdesc" id="cmdDesc"></div>
 												</td>										
 											</tr>
+											<!--
 											<tr id="adm_user">
 												<td style="background-color: #2F3A3E;width:15%;">
 													<label>自定义过滤规则</label>
@@ -266,6 +271,7 @@ location.href = "/Main_Soft_center.asp";
 !||kafan.cn$s@<div id="hd">@<div id="hd" style="display:none!important">@' cols="50" rows="20" id="adm_user_txt" name="adm_user_txt" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
 												</td>
 											</tr>
+											-->
                                     	</table>
 										<div class="apply_gen">
 											<button id="cmdBtn" class="button_gen" onclick="onSubmitCtrl(this, ' Refresh ')">提交</button>
