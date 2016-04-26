@@ -2,7 +2,7 @@
 
 # ====================================变量定义====================================
 # 版本号定义
-version="1.1"
+version="1.2"
 
 # 导入skipd数据
 eval `dbus export adm`
@@ -172,7 +172,7 @@ restart)
 	add_process_protect
 	start_adm
 	update_nat_rules
-	service dnsmasq_start
+	service start_dnsmasq
 	add_ss_event
 	write_adm_version
 	add_remove_log
