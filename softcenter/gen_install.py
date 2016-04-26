@@ -56,7 +56,7 @@ def check_subdir(module, path, name, ext, target_path):
             target_file = os.path.join(target_path, os.path.basename(f))
             #print "copy", f, "-->", target_file
             copyfile(f, target_file)
-            if to_remove:
+            if not target_file.endswith(".png") and to_remove:
                 to_remove.write(target_file+"\n")
 
 def check_and_cp():
