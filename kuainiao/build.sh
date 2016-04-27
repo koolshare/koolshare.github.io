@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=kuainiao
-VERSION=0.1.0
+VERSION=0.1.1
 TITLE=讯雷快鸟
 DESCRIPTION=迅雷快鸟，不解释~
 

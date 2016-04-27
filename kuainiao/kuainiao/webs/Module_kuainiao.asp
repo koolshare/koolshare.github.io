@@ -39,7 +39,6 @@
 			//conf2obj();
 			//var conf_ajax = setInterval("conf2obj();", 60000);
 			version_show();
-			write_kuainiao_install_status();
 			check_selected("kuainiao_start", db_kuainiao_.kuainiao_start);
 			check_selected("kuainiao_time", db_kuainiao_.kuainiao_time);
 		}
@@ -135,52 +134,6 @@
 			}
 		}
 
-		function write_kuainiao_install_status(){
-			$.ajax({
-				type: "get",
-				url: "dbconf?p=kuainiao_",
-				dataType: "script",
-				success: function() {
-					if (db_kuainiao_['kuainiao_install_status'] == "1"){
-						$("#kuainiao_install_show").html("<i>正在下载更新...</i>");
-					} else if (db_kuainiao_['kuainiao_install_status'] == "2"){
-						$("#kuainiao_install_show").html("<i>正在安装更新...</i>");
-					} else if (db_kuainiao_['kuainiao_install_status'] == "3"){
-						$("#kuainiao_install_show").html("<i>安装更新成功，5秒后刷新本页!</i>");
-						version_show();
-						refreshpage(3);
-					} else if (db_kuainiao_['kuainiao_install_status'] == "4"){
-					   document.getElementById('updateBtn').style.display = "";
-						$("#kuainiao_install_show").html("<i>下载文件校验不一致！</i>");
-					} else if (db_kuainiao_['kuainiao_install_status'] == "5"){
-						document.getElementById('updateBtn').style.display = "";
-						$("#kuainiao_install_show").html("<i>然而并没有更新！</i>");
-					} else if (db_kuainiao_['kuainiao_install_status'] == "6"){
-			      		$("#kuainiao_install_show").html("<i>正在检查是否有更新~</i>");
-					} else if (db_kuainiao_['kuainiao_install_status'] == "7"){
-					   document.getElementById('updateBtn').style.display = "";
-						$("#kuainiao_install_show").html("<i>检测更新错误！</i>");
-					} else {
-						$("#kuainiao_install_show").html("");
-					}
-					//尝试合并函数
-					var p = "kuainiao_";
-					var params = ["warning","can_upgrade", "run_status", "run_warnning"];
-					for (var i = 0; i < params.length; i++) {
-						if (typeof db_kuainiao_[p + params[i]] !== "undefined") {
-							$("#kuainiao_"+params[i]).val(db_kuainiao_[p + params[i]]);
-						}
-					}
-					update_visibility();
-					//check_selected("kuainiao_start", db_kuainiao_.kuainiao_start);
-					//check_selected("kuainiao_time", db_kuainiao_.kuainiao_time);
-					check_downstream(parseInt(db_kuainiao_.kuainiao_config_downstream), parseInt(db_kuainiao_.kuainiao_config_max_downstream), db_kuainiao_.kuainiao_run_status);
-
-					setTimeout("write_kuainiao_install_status()", 2000);
-				}
-			});
-		}
-
 		function version_show(){
 			if (db_kuainiao_['kuainiao_version'] != db_kuainiao_['kuainiao_version_web'] && db_kuainiao_['kuainiao_version_web'] !== undefined){
 				$("#kuainiao_version_status").html("<i>有新版本：" + db_kuainiao_['kuainiao_version_web']);
@@ -191,12 +144,6 @@
 					$("#kuainiao_version_status").html("<i>当前版本：" + db_kuainiao_['kuainiao_version']);
 				}
 			}
-		}
-		function update_kuainiao(o, s){
-			document.form.kuainiao_update_check.value = 1;
-			document.getElementById('updateBtn').style.display = "none";
-			document.form.action_mode.value = s;
-			document.form.submit();
 		}
 
 		function done_validating(action) {
@@ -222,7 +169,7 @@
 			<input type="hidden" name="action_wait" value="5"/>
 			<input type="hidden" name="first_time" value=""/>
 			<input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
-			<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="config-kuainiao.sh"/>
+			<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="kuainiao_config.sh"/>
 			<input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
 			<input type="hidden" id="kuainiao_config_pwd" name="kuainiao_config_pwd" value='<% dbus_get_def("kuainiao_config_pwd", ""); %>'/>
 			<input type="hidden" id="kuainiao_warning" name="kuainiao_warning" value='<% dbus_get_def("kuainiao_warning", ""); %>'/>
@@ -230,8 +177,6 @@
 			<input type="hidden" id="kuainiao_can_upgrade" name="kuainiao_can_upgrade" value='<% dbus_get_def("kuainiao_can_upgrade", "0"); %>'/>
 			<input type="hidden" id="kuainiao_run_status" name="kuainiao_run_status" value='<% dbus_get_def("kuainiao_run_status", "0"); %>'/>
 			<input type="hidden" id="kuainiao_run_warnning" name="kuainiao_run_warnning" value='<% dbus_get_def("kuainiao_run_warnning", ""); %>'/>
-			<input type="hidden" id="kuainiao_install_status" name="kuainiao_install_status" value="0" />
-			<input type="hidden" id="kuainiao_update_check" name="kuainiao_update_check" value="0" />
 
 			<table class="content" align="center" cellpadding="0" cellspacing="0">
 				<tr>
@@ -275,10 +220,6 @@
 																	</div>
 																</label>
 															</div>
-															<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-35px;float: left;">
-																<button id="updateBtn" class="button_gen" onclick="update_kuainiao(this, ' Refresh ');">检查更新</button>
-															</div>
-															<div id="kuainiao_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>
 													</td>
 													</tr>
 		                                    	</table>
