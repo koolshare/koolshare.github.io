@@ -1,1 +1,1 @@
-/koolshare/adm/adm.sh
+/koolshare/ssserver/ssserver.sh
