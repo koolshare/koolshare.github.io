@@ -1,7 +1,7 @@
 #!/bin/sh
 eval `dbus export speedtest`
 source /koolshare/scripts/base.sh
-version="0.2.1"
+version="0.2.2"
 dbus set speedtest_version=$version
 
 #定义更新相关地址
