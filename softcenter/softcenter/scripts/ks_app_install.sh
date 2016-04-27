@@ -140,6 +140,7 @@ install_module() {
 		fi
 
 		if [ -f /tmp/$softcenter_installing_module/uninstall.sh ]; then
+            chmod 755 /tmp/$softcenter_installing_module/uninstall.sh
 			mv /tmp/$softcenter_installing_module/uninstall.sh /koolshare/scripts/uninstall_$softcenter_installing_todo.sh
 		fi
 
