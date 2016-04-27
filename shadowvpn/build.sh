@@ -3,7 +3,7 @@
 MODULE=shadowvpn
 VERSION=2.3
 TITLE=Shadowvpn
-DESCRIPTION=VPN让游戏更畅快
+DESCRIPTION=SVPN让游戏更畅快
 HOME_URL=Module_shadowvpn.asp
 
 # Check and include base

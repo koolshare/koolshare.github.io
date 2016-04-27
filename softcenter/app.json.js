@@ -21,9 +21,14 @@
             "version": "0.2"
         }, 
         {
+            "build_date": "2016-04-28_01:31:15", 
+            "description": "SVPN让游戏更畅快", 
+            "home_url": "Module_shadowvpn.asp", 
+            "md5": "319f5cfd1ec2e677c3c0e305403078df", 
             "name": "shadowvpn", 
             "tar_url": "shadowvpn/shadowvpn.tar.gz", 
-            "title": "shadowvpn"
+            "title": "Shadowvpn", 
+            "version": "2.3"
         }, 
         {
             "build_date": "2016-04-27_19:43:43", 
