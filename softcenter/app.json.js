@@ -56,11 +56,6 @@
             "version": "1.4"
         }, 
         {
-            "name": "v2ray", 
-            "tar_url": "v2ray/v2ray.tar.gz", 
-            "title": "v2ray"
-        }, 
-        {
             "build_date": "2016-04-27_11:22:01", 
             "description": "点对点建立连接,下载更快", 
             "home_url": "", 
@@ -71,10 +66,10 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2016-04-28_01:07:53", 
+            "build_date": "2016-04-28_01:13:37", 
             "description": "迅雷快鸟，不解释~", 
             "home_url": "", 
-            "md5": "4e63031b121655cd9b7e8f1f07bd27bd", 
+            "md5": "98290226236ea0a5da9950edacdb0ac8", 
             "name": "kuainiao", 
             "tar_url": "kuainiao/kuainiao.tar.gz", 
             "title": "讯雷快鸟", 
