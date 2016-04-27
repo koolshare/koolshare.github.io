@@ -36,14 +36,14 @@
             "version": "1.2"
         }, 
         {
-            "build_date": "2016-04-27_02:05:17", 
+            "build_date": "2016-04-27_20:05:47", 
             "description": "去广告，看疗效~", 
             "home_url": "Module_adm.asp", 
-            "md5": "fe51466e0c42252a315042fdb44adc47", 
+            "md5": "04288e0cfceb8020caa7143bf6f23b30", 
             "name": "adm", 
             "tar_url": "adm/adm.tar.gz", 
             "title": "阿呆猫", 
-            "version": "1.2"
+            "version": "1.3"
         }, 
         {
             "description": "迅雷远程~", 
