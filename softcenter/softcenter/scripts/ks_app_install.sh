@@ -41,6 +41,7 @@ fi
 VER_SUFFIX=_version
 MD5_SUFFIX=_md5
 INSTALL_SUFFIX=_install
+UNINSTALL_SUFFIX=_uninstall
 
 LOGGER() {
 #	echo $1
@@ -221,10 +222,13 @@ uninstall_module() {
 	dbus set softcenter_installing_todo=""
 
 	#try to call uninstall script
-	if [ -f "/koolshare/scripts/uninstall_$softcenter_installing_todo.sh" ]; then
+    if [ -f "/koolshare/scripts/$softcenter_installing_todo$UNINSTALL_SUFFIX.sh"]; then
+        sh /koolshare/scripts/$softcenter_installing_todo$UNINSTALL_SUFFIX.sh
+    elif [ -f "/koolshare/scripts/uninstall_$softcenter_installing_todo.sh" ]; then
 		sh /koolshare/scripts/uninstall_$softcenter_installing_todo.sh
 	else
 		rm -f /koolshare/webs/Module_$softcenter_installing_todo.asp
+        rm -f /koolshare/init.d/S*$softcenter_installing_todo.sh
 	fi
 }
 
