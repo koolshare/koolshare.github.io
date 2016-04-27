@@ -46,13 +46,14 @@
             "version": "1.3"
         }, 
         {
+            "build_date": "2016-04-27_22:16:20", 
             "description": "迅雷远程~", 
             "home_url": "Module_thunder.asp", 
-            "md5": "5aee54e267f2ac5df89d564352a005a9", 
+            "md5": "2701af3eb6c557ba22d7de211db936d7", 
             "name": "thunder", 
             "tar_url": "thunder/thunder.tar.gz", 
             "title": "迅雷远程", 
-            "version": "1.2"
+            "version": "1.3"
         }, 
         {
             "name": "v2ray", 
