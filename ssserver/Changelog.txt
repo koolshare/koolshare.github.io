@@ -1,0 +1,5 @@
+Koolshare Asuswrt-Merlin ss-server Changelog
+===========================================
+1.0
+   - add	add ss-server
+
