@@ -1,13 +1,13 @@
 #!/bin/sh
 
-eval `dbus export tunnel_config`
+eval `dbus export tunnel_`
 source /koolshare/scripts/base.sh
 
 onstart() {
 
 killall tunnel
-txt=$tunnel_config_txt
-en=$tunnel_config_enable
+txt=$tunnel_txt
+en=$tunnel_enable
 
 if [ -z "$txt" ]; then
 echo "not config"

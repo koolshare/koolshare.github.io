@@ -83,13 +83,13 @@ function refreshTunnels(config) {
 function initial(){
 	show_menu();
 
-    $("#radio_webshell_enable").iphoneSwitch($("#tunnel_config_enable").val(), function () {
-    $("#tunnel_config_enable").val("1");
+    $("#radio_webshell_enable").iphoneSwitch($("#tunnel_enable").val(), function () {
+    $("#tunnel_enable").val("1");
     }, function () {
-    $("#tunnel_config_enable").val("0");
+    $("#tunnel_enable").val("0");
     });
 
-    var val = $("#tunnel_config_txt").val();
+    var val = $("#tunnel_txt").val();
     if(val != "") {
         var txt = Base64.decode(val);
         globalConfig = JSON.parse(txt);
@@ -148,7 +148,7 @@ function onSubmitCtrl(o, s) {
 	globalConfig.user = $("#user").val();
 	globalConfig.auth = $("#auth").val();
 	var txt = Base64.encode(JSON.stringify(globalConfig));
-	$("#tunnel_config_txt").val(txt);
+	$("#tunnel_txt").val(txt);
 	showLoading(5);
 	document.form.submit();
 }
@@ -164,7 +164,7 @@ location.href = "/Main_Soft_center.asp";
 <div id="TopBanner"></div>
 <div id="Loading" class="popup_bg"></div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
-<form method="POST" name="form" action="/applydb.cgi?p=tunnel_config_" target="hidden_frame"> 
+<form method="POST" name="form" action="/applydb.cgi?p=tunnel_" target="hidden_frame"> 
 <input type="hidden" name="current_page" value="Module_webshell.asp"/>
 <input type="hidden" name="next_page" value="Main_webshell.asp"/>
 <input type="hidden" name="group_id" value=""/>
@@ -176,8 +176,8 @@ location.href = "/Main_Soft_center.asp";
 <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
 <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="config-tunnel.sh"/>
 <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
-<input type="hidden" id="tunnel_config_txt" name="tunnel_config_txt" value='<% dbus_get_def("tunnel_config_txt", ""); %>'/>
-<input type="hidden" id="tunnel_config_enable" name="tunnel_config_enable" value='<% dbus_get_def("tunnel_config_enable", "0"); %>'/>
+<input type="hidden" id="tunnel_txt" name="tunnel_txt" value='<% dbus_get_def("tunnel_txt", ""); %>'/>
+<input type="hidden" id="tunnel_enable" name="tunnel_enable" value='<% dbus_get_def("tunnel_enable", "0"); %>'/>
 
 <table class="content" align="center" cellpadding="0" cellspacing="0">
 	<tr>
