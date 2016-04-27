@@ -78,12 +78,13 @@
             "title": "v2ray"
         }, 
         {
+            "build_date": "2016-04-27_11:22:01", 
             "description": "点对点建立连接,下载更快", 
             "home_url": "", 
-            "md5": "6e44ab0b7620137928af400b75cdae56", 
+            "md5": "0bdc9228d8f3d9f46f7bad25bf47a04a", 
             "name": "koolnet", 
             "tar_url": "koolnet/koolnet.tar.gz", 
-            "title": "", 
+            "title": "P2P 穿透", 
             "version": "0.2"
         }
     ], 

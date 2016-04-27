@@ -101,24 +101,13 @@ function refreshTunnels(config) {
 function initial(){
 	show_menu();
 
-     var v = $("#koolnet_install_status").val();
-     if(v == "0") {
-	$("#cmdDesc").html("未下载安装,启用则自动下载");
-     } else if(v == "1") {
-	$("#cmdDesc").html("下载中...");
-     } else if(v == "2") {
-	$("#cmdDesc").html("验证码出错");
-     } else if (v == "3") {
-	$("#cmdDesc").html("<a href='http://koolshare.cn/' target='_blank'>查看教程</a>");
-     }
-
-    $("#radio_koolnet_enable").iphoneSwitch($("#koolnet_config_enable").val(), function () {
-    $("#koolnet_config_enable").val("1");
+    $("#radio_koolnet_enable").iphoneSwitch($("#koolnet_enable").val(), function () {
+    $("#koolnet_enable").val("1");
     }, function () {
-    $("#koolnet_config_enable").val("0");
+    $("#koolnet_enable").val("0");
     });
 
-    var val = $("#koolnet_config_txt").val();
+    var val = $("#koolnet_txt").val();
     if(val != "") {
         var txt = Base64.decode(val);
         globalConfig = JSON.parse(txt);
@@ -170,7 +159,7 @@ function onSubmitCtrl(o, s) {
 	globalConfig.user = $("#user").val();
 	globalConfig.password = $("#password").val();
 	var txt = Base64.encode(JSON.stringify(globalConfig));
-	$("#koolnet_config_txt").val(txt);
+	$("#koolnet_txt").val(txt);
 	showLoading(5);
 	document.form.submit();
 }
@@ -186,7 +175,7 @@ location.href = "/Main_Soft_center.asp";
 <div id="TopBanner"></div>
 <div id="Loading" class="popup_bg"></div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
-<form method="post" name="form" action="/applydb.cgi?p=koolnet_config_" target="hidden_frame"> 
+<form method="post" name="form" action="/applydb.cgi?p=koolnet_" target="hidden_frame"> 
 <input type="hidden" name="current_page" value="Module_koolnet.asp"/>
 <input type="hidden" name="next_page" value="Module_koolnet.asp"/>
 <input type="hidden" name="group_id" value=""/>
@@ -198,9 +187,8 @@ location.href = "/Main_Soft_center.asp";
 <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
 <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="config-koolnet.sh"/>
 <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
-<input type="hidden" id="koolnet_config_txt" name="koolnet_config_txt" value='<% dbus_get_def("koolnet_config_txt", ""); %>'/>
-<input type="hidden" id="koolnet_config_enable" name="koolnet_config_enable" value='<% dbus_get_def("koolnet_config_enable", "0"); %>'/>
-<input type="hidden" id="koolnet_install_status" name="koolnet_install_status" value='<% dbus_get_def("koolnet_install_status", "0"); %>'/>
+<input type="hidden" id="koolnet_txt" name="koolnet_txt" value='<% dbus_get_def("koolnet_txt", ""); %>'/>
+<input type="hidden" id="koolnet_enable" name="koolnet_enable" value='<% dbus_get_def("koolnet_enable", "0"); %>'/>
 
 <table class="content" align="center" cellpadding="0" cellspacing="0">
 	<tr>
@@ -221,7 +209,7 @@ location.href = "/Main_Soft_center.asp";
 									<div style="float:left;" class="formfonttitle">软件中心 - P2P穿透</div>
 									<div style="float:right; width:15px; height:25px;margin-top:10px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'" /></div>
 									<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"/></div>
-									<div class="formfontdesc" id="cmdDesc"></div>
+									<div class="formfontdesc" id="cmdDesc"><a href='http://koolshare.cn/' target='_blank'>查看教程</a></div>
 									<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
                                         <tr>
                                             <th width="20%">开启</th>
