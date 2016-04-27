@@ -56,11 +56,6 @@
             "version": "1.4"
         }, 
         {
-            "name": "v2ray", 
-            "tar_url": "v2ray/v2ray.tar.gz", 
-            "title": "v2ray"
-        }, 
-        {
             "build_date": "2016-04-27_11:22:01", 
             "description": "点对点建立连接,下载更快", 
             "home_url": "", 
@@ -81,7 +76,7 @@
             "version": "0.1.0"
         }, 
         {
-            "description": "迅雷不好,试试这个", 
+            "description": "aria2", 
             "home_url": "", 
             "md5": "167ab07a513df44612bd0140084829d3", 
             "name": "aria2", 
