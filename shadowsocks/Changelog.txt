@@ -1,5 +1,22 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.4.8
+   - change	shadowsocks-libev客户端回滚到2.4.5（1.4.4版本内置的版本）
+   		因为1.4.6， 1.4.7的锅太多，我已经伤心，决定回滚到1.4.5，吃掉1.4.6， 1.4.7
+   		再往下更新，这次1.4.8版本回滚shadowsocks-libev到2.4.5主要是因为很多游戏玩家反映的联机问题
+
+1.4.7
+   - fix	被吃掉了
+
+1.4.6
+   - fix	被吃掉了
+
+1.4.5
+   - change	更新shadowsocks-libev客户端到2.4.6
+   - change	更新shadowsocks-libev-ssr客户端为最新，支持tls1.2_ticket_auth自定义参数(不支持多个域名)
+   - fix	增加ssr中http_simple的自定义参数
+   - fix	增加socks5页面的chacha20-ietf加密方式
+
 1.4.5
    - change	更新shadowsocks-libev客户端到2.4.6
    - change	更新shadowsocks-libev-ssr客户端为最新，支持tls1.2_ticket_auth自定义参数(不支持多个域名)
