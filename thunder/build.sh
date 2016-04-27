@@ -2,7 +2,7 @@
 
 
 MODULE=thunder
-VERSION=1.3
+VERSION=1.4
 TITLE=迅雷远程
 DESCRIPTION=迅雷远程~
 HOME_URL=Module_thunder.asp
