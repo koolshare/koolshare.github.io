@@ -103,7 +103,7 @@ function show_address(){ //<% nvram_get("ddns_hostname_x"); %></br><% nvram_get(
 	<input type="hidden" name="action_wait" value="5"/>
 	<input type="hidden" name="first_time" value=""/>
 	<input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
-	<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="ssserver.sh"/>
+	<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="ssserver_config.sh"/>
 	<input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
 	<input type="hidden" id="ssserver_enable" name="ssserver_enable" value='<% dbus_get_def("ssserver_enable", "0"); %>'/>
 	<table class="content" align="center" cellpadding="0" cellspacing="0">

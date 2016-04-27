@@ -22,14 +22,14 @@
             "title": "shadowvpn"
         }, 
         {
-            "build_date": "2016-04-27_09:57:23", 
+            "build_date": "2016-04-27_10:17:33", 
             "description": "ss-server", 
             "home_url": "Module_ssserver.asp", 
-            "md5": "ae4ebb06e426a82482affa4cae774620", 
+            "md5": "1a00ceabc9a3e873b0fd70f9353cc244", 
             "name": "ssserver", 
             "tar_url": "ssserver/ssserver.tar.gz", 
             "title": "ss-server", 
-            "version": "1.0"
+            "version": "1.1"
         }, 
         {
             "build_date": "2016-04-27_02:05:17", 
