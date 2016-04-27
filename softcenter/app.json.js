@@ -1,14 +1,14 @@
 {
     "apps": [
         {
-            "build_date": "2016-04-27_10:35:34", 
+            "build_date": "2016-04-27_23:27:48", 
             "description": "让测速更简单", 
-            "home_url": "", 
-            "md5": "04954b66b829a273040a012866fbf84d", 
+            "home_url": "Module_speedtest.asp", 
+            "md5": "aaa7851a6d24dc91a8493d009e31e664", 
             "name": "speedtest", 
             "tar_url": "speedtest/speedtest.tar.gz", 
             "title": "网络测速", 
-            "version": "0.2.0"
+            "version": "0.2.1"
         }, 
         {
             "build_date": "2016-04-27_12:07:46", 

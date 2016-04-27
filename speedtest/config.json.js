@@ -1,8 +1,8 @@
 {
-"version":"0.2.0",
-"md5":"04954b66b829a273040a012866fbf84d",
-"home_url":"",
+"version":"0.2.1",
+"md5":"aaa7851a6d24dc91a8493d009e31e664",
+"home_url":"Module_speedtest.asp",
 "title":"网络测速",
 "description":"让测速更简单",
-"build_date":"2016-04-27_10:35:34"
+"build_date":"2016-04-27_23:27:48"
 }

@@ -1,9 +1,11 @@
 #!/bin/sh
 
+
 MODULE=speedtest
-VERSION=0.2.0
+VERSION=0.2.1
 TITLE=网络测速
 DESCRIPTION=让测速更简单
+HOME_URL=Module_speedtest.asp
 
 # Check and include base
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

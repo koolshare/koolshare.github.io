@@ -230,13 +230,6 @@
                 background-color:#4D595D;
                 margin-top: 20px;
             }
-            .dashboard-info{
-                background:lightyellow;
-                line-height: 26px;
-                color:#7B6303;
-                padding: 0px 20px;
-                font-size: 12px;
-            }
         </style>
     </head>
     <body onload="init();">
@@ -253,10 +246,8 @@
             <input type="hidden" name="action_wait" value="5"/>
             <input type="hidden" name="first_time" value=""/>
             <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
-            <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="speedtest.sh"/>
+            <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="speedtest_config.sh"/>
             <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
-            <input type="hidden" id="speedtest_install_status" name="speedtest_install_status" value="0" />
-            <input type="hidden" id="speedtest_update_check" name="speedtest_update_check" value="0" />
 
             <table class="content" align="center" cellpadding="0" cellspacing="0">
                 <tr>
@@ -280,7 +271,6 @@
 					                                <a class="return-button" href="/Main_Soft_center.asp">返回软件中心</a>
 					                            </h2>
 					                            <div class="speedtest-dashboard">
-					                                <div class="dashboard-info" id="speedtest_install_show"></div>
 					                                <div class="dashboard-content">
 					                                    <div class="graph">
 					                                        <h4 class="desc">下载速度</h4>
@@ -300,7 +290,6 @@
 					                            </div>
 					                            <div class="opt-bar">
 					                                <center>
-					                                    <button id="updateBtn" class="button_gen" onclick="updateSpeed(this, ' Refresh ');">检查更新</button>
 					                                    <button id="cmdBtn" class="button_gen" onclick="onSubmitCtrl(this, ' Refresh ')">开始测速</button>
 					                                </center>
 					                            </div>
@@ -327,14 +316,10 @@
                 show_menu();
                 var testStatus = <% dbus_get_def("speedtest_status", "0"); %>;
                 if (+testStatus === 1) {
-                    $("#updateBtn").attr("disabled", true);
-                    $("#updateBtn").hide();
                     $("#cmdBtn").attr("disabled", true);
                     $("#cmdBtn").html("测速中...");
                     TestModule.polling(function () {
                         $("#cmdBtn").attr("disabled", false);
-                        $("#updateBtn").attr("disabled", false);
-                        $("#updateBtn").show();
                         $("#cmdBtn").html("开始测速");
                     });
                 } else {
@@ -459,120 +444,6 @@
                 };
             })();
 
-            /* 更新插件模块 */
-            var UpdateModule = (function () {
-                var timer;
-                var freq = 2 * 1000;
-
-                //状态码和提示信息配置，方便以后修改和i18n
-                var STATUS = {
-                    DOWNLOADING: { code: 1, info: "正在下载更新..." },
-                    INSTALLING : { code: 2, info: "正在安装更新..." },
-                    INSTALLDONE: { code: 3, info: "安装更新成功，5秒后刷新本页!" },
-                    VERIFYERROR: { code: 4, info: "下载文件校验不一致！" },
-                    ISNEWEST   : { code: 5, info: "然而并没有更新！" },
-                    CHECKUPDATE: { code: 6, info: "正在检查是否有更新~" },
-                    CHECKERROR : { code: 7, info: "检测更新错误！" },
-                };
-
-                var el = $("#speedtest_install_show");
-                var updateBtn = $("#updateBtn");
-
-
-                var hideInfoTimer;
-                function showInfo(msg, freq) {
-                    hideInfoTimer && clearTimeout(hideInfoTimer);
-                    el.html(msg).show();
-                    if (freq) {
-                        hideInfoTimer = setTimeout(function () {
-                            el.hide();
-                        }, freq);
-                    }
-                }
-
-                function loopFn(oncomplete) {
-                    $.ajax({
-                            type: "get",
-                            url: "dbconf",
-                            data: {
-                                p: "speedtest_"
-                            },
-                            dataType: "script"
-                        })
-                        .done(function() {
-                            switch (+db_speedtest_["speedtest_install_status"]) {
-                                case STATUS.DOWNLOADING.code:
-                                    showInfo(STATUS.DOWNLOADING.info);
-                                    break;
-                                case STATUS.INSTALLING.code:
-                                    showInfo(STATUS.INSTALLING.info);
-                                    break;
-                                case STATUS.CHECKUPDATE.code:
-                                    showInfo(STATUS.CHECKUPDATE.info);
-                                    break;
-                                case STATUS.INSTALLDONE.code:
-                                    oncomplete();
-                                    clearInterval(timer);
-                                    timer = null;
-                                    showInfo(STATUS.INSTALLDONE.info, 3000);
-                                    version_show();
-                                    refreshpage(STATUS.INSTALLDONE.code);
-                                    break;
-                                case STATUS.VERIFYERROR.code:
-                                    oncomplete();
-                                    clearInterval(timer);
-                                    timer = null;
-                                    updateBtn.show();
-                                    showInfo(STATUS.VERIFYERROR.info, 3000);
-                                    break;
-                                case STATUS.ISNEWEST.code:
-                                    oncomplete();
-                                    clearInterval(timer);
-                                    timer = null;
-                                    updateBtn.show();
-                                    showInfo(STATUS.ISNEWEST.info, 3000);
-                                    break;
-                                case STATUS.CHECKERROR.code:
-                                    oncomplete();
-                                    clearInterval(timer);
-                                    timer = null;
-                                    showInfo(STATUS.CHECKERROR.info, 3000);
-                                    break;
-                                default:
-                                    clearInterval(timer);
-                                    timer = null;
-                                    oncomplete();
-                                    showInfo("");
-                                    break;
-                            }
-
-                            // //尝试合并函数
-                            // var p = "speedtest_";
-
-                            // $.each(["warning","can_upgrade", "run_status", "run_warnning"], function (i, key) {
-                            //     key = p + key;
-                            //     if ("undefined" !== typeof db_speedtest_[key]) {
-                            //         $("#" + key).val(db_speedtest_[key]);
-                            //     }
-                            // });
-                        });
-                }
-
-                return {
-                    polling: function (oncomplete) {
-                        if (!timer) {
-                            //一般第一次不可能就结束了，所以这里偷懒了，没有判断第一次是否成功才去做下面的操作
-                            setTimeout(function () {
-                                loopFn(oncomplete);
-                            }, 1000);
-                            timer = setInterval(function () {
-                                loopFn(oncomplete);
-                            }, freq);
-                        }
-                    }
-                };
-            })();
-
             //开始测速
             function onSubmitCtrl(o, s) {
                 document.form.action_mode.value = s;
@@ -590,22 +461,6 @@
                 });
             }
 
-            //开始更新
-            function updateSpeed(o, s){
-                document.form.speedtest_update_check.value = 1;
-                $("#updateBtn").attr("disabled", true);
-                $("#cmdBtn").attr("disabled", true);
-                $("#cmdBtn").hide();
-                $("#updateBtn").html('检查中...');
-                document.form.action_mode.value = s;
-                document.form.submit();
-                UpdateModule.polling(function () {
-                    $("#cmdBtn").attr("disabled", false);
-                    $("#updateBtn").attr("disabled", false);
-                    $("#cmdBtn").show();
-                    $("#updateBtn").html('检查更新');
-                });
-            }
 
 			function done_validating(action) {
 				return true;
