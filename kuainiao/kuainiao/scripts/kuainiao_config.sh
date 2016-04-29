@@ -1,7 +1,7 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.2.1"
+version="0.2.3"
 kuainiaocru=$(cru l | grep "kuainiao")
 startkuainiao=$(ls -l /koolshare/init.d/ | grep "S80Kuainiao")
 

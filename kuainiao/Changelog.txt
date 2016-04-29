@@ -1,5 +1,11 @@
 Koolshare Asuswrt-Merlin KuaiNiao Changelog
 ===========================================
+0.2.3
+	-fix	fix installation issue
+
+0.2.2
+	-fix	adapt to new softerware center
+
 0.2.1 ( 11/04/2016 17:07:36 )
 	- fix	双WAN模式下获取网关地址的错误
 	- change	修复默认的MAC地址获取逻辑，防止迅雷检查异常

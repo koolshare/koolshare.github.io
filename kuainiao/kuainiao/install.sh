@@ -4,7 +4,7 @@ if [ ! -d /koolshare/kuainiao ]; then
    mkdir -p /koolshare/kuainiao
 fi
 
-cp -rf /tmp/kuainiao/scripts/config-kuainiao.sh /koolshare/scripts/
+cp -rf /tmp/kuainiao/scripts/* /koolshare/scripts/
 cp -rf /tmp/kuainiao/webs/* /koolshare/webs/
 cp -rf /tmp/kuainiao/res/* /koolshare/res/
 cp -rf /tmp/kuainiao/scripts/kuainiao.sh /koolshare/kuainiao/
