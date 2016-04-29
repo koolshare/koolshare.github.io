@@ -285,7 +285,7 @@
       }
       function version_check(){
     $.ajax({
-        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/aria2/config.json.js',
+        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/aria2/config.json.js',
         type: 'GET',
         success: function(res) {
             var txt = jQuery(res.responseText).text();
