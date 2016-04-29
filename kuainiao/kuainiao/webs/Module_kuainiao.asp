@@ -227,7 +227,6 @@
 																		</div>
 																	</div>
 																</label>
-															</div>
 															<div id="kuainiao_version_status" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("kuainiao_version", "未知"); %></i>
 															</div>
 															<div id="kuainiao_install_show" style="padding-top:5px;margin-left:330px;margin-top:-25px;">
