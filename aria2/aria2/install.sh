@@ -4,7 +4,7 @@ cp -rf /tmp/aria2/aria2 /koolshare/
 cp -rf /tmp/aria2/res/* /koolshare/res/
 cp -rf /tmp/aria2/scripts/* /koolshare/scripts/
 cp -rf /tmp/aria2/webs/* /koolshare/webs/
-cp -rf /tmp/aria2/www/* /koolshare/
+cp -rf /tmp/aria2/www /koolshare/
 
 cd /
 rm -rf /tmp/aria2* >/dev/null 2>&1
