@@ -283,25 +283,32 @@
           update_visibility();
         }
       }
-      function version_check(){
-    $.ajax({
+
+function version_check(){
+	$j("#aria2_version_status").html("<i>当前版本：" + db_adm_['aria2_version']);
+
+    $j.ajax({
         url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/aria2/config.json.js',
         type: 'GET',
         success: function(res) {
-            var txt = jQuery(res.responseText).text();
+            var txt = $j(res.responseText).text();
             if(typeof(txt) != "undefined" && txt.length > 0) {
-                var obj = jQuery.parseJSON(txt.replace("'", "\""));
-
-    if(obj.version != db_aria2_['aria2_version']) {
-      $("#aria2_version_status").html("<i>有新版本：" + db_aria2_['aria2_version_web']);
-    } else {
-      $("#aria2_version_status").html("<i>当前版本：" + db_aria2_['aria2_version']);
-    }
+                //console.log(txt);
+                var obj = $j.parseJSON(txt.replace("'", "\""));
+		$j("#aria2_version_status").html("<i>当前版本：" + obj.version);
+		if(obj.version != db_adm_["adm_version"]) {
+			$j("#aria2_version_status").html("<i>有新版本：" + obj.version);
+		}
             }
         }
     });
+}
 
-      }
+
+
+
+
+
       function valid_custom(){
         var s = document.getElementById('aria2_custom').value;
         var ins = ["/enable-rpc=/", "/rpc-allow-origin-all=/", "/rpc-listen-all=/"];
