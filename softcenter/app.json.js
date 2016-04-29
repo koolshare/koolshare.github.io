@@ -71,14 +71,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2016-04-29_21:36:48", 
+            "build_date": "2016-04-29_21:42:40", 
             "description": "迅雷快鸟，不解释~", 
             "home_url": "", 
-            "md5": "790a7e322c98b8b1d0566f92bc0a5e00", 
+            "md5": "8746a8a882365862c6bd80c2246680c3", 
             "name": "kuainiao", 
             "tar_url": "kuainiao/kuainiao.tar.gz", 
             "title": "讯雷快鸟", 
-            "version": "0.2.1"
+            "version": "0.2.2"
         }, 
         {
             "description": "迅雷不好,试试这个", 
