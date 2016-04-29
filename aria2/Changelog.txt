@@ -1,1 +1,4 @@
-TODO
+Koolshare Asuswrt-Merlin adm Changelog
+===========================================
+1.6.0
+	-add	adapt aria2 to new softcenter

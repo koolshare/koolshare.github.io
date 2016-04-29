@@ -81,13 +81,14 @@
             "version": "0.2.4"
         }, 
         {
-            "description": "迅雷不好,试试这个", 
-            "home_url": "", 
-            "md5": "167ab07a513df44612bd0140084829d3", 
+            "build_date": "2016-04-30_02:44:34", 
+            "description": "linux下载利器", 
+            "home_url": "Module_aria2.asp", 
+            "md5": "10d5382469c5dd2d19f2dbee0fd420b7", 
             "name": "aria2", 
             "tar_url": "aria2/aria2.tar.gz", 
-            "title": "", 
-            "version": "1.5.8"
+            "title": "Aria2", 
+            "version": "1.6.0"
         }, 
         {
             "build_date": "2016-04-29_15:33:35", 
