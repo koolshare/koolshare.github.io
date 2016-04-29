@@ -82,7 +82,7 @@ start_aria2(){
 start_lighttpd(){
 	# create tmp folder for lighttpd
 	mkdir -p /tmp/lighttpd
-	/usr/sbin/lighttpd -f /koolshare/www/lighttpd.conf
+	/usr/sbin/lighttpd -m /usr/lib -f /koolshare/www/lighttpd.conf
 	lighttpd_run=$(ps|grep lighttpd|grep -v grep)
 	if [ ! -z "$lighttpd_run" ];then
 		echo lighttpd start success!
@@ -241,7 +241,6 @@ restart)
 	open_port
 	add_cpulimit
 	;;
-*)
 default)
 	load_default
 	;;
