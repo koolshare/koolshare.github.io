@@ -105,8 +105,8 @@ for (var i = 0; i < params.length; i++) {
 
 }
 function update_visibility() {
-showhide("dualwanpolicy_wan1_custom", (document.form.dualwanpolicy_wan1.value == "6"));
-showhide("dualwanpolicy_wan2_custom", (document.form.dualwanpolicy_wan2.value == "6"));
+showhide("dualwanpolicy_wan1_custom", (document.form.dualwanpolicy_wan1.value == "2"));
+showhide("dualwanpolicy_wan2_custom", (document.form.dualwanpolicy_wan2.value == "5"));
 }
 function reload_Soft_Center(){
 location.href = "/Main_Soft_center.asp";
@@ -132,12 +132,23 @@ function setIframeSrc() {
 setTimeout(setIframeSrc, 5000);	
 
 function version_show(){
-	if (db_dualwanpolicy_['dualwanpolicy_version_local'] != db_dualwanpolicy_['dualwanpolicy_version_web'] && db_dualwanpolicy_['dualwanpolicy_version_web'] !== "undefined"){
-		//$j("#dualwan_version_show").html("<i>有新版本：" + db_dualwanpolicy_['dualwanpolicy_version_web']);
-		$("#dualwan_version_show").html("<i>当前版本：" + db_dualwanpolicy_['dualwanpolicy_version_local']);
-	} else {
-		$("#dualwan_version_show").html("<i>当前版本：" + db_dualwanpolicy_['dualwanpolicy_version_local']);
-	}
+	$j("#dualwan_version_status").html("<i>当前版本：" + db_dualwanpolicy_['dualwan_version']);
+
+    $j.ajax({
+        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/dualwan/config.json.js',
+        type: 'GET',
+        success: function(res) {
+            var txt = $j(res.responseText).text();
+            if(typeof(txt) != "undefined" && txt.length > 0) {
+                //console.log(txt);
+                var obj = $j.parseJSON(txt.replace("'", "\""));
+		$j("#dualwan_version_status").html("<i>当前版本：" + obj.version);
+		if(obj.version != db_dualwanpolicy_["dualwan_version"]) {
+			$j("#dualwan_version_status").html("<i>有新版本：" + obj.version);
+		}
+            }
+        }
+    });
 }
 
 
@@ -156,8 +167,6 @@ function version_show(){
 <input type="hidden" name="action_script" value=""/>
 <input type="hidden" name="action_wait" value="5"/>
 <input type="hidden" name="first_time" value=""/>
-<input type="hidden" id="dualwanpolicy_install_status" name="dualwanpolicy_install_status" value="0" />
-<input type="hidden" id="dualwanpolicy_update_check" name="dualwanpolicy_update_check" value="0" />
 <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
 <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="dualwan_policy.sh"/>
 <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
@@ -203,9 +212,9 @@ function version_show(){
 </div>
 </label>
 </div>
-<div id="dualwan_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("dualwanpolicy_version_local", "未知"); %></i></div>
+<div id="dualwan_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("dualwan_version", "未知"); %></i></div>
 <div id="dualwanpolicy_install_show" style="padding-top:5px;margin-left:330px;margin-top:-25px;"></div>
-<a style="margin-left: 318px;" href="https://github.com/koolshare/koolshare.github.io/blob/master/dualwan/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
+<a style="margin-left: 318px;" href="https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/dualwan/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
 </td>
 </tr>
 </table>
