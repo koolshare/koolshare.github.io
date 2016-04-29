@@ -1,9 +1,9 @@
 #!/bin/sh
 
 MODULE=kuainiao
-VERSION=0.2.3
+VERSION=0.2.4
 TITLE=讯雷快鸟
-DESCRIPTION=迅雷快鸟，不解释~
+DESCRIPTION=迅雷快鸟，为上网加速而生~
 
 # Check and include base
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

@@ -1,7 +1,7 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.2.3"
+version="0.2.4"
 kuainiaocru=$(cru l | grep "kuainiao")
 startkuainiao=$(ls -l /koolshare/init.d/ | grep "S80Kuainiao")
 
@@ -33,10 +33,6 @@ else
 	HTTP_REQ="wget --no-check-certificate -O - "
 	POST_ARG="--post-data="
 fi
-
-#定义更新相关地址
-UPDATE_VERSION_URL="https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/kuainiao/version"
-UPDATE_TAR_URL="https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/kuainiao/kuainiao.tar.gz"
 
 #数据mock
 uname=$kuainiao_config_uname
@@ -215,72 +211,6 @@ stop_kuainiao(){
 	dbus remove kuainiao_run_session
 }
 
-#检查版本
-check_version(){
-	kuainiao_version_web1=$(curl -s $UPDATE_VERSION_URL | sed -n 1p)
-
-	if [ ! -z $kuainiao_version_web1 ];then
-		dbus set kuainiao_version_web=$kuainiao_version_web1
-	fi
-}
-
-##更新插件
-
-if [ "$kuainiao_update_check" == "1" ];then
-
-	# kuainiao_install_status=	#
-	# kuainiao_install_status=0	#
-	# kuainiao_install_status=1	#正在下载更新......
-	# kuainiao_install_status=2	#正在安装更新...
-	# kuainiao_install_status=3	#安装更新成功，5秒后刷新本页！
-	# kuainiao_install_status=4	#下载文件校验不一致！
-	# kuainiao_install_status=5	#然而并没有更新！
-	# kuainiao_install_status=6	#正在检查是否有更新~
-	# kuainiao_install_status=7	#检测更新错误！
-
-	dbus set kuainiao_install_status="6"
-	kuainiao_version_web1=`curl -s $UPDATE_VERSION_URL | sed -n 1p`
-	if [ ! -z $kuainiao_version_web1 ];then
-		dbus set kuainiao_version_web=$kuainiao_version_web1
-		cmp=`versioncmp $kuainiao_version_web1 $version`
-		if [ "$cmp" = "-1" ];then
-			dbus set kuainiao_install_status="1"
-			cd /tmp
-			md5_web1=`curl -s $UPDATE_VERSION_URL | sed -n 2p`
-			wget --no-check-certificate --tries=1 --timeout=15 $UPDATE_TAR_URL
-			md5sum_gz=`md5sum /tmp/kuainiao.tar.gz | sed 's/ /\n/g'| sed -n 1p`
-			if [ "$md5sum_gz" != "$md5_web1" ]; then
-				dbus set kuainiao_install_status="4"
-				rm -rf /tmp/kuainiao* >/dev/null 2>&1
-				sleep 5
-				dbus set kuainiao_install_status="0"
-			else
-				stop_kuainiao
-				tar -zxf kuainiao.tar.gz
-				dbus set kuainiao_enable="0"
-				dbus set kuainiao_install_status="2"
-				chmod a+x /tmp/kuainiao/update.sh
-				sh /tmp/kuainiao/update.sh
-				sleep 2
-				dbus set kuainiao_install_status="3"
-				dbus set kuainiao_version=$kuainiao_version_web1
-				sleep 2
-				dbus set kuainiao_install_status="0"
-			fi
-		else
-			dbus set kuainiao_install_status="5"
-			sleep 2
-			dbus set kuainiao_install_status="0"
-		fi
-	else
-		dbus set kuainiao_install_status="7"
-		sleep 5
-		dbus set kuainiao_install_status="0"
-	fi
-	dbus set kuainiao_update_check="0"
-	exit 0
-fi
-
 ##主逻辑
 #执行初始化
 dbus set kuainiao_warning=""
@@ -300,8 +230,6 @@ if [ "$kuainiao_enable" == "1" ]; then
 		add_kuainiao_cru
 		#开机执行
 		auto_start
-		#检查下插件版本
-		check_version
 		#开始初始化执行
 		sleep $kuainiao_time
 		#判断cru脚本是否正在执行

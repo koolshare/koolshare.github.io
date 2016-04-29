@@ -142,17 +142,24 @@
 				}
 			}
 		}
-
+		
 		function version_show(){
-			if (db_kuainiao_['kuainiao_version'] != db_kuainiao_['kuainiao_version_web'] && db_kuainiao_['kuainiao_version_web'] !== undefined){
-				$("#kuainiao_version_status").html("<i>有新版本：" + db_kuainiao_['kuainiao_version_web']);
-			} else {
-				if (db_kuainiao_['kuainiao_version'] == undefined) {
-					$("#kuainiao_version_status").html("<i>当前版本：");
-				} else {
-					$("#kuainiao_version_status").html("<i>当前版本：" + db_kuainiao_['kuainiao_version']);
+			$j("#kuainiao_version_status").html("<i>当前版本：" + db_adm_['adm_version']);
+		    $j.ajax({
+		        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/kuainiao/config.json.js',
+		        type: 'GET',
+		        success: function(res) {
+		            var txt = $j(res.responseText).text();
+		            if(typeof(txt) != "undefined" && txt.length > 0) {
+		                //console.log(txt);
+		                var obj = $j.parseJSON(txt.replace("'", "\""));
+				$j("#kuainiao_version_status").html("<i>当前版本：" + obj.version);
+				if(obj.version != db_adm_["adm_version"]) {
+					$j("#kuainiao_version_status").html("<i>有新版本：" + obj.version);
 				}
-			}
+		            }
+		        }
+		    });
 		}
 
 		function done_validating(action) {
@@ -227,9 +234,9 @@
 																		</div>
 																	</div>
 																</label>
-															<div id="kuainiao_version_status" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("kuainiao_version", "未知"); %></i>
 															</div>
-															<div id="kuainiao_install_show" style="padding-top:5px;margin-left:330px;margin-top:-25px;">
+															<div id="kuainiao_version_status" style="padding-top:5px;margin-left:230px;margin-top:0px;">
+																<i>当前版本：<% dbus_get_def("kuainiao_version", "未知"); %></i>
 															</div>
 													</td>
 													</tr>
