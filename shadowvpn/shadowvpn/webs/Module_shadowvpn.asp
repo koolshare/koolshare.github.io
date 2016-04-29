@@ -28,7 +28,6 @@ function init() {
 	buildswitch();
     conf2obj();
     version_show();
-    write_shadowvpn_install_status();
     var ss_mode = '<% nvram_get("ss_mode"); %>';
 	if(ss_mode != "0" && ss_mode != ''){
 		document.getElementById('ShadowVPN_detail_table').style.display = "none";
@@ -95,38 +94,6 @@ function conf2obj(){
 	}
 	});
 }
-function write_shadowvpn_install_status(){
-	$.ajax({
-		type: "get",
-		url: "dbconf?p=shadowvpn_",
-		dataType: "script",
-		success: function() {
-		if (db_shadowvpn_['shadowvpn_install_status'] == "1"){
-			$("#shadowvpn_install_show").html("<i>正在下载更新...</i>");
-		} else if (db_shadowvpn_['shadowvpn_install_status'] == "2"){
-			$("#shadowvpn_install_show").html("<i>正在安装更新...</i>");
-		} else if (db_shadowvpn_['shadowvpn_install_status'] == "3"){
-			$("#shadowvpn_install_show").html("<i>安装更新成功，5秒后刷新本页,你需要重新开启shadowvpn</i>");
-			version_show();
-			refreshpage(3);
-		} else if (db_shadowvpn_['shadowvpn_install_status'] == "4"){
-		   document.getElementById('updateBtn').style.display = "";
-			$("#shadowvpn_install_show").html("<i>下载文件校验不一致！</i>");
-		} else if (db_shadowvpn_['shadowvpn_install_status'] == "5"){
-			document.getElementById('updateBtn').style.display = "";
-			$("#shadowvpn_install_show").html("<i>然而并没有更新！</i>");
-		} else if (db_shadowvpn_['shadowvpn_install_status'] == "6"){
-      $("#shadowvpn_install_show").html("<i>正在检查是否有更新~</i>");
-		} else if (db_shadowvpn_['shadowvpn_install_status'] == "7"){
-		   document.getElementById('updateBtn').style.display = "";
-			$("#shadowvpn_install_show").html("<i>检测更新错误！</i>");
-		} else {
-			$("#shadowvpn_install_show").html("");
-		}
-		setTimeout("write_shadowvpn_install_status()", 1000);
-		}
-		});
-	}
 
 function version_show(){
 	if (db_shadowvpn_['shadowvpn_version'] != db_shadowvpn_['shadowvpn_version_web'] && db_shadowvpn_['shadowvpn_version_web'] !== "undefined"){
@@ -135,19 +102,7 @@ function version_show(){
 		$("#shadowvpn_version_status").html("<i>当前版本：" + db_shadowvpn_['shadowvpn_version']);
 	}
 }
-function update_shadowvpn(o, s){
-	document.form.shadowvpn_update_check.value = 1;
-	//document.form.shadowvpn_enable.value = 0;
-	document.getElementById('updateBtn').style.display = "none";
-	document.form.action_mode.value = s;
-	document.form.submit();
-	//update_visibility();
-	//write_shadowvpn_install_status();
-}
 
-function update_visibility() {
-    showhide("shadowvpn_file", (document.form.shadowvpn_mode.value == "1"));
-}
 
 function reload_Soft_Center(){
 location.href = "/Main_Soft_center.asp";
@@ -170,8 +125,6 @@ location.href = "/Main_Soft_center.asp";
 	<input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
 	<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="shadowvpn.sh"/>
 	<input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
-	<input type="hidden" id="shadowvpn_install_status" name="shadowvpn_install_status" value="0" />
-	<input type="hidden" id="shadowvpn_update_check" name="shadowvpn_update_check" value="0" />
 	<input type="hidden" id="shadowvpn_poweron" name="shadowvpn_poweron" value="1" />
 	<input type="hidden" id="shadowvpn_enable" name="shadowvpn_enable" value='<% dbus_get_def("shadowvpn_enable", "0"); %>'/>
 	<table class="content" align="center" cellpadding="0" cellspacing="0">
@@ -194,7 +147,6 @@ location.href = "/Main_Soft_center.asp";
 										<div style="float:right; width:15px; height:25px;margin-top:10px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 										<div class="formfontdesc" style="padding-top:5px;margin-top:0px;float: left;" id="cmdDesc">轻量级无状态VPN，小巧，好用，支持UDP，游戏玩家首选，专为PSN、XBOX优化。双WAN用户请关闭策略路由！</div>
-										<div id="shadowvpn_version_status" style="padding-top:5px;margin-left:30px;margin-top:0px;float: left;"><i>当前版本：<% dbus_get_def("shadowvpn_version", "0"); %></i></div>								
 										<div class="formfontdesc" id="cmdDesc"></div>
 										<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="routing_table">
 											<thead>
@@ -205,7 +157,7 @@ location.href = "/Main_Soft_center.asp";
 											<tr>
 											<th>开启ShadowVPN</th>
 												<td colspan="2">
-													<div class="switch_field" style="display:table-cell">
+													<div class="switch_field" style="display:table-cell;float: left;">
 														<label for="switch">
 															<input id="switch" class="switch" type="checkbox" style="display: none;">
 															<div class="switch_container" >
@@ -216,10 +168,9 @@ location.href = "/Main_Soft_center.asp";
 															</div>
 														</label>
 													</div>
-													<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-35px;float: left;">
-														<button id="updateBtn" class="button_gen" onclick="update_shadowvpn(this, ' Refresh ');">检查更新</button>						
-													</div>
-													<div id="shadowvpn_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>	
+													<div id="shadowvpn_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("shadowvpn_version", "未知"); %></i></div>
+													<div id="shadowvpn_install_show" style="padding-top:5px;margin-left:330px;margin-top:-25px;"></div>	
+											<a style="margin-left: 318px;" href="https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowvpn/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
 											</td>
 											</tr>
                                     	</table>
