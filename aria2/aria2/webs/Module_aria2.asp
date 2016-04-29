@@ -131,7 +131,7 @@
         }
 
         return _ajax.apply(this, arguments);
-        
+
     };
 
 })(jQuery.ajax);
@@ -1037,6 +1037,14 @@
 															</div>
 														</td>
 													</tr>
+                         										<tr id="glutton">
+                           										<th style="width:25%;">Glutton控制台</th>
+                            											<td>
+                             						 						<div id="link4" style="padding-top:5px;">
+                             						   							<a id="link4.1" href="http://192.168.100.1:808/glutton" target="_blank"><i><u>http://192.168.100.1:808/glutton</u></i></a>
+                             						 						</div>
+                           							 				</td>
+                         							 			</tr>
 												</table>
 												<div id="warn" style="display: none;margin-top: 20px;text-align: center;font-size: 20px;margin-bottom: 20px;" class="formfontdesc" id="cmdDesc">
 													<i><% dbus_get_def("tunnel_config_enable", "0"); %></i>
