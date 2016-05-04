@@ -1,5 +1,28 @@
 Koolshare Asuswrt-Merlin shadowsocks_mips Changelog
 ===========================================
+1.4.6
+   - fix	修复节点ping测试和web连通性测试不能保存的bug
+   - add	节点恢复增加对json格式导入的支持
+   		现在用json文件导入，会在已有节点基础上增加，不会覆盖
+   		而用备份文件导入，会和以前一样进行覆盖写入
+   		支持的json必须包含"password", "method", "server_port", "server", "remarks"字段
+   		实际测试用了枫叶主机的json原文件通过，其它运营商的json文件如果包括以上字段应该也不会有问题
+   		基本格式如下：
+			{
+    			  "password": "xxxxx",
+    			  "method": "rc4-md5",
+    			  "server_port": "65533",
+    			  "remarks": "日本节点",
+    			  "server": "aaa.bbb.com"
+    			},
+    			 {
+    			  "password": "xxxxx",
+    			  "method": "rc4-md5",
+    			  "server_port": "65533",
+    			  "remarks": "美国节点",
+    			  "server": "aaa.bbb.com"
+    			},
+
 1.4.5
    - change	更新shadowsocks-libev客户端到2.4.6
    - change	更新shadowsocks-libev-ssr客户端为最新，支持tls1.2_ticket_auth自定义参数(不支持多个域名)
