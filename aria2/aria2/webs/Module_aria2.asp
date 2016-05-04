@@ -169,7 +169,6 @@
           if(document.getElementById('switch').checked){
           document.aria2_form.aria2_enable.value = 1;
               document.getElementById('aria2-webui').style.display = "";
-              document.getElementById('yaaw').style.display = "";
               document.getElementById('glutton').style.display = "";
               document.getElementById('aria2_base_table').style.display = "";
               document.getElementById('aria2_rpc_table').style.display = "";
@@ -179,7 +178,6 @@
           } else {
             document.aria2_form.aria2_enable.value = 0;
               document.getElementById('aria2-webui').style.display = "none";
-              document.getElementById('yaaw').style.display = "none";
               document.getElementById('glutton').style.display = "none";
               document.getElementById('aria2_base_table').style.display = "none";
               document.getElementById('aria2_rpc_table').style.display = "none";
@@ -194,7 +192,6 @@
           if (document.aria2_form.aria2_enable.value !== "1") {
               rrt.checked = false;
               document.getElementById('aria2-webui').style.display = "none";
-              document.getElementById('yaaw').style.display = "none";
               document.getElementById('glutton').style.display = "none";
               document.getElementById('aria2_base_table').style.display = "none";
               document.getElementById('aria2_rpc_table').style.display = "none";
@@ -204,7 +201,6 @@
           } else {
               rrt.checked = true;
               document.getElementById('aria2-webui').style.display = "";
-              document.getElementById('yaaw').style.display = "";
               document.getElementById('glutton').style.display = "";
               document.getElementById('aria2_base_table').style.display = "";
               document.getElementById('aria2_rpc_table').style.display = "";
@@ -217,8 +213,6 @@
           document.getElementById("link1.1").href = "http://"+lan_ipaddr+":8088";
           document.getElementById("link2.1").innerHTML = "<i><u>http://"+lan_ipaddr+":8088/aria2</u></i>";
           document.getElementById("link2.1").href = "http://"+lan_ipaddr+":8088/aria2";
-          document.getElementById("link3.1").innerHTML = "<i><u>http://"+lan_ipaddr+":8088/yaaw</u></i>";
-          document.getElementById("link3.1").href = "http://"+lan_ipaddr+":8088/yaaw";
           document.getElementById("link4.1").innerHTML = "<i><u>http://"+lan_ipaddr+":8088/glutton</u></i>";
           document.getElementById("link4.1").href = "http://"+lan_ipaddr+":8088/glutton";
           showhide("aria2_binary_custom", (document.aria2_form.aria2_binary.value == "custom"));
@@ -1016,27 +1010,11 @@ function version_check(){
 															<div id="aria2_version_status" style="padding-top:5px;margin-left:30px;margin-top:0px;float: left;"><i>当前版本：<% dbus_get_def("aria2_version", "0"); %></i></div>
 														</td>
 													</tr>
-													<tr id="h5ai">
-														<th style="width:25%;">h5ai文件服务器</th>
-														<td>
-															<div id="link1" style="padding-top:5px;">
-																<a id="link1.1" href="http://192.168.100.1:808" target="_blank"><i><u>http://192.168.100.1:808</u></i></a>
-															</div>
-														</td>
-													</tr>
 													<tr id="aria2-webui">
 														<th style="width:25%;">aria2-webui控制台</th>
 														<td>
 															<div id="link2" style="padding-top:5px;">
-																<a id="link2.1" href="http://192.168.100.1:808/aria2" target="_blank"><i><u>http://192.168.100.1:808/aria2</u></i></a>
-															</div>
-														</td>
-													</tr>
-													<tr id="yaaw">
-														<th style="width:25%;">Yaaw控制台</th>
-														<td>
-															<div id="link3" style="padding-top:5px;">
-																<a id="link3.1" href="http://192.168.100.1:808/yaaw" target="_blank"><i><u>http://192.168.100.1:808/yaaw</u></i></a>
+																<a id="link2.1" href="http://ziahamza.github.io/webui-aria2/" target="_blank"><i><u>http://192.168.100.1:808/aria2</u></i></a>
 															</div>
 														</td>
 													</tr>
@@ -1044,7 +1022,7 @@ function version_check(){
                            										<th style="width:25%;">Glutton控制台</th>
                             											<td>
                              						 						<div id="link4" style="padding-top:5px;">
-                             						   							<a id="link4.1" href="http://192.168.100.1:808/glutton" target="_blank"><i><u>http://192.168.100.1:808/glutton</u></i></a>
+                             						   							<a id="link4.1" href="http://nemoalex.github.io/glutton/" target="_blank"><i><u>http://192.168.100.1:808/glutton</u></i></a>
                              						 						</div>
                            							 				</td>
                          							 			</tr>

@@ -59,19 +59,6 @@ start_aria2(){
 	fi
 }
 
-# start lighttpd
-start_lighttpd(){
-	# create tmp folder for lighttpd
-	mkdir -p /tmp/lighttpd
-	/usr/sbin/lighttpd -m /usr/lib -f /koolshare/www/lighttpd.conf
-	lighttpd_run=$(ps|grep lighttpd|grep -v grep)
-	if [ ! -z "$lighttpd_run" ];then
-		echo lighttpd start success!
-	else
-		echo lighttpd start failure！
-	fi
-}
-
 # generate token
 generate_token(){
 	if [ -z $aria2_rpc_secret ];then
@@ -112,18 +99,6 @@ kill_aria2(){
 	fi
 }
 
-# kill lighttpd
-kill_lighttpd(){
-	killall lighttpd >/dev/null 2>&1
-	sleep 2
-	lighttpd_run1=$(ps|grep lighttpd|grep -v grep|grep -v killall)
-	if [ -z "$lighttpd_run1" ];then
-		echo lighttpd stoped!
-	else
-		echo lighttpd stop failure!
-	fi
-}
-
 
 add_process_check(){
 	if [ "$aria2_check" = "true" ];then
@@ -146,9 +121,7 @@ add_cpulimit(){
 
 load_default(){
 	del_version_check
-	rm_shortcut
 	kill_aria2
-	kill_lighttpd
 	close_port
 	dbus set tmp_aria2_version=`dbus get aria2_version`
 	dbus set tmp_aria2_version_web=`dbus get aria2_version_web`
@@ -170,16 +143,13 @@ start)
 	creat_conf
 	generate_token
 	start_aria2
-	start_lighttpd
 	add_process_check
 	open_port
 	add_cpulimit
 	fi
 	;;
 stop | kill )
-	rm_shortcut
 	kill_aria2
-	kill_lighttpd
 	close_port
 	dbus remove aria2_custom
 	;;
@@ -187,13 +157,11 @@ restart)
 	del_process_check
 	killall cpulimit
 	kill_aria2
-	kill_lighttpd
 	close_port
 	sleep 1
 	creat_conf
 	generate_token
 	start_aria2
-	start_lighttpd
 	add_process_check
 	open_port
 	add_cpulimit
