@@ -36,36 +36,17 @@ EOF
 }
 
 start_aria2(){
-	if [ "$aria2_dir" = "download" ];then
-		if [ ! -z "$usb_disk1" ];then
-			export aria2_dir="$usb_disk1"
-			export aria2_warning="没有定义下载文件夹，默认使用$usb_disk1"
-			if [ "$aria2_binary" = "entware" ];then
-				/opt/bin/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
-			elif [ "$aria2_binary" = "custom" ];then
-				if [ ! -z "$aria2_binary_custom" ];then
-					"$aria2_binary_custom"/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
-				else
-					export aria2_warning="当前目录没有找到aria2可执行文件"
-				fi
-			elif [ "$aria2_binary" = internal ];then
-				/koolshare/aria2/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
-			fi
+
+	if [ "$aria2_binary" = entware ];then
+		/opt/bin/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
+	elif [ "$aria2_binary" = custom ];then
+		if [ ! -z "$aria2_binary_custom" ];then
+			$aria2_binary_custom/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
 		else
-			export aria2_warning="没有找到可用的USB磁盘"
+			dbus set aria2_warning="当前目录没有找到aria2可执行文件"
 		fi
-	else
-		if [ "$aria2_binary" = entware ];then
-			/opt/bin/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
-		elif [ "$aria2_binary" = custom ];then
-			if [ ! -z "$aria2_binary_custom" ];then
-				$aria2_binary_custom/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
-			else
-				dbus set aria2_warning="当前目录没有找到aria2可执行文件"
-			fi
-		elif [ "$aria2_binary" = internal ];then
-			/koolshare/aria2/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
-		fi
+	elif [ "$aria2_binary" = internal ];then
+		/koolshare/aria2/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
 	fi
 
 
@@ -95,7 +76,7 @@ start_lighttpd(){
 generate_token(){
 	if [ -z $aria2_rpc_secret ];then
 		sed -i "s/rpc-secret=/rpc-secret=$token/g" "/koolshare/aria2/aria2.conf"
-		export aria2_rpc_secret=$token
+		dbus set aria2_rpc_secret="$token"
 	fi
 }
 
@@ -104,6 +85,7 @@ open_port(){
 	echo open firewall port $aria2_rpc_listen_port and 8088
 	iptables -I INPUT -p tcp --dport $aria2_rpc_listen_port -j ACCEPT >/dev/null 2>&1
 	iptables -I INPUT -p tcp --dport 8088 -j ACCEPT >/dev/null 2>&1
+	iptables -I INPUT -p tcp --dport 52413 -j ACCEPT >/dev/null 2>&1
 	echo done
 }
 
@@ -112,6 +94,7 @@ close_port(){
 	echo close firewall port $aria2_rpc_listen_port and 8088
 	iptables -D INPUT -p tcp --dport $aria2_rpc_listen_port -j ACCEPT >/dev/null 2>&1
 	iptables -D INPUT -p tcp --dport 8088 -j ACCEPT >/dev/null 2>&1
+	iptables -D INPUT -p tcp --dport 52413 -j ACCEPT >/dev/null 2>&1
 	echo done
 }
 
@@ -153,29 +136,6 @@ del_process_check(){
 	cru d aria2_guard >/dev/null 2>&1
 }
 
-add_shortcut(){
-	usb1_name=`/bin/mount | grep -E 'mnt' | sed -n 1p | cut -d" " -f3 |cut -d "/" -f 4`
-	usb2_name=`/bin/mount | grep -E 'mnt' | sed -n 2p | cut -d" " -f3 |cut -d "/" -f 4`
-	if [ ! -z $usb1_name ];then
-		mkdir -p /koolshare/www/$usb1_name
-		ln -nsf /tmp/mnt/$usb1_name/ /koolshare/www/$usb1_name
-	fi
-	if [ ! -z $usb2_name ];then
-		mkdir -p /koolshare/www/$usb2_name
-		ln -nsf /tmp/mnt/$usb2_name/ /koolshare/www/$usb2_name
-	fi
-}
-rm_shortcut(){
-	usb1_name=`/bin/mount | grep -E 'mnt' | sed -n 1p | cut -d" " -f3 |cut -d "/" -f 4`
-	usb2_name=`/bin/mount | grep -E 'mnt' | sed -n 2p | cut -d" " -f3 |cut -d "/" -f 4`
-	if [ ! -z $usb1_name ];then
-	rm -rf /koolshare/www/$usb1_name
-	fi
-	if [ ! -z $usb2_name ];then
-	rm -rf /koolshare/www/$usb2_name
-	fi
-}
-
 add_cpulimit(){
 	if [ "$aria2_cpulimit_enable" = "true" ];then
 		limit=`expr $aria2_cpulimit_value \* 2`
@@ -212,7 +172,6 @@ start)
 	start_aria2
 	start_lighttpd
 	add_process_check
-	add_shortcut
 	open_port
 	add_cpulimit
 	fi
@@ -226,7 +185,6 @@ stop | kill )
 	;;
 restart)
 	del_process_check
-	rm_shortcut
 	killall cpulimit
 	kill_aria2
 	kill_lighttpd
@@ -237,7 +195,6 @@ restart)
 	start_aria2
 	start_lighttpd
 	add_process_check
-	add_shortcut
 	open_port
 	add_cpulimit
 	;;

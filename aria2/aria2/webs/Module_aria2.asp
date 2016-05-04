@@ -168,7 +168,6 @@
         function(){
           if(document.getElementById('switch').checked){
           document.aria2_form.aria2_enable.value = 1;
-              document.getElementById('h5ai').style.display = "";
               document.getElementById('aria2-webui').style.display = "";
               document.getElementById('yaaw').style.display = "";
               document.getElementById('glutton').style.display = "";
@@ -179,7 +178,6 @@
           document.getElementById('cmdBtn1').style.display = "";
           } else {
             document.aria2_form.aria2_enable.value = 0;
-              document.getElementById('h5ai').style.display = "none";
               document.getElementById('aria2-webui').style.display = "none";
               document.getElementById('yaaw').style.display = "none";
               document.getElementById('glutton').style.display = "none";
@@ -195,7 +193,6 @@
         var rrt = document.getElementById("switch");
           if (document.aria2_form.aria2_enable.value !== "1") {
               rrt.checked = false;
-              document.getElementById('h5ai').style.display = "none";
               document.getElementById('aria2-webui').style.display = "none";
               document.getElementById('yaaw').style.display = "none";
               document.getElementById('glutton').style.display = "none";
@@ -206,7 +203,6 @@
               document.getElementById('cmdBtn1').style.display = "none";
           } else {
               rrt.checked = true;
-              document.getElementById('h5ai').style.display = "";
               document.getElementById('aria2-webui').style.display = "";
               document.getElementById('yaaw').style.display = "";
               document.getElementById('glutton').style.display = "";
@@ -1454,8 +1450,8 @@ function version_check(){
                               <label>DHT 监听端口</label>
                             </td>
                             <td>
-                              <input type="text" class="input_ss_table" style="width:auto;" name="aria2_dht_listen_port" value="6881-6999" maxlength="50" size="50" id="aria2_dht_listen_port">
-                              <small>默认: 6881-6999</small>
+                              <input type="text" class="input_ss_table" style="width:auto;" name="aria2_dht_listen_port" value="52413" maxlength="50" size="50" id="aria2_dht_listen_port">
+                              <small>默认: 52413</small>
 
                             </td>
                           </tr>
