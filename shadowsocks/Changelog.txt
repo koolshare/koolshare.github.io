@@ -6,7 +6,9 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    		现在用json文件导入，会在已有节点基础上增加，不会覆盖
    		而用备份文件导入，会和以前一样进行覆盖写入
    		支持的json必须包含"password", "method", "server_port", "server", "remarks"字段
-   		实际测试用了枫叶主机的json原文件通过，其它运营商的json文件如果包括以上字段应该也不会有问题
+   		实际测试用了枫叶主机的json原文件，windows纸飞机客户端的json文件通过，
+   		其它运营商的json文件如果包括以上字段应该也不会有问题
+   		shadowsocks-R的json文件，仅支持导入节点信息，不支持导入混淆信息等
    		基本格式如下：
 			{
     			  "password": "xxxxx",
