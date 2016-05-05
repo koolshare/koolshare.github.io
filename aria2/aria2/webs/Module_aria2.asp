@@ -159,6 +159,7 @@
         version_check();
         initial_dir();
         check_dir_path();
+        generate_glutton_link();
       }
       function done_validating() {
         return true;
@@ -169,6 +170,7 @@
           if(document.getElementById('switch').checked){
           document.aria2_form.aria2_enable.value = 1;
               document.getElementById('aria2-webui').style.display = "";
+              document.getElementById('yaaw').style.display = "";
               document.getElementById('glutton').style.display = "";
               document.getElementById('aria2_base_table').style.display = "";
               document.getElementById('aria2_rpc_table').style.display = "";
@@ -178,6 +180,7 @@
           } else {
             document.aria2_form.aria2_enable.value = 0;
               document.getElementById('aria2-webui').style.display = "none";
+              document.getElementById('yaaw').style.display = "none";
               document.getElementById('glutton').style.display = "none";
               document.getElementById('aria2_base_table').style.display = "none";
               document.getElementById('aria2_rpc_table').style.display = "none";
@@ -192,6 +195,7 @@
           if (document.aria2_form.aria2_enable.value !== "1") {
               rrt.checked = false;
               document.getElementById('aria2-webui').style.display = "none";
+              document.getElementById('yaaw').style.display = "none";
               document.getElementById('glutton').style.display = "none";
               document.getElementById('aria2_base_table').style.display = "none";
               document.getElementById('aria2_rpc_table').style.display = "none";
@@ -201,6 +205,7 @@
           } else {
               rrt.checked = true;
               document.getElementById('aria2-webui').style.display = "";
+              document.getElementById('yaaw').style.display = "";
               document.getElementById('glutton').style.display = "";
               document.getElementById('aria2_base_table').style.display = "";
               document.getElementById('aria2_rpc_table').style.display = "";
@@ -208,13 +213,6 @@
               document.getElementById('aria2_bt_table').style.display = "";
               document.getElementById('cmdBtn1').style.display = "";
           }
-          var lan_ipaddr = '<% nvram_get("lan_ipaddr"); %>';
-          document.getElementById("link1.1").innerHTML = "<i><u>http://"+lan_ipaddr+":8088</u></i>";
-          document.getElementById("link1.1").href = "http://"+lan_ipaddr+":8088";
-          document.getElementById("link2.1").innerHTML = "<i><u>http://"+lan_ipaddr+":8088/aria2</u></i>";
-          document.getElementById("link2.1").href = "http://"+lan_ipaddr+":8088/aria2";
-          document.getElementById("link4.1").innerHTML = "<i><u>http://"+lan_ipaddr+":8088/glutton</u></i>";
-          document.getElementById("link4.1").href = "http://"+lan_ipaddr+":8088/glutton";
           showhide("aria2_binary_custom", (document.aria2_form.aria2_binary.value == "custom"));
           showhide("aria2_check_time_tr", (document.aria2_form.f_aria2_check.value !== "false"));
           showhide("aria2_rpc_listen_port_tr", (document.aria2_form.f_aria2_enable_rpc.value !== "false"));
@@ -275,19 +273,19 @@
       }
 
 function version_check(){
-	$j("#aria2_version_status").html("<i>当前版本：" + db_adm_['aria2_version']);
+	$("#aria2_version_status").html("<i>插件版本：" + db_aria2_['aria2_version']);
 
-    $j.ajax({
+    $.ajax({
         url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/aria2/config.json.js',
         type: 'GET',
         success: function(res) {
-            var txt = $j(res.responseText).text();
+            var txt = $(res.responseText).text();
             if(typeof(txt) != "undefined" && txt.length > 0) {
                 //console.log(txt);
-                var obj = $j.parseJSON(txt.replace("'", "\""));
-		$j("#aria2_version_status").html("<i>当前版本：" + obj.version);
-		if(obj.version != db_adm_["adm_version"]) {
-			$j("#aria2_version_status").html("<i>有新版本：" + obj.version);
+                var obj = $.parseJSON(txt.replace("'", "\""));
+		$("#aria2_version_status").html("<i>插件版本：" + obj.version);
+		if(obj.version != db_aria2_["aria2_version"]) {
+			$("#aria2_version_status").html("<i>有新版本：" + obj.version);
 		}
             }
         }
@@ -886,6 +884,11 @@ function version_check(){
 				if(dir_array[dir_array.length - 1].length > 21)
 				document.getElementById('aria2_dir').value = "/" + dir_array[1] + "/" + dir_array[2] + "/" + dir_array[dir_array.length - 1].substring(0,18) + "...";
 			}
+
+			function generate_glutton_link(){
+				var link_glutton = window.btoa("http://"+'<% nvram_get("lan_ipaddr"); %>'+":"+'<% dbus_get_def("aria2_rpc_listen_port", "192.168.1.1"); %>'+"/jsonrpc||"+'<% dbus_get_def("aria2_rpc_secret", "0"); %>')
+				document.getElementById("link4.1").href = "http://aria2.me/glutton/"+"?s="+link_glutton;
+			}
 		</script>
 	</head>
 	<body onload="init();">
@@ -1005,27 +1008,39 @@ function version_check(){
 														</tr>
 													</thead>
 													<tr>
-														<th style="width:25%;">Aria2安装</th>
+														<th style="width:25%;">Aria2版本</th>
 														<td>
-															<div id="aria2_version_status" style="padding-top:5px;margin-left:30px;margin-top:0px;float: left;"><i>当前版本：<% dbus_get_def("aria2_version", "0"); %></i></div>
+															<div id="aria2_version_status" style="padding-top:5px;margin-left:0px;margin-top:0px;float: left;"><i>插件版本：<% dbus_get_def("aria2_version", "0"); %></i></div>
+															<div id="aria2_version1" style="padding-top:5px;margin-left:30px;margin-top:0px;float: left;"><i>aria2版本：1.2.2</i></div>
+														</td>
+													</tr>
+                         							<tr id="glutton">
+                           								<th style="width:25%;">Glutton控制台</th>
+                            							<td>
+                             						 		<div style="padding-top:5px;">
+                             						   			<a id="link4.1" style="font-size: 16px;" href="http://aria2.me/glutton/" target="_blank"><i><u>http://aria2.me/glutton/</u></i></a>
+                             						   			<span><a style="font-size: 12px;margin-left: 20px;" href="https://koolshare.cn/thread-40938-1-1.html" target="_blank"><i><u>戳我了解</u></i></a>
+                             						 		</div>
+                           							 	</td>
+                         							</tr>
+													<tr id="yaaw">
+														<th style="width:25%;">yaaw控制台</th>
+														<td>
+															<div style="padding-top:5px;">
+																<a style="font-size: 16px; "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;" href="http://aria2.me/yaaw/" target="_blank"><i><u>http://aria2.me/yaaw/</u></i></a>
+															</div>
 														</td>
 													</tr>
 													<tr id="aria2-webui">
 														<th style="width:25%;">aria2-webui控制台</th>
 														<td>
-															<div id="link2" style="padding-top:5px;">
-																<a id="link2.1" href="http://ziahamza.github.io/webui-aria2/" target="_blank"><i><u>http://192.168.100.1:808/aria2</u></i></a>
+															<div style="padding-top:5px;">
+																<a style="font-size: 16px; "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;" href="http://aria2.me/webui-aria2/" target="_blank"><i><u>http://aria2.me/webui-aria2/</u></i></a>
 															</div>
 														</td>
 													</tr>
-                         										<tr id="glutton">
-                           										<th style="width:25%;">Glutton控制台</th>
-                            											<td>
-                             						 						<div id="link4" style="padding-top:5px;">
-                             						   							<a id="link4.1" href="http://nemoalex.github.io/glutton/" target="_blank"><i><u>http://192.168.100.1:808/glutton</u></i></a>
-                             						 						</div>
-                           							 				</td>
-                         							 			</tr>
+
+
 												</table>
 												<div id="warn" style="display: none;margin-top: 20px;text-align: center;font-size: 20px;margin-bottom: 20px;" class="formfontdesc" id="cmdDesc">
 													<i><% dbus_get_def("tunnel_config_enable", "0"); %></i>

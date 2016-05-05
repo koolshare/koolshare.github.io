@@ -22,7 +22,7 @@ echo ""
 creat_conf(){
 cat > /koolshare/aria2/aria2.conf <<EOF
 `dbus list aria2 | grep -vw aria2_enable | grep -vw aria2_binary| grep -vw aria2_binary_custom | grep -vw aria2_check | grep -vw aria2_check_time | grep -vw aria2_sleep | grep -vw aria2_update_enable| grep -vw aria2_update_sel | grep -vw aria2_version | grep -vw aria2_cpulimit_enable | grep -vw aria2_cpulimit_value| grep -vw aria2_version_web | grep -vw aria2_warning | grep -vw aria2_custom | grep -vw aria2_install_status|grep -vw aria2_restart |grep -vw aria2_dir| sed 's/aria2_//g' | sed 's/_/-/g'`
-`dbus list aria2|grep -w aria2_dir|sed 's/aria2_=//g'`
+`dbus list aria2|grep -w aria2_dir|sed 's/aria2_//g'`
 EOF
 
 cat >> /koolshare/aria2/aria2.conf <<EOF
