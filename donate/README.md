@@ -39,7 +39,7 @@
 
 * Bbis 8.8
 * Lo**ki 6.66
-* L**Y 88.0
+* [L.G.Y](http://koolshare.cn/space-uid-21468.html) [Twitter](https://twitter.com/lingaoyi) 88.0
 * Laoziwodi 200.0
 * 葛**祥 100.0
 
