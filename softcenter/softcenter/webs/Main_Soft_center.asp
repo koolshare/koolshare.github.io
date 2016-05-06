@@ -70,6 +70,8 @@
         position: absolute;
         left: 0;
         top: 0;
+        height: 100%;
+        visibility: hidden;
         font-size:0;
         width: 119px;
         border-radius: 8px;
@@ -90,6 +92,7 @@
     }
     .icon:hover .icon-desc{
         opacity: .8;
+        visibility: visible;
     }
     .icon-desc .opt{
         font-size: 0;
@@ -126,6 +129,9 @@
     }
     .install-status-1 .uninstall-btn{
         display: inline-block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
     }
     .install-status-1 .install-btn{
         display: none;
