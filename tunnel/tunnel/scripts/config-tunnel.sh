@@ -5,7 +5,7 @@ source /koolshare/scripts/base.sh
 
 onstart() {
 
-killall tunnel
+killall tunnel || true
 txt=$tunnel_txt
 en=$tunnel_enable
 
@@ -16,7 +16,7 @@ else
 if [ "$en" == "1" ]; then
 touch /tmp/tunnel.log
 echo $txt|base64_decode > /tmp/tunnel.json
-tunnel -c /tmp/tunnel.json -p /tmp/tunnel.pid -d
+tunnel -c /tmp/tunnel.json -p /tmp/tunnel.pid -d &
 fi
 fi
 
