@@ -104,6 +104,7 @@
         display: inline-block;
         border: none;
         width: 100%;
+        height: 18px;
         margin-top: 20px;
         border-radius: 0px 0px 5px 5px;
     }
