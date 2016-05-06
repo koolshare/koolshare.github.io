@@ -33,12 +33,14 @@ function init() {
 	buildswitch();
     version_show();
     setTimeout("version_show()", 3000);
+    /*
     var ss_mode = '<% nvram_get("ss_mode"); %>';
 	if(ss_mode != "0" && ss_mode != 'undefined'){
 		$j("#warn").html("<i>你开启了shadowsocks, 阿呆喵将只过滤国内广告</i>");
 	}else{
 		$j("#warn").html("<i>阿呆喵将过滤全部广告</i>");
 	}
+    */
     var rrt = document.getElementById("switch");
     if (document.form.adm_enable.value != "1") {
         rrt.checked = false;
@@ -197,7 +199,10 @@ location.href = "/Main_Soft_center.asp";
 										<div class="formfontdesc" style="padding-top:5px;margin-top:0px;float: left;" id="cmdDesc">使用ADM，你就知道，去广告，原来是如此简单</div>
 										<div id="adm_version_status" style="padding-top:5px;margin-left:30px;margin-top:0px;float: left;"><i>当前版本：<% dbus_get_def("adm_version", "0"); %></i></div>
 										<div style="padding-top:5px;margin-top:0px;float: left;" id="NoteBox" >
-											<li>由于adm(阿呆猫)路由器版本性能问题，导致可能会出现卡网，因此我们对广告过滤做了限制：adm将专注过滤视频广告。 </li>
+											<li>由于adm(阿呆猫)路由器版本性能问题，导致可能会出现卡网，因此我们对广告过滤做了限制：<i>adm将专注过滤视频广告;</i> </li>
+											<li>注意：即使专注过滤视频广告，如果你的client过多，ADM也可能出现卡网，这是ADM本身的一些问题，目前我们尚不能解决; </li>
+											<li>如果你需要过滤更多广告，可以编辑<i>/koolshare/adm/adblock.conf</i>添加你要过滤的网站; </li>
+											<li>如果突然发现视频广告不能过滤了，不要惊慌，手动重启下吧！ </li>
 										</div>
 																	
 										<div class="formfontdesc" id="cmdDesc"></div>
@@ -225,7 +230,8 @@ location.href = "/Main_Soft_center.asp";
 													</div>
 													<div id="adm_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>	
 												</td>
-											</tr>											
+											</tr>
+											<!--
 											<tr id="adm_status">
 												<th>
 													<label>ADM状态</label>
@@ -234,7 +240,6 @@ location.href = "/Main_Soft_center.asp";
  													<div id="warn" style="margin-top: 20px;text-align: center;font-size: 18px;margin-bottom: 20px;"class="formfontdesc" id="cmdDesc"></div>
 												</td>										
 											</tr>
-											<!--
 											<tr id="adm_user">
 												<td style="background-color: #2F3A3E;width:15%;">
 													<label>自定义过滤规则</label>
