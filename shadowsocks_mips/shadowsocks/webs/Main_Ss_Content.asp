@@ -601,6 +601,21 @@ function web_test2(){
     document.form.submit();
 }
 
+function load_test_value(){
+	if (typeof db_ss['ssconf_basic_Ping_Method']  == "undefined" ){
+		$j("#ssconf_basic_Ping_Method").val("1");
+	}else{
+		$j("#ssconf_basic_Ping_Method").val(db_ss['ssconf_basic_Ping_Method']);
+	}
+
+	if (typeof db_ss['ssconf_basic_test_domain']  == "undefined" ){
+		$j("#ssconf_basic_test_domain").val("https://www.google.com/");
+	}else{
+		$j("#ssconf_basic_test_domain").val(db_ss['ssconf_basic_test_domain']);
+	}
+
+}
+
 function loadBasicOptions(confs) {
     var option = $j("#ssconf_basic_node");
     option.find('option').remove().end();
@@ -625,6 +640,7 @@ function loadAllConfigs() {
     confs = getAllConfigs();
     loadBasicOptions(confs);
     refresh_popup_listview(confs);
+       	load_test_value();
 }
 
 function add_conf_in_table(o) {
@@ -848,7 +864,6 @@ function updateSs_node_listView() {
         success: function(response) {
             $j.globalEval(response);
             loadAllConfigs();
-
             cal_panel_block_clientList("ss_node_list_viewlist_content", 0.037);
             $j("#ss_node_list_viewlist_content").show();
         }

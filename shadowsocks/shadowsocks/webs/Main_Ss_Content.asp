@@ -601,6 +601,21 @@ function web_test2(){
     document.form.submit();
 }
 
+function load_test_value(){
+	if (typeof db_ss['ssconf_basic_Ping_Method']  == "undefined" ){
+		$j("#ssconf_basic_Ping_Method").val("1");
+	}else{
+		$j("#ssconf_basic_Ping_Method").val(db_ss['ssconf_basic_Ping_Method']);
+	}
+
+	if (typeof db_ss['ssconf_basic_test_domain']  == "undefined" ){
+		$j("#ssconf_basic_test_domain").val("https://www.google.com/");
+	}else{
+		$j("#ssconf_basic_test_domain").val(db_ss['ssconf_basic_test_domain']);
+	}
+
+}
+
 function loadBasicOptions(confs) {
     var option = $j("#ssconf_basic_node");
     option.find('option').remove().end();
@@ -625,6 +640,7 @@ function loadAllConfigs() {
     confs = getAllConfigs();
     loadBasicOptions(confs);
     refresh_popup_listview(confs);
+       	load_test_value();
 }
 
 function add_conf_in_table(o) {
@@ -848,7 +864,6 @@ function updateSs_node_listView() {
         success: function(response) {
             $j.globalEval(response);
             loadAllConfigs();
-
             cal_panel_block_clientList("ss_node_list_viewlist_content", 0.037);
             $j("#ss_node_list_viewlist_content").show();
         }
@@ -1273,7 +1288,8 @@ function check_ss(){
 															<a href="http://koolshare.cn/thread-4519-1-1.html" target="_blank"><i>&nbsp;账号需支持UDP转发&nbsp;&nbsp;<u>FAQ</u></i></a>
 														</div>
 														<div id="game_alertV2" style="margin-left:180px;margin-top:-20px;margin-bottom:0px;">
-															<a href="http://koolshare.cn/thread-36167-1-1.html" target="_blank"><i>&nbsp;不兼容原版SS账号&nbsp;&nbsp;<u>FAQ</u></i></a>
+															<a href="http://koolshare.io/koolgame/0.3.2/" target="_blank"><i><u>服务器端下载</u></i></a>
+															<a style="margin-left: 20px;" href="https://koolshare.cn/thread-38263-1-1.html" target="_blank"><i><u>&nbsp;一键安装教程</u></i></a>
 														</div>
 													</td>
 												</tr>
