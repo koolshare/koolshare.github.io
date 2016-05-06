@@ -22,9 +22,10 @@
 * 最好在 linux 环境下进行开发
 * TODO
 
-贡献我们
+微信扫码，捐赠我们
 ======
-* 排名不分先后
+
+ <img src="/donate/img/qr.png" alt="QR" width="120"/>
 * [贡献名单详情](https://github.com/koolshare/koolshare.github.io/tree/master/donate)
 
 交流场地
