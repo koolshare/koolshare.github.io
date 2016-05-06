@@ -21,8 +21,11 @@
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/general.js"></script>
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
+<script language="JavaScript" type="text/javascript" src="/client_function.js"></script>
 <script type="text/javascript" src="/dbconf?p=dualwanpolicy_&v=<% uptime(); %>"></script>
 <script>
+var $j = jQuery.noConflict();
+
 function init() {
 show_menu();
 buildswitch();
@@ -30,15 +33,15 @@ conf2obj();
 version_show();
 var ss_mode = '<% nvram_get("ss_mode"); %>';
 if(ss_mode == '3'){
-$("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式下会和策略路由相冲突，不要同时开启</font></span>");
+$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式下会和策略路由相冲突，不要同时开启</font></span>");
 } else if (ss_mode == '2') {
-$("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS大陆白名单模式下国外线路默认全部走SS</font></span>");
+$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS大陆白名单模式下国外线路默认全部走SS</font></span>");
 } else if (ss_mode == '4') {
-$("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS全局模式下国内外线路默认全部走SS</font></span>");
+$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS全局模式下国内外线路默认全部走SS</font></span>");
 } else if (ss_mode == '1') {
-$("#foreign_line1").html("<span class='software_action'><font color='#ffcc00'>当前gfwlsit模式下，gfwlsit以外的国外线路默认全部此端口</font></span>");
+$j("#foreign_line1").html("<span class='software_action'><font color='#ffcc00'>当前gfwlsit模式下，gfwlsit以外的国外线路默认全部此端口</font></span>");
 } else if (ss_mode == '0') {
-$("#ss_line").html("<span class='software_action'><font color='#ffcc00'>不可用，因为SS未启用</font></span>");
+$j("#ss_line").html("<span class='software_action'><font color='#ffcc00'>不可用，因为SS未启用</font></span>");
 }
 var lb_mode = '<% nvram_get("wans_mode"); %>';
 if(lb_mode !== "lb"){
@@ -65,7 +68,7 @@ function done_validating() {
 //refreshpage(5);
 }
 function buildswitch(){
-$("#switch").click(
+$j("#switch").click(
 function(){
 if(document.getElementById('switch').checked){
 document.form.dualwanpolicy_enable.value = 1;
@@ -85,7 +88,7 @@ document.form.submit();
 }
 
 function conf2obj(){
-$.ajax({
+$j.ajax({
 type: "get",
 url: "dbconf?p=dualwanpolicy_",
 dataType: "script",
@@ -95,7 +98,7 @@ var params = ["wan1", "wan2", "wan_foreign", "wan_ss", "wan1_custom", "wan2_cust
 for (var i = 0; i < params.length; i++) {
         for (var i = 0; i < params.length; i++) {
 			if (typeof db_dualwanpolicy_[p + params[i]] !== "undefined") {
-				$("#dualwanpolicy_"+params[i]).val(db_dualwanpolicy_[p + params[i]]);
+				$j("#dualwanpolicy_"+params[i]).val(db_dualwanpolicy_[p + params[i]]);
 				}
             update_visibility();
         }
@@ -150,7 +153,6 @@ function version_show(){
         }
     });
 }
-
 
 </script>
 </head>
