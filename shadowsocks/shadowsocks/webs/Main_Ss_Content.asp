@@ -1288,7 +1288,8 @@ function check_ss(){
 															<a href="http://koolshare.cn/thread-4519-1-1.html" target="_blank"><i>&nbsp;账号需支持UDP转发&nbsp;&nbsp;<u>FAQ</u></i></a>
 														</div>
 														<div id="game_alertV2" style="margin-left:180px;margin-top:-20px;margin-bottom:0px;">
-															<a href="http://koolshare.cn/thread-36167-1-1.html" target="_blank"><i>&nbsp;不兼容原版SS账号&nbsp;&nbsp;<u>FAQ</u></i></a>
+															<a href="http://koolshare.io/koolgame/0.3.2/" target="_blank"><i><u>服务器端下载</u></i></a>
+															<a style="margin-left: 20px;" href="https://koolshare.cn/thread-38263-1-1.html" target="_blank"><i><u>&nbsp;一键安装教程</u></i></a>
 														</div>
 													</td>
 												</tr>
