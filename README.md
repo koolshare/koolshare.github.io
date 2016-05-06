@@ -25,7 +25,7 @@
 贡献我们
 ======
 * 排名不分先后
-* [贡献名单详情](http://koolshare.io)
+* [贡献名单详情](https://github.com/koolshare/koolshare.github.io/tree/master/donate)
 
 交流场地
 ======
