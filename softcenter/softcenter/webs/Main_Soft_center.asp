@@ -189,33 +189,6 @@ String.prototype.startsWith = function(prefix) {
 String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
-var softcenter_modules = {};
-function parse_softcenter() {
-    var sm = "softcenter_module_";
-    for(o in db_softcenter_) {
-        if(o.indexOf(sm) != -1) {
-            var pos = o.indexOf("_", sm.length);
-            if(pos == -1) {
-             continue;
-            }
-            var name = o.substring(sm.length, pos);
-            //console.log(name);
-            var ob = null;
-            if (typeof(softcenter_modules[name]) != "undefined") {
-                ob = softcenter_modules[name];
-            } else {
-                ob = {};
-                softcenter_modules[name] = ob;
-            }
-            var name_op = o.substring(pos+1);
-            //console.log("name_op:"+name_op);
-            if(name_op.length == 0) {
-                 continue;
-            }
-            ob[name_op]=db_softcenter_[o];
-        }
-    }
-}
 function checkField(o, f, d) {
     if(typeof o[f] == "undefined") {
         o[f] = d;

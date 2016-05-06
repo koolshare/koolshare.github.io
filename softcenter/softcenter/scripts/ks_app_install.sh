@@ -140,7 +140,7 @@ install_module() {
 		fi
 
 		if [ -f /tmp/$softcenter_installing_module/uninstall.sh ]; then
-            chmod 755 /tmp/$softcenter_installing_module/uninstall.sh
+			chmod 755 /tmp/$softcenter_installing_module/uninstall.sh
 			mv /tmp/$softcenter_installing_module/uninstall.sh /koolshare/scripts/uninstall_$softcenter_installing_todo.sh
 		fi
 
@@ -223,9 +223,9 @@ uninstall_module() {
 	dbus set softcenter_installing_todo=""
 
 	#try to call uninstall script
-    if [ -f "/koolshare/scripts/$softcenter_installing_todo$UNINSTALL_SUFFIX.sh"]; then
-        sh /koolshare/scripts/$softcenter_installing_todo$UNINSTALL_SUFFIX.sh
-    elif [ -f "/koolshare/scripts/uninstall_$softcenter_installing_todo.sh" ]; then
+	if [ -f "/koolshare/scripts/$softcenter_installing_todo$UNINSTALL_SUFFIX.sh"]; then
+ 		sh /koolshare/scripts/$softcenter_installing_todo$UNINSTALL_SUFFIX.sh
+	elif [ -f "/koolshare/scripts/uninstall_$softcenter_installing_todo.sh" ]; then
 		sh /koolshare/scripts/uninstall_$softcenter_installing_todo.sh
 	else
 		rm -f /koolshare/webs/Module_$softcenter_installing_todo.asp
