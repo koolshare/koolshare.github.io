@@ -3,7 +3,7 @@
 MODULE=tunnel
 VERSION=0.2
 TITLE=穿透DDNS
-DESCRIPTION=穿透 DDNS, 服务器转发方式
+DESCRIPTION="穿透 DDNS, 服务器转发方式"
 HOME_URL=Module_tunnel.asp
 
 # Check and include base
