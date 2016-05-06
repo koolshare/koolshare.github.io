@@ -31,10 +31,10 @@
             "version": "1.6.8"
         }, 
         {
-            "build_date": "2016-05-07_01:10:37", 
+            "build_date": "2016-05-07_01:41:30", 
             "description": "点对点建立连接,下载更快", 
             "home_url": "", 
-            "md5": "195b9798324028dbb29d44d75529ba7b", 
+            "md5": "21f65a490064f311481d3db3c5068a9d", 
             "name": "koolnet", 
             "tar_url": "koolnet/koolnet.tar.gz", 
             "title": "P2P 穿透", 
@@ -71,10 +71,10 @@
             "version": "0.4"
         }, 
         {
-            "build_date": "2016-05-07_01:18:24", 
+            "build_date": "2016-05-07_01:41:09", 
             "description": "穿透 DDNS, 服务器转发方式", 
             "home_url": "Module_tunnel.asp", 
-            "md5": "8421def4f701b5d838c114fd7bca5767", 
+            "md5": "20458768a9a35e8c60d84f79f5f84e01", 
             "name": "tunnel", 
             "tar_url": "tunnel/tunnel.tar.gz", 
             "title": "穿透DDNS", 
