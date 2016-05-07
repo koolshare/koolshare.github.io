@@ -42,6 +42,9 @@
 * [L.G.Y](https://twitter.com/lingaoyi) 88.0
 * Laoziwodi 200.0
 * 葛**祥 100.0
+* 晓JAM 66.0
+* shoujidi 66.6
+
 
 支出列表
 ========
