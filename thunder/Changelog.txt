@@ -1,4 +1,7 @@
 Koolshare Asuswrt-Merlin adm Changelog
 ===========================================
+1.5
+   - fix	fix startup with system issue
+
 0.6
    - fix	add thunder todo

@@ -9,7 +9,7 @@ thunderPath=/koolshare/thunder
 
 # 开机自启
 start_with_system() {
-	if [ "$thunder_basic_request" = "10" ]; then
+	if [ "$thunder_basic_request" = "01" ]; then
 		$thunderPath/portal &
 	fi
 }
