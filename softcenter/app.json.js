@@ -51,14 +51,14 @@
             "version": "1.4"
         }, 
         {
-            "build_date": "2016-05-09_23:11:10", 
+            "build_date": "2016-05-09_23:58:50", 
             "description": "迅雷远程~", 
             "home_url": "Module_thunder.asp", 
-            "md5": "09f6c802ef408e83b2359bfd5ebd359f", 
+            "md5": "ec1ccf584ef9fe4ddcf5867b96436c0d", 
             "name": "thunder", 
             "tar_url": "thunder/thunder.tar.gz", 
             "title": "迅雷远程", 
-            "version": "1.5"
+            "version": "1.6"
         }, 
         {
             "build_date": "2016-05-07_01:41:30", 
