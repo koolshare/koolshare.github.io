@@ -51,6 +51,16 @@
             "version": "1.4"
         }, 
         {
+            "build_date": "2016-05-10_01:35:18", 
+            "description": "老板，来一斤虚拟内存~", 
+            "home_url": "Module_swap.asp", 
+            "md5": "07e5e13f5232f5e8b4bf5003c101cf2e", 
+            "name": "swap", 
+            "tar_url": "swap/swap.tar.gz", 
+            "title": "虚拟内存", 
+            "version": "1.4"
+        }, 
+        {
             "build_date": "2016-05-09_23:58:50", 
             "description": "迅雷远程~", 
             "home_url": "Module_thunder.asp", 
