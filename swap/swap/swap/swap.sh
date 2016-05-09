@@ -20,7 +20,7 @@ check_usb_status(){
 	usb_disk=`/bin/mount | grep -E 'mnt' | sed -n 1p | cut -d" " -f3`
 	swapon=`free | grep Swap | awk '{print $2}'`
 	dbus set swap_usb_type="$ext_type"
-
+	dbus set swap_usb_disk="$usb_disk"
 	
 if [ "$swapon" == "0" ];then
 	if [ -z "$usb_disk" ];then
@@ -37,7 +37,6 @@ if [ "$swapon" == "0" ];then
 			fi
 		fi
 	fi
-	dbus set swap_usb_disk="$usb_disk"
 else
 		dbus set swap_warnning="4"
 fi
