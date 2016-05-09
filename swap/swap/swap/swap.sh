@@ -1,7 +1,7 @@
 #! /bin/sh
 # ====================================变量定义====================================
 # 版本号定义
-version="1.6"
+version="1.7"
 dbus set swap_version="$version"
 # 导入skipd数据
 eval `dbus export swap`
