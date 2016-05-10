@@ -113,7 +113,7 @@ function write_usb_status(){
 			document.getElementById('swap_size_tr').style.display = "";
 			document.getElementById('swap_usage_tr').style.display = "none";
 		}else if(db_swap_['swap_warnning'] == "4" ){
-			$j("#warn").html("<i>已经挂载虚拟内存!&nbsp;&nbsp;&nbsp;&nbsp;虚拟文件："+usb_path+"/swap</i>");
+			$j("#warn").html("<i>已经挂载虚拟内存!&nbsp;&nbsp;&nbsp;&nbsp;虚拟文件："+usb_path+"/swapfile</i>");
 			document.getElementById('cmdBtn').style.display = "none";
 			document.getElementById('cmdBtn1').style.display = "";
 			document.getElementById('swap_size_tr').style.display = "none";
