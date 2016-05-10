@@ -20,5 +20,11 @@ $VERSION
 $md5value
 EOF
 
+cat > ./config.json.js <<EOF
+{
+"version':"$VERSION",
+"md5":"$md5value"
+}
+
 echo $VERSION
 echo $md5value
