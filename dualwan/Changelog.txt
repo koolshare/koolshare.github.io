@@ -8,5 +8,7 @@ Koolshare Asuswrt-Merlin dualwan Changelog
    - fix ui error
 0.4 (28/04/2016 16:21:00)
    - fix ui again
-0.4 (28/04/2016 16:21:00)
+0.5 (28/04/2016 16:21:00)
    - 优化路由表
+0.6 (28/04/2016 16:21:00)
+   - 针对移动用户特别优化
