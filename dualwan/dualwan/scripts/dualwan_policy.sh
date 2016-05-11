@@ -84,12 +84,12 @@ use_wan1operators=$operators1_config
 sed -e "s/^/-A wan1operators &/g" -e "1 i\-N wan1operators nethash --hashsize 91260" $use_wan1operators | awk '{print $0} END{print "COMMIT"}' | ipset -R
 use_wan2operators=$operators2_config
 sed -e "s/^/-A wan2operators &/g" -e "1 i\-N wan2operators nethash --hashsize 4096" $use_wan2operators | awk '{print $0} END{print "COMMIT"}' | ipset -R
-iptables -t mangle -A PREROUTING -m set --match-set wan1operators dst -j MARK --set-mark 7777 >/dev/null 2>&1
 iptables -t mangle -A PREROUTING -m set --match-set wan2operators dst  -j MARK --set-mark 8888 >/dev/null 2>&1
 iptables -t mangle -A PREROUTING -m set ! --match-set wan1operators dst -j MARK --set-mark $operators_foreign >/dev/null 2>&1
-iptables -t mangle -A OUTPUT -m set --match-set wan1operators dst -j MARK --set-mark 7777 >/dev/null 2>&1
+iptables -t mangle -A PREROUTING -m set --match-set wan1operators dst -j MARK --set-mark 7777 >/dev/null 2>&1
 iptables -t mangle -A OUTPUT -m set --match-set wan2operators dst  -j MARK --set-mark 8888 >/dev/null 2>&1
 iptables -t mangle -A OUTPUT -m set ! --match-set wan1operators dst -j MARK --set-mark $operators_foreign >/dev/null 2>&1
+iptables -t mangle -A OUTPUT -m set --match-set wan1operators dst -j MARK --set-mark 7777 >/dev/null 2>&1
 if [ ! -z "$shadowsocks_server_ip" ] && [ "$ss_mode" != "0" ];then
 	ip rule add from $shadowsocks_server_ip table $sstable pref 123
 	ip rule add to $shadowsocks_server_ip table $sstable pref 124
