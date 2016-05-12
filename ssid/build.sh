@@ -2,7 +2,7 @@
 
 
 MODULE=ssid
-VERSION=1.0
+VERSION=1.1
 TITLE=中文SSID
 DESCRIPTION=中文SSID，装逼利器！
 HOME_URL=Module_ssid.asp

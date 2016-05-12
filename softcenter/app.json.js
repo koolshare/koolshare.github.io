@@ -81,14 +81,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2016-05-12_23:09:50", 
+            "build_date": "2016-05-12_23:12:08", 
             "description": "中文SSID，装逼利器！", 
             "home_url": "Module_ssid.asp", 
-            "md5": "945968d9081867d33e500f6f126ca1b7", 
+            "md5": "83405e0eb09f750c286f34a7e604620d", 
             "name": "ssid", 
             "tar_url": "ssid/ssid.tar.gz", 
             "title": "中文SSID", 
-            "version": "1.0"
+            "version": "1.1"
         }, 
         {
             "build_date": "2016-04-30_01:11:17", 
