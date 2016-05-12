@@ -343,6 +343,7 @@ function appUninstallModule(moduleInfo) {
             "正在检查是否有更新~",
             "检测更新错误！"
         ];
+        document.getElementById("install_status").style.display = "";
         $("#appInstallInfo").html(s + infos[code]);
     }
     //切换安装未安装面板
@@ -642,6 +643,17 @@ function softceterInitData(data) {
                                                         <td colspan="3"></td>
                                                     </tr>
 
+                                                    <tr bgcolor="#444f53" id="install_status" style="display: none;" width="235px">
+                                                       	<td>
+                                                       	    <div style="padding:10px;width:95%;font-size:14px;" id="appInstallInfo">
+                                                       	    </div>
+                                                       	</td>
+                                                       	<td class="cloud_main_radius_right">
+                                                       	</td>
+                                                     </tr>
+                                                    <tr height="10px">
+                                                        <td colspan="3"></td>
+                                                    </tr>
                                                     <tr width="235px">
                                                         <td colspan="4" cellpadding="0" cellspacing="0" style="padding:0">
                                                             <input class="show-install-btn" type="button" value="已安装"/>
@@ -654,33 +666,10 @@ function softceterInitData(data) {
                                                             <div style="text-align:center; line-height: 4em;">更新中...</div>
                                                         </td>
                                                     </tr>
+                                                    <tr height="10px">
+                                                        <td colspan="3"></td>
+                                                    </tr>
 
-                                                    <tr bgcolor="#444f53" width="235px">
-                                                            <td bgcolor="#444f53" class="cloud_main_radius_left" width="20%" height="50px">
-                                                                <div style="padding:10px;" align="left">
-                                                                    <li>摄像头挂载？</li>
-                                                                    <li>百度云？</li>
-                                                                    <li>Transmission？</li>
-                                                                    <li>Owncloud？</li>
-                                                                    <li>中文SSID?</li>
-                                                                    <li>校园网认证？</li>
-                                                                    
-                                                                    <li>....</li>
-                                                                </div>
-                                                            </td>
-                                                            <td width="6px">
-                                                                <div align="center"><img src="/images/cloudsync/line.png"></div>
-                                                            </td>
-                                                            <td width="1px">
-                                                            </td>
-                                                            <td>
-                                                                <div style="padding:10px;width:95%;font-size:14px;" id="appInstallInfo">
-                                                                    然而并没有...请随时关注固件更新哦~<i>（上古天坑区）</i>
-                                                                </div>
-                                                            </td>
-                                                            <td class="cloud_main_radius_right">
-                                                            </td>
-                                                        </tr>
                                                 </table>
                                             <div class="KoolshareBottom">论坛技术支持： <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a>
                                                 <br/>博客技术支持： <a href="http://www.mjy211.com" target="_blank"> <i><u>www.mjy211.com</u></i> </a>
