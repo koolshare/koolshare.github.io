@@ -3,6 +3,35 @@
 
 目前仅支持小宝改版本的 Merlin 固件的插件。未来有望支持 Tomato/Ddwrt 等 arm 系列路由器的插件而成为类似 Entware 可以让大家安装并且有配置界面的插件列表。目前还远远达不到我们心中的设计目标，时间有限，只能一跳一跳的去完成，希望能有更多兄弟参与。
 
+插件支持列表
+========
+* 穿透 DDNS
+* P2P 远程控制 [项目地址](https://github.com/jannson/koolnet)
+* 讯雷下载
+* Aria2 下载
+* 讯雷快鸟
+* Adm 去广告
+* 策略路由
+
+存储核心
+=======
+* Skipdbv2 [项目地址](https://github.com/koolshare/skipdbv2)
+
+开发与调试方式
+======
+* 最好在 linux 环境下进行开发
+* TODO
+
+微信扫码捐赠我们
+======
+
+ <img src="https://github.com/koolshare/firmware/blob/master/.resources/img/qr.png" alt="QR" width="120"/>
+
+* [贡献名单详情](https://github.com/koolshare/koolshare.github.io/tree/master/donate)
+
+交流场地
+======
+* 目前我们在 [Koolshare 论坛](https://koolshare.cn/forum.php)
 
 项目感想
 ========
@@ -36,34 +65,3 @@
 4. 如果你是严重的阴谋论者，总觉得我们从固件当中得到巨额的利益，可以选择像其它友善的用户一样，给我们[捐赠](#微信扫码捐赠我们)。
 
 最后，要说到某些看不懂代码小弱，反正用正确的代码攻击我们的人。请多来论坛学习些知识，然后再说话好么？能看懂代码再说话好么？用 cdn.txt 来实现返利网的跳转，你来实现试试？
-
-插件支持列表
-========
-* 穿透 DDNS
-* P2P 远程控制 [项目地址](https://github.com/jannson/koolnet)
-* 讯雷下载
-* Aria2 下载
-* 讯雷快鸟
-* Adm 去广告
-* 策略路由
-
-存储核心
-=======
-* Skipdbv2 [项目地址](https://github.com/koolshare/skipdbv2)
-
-开发与调试方式
-======
-* 最好在 linux 环境下进行开发
-* TODO
-
-微信扫码捐赠我们
-======
-
- <img src="https://github.com/koolshare/firmware/blob/master/.resources/img/qr.png" alt="QR" width="120"/>
-
-* [贡献名单详情](https://github.com/koolshare/koolshare.github.io/tree/master/donate)
-
-交流场地
-======
-* 目前我们在 [Koolshare 论坛](https://koolshare.cn/forum.php)
-
