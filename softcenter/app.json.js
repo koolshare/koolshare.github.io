@@ -11,14 +11,14 @@
             "version": "0.2.4"
         }, 
         {
-            "build_date": "2016-05-13_15:49:47", 
+            "build_date": "2016-05-13_16:14:27", 
             "description": "加速apple服务", 
             "home_url": "Module_appledns.asp", 
-            "md5": "5a74cbe6d06b2d55d7bc75ca7fb84711", 
+            "md5": "b36145d26b9a896a329c8facd9020466", 
             "name": "appledns", 
             "tar_url": "appledns/appledns.tar.gz", 
             "title": "AppleDNS", 
-            "version": "0.1"
+            "version": "0.2"
         }, 
         {
             "build_date": "2016-05-05_17:05:32", 

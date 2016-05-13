@@ -75,7 +75,7 @@ for (var i = 0; i < params.length; i++) {
 			if (typeof db_appledns_[p + params[i]] !== "undefined") {
 				$j("#appledns_"+params[i]).val(db_appledns_[p + params[i]]);
 				}
-            update_visibility();
+
         }
 	}
 	}

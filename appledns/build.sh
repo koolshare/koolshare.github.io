@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=appledns
-VERSION=0.1
+VERSION=0.2
 TITLE=AppleDNS
 DESCRIPTION=加速apple服务
 HOME_URL=Module_appledns.asp
