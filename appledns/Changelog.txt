@@ -1,0 +1,4 @@
+Koolshare Asuswrt-Merlin AppleDNS Changelog
+===========================================
+0.1 (13/5/2015 15:10:00)
+   - ADD:	add AppleDNS for Merlin Koolshare firmware Softerware center
