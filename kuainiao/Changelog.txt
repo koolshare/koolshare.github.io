@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin KuaiNiao Changelog
 ===========================================
+0.2.5
+	-fix	修复加速状态提示
+
 0.2.4
 	-fix	remove old install module and set version check in web
 

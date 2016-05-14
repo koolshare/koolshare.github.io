@@ -48,6 +48,7 @@
 			//conf2obj();
 			//var conf_ajax = setInterval("conf2obj();", 60000);
 			version_show();
+			write_kuainiao_install_status();
 			check_selected("kuainiao_start", db_kuainiao_.kuainiao_start);
 			check_selected("kuainiao_time", db_kuainiao_.kuainiao_time);
 		}
@@ -142,20 +143,44 @@
 				}
 			}
 		}
+
+		function write_kuainiao_install_status(){
+			$.ajax({
+				type: "get",
+				url: "dbconf?p=kuainiao_",
+				dataType: "script",
+				success: function() {
+					//尝试合并函数
+					var p = "kuainiao_";
+					var params = ["warning","can_upgrade", "run_status", "run_warnning"];
+					for (var i = 0; i < params.length; i++) {
+						if (typeof db_kuainiao_[p + params[i]] !== "undefined") {
+							$("#kuainiao_"+params[i]).val(db_kuainiao_[p + params[i]]);
+						}
+					}
+					update_visibility();
+					//check_selected("kuainiao_start", db_kuainiao_.kuainiao_start);
+					//check_selected("kuainiao_time", db_kuainiao_.kuainiao_time);
+					check_downstream(parseInt(db_kuainiao_.kuainiao_config_downstream), parseInt(db_kuainiao_.kuainiao_config_max_downstream), db_kuainiao_.kuainiao_run_status);
+
+					setTimeout("write_kuainiao_install_status()", 10000);
+				}
+			});
+		}
 		
 		function version_show(){
-			$j("#kuainiao_version_status").html("<i>当前版本：" + db_adm_['adm_version']);
-		    $j.ajax({
+			$("#kuainiao_version_status").html("<i>当前版本：" + db_kuainiao_['kuainiao_version']);
+		    $.ajax({
 		        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/kuainiao/config.json.js',
 		        type: 'GET',
 		        success: function(res) {
-		            var txt = $j(res.responseText).text();
+		            var txt = $(res.responseText).text();
 		            if(typeof(txt) != "undefined" && txt.length > 0) {
 		                //console.log(txt);
-		                var obj = $j.parseJSON(txt.replace("'", "\""));
-				$j("#kuainiao_version_status").html("<i>当前版本：" + obj.version);
+		                var obj = $.parseJSON(txt.replace("'", "\""));
+				$("#kuainiao_version_status").html("<i>当前版本：" + obj.version);
 				if(obj.version != db_adm_["adm_version"]) {
-					$j("#kuainiao_version_status").html("<i>有新版本：" + obj.version);
+					$("#kuainiao_version_status").html("<i>有新版本：" + obj.version);
 				}
 		            }
 		        }

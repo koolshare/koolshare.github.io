@@ -1,14 +1,14 @@
 {
     "apps": [
         {
-            "build_date": "2016-04-30_01:11:17", 
+            "build_date": "2016-05-14_19:18:05", 
             "description": "迅雷快鸟，为上网加速而生~", 
             "home_url": "", 
-            "md5": "b83f50b36c34f383fc365bd45c9b1a5f", 
+            "md5": "8f85cf71e23f3d750c5fefdd702d70d8", 
             "name": "kuainiao", 
             "tar_url": "kuainiao/kuainiao.tar.gz", 
             "title": "讯雷快鸟", 
-            "version": "0.2.4"
+            "version": "0.2.5"
         }, 
         {
             "build_date": "2016-05-13_16:14:27", 
