@@ -2,7 +2,7 @@
 
 # ====================================变量定义====================================
 # 版本号定义
-version="1.4"
+version="1.5"
 
 # 导入skipd数据
 eval `dbus export adm`
@@ -55,6 +55,7 @@ del_process_protect(){
 # 更新nat规则（兼容SS）
 update_nat_rules(){
 	ipset -N adblock iphash
+	ipset --add adblock 188.188.188.188
 	ln -sf /koolshare/adm/adblock.conf /jffs/configs/dnsmasq.d/adblock.conf
 	if [ "$ssmode" == "1" ] || [ "$ssmode" == "3" ] || [ "$ssmode" == "4" ] || [ "$ssmode" == "5" ] ;then
 		# 当ss模式为gfwlist模式，游戏模式，游戏模式V2，全局模式时，应用此规则

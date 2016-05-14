@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin adm Changelog
 ===========================================
+1.5
+   - fix	fix page loading slow when accessing 188.188.188.188
+
 0.9
    - add	add ipset support for adm
 
