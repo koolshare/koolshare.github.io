@@ -40,7 +40,11 @@ else
 	
 	
 	last_node=`dbus list ssconf_basic_server|cut -d "=" -f 1| cut -d "_" -f 4| sort -nr|head -n 1`
+	if [ ! -z "$last_node" ];then
 	k=`expr $last_node + 1`
+	else
+	k=1
+	fi
 	min=1
 	max=`cat /tmp/ss_conf_backup.txt |grep -wc server`
 	while [ $min -le $max ]
