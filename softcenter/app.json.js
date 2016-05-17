@@ -51,14 +51,14 @@
             "version": "0.2"
         },
         {
-            "build_date": "2016-05-17_13:28:58",
+            "build_date": "2016-05-17_13:34:30",
             "description": "迅雷快鸟，为上网加速而生~",
             "home_url": "Module_kuainiao.asp",
-            "md5": "0345a9f945717c29b6bfbf04efb16f13", 
+            "md5": "765df77cd27ac13b73077c3d0020c0bb", 
             "name": "kuainiao",
             "tar_url": "kuainiao/kuainiao.tar.gz",
             "title": "讯雷快鸟",
-            "version": "0.3.2"
+            "version": "0.3.3"
         },
         {
             "build_date": "2016-04-29_16:03:44",
