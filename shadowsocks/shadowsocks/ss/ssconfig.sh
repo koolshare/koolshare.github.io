@@ -31,6 +31,13 @@ if [ -z $ss_ipset_cdn_dns ];then
 	dbus set ss_overall_dns="0"
 	dbus set ss_basic_adblock="0"
 fi
+
+if [ -z $ss_kcptun_dns_china ];then
+	dbus set ss_kcptun_dns_china="1"
+	dbus set ss_kcptun_dns_foreign="4"
+	dbus set ss_kcptun_dns2socks_user="8.8.8.8:53"
+fi
+
 if [ -z $ss_gameV2_dns2ss_user ];then
 	dbus set ss_gameV2_dns2ss_user="8.8.8.8:53"
 	dbus set ss_gameV2_dns_china="1"
@@ -195,6 +202,9 @@ apply_ss(){
 	elif [ "5" == "$ss_basic_mode" ]; then
 		. /koolshare/ss/stop.sh
 		. /koolshare/ss/overall/start.sh
+	elif [ "6" == "$ss_basic_mode" ]; then
+		. /koolshare/ss/stop.sh
+		. /koolshare/ss/kcptun/start.sh
 	fi
 }
 

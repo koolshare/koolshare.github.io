@@ -15,6 +15,7 @@ pdnsd=$(ps | grep "pdnsd" | grep -v "grep")
 chinadns=$(ps | grep "chinadns" | grep -v "grep")
 DNS2SOCK=$(ps | grep "dns2socks" | grep -v "grep")
 koolgame=$(ps | grep "koolgame" | grep -v "grep")
+kcptun=$(ps | grep "kcp_router" | grep -v "grep")
 Pcap_DNSProxy=$(ps | grep "Pcap_DNSProxy" | grep -v "grep")
 lan_ipaddr=$(nvram get lan_ipaddr)
 ip_rule_exist=`ip rule show | grep "fwmark 0x1/0x1 lookup 300" | grep -c 300`
@@ -230,6 +231,13 @@ sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
 	if [ ! -z "$koolgame" ]; then 
 		echo $(date): kill koolgame...
 		killall koolgame >/dev/null 2>&1
+		echo $(date): done
+		echo $(date):
+	fi
+# kill all kcptun
+	if [ ! -z "$kcptun" ]; then 
+		echo $(date): kill kcptun...
+		killall kcptun >/dev/null 2>&1
 		echo $(date): done
 		echo $(date):
 	fi
