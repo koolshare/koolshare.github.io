@@ -1,7 +1,7 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.3.1"
+version="0.3.2"
 
 #双WAN判断
 wans_mode=$(nvram get wans_mode)
@@ -102,7 +102,7 @@ fi
 if test $kuainiao_run_i -ge 6; then
 	#改变sequenceNo值
 	sequence=$(expr $kuainiao_run_i + 100001)
-	ret=`$HTTP_REQ --header "User-Agent: android-async-http/xl-acc-sdk/version-1.6.1.177600" https://login.mobile.reg2t.sandai.net:443/ $POST_ARG"{\"userName\": \""$uname"\", \"businessType\": 68, \"clientVersion\": \"2.0.3.4\", \"appName\": \"ANDROID-com.xunlei.vip.swjsq\", \"isCompressed\": 0, \"sequenceNo\": "$sequence", \"sessionID\": \"\", \"loginType\": 0, \"rsaKey\": {\"e\": \"010001\", \"n\": \"AC69F5CCC8BDE47CD3D371603748378C9CFAD2938A6B021E0E191013975AD683F5CBF9ADE8BD7D46B4D2EC2D78AF146F1DD2D50DC51446BB8880B8CE88D476694DFC60594393BEEFAA16F5DBCEBE22F89D640F5336E42F587DC4AFEDEFEAC36CF007009CCCE5C1ACB4FF06FBA69802A8085C2C54BADD0597FC83E6870F1E36FD\"}, \"cmdID\": 1, \"verifyCode\": \"\", \"peerID\": \""$peerid"\", \"protocolVersion\": 108, \"platformVersion\": 1, \"passWord\": \""$pwd"\", \"extensionList\": \"\", \"verifyKey\": \"\", \"sdkVersion\": 177550, \"devicesign\": \""$devicesign"\"}"`
+	ret=`$HTTP_REQ --header "User-Agent: android-async-http/xl-acc-sdk/version-1.6.1.177600" https://login.mobile.reg2t.sandai.net:443/ $POST_ARG"{\"userName\": \""$uid"\", \"businessType\": 68, \"clientVersion\": \"2.0.3.4\", \"appName\": \"ANDROID-com.xunlei.vip.swjsq\", \"isCompressed\": 0, \"sequenceNo\": "$sequence", \"sessionID\": \"\", \"loginType\": 0, \"rsaKey\": {\"e\": \"010001\", \"n\": \"AC69F5CCC8BDE47CD3D371603748378C9CFAD2938A6B021E0E191013975AD683F5CBF9ADE8BD7D46B4D2EC2D78AF146F1DD2D50DC51446BB8880B8CE88D476694DFC60594393BEEFAA16F5DBCEBE22F89D640F5336E42F587DC4AFEDEFEAC36CF007009CCCE5C1ACB4FF06FBA69802A8085C2C54BADD0597FC83E6870F1E36FD\"}, \"cmdID\": 1, \"verifyCode\": \"\", \"peerID\": \""$peerid"\", \"protocolVersion\": 108, \"platformVersion\": 1, \"passWord\": \""$pwd"\", \"extensionList\": \"\", \"verifyKey\": \"\", \"sdkVersion\": 177550, \"devicesign\": \""$devicesign"\"}"`
 	session=`echo $ret|awk -F '"sessionID":' '{print $2}'|awk -F ',' '{print $1}'|grep -oE "[A-F,0-9]{32}"`
 	uid=`echo $ret|awk -F '"userID":' '{print $2}' | awk -F ',' '{print $1}'`
 	#判断登陆是否成功
