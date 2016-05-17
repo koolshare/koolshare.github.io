@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=kuainiao
-VERSION=0.3.0
+VERSION=0.3.1
 TITLE=讯雷快鸟
 DESCRIPTION=迅雷快鸟，为上网加速而生~
 HOME_URL=Module_kuainiao.asp
