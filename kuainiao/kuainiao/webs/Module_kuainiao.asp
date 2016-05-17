@@ -24,6 +24,7 @@
 		<script type="text/javascript" src="/dbconf?p=kuainiao_&v=<% uptime(); %>"></script>
         <script type="text/javascript" src="/res/rsa.js"></script>
         <script type="text/javascript" src="/res/md5.js"></script>
+		<script type="text/javascript" src="/res/sha1.js"></script>
         <script type="text/javascript">
 		function init() {
 			show_menu();
@@ -52,7 +53,12 @@
 			check_selected("kuainiao_start", db_kuainiao_.kuainiao_start);
 			check_selected("kuainiao_time", db_kuainiao_.kuainiao_time);
 		}
-        var kn = '00D6F1CFBF4D9F70710527E1B1911635460B1FF9AB7C202294D04A6F135A906E90E2398123C234340A3CEA0E5EFDCB4BCF7C613A5A52B96F59871D8AB9D240ABD4481CCFD758EC3F2FDD54A1D4D56BFFD5C4A95810A8CA25E87FDC752EFA047DF4710C7D67CA025A2DC3EA59B09A9F2E3A41D4A7EFBB31C738B35FFAAA5C6F4E6F';
+		//生成设备id
+		var wan_mac = '<% nvram_get("wan_hwaddr"); %>';
+		var fake_device_id = md5(wan_mac);
+		var device_sign = "div100."+fake_device_id+md5(hex_sha1(fake_device_id+"com.xunlei.vip.swjsq68700d1872b772946a6940e4b51827e8af"));
+
+        var kn = '00AC69F5CCC8BDE47CD3D371603748378C9CFAD2938A6B021E0E191013975AD683F5CBF9ADE8BD7D46B4D2EC2D78AF146F1DD2D50DC51446BB8880B8CE88D476694DFC60594393BEEFAA16F5DBCEBE22F89D640F5336E42F587DC4AFEDEFEAC36CF007009CCCE5C1ACB4FF06FBA69802A8085C2C54BADD0597FC83E6870F1E36FD';
         var ke = '010001';
 
         var rsa = new RSAKey();
@@ -65,6 +71,7 @@
 			var pwd = $("#kuainiao_config_old_pwd").val();
 			var encrypted_pwd = rsa.encrypt(md5(pwd));
 			$("#kuainiao_config_pwd").val(encrypted_pwd.toUpperCase());
+			$("#kuainiao_device_sign").val(device_sign);
 			//防止变为更新操作
 			$("#kuainiao_update_check").val(0);
 			showLoading(9);
@@ -167,7 +174,7 @@
 				}
 			});
 		}
-		
+
 		function version_show(){
 			$("#kuainiao_version_status").html("<i>当前版本：" + db_kuainiao_['kuainiao_version']);
 		    $.ajax({
@@ -218,6 +225,7 @@
 			<input type="hidden" id="kuainiao_can_upgrade" name="kuainiao_can_upgrade" value='<% dbus_get_def("kuainiao_can_upgrade", "0"); %>'/>
 			<input type="hidden" id="kuainiao_run_status" name="kuainiao_run_status" value='<% dbus_get_def("kuainiao_run_status", "0"); %>'/>
 			<input type="hidden" id="kuainiao_run_warnning" name="kuainiao_run_warnning" value='<% dbus_get_def("kuainiao_run_warnning", ""); %>'/>
+			<input type="hidden" id="kuainiao_device_sign" name="kuainiao_device_sign" value='<% dbus_get_def("kuainiao_device_sign", ""); %>'/>
 
 			<table class="content" align="center" cellpadding="0" cellspacing="0">
 				<tr>

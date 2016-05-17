@@ -1,9 +1,10 @@
 #!/bin/sh
 
 MODULE=kuainiao
-VERSION=0.2.5
+VERSION=0.3.0
 TITLE=讯雷快鸟
 DESCRIPTION=迅雷快鸟，为上网加速而生~
+HOME_URL=Module_kuainiao.asp
 
 # Check and include base
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
