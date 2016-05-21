@@ -25,17 +25,17 @@
 <style>
 .cloud_main_radius_left{
     -webkit-border-radius: 10px 0 0 10px;
-    -moz-border-radius: 10px 0 0 10px;  
+    -moz-border-radius: 10px 0 0 10px;
     border-radius: 10px 0 0 10px;
 }
 .cloud_main_radius_right{
     -webkit-border-radius: 0 10px 10px 0;
-    -moz-border-radius: 0 10px 10px 0;  
+    -moz-border-radius: 0 10px 10px 0;
     border-radius: 0 10px 10px 0;
 }
 .cloud_main_radius{
     -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;   
+    -moz-border-radius: 10px;
     border-radius: 10px;
 }
 </style>
@@ -78,7 +78,6 @@
         font-size: 16px;
         opacity: 0;
         background-color:#000;
-        line-height: 84px;
         margin:5px;
         text-overflow:ellipsis;
         transition: opacity .5s ease-in;
@@ -86,27 +85,35 @@
     .icon-desc .text{
         font-size: 12px;
         line-height: 1.4em;
-        vertical-align:middle;
-        display: inline-block;
-        margin: 10px;
+        display: block;
+        height: 100%;
+        padding: 10px;
+        box-sizing: border-box;
     }
     .icon:hover .icon-desc{
         opacity: .8;
         visibility: visible;
     }
     .icon-desc .opt{
-        font-size: 0;
-        line-height: 0;
+        position: absolute;
+        bottom: 0;
+        height: 18px;
+        width: 100%;
+    }
+    .install-status-0 .icon-desc .opt{
+        height: 100%;
     }
     .icon-desc .install-btn,
     .icon-desc .uninstall-btn,
     .icon-desc .update-btn{
-        display: inline-block;
+        display: block;
         border: none;
         width: 100%;
         height: 18px;
-        margin-top: 20px;
         border-radius: 0px 0px 5px 5px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
     }
     .icon-desc .uninstall-btn{
         display: none;
@@ -129,10 +136,7 @@
         background: #444f53;
     }
     .install-status-1 .uninstall-btn{
-        display: inline-block;
-        position: absolute;
-        left: 0;
-        bottom: 0;
+        display: block;
     }
     .install-status-1 .install-btn{
         display: none;
@@ -141,15 +145,17 @@
         display: none;
     }
     .install-status-2 .uninstall-btn{
-        display: inline-block;
+        display: block;
         width: 40%;
         border-radius: 0px 0px 5px 0px;
+        right: 0;
+        left: auto;
     }
     .install-status-2 .install-btn{
         display: none;
     }
     .install-status-2 .update-btn{
-        display: inline-block;
+        display: block;
     }
     .install-status-1{
         display: none;
@@ -200,7 +206,7 @@ function checkField(o, f, d) {
     if(typeof o[f] == "undefined") {
         o[f] = d;
     }
- 
+
     return o[f];
 }
 function appPostScript(moduleInfo, script) {
@@ -219,12 +225,12 @@ function appPostScript(moduleInfo, script) {
 
     data["softcenter_installing_todo"] = moduleInfo.name;
     if(script == "ks_app_install.sh") {
-	data["softcenter_installing_tar_url"] = moduleInfo.tar_url;
-	data["softcenter_installing_md5"] = moduleInfo.md5;
-	data["softcenter_installing_version"] = moduleInfo.version;
+    data["softcenter_installing_tar_url"] = moduleInfo.tar_url;
+    data["softcenter_installing_md5"] = moduleInfo.md5;
+    data["softcenter_installing_version"] = moduleInfo.version;
 
-	//Update title for this module
-	data[moduleInfo.name + "_title"] = moduleInfo.title;
+    //Update title for this module
+    data[moduleInfo.name + "_title"] = moduleInfo.title;
         applyUrl = applyUrl + "," + moduleInfo.name;
     }
 
@@ -251,16 +257,16 @@ function appInstallModule(moduleInfo) {
 }
 function appUninstallModule(moduleInfo) {
 
-	if (!window.confirm('确定卸载吗')) {
-	    return;
-	}
+    if (!window.confirm('确定卸载吗')) {
+        return;
+    }
     appPostScript(moduleInfo, "ks_app_remove.sh");
 }
 </script>
 <script>
     //TODO auto detect home url
     db_softcenter_["softcenter_home_url"] = "http://koolshare.ngrok.wang:5000";
-    // 安装信息更新策略: 
+    // 安装信息更新策略:
     // 当软件安装的时候,安装进程内部会有超时时间. 超过超时时间 没安装成功,则认为失败.
     // 但是路由内部的绝对时间与浏览器上的时间可能不同步,所以无法使用路由器内的时间. 浏览器的策略是,
     // 安装的时候会有一个同样的计时,若这个超时时间内,安装状态有变化,则更新安装状态.从而可以实时更新安装进程.
@@ -301,7 +307,7 @@ function appUninstallModule(moduleInfo) {
             if(o[base+"status"] != currState.lastStatus) {
                 currState.lastStatus = o[base+"status"];
                 showInstallInfo(curr_module, currState.lastStatus);
-        
+
                 // Install ok now
                 if(currState.lastStatus == "1" || currState.lastStatus == "7") {
                     currState.installing = false;
@@ -321,7 +327,7 @@ function appUninstallModule(moduleInfo) {
            }
         })
     }
-    
+
     function showInstallInfo(module, scode) {
         var code = parseInt(scode);
         var s = module.capitalizeFirstLetter();
@@ -367,8 +373,8 @@ function appUninstallModule(moduleInfo) {
                 data = Array.prototype.slice.call(arguments, 1),
                 toString = Object.prototype.toString;
             if(data.length){
-                data = data.length == 1 ? 
-                    (opts !== null && (/\[object Array\]|\[object Object\]/.test(toString.call(opts))) ? opts : data) 
+                data = data.length == 1 ?
+                    (opts !== null && (/\[object Array\]|\[object Object\]/.test(toString.call(opts))) ? opts : data)
                     : data;
                 return source.replace(/#\{(.+?)\}/g, function (match, key){
                     var replacer = data[key];
@@ -390,9 +396,9 @@ function appUninstallModule(moduleInfo) {
                 '</dd>',
                 '<dt class="icon-title">#{title}</dt>',
                 '<dd class="icon-desc">',
-                    '<div class="text">',
-                        '<a href="/#{home_url}">#{description}</a>',
-                    '</div>',
+                    '<a class="text" href="/#{home_url}">',
+                        '#{description}',
+                    '</a>',
                     '<div class="opt">',
                         '<button type="button" class="install-btn" data-name="#{name}">安装</button>',
                         '<button type="button" class="update-btn" data-name="#{name}">更新</button>',
@@ -427,16 +433,16 @@ function softceterInitData(data) {
     var remoteData = data;
     $("#spnOnlineVersion").html(remoteData.version);
     if(remoteData.version != db_softcenter_["softcenter_version"]) {
-	 $("#updateBtn").show();
-	 $("#updateBtn").click(function () {
-	      var moduleInfo = {
-		"name":"softcenter",
-		"md5": remoteData.md5, 
-		"tar_url": remoteData.tar_url, 
-		"version": remoteData.version
-		};
-	      appPostScript(moduleInfo, "ks_app_install.sh");
-	 });
+     $("#updateBtn").show();
+     $("#updateBtn").click(function () {
+          var moduleInfo = {
+        "name":"softcenter",
+        "md5": remoteData.md5,
+        "tar_url": remoteData.tar_url,
+        "version": remoteData.version
+        };
+          appPostScript(moduleInfo, "ks_app_install.sh");
+     });
     }
 }
 
@@ -475,7 +481,7 @@ function softceterInitData(data) {
             $.each(remoteData, function (i, app) {
                 var name = app.name;
                 var oldApp = localData[name] || {};
-                var install = (parseInt(oldApp.install, 10) === 1 && app.version !== oldApp.version) ? 2 : oldApp.install || "0"; 
+                var install = (parseInt(oldApp.install, 10) === 1 && app.version !== oldApp.version) ? 2 : oldApp.install || "0";
                 result[name] = $.extend(oldApp, app);
                 result[name].install = install;
             });
@@ -495,7 +501,7 @@ function softceterInitData(data) {
                     new_version: false
                 });
 
-                // icon 规则: 
+                // icon 规则:
                 // 如果已安装的插件,那图标必定在 /koolshare/res 目录, 通过 /res/icon-{name}.png 请求路径得到图标
                 // 如果是未安装的插件,则必定在 http://koolshare.ngrok.wang:5000/{name}/{name}/icon-{name}.png
                 // TODO 如果因为一些错误导致没有图标, 有可能显示一张默认图标吗?
@@ -571,7 +577,7 @@ function softceterInitData(data) {
             appInstallModule(softInfo[name]);
 
         });
-    
+
     });
 </script>
 </head>
@@ -589,7 +595,7 @@ function softceterInitData(data) {
     <input type="hidden" name="first_time" value="">
     <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>">
     <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>">
-<table class="content" align="center" cellpadding="0" cellspacing="0">  
+<table class="content" align="center" cellpadding="0" cellspacing="0">
     <tr>
         <td width="17">&nbsp;</td>
         <td valign="top" width="202">
@@ -644,12 +650,12 @@ function softceterInitData(data) {
                                                     </tr>
 
                                                     <tr bgcolor="#444f53" id="install_status" style="display: none;" width="235px">
-                                                       	<td>
-                                                       	    <div style="padding:10px;width:95%;font-size:14px;" id="appInstallInfo">
-                                                       	    </div>
-                                                       	</td>
-                                                       	<td class="cloud_main_radius_right">
-                                                       	</td>
+                                                        <td>
+                                                            <div style="padding:10px;width:95%;font-size:14px;" id="appInstallInfo">
+                                                            </div>
+                                                        </td>
+                                                        <td class="cloud_main_radius_right">
+                                                        </td>
                                                      </tr>
                                                     <tr height="10px">
                                                         <td colspan="3"></td>
