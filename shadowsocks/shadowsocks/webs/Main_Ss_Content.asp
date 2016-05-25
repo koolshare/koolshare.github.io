@@ -130,11 +130,11 @@ function init() {
     }
     setTimeout("checkSSStatus();", 1000);
     setTimeout("write_ss_install_status()", 1000);
-    setTimeout("check_ss()", 2000);
     updateSs_node_listView();
+    document.getElementById('table_for_all').style.display = "";
     var jffs2_scripts = '<% nvram_get("jffs2_scripts"); %>';
 	if(jffs2_scripts == "0"){
-		$j("#warn").html("<i>发现Enab JFFS custom scripts and configs选项未开启！</br></br>请开启并重启路由器后才能正常使用SS。<a href='/Advanced_System_Content.asp'><em><u> 前往设置 </u></em></a> </i>");
+		$j("#warn").html("<i>发现Enable JFFS custom scripts and configs选项未开启！</br></br>请开启并重启路由器后才能正常使用SS。<a href='/Advanced_System_Content.asp'><em><u> 前往设置 </u></em></a> </i>");
 		document.form.ss_basic_enable.value = 0;
 		inputCtrl(document.form.switch,0);
 	}
@@ -379,7 +379,7 @@ function update_visibility() {
 	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode!== "4"));
 	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode!== "4"));
 	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode!== "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple"));
-	document.getElementById('table_for_all').style.display = "";
+	
 }
 
 function oncheckclick(obj) {
@@ -1144,14 +1144,25 @@ function show_hide_table(){
 	}
 }
 
+
+
 function version_show(){
-	if (db_ss['ss_basic_version_local'] != db_ss['ss_basic_version_web'] && db_ss['ss_basic_version_web'] !== "undefined"){
-		//$j("#ss_version_show").html("<i>有新版本：ARM " + db_ss['ss_basic_version_web']);
-		$j("#ss_version_show").html("<i>当前版本：ARM " + db_ss['ss_basic_version_local']);
-		$j("#updateBtn").html("<i>升级到：" + db_ss['ss_basic_version_web']);
-	} else {
-		$j("#ss_version_show").html("<i>当前版本：ARM " + db_ss['ss_basic_version_local']);
-	}
+	$j("#ss_version_show").html("<i>当前版本：" + db_ss['ss_basic_version_web']);
+    $j.ajax({
+        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/config.json.js',
+        type: 'GET',
+        success: function(res) {
+            var txt = $j(res.responseText).text();
+            if(typeof(txt) != "undefined" && txt.length > 0) {
+                var obj = $j.parseJSON(txt.replace("'", "\""));
+		        $j("#ss_version_show").html("<i>当前版本：" + obj.version);
+		        if(obj.version != db_ss["ss_basic_version_local"]) {
+                    $j("#ss_version_show").html("<i>当前版本：ARM " + db_ss['ss_basic_version_local']);
+                    $j("#updateBtn").html("<i>升级到：" + db_ss['ss_basic_version_web']);
+		        }
+            }
+        }
+    });
 }
 
 function write_ss_install_status(){
@@ -1210,13 +1221,6 @@ function update_ss(){
 	document.form.action_mode.value = ' Refresh ';
     document.form.SystemCmd.value = "ss_update.sh";
     document.form.submit();
-}
-
-function check_ss(){
-	document.form.action_mode.value = ' Refresh ';
-    document.form.SystemCmd.value = "ss_check.sh";
-    document.form.submit();
-    setTimeout("version_show()", 6000)
 }
 
 </script>
