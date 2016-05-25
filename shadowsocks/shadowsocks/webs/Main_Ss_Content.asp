@@ -1158,7 +1158,7 @@ function version_show(){
 		        $j("#ss_version_show").html("<i>当前版本：" + obj.version);
 		        if(obj.version != db_ss["ss_basic_version_local"]) {
                     $j("#ss_version_show").html("<i>当前版本：ARM " + db_ss['ss_basic_version_local']);
-                    $j("#updateBtn").html("<i>升级到：" + db_ss['ss_basic_version_web']);
+                    $j("#updateBtn").html("<i>升级到：" + obj.version);
 		        }
             }
         }
