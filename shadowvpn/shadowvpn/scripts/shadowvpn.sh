@@ -106,7 +106,6 @@ service restart_dnsmasq >/dev/null 2>&1
 
 }
 
-}
 if [ "$shadowvpn_enable" = "1" ];then
 	if [ ! -c "/dev/net/tun" ]; then
 		modprobe tun

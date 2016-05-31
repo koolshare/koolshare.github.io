@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=shadowvpn
-VERSION=2.6
+VERSION=2.7
 TITLE=Shadowvpn
 DESCRIPTION=SVPN让游戏更畅快
 HOME_URL=Module_shadowvpn.asp
