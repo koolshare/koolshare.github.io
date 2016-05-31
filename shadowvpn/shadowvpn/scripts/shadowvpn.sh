@@ -26,20 +26,20 @@ EOF
 	if [ "$shadowvpn_token" != "" ]; then
 		echo "user_token=$shadowvpn_token" >>$CONFIG
 	fi
-	shadowvpn -c $CONFIG -s start
+	/koolshare/bin/shadowvpn -c $CONFIG -s start
 }
 start_dns() {
 if [ ! -d /jffs/configs ]; then
 mkdir -p /jffs/configs
 fi
-if [ ! -d /jffs/configs/game.d ]; then
-mkdir -p /jffs/configs/game.d
+if [ ! -d /jffs/configs/dnsmasq.d ]; then
+mkdir -p /jffs/configs/dnsmasq.d
 fi
 echo $(date): create dnsmasq.conf.add..
 cat <<-EOF >/jffs/configs/dnsmasq.conf.add
 no-resolv
 server=127.0.0.1#7913
-conf-dir=/jffs/configs/game.d
+conf-dir=/jffs/configs/dnsmasq.d
 EOF
 if [ -z "$Pcap_DNSProxy" ]; then
 echo $(date): Start Pcap_DNSProxy..
@@ -82,7 +82,7 @@ sleep_a_while(){
 stop_vpn() {
    if [ ! -z "$shadowvpn" ]; then
 	 echo $(date): stop shadowvpn...
-   /usr/bin/shadowvpn -c $CONFIG -s stop >/dev/null 2>&1
+   /koolshare/bin/shadowvpn -c $CONFIG -s stop >/dev/null 2>&1
 	 fi
 	# kill Pcap_DNSProxy
 	if [ ! -z "$Pcap_DNSProxy" ]; then
