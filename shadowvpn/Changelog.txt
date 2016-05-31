@@ -1,5 +1,11 @@
 Koolshare Asuswrt-Merlin ShaowVpn Changelog
 ===========================================
+2.5 ( 26/02/2016 15:03:28 )
+   - fix erro
+
+2.4 ( 26/02/2016 15:03:28 )
+   - fix some type error
+
 2.3 ( 26/02/2016 15:03:28 )
    - fix some type error
 
