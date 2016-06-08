@@ -42,17 +42,17 @@ function submitData(r){
         if(r == "01" && phddnsEnable == 0)  return;
         submitDatas["phddns_basic_request"] = r;
         $.ajax({
-type:"POST",
-url:"applydb.cgi?p=phddns_basic",
-dataType:"text",
-data:submitDatas,
-success : function(){
-setTimeout("getDataStatus()",1000)
-},
-error:function(){
-$("#status").html("状态信息异常Ajax:" + r );    
-}
-});
+            type:"POST",
+            url:"applydb.cgi?p=phddns_basic",
+            dataType:"text",
+            data:submitDatas,
+            success : function(){
+            setTimeout("getDataStatus()",1000)
+            },
+            error:function(){
+            $("#status").html("状态信息异常Ajax:" + r );    
+            }
+    });
 }
 
 function getDataStatus(){
@@ -170,7 +170,7 @@ if(db_phddns_basic['phddns_basic_status'] == "020"){
 function buildIphoneSwitch(x) {
         phddnsEnable = x;
         $('#phddns_enable').iphoneSwitch(x, function() {
-                        document.form.submit();
+                        //document.form.submit();
                         phddnsEnable = 1;
                         submitData("10");
                         }, function() {

@@ -2,7 +2,7 @@
 eval `dbus  export phddns`
 
 PhddnsPath=/koolshare/phddns
-StatusFile=$PhddnsPath/oraysl.status
+StatusFile=$Phddns/config/oraysl.status
 orayproc=`ps | grep "oraysl" | grep -v 'grep' | awk '{print $1}'`
 
 ########get user info SN and status#####

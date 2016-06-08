@@ -6,12 +6,11 @@ ORAY_DAEMON="$PathPath/phddns_daemon.sh"
 ###start peanuthull###
 start()
 {
-
 killall oraysl
 killall oraynewph
 
 $PhddnsPath/oraysl  -a 127.0.0.1 -p 16062 -s phsle01.oray.net:80 -d >/dev/null 2>&1
-$PhddnsPath/oraynepwh -s 0.0.0.0  >/dev/null 2>&1 &
+$PhddnsPath/oraynewph -s 0.0.0.0  >/dev/null 2>&1 &
 $ORAY_DAEMON >/dev/null 2>&1 &
 }
 
