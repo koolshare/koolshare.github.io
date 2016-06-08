@@ -111,10 +111,10 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2016-06-08_16:09:54", 
+            "build_date": "2016-06-08_17:08:26", 
             "description": "让局域网控制能简单", 
             "home_url": "", 
-            "md5": "874eb2abb61a16c97b43559cd533eab6", 
+            "md5": "16a3a5fe79aab8dcb5ebcaffe4b43d4a", 
             "name": "phddns", 
             "tar_url": "phddns/phddns.tar.gz", 
             "title": "花生壳内网版", 

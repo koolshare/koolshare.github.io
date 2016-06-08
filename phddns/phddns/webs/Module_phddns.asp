@@ -36,7 +36,7 @@
         }
 
         function showDataStatus() {
-            $("#phddns_basic_request") = submitDatas["phddns_basic_request"];
+            $("#phddns_basic_request").val(submitDatas["phddns_basic_request"]);
 
             if (submitDatas["phddns_enable"]) {
                 buildIphoneSwitch(submitDatas["phddns_enable"]);
