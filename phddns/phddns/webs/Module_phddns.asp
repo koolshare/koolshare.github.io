@@ -28,7 +28,7 @@
             submitDatas = db_phddns_;
             showDataStatus();
 
-            setTimeout("getDataStatus()", 3000);
+            setTimeout("getDataStatus()", 5000);
         }
 
         function reload_Soft_Center() {
@@ -36,6 +36,8 @@
         }
 
         function showDataStatus() {
+            $("#phddns_basic_request") = submitDatas["phddns_basic_request"];
+
             if (submitDatas["phddns_enable"]) {
                 buildIphoneSwitch(submitDatas["phddns_enable"]);
             } else {
@@ -95,7 +97,10 @@
                 url: "dbconf?p=phddns_",
                 dataType: "script",
                 success: function (s) {
+                    submitDatas = db_phddns_;
                     showDataStatus();
+
+                    setTimeout("getDataStatus()", 3000);
                 }
             });
         }
