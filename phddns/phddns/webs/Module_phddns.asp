@@ -35,7 +35,7 @@
 
         function showDataStatus() {
             if (submitDatas["phddns_enable"]) {
-                buildIphoneSwitch($("phddns_eanble").val());
+                buildIphoneSwitch(submitDatas["phddns_enable"]);
             } else {
                 buildIphoneSwitch("0");
             }
@@ -57,11 +57,9 @@
             } else if (submitDatas['phddns_basic_status'] == "02") {
                 $("#status").html("phddns has already stopped");
             } else if (submitDatas['phddns_basic_status'] == "010") {
-                $("#status").html("启动中，请稍等……");
-            } else if (submitDatas['phddns_basic_status'] == "01") {
                 if (submitDatas['phddns_basic_info']) {
-                    var sn_code = submitDatas['phddns_basic_info'].split(" ")[1].split("=")[1];
-                    var status = submitDatas['phddns_basic_info'].split(" ")[2].split("=")[1];
+                    var sn_code = submitDatas['phddns_basic_info'].split("$")[1].split("=")[1];
+                    var status = submitDatas['phddns_basic_info'].split("$")[2].split("=")[1];
                     if (status.length != 0) {
                         if (status = "ONLINE") {
                             $("#status").html("在线");
