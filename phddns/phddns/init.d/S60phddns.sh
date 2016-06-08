@@ -9,8 +9,8 @@ start_with_sys(){
 		$Phddns/phddns_run.sh  start>/dev/null 2>&1
 	fi
 }
-case $ACTION in
 
+case $1 in
 start)
 	start_with_sys
 	exit 0
