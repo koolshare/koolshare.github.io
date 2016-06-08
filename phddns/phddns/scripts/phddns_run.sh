@@ -30,8 +30,8 @@ sleep 1
 }
 
 reset(){
-rm -rf $PhddnsPath/configs/init.status
-rm -rf $PhddnsPath/configs/PhMain.ini
+rm -rf $PhddnsPath/config/init.status
+rm -rf $PhddnsPath/config/PhMain.ini
 }
 
 case $1 in 
