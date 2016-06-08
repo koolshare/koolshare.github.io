@@ -1,16 +1,18 @@
 #!/bin/sh
 
 PhddnsPath=/koolshare/phddns
-ORAY_DAEMON="$PathPath/phddns_daemon.sh"
+ORAY_DAEMON="$PhddnsPath/phddns_daemon.sh"
 
 ###start peanuthull###
 start()
 {
-killall oraysl
-killall oraynewph
+killall oraysl || true
+killall oraynewph || true
+sleep 1
 
-$PhddnsPath/oraysl  -a 127.0.0.1 -p 16062 -s phsle01.oray.net:80 -d >/dev/null 2>&1
+$PhddnsPath/oraysl -a 127.0.0.1 -p 16062 -s phsle01.oray.net:80 -d >/dev/null 2>&1
 $PhddnsPath/oraynewph -s 0.0.0.0  >/dev/null 2>&1 &
+sleep 1
 $ORAY_DAEMON >/dev/null 2>&1 &
 }
 
@@ -18,12 +20,13 @@ $ORAY_DAEMON >/dev/null 2>&1 &
 stop()
 {
 
-killall phddns_daemon.sh
-killall oraysl
-killall oraynewph
+killall phddns_daemon.sh || true
+killall oraysl || true
+killall oraynewph || true
 
+sleep 1
 ##clean the statu file##
-rm -rf $PhddnsPath/config/oraysl.status
+#rm -rf $PhddnsPath/config/oraysl.status
 }
 
 reset(){

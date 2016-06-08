@@ -27,6 +27,8 @@
 
             submitDatas = db_phddns_;
             showDataStatus();
+
+            setTimeout("getDataStatus()", 3000);
         }
 
         function reload_Soft_Center() {
@@ -53,7 +55,8 @@
             }
 
             if (submitDatas['phddns_basic_status'] == "020") {
-                $("#status").html("phddns start stoping");
+                buildIphoneSwitch(0);
+                $("#status").html("花生壳已关闭");
             } else if (submitDatas['phddns_basic_status'] == "02") {
                 $("#status").html("phddns has already stopped");
             } else if (submitDatas['phddns_basic_status'] == "010") {
@@ -89,7 +92,7 @@
         function getDataStatus() {
             $.ajax({
                 type: "get",
-                url: "dbconf?p=phddns_basic",
+                url: "dbconf?p=phddns_",
                 dataType: "script",
                 success: function (s) {
                     showDataStatus();
@@ -103,13 +106,13 @@
                 $("#phddns_enable").val("1");
                 $("#phddns_basic_request").val("10");
 
-                showLoading(5);
+                showLoading(7);
                 document.form.submit();
             }, function () {
                 $("#phddns_enable").val("0");
                 $("#phddns_basic_request").val("20");
 
-                showLoading(5);
+                showLoading(7);
                 document.form.submit();
             });
         }
@@ -117,21 +120,21 @@
         function check() {
             var se = confirm("是否重置当前账户?");
             if (se == true) {
-                submitDatas["phddns_basic_request"] = "30";
-                $.ajax({
-                    type: "POST",
-                    url: "applydb?p=phddns_basic",
-                    dataType: "text",
-                    data: submitDatas,
-                    success: function () {
-                        setTimeout("getDataStatus()", 1000)
-                    },
-                    error: function () {
-                        alert("重置失败！");
-                    }
-                });
+                $("#phddns_enable").val("0");
+                $("#phddns_basic_request").val("30");
+
+                showLoading(7);
+                document.form.submit();
             }
         }
+
+function manager() {
+    window.open("http://hsk.oray.com/bang/passport/login?sn=" + $("#sn").html())
+}
+
+function done_validating(action) {
+    refreshpage(8);
+}
 
 </script>
 </head>
@@ -140,19 +143,18 @@
     </div>
     <div id="Loading" class="popup_bg">
     </div>
-    <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0">
-    </iframe>
-    <form method="post" name="form" action="/applydb.cgi?p=phddns_" target="hidden_frame">
+    <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"> </iframe>
+    <form method="POST" name="form" action="/applydb.cgi?p=phddns_" target="hidden_frame">
     <input type="hidden" name="current_page" value="Module_phddns.asp" />
     <input type="hidden" name="next_page" value="Module_phddns.asp" />
     <input type="hidden" name="group_id" value="" />
     <input type="hidden" name="modified" value="0" />
-    <input type="hidden" name="action_mode" value="Refresh" />
+    <input type="hidden" name="action_mode" value=" Refresh " />
     <input type="hidden" name="action_script" value="" />
-    <input type="hidden" name="action_wait" value="25" />
+    <input type="hidden" name="action_wait" value="5" />
     <input type="hidden" name="first_time" value="" />
     <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>" />
-    <input type="hidden" name="SystemCmd" value="phddns_config.sh" onkeydown="onSubmitCtrl(this, ' Refresh ')" />
+    <input type="hidden" name="SystemCmd" value="phddns_config.sh" />
     <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>" />
     <input type="hidden" id="phddns_basic_request" name="phddns_basic_request" value="" />
     <input type="hidden" id="phddns_enable" name="phddns_enable" value="" />
@@ -218,8 +220,7 @@
                                             </tr>
                                         </table>
                                         <div class="apply_gen">
-                                            <button class="button_gen" onclick="window.open('http://b.oray.com/')">
-                                                登陆管理</button>
+                                            <button class="button_gen" onclick="manager()">管理页面</button>
                                             <button class="button_gen" onclick="check()">
                                                 重置</button>
                                         </div>
