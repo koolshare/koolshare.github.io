@@ -7,6 +7,7 @@ cp -rf /tmp/phddns/phddns/  /koolshare/
 cp -rf /tmp/phddns/res/* /koolshare/res/
 cp -rf /tmp/phddns/scripts/* /koolshare/scripts/
 cp -rf /tmp/phddns/webs/*  /koolshare/webs/
+mkdir -p /koolshare/phddns/config
 
 cd /
 rm -rf /tmp/phddns*  >/dev/null 2>&1
