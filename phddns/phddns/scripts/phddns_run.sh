@@ -27,10 +27,8 @@ rm -rf $PhddnsPath/config/oraysl.status
 }
 
 reset(){
-        
 rm -rf $PhddnsPath/configs/init.status
 rm -rf $PhddnsPath/configs/PhMain.ini
-        
 }
 
 case $1 in 

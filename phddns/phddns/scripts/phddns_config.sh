@@ -1,9 +1,11 @@
 #!/bin/sh
-eval `dbus  export phddns`
+eval `dbus export phddns`
 
 PhddnsPath=/koolshare/phddns
 StatusFile=$Phddns/config/oraysl.status
 orayproc=`ps | grep "oraysl" | grep -v 'grep' | awk '{print $1}'`
+
+logger "request is: "$phddns_basic_request
 
 ########get user info SN and status#####
 getStatus()
@@ -11,10 +13,10 @@ getStatus()
 if [ -e $StatusFile ]; then
         dbus set phddns_basic_info=$(cat "$StatusFile")
         if [ -n $phddns_basic_info ]; then
-                dbus set phddns_basic_status ="01"
+                dbus set phddns_basic_status="01"
         fi
 else
-        dbus set phddns_basic_status = ""
+        dbus set phddns_basic_status=""
 fi
 }
 #####Request processing interface#######
@@ -28,7 +30,7 @@ if [ "$phddns_basic_request" = "20"]; then
         fi
 elif [ "$phddns_basic_request" = "10"]; then
         if [ -e $Phddns/oraysl ]; then
-                dbus set phddns_basic_status ="010"
+                dbus set phddns_basic_status="010"
                 $PhddnsPath/../script/phddns_run.sh start
         else
                 dbus set phddns_basic_status="00"
@@ -36,10 +38,10 @@ elif [ "$phddns_basic_request" = "10"]; then
 elif [ "$phddns_basic_request" = "00" ]; then
         if [ -n "$orayproc" ]; then 
                 #does not exist oray cloese switch#
-                dbus set phddns_basic_status ="01"
+                dbus set phddns_basic_status="01"
                 getStatus
         else
-                dbus set phddns_basic_status ="02"
+                dbus set phddns_basic_status="02"
         fi
 elif [ "$phddns_basic_request" = "30"]; then
         if [-e $Phddns/oraysl ]; then
@@ -50,7 +52,7 @@ elif [ "$phddns_basic_request" = "30"]; then
                 dbus set phddns_basic_status="030"
         fi
 else
-        dbus set phddns_basic_status ="00"
+        dbus set phddns_basic_status="00"
 fi
 
 #dbus save phddns
