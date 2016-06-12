@@ -1,8 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
-1.5.1
-   - fix	修复SS界面黑屏的bug
-   - changed	更改版本号检测机制为前端检测
+1.5.2
+		常规维护，因时间太少没时间做其它部分。
+   - fix	修复SS界面黑屏的bug，应该修好了吧；
+   - fix	修复ping test和web test在上个版本中不能使用的bug。
 
 1.5.0
    - fix	修复当节点为空时，导入json文件只能导入一个节点的bug

@@ -18,6 +18,7 @@
 <script type="text/javascript" src="/validator.js"></script>
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/general.js"></script>
+<script type="text/javascript" src="/form.js"></script>
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
 <script language="JavaScript" type="text/javascript" src="/client_function.js"></script>
 <script type="text/javascript" src="/dbconf?p=ss&v=<% uptime(); %>"></script>
@@ -99,6 +100,46 @@
 	box-shadow: 3px 3px 10px #000;
 	display:block;
 	overflow: auto;
+}
+.xware{
+	width:700px;
+	height:280px;
+	position:absolute;
+	background: rgba(0,0,0,0.85);
+	z-index:10;
+	margin-top:050px;
+	margin-left:300px;
+	border-radius:10px;
+	display: none;
+}
+.xware_router_status{
+	text-align:center;
+	font-size:18px;
+	padding:10px;
+	font-weight:bold;
+}
+.xware_status{
+	width:90%;
+	background-color:#BEBEBE;
+	color:#000;border-collapse:separate !important;
+	border-radius:10px;
+}
+.xware_status th{
+	text-align:left;
+	border-bottom:1px solid #4D595D;
+	padding-left:15px;
+	font-size:14px;
+}
+.xware_status td{
+	border-bottom:1px solid #4D595D;
+	width:100px;
+}
+.xware_status td>div{
+	/*background-color:#FF7575;*/ /*#1CFE16 for Yes button*/
+	border-radius:10px;
+	text-align:center;
+	padding:3px 0px;
+	width:100px;
 }
 </style>
 <script>
@@ -1225,11 +1266,66 @@ function update_ss(){
     document.form.submit();
 }
 
+function pop_lan_list(){
+cal_panel_block("xware_div", 0.25);
+$j('#xware_div').fadeIn();
+}
+function close_xware_status(){
+$j('#xware_div').fadeOut(100);
+}
+
 </script>
 </head>
 <body onload="init();">
 <div id="TopBanner"></div>
 <div id="Loading" class="popup_bg"></div>
+<div id="xware_div" class="xware">
+	<table style="width:99%;">
+		<tr>
+			<td>
+				<div class="xware_router_status">梅林固件-迅雷远程</div>
+			</td>
+		</tr>
+			<td>
+				<div id="xunlei_description" class="formfontdesc" style="font-style: italic;font-size: 14px;">1.&nbsp;得到激活码后请前往[迅雷远程管理页面]绑定账号；<br>2.&nbsp;下载速度过快时，可能消耗更多的CPU资源，你可以在远程管理页面中设置速度限制。<br>3.&nbsp;当前迅雷安装目录：<br>4.&nbsp;当前默认下载目录：</div>
+			</td>
+		<tr>
+			<td>
+				<div>
+					<table class="FormTable" width="99%" border="1" align="center" cellpadding="4" cellspacing="0">
+						<tr>
+							<th>启用/关闭</th>
+							<td>
+								<div class="left" style="width:94px; float:left; cursor:pointer;" id="radio_enable"></div>
+							</td>
+						</tr>
+						<tr>
+							<th>信息提示</th>
+							<td>
+								<div>
+									<span id="xunlei_info"></span>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table style="margin-top:10px;margin-left:auto;margin-right:auto;">
+					<tr>
+						<td>
+							<div style="margin-left:200px;"><input  class="button_gen" type="button" onclick="close_xware_status();" value="关闭"></input></div>
+							<div style="margin-top:-33px;margin-left:340px;"><button class="button_gen" onclick="window.open('http://yuancheng.xunlei.com/')">迅雷远程管理页面</button></div>
+							<div style="margin-top:-33px;margin-left:535px;">后台技术支持：<font color='#ffcc00'>sadoneli</font><br/>Shell, Web by： <a href="http://ganky.vicp.net" target="_blank"><font color='#ffcc00'>Ganky</font></a></div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</div>
 <div id="LoadingBar" class="popup_bar_bg">
 <table cellpadding="5" cellspacing="0" id="loadingBarBlock" class="loadingBarBlock" align="center">
 	<tr>
@@ -1640,6 +1736,14 @@ function update_ss(){
 															<input type="text" class="input_ss_table" style="width:auto;display: none;" id="ss_basic_white_lan" name="ss_basic_white_lan" maxlength="80" size="43" placeholder="仅允许的客户端IP如:192.168.1.2,192.168.1.3" value="">
 													</td>
 												</tr>
+
+												<tr id="ss_lan_controls1">
+													<th width="35%">局域网客户端控制</th>
+													<td>
+														<div id="ss_lan_edit" style="float:left;cursor:pointer" onclick="pop_lan_list();"><i><u>点击配置</u></i></div>
+													</td>
+												</tr>
+												
 											</table>
 										</div>
 										<div id="boot_delay">
