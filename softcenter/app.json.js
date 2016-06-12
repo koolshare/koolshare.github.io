@@ -112,7 +112,7 @@
         }, 
         {
             "build_date": "2016-06-08_18:35:25", 
-            "description": "让局域网控制能简单", 
+            "description": "让局域网控制更简单", 
             "home_url": "", 
             "md5": "128a5d9cb4077ca96feb75ecfacc4f71", 
             "name": "phddns", 
