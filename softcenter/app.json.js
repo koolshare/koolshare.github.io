@@ -1,6 +1,16 @@
 {
     "apps": [
         {
+            "build_date": "2016-06-13_11:16:04", 
+            "description": "使用Dnspod的ddns服务", 
+            "home_url": "Module_ddnspod.asp", 
+            "md5": "bf4231eac9d141f0d9bf3ee37d79b0e0", 
+            "name": "ddnspod", 
+            "tar_url": "ddnspod/ddnspod.tar.gz", 
+            "title": "DDnspod", 
+            "version": "0.1.1"
+        }, 
+        {
             "build_date": "2016-05-17_13:34:30", 
             "description": "迅雷快鸟，为上网加速而生~", 
             "home_url": "Module_kuainiao.asp", 
