@@ -1,14 +1,14 @@
 {
     "apps": [
         {
-            "build_date": "2016-06-13_11:23:35", 
+            "build_date": "2016-06-13_11:46:24", 
             "description": "使用Dnspod的ddns服务", 
             "home_url": "Module_ddnspod.asp", 
-            "md5": "f27cb9490899de8ca44b2e6add3ea5f0", 
+            "md5": "56cd70417014e9f698536e6e2f8ba3d5", 
             "name": "ddnspod", 
             "tar_url": "ddnspod/ddnspod.tar.gz", 
             "title": "DDnspod", 
-            "version": "0.1.1"
+            "version": "0.1.2"
         }, 
         {
             "build_date": "2016-05-17_13:34:30", 
