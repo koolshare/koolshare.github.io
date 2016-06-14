@@ -46,13 +46,14 @@ elif [ "$phddns_basic_request" = "00" ]; then
         dbus set phddns_basic_status="02"
     fi
 elif [ "$phddns_basic_request" = "30" ]; then
-    if [ -f $Phddns/oraysl ]; then
+    if [ -f $Phddns/config/init.status ]; then
         $Phddns/../scripts/phddns_run.sh reset
         ##reset success##
-        dbus set phddns_basic_status="03"
+        dbus set phddns_basic_status="010"
+        dbus set phddns_reset_status="01"
         sleep 2
     else
-        dbus set phddns_basic_status="030"
+        dbus set phddns_reset_status="00"
     fi
 else
     dbus set phddns_basic_status="00"

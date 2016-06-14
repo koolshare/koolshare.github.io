@@ -22,6 +22,8 @@
     <script>
 
         var submitDatas = {};
+		var requesting = false;
+
         function init() {
             show_menu();
 
@@ -37,8 +39,9 @@
 
         function showDataStatus() {
             $("#phddns_basic_request").val(submitDatas["phddns_basic_request"]);
+			$("#phddns_enable").val(submitDatas["phddns_enable"]);
 
-            if (submitDatas["phddns_enable"]) {
+            if (submitDatas["phddns_enable"] == "1") {
                 buildIphoneSwitch(submitDatas["phddns_enable"]);
             } else {
                 buildIphoneSwitch("0");
@@ -108,15 +111,24 @@
 
         function buildIphoneSwitch(x) {
             $('#iphone_phddns_enable').iphoneSwitch(x, function () {
+				if(requesting) {
+					return;
+				}
+
                 $("#phddns_enable").val("1");
                 $("#phddns_basic_request").val("10");
 
                 showLoading(7);
                 document.form.submit();
             }, function () {
+				if(requesting) {
+					return;
+				}
+
                 $("#phddns_enable").val("0");
                 $("#phddns_basic_request").val("20");
 
+				requesting = true;
                 showLoading(7);
                 document.form.submit();
             });
@@ -125,20 +137,32 @@
         function check() {
             var se = confirm("是否重置当前账户?");
             if (se == true) {
-                $("#phddns_enable").val("0");
+                $("#phddns_enable").val("1");
                 $("#phddns_basic_request").val("30");
-
-                showLoading(7);
+				if (submitDatas['phddns_basic_stataus'] == "03")
+				{
+					showLoading(7);
+					setTimeout("alert('重置成功！')", 3000);
+				} else if (submitDatas['phddns_basic_status'] == "030")
+				{
+					showLoading(7);
+					setTimeout("alert('重置失败或当前账户未登录！')", 3000);
+				}
                 document.form.submit();
+				return true;
             }
+
+			return false;
         }
 
 function manager() {
-    window.open("http://hsk.oray.com/bang/passport/login?sn=" + $("#sn").html())
+    window.open("http://hsk.oray.com/bang/passport/login?sn=" + $("#sn").html())	;
+	return false;
 }
 
 function done_validating(action) {
     refreshpage(8);
+	requesting = false;
 }
 
 </script>
@@ -225,8 +249,8 @@ function done_validating(action) {
                                             </tr>
                                         </table>
                                         <div class="apply_gen">
-                                            <button class="button_gen" onclick="manager()">管理页面</button>
-                                            <button class="button_gen" onclick="check()">
+                                            <button class="button_gen" onclick="return manager();">管理页面</button>
+                                            <button class="button_gen" onclick="return check();">
                                                 重置</button>
                                         </div>
                                         <div class="apply_gen">
