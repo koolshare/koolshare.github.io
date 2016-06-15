@@ -139,11 +139,11 @@
             if (se == true) {
                 $("#phddns_enable").val("1");
                 $("#phddns_basic_request").val("30");
-				if (submitDatas['phddns_basic_stataus'] == "03")
+				if (submitDatas['phddns_reset_stataus'] == "00")
 				{
 					showLoading(7);
 					setTimeout("alert('重置成功！')", 3000);
-				} else if (submitDatas['phddns_basic_status'] == "030")
+				} else if (submitDatas['phddns_reset_status'] == "00")
 				{
 					showLoading(7);
 					setTimeout("alert('重置失败或当前账户未登录！')", 3000);

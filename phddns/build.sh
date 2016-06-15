@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=phddns
-VERSION=0.1
+VERSION=0.2
 TITLE="花生壳内网版"
 DESCRIPTION=让局域网控制能简单
 
