@@ -1,7 +1,7 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.3.5"
+version="0.3.6"
 kuainiaocru=$(cru l | grep "kuainiao")
 startkuainiao=$(ls -l /koolshare/init.d/ | grep "S80Kuainiao")
 app_version="2.0.3.4"
@@ -100,7 +100,7 @@ get_bandwidth(){
 		can_upgrade=`echo $band|awk -F '"can_upgrade":' '{print $2}'|awk -F ',' '{print $1}'`
 		dbus set kuainiao_can_upgrade=$can_upgrade
 		kuainiao_can_upgrade=$can_upgrade
-		dial_account=`echo $band|awk -F '"dial_account": "' '{print $2}'|awk -F '"' '{print $1}'`
+		dial_account=`echo $band|awk -F '"dial_account":' '{print $2}'|awk -F ',' '{print $1}'|grep -oE '[0-9]{1,20}'`
 		dbus set kuainiao_dial_account=$dial_account
 		kuainiao_dial_account=$dial_account
 		#判断是否满足加速条件

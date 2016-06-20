@@ -1,7 +1,7 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.3.5"
+version="0.3.6"
 
 #双WAN判断
 wans_mode=$(nvram get wans_mode)
