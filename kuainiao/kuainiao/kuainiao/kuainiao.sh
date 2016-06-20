@@ -1,7 +1,7 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.3.4"
+version="0.3.5"
 
 #双WAN判断
 wans_mode=$(nvram get wans_mode)
@@ -94,7 +94,8 @@ day_of_month=`echo $day_of_month_orig|grep -oE "[1-9]{1,2}"`
 if [[ -z $kuainiao_run_orig_day || $day_of_month -ne $kuainiao_run_orig_day ]]; then
 	dbus ram kuainiao_run_orig_day=$day_of_month
 	kuainiao_run_orig_day=$day_of_month
-	$HTTP_REQ "$api_url/recover?peerid=$peerid&userid=$uid&user_type=1&sessionid=$kuainiao_run_session&dial_account=$dial_account&client_type=android-swjsq-$app_version&client_version=androidswjsq-$app_version&os=android-5.0.1.24SmallRice"
+	_ts=`date +%s`000
+	$HTTP_REQ "$api_url/recover?peerid=$peerid&userid=$uid&user_type=1&sessionid=$kuainiao_run_session&dial_account=$dial_account&client_type=android-swjsq-$app_version&client_version=androidswjsq-$app_version&os=android-5.0.1.24SmallRice&time_and=$_ts"
 	dbus ram kuainiao_run_i=6
 	kuainiao_run_i=6
 	sleep 5
@@ -133,13 +134,15 @@ if test $kuainiao_run_i -ge 6; then
 	#登录完成重置下加速api
 	get_kuainiao_api
 	#开始加速
-	$HTTP_REQ "$api_url/upgrade?peerid=$peerid&userid=$uid&user_type=1&sessionid=$kuainiao_run_session&dial_account=$dial_account&client_type=android-swjsq-$app_version&client_version=androidswjsq-$app_version&os=android-5.0.1.24SmallRice"
+	_ts=`date +%s`000
+	$HTTP_REQ "$api_url/upgrade?peerid=$peerid&userid=$uid&user_type=1&sessionid=$kuainiao_run_session&dial_account=$dial_account&client_type=android-swjsq-$app_version&client_version=androidswjsq-$app_version&os=android-5.0.1.24SmallRice&time_and=$_ts"
 fi
 
 sleep 1
 
 #保持心跳
-ret=`$HTTP_REQ "$api_url/keepalive?peerid=$peerid&userid=$uid&user_type=1&sessionid=$kuainiao_run_session&dial_account=$dial_account&client_type=android-swjsq-$app_version&client_version=androidswjsq-$app_version&os=android-5.0.1.24SmallRice"`
+_ts=`date +%s`000
+ret=`$HTTP_REQ "$api_url/keepalive?peerid=$peerid&userid=$uid&user_type=1&sessionid=$kuainiao_run_session&dial_account=$dial_account&client_type=android-swjsq-$app_version&client_version=androidswjsq-$app_version&os=android-5.0.1.24SmallRice&time_and=$_ts"`
 if [ ! -z "`echo $ret|grep "not exist channel"`" ]; then
 	dbus ram kuainiao_run_i=6
 	dbus ram kuainiao_run_warnning="迅雷快鸟心跳保持失败！"$(date "+%Y-%m-%d %H:%M:%S")
