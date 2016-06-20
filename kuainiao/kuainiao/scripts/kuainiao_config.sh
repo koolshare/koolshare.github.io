@@ -1,9 +1,10 @@
 #!/bin/sh
 eval `dbus export kuainiao`
 source /koolshare/scripts/base.sh
-version="0.3.3"
+version="0.3.4"
 kuainiaocru=$(cru l | grep "kuainiao")
 startkuainiao=$(ls -l /koolshare/init.d/ | grep "S80Kuainiao")
+app_version="2.0.3.4"
 
 #双WAN判断
 wans_mode=$(nvram get wans_mode)
@@ -58,6 +59,7 @@ get_mac_addr
 dbus set kuainiao_config_nic=$nic
 dbus set kuainiao_config_peerid=$peerid
 dbus set kuainiao_version=$version
+dbus set kuainiao_app_version=$app_version
 
 #获取迅雷用户uid
 get_xunlei_uid(){
@@ -98,6 +100,9 @@ get_bandwidth(){
 		can_upgrade=`echo $band|awk -F '"can_upgrade":' '{print $2}'|awk -F ',' '{print $1}'`
 		dbus set kuainiao_can_upgrade=$can_upgrade
 		kuainiao_can_upgrade=$can_upgrade
+		dial_account=`echo $band|awk -F '"dial_account": "' '{print $2}'|awk -F '"' '{print $1}'`
+		dbus set kuainiao_dial_account=$dial_account
+		kuainiao_dial_account=$dial_account
 		#判断是否满足加速条件
 		if [[ $can_upgrade -eq 1 ]]; then
 			#echo "迅雷快鸟可以加速~~~愉快的开始加速吧~~"
@@ -152,20 +157,20 @@ query_try_info(){
 
 #检测提速带宽
 bandwidth(){
-	width=`$HTTP_REQ "$api_url/bandwidth?peerid=$peerid&userid=$uid&user_type=1&sessionid=$session"`
+	width=`$HTTP_REQ "$api_url/bandwidth?peerid=$peerid&userid=$uid&user_type=1&sessionid=$session&dial_account=$dial_account&client_type=android-swjsq-$app_version&client_version=androidswjsq-$app_version&os=android-5.0.1.24SmallRice"`
 	echo $width
 }
 ##{"bandwidth":{"downstream":51200,"upstream":0},"can_upgrade":1,"dial_account":"100001318645","errno":0,"max_bandwidth":{"downstream":102400,"upstream":0},"message":"","province":"bei_jing","province_name":"北京","richmessage":"","sequence":0,"sp":"cnc","sp_name":"联通","timestamp":1455936922}
 
 #迅雷快鸟加速心跳
 kuainiao_keepalive(){
-	keepalive=`$HTTP_REQ "$api_url/keepalive?peerid=$peerid&userid=$uid&user_type=1&sessionid=$session"`
+	keepalive=`$HTTP_REQ "$api_url/keepalive?peerid=$peerid&userid=$uid&user_type=1&sessionid=$session&dial_account=$dial_account&client_type=android-swjsq-$app_version&client_version=androidswjsq-$app_version&os=android-5.0.1.24SmallRice"`
 	echo $keepalive
 }
 
 #快鸟加速注销
 kuainiao_recover(){
-	recover=`$HTTP_REQ "$api_url/recover?peerid=$peerid&userid=$uid&user_type=1&sessionid=$session"`
+	recover=`$HTTP_REQ "$api_url/recover?peerid=$peerid&userid=$uid&user_type=1&sessionid=$session&dial_account=$dial_account&client_type=android-swjsq-$app_version&client_version=androidswjsq-$app_version&os=android-5.0.1.24SmallRice"`
 	echo $recover
 }
 
