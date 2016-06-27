@@ -95,11 +95,17 @@
         }
 
         function getDataStatus() {
+            if(requesting) {
+                return;
+            }
+            requesting = true;
+
             $.ajax({
                 type: "get",
                 url: "dbconf?p=phddns_",
                 dataType: "script",
                 success: function (s) {
+                    requesting = false;
                     submitDatas = db_phddns_;
                     showDataStatus();
 
@@ -109,11 +115,17 @@
         }
 
 
+        var iphone_last_state = "";
         function buildIphoneSwitch(x) {
+            if(iphone_last_state == x) {
+                return
+            }
+            iphone_last_state = x;
             $('#iphone_phddns_enable').iphoneSwitch(x, function () {
 				if(requesting) {
 					return;
 				}
+				requesting = true;
 
                 $("#phddns_enable").val("1");
                 $("#phddns_basic_request").val("10");
@@ -124,30 +136,37 @@
 				if(requesting) {
 					return;
 				}
+				requesting = true;
 
                 $("#phddns_enable").val("0");
                 $("#phddns_basic_request").val("20");
 
-				requesting = true;
                 showLoading(7);
                 document.form.submit();
             });
         }
 
         function check() {
+            if(requesting) {
+                alert("请求中。。。")
+                return;
+            }
+
             var se = confirm("是否重置当前账户?");
             if (se == true) {
                 $("#phddns_enable").val("1");
                 $("#phddns_basic_request").val("30");
-				if (submitDatas['phddns_reset_status'] == "00")
+
+				/* if (submitDatas['phddns_reset_status'] == "00")
 				{
-					showLoading(7);
 					setTimeout("alert('重置成功！')", 3000);
 				} else if (submitDatas['phddns_reset_status'] == "01")
 				{
-					showLoading(7);
 					setTimeout("alert('重置失败或当前账户未登录！')", 3000);
-				}
+				} */
+
+                requesting = true;
+				showLoading(7);
                 document.form.submit();
 				return true;
             }
