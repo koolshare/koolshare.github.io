@@ -23,6 +23,7 @@
 
         var submitDatas = {};
 		var requesting = false;
+        var reseting = false;
 
         function init() {
             show_menu();
@@ -166,7 +167,8 @@
 				} */
 
                 requesting = true;
-				showLoading(7);
+                reseting = true;
+				showLoading(2);
                 document.form.submit();
 				return true;
             }
@@ -180,8 +182,25 @@ function manager() {
 }
 
 function done_validating(action) {
-    refreshpage(8);
 	requesting = false;
+    if(reseting) {
+        reseting = false;
+        $.ajax({
+            type: "get",
+            url: "dbconf?p=phddns_",
+            dataType: "script",
+            success: function (s) {
+                submitDatas = db_phddns_;
+                if (submitDatas['phddns_reset_status'] == "00") {
+                    setTimeout("alert('重置成功！');refreshpage(2);", 3000);
+                } else if (submitDatas['phddns_reset_status'] == "01") {
+                    setTimeout("alert('重置失败或当前账户未登录！');refreshpage(2);", 3000);
+                }
+            }
+        });
+    } else {
+    refreshpage(8);
+    }
 }
 
 </script>
