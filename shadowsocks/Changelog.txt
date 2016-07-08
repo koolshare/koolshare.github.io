@@ -2,8 +2,8 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 1.5.3
 		This is a regular maintenance version
-   - update	update shadowsocks-libev binary to version 2.4.7；
-   - update	update gfwlist.conf and chnroute.txt to newest
+   - update	update shadowsocks-libev binary to version 2.4.7
+   - update	update gfwlist.conf and chnroute.txt to latest
    - fix	fix shadowsocks service won't restart after rule updated
 
 1.5.2
