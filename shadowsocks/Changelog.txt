@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.5.4
+		This is a regular maintenance version
+   - update	kcptun fix
 1.5.3
 		This is a regular maintenance version
    - update	update shadowsocks-libev binary to version 2.4.7

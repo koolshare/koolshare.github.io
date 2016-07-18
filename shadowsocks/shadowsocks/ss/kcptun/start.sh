@@ -44,11 +44,10 @@ cat > /koolshare/ss/kcptun/kcptun_config.json <<EOF
     "password":"$ss_basic_kcptun_password",
     "socks5_port":23456,
     "redir_port":1089,
-    "tuncrypt":0,
     "sndwnd":128,
     "rcvwnd":1024,
     "mtu":$ss_basic_kcptun_mtu,
-    "mode":"fast"
+    "mode":"fast2"
 }
 
 EOF
