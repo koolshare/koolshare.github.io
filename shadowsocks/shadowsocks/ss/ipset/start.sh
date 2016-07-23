@@ -9,7 +9,6 @@ lan_ipaddr=$(nvram get lan_ipaddr)
 server_ip=`resolvip $ss_basic_server`
 nat_ready=$(iptables -t nat -L PREROUTING -v -n --line-numbers|grep -v PREROUTING|grep -v destination)
 version_gfwlist=$(cat /koolshare/ss/cru/version | sed -n 1p | sed 's/ /\n/g'| sed -n 3p)
-md5sum_gfwlist=$(md5sum /jffs/configs/dnsmasq.d/gfwlist.conf | sed 's/ /\n/g'| sed -n 1p)
 wanwhitedomain=$(echo $ss_ipset_white_domain_web | sed 's/,/\n/g')
 i=120
 nvram set ss_mode=1
@@ -59,6 +58,7 @@ cat > /koolshare/ss/ipset/ss.json <<EOF
     "timeout":600,
     "protocol":"$ss_basic_rss_protocol",
     "obfs":"$ss_basic_rss_obfs",
+    "obfs_param":"$ss_basic_rss_obfs_param",
     "method":"$ss_basic_method"
 }
 
@@ -78,7 +78,7 @@ echo $(date):
 [ "$ss_ipset_cdn_dns" == "8" ] && dns="119.29.29.29"
 
 # create dnsmasq.conf.add
-if [ ! -d /jffs/configs/dnsmasq.d ]; then 
+if [ ! -d /jffs/configs/dnsmasq.d ]; then
 mkdir -p /jffs/configs/dnsmasq.d
 fi
 
@@ -102,7 +102,7 @@ if [ ! -z $ss_ipset_white_domain_web ];then
 	echo $(date): append white_domain
 	echo "#for white_domain" >> /jffs/configs/dnsmasq.conf.add
 	for wan_white_domain in $wanwhitedomain
-	do 
+	do
 		echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /jffs/configs/dnsmasq.conf.add
 		echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_domain/g" >> /jffs/configs/dnsmasq.conf.add
 	done
@@ -111,12 +111,18 @@ if [ ! -z $ss_ipset_white_domain_web ];then
 fi
 
 # append custom conf dir
-echo "conf-dir=/jffs/configs/dnsmasq.d" >> /jffs/configs/dnsmasq.conf.add
+	fm_version=`nvram get extendno|sed 's/alpha[0-9]-//g'|sed 's/beta[0-9]-//g'|cut -d "-" -f1|sed 's/X//g'`
+	cmp=`versioncmp $fm_version "6.5.1"`
+	if [ "$cmp" = "1" ];then
+		#from KOOLSHARE firmware version 6.5.1,this line is default in dnsmasq.conf
+		echo "conf-dir=/jffs/configs/dnsmasq.d" >> /jffs/configs/dnsmasq.conf.add
+	fi
 
 # append gfwlist
-	if [ "$version_gfwlist" != "$md5sum_gfwlist" ];then
-		echo $(date): append gfwlist into dnsmasq.conf
-		cp -rf /koolshare/ss/ipset/gfwlist.conf  /jffs/configs/dnsmasq.d/
+	if [ ! -f /jffs/configs/dnsmasq.d/gfwlist.conf ];then
+		echo $(date): creat gfwlist conf to dnsmasq.conf
+		#cp -rf /koolshare/ss/ipset/gfwlist.conf  /jffs/configs/dnsmasq.d/
+		ln -sf /koolshare/ss/ipset/gfwlist.conf /jffs/configs/dnsmasq.d/gfwlist.conf
 		echo $(date): done
 		echo $(date):
 	fi
@@ -202,7 +208,7 @@ echo $(date):
 	# Start dnscrypt-proxy
 	if [ "$ss_ipset_foreign_dns" == "0" ]; then
 		echo $(date): Starting dnscrypt-proxy...
-		dnscrypt-proxy --local-address=127.0.0.1:7913 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R opendns
+		dnscrypt-proxy --local-address=127.0.0.1:7913 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_ipset_opendns"
 		echo $(date): done
 		echo $(date):
 	fi
@@ -210,7 +216,7 @@ echo $(date):
 	[ "$ss_ipset_tunnel" == "2" ] && it="8.8.8.8:53"
 	[ "$ss_ipset_tunnel" == "3" ] && it="8.8.4.4:53"
 	[ "$ss_ipset_tunnel" == "4" ] && it="$ss_ipset_tunnel_user"
-	
+
 	if [ "$ss_ipset_foreign_dns" == "1" ]; then
 		echo $(date): Starting ss-tunnel...
 		if [ "$ss_basic_use_rss" == "1" ];then
@@ -253,6 +259,112 @@ echo $(date):
 		echo $(date):
 	fi
 
+# Start pdnsd
+	if [ "$ss_ipset_foreign_dns" == "4" ]; then
+		echo $(date): Start pdnsd..
+mkdir -p /koolshare/ss/pdnsd
+if [ "$ss_ipset_pdnsd_method" == "1" ];then
+cat > /koolshare/ss/pdnsd/pdnsd.conf <<EOF
+global {
+	perm_cache=2048;
+	cache_dir="/koolshare/ss/pdnsd/";
+	run_as="nobody";
+	server_port = 7913;
+	server_ip = 127.0.0.1;
+	status_ctl = on;
+	query_method=udp_only;
+	min_ttl=$ss_ipset_pdnsd_server_cache_min;
+	max_ttl=$ss_ipset_pdnsd_server_cache_max;
+	timeout=10;
+}
+
+server {
+	label= "koolshare"; 
+	ip = 127.0.0.1;
+	port = 1099;
+	root_server = on;   
+	uptest = none;    
+}
+EOF
+	if [ "$ss_ipset_pdnsd_udp_server" == "1" ];then
+		echo $(date): Starting DNS2SOCKS \for pdnsd..
+		if [ "$ss_basic_use_rss" == "1" ];then
+			rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+		elif  [ "$ss_basic_use_rss" == "0" ];then
+			if [ "$ss_basic_onetime_auth" == "1" ];then
+				ss-local -b 0.0.0.0 -l 23456 -A -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid
+			elif [ "$ss_basic_onetime_auth" == "0" ];then
+				ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid
+			fi
+		fi
+		dns2socks 127.0.0.1:23456 "$ss_ipset_pdnsd_udp_server_dns2socks" 127.0.0.1:1099 > /dev/null 2>&1 &
+		echo $(date): done
+		echo $(date):
+	elif [ "$ss_ipset_pdnsd_udp_server" == "2" ];then
+		echo $(date): Starting dnscrypt-proxy \for pdnsd...
+		dnscrypt-proxy --local-address=127.0.0.1:1099 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_ipset_pdnsd_udp_server_dnscrypt"
+		echo $(date): done
+		echo $(date):
+	elif [ "$ss_ipset_pdnsd_udp_server" == "3" ];then
+		[ "$ss_ipset_pdnsd_udp_server_ss_tunnel" == "1" ] && dns1="208.67.220.220:53"
+		[ "$ss_ipset_pdnsd_udp_server_ss_tunnel" == "2" ] && dns1="8.8.8.8:53"
+		[ "$ss_ipset_pdnsd_udp_server_ss_tunnel" == "3" ] && dns1="8.8.4.4:53"
+		[ "$ss_ipset_pdnsd_udp_server_ss_tunnel" == "4" ] && dns1="$ss_ipset_pdnsd_udp_server_ss_tunnel_user"
+		echo $(date): Starting ss-tunnel \for pdnsd...
+		if [ "$ss_basic_use_rss" == "1" ];then
+			rss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid
+		elif  [ "$ss_basic_use_rss" == "0" ];then
+			if [ "$ss_basic_onetime_auth" == "1" ];then
+				ss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -A -f /var/run/sstunnel.pid
+			elif [ "$ss_basic_onetime_auth" == "0" ];then
+				ss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid
+			fi
+		fi
+		echo $(date): done
+		echo $(date):
+	fi
+elif [ "$ss_ipset_pdnsd_method" == "2" ];then
+cat > /koolshare/ss/pdnsd/pdnsd.conf <<EOF
+global {
+	perm_cache=2048;
+	cache_dir="/koolshare/ss/pdnsd/";
+	run_as="nobody";
+	server_port = 7913;
+	server_ip = 127.0.0.1;
+	status_ctl = on;
+	query_method=$ss_ipset_pdnsd_method;
+	min_ttl=$ss_ipset_pdnsd_server_cache_min;
+	max_ttl=$ss_ipset_pdnsd_server_cache_max;
+	timeout=10;
+}
+
+server {
+	label= "RT-AC68U"; 
+	ip = $ss_ipset_pdnsd_server_ip;
+	port = $ss_ipset_pdnsd_server_port;
+	root_server = on;   
+	uptest = none;    
+}
+EOF
+
+fi
+
+chmod 644 /koolshare/ss/pdnsd/pdnsd.conf
+CACHEDIR=/koolshare/ss/pdnsd
+CACHE=/koolshare/ss/pdnsd/pdnsd.cache
+USER=nobody
+GROUP=nogroup
+
+if ! test -f "$CACHE"; then
+        dd if=/dev/zero of=/koolshare/ss/pdnsd/pdnsd.cache bs=1 count=4 2> /dev/null
+        chown -R $USER.$GROUP $CACHEDIR 2> /dev/null
+fi
+
+	pdnsd --daemon -c /koolshare/ss/pdnsd/pdnsd.conf -p /var/run/pdnsd.pid
+	echo $(date): done
+	echo $(date):
+fi
+
 	# Start ss-redir
 	echo $(date): Starting ss-redir...
 	if [ "$ss_basic_use_rss" == "1" ];then
@@ -289,6 +401,5 @@ echo $(date):
 	/sbin/service restart_dnsmasq >/dev/null 2>&1
 	echo $(date): done
 	echo $(date):
-	
-echo $(date): ------------------ Shadowsock gfwlist mode Started-----------------------
 
+echo $(date): ------------------ Shadowsock gfwlist mode Started-----------------------

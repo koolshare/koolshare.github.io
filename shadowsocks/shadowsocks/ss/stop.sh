@@ -15,6 +15,7 @@ pdnsd=$(ps | grep "pdnsd" | grep -v "grep")
 chinadns=$(ps | grep "chinadns" | grep -v "grep")
 DNS2SOCK=$(ps | grep "dns2socks" | grep -v "grep")
 koolgame=$(ps | grep "koolgame" | grep -v "grep")
+kcptun=$(ps | grep "kcp_router" | grep -v "grep")
 Pcap_DNSProxy=$(ps | grep "Pcap_DNSProxy" | grep -v "grep")
 lan_ipaddr=$(nvram get lan_ipaddr)
 ip_rule_exist=`ip rule show | grep "fwmark 0x1/0x1 lookup 300" | grep -c 300`
@@ -77,9 +78,10 @@ echo $(date): --------------------Stopping Shadowsock service-------------------
 	echo $(date): flush iptables and destory chain...
 	iptables -t nat -D PREROUTING -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p udp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
+	iptables -t nat -D PREROUTING -p tcp -j REDSOCKS2 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -i br0 -p tcp -j REDSOCKS2 >/dev/null 2>&1
-	iptables -t nat -D PREROUTING -i br0 -p tcp -j SHADOWSOCKS >/dev/null 2>&1
-	iptables -t nat -D PREROUTING -i br0 -j SHADOWSOCKS >/dev/null 2>&1
+	iptables -t nat -D PREROUTING -p tcp -j SHADOWSOCKS >/dev/null 2>&1
+	iptables -t nat -D PREROUTING -j SHADOWSOCKS >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j REDSOCKS2 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j SHADOWSOCKS >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -j SHADOWSOCKS >/dev/null 2>&1
@@ -232,6 +234,13 @@ sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
 		echo $(date): done
 		echo $(date):
 	fi
+# kill all kcptun
+	if [ ! -z "$kcptun" ]; then 
+		echo $(date): kill kcptun...
+		killall kcptun >/dev/null 2>&1
+		echo $(date): done
+		echo $(date):
+	fi
 #--------------------------------------------------------------------------
 # kill crontab job
 	echo $(date): kill crontab job
@@ -239,6 +248,10 @@ sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
 	echo $(date): done
 	echo $(date): -------------------- Shadowsock service Stopped--------------------------
 	echo $(date):
+
+# remove conf under /jffs/configs/dnsmasq.d
+	rm -rf /jffs/configs/dnsmasq.d/gfwlist.conf
+
 
 # remove ss state
 	dbus remove ss_basic_state_china

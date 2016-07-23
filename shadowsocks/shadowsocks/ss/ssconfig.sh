@@ -11,19 +11,19 @@ if [ -z $ss_ipset_cdn_dns ];then
 	dbus set ss_ipset_cdn_dns="1"
 	dbus set ss_ipset_foreign_dns="2"
 	dbus set ss_ipset_dns2socks_user="8.8.8.8:53"
-	dbus set ss_ipset_opendns="opendns"
+	dbus set ss_ipset_opendns="cisco(opendns)"
 	dbus set ss_ipset_tunnel="2"
 	dbus set ss_redchn_dns_china="1"
 	dbus set ss_redchn_dns_foreign="4"
 	dbus set ss_redchn_dns2socks_user="8.8.8.8:53"
-	dbus set ss_redchn_opendns="opendns"
+	dbus set ss_redchn_opendns="cisco(opendns)"
 	dbus set ss_redchn_sstunnel="2"
 	dbus set ss_redchn_chinadns_china="1"
 	dbus set ss_redchn_chinadns_foreign="2"
 	dbus set ss_game_dns_china="1"
 	dbus set ss_game_dns_foreign="4"
 	dbus set ss_game_dns2socks_user="8.8.8.8:53"
-	dbus set ss_game_opendns="opendns"
+	dbus set ss_game_opendns="cisco(opendns)"
 	dbus set ss_game_sstunnel="2"
 	dbus set ss_game_chinadns_china="1"
 	dbus set ss_game_chinadns_foreign="2"
@@ -31,12 +31,25 @@ if [ -z $ss_ipset_cdn_dns ];then
 	dbus set ss_overall_dns="0"
 	dbus set ss_basic_adblock="0"
 fi
+
+if [ -z $ss_kcptun_dns_china ];then
+	dbus set ss_kcptun_dns_china="1"
+	dbus set ss_kcptun_dns_foreign="4"
+	dbus set ss_kcptun_dns2socks_user="8.8.8.8:53"
+fi
+
 if [ -z $ss_gameV2_dns2ss_user ];then
 	dbus set ss_gameV2_dns2ss_user="8.8.8.8:53"
 	dbus set ss_gameV2_dns_china="1"
 fi
 }
 
+# creat dnsmasq.d folder
+creat_folder(){
+if [ ! -d /koolshare/configs/dnsmasq.d ];then
+	mkdir /koolshare/configs/dnsmasq.d
+fi
+}
 
 install_ss(){
 	tar -zxf shadowsocks.tar.gz
@@ -65,7 +78,7 @@ update_ss(){
 	# ss_basic_install_status=6	#正在检查是否有更新~
 	# ss_basic_install_status=7	#检测更新错误！
 	# ss_basic_install_status=8	#更换更新服务器
-	
+
 	dbus set ss_basic_install_status="6"
 	ss_basic_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/version | sed -n 1p`
 	if [ ! -z $ss_basic_version_web1 ];then
@@ -114,7 +127,7 @@ update_ss2(){
 	# ss_basic_install_status=6	#正在检查是否有更新~
 	# ss_basic_install_status=7	#检测更新错误！
 	# ss_basic_install_status=8	#更换奔涌更新服务器1
-	
+
 	dbus set ss_basic_install_status="6"
 	ss_basic_version_web2=`curl -s http://file.mjy211.com/koolshare.github.io/shadowsocks/version | sed -n 1p`
 	if [ ! -z $ss_basic_version_web2 ];then
@@ -161,7 +174,7 @@ enable_jffs2(){
 	  echo You have to reboot the router and try again. Exiting...
 	  exit 1
 	fi
-	
+
 	jffs2_script=`nvram get jffs2_scripts`
 	if [ "$jffs2_script" != "1" ]
 	then
@@ -189,6 +202,9 @@ apply_ss(){
 	elif [ "5" == "$ss_basic_mode" ]; then
 		. /koolshare/ss/stop.sh
 		. /koolshare/ss/overall/start.sh
+	elif [ "6" == "$ss_basic_mode" ]; then
+		. /koolshare/ss/stop.sh
+		. /koolshare/ss/kcptun/start.sh
 	fi
 }
 
@@ -217,26 +233,30 @@ fire_ss_depend_scripts(){
 
 print_success_info(){
 	if [ "$ss_basic_mode" == "0" ];then
-		echo $(date): 
+		echo $(date):
 		echo $(date): You have disabled the shadowsocks service
 		echo $(date): See you again!
-		echo $(date): 
+		echo $(date):
 		echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
 	else
-		echo $(date): 
+		echo $(date):
 		echo $(date): Congratulation!
 		echo $(date): Enjoy surfing internet without "Great Fire Wall"!
-		echo $(date): 
+		echo $(date):
 		echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
 	fi
 }
-
 
 # detect ss version after ss service applied.
 detect_ss_version(){
 	ss_basic_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/version | sed -n 1p`
 	if [ ! -z $ss_basic_version_web1 ];then
 		dbus set ss_basic_version_web=$ss_basic_version_web1
+	else
+		ss_basic_version_web2=`curl -s http://file.mjy211.com/koolshare.github.io/shadowsocks/version | sed -n 1p`
+		if [ ! -z $ss_basic_version_web2 ];then
+			dbus set ss_basic_version_web=$ss_basic_version_web2
+		fi
 	fi
 }
 
@@ -249,6 +269,7 @@ set_ulimit(){
 case $ACTION in
 start)
 	if [ "$ss_basic_enable" == "1" ];then
+	creat_folder
 	set_default_value
 	set_ulimit
     	apply_ss
@@ -262,6 +283,7 @@ stop | kill )
 	;;
 restart)
 	#disable_ss
+	creat_folder
 	set_default_value
 	set_ulimit
 	apply_ss
@@ -282,4 +304,3 @@ update)
 	exit 1
 	;;
 esac
-
