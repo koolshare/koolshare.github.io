@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.5.5
+   - update	update shadowsocks-rss-liev client to latest
+   - update	update kcp-tun client to 20160728 version
+
 1.5.4
 		This is a regular maintenance version
    - update	kcptun fix
