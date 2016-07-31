@@ -23,10 +23,20 @@
 * <b>shadowsocks.tar.gz</b><br/>
 此文件为shadowsocks文件夹的打包，通过路由器访问 [https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/shadowsocks.tar.gz](https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/shadowsocks.tar.gz) 获取安装包更新。
 
-如果你更新出现问题，请按照以下方式手动更新：
+## 如果你更新出现问题，请按照以下方式手动更新：
 <pre>
 cd /tmp
-wget --no-check-certificate --timeout=15 -P /tmp https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/shadowsocks.tar.gz
+wget --no-check-certificate --timeout=15 https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/shadowsocks.tar.gz
+tar -zxvf /tmp/shadowsocks.tar.gz
+chmod +x /tmp/shadowsocks/install.sh
+sh /tmp/shadowsocks/install.sh
+</pre>
+
+## 如果你需要更新历史版本，这里以 1.5.0版本为例：（需要更新其它版本，只需要自行更改版本号，所有历史版本存档目录：https://github.com/koolshare/koolshare.github.io/tree/master/shadowsocks/history）
+
+<pre>
+cd /tmp
+wget --no-check-certificate https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/history/shadowsocks_1.5.0.tar.gz
 tar -zxvf /tmp/shadowsocks.tar.gz
 chmod +x /tmp/shadowsocks/install.sh
 sh /tmp/shadowsocks/install.sh
