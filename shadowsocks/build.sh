@@ -22,7 +22,7 @@ EOF
 
 cat > ./config.json.js <<EOF
 {
-"version':"$VERSION",
+"version":"$VERSION",
 "md5":"$md5value"
 }
 EOF
