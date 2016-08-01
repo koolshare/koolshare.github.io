@@ -1146,21 +1146,17 @@ function show_hide_table(){
 	}
 }
 
-
-
 function version_show(){
-	$j("#ss_version_show").html("<i>当前版本：" + db_ss['ss_basic_version_web']);
     $j.ajax({
-        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/config.json.js',
+        url: 'http://master.ngrok.wang:5000/shadowsocks/config.json.js',
         type: 'GET',
-        success: function(res) {
-            var txt = $j(res.responseText).text();
-            if(typeof(txt) != "undefined" && txt.length > 0) {
-                var obj = $j.parseJSON(txt.replace("'", "\""));
-		        $j("#ss_version_show").html("<i>当前版本：" + obj.version);
-		        if(obj.version != db_ss["ss_basic_version_local"]) {
-                    $j("#ss_version_show").html("<i>当前版本：ARM " + db_ss['ss_basic_version_local']);
-                    $j("#updateBtn").html("<i>升级到：" + obj.version);
+        dataType: 'jsonp',
+        success: function(res) {        
+            if(typeof(res["version"]) != "undefined" && res["version"].length > 0) {
+	            if(res["version"] == db_ss["ss_basic_version_local"]){
+		        	$j("#ss_version_show").html("<i>当前版本：" + res["version"] + "<i>");
+	       		}else if(res["version"] !== db_ss["ss_basic_version_local"]) {
+                    $j("#ss_version_show").html("<i>有新版本：" + res.version  + "<i>");
 		        }
             }
         }
