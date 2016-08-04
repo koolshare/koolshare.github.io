@@ -1,0 +1,170 @@
+#!/bin/sh
+eval `dbus export KCP`
+server_ip=`resolvip $KCP_basic_server`
+lan_ipaddr=$(nvram get lan_ipaddr)
+
+# Different routers got different iptables syntax
+case $(uname -m) in
+  armv7l)
+    MATCH_SET='--match-set'
+    ;;
+  mips)
+    MATCH_SET='--set'
+    ;;
+esac
+
+flush_nat(){
+	# flush rules and set if any
+	
+	iptables -t nat -D PREROUTING -p tcp -j KCPTUN >/dev/null 2>&1
+	iptables -t nat -D PREROUTING -i br0 -p tcp -j KCPTUN >/dev/null 2>&1
+	iptables -t nat -D OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 3333 >/dev/null 2>&1
+	iptables -t nat -F OUTPUT  >/dev/null 2>&1
+	iptables -t nat -D PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
+	iptables -t nat -F KCPTUN >/dev/null 2>&1
+	iptables -t nat -X KCPTUN >/dev/null 2>&1
+
+	ipset -F router >/dev/null 2>&1
+	ipset -F chnroute >/dev/null 2>&1
+	ipset -X router >/dev/null 2>&1
+	ipset -X chnroute >/dev/null 2>&1
+	ipset -F white_domain >/dev/null 2>&1
+	ipset -F black_domain >/dev/null 2>&1
+	ipset -X white_domain >/dev/null 2>&1
+	ipset -X black_domain >/dev/null 2>&1
+}
+
+creat_ispet(){
+	# creat ipset rules
+	use_chnroute="/koolshare/kcptun/chnmode/chnroute.txt"
+	sed -e "s/^/-A chnroute &/g" -e "1 i\-N chnroute nethash --hashsize 81920" $use_chnroute | awk '{print $0} END{print "COMMIT"}' | ipset -R
+	ipset -N router iphash
+	ipset -N white_domain iphash
+	ipset -N black_domain iphash
+	ipset -N white_ip iphash
+	ipset -N black_ip iphash
+}
+
+add_white_black_ip(){
+	wanwhitelist=$(echo $KCP_chnmode_wan_white_ip | sed 's/,/\n/g')
+	if [ ! -z $KCP_chnmode_wan_white_ip ];then
+	for wan_white_ip in $wanwhitelist
+		do 
+			ispet -A white_ip $wan_white_ip
+		done
+	fi
+
+	wanblacklist=$(echo $KCP_chnmode_wan_black_ip | sed "s/,/\n/g")
+	if [ ! -z $KCP_chnmode_wan_black_ip ];then
+	for wan_black_ip in $wanblacklist
+		do 
+			ispet -A white_ip $wan_black_ip
+		done
+	fi
+	
+}
+# nat rules below
+
+apply_nat_rules(){
+	ip1=$(nvram get wan0_ipaddr | cut -d"." -f1,2)
+	
+	iptables -t nat -N KCPTUN
+	
+	# 重定所有流量到 KCPTUN
+	iptables -t nat -A PREROUTING -p tcp -j KCPTUN
+	
+	# default wan_blacklist 强制局域网ip，DNS ip地址不走代理
+	iptables -t nat -A KCPTUN -d $server_ip -j RETURN
+	iptables -t nat -A KCPTUN -d 0.0.0.0/8 -j RETURN
+	iptables -t nat -A KCPTUN -d 10.0.0.0/8 -j RETURN
+	iptables -t nat -A KCPTUN -d 127.0.0.0/8 -j RETURN
+	iptables -t nat -A KCPTUN -d 169.254.0.0/16 -j RETURN
+	iptables -t nat -A KCPTUN -d 172.16.0.0/12 -j RETURN
+	iptables -t nat -A KCPTUN -d 192.168.0.0/16 -j RETURN
+	iptables -t nat -A KCPTUN -d 224.0.0.0/4 -j RETURN
+	iptables -t nat -A KCPTUN -d 240.0.0.0/4 -j RETURN
+	iptables -t nat -A KCPTUN -d 114.114.114.114 -j RETURN
+	iptables -t nat -A KCPTUN -d 235.6.6.6 -j RETURN
+	iptables -t nat -A KCPTUN -d 236.6.6.6 -j RETURN
+	iptables -t nat -A KCPTUN -d $ip1.0.0/16 -j RETURN
+	
+	
+	# IP白名单控制（不走kcptun）
+	iptables -t nat -A KCPTUN -p tcp -m set --match-set white_ip dst -j RETURN 
+
+	
+	# 域名白名单控制（不走kcptun）
+	iptables -t nat -A KCPTUN -p tcp -m set $MATCH_SET white_domain dst -j RETURN 
+
+	
+	# IP黑名单控制（走kcptun）
+	#iptables -t nat -A KCPTUN -d $wan_black_ip -p tcp -j REDIRECT --to-ports 3333
+	iptables -t nat -A KCPTUN -p tcp -m set $MATCH_SET black_ip dst -j REDIRECT --to-ports 3333
+
+	
+	# 域名黑名单控制（走kcptun）
+	iptables -t nat -A KCPTUN -p tcp -m set $MATCH_SET black_domain dst -j REDIRECT --to-ports 3333
+	
+	# router itself
+	iptables -t nat -A OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 3333
+	
+	# lan blacklist
+	black=$(echo $KCP_basic_black_lan | sed "s/,/\n/g")
+	white=$(echo $KCP_basic_white_lan | sed "s/,/\n/g")
+	if [ "$KCP_basic_lan_control" == "1" ];then
+		if [ ! -z $KCP_basic_black_lan ];then
+			for balck_ip in $black
+			do
+				iptables -t nat -A KCPTUN -p tcp -s $balck_ip -j RETURN
+			done
+			iptables -t nat -A KCPTUN -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
+		else
+		iptables -t nat -A KCPTUN -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
+		fi
+	elif [ "$KCP_basic_lan_control" == "2" ];then
+		if [ ! -z $KCP_basic_white_lan ];then
+			for white_ip in $white
+			do
+				iptables -t nat -A KCPTUN -p tcp -s $white_ip -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
+			done
+		else
+		iptables -t nat -A KCPTUN -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
+		fi
+	else
+		iptables -t nat -A KCPTUN -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333 
+	fi
+}
+
+
+chromecast(){
+	if [ "$KCP_basic_chromecast" == "1" ]; then
+		echo $(date): enable lan dns take over: chromecast...
+		iptables -t nat -A PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
+		echo $(date): done
+		echo $(date):
+	else
+		echo $(date): disable lan dns take over..
+		iptables -t nat -D PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
+		echo $(date): done
+		echo $(date):
+	fi
+}
+
+case $1 in
+start_all)
+	#KCP_basic_action=0 应用所有设置
+	flush_nat
+	creat_ispet
+	add_white_black_ip
+	apply_nat_rules
+	chromecast
+	;;
+add_new_ip)
+	#KCP_basic_action=0 应用所有设置
+	add_white_black_ip
+	;;
+*)
+	echo "Usage: $0 (start_all|restart_wb_list)"
+	exit 1
+	;;
+esac
