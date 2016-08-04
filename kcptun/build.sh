@@ -5,7 +5,7 @@ MODULE=kcptun
 VERSION=`cat kcptun/kcptun/version`
 TITLE=kcptun
 DESCRIPTION=基于kcp协议的udp网络加速
-HOME_URL=Module_kcp.asp
+HOME_URL=Module_kcptun.asp
 
 # Check and include base
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
