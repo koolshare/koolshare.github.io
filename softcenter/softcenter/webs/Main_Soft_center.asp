@@ -64,7 +64,7 @@
         border:0;
         width: 60px;
         height: 60px;
-        margin:4px;
+        margin:2px;
     }
     .icon-desc{
         position: absolute;
