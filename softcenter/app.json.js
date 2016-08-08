@@ -31,14 +31,14 @@
             "version": "2.7"
         }, 
         {
-            "build_date": "2016-04-27_19:43:43", 
+            "build_date": "2016-08-08_21:12:31", 
             "description": "ss-server", 
             "home_url": "Module_ssserver.asp", 
-            "md5": "eb21f53915f8fae3502b32c94ce3ff9a", 
+            "md5": "8410c415cd52dcf229ed2d1625c02434", 
             "name": "ssserver", 
             "tar_url": "ssserver/ssserver.tar.gz", 
             "title": "ss-server", 
-            "version": "1.2"
+            "version": "1.3"
         }, 
         {
             "build_date": "2016-05-14_21:11:08", 
@@ -162,7 +162,7 @@
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "ca69a7eedbd9099ea4d4143d08efbda9", 
+    "md5": "e6890705f793a23c35b29e4ad4ffb489", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.0.8"
 }

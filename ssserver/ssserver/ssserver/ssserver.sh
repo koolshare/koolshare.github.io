@@ -2,7 +2,7 @@
 
 # ====================================变量定义====================================
 # 版本号定义
-version="1.2"
+version="1.3"
 
 # 导入skipd数据
 eval `dbus export ssserver`
@@ -11,7 +11,7 @@ eval `dbus export ssserver`
 source /koolshare/scripts/base.sh
 
 # var define
-num=$(iptables -t filter -L INPUT -v -n --line-numbers | grep dpt:$ss_server_port | cut -d " " -f 1 | sort -nr)
+num=$(iptables -t filter -L INPUT -v -n --line-numbers | grep dpt:$ssserver_port | cut -d " " -f 1 | sort -nr)
 
 # kill first
 stop_ssserver(){
@@ -22,7 +22,7 @@ stop_ssserver(){
 # start ssserver
 start_ssserver(){
 mkdir -p /jffs/ss/ssserver
-cat > /koolshare/ssserver/ss.json <<EOF
+cat > /koolshare/ssserver/ss.json <<-EOF
 {
     "server":["[::0]", "0.0.0.0"],
     "server_port":$ssserver_port,
