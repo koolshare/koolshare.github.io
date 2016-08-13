@@ -57,12 +57,14 @@
 }
 .show-btn1,
 .show-btn2,
-.show-btn3{
+.show-btn3,
+.show-btn4{
     border: 1px solid #222;
     background: #576d73;
     color: #fff;
-    padding: 10px 14.6666667px;
+    padding: 10px 3.75px;
     border-radius: 5px 5px 0px 0px;
+    width:8.45601%;
 }
 .active{
     background: #2f3a3e;
@@ -91,17 +93,15 @@ function init() {
     buildswitch();
     $j('.show-btn1').addClass('active');
     $j("#cmdBtn").html("应用所有设置");
-    document.form.KCP_basic_action.value = 0;
-    document.getElementById("kcp_show").style.display = "";
-	document.getElementById("gfwlist_dns").style.display = "none";
-	document.getElementById("gfwlist_dns_message").style.display = "none";
-	document.getElementById("gfwlist_list").style.display = "none";
-	document.getElementById("gfwlist_list_message").style.display = "none";
-	document.getElementById("chn_dns").style.display = "none";
-	document.getElementById("chn_dns_message").style.display = "none";
-	document.getElementById("chn_list").style.display = "none";
-	document.getElementById("chn_list_message").style.display = "none";
-	document.getElementById("add_fun").style.display = "";
+    //document.getElementById("kcp_show").style.display = "";
+	//document.getElementById("gfwlist_dns").style.display = "none";
+	//document.getElementById("gfwlist_dns_message").style.display = "none";
+	//document.getElementById("gfwlist_list").style.display = "none";
+	//document.getElementById("gfwlist_list_message").style.display = "none";
+	//document.getElementById("chn_dns").style.display = "none";
+	//document.getElementById("chn_dns_message").style.display = "none";
+	//document.getElementById("chn_list").style.display = "none";
+	//document.getElementById("chn_list_message").style.display = "none";
 	toggle_func();
     for (var field in db_KCP) {
 		$j('#'+field).val(db_KCP[field]);
@@ -118,11 +118,7 @@ function init() {
 		inputCtrl(document.form.switch,0);
 	}
 	detect_ss();
-	
-	if (db_KCP['KCP_basic_enable'] == "1"){
-		document.getElementById("switch").checked = true;
-		update_visibility();
-	}
+	toggle_switch();
 	update_visibility();
 	setTimeout("checkKCPStatus();", 1000);
 }
@@ -160,21 +156,17 @@ function onSubmitCtrl() {
 	KCPaction = document.getElementById("KCP_basic_action").value;
 	global_status_enable=false;
 	checkKCPStatus();
-	if (validForm()) {
-			setTimeout("checkKCPStatus();", 50000); //make sure KCP_status do not update during reloading
-			if (KCPaction == "0"){
-				if (KCPmode == "1"){
-					showKCPLoadingBar(12);
-				} else if (KCPmode == "2"){
-					showKCPLoadingBar(15);
-				}
-			} else if (KCPaction == "1" ){
-				showKCPLoadingBar(3);
-			} else if (KCPaction == "2"){
-				showKCPLoadingBar(3);
-			}
-				updateOptions();
+	setTimeout("checkKCPStatus();", 50000); //make sure KCP_status do not update during reloading
+	if (KCPaction == "0"){
+		if (KCPmode == "1"){
+			showKCPLoadingBar(5);
+		} else if (KCPmode == "2"){
+			showKCPLoadingBar(5);
+		}
+	} else if (KCPaction == "1" || KCPaction == "2" || KCPaction == "3" ){
+		showKCPLoadingBar(2);
 	}
+	updateOptions();
 }
 
 
@@ -182,7 +174,9 @@ function updateOptions() {
 	document.form.action_mode.value = ' Refresh ';
 	document.form.action = "/applydb.cgi?p=KCP";
 	document.form.SystemCmd.value = "kcp_config.sh";
-	document.form.submit();
+	if (validForm()){
+		document.form.submit();
+	}
 }
 
 function validForm(){
@@ -297,24 +291,6 @@ function get_ss_state(){
 		});
 	}
 
-function buildswitch(){
-	$j("#switch").click(
-	function(){
-		var KCPmode = document.getElementById("KCP_basic_policy").value;
-		if(document.getElementById('switch').checked){
-			document.form.action_mode.value = ' Refresh ';
-			document.getElementById('KCP_basic_enable').value = 1;
-		}else{
-			document.form.KCP_basic_enable.value = 0;
-			showKCPLoadingBar(8);
-			document.form.action_mode.value = ' Refresh ';
-			document.form.action = "/applydb.cgi?p=KCP";
-			document.form.SystemCmd.value = "kcp_config.sh";
-			document.form.submit();
-		}
-	});
-}
-
 function version_show(){
     $j.ajax({
         url: 'http://koolshare.ngrok.wang:5000/kcptun/config.json.js',
@@ -397,14 +373,125 @@ function generate_options(){
 	}
 }
 
+function show_log_info(){
+	document.getElementById("basic_show").style.display = "none";
+	document.getElementById("add_fun").style.display = "none";
+	document.getElementById("apply_button").style.display = "none";
+	document.getElementById("log_content").style.display = "";
+	document.getElementById("return_button").style.display = "";
+	checkCmdRet();
+}
+function return_basic(){
+	document.getElementById("basic_show").style.display = "";
+	document.getElementById("add_fun").style.display = "";
+	document.getElementById("apply_button").style.display = "";
+	document.getElementById("log_content").style.display = "none";
+	document.getElementById("return_button").style.display = "none";
+}
+
+var _responseLen;
+var noChange = 0;
+var retArea = document.getElementById('log_content');
+
+function checkCmdRet(){
+
+	$j.ajax({
+		url: '/cmdRet_check.htm',
+		dataType: 'html',
+		
+		error: function(xhr){
+			setTimeout("checkCmdRet();", 1000);
+			},
+		success: function(response){
+			var retArea = document.getElementById("log_content1");
+			if(response.search("XU6J03M6") != -1){
+				document.getElementById("loadingIcon").style.display = "none";
+				retArea.value = response.replace("XU6J03M6", " ");
+				//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
+				retArea.scrollTop = retArea.scrollHeight;
+				return false;
+			}
+			
+			if(_responseLen == response.length)
+				noChange++;
+			else
+				noChange = 0;
+				
+			if(noChange > 10){
+				document.getElementById("loadingIcon").style.display = "none";
+				//retArea.scrollTop = retArea.scrollHeight;
+				setTimeout("checkCmdRet();", 1000);
+			}else{
+				document.getElementById("loadingIcon").style.display = "";
+				setTimeout("checkCmdRet();", 1000);
+			}
+			
+			retArea.value = response;
+			//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
+			retArea.scrollTop = retArea.scrollHeight;
+			_responseLen = response.length;
+		}
+	});
+}
+
+function buildswitch(){
+	$j("#switch").click(
+	function(){
+		var KCPmode = document.getElementById("KCP_basic_policy").value;
+		if(document.getElementById('switch').checked){
+			document.form.action_mode.value = ' Refresh ';
+			document.getElementById('KCP_basic_enable').value = 1;
+			document.getElementById("policy").style.display = "";
+			document.getElementById("KCP_status1").style.display = "";
+			document.getElementById("basic_show").style.display = "";
+			document.getElementById("kcp_show").style.display = "";
+			document.getElementById("apply_button").style.display = "";
+			
+		}else{
+			document.form.KCP_basic_enable.value = 0;
+			//showKCPLoadingBar(8);
+			document.form.action_mode.value = ' Refresh ';
+			document.form.action = "/applydb.cgi?p=KCP";
+			document.form.SystemCmd.value = "kcp_config.sh";
+			//if (validForm()){
+			//	document.form.submit();
+			//}
+			document.getElementById("switch").checked = false;
+			document.getElementById("policy").style.display = "none";
+			document.getElementById("KCP_status1").style.display = "none";
+			document.getElementById("basic_show").style.display = "none";
+			document.getElementById("kcp_show").style.display = "none";
+			document.getElementById("add_fun").style.display = "none";
+			$j("#cmdBtn").html("关闭kcptun");
+		}
+	});
+}
+
+function toggle_switch(){
+	if (db_KCP['KCP_basic_enable'] == "1"){
+		document.getElementById("switch").checked = true;
+    	update_visibility();
+	} else {
+		document.getElementById("switch").checked = false;
+		document.getElementById("policy").style.display = "none";
+		document.getElementById("KCP_status1").style.display = "none";
+		document.getElementById("basic_show").style.display = "none";
+		document.getElementById("kcp_show").style.display = "none";
+		document.getElementById("add_fun").style.display = "none";
+		document.getElementById("apply_button").style.display = "none";
+	}
+}
+
 function toggle_func(){
 	KCPmode = document.form.KCP_basic_policy.value;
 	KCPenable = document.form.KCP_basic_enable.value;
+	document.form.KCP_basic_action.value = 0;
 	$j(".show-btn1").click(
 	function(){
 		$j('.show-btn1').addClass('active');
 		$j('.show-btn2').removeClass('active');
 		$j('.show-btn3').removeClass('active');
+		$j('.show-btn4').removeClass('active');
 		$j("#cmdBtn").html("应用所有设置");
 		//document.form.action_mode.value = ' Refresh ';
 		document.form.KCP_basic_action.value = 0;
@@ -418,7 +505,7 @@ function toggle_func(){
 		document.getElementById("chn_dns_message").style.display = "none";
 		document.getElementById("chn_list").style.display = "none";
 		document.getElementById("chn_list_message").style.display = "none";
-		document.getElementById("add_fun").style.display = "";
+		document.getElementById("add_fun").style.display = "none";
 		update_visibility()
 	});
 		$j(".show-btn2").click(
@@ -426,6 +513,7 @@ function toggle_func(){
 		$j('.show-btn1').removeClass('active');
 		$j('.show-btn2').addClass('active');
 		$j('.show-btn3').removeClass('active');
+		$j('.show-btn4').removeClass('active');
 		if(KCPenable == "1"){
 			$j("#cmdBtn").html("应用DNS设置");
 			document.form.KCP_basic_action.value = 1;
@@ -462,6 +550,7 @@ function toggle_func(){
 		$j('.show-btn1').removeClass('active');
 		$j('.show-btn2').removeClass('active');
 		$j('.show-btn3').addClass('active');
+		$j('.show-btn4').removeClass('active');
 		if(KCPenable == "1"){
 			$j("#cmdBtn").html("应用黑白名单设置");
 			document.form.KCP_basic_action.value = 2;
@@ -489,6 +578,42 @@ function toggle_func(){
 			document.getElementById("chn_list").style.display = "";
 			document.getElementById("chn_list_message").style.display = "";
 			document.getElementById("add_fun").style.display = "none";
+		}
+			update_visibility()
+	});
+	$j(".show-btn4").click(
+	function(){
+		$j('.show-btn1').removeClass('active');
+		$j('.show-btn2').removeClass('active');
+		$j('.show-btn3').removeClass('active');
+		$j('.show-btn4').addClass('active');
+		if(KCPenable == "1"){
+			$j("#cmdBtn").html("应用附加功能设置");
+			document.form.KCP_basic_action.value = 3;
+			document.getElementById("KCP_basic_policy").disabled = true;
+		} else {
+			$j("#cmdBtn").html("应用所有设置");
+			document.form.KCP_basic_action.value = 0;
+		}
+		document.getElementById("kcp_show").style.display = "none";
+		if(KCPmode == "1"){
+			document.getElementById("gfwlist_dns").style.display = "none";
+			document.getElementById("gfwlist_dns_message").style.display = "none";
+			document.getElementById("gfwlist_list").style.display = "none";
+			document.getElementById("gfwlist_list_message").style.display = "none";
+			document.getElementById("chn_dns").style.display = "none";
+			document.getElementById("chn_dns_message").style.display = "none";
+			document.getElementById("chn_list").style.display = "none";
+			document.getElementById("chn_list_message").style.display = "none";
+			document.getElementById("add_fun").style.display = "";
+		} else if (KCPmode == "2"){
+			document.getElementById("gfwlist_dns").style.display = "none";
+			document.getElementById("gfwlist_list").style.display = "none";
+			document.getElementById("chn_dns").style.display = "none";
+			document.getElementById("chn_dns_message").style.display = "none";
+			document.getElementById("chn_list").style.display = "none";
+			document.getElementById("chn_list_message").style.display = "none";
+			document.getElementById("add_fun").style.display = "";
 		}
 			update_visibility()
 	});
@@ -577,6 +702,9 @@ function LoadingKCPProgress(seconds){
 		} else if (document.form.KCP_basic_action.value == 2){
 			document.getElementById("loading_block3").innerHTML = "快速应用黑白名单 ..."
 			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>无需重启全部服务，黑白名单即可生效~</font></li>");
+		} else if (document.form.KCP_basic_action.value == 3){
+			document.getElementById("loading_block3").innerHTML = "快速应用附加功能 ..."
+			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>无需重启全部服务，附加功能即可生效~</font></li>");
 		}
 	}
 	y = y + progress;
@@ -713,20 +841,6 @@ function hideKCPLoadingBar(){
 											</tr>
 										</table>
 									</div>
-									<!-- 暂时不启用重启主进程，待节点功能添加后，用另外的形式添加该功能
-									<div id="KCP_maitain">
-										<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
-											
-											<tr id="KCP_service">
-											<th width="35%">kcptun维护</th>
-												<td>
-													<input class="button_gen" id="cmdBtn1" type="button" value="重启主进程"/>
-												</td>
-											</tr>
-											
-										</table>
-									</div>
-									-->
 									<div id="basic_show">
 										<table style="margin:10px 0px 0px 0px;border-collapse:collapse"  width="100%" height="37px">
 									        <tr width="235px">
@@ -734,6 +848,7 @@ function hideKCPLoadingBar(){
                                                     <input id="show_btn1" class="show-btn1" style="cursor:pointer" type="button" value="账号设置"/>
                                                     <input id="show_btn2" class="show-btn2" style="cursor:pointer" type="button" value="DNS设置"/>
                                                     <input id="show_btn3" class="show-btn3" style="cursor:pointer" type="button" value="黑白名单"/>
+                                                    <input id="show_btn4" class="show-btn4" style="cursor:pointer" type="button" value="附加功能"/>
                                                 </td>
                                             </tr>
 										</table>
@@ -954,9 +1069,11 @@ baidu.com
 														</a>
 													</th>
 													<td>
-														<textarea placeholder="# 此处填入需要强制走kcptun的IP地址，一行一个，格式如下：
-37.252.248.76
+														<textarea placeholder="# 此处填入需要强制走kcptun的IP或IP段（CIDR格式），一行一个，格式如下：
+137.252.248.76
 149.154.167.80
+110.120.130.0/24
+223.240.0.0/16
 # 对于某些没有域名但是被墙的服务很有用处，比如telegram等!" rows=8 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="KCP_gfwlist_black_ip" name="KCP_gfwlist_black_ip" title=""></textarea>
 													</td>
 												</tr>
@@ -1145,15 +1262,15 @@ taobao.com
 											</table>
 										</div>
 										
-										<div id="add_fun">
-											<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
-												<thead >
-												<tr>
-													<td colspan="2">附加功能</td>
-												</tr>
-												</thead>
-											</table>
+										<div id="add_fun" style="display: none;">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >		
+												<tr>
+													<th>查看日志信息</th>
+													<td>
+														<input class="button_gen" id="logBtn" onclick="show_log_info()" type="button" value="查看日志"/>
+													</td>
+												</tr>
+
 												<tr id="chromecast">
 													<th width="35%">Chromecast支持</th>
 													<td>
@@ -1174,6 +1291,19 @@ taobao.com
 															<span id="guardian1"> 开启后将使用perp对kcp_router进程实时守护 </span>
 													</td>
 												</tr>
+												<tr id="KCP_sleep_tr">
+													<th width="35%">开机启动延时</th>
+													<td>
+														<select id="KCP_basic_sleep" name="KCP_basic_sleep" class="ssconfig input_option" onchange="update_visibility();" >
+															<option value="0">0s</option>
+															<option value="5">5s</option>
+															<option value="10">10s</option>
+															<option value="15">15s</option>
+															<option value="30">30s</option>
+															<option value="60">60s</option>
+														</select>
+													</td>
+												</tr>
 												<tr id="KCP_lan_control">
 													<th width="35%">局域网客户端控制&nbsp;&nbsp;&nbsp;&nbsp;<select id="KCP_basic_lan_control" name="KCP_basic_lan_control" class="input_KCP_table" style="width:auto;height:25px;margin-left: 0px;" onchange="update_visibility();">
 															<option value="0">禁用</option>
@@ -1188,6 +1318,20 @@ taobao.com
 												</tr>
 											</table>
 										</div>
+
+										<!--log_content-->
+										<div id="log_content" style="margin-top:10px;display: none;">
+											<textarea cols="63" rows="30" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;"></textarea>
+										</div>
+
+										<div class="apply_gen" id="loading_icon">
+											<img id="loadingIcon" style="display:none;" src="/images/InternetScan.gif">
+										</div>
+										<div id="return_button" class="apply_gen" style="display: none;">
+											<input class="button_gen" id="returnBtn" onClick="return_basic()" type="button" value="返回"/>
+										</div>
+
+										
 										<div id="chn_list_message" style="display: none;margin-top: 10px;text-align: left;margin-bottom: 20px;"class="formfontdesc" >*点击<i>应用黑白名单设置</i>按钮，快速应用大陆白名单模式的黑白名单</div>
 										<div id="apply_button"class="apply_gen">
 											<button id="cmdBtn" class="button_gen" onclick="onSubmitCtrl()">提交</button>

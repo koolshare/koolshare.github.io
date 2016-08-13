@@ -18,14 +18,23 @@ flush_nat(){
 	iptables -t nat -D PREROUTING -p tcp -j KCPTUN >/dev/null 2>&1
 	iptables -t nat -X KCPTUN > /dev/null 2>&1
 	iptables -t nat -D OUTPUT -p tcp -m set --match-set router dst -j REDIRECT --to-ports 3333 >/dev/null 2>&1
-	ipset -F router >/dev/null 2>&1
+	iptables -t nat -D KCPTUN -p tcp -m set --match-set black_cidr dst -j REDIRECT --to-ports 3333 >/dev/null 2>&1
+	# flush chromecast rule to void mutiple apply
+	iptables -t nat -D PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
+}
+
+flush_ipset(){
+	#ipset -F router >/dev/null 2>&1
 	ipset -F gfwlist >/dev/null 2>&1
 	ipset -F white_domain >/dev/null 2>&1
+	ipset -F black_cidr >/dev/null 2>&1
+}
+
+destory_ipset(){
 	ipset -X router >/dev/null 2>&1
 	ipset -X gfwlist >/dev/null 2>&1
 	ipset -X white_domain >/dev/null 2>&1
-	# flush chromecast rule to void mutiple apply
-	iptables -t nat -D PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
+	ipset -X black_cidr >/dev/null 2>&1
 }
 
 creat_ispet(){
@@ -33,19 +42,32 @@ creat_ispet(){
 	ipset -N router iphash
 	ipset -N gfwlist iphash
 	ipset -N white_domain iphash
+	ipset -N black_cidr nethash
 }
 
 add_black_wan_ip(){
-	
-	if [ ! -z $KCP_gfwlist_black_ip ];then
-		echo $(date): add your blck ip into gfwlist...
-		black_wan_ip=$(echo $KCP_gfwlist_black_ip | sed "s/,/ /g")
-		for ip in $black_wan_ip
-		do
-			ipset -A gfwlist $ip
-		done
-		echo $(date): done
-		echo $(date):
+	if [ ! -z "$KCP_gfwlist_black_ip" ];then
+		ip_format=`dbus get KCP_gfwlist_black_ip|sed 's/,/\n/g'|grep -v "/"|sed '/\#/d'`
+		cidr_format=`dbus get KCP_gfwlist_black_ip|sed 's/,/\n/g'|grep "/"|sed '/\#/d'`
+		if [ ! -z "$ip_format" ];then
+			echo $(date): add your black ip into gfwlist ipset...
+			for ip in $ip_format
+			do
+				ipset -A gfwlist $ip >/dev/null 2>&1
+			done
+			echo $(date): done
+			echo $(date):
+		fi
+		
+		if [ ! -z "$cidr_format" ];then
+			echo $(date): add your black cidr into black_cidr ipset...
+			for cidr in $cidr_format
+			do
+				ipset -A black_cidr $cidr >/dev/null 2>&1
+			done
+			echo $(date): done
+			echo $(date):
+		fi
 	fi
 }
 
@@ -71,8 +93,6 @@ apply_basic_return(){
 apply_lan_black_return(){
 	#局域网黑名单（不允许这些设备走kcptun）
 	black=$(echo $KCP_basic_black_lan | sed "s/,/ /g")
-	
-	
 	for balck_ip in $black
 	do
 		iptables -t nat -A KCPTUN -p tcp -s $balck_ip -j RETURN
@@ -88,6 +108,7 @@ apply_wan_white_return(){
 
 apply_wan_gfwlist_redirect(){
 	#gfwlist(域名黑名单)（访问这些域名的时候走kcptun）
+	iptables -t nat -A KCPTUN -p tcp -m set $MATCH_SET black_cidr dst -j REDIRECT --to-ports 3333
 	iptables -t nat -A KCPTUN -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-ports 3333
 	iptables -t nat -A PREROUTING -p tcp -j KCPTUN
 }
@@ -98,6 +119,7 @@ apply_wan_gfwlist_redirect_for_some_client(){
 	white=$(echo $KCP_basic_white_lan | sed "s/,/ /g")
 	for white_ip in $white
 	do
+		iptables -t nat -A KCPTUN -p tcp -s $white_ip -m set $MATCH_SET black_cidr dst -j REDIRECT --to-ports 3333
 		iptables -t nat -A KCPTUN -p tcp -s $white_ip -m set $MATCH_SET gfwlist dst -j REDIRECT --to-ports 3333
 	done
 	iptables -t nat -A PREROUTING -p tcp -j KCPTUN
@@ -108,29 +130,44 @@ apply_nat_rules(){
 	# lan control and white black list
 	if [ "$KCP_basic_lan_control" == "1" ];then
 		if [ ! -z $KCP_basic_black_lan ];then
+			echo $(date): appply lan black ip for lan control
 			apply_basic_return
 			apply_lan_black_return
 			apply_wan_white_return
 			apply_wan_gfwlist_redirect
+			echo $(date): done
+			echo $(date):
 		else
+			echo $(date): no balck lan ip fill，do nothing
 			apply_basic_return
 			apply_wan_white_return
 			apply_wan_gfwlist_redirect
+			echo $(date): done
+			echo $(date):
 		fi
 	elif [ "$KCP_basic_lan_control" == "2" ];then
 		if [ ! -z $KCP_basic_white_lan ];then
+			echo $(date): appply lan white ip for lan control
 			apply_basic_return
 			apply_wan_white_return
 			apply_wan_gfwlist_redirect_for_some_client
+			echo $(date): done
+			echo $(date):
 		else
+			echo $(date): no white lan ip fill，do nothing
 			apply_basic_return
 			apply_wan_white_return
 			apply_wan_gfwlist_redirect
+			echo $(date): done
+			echo $(date):
 		fi
 	else
+		echo $(date): lan control not enabled
 		apply_basic_return
 		apply_wan_white_return
 		apply_wan_gfwlist_redirect
+		echo $(date): done
+		echo $(date):
 	fi
 	# Apply the rules for router self
 	iptables -t nat -A OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 3333
@@ -139,12 +176,12 @@ apply_nat_rules(){
 
 chromecast(){
 	if [ "$KCP_basic_chromecast" == "1" ]; then
-		echo $(date): enable lan dns take over, i.e chromecast...
+		echo $(date): enable lan dns take over/chromecast...
 		iptables -t nat -A PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 		echo $(date): done
 		echo $(date):
 	else
-		echo $(date): disable lan dns take over..
+		echo $(date): disable lan dns take over/chromecast
 		iptables -t nat -D PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 		echo $(date): done
 		echo $(date):
@@ -156,6 +193,9 @@ case $1 in
 start_all)
 	#KCP_basic_action=0 应用所有设置
 	flush_nat
+	flush_ipset
+	ipset -F router >/dev/null 2>&1
+	destory_ipset
 	creat_ispet
 	add_black_wan_ip
 	apply_nat_rules
@@ -163,7 +203,14 @@ start_all)
 	;;
 add_black_wan_ip)
 	#KCP_basic_action=2
+	flush_ipset
 	add_black_wan_ip
+	;;
+start_part_for_addon)
+	#KCP_basic_action=3 应用所有设置
+	flush_nat
+	chromecast
+	apply_nat_rules
 	;;
 *)
 	echo "Usage: $0 (start_all|restart_wb_list)"

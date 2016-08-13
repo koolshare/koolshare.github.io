@@ -140,8 +140,9 @@ nat_auto_start(){
 	
 	writenat=$(cat /jffs/scripts/nat-start | grep "nat-start")
 	if [ -z "$writenat" ];then
-		echo $(date): Creating iptables rules \for shadowsocks
-		sed -i '2a sh /koolshare/kcptun/gfwlist/nat-start' /jffs/scripts/nat-start
+		echo $(date): Add service to nat-start...
+		sed -i "2a sleep $KCP_basic_sleep" /jffs/scripts/nat-start
+		sed -i '3a sh /koolshare/kcptun/gfwlist/nat-start' /jffs/scripts/nat-start
 		chmod +x /jffs/scripts/nat-start
 	fi
 		echo $(date): done
@@ -164,6 +165,7 @@ wan_auto_start(){
 	startss=$(cat /jffs/scripts/wan-start | grep "/koolshare/scripts/kcp_config.sh")
 	if [ -z "$startss" ];then
 		echo $(date): Add service to wan-start...
+		sed -i "2a sleep $KCP_basic_sleep" /jffs/scripts/wan-start
 		sed -i '2a sh /koolshare/scripts/kcp_config.sh' /jffs/scripts/wan-start
 	fi
 	
@@ -190,17 +192,17 @@ start_dns(){
 		echo $(date): done
 		echo $(date):
 	fi
-	
+
 	# Start Pcap_DNSProxy
-	if [ "$KCP_gfwlist_foreign_dns" == "3" ]; then
+	if [ "$KCP_gfwlist_foreign_dns" == "3"  ]; then
 		echo $(date): Start Pcap_DNSProxy..
-		sed -i '/^Listen Port/c Listen Port = 7913' /koolshare/ss/dns/Config.conf
+		sed -i '/^Listen Port/c Listen Port = 1053' /koolshare/ss/dns/Config.conf
 		sed -i '/^Local Main/c Local Main = 0' /koolshare/ss/dns/Config.conf
 		/koolshare/ss/dns/dns.sh > /dev/null 2>&1 &
 		echo $(date): done
 		echo $(date):
 	fi
-	
+
 	# Start pdnsd
 	if [ "$KCP_gfwlist_foreign_dns" == "4" ]; then
 		echo $(date): Start pdnsd..
@@ -256,8 +258,8 @@ start_dns(){
 			
 			server {
 				label= "RT-AC68U"; 
-				ip = $KCP_chnmode_pdnsd_server_ip;
-				port = $KCP_chnmode_pdnsd_server_port;
+				ip = $KCP_gfwlist_pdnsd_server_ip;
+				port = $KCP_gfwlist_pdnsd_server_ip;
 				root_server = on;   
 				uptest = none;    
 			}
@@ -336,21 +338,23 @@ stop_dns(){
 
 Start_kcptun(){
 	# Start kcptun
-	echo $(date): starting kcptun...
-	perp=`ps | grep perpd |grep -v grep`
-	if [ -z "$perp" ];then
-		sh /koolshare/perp/perp.sh stop
-		sh /koolshare/perp/perp.sh start
-	fi
-
 	if [ "$KCP_basic_guardian" == "1" ];then
-		perpctl A kcptun
+		perp=`ps | grep perpd |grep -v grep`
+		if [ -z "$perp" ];then
+			sh /koolshare/perp/perp.sh stop
+			sh /koolshare/perp/perp.sh start
+		fi
+		echo $(date): start kcptun with guardian...
+		perpctl A kcptun >/dev/null 2>&1
 		#/koolshare/bin/perpctl A kcptun
+		echo $(date): done
+		echo $(date):
 	else
+		echo $(date): start kcptun without guardian...
 		start-stop-daemon -S -q -b -m -p /tmp/var/kcptun.pid -x /koolshare/bin/kcp_router -- -c /koolshare/kcptun/kcptun_config.json
+		echo $(date): done
+		echo $(date):
 	fi
-	echo $(date): done
-	echo $(date):
 }
 
 load_nat(){
@@ -360,8 +364,7 @@ load_nat(){
 	until [ -n "$nat_ready" ]
 	do
 	        i=$(($i-1))
-	        if [ "$i" -lt 1 ]
-	        then
+	        if [ "$i" -lt 1 ];then
 	            echo $(date): "Could not load nat rules!"
 	            sh /koolshare/ss/stop.sh
 	            exit
@@ -370,11 +373,7 @@ load_nat(){
 	done
 	echo $(date): "Apply nat rules!"
 	sh /koolshare/kcptun/gfwlist/nat-start start_all
-	echo $(date): done
-	echo $(date):
 }
-
-
 
 restart_dnsmasq(){
 	# Restart dnsmasq
@@ -386,7 +385,7 @@ restart_dnsmasq(){
 
 case $1 in
 start_all)
-	#KCP_basic_action=0 Ó¦ÓÃËùÓÐÉèÖÃ
+	#KCP_basic_action=0 åº”ç”¨æ‰€æœ‰è®¾ç½®
 	echo $(date): ------------------- kcptun gfwlist mode Starting-------------------------
 	creat_kcptun_conf
 	creat_dnsmasq_conf
@@ -406,7 +405,7 @@ start_all)
 	echo $(date): -------------------- kcptu gfwlist mode Started -------------------------
 	;;
 restart_dns)
-	#KCP_basic_action=1 Ó¦ÓÃDNSÉèÖÃ
+	#KCP_basic_action=1 åº”ç”¨DNSè®¾ç½®
 	echo $(date): --------------------------- Restart dns ---------------------------------
 	stop_dns
 	creat_dnsmasq_conf
@@ -419,30 +418,88 @@ restart_dns)
 	echo $(date): -------------------------- dns Restarted --------------------------------
 	;;
 restart_wb_list)
-	#KCP_basic_action=2 Ó¦ÓÃºÚ°×Ãûµ¥ÉèÖÃ
+	#KCP_basic_action=2 åº”ç”¨é»‘ç™½åå•è®¾ç½®
 	echo $(date): --------------------- Restart white_black_list --------------------------
 	ipset -F gfwlist >/dev/null 2>&1
 	ipset -F white_domain >/dev/null 2>&1
 	creat_dnsmasq_conf
 	append_white_black_conf
 	custom_dnsmasq
-	ln_custom_conf
+	ln_custom_conf 
 	sh /koolshare/kcptun/gfwlist/nat-start add_black_wan_ip
 	restart_dnsmasq
 	dbus remove ss_basic_state_china
 	dbus remove ss_basic_state_foreign
-	#echo $(date): --------------------- white_black_list applied --------------------------
+	echo $(date): --------------------- white_black_list applied --------------------------
 	;;
-restart_kcptun)
-	#KCP_basic_action=3 Ó¦ÓÃkcptunÖ÷½ø³Ì
-	echo $(date): ---------------------- Restart kcptun process----------------------------
-	echo $(date): kill kcptun...
-	killall kcp_router
-	echo $(date): done
-	echo $(date):
-	creat_kcptun_conf
-	Start_kcptun
-	echo $(date): --------------------- kcptun process restarted---------------------------
+restart_addon)
+	#KCP_basic_action=3 åº”ç”¨kcptunä¸»è¿›ç¨‹
+	echo $(date): ----------------------- Restart kcptun addon ----------------------------
+	
+	# for kcptun gardiant
+	kcptun=$(ps | grep "kcp_router" | grep -v "grep")
+	guardian=$(ps|grep kcp |grep main)
+	if [ "$KCP_basic_guardian" == "1" ];then
+		if [ ! -z "$guardian" ];then
+			echo $(date): kcptun with guardian already in use
+			echo $(date): done
+			echo $(date):
+		else
+			echo $(date): start kcptun with guardian...
+			killall kcp_router >/dev/null 2>&1
+			perp=`ps | grep perpd |grep -v grep`
+			if [ -z "$perp" ];then
+				sh /koolshare/perp/perp.sh stop
+				sh /koolshare/perp/perp.sh start
+			fi
+			perpctl A kcptun >/dev/null 2>&1
+			echo $(date): done
+			echo $(date):
+		fi
+	elif [ "$KCP_basic_guardian" == "0" ];then
+		if [ ! -z "$guardian" ];then
+			echo $(date): start kcptun without guardian...
+			perpctl X kcptun >/dev/null 2>&1
+			killall kcp_router >/dev/null 2>&1
+			start-stop-daemon -S -q -b -m -p /tmp/var/kcptun.pid -x /koolshare/bin/kcp_router -- -c /koolshare/kcptun/kcptun_config.json
+			echo $(date): done
+			echo $(date):
+		else
+			echo $(date): kcptun without guardian already in use
+			echo $(date): done
+			echo $(date):
+		fi
+	fi
+	
+	# for sleep walue in start up files
+	old_sleep=`cat /jffs/scripts/nat-start | grep sleep | awk '{print $2}'`
+	new_sleep="$KCP_basic_sleep"
+	if [ "$old_sleep" = "$new_sleep" ];then
+		echo $(date): boot delay time not changing, still "$KCP_basic_sleep" seconds
+		echo $(date): done
+		echo $(date):
+	else
+		echo $(date): set boot delay to "$KCP_basic_sleep" seconds before starting kcptun service
+		# delete boot delay in nat-start and wan-start
+		sed -i '/koolshare/d' /jffs/scripts/nat-start >/dev/null 2>&1
+		sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
+		sed -i '/koolshare/d' /jffs/scripts/wan-start >/dev/null 2>&1
+		sed -i '/sleep/d' /jffs/scripts/wan-start >/dev/null 2>&1
+		# re add delay in nat-start and wan-start
+		nat_auto_start >/dev/null 2>&1
+		wan_auto_start >/dev/null 2>&1
+		echo $(date): done
+		echo $(date):
+	fi
+	
+	# for chromecast surpport
+	# also for chromecast
+	sh /koolshare/kcptun/gfwlist/nat-start start_part_for_addon
+	
+	#delete status
+	dbus remove ss_basic_state_china
+	dbus remove ss_basic_state_foreign
+	echo $(date): ---------------------- kcptun addon restarted ---------------------------
 	;;
 *)
 	echo "Usage: $0 (start_all|restart_kcptun|restart_wb_list|restart_dns)"

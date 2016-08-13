@@ -9,7 +9,6 @@ pdnsd=$(ps | grep "pdnsd" | grep -v "grep")
 chinadns=$(ps | grep "chinadns" | grep -v "grep")
 DNS2SOCK=$(ps | grep "dns2socks" | grep -v "grep")
 Pcap_DNSProxy=$(ps | grep "Pcap_DNSProxy" | grep -v "grep")
-kcptun=$(ps | grep "kcp_router" | grep -v "grep")
 lan_ipaddr=$(nvram get lan_ipaddr)
 nvram set KCP_mode=0
 nvram commit
@@ -55,6 +54,8 @@ echo $(date): ----------------------Stopping kcptun service---------------------
 	iptables -t nat -D PREROUTING -p tcp -j KCPTUN >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -i br0 -p tcp -j KCPTUN >/dev/null 2>&1
 	iptables -t nat -D OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 3333 >/dev/null 2>&1
+	iptables -t nat -D KCPTUN -p tcp -m set --match-set gfw_cidr dst -j REDIRECT --to-ports 3333 >/dev/null 2>&1
+	
 	iptables -t nat -F OUTPUT  >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 	iptables -t nat -F KCPTUN >/dev/null 2>&1
@@ -75,7 +76,17 @@ echo $(date): ----------------------Stopping kcptun service---------------------
 	ipset -F black_domain >/dev/null 2>&1
 	ipset -X white_domain >/dev/null 2>&1
 	ipset -X black_domain >/dev/null 2>&1
-	echo $(date): done
+	ipset -F white_ip >/dev/null 2>&1
+	ipset -F black_ip >/dev/null 2>&1
+	ipset -X white_ip >/dev/null 2>&1
+	ipset -X black_ip >/dev/null 2>&1
+	#flush and destory white_cidr in chnmode mode
+	ipset -F white_cidr >/dev/null 2>&1
+	ipset -X white_cidr >/dev/null 2>&1
+	#flush and destory black_cidr in gfwlist mode
+	ipset -F black_cidr >/dev/null 2>&1
+	ipset -X black_cidr >/dev/null 2>&1
+	echo $(date): done 
 	echo $(date):
 #--------------------------------------------------------------------------
 # restore nat-start file if any
@@ -132,8 +143,12 @@ sed -i '/sleep/d' /jffs/scripts/wan-start >/dev/null 2>&1
 	fi
 #--------------------------------------------------------------------------
 # kill all kcptun
+	kcptun=$(ps | grep "kcp_router" | grep -v "grep")
 	if [ "$KCP_basic_guardian" == "1" ];then
-		perpctl X kcptun
+		echo $(date): kill kcptun and guardian...
+		perpctl X kcptun >/dev/null 2>&1
+		echo $(date): done
+		echo $(date):
 	fi
 	if [ ! -z "$kcptun" ]; then 
 		echo $(date): kill kcptun...

@@ -1,5 +1,22 @@
 Koolshare Asuswrt-Merlin kcptun Changelog
 ===========================================
+1.5
+   - fix	更新kcptun二进制文件到20160812最新版本（建议同时更新服务器端版本）；
+   - fix	修复gfwlist模式pdnsd上游服务器使用了大陆白名单模式的变量；
+   - fix	修复大陆白名单模式中启动chinadns实际启动pcapDNSProxy的问题；
+   - fix	修复pcapDNSProxy不能使用的问题；
+   - fix	修复了一个web上的一个严重个bug，该错误会导致网页js错误，看起来像丢失配置一样；
+   - add	将附加功能移动到附加功能标签页；
+   - add	附加功能增加开机延迟启动选项；
+   - add	增加日志查看功能，优化日志显示；
+   - add	gfwlist中ip黑名单增加对cidr的支持；
+   - update	改进大陆白名单的ip黑白名单策略；
+   - update	继续使用上个版本的简化cdn名单，并加入了国内cdn提供商的域名；；
+   - update	优化增模式启动和切换时间，同时增加首次进入页面状态刷新时长（防止污染）；
+   - fix	修复版本显示问题。
+
+
+
 1.0
    - add	全新插件形式，支援gfwlist模式和大陆白名单模式;
    - add	优化的大陆白名单cdn列表，更快的加载时间;
