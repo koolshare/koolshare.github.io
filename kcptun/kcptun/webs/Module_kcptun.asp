@@ -446,7 +446,7 @@ function buildswitch(){
 			document.getElementById("basic_show").style.display = "";
 			document.getElementById("kcp_show").style.display = "";
 			document.getElementById("apply_button").style.display = "";
-			
+			$j("#cmdBtn").html("应用所有设置");
 		}else{
 			document.form.KCP_basic_enable.value = 0;
 			//showKCPLoadingBar(8);
