@@ -97,8 +97,8 @@ set_ulimit(){
 }
 
 set_local_version(){
-	KCP_basic_version=`cat /koolshare/kcptun/version`
-	dbus set KCP_basic_version=$KCP_basic_version_local
+	KCP_basic_version_local=`cat /koolshare/kcptun/version`
+	dbus set KCP_basic_version="$KCP_basic_version_local"
 }
 
 case $ACTION in
