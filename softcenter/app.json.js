@@ -61,10 +61,10 @@
             "version": "1.8"
         }, 
         {
-            "build_date": "2016-08-13_21:05:16", 
+            "build_date": "2016-08-13_21:11:17", 
             "description": "基于kcp协议的udp网络加速", 
             "home_url": "Module_kcptun.asp", 
-            "md5": "3650f459f77845fb5db835b562da14ba", 
+            "md5": "d5c27d89406fbf0ac315dac2f53bce59", 
             "name": "kcptun", 
             "tar_url": "kcptun/kcptun.tar.gz", 
             "title": "kcptun", 
@@ -162,7 +162,7 @@
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "e959b5e75c36aaa4103197af27546e5d", 
+    "md5": "814b53fd0728f7228be2dc40388e3425", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.0.8"
 }
