@@ -1,6 +1,0 @@
-#!/bin/sh
-if test ${1} = 'start' ; then
-   exec tinylog -k 5 -t /var/log/${2}
-fi
-    
-exit 0

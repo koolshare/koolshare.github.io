@@ -1,1 +1,0 @@
-/koolshare/adm/adm.sh
