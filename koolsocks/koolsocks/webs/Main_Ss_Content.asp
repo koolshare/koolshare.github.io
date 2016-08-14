@@ -1146,21 +1146,18 @@ function show_hide_table(){
 	}
 }
 
-
-
 function version_show(){
-	$j("#ss_version_show").html("<i>当前版本：" + db_ss['ss_basic_version_web']);
     $j.ajax({
-        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/config.json.js',
+        url: 'http://master.ngrok.wang:5000/shadowsocks/config.json.js',
         type: 'GET',
+        dataType: 'jsonp',
         success: function(res) {
-            var txt = $j(res.responseText).text();
-            if(typeof(txt) != "undefined" && txt.length > 0) {
-                var obj = $j.parseJSON(txt.replace("'", "\""));
-		        $j("#ss_version_show").html("<i>当前版本：" + obj.version);
-		        if(obj.version != db_ss["ss_basic_version_local"]) {
-                    $j("#ss_version_show").html("<i>当前版本：ARM " + db_ss['ss_basic_version_local']);
-                    $j("#updateBtn").html("<i>升级到：" + obj.version);
+            if(typeof(res["version"]) != "undefined" && res["version"].length > 0) {
+	            if(res["version"] == db_ss["ss_basic_version_local"]){
+		        	$j("#ss_version_show").html("<i>当前版本：" + db_ss["ss_basic_version_local"]);
+	       		}else if(res["version"] !== db_ss["ss_basic_version_local"]) {
+                    $j("#ss_version_show").html("<i>当前版本：" + db_ss["ss_basic_version_local"]);
+                    $j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
 		        }
             }
         }
@@ -1307,7 +1304,7 @@ function update_ss(){
 														<button id="updateBtn" class="button_gen" onclick="update_ss();">检查更新</button>
 														<a style="margin-left: 178px;" href="https://github.com/koolshare/koolshare.github.io/blob/master/shadowsocks/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
 													</div>
-													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("ss_version_local", "未知"); %></i></div>
+													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i></div>
 													<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"></div>	
 												</td>
 											</tr>
