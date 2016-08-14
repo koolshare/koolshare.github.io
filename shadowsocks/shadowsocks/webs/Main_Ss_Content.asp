@@ -1151,12 +1151,13 @@ function version_show(){
         url: 'http://master.ngrok.wang:5000/shadowsocks/config.json.js',
         type: 'GET',
         dataType: 'jsonp',
-        success: function(res) {        
+        success: function(res) {
             if(typeof(res["version"]) != "undefined" && res["version"].length > 0) {
 	            if(res["version"] == db_ss["ss_basic_version_local"]){
-		        	$j("#ss_version_show").html("<i>当前版本：" + res["version"] + "<i>");
+		        	$j("#ss_version_show").html("<i>当前版本：" + db_ss["ss_basic_version_local"]);
 	       		}else if(res["version"] !== db_ss["ss_basic_version_local"]) {
-                    $j("#ss_version_show").html("<i>有新版本：" + res.version  + "<i>");
+                    $j("#ss_version_show").html("<i>当前版本：" + db_ss["ss_basic_version_local"]);
+                    $j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
 		        }
             }
         }
