@@ -1304,7 +1304,7 @@ function update_ss(){
 														<button id="updateBtn" class="button_gen" onclick="update_ss();">检查更新</button>
 														<a style="margin-left: 178px;" href="https://github.com/koolshare/koolshare.github.io/blob/master/shadowsocks/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
 													</div>
-													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("ss_version_local", "未知"); %></i></div>
+													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i></div>
 													<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"></div>	
 												</td>
 											</tr>
