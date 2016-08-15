@@ -1,5 +1,23 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+1.5.7 
+   - 说明	为了ss下个大版本更新，也为了更加契合软件中心，ss在此版本首先增加软件中心入口，然后下次固件更新会提供侧边栏入口开关。
+   		以后的ss维护都将转入acelan_softcenter_ui分支，这样的好处一是便于维护人员维护，二是可以利用软件中心的国内中转，
+   		来进行ss的更新，避免各种问题
+		以后master分支将冻结，仅留下1.5.7版本（不出意外的话），作为过渡。
+		同时欢迎大家到telegram群讨论：https://telegram.me/joinchat/DCq55kC7pgWKX9J4cJ4dJw
+		
+   - add	新增软件中心入口，更新1.5.7版本会自动安装软件中心入口，不更新1.5.7需要在软件中心自行安装；
+   - update 	SS更换到acelan_softcenter_ui分支的软件中心进行维护，1.5.7版本将是过度版本，
+		如果不出意外，1.5.7将是本分支最后一个版本，也就是说：小于1.5.7的版本最高只能更新到1.5.7，
+		要更新到今后2.0以及以上版本，需要先升级1.5.7版本，才能升级更高版本。
+   - update	同时ss规则更新也迁移到acelan_softcenter_ui分支。
+
+1.5.6 
+   - update	update Shadowsocks-libev client to latest (2.4.8)
+   - update	update ShadowsocksR-libev client to latest (2.4.8)
+   - update	fix version show
+
 1.5.6 
    - update	update Shadowsocks-libev client to latest (2.4.8)
    - update	update ShadowsocksR-libev client to latest (2.4.8)

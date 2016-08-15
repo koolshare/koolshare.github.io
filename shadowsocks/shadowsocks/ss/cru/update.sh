@@ -10,7 +10,7 @@ version_cdn1=$(cat /jffs/ss/cru/version | sed -n 4p | sed 's/ /\n/g'| sed -n 1p)
 
 echo ========================================================================================================== >> /tmp/syscmd.log
 echo $(date): Begin to update shadowsocks rules! please wait... >> /tmp/syscmd.log
-wget --no-check-certificate --tries=1 --timeout=15 -qO - https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/maintain_files/version1 > /tmp/version1
+wget --no-check-certificate --tries=1 --timeout=15 -qO - https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/maintain_files/version1 > /tmp/version1
 online_content=$(cat /tmp/version1)
 if [ -z "$online_content" ];then
 	rm -rf /tmp/version1
@@ -32,7 +32,7 @@ md5sum_chnroute2=$(echo $git_line2 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 md5sum_cdn2=$(echo $git_line4 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 
 # detect ss version
-ss_basic_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/version | sed -n 1p`
+ss_basic_version_web1=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks/version | sed -n 1p`
 if [ ! -z $ss_basic_version_web1 ];then
 	dbus set ss_basic_version_web=$ss_basic_version_web1
 fi
@@ -43,7 +43,7 @@ if [ "$ss_basic_gfwlist_update" == "1" ];then
 		if [ "$version_gfwlist1" != "$version_gfwlist2" ];then
 			echo $(date): new version decteted, will update gfwlist >> /tmp/syscmd.log
 			echo $(date): downloading gfwlist to tmp file >> /tmp/syscmd.log
-			wget --no-check-certificate --tries=1 --timeout=15 -qO - https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/maintain_files/gfwlist.conf > /tmp/gfwlist.conf
+			wget --no-check-certificate --tries=1 --timeout=15 -qO - https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/maintain_files/gfwlist.conf > /tmp/gfwlist.conf
 			md5sum_gfwlist1=$(md5sum /tmp/gfwlist.conf | sed 's/ /\n/g'| sed -n 1p)
 			if [ "$md5sum_gfwlist1"x = "$md5sum_gfwlist2"x ];then
 				echo $(date): md5sum check succeed \for gfwlist, apply tmp file to the original file >> /tmp/syscmd.log
@@ -71,7 +71,7 @@ if [ "$ss_basic_chnroute_update" == "1" ];then
 		if [ "$version_chnroute1" != "$version_chnroute2" ];then
 			echo $(date): new version decteted, will update chnroute >> /tmp/syscmd.log
 			echo $(date): downloading chnroute to tmp file >> /tmp/syscmd.log
-			wget --no-check-certificate --tries=1 --timeout=15 -qO - https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/maintain_files/chnroute.txt > /tmp/chnroute.txt
+			wget --no-check-certificate --tries=1 --timeout=15 -qO - https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/maintain_files/chnroute.txt > /tmp/chnroute.txt
 			md5sum_chnroute1=$(md5sum /tmp/chnroute.txt | sed 's/ /\n/g'| sed -n 1p)
 			if [ "$md5sum_chnroute1"x = "$md5sum_chnroute2"x ];then
 				echo $(date): md5sum check succeed \for chnroute, apply tmp file to the original file >> /tmp/syscmd.log
@@ -99,7 +99,7 @@ if [ "$ss_basic_cdn_update" == "1" ];then
 		if [ "$version_cdn1" != "$version_cdn2" ];then
 			echo $(date): new version decteted, will update cdn >> /tmp/syscmd.log
 			echo $(date): downloading cdn list to tmp file >> /tmp/syscmd.log
-			wget --no-check-certificate --tries=1 --timeout=15 -qO - https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/maintain_files/cdn.txt > /tmp/cdn.txt
+			wget --no-check-certificate --tries=1 --timeout=15 -qO - https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/maintain_files/cdn.txt > /tmp/cdn.txt
 			md5sum_cdn1=$(md5sum /tmp/cdn.txt | sed 's/ /\n/g'| sed -n 1p)
 			if [ "$md5sum_cdn1"x = "$md5sum_cdn2"x ];then
 				echo $(date): md5sum check succeed \for cdn, apply tmp file to the original file >> /tmp/syscmd.log
