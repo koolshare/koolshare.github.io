@@ -81,10 +81,10 @@
             "version": "1.6"
         }, 
         {
-            "build_date": "2016-08-15_11:16:02", 
+            "build_date": "2016-08-15_11:19:00", 
             "description": "科学上网", 
             "home_url": "Main_Ss_Content.asp", 
-            "md5": "ad0ef8303fd83e23785ab4ac62f400b9", 
+            "md5": "bdaacb3a2a1aef99897ee660ecf18f58", 
             "name": "koolsocks", 
             "tar_url": "koolsocks/koolsocks.tar.gz", 
             "title": "shadowsocks", 
