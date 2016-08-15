@@ -80,14 +80,14 @@ update_ss(){
 	# ss_basic_install_status=8	#更换更新服务器
 
 	dbus set ss_basic_install_status="6"
-	ss_basic_version_web1=`curl -s http://master.ngrok.wang:5000/shadowsocks/version | sed -n 1p`
+	ss_basic_version_web1=`curl -s http://koolshare.ngrok.wang:5000/shadowsocks/version | sed -n 1p`
 	if [ ! -z $ss_basic_version_web1 ];then
 		dbus set ss_basic_version_web=$ss_basic_version_web1
 		if [ "$ss_basic_version_local" != "$ss_basic_version_web1" ];then
 			dbus set ss_basic_install_status="1"
 			cd /tmp
-			md5_web1=`curl -s http://master.ngrok.wang:5000/shadowsocks/version | sed -n 2p`
-			wget http://master.ngrok.wang:5000/shadowsocks/shadowsocks.tar.gz
+			md5_web1=`curl -s http://koolshare.ngrok.wang:5000/shadowsocks/version | sed -n 2p`
+			wget http://koolshare.ngrok.wang:5000/shadowsocks/shadowsocks.tar.gz
 			md5sum_gz=`md5sum /tmp/shadowsocks.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web1" ]; then
 				dbus set ss_basic_install_status="4"
@@ -129,14 +129,14 @@ update_ss2(){
 	# ss_basic_install_status=8	#更换奔涌更新服务器1
 
 	dbus set ss_basic_install_status="6"
-	ss_basic_version_web2=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/version | sed -n 1p`
+	ss_basic_version_web2=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks/version | sed -n 1p`
 	if [ ! -z $ss_basic_version_web2 ];then
 		dbus set ss_basic_version_web=$ss_basic_version_web2
 		if [ "$ss_basic_version_local" != "$ss_basic_version_web2" ];then
 			dbus set ss_basic_install_status="1"
 			cd /tmp
-			md5_web2=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/version | sed -n 2p`
-			wget --no-check-certificate --timeout=15 https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/shadowsocks.tar.gz
+			md5_web2=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks/version | sed -n 2p`
+			wget --no-check-certificate --timeout=15 https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks/shadowsocks.tar.gz
 			md5sum_gz=`md5sum /tmp/shadowsocks.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web2" ]; then
 				dbus set ss_basic_install_status="4"
@@ -249,11 +249,11 @@ print_success_info(){
 
 # detect ss version after ss service applied.
 detect_ss_version(){
-	ss_basic_version_web1=`curl -s http://master.ngrok.wang:5000/shadowsocks/version | sed -n 1p`
+	ss_basic_version_web1=`curl -s http://koolshare.ngrok.wang:5000/shadowsocks/version | sed -n 1p`
 	if [ ! -z $ss_basic_version_web1 ];then
 		dbus set ss_basic_version_web=$ss_basic_version_web1
 	else
-		ss_basic_version_web2=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/version | sed -n 1p`
+		ss_basic_version_web2=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks/version | sed -n 1p`
 		if [ ! -z $ss_basic_version_web2 ];then
 			dbus set ss_basic_version_web=$ss_basic_version_web2
 		fi

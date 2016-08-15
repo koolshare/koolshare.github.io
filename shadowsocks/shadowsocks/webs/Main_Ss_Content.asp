@@ -1148,7 +1148,7 @@ function show_hide_table(){
 
 function version_show(){
     $j.ajax({
-        url: 'http://master.ngrok.wang:5000/shadowsocks/config.json.js',
+        url: 'http://koolshare.ngrok.wang:5000/shadowsocks/config.json.js',
         type: 'GET',
         dataType: 'jsonp',
         success: function(res) {
@@ -1302,7 +1302,7 @@ function update_ss(){
 													</div>
 													<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-38px;float: left;">
 														<button id="updateBtn" class="button_gen" onclick="update_ss();">检查更新</button>
-														<a style="margin-left: 178px;" href="https://github.com/koolshare/koolshare.github.io/blob/master/shadowsocks/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
+														<a style="margin-left: 178px;" href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
 													</div>
 													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i></div>
 													<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"></div>	
@@ -1542,7 +1542,7 @@ function update_ss(){
 													<th id="gfw_nu1" width="35%">当前gfwlist域名数量</th>
 													<td id="gfw_nu2">
 															<% nvram_get("ipset_numbers"); %>&nbsp;条，最后更新版本：
-															<a href="https://github.com/koolshare/koolshare.github.io/blob/master/maintain_files/gfwlist.conf" target="_blank">
+															<a href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf" target="_blank">
 																<i><% nvram_get("update_ipset"); %></i>
 														</a>
 													</td>
@@ -1552,7 +1552,7 @@ function update_ss(){
 												<td id="chn_nu2">
 													<p>
 														<% nvram_get("chnroute_numbers"); %>&nbsp;行，最后更新版本：
-														<a href="https://github.com/koolshare/koolshare.github.io/blob/master/maintain_files/chnroute.txt" target="_blank">
+														<a href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/chnroute.txt" target="_blank">
 															<i><% nvram_get("update_chnroute"); %></i>
 														</a>
 													</p>
@@ -1563,7 +1563,7 @@ function update_ss(){
 													<td id="cdn_nu2">
 														<p>
 														<% nvram_get("cdn_numbers"); %>&nbsp;条，最后更新版本：
-															<a href="https://github.com/koolshare/koolshare.github.io/blob/master/maintain_files/cdn.txt" target="_blank">
+															<a href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt" target="_blank">
 																<i><% nvram_get("update_cdn"); %></i>
 															</a>
 														</p>
