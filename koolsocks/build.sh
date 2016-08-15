@@ -2,23 +2,11 @@
 
 
 MODULE=shadowsocks
-VERSION=`cat ./koolsocks/ss/version|sed -n 1p`
+VERSION=1.0
 TITLE=shadowsocks
 DESCRIPTION=科学上网
 HOME_URL=Main_Ss_Content.asp
 
-old_version=`cat version | sed -n 1p`
-old_md5sum=`cat version | sed -n 2p`
-
-if [ "$old_version" != "$VERSION" ];then
-  echo old_version $old_version
-  echo VERSION $VERSION
-  mv koolsocks.tar.gz ./history/"koolsocks"_"$old_version".tar.gz
-  cd ./history
-  md5sum * |grep -v "version" | awk '{print $2,$1}' > version
-  cd ..
-  #echo $old_version $old_md5sum >> ./history/version
-fi
 
 # Check and include base
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -72,5 +60,6 @@ cat > ./config.json.js <<EOF
 EOF
 
 #update md5
-# python ../softcenter/gen_install.py stage2
+python ../softcenter/gen_install.py stage2
+
 

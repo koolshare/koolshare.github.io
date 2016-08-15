@@ -91,6 +91,16 @@
             "version": "0.2"
         }, 
         {
+            "build_date": "2016-08-15_11:04:57", 
+            "description": "科学上网", 
+            "home_url": "Main_Ss_Content.asp", 
+            "md5": "8e5e0628fea052ecac1575f98ea52d6e", 
+            "name": "shadowsocks", 
+            "tar_url": "shadowsocks/shadowsocks.tar.gz", 
+            "title": "shadowsocks", 
+            "version": "1.0"
+        }, 
+        {
             "build_date": "2016-05-19_22:37:04", 
             "description": "中文SSID，装逼利器！", 
             "home_url": "Module_ssid.asp", 
