@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-MODULE=shadowsocks
+MODULE=koolsocks
 VERSION=1.0
 TITLE=shadowsocks
 DESCRIPTION=科学上网
