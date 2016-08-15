@@ -1,0 +1,371 @@
+Koolshare Asuswrt-Merlin shadowsocks Changelog
+===========================================
+1.5.6 
+   - update	update Shadowsocks-libev client to latest (2.4.8)
+   - update	update ShadowsocksR-libev client to latest (2.4.8)
+   - update	fix version show
+
+1.5.5
+   - update	update ShadowsocksR-libev client to latest
+   - update	update kcp-tun client to 20160728 version
+   - update	using better server for version check and update download
+   - update	new way and new server for online version check
+
+1.5.4
+		This is a regular maintenance version
+   - update	kcptun fix
+1.5.3
+		This is a regular maintenance version
+   - update	update shadowsocks-libev binary to version 2.4.7
+   - update	update gfwlist.conf and chnroute.txt to latest
+   - fix	fix shadowsocks service won't restart after rule updated
+
+1.5.2
+		常规维护，因时间太少没时间做其它部分。
+   - fix	修复SS界面黑屏的bug，应该修好了吧；
+   - fix	修复ping test和web test在上个版本中不能使用的bug。
+
+1.5.1
+   - changed	更改版本号检测机制为前端检测
+   - add	新增kcptun模式
+
+1.5.0
+   - fix	修复当节点为空时，导入json文件只能导入一个节点的bug
+   - add	新增kcptun模式
+
+1.4.9
+   - change	更新游戏模式V2客户端koolgame为最新
+   - fix	修复节点ping测试和web连通性测试不能保存的bug
+   - add	节点恢复增加对json格式导入的支持
+   		现在用json文件导入，会在已有节点基础上增加，不会覆盖
+   		而用备份文件导入，会和以前一样进行覆盖写入
+   		支持的json必须包含"password", "method", "server_port", "server", "remarks"字段
+   		实际测试用了枫叶主机的json原文件，windows纸飞机客户端的json文件通过，
+   		其它运营商的json文件如果包括以上字段应该也不会有问题
+   		shadowsocks-R的json文件，仅支持导入节点信息，不支持导入混淆信息等
+   		基本格式如下：
+			{
+    			  "password": "xxxxx",
+    			  "method": "rc4-md5",
+    			  "server_port": "65533",
+    			  "remarks": "日本节点",
+    			  "server": "aaa.bbb.com"
+    			},
+    			 {
+    			  "password": "xxxxx",
+    			  "method": "rc4-md5",
+    			  "server_port": "65533",
+    			  "remarks": "美国节点",
+    			  "server": "aaa.bbb.com"
+    			},
+
+1.4.8
+   - change	shadowsocks-libev客户端回滚到2.4.5（1.4.4版本内置的版本）
+   		因为1.4.6， 1.4.7的锅太多，我已经伤心，决定回滚到1.4.5，吃掉1.4.6， 1.4.7
+   		再往下更新，这次1.4.8版本回滚shadowsocks-libev到2.4.5主要是因为很多游戏玩家反映的联机问题
+
+1.4.7
+   - fix	被吃掉了
+
+1.4.6
+   - fix	被吃掉了
+
+1.4.5
+   - change	更新shadowsocks-libev客户端到2.4.6
+   - change	更新shadowsocks-libev-ssr客户端为最新，支持tls1.2_ticket_auth自定义参数(不支持多个域名)
+   - fix	增加ssr中http_simple的自定义参数
+   - fix	增加socks5页面的chacha20-ietf加密方式
+
+1.4.5
+   - change	更新shadowsocks-libev客户端到2.4.6
+   - change	更新shadowsocks-libev-ssr客户端为最新，支持tls1.2_ticket_auth自定义参数(不支持多个域名)
+   - fix	增加ssr中http_simple的自定义参数
+   - fix	增加socks5页面的chacha20-ietf加密方式
+
+1.4.4
+   - fix	修复一些笔误
+
+1.4.3
+   - fix	修复gfwlist内，PcapDNSProxy可能不显示的bug
+   - add	更新ssr客户端为最新，支持tls1.2_ticket_auth
+
+1.4.2
+   - 说明	此次更新仅为ss功能个性更新，并不涉及到SS核心部分(ss二进制文件，规则文件，iptables规则)，基本亮点总结为:
+   		1	添加了新的DNS解析软件
+   		2	增加了ss节点的测试功能
+   		3	实用性上增加了未开启jffs分区的自定义脚本的提醒
+   			所以较之1.4.1，稳定性应该不会有区别。
+   - fix	修复pdnsd运行权限问题
+   - add	增加未开启Enable JFFS custom scripts and configs选项提醒
+   - add	增加节点google、youtube连通性测试
+   - add	增加节点ping测试和丢包测试
+   - add	增加游戏模式模式pdnsd解析软件选项
+   - add	增加大陆白名单模式pdnsd解析软件选项
+   - add	增加gfwlist模式pdnsd解析软件选项
+   - fix	修改版本号显示前缀，以区分ARM机型和mipsel机型
+
+1.4.1
+   - fix	修复初始化时gfwlist模式dnscrypt-proxy错误的默认节点
+   - fix	gfwlist模式中选择dnscrypt-proxy节点，实际无效的问题
+   - change	更新游戏模式v2中koolgame客户端为最新.
+
+1.4.0
+   - fix	修复全局模式下dnscrypt-proxy不能启动的问题
+   - fix	修复SS初始化时，错误的dnscrypt-proxy节点设置问题
+   -		
+		最近SS版本更新频繁，但是我还是建议大家选择最新版本的，这次的更新从1.3.8开始
+   		主要是更换了dnscrypt-proxy的解析节点，不过其中导致了一些问题，一直到1.4.0才修复完毕
+   		更新都不涉及到SS主要核心逻辑的修改，理论上讲不会导致稳定性的变化，硬要说变化，可能会影响
+   		使用dnscrypt-proxy作解析的朋友，需要手动重新选择下解析节点。
+
+1.3.9
+   - fix	修复全局模式下DNS解析问题导致的不能出墙
+   - change	更新redsocks2二进制文件到最新版本：release-0.65-55-g2a93e7e
+
+1.3.8
+   - add	为了更好的更新，增加'raw.githubusercontent.com'到output.conf
+   - change	更新dns2socks 2.0
+   - change 	更新dnscrypt-proxy解析文件(更多解析服务器可用)
+   - change 	在线版本检测增加备用服务器
+
+1.3.7
+   - fix	fix rule update botton won't work
+   - fix	fix inner ss rules version and md5sum
+
+1.3.6
+   - fix	去除大陆白名单模式br0网卡限制
+   - update	更新ss和ssr二进制文件为最新源码编译
+   - update	更新内置的gfwlist，chnroute，cnd规则文件为最新
+
+1.3.5
+   - fix	fix a type error!
+
+1.3.4
+   - fix	更新了gfwlist模式内/jffs/configs/dnsmasq.conf.add文件夹配置，
+   		现在固件版本小于6.5.1的,该配置由start.sh生成，大于或者等于6.5.1
+   		改配置由dnsmasq默认提供。
+   		更新此版本ss，能解决6.5.1最新测试固件除了gfwlist模式外其它模式不能使用的问题；
+   		需要注意的是，如果你使用的是6.5.1前几个版本的测试固件（beta1-3），gfwlist模式可能会出现问题，
+   		6.5及之前版本和6.5.1beta4及其以后版本正常。
+
+1.3.3 ( 25/03/2016 08:28:20 )
+   - fix	修复游戏模式V2可能出现的日志错误
+   - fix	修复游戏模式V2中，koolgame启动两次的错误
+   - add	为了保证提交后第一时间看到正确的SS状态，现在切换模式后，
+   		上一个SS状态会被清除，重新进入页面后，下一个状态会等到刷新时间后才更新。
+
+1.3.2 ( 22/03/2016 16:29:41 )
+   - fix	修复切换全局模式后显示游戏模式V2的问题
+
+1.3.1 ( 22/03/2016 11:16:38 )
+   - fix	修复全局模式下，高级设置页面显示游戏模式v2界面的问题
+
+1.3.0 ( 21/03/2016 15:32:09 )
+   - fix	now ss mode can be rememberd
+		我编不下去了，我还是用中文吧！
+		修复了一个ss模式不能存储的问题，现在切换节点，会自动切换到上次该节点使用的模式。
+		初次更新本版本，可能会导致模式选择一栏为空，不要惊慌，选择一个节点，点击提交就好了
+		以后就会记住这个模式
+   - fix	修复了脚本里的一些手写错误
+   - fix	修复了关闭ss不触发onssstart脚本问题（以更好兼容ADM）
+   - fix	修复textarea的水印文字说明的浏览器兼容问题
+   - fix	修复大陆白名单模式自定义dnsmasq页面错乱问题
+   - add	增加了游戏模式V2，游戏模式V2使用小宝开发的程序koolgame，需要配合同是小宝开发的game-server
+		服务器端 http://koolshare.cn/thread-37086-1-1.html
+   - change	所有模式里的address功能改为dnsmasq自定义	
+   - del	去除了ss自带的去广告功能，因为此功能可能会导致dnsmasq不能正常启动，而使路由器失去dns解析能力
+		
+1.2.9 ( 03/03/2016 23:00:09 )
+   - fix	revert shadowsocks-ssr binary to 1.2.5
+
+1.2.8 ( 03/03/2016 22:32:37 )
+   - fix	revert shadowsocks-ssr binary to previous version
+
+1.2.7 ( 03/03/2016 19:31:01 )
+   - update	update shadowsocks-ssr to latest;
+   - update	update PcapDNSproxy to latest
+   - add	add black domain control in CHN mode
+   - add	add white doamin control in CHN mode
+   - add	add dnsmasq conf customize in CHN mode
+   - changed	changed the tile of ip doamin (now black ip go through ss, 
+		white ip go directly)
+     		By update this version 1.2.7, your old balck ip and white ip setting will lost,
+		you can find it back by backup ss conf (in ss node definition page), the old walue 
+		is "ss_redchn_wan_blacklist" (now "ss_redchn_wan_white_ip") and "ss_redchn_wan_whitelist" 
+		(now "ss_redchn_wan_black_ip")
+
+1.2.6 ( 29/02/2016 16:03:25 )
+   - fix	fix typo in ss update module (no ss code change)
+
+1.2.5 ( 26/02/2016 16:01:44 )
+   - fix	delete softerware center component in ss update (no ss code change)
+
+1.2.4 ( 26/02/2016 15:00:06 )
+   - fix	fix a wrong variable in gfwlist mode
+   - update	update inner ss rule to newest
+
+1.2.3 ( 13/02/2016 17:28:41 )
+   - fix	fix lan comtrol won't work in gfwlist mode
+
+1.2.2 ( 09/02/2016 18:24:10 )
+   - add	add chacha20-ietf encryption method in ss node window.
+
+1.2.1 ( 06/02/2016 20:22:20 )
+   - add	add chacha20-ietf encryption method.
+
+1.2.0 ( 05/02/2016 09:23:15 )
+   - fix	fix ss overall mode woking only in router.
+
+1.1.9 ( 03/02/2016 17:57:18 )
+   - changed	update shadowsocks-libev binary to newest 2.4.5
+
+1.1.8 ( 01/02/2016 07:24:26 )
+   - add	now ss use at most 8192 connections
+
+1.1.7 ( 31/01/2016 13:39:50 )
+   - fix	fix lan black list don't work in gfw list mode, yes, again!
+
+1.1.6 ( 31/01/2016 10:51:31 )
+   - fix	fix lan black list don't work in gfw list mode
+
+1.1.5 ( 31/01/2016 04:25:06 )
+   - CHANGE	update inner ss rule list to newest.
+
+1.1.4 ( 30/01/2016 06:51:59 )
+   - fix	fix wrong process detect
+   - fix	fix ss CHN mode wan balck list and wan white list doesn't work.
+
+1.1.3 ( 30/01/2016 05:18:19 )
+   - fix	prevent ss version check run multiple times
+
+1.1.2 ( 30/01/2016 04:18:11 )
+   - fix	fix typo cause ss restart when enter ss main page
+
+1.1.1 ( 30/01/2016 04:00:27 )
+   - fix	update ss-libev binary to newest
+
+1.1.0 ( 30/01/2016 03:10:19 )
+   - fix	fix version check when entered ss main page
+
+1.0.9 ( 28/01/2016 11:58:28 )
+   - fix	fix ss_status don't update after version check
+
+1.0.8 ( 26/01/2016 10:19:55 )
+   - rss add protocol auth_sha1_v2!
+
+1.0.7 ( 26/01/2016 10:19:55 )
+   - fix:	fix some type error!
+
+1.0.6 ( 24/01/2016 10:36:09 )
+   - fix:	fix ss start up
+
+1.0.5 ( 24/01/2016 10:36:09 )
+   - fix:	fix ss-local/rss-local don't killed
+   - fix:	fix socks5 start error
+   - CHANGE:	ussing raw to update ss
+
+1.0.4 ( 24/01/2016 10:36:09 )
+   - fix:	try to fix md5
+
+1.0.3 ( 24/01/2016 10:36:09 )
+   - fix:	fix update bpttom
+
+1.0.2 ( 24/01/2016 10:36:09 )
+   - fix:	fix dns2socks in CHN mode
+
+1.0.1 ( 24/01/2016 09:56:35 )
+   - fix:	fix ss/socks5 start with system even ss not enabled
+
+1.0.0 ( 23/01/2016 22:03:48 )
+   - fix:	fix socks5 dot't auto start
+   - fix:	add backup update server
+   - fix:	fix ss start with system issue
+   - CHANGE:	change scripts location fir future working
+
+0.9.9 ( 21/01/2016 20:35:28 )
+   - fix:	fix update bottom not show when ss version check failed
+
+0.9.8 ( 21/01/2016 20:35:28 )
+   - FIX:	fix type error may cause ss apply failed after version check failed
+
+0.9.7 ( 21/01/2016 20:14:53 )
+   - CHANGE:	now update bottom will not show when ss not enabled
+
+0.9.6 ( 21/01/2016 10:52:18 )
+   - CHANGE:	change the way of pcapDNSProxy start.
+   - CHANGE:	update inner ss rule list to newest.
+
+0.9.5 ( 20/01/2016 18:39:40 )
+   - FIX:	change absolute path of ssocnfig for after ss rule update success.
+   - FIX:	fix ss stop.sh stop the socks5 in socks5 page.
+
+0.9.4 ( 220/01/2016 16:01:42 )
+   - CHANGE:	change the absolute path of Pcap_DNSProxy
+
+0.9.3 ( 220/01/2016 16:01:42 )
+   - CHANGE:	update Pcap_DNSProxy version to 0.4.5.1
+
+0.9.2 ( 20/01/2016 11:01:01 )
+   - CHANGE:	Using dns2socks as default foreign dns resolver
+   - FIX:	fix early page refresh after ss updated
+
+0.9.1 ( 20/01/2016 10:17:44 )
+   - FIX:	fix word lost when ss conf restore
+
+0.9.0 ( 20/01/2016 09:29:03 )
+   - CHANGE:	detect ss version web everytime ss applied
+
+0.8.9 ( 20/01/2016 09:29:03 )
+   - CHANGE:	update shadowsocks binary
+
+0.8.8 ( 20/01/2016 08:33:03 )
+   - fix:	fix ss state show for china and foreign
+
+0.8.7 ( 20/01/2016 00:49:53 )
+   - fix:	fix loading bar error
+   - fix:	fix ss list update
+
+0.8.6 ( 19/01/2016 21:38:04 )
+   - fix:	do not restore some values for better looking
+
+0.8.5 ( 19/01/2016 15:25:46 )
+   - fix:	fix wrong var
+
+0.8.4 ( 19/01/2016 15:25:46 )
+   - fix:	fix wrong ss state after update
+
+0.8.3 ( 19/01/2016 07:06:37 )
+   - ADD:	add ss conf remove/backup/restore
+   - FIX:	fix lan control don't work
+   - FIX:	using dbus ram to replace nvram for ss_status
+   - FIX:	now slide switch won't save unless apply bottom clicked
+
+0.8.2 ( 18/01/2016 07:06:37 )
+   - FIX:	fix asp format
+
+0.8.1 ( 17/01/2016 06:36:17 )
+   - FIX:	fix software center
+		(software center's update now temporarily rely on ss)
+
+0.8.0 ( 14/01/2016 06:36:17 )
+   - FIX:	fix local version show
+
+0.7.9 ( 14/01/2016 06:26:06 )
+   - ADD:	add some directions in the ost/black list aera
+   - FIX:	complete of move ss conf to dbus
+   - FIX:	fix Main_Ss_Content.asp page layout
+   - FIX:	fix Main_Ss_Content.asp page layout
+   - FIX:	fix add/del ss node
+   - FIX:	fix page crash when add host/black list in ss advanced page
+   - FIX:	fix game mode chinadns not working
+   - CHANGE:	now socks5 page is independent from ss
+
+0.7.8 ( 14/01/2016 06:07:34 )
+   - ADD:	move ss conf to dbus
+   - FIX:	fix ss switch
+
+0.7.7 ( 12/01/2016 13:44:35 )
+   - FIX:	fix ss page layout
+
+0.7.6 ( 12/01/2016 10:45:43)
+   - ADD:	add shadowsocks for Merlin Koolshare firmware Softerware center

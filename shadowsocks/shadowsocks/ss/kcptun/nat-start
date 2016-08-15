@@ -1,0 +1,150 @@
+#!/bin/sh
+eval `dbus export shadowsocks`
+eval `dbus export ss`
+black=$(echo $ss_basic_black_lan | sed "s/,/\n/g")
+white=$(echo $ss_basic_white_lan | sed "s/,/\n/g")
+lan_ipaddr=$(nvram get lan_ipaddr)
+wanwhitelist=$(echo $ss_kcptun_wan_white_ip | sed 's/,/\n/g')
+wanblacklist=$(echo $ss_kcptun_wan_black_ip | sed "s/,/\n/g")
+wanblackdomain=$(echo $ss_kcptun_wan_white_domain | sed 's/,/\n/g')
+wanwhitedomain=$(echo $ss_kcptun_wan_black_domain | sed "s/,/\n/g")
+use_chnroute="/koolshare/ss/redchn/chnroute.txt"
+server_ip=`resolvip $ss_basic_server`
+ip1=$(nvram get wan0_ipaddr | cut -d"." -f1)
+ip2=$(nvram get wan0_ipaddr | cut -d"." -f2)
+
+# Different routers got different iptables syntax
+case $(uname -m) in
+  armv7l)
+    MATCH_SET='--match-set'
+    ;;
+  mips)
+    MATCH_SET='--set'
+    ;;
+esac
+
+if [ -z "$shadowsocks_server_ip" ];then
+        if [ ! -z "$server_ip" ];then
+                export shadowsocks_server_ip="$server_ip"
+                ss_basic_server="$server_ip"
+                dbus save shadowsocks
+        fi
+else
+        if [ "$shadowsocks_server_ip"x = "$server_ip"x ];then
+                ss_basic_server="$shadowsocks_server_ip"
+        elif [ "$shadowsocks_server_ip"x != "$server_ip"x ] && [ ! -z "$server_ip" ];then
+                ss_basic_server="$server_ip"
+                export shadowsocks_server_ip="$server_ip"
+                dbus save shadowsocks
+        else
+                ss_basic_server="$ss_basic_server"
+        fi
+fi
+
+# flush rules and set if any
+iptables -t nat -F REDSOCKS2 > /dev/null 2>&1
+iptables -t nat -D PREROUTING -p tcp -j REDSOCKS2 >/dev/null 2>&1
+iptables -t nat -X REDSOCKS2 > /dev/null 2>&1
+iptables -t nat -D OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 1089 >/dev/null 2>&1
+iptables -t nat -D PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
+ipset -F router >/dev/null 2>&1
+ipset -F white_domain >/dev/null 2>&1
+ipset -F black_domain >/dev/null 2>&1
+ipset -X router >/dev/null 2>&1
+ipset -X white_domain >/dev/null 2>&1
+ipset -X black_domain >/dev/null 2>&1
+
+# creat ipset rules
+sed -e "s/^/-A chnroute &/g" -e "1 i\-N chnroute nethash --hashsize 81920" $use_chnroute | awk '{print $0} END{print "COMMIT"}' | ipset -R
+ipset -N router iphash
+ipset -N white_domain iphash
+ipset -N black_domain iphash
+# nat rules below
+# 创建REDSOCKS2 nat rule
+iptables -t nat -N REDSOCKS2
+
+# 重定所有流量到 REDSOCKS2
+iptables -t nat -A PREROUTING -p tcp -j REDSOCKS2
+
+# default wan_blacklist 强制局域网ip，DNS ip地址不走代理
+iptables -t nat -A REDSOCKS2 -d $ss_basic_kcptun_server -j RETURN
+iptables -t nat -A REDSOCKS2 -d 0.0.0.0/8 -j RETURN
+iptables -t nat -A REDSOCKS2 -d 10.0.0.0/8 -j RETURN
+iptables -t nat -A REDSOCKS2 -d 127.0.0.0/8 -j RETURN
+iptables -t nat -A REDSOCKS2 -d 169.254.0.0/16 -j RETURN
+iptables -t nat -A REDSOCKS2 -d 172.16.0.0/12 -j RETURN
+iptables -t nat -A REDSOCKS2 -d 192.168.0.0/16 -j RETURN
+iptables -t nat -A REDSOCKS2 -d 224.0.0.0/4 -j RETURN
+iptables -t nat -A REDSOCKS2 -d 240.0.0.0/4 -j RETURN
+iptables -t nat -A REDSOCKS2 -d 114.114.114.114 -j RETURN
+iptables -t nat -A REDSOCKS2 -d 235.6.6.6 -j RETURN
+iptables -t nat -A REDSOCKS2 -d 236.6.6.6 -j RETURN
+iptables -t nat -A REDSOCKS2 -d $ip1.$ip2.0.0/16 -j RETURN
+
+
+# IP白名单控制（不走ss）
+if [ ! -z $ss_kcptun_wan_white_ip ];then
+for wan_white_ip in $wanwhitelist
+	do 
+		iptables -t nat -A REDSOCKS2 -d $wan_white_ip -j RETURN
+	done
+fi
+
+# 域名白名单控制（不走ss）
+if [ ! -z $ss_kcptun_wan_white_domain ];then
+	iptables -t nat -A REDSOCKS2 -p tcp -m set $MATCH_SET white_domain dst -j RETURN 
+fi
+
+
+# IP黑名单控制（走ss）
+if [ ! -z $ss_kcptun_wan_blacklist ];then
+for wan_black_ip in $wanblacklist
+	do 
+		iptables -t nat -A REDSOCKS2 -d $wan_black_ip -p tcp -j REDIRECT --to-ports 1089
+	done
+fi
+
+# 域名黑名单控制（走ss）
+if [ ! -z $ss_kcptun_wan_black_domain ];then
+	iptables -t nat -A REDSOCKS2 -p tcp -m set $MATCH_SET black_domain dst -j REDIRECT --to-ports 1089
+fi
+
+# router itself
+iptables -t nat -A OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 1089
+
+# lan blacklist
+if [ "$ss_basic_lan_control" == "1" ];then
+	if [ ! -z $ss_basic_black_lan ];then
+		for balck_ip in $black
+		do
+			iptables -t nat -A REDSOCKS2 -p tcp -s $balck_ip -j RETURN
+		done
+		iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 1089
+	else
+	iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 1089
+	fi
+elif [ "$ss_basic_lan_control" == "2" ];then
+	if [ ! -z $ss_basic_white_lan ];then
+		for white_ip in $white
+		do
+			iptables -t nat -A REDSOCKS2 -p tcp -s $white_ip -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 1089
+		done
+	else
+	iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 1089
+	fi
+else
+	iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 1089 
+fi
+
+if [ "$ss_basic_chromecast" == "1" ]; then
+	echo $(date): enable lan dns take over: chromecast...
+	iptables -t nat -A PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
+	echo $(date): done
+	echo $(date):
+else
+	echo $(date): disable lan dns take over..
+	iptables -t nat -D PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
+	echo $(date): done
+	echo $(date):
+fi
+
