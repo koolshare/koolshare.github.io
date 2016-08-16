@@ -5,44 +5,6 @@ source /koolshare/scripts/base.sh
 ss_basic_version_local=`cat /koolshare/ss/version`
 dbus set ss_basic_version_local=$ss_basic_version_local
 
-# set default vaule
-set_default_value(){
-if [ -z $ss_ipset_cdn_dns ];then
-	dbus set ss_ipset_cdn_dns="1"
-	dbus set ss_ipset_foreign_dns="2"
-	dbus set ss_ipset_dns2socks_user="8.8.8.8:53"
-	dbus set ss_ipset_opendns="cisco(opendns)"
-	dbus set ss_ipset_tunnel="2"
-	dbus set ss_redchn_dns_china="1"
-	dbus set ss_redchn_dns_foreign="4"
-	dbus set ss_redchn_dns2socks_user="8.8.8.8:53"
-	dbus set ss_redchn_opendns="cisco(opendns)"
-	dbus set ss_redchn_sstunnel="2"
-	dbus set ss_redchn_chinadns_china="1"
-	dbus set ss_redchn_chinadns_foreign="2"
-	dbus set ss_game_dns_china="1"
-	dbus set ss_game_dns_foreign="4"
-	dbus set ss_game_dns2socks_user="8.8.8.8:53"
-	dbus set ss_game_opendns="cisco(opendns)"
-	dbus set ss_game_sstunnel="2"
-	dbus set ss_game_chinadns_china="1"
-	dbus set ss_game_chinadns_foreign="2"
-	dbus set ss_overall_mode="1"
-	dbus set ss_overall_dns="0"
-	dbus set ss_basic_adblock="0"
-fi
-
-if [ -z $ss_kcptun_dns_china ];then
-	dbus set ss_kcptun_dns_china="1"
-	dbus set ss_kcptun_dns_foreign="4"
-	dbus set ss_kcptun_dns2socks_user="8.8.8.8:53"
-fi
-
-if [ -z $ss_gameV2_dns2ss_user ];then
-	dbus set ss_gameV2_dns2ss_user="8.8.8.8:53"
-	dbus set ss_gameV2_dns_china="1"
-fi
-}
 
 # creat dnsmasq.d folder
 creat_folder(){
@@ -92,16 +54,16 @@ update_ss(){
 			if [ "$md5sum_gz" != "$md5_web1" ]; then
 				dbus set ss_basic_install_status="4"
 				rm -rf /tmp/shadowsocks* >/dev/null 2>&1
-				sleep 2
+				sleep 1
 				dbus set ss_basic_install_status="8"
-				sleep 2
+				sleep 1
 				update_ss2
 			else
 				install_ss
 			fi
 		else
 			dbus set ss_basic_install_status="5"
-			sleep 2
+			sleep 1
 			dbus set ss_basic_install_status="0"
 			exit
 		fi
@@ -109,10 +71,9 @@ update_ss(){
 		dbus set ss_basic_install_status="7"
 		sleep 2
 		dbus set ss_basic_install_status="8"
-		sleep 2
+		sleep 1
 		update_ss2
 	fi
-	dbus save ssconf
 }
 
 
@@ -159,7 +120,6 @@ update_ss2(){
 		dbus set ss_basic_install_status="0"
 		exit
 	fi
-	dbus save ssconf
 }
 
 
@@ -188,28 +148,67 @@ enable_jffs2(){
 # Enable service by user choose
 apply_ss(){
 	if [ "1" == "$ss_basic_mode" ]; then
-		. /koolshare/ss/stop.sh
-		. /koolshare/ss/ipset/start.sh
+		if [ "1" == "$ss_basic_action" ]; then
+			. /koolshare/ss/stop.sh stop_part
+			. /koolshare/ss/ipset/start.sh start_all
+		elif [ "2" == "$ss_basic_action" ]; then
+			. /koolshare/ss/ipset/start.sh restart_dns
+		elif [ "3" == "$ss_basic_action" ]; then
+			. /koolshare/ss/ipset/start.sh restart_wb_list
+		elif [ "4" == "$ss_basic_action" ]; then
+			. /koolshare/ss/ipset/start.sh restart_addon
+		fi
 	elif [ "2" == "$ss_basic_mode" ]; then
-		. /koolshare/ss/stop.sh
-		. /koolshare/ss/redchn/start.sh
+		if [ "1" == "$ss_basic_action" ]; then
+			. /koolshare/ss/stop.sh stop_part
+			. /koolshare/ss/redchn/start.sh start_all
+		elif [ "2" == "$ss_basic_action" ]; then
+			. /koolshare/ss/redchn/start.sh restart_dns
+		elif [ "3" == "$ss_basic_action" ]; then
+			. /koolshare/ss/redchn/start.sh restart_wb_list
+		elif [ "4" == "$ss_basic_action" ]; then
+			. /koolshare/ss/redchn/start.sh restart_addon
+		fi
 	elif [ "3" == "$ss_basic_mode" ]; then
-		. /koolshare/ss/stop.sh
-		. /koolshare/ss/game/start.sh
+		if [ "1" == "$ss_basic_action" ]; then
+			. /koolshare/ss/stop.sh stop_part
+			. /koolshare/ss/game/start.sh start_all
+		elif [ "2" == "$ss_basic_action" ]; then
+			. /koolshare/ss/game/start.sh restart_dns
+		elif [ "3" == "$ss_basic_action" ]; then
+			. /koolshare/ss/game/start.sh restart_wb_list
+		elif [ "4" == "$ss_basic_action" ]; then
+			. /koolshare/ss/game/start.sh restart_addon
+		fi
 	elif [ "4" == "$ss_basic_mode" ]; then
-		. /koolshare/ss/stop.sh
-		. /koolshare/ss/koolgame/start.sh
+		if [ "1" == "$ss_basic_action" ]; then
+			. /koolshare/ss/stop.sh stop_part
+			. /koolshare/ss/koolgame/start.sh start_all
+		elif [ "2" == "$ss_basic_action" ]; then
+			. /koolshare/ss/koolgame/start.sh restart_dns
+		elif [ "3" == "$ss_basic_action" ]; then
+			. /koolshare/ss/koolgame/start.sh restart_wb_list
+		elif [ "4" == "$ss_basic_action" ]; then
+			. /koolshare/ss/koolgame/start.sh restart_addon
+		fi
 	elif [ "5" == "$ss_basic_mode" ]; then
-		. /koolshare/ss/stop.sh
-		. /koolshare/ss/overall/start.sh
-	elif [ "6" == "$ss_basic_mode" ]; then
-		. /koolshare/ss/stop.sh
-		. /koolshare/ss/kcptun/start.sh
+		if [ "1" == "$ss_basic_action" ]; then
+			. /koolshare/ss/stop.sh stop_part
+			. /koolshare/ss/overall/start.sh start_all
+		elif [ "2" == "$ss_basic_action" ]; then
+			. /koolshare/ss/overall/start.sh restart_dns
+		elif [ "3" == "$ss_basic_action" ]; then
+			. /koolshare/ss/overall/start.sh restart_wb_list
+		elif [ "4" == "$ss_basic_action" ]; then
+			. /koolshare/ss/overall/start.sh restart_addon
+		fi
 	fi
+	dbus set ss_basic_action="1"
 }
 
 disable_ss(){
-	. /koolshare/ss/stop.sh
+	. /koolshare/ss/stop.sh stop_all
+	dbus set ss_basic_action="1"
 }
 
 
@@ -217,11 +216,9 @@ disable_ss(){
 write_numbers(){
 	nvram set update_ipset="$(cat /koolshare/ss/cru/version | sed -n 1p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set update_chnroute="$(cat /koolshare/ss/cru/version | sed -n 2p | sed 's/#/\n/g'| sed -n 1p)"
-	nvram set update_adblock="$(cat /koolshare/ss/cru/version | sed -n 3p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set update_cdn="$(cat /koolshare/ss/cru/version | sed -n 4p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set ipset_numbers=$(cat /koolshare/ss/ipset/gfwlist.conf | grep -c ipset)
 	nvram set chnroute_numbers=$(cat /koolshare/ss/redchn/chnroute.txt | grep -c .)
-	nvram set adblock_numbers=$(cat /koolshare/ss/ipset/adblock.conf | grep -c address)
 	nvram set cdn_numbers=$(cat /koolshare/ss/redchn/cdn.txt | grep -c .)
 }
 
@@ -230,22 +227,6 @@ fire_ss_depend_scripts(){
 	dbus fire onssstart
 }
 
-
-print_success_info(){
-	if [ "$ss_basic_mode" == "0" ];then
-		echo $(date):
-		echo $(date): You have disabled the shadowsocks service
-		echo $(date): See you again!
-		echo $(date):
-		echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
-	else
-		echo $(date):
-		echo $(date): Congratulation!
-		echo $(date): Enjoy surfing internet without "Great Fire Wall"!
-		echo $(date):
-		echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
-	fi
-}
 
 # detect ss version after ss service applied.
 detect_ss_version(){
@@ -269,34 +250,39 @@ set_ulimit(){
 case $ACTION in
 start)
 	if [ "$ss_basic_enable" == "1" ];then
-	creat_folder
-	set_default_value
-	set_ulimit
-    	apply_ss
-    	write_numbers
+		creat_folder
+		set_ulimit
+		apply_ss
+    		write_numbers
 	else
-    	echo ss not enabled
+		echo ss not enabled
 	fi
 	;;
 stop | kill )
 	disable_ss
+	echo $(date):
+	echo $(date): You have disabled the shadowsocks service
+	echo $(date): See you again!
+	echo $(date):
+	echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
 	;;
 restart)
 	#disable_ss
 	creat_folder
-	set_default_value
 	set_ulimit
 	apply_ss
 	write_numbers
-	print_success_info
+	echo $(date):
+	echo $(date): Enjoy surfing internet without "Great Fire Wall"!
+	echo $(date):
+	echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
 	fire_ss_depend_scripts
-	detect_ss_version
+	dbus set ss_basic_install_status="0"
 	;;
 check)
 	detect_ss_version
 	;;
 update)
-	set_default_value
 	update_ss
 	;;
 *)

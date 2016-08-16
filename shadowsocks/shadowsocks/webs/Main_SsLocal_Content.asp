@@ -106,7 +106,7 @@ function conf_to_obj(){
 
 function onSubmitCtrl(o, s) {
 	if(validForm()){
-		showSSLoadingBar(10);
+		showSSLoadingBar(5);
 		document.form.action_mode.value = s;
 		updateOptions();
 	}
@@ -132,43 +132,7 @@ function validForm(){
 function pass_checked(obj){
 	switchType(obj, document.form.show_pass.checked, true);
 }
-/*
-function UploadFile() {
-	if (document.getElementById('ss_file').value == "") return false;
-	document.getElementById('ss_file_info').style.display = "none";
-	document.getElementById('loadingicon').style.display = "block";
-	document.form.action = "ssupload.cgi?a=/tmp/ss.ini";
-	document.form.enctype = "multipart/form-data";
-	document.form.encoding = "multipart/form-data";
-	document.form.submit();
-}
-function upload_ok(isok) {
-	var info = document.getElementById('ss_file_info');
-	if(isok==1){
-		info.innerHTML="上传完成";
-	} else {
-		info.innerHTML="上传失败";
-	}
-	info.style.display = "block";
-	document.getElementById('loadingicon').style.display = "none";
-}
 
-function disable_input() {
-	var dns2socks = document.form.dns2socks.value;
-	if(dns2socks == '1'){
-		$j("#warning").html("<font color='#ffcc00'><li>注意：DNS2SOCKS依赖于Socks5。</li><li>如果使用dns2socks作为国外DNS解析，此页面将不允许自由设置。</li><li>不过你仍然可以使用此页面定义的1080端口的socks5协议。</li></font>");
-		inputCtrl(document.form.ss_local_enable,0);
-		inputCtrl(document.form.ss_local_server,0);
-		inputCtrl(document.form.ss_local_port,0);
-		inputCtrl(document.form.ss_local_password,0);
-		inputCtrl(document.form.ss_local_method,0);
-		inputCtrl(document.form.ss_local_timeout,0);
-		inputCtrl(document.form.ss_local_proxyport,0);
-		document.form.cmdBtn.disabled = true
-		document.form.cmdBtn.value = "禁止"
-	}
-}
-*/
 </script>
 </head>
 <body onload="init();">
@@ -220,7 +184,7 @@ function disable_input() {
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 										<div class="SimpleNote">
 											<li><i>说明：</i>此页面允许配置第二个shadosocks账号，功能仅限于在路由器上打开一个连接到shadowsocks服务器的socks5端口。如果你使用chrome浏览器，你可以使用SwitchyOmega插件去连接这个socks5代理。</li></br>
-											<li><i>此页面功能独立于ss，单独开关：</i>在以前的版本中，当ss启用了dns2socks，这里会自动设置，现在不会自动设置，而是dns2socks自己单独占用一个23456端口的socks5，而现在这里允许单独设置。</li>
+											<li><i>此页面功能独立于ss，单独开关：</i></li>
 										</div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 										<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">

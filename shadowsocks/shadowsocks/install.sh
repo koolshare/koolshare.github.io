@@ -12,6 +12,8 @@ rm -rf /tmp/shadowsocks* >/dev/null 2>&1
 rm -rf /koolshare/ss/ssconfig
 rm -rf /koolshare/ss/socks5config
 
+# no use sice version 2.0
+rm -rf /koolshare/ss/kcptun
 
 chmod 755 /koolshare/ss/game/*
 chmod 755 /koolshare/ss/koolgame/*
