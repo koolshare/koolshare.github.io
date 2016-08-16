@@ -142,7 +142,7 @@ nat_auto_start(){
 	if [ -z "$writenat" ];then
 		echo $(date): Add service to nat-start...
 		sed -i "2a sleep $KCP_basic_sleep" /jffs/scripts/nat-start
-		sed -i '3a sh /koolshare/kcptun/gfwlist/nat-start' /jffs/scripts/nat-start
+		sed -i '3a sh /koolshare/kcptun/gfwlist/nat-start start_all' /jffs/scripts/nat-start
 		chmod +x /jffs/scripts/nat-start
 	fi
 		echo $(date): done

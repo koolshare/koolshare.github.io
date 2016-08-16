@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin kcptun Changelog
 ===========================================
+1.6
+   - fix	fix kcptun won't start after reboot
+
 1.5
    - fix	更新kcptun二进制文件到20160812最新版本（建议同时更新服务器端版本）；
    - fix	修复gfwlist模式pdnsd上游服务器使用了大陆白名单模式的变量；
