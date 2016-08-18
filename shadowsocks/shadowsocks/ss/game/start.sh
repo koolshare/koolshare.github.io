@@ -539,6 +539,7 @@ restart_dns)
 	echo $(date): --------------------------- Restart DNS ---------------------------------
 	creat_ss_json
 	creat_dnsmasq_basic_conf
+	custom_dnsmasq
 	killall koolgame
 	start_koolgame
 	restart_dnsmasq

@@ -7,23 +7,24 @@
 <meta HTTP-EQUIV="Expires" CONTENT="-1"/>
 <link rel="shortcut icon" href="images/favicon.png"/>
 <link rel="icon" href="images/favicon.png"/>
-<title>Shadowsocks - 账号信息配置</title>
+<title>shadowsocks - 账号信息配置</title>
 <link rel="stylesheet" type="text/css" href="index_style.css"/>
 <link rel="stylesheet" type="text/css" href="form_style.css"/>
 <link rel="stylesheet" type="text/css" href="usp_style.css"/>
 <link rel="stylesheet" type="text/css" href="css/element.css">
 <script type="text/javascript" src="/state.js"></script>
 <script type="text/javascript" src="/popup.js"></script>
-<script type="text/javascript" src="/help.js"></script>
+
 <script type="text/javascript" src="/validator.js"></script>
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/general.js"></script>
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
-<script language="JavaScript" type="text/javascript" src="/client_function.js"></script>
+<script type="text/javascript" src="/client_function.js"></script>
+<script type="text/javascript" src="/help.js"></script>
 <script type="text/javascript" src="/dbconf?p=ss&v=<% uptime(); %>"></script>
 <script type="text/javascript" src="/res/ss-menu.js"></script>
 <style>
-.Bar_container{
+.Bar_container {
 	width:85%;
 	height:20px;
 	border:1px inset #999;
@@ -32,104 +33,84 @@
 	background-color:#FFFFFF;
 	z-index:100;
 }
-#proceeding_img_text{
-	position:absolute; 
-	z-index:101; 
-	font-size:11px; color:#000000; 
+#proceeding_img_text {
+	position:absolute;
+	z-index:101;
+	font-size:11px;
+	color:#000000;
 	line-height:21px;
 	width: 83%;
 }
-#proceeding_img{
- 	height:21px;
+#proceeding_img {
+	height:21px;
 	background:#C0D1D3 url(/images/ss_proceding.gif);
-}	
-#Ss_node_list_Block_PC {
-	border: 1px outset #999;
-	background-color: #576D73;
-	position: absolute;
-	*margin-top:26px;
-	margin-left: 3px;
-	*margin-left:-129px;
-	width: 255px;
-	text-align: left;
-	height: auto;
-	overflow-y: auto;
-	z-index: 200;
-	padding: 1px;
-	display: none;
 }
-#Ss_node_list_Block_PC div {
-	background-color: #576D73;
-	height: auto;
-	*height:20px;
-	line-height: 20px;
-	text-decoration: none;
-	font-family: Lucida Console;
-	padding-left: 2px;
-}
-#Ss_node_list_Block_PC a {
-	background-color: #EFEFEF;
-	color: #FFF;
-	font-size: 12px;
-	font-family: Arial, Helvetica, sans-serif;
-	text-decoration: none;
-}
-#Ss_node_list_Block_PC div:hover, #Ss_node_list_Block a:hover {
-	background-color: #3366FF;
-	color: #FFFFFF;
-	cursor: default;
-}
-#ss_node_edit{
+#ss_node_edit {
 	background: url(/images/New_ui/ss_list.png);
 	background-position: 0px 0px;
 	width: 30px;
 	height: 35px;
 }
-.ss_node_list_viewlist {
+.show-btn1, .show-btn2, .show-btn3, .show-btn4 {
+	border: 1px solid #222;
+	background: #576d73;
+	font-size:10pt;
+	color: #fff;
+	padding: 10px 3.75px;
+	border-radius: 5px 5px 0px 0px;
+	width:8.45601%;
+}
+.active {
+	background: #2f3a3e;
+}
+input[type=button]:focus {
+	outline: none;
+}
+.contentM_qis {
 	position: absolute;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	z-index: 200;
-	background-color:#444f53;
-	margin-left: 40px;
-	margin-top: -1100px;
-	width:950px;
-	height:auto;
+	background-color:#2B373B;
+	margin-left: 50px;
+	top: 250px;
+	width:650px;
+	return height:auto;
 	box-shadow: 3px 3px 10px #000;
-	display:block;
-	overflow: auto;
+	display:none;
 }
-.input_KCP_table{
-	margin-left:2px;
-	padding-left:0.4em;
-	height:21px;
-	width:158.2px;
-	line-height:23px \9;	/*IE*/
-	font-size:13px;
-	font-family:'Courier New', Courier, mono;
-	background-image:none;
-	background-color: #576d73;
-	border:1px solid gray;
+.QISform_wireless {
+	width:600px;
+	font-size:12px;
+	color:#FFFFFF;
+	margin-top:10px;
+	*margin-left:10px;
+}
+.QISform_wireless thead {
+	font-size:15px;
+	line-height:20px;
 	color:#FFFFFF;
 }
-.show-btn1,
-.show-btn2,
-.show-btn3,
-.show-btn4{
-    border: 1px solid #222;
-    background: #576d73;
-    font-size:10pt;
-    color: #fff;
-    padding: 10px 3.75px;
-    border-radius: 5px 5px 0px 0px;
-    width:8.45601%;
+.QISform_wireless th {
+	padding-left:10px;
+	*padding-left:30px;
+	font-size:12px;
+	font-weight:bolder;
+	color: #FFFFFF;
+	text-align:left;
 }
-.active{
-    background: #2f3a3e;
+.vpnClientTitle_td_unclick {
+	background-color: #000;
+	height: 30px;
+	cursor: pointer;
+	border: 1px solid #222;
 }
-input[type=button]:focus {
-    outline: none;
+.vpnClientTitle_td_click {
+	background-color: #4D595D;
+	height: 30px;
+	cursor: pointer;
+	border: 1px solid #222;
 }
 </style>
 <script>
@@ -168,7 +149,7 @@ function init() {
 	}
     setTimeout("checkSSStatus();", 5000);
     setTimeout("write_ss_install_status()", 1000);
-    updateSs_node_listView();
+    refresh_table();
     var jffs2_scripts = '<% nvram_get("jffs2_scripts"); %>';
 	if(jffs2_scripts == "0"){
 		$j("#warn").html("<i>发现Enable JFFS custom scripts and configs选项未开启！</br></br>请开启并重启路由器后才能正常使用SS。<a href='/Advanced_System_Content.asp'><em><u> 前往设置 </u></em></a> </i>");
@@ -315,11 +296,6 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		}
-		var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_dnsmasq", "ss_redchn_wan_white_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_ip", "ss_redchn_wan_black_domain", "ss_basic_black_lan", "ss_basic_white_lan","ss_ipset_black_domain_web", "ss_ipset_white_domain_web", "ss_ipset_dnsmasq", "ss_ipset_black_ip", "ss_game_dnsmasq", "ss_gameV2_dnsmasq"];
-			for (var i = 0; i < temp_ss.length; i++) {
-				temp_str = $G(temp_ss[i]).value;
-				$G(temp_ss[i]).value = temp_str.replaceAll(",","\n");
-		}
 		if (el != null) {
 			el.value = obj[field];
 		}
@@ -396,28 +372,28 @@ function update_visibility() {
 	
 	if (ssmode == "0"){
 		$j("#mode_state").html("SS运行状态");
-		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的Shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
-		$j("#ss_switch").html("ShadowSocks 开关");
-		$j("#ss_title").html("ShadowSocks - 账号信息配置");
-		$j("#ss_info_table").html("ShadowSocks信息<i id='detail_show_hide' name='detail_show_hide' value='' class='clientlist_expander' style='cursor:pointer;margin-left: 565px;' onclick='show_detail(this);'>[ 简洁 ]</i>");
+		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
+		$j("#ss_switch").html("shadowsocks 开关");
+		$j("#ss_title").html("shadowsocks - 账号信息配置");
+		$j("#ss_info_table").html("shadowsocks信息<i id='detail_show_hide' name='detail_show_hide' value='' class='clientlist_expander' style='cursor:pointer;margin-left: 565px;' onclick='show_detail(this);'>[ 简洁 ]</i>");
 	} else if (ssmode == "1"){
 		$j("#mode_state").html("SS运行状态【gfwlist模式】");
-		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的Shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
-		$j("#ss_switch").html("ShadowSocks 开关");
-		$j("#ss_title").html("ShadowSocks - 账号信息配置");
-		$j("#ss_info_table").html("ShadowSocks信息<i id='detail_show_hide' name='detail_show_hide' value='' class='clientlist_expander' style='cursor:pointer;margin-left: 565px;' onclick='show_detail(this);'>[ 简洁 ]</i>");
+		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
+		$j("#ss_switch").html("shadowsocks 开关");
+		$j("#ss_title").html("shadowsocks - 账号信息配置");
+		$j("#ss_info_table").html("shadowsocks信息<i id='detail_show_hide' name='detail_show_hide' value='' class='clientlist_expander' style='cursor:pointer;margin-left: 565px;' onclick='show_detail(this);'>[ 简洁 ]</i>");
 	} else if (ssmode == "2"){
 		$j("#mode_state").html("SS运行状态【大陆白名单模式】");
-		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的Shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
-		$j("#ss_switch").html("ShadowSocks 开关");
-		$j("#ss_title").html("ShadowSocks - 账号信息配置");
-		$j("#ss_info_table").html("ShadowSocks信息<i id='detail_show_hide' name='detail_show_hide' value='' class='clientlist_expander' style='cursor:pointer;margin-left: 565px;' onclick='show_detail(this);'>[ 简洁 ]</i>");
+		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
+		$j("#ss_switch").html("shadowsocks 开关");
+		$j("#ss_title").html("shadowsocks - 账号信息配置");
+		$j("#ss_info_table").html("shadowsocks信息<i id='detail_show_hide' name='detail_show_hide' value='' class='clientlist_expander' style='cursor:pointer;margin-left: 565px;' onclick='show_detail(this);'>[ 简洁 ]</i>");
 	} else if (ssmode == "3"){
 		$j("#mode_state").html("SS运行状态【游戏模式】");
-		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的Shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。</br><li><a href='http://koolshare.cn/thread-4519-1-1.html' target='_blank'><i>&nbsp;账号需支持UDP转发&nbsp;&nbsp;<u>FAQ</u></i></a></li>");
-		$j("#ss_switch").html("ShadowSocks 开关");
-		$j("#ss_title").html("ShadowSocks - 账号信息配置");
-		$j("#ss_info_table").html("ShadowSocks信息<i id='detail_show_hide' name='detail_show_hide' value='' class='clientlist_expander' style='cursor:pointer;margin-left: 565px;' onclick='show_detail(this);'>[ 简洁 ]</i>");
+		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。</br><li><a href='http://koolshare.cn/thread-4519-1-1.html' target='_blank'><i>&nbsp;账号需支持UDP转发&nbsp;&nbsp;<u>FAQ</u></i></a></li>");
+		$j("#ss_switch").html("shadowsocks 开关");
+		$j("#ss_title").html("shadowsocks - 账号信息配置");
+		$j("#ss_info_table").html("shadowsocks信息<i id='detail_show_hide' name='detail_show_hide' value='' class='clientlist_expander' style='cursor:pointer;margin-left: 565px;' onclick='show_detail(this);'>[ 简洁 ]</i>");
 	} else if (ssmode == "4"){
 		$j("#mode_state").html("SS运行状态【游戏模式V2】");
 		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>游戏模式V2信息</em>表格中填入你的游戏模式V2账号信息，点击提交后就能使用代理服务。</br><li>游戏模式V2不兼容shadowsocks，你需要自己架设游戏模式V2的服务器才能使用这个模式</li><li>建议使用交换内存，以确保游戏模式V2更好的运行。&nbsp;&nbsp;<a href='http://koolshare.io/koolgame/latest/' target='_blank'><i><u>服务器端下载</u></i></a>&nbsp;&nbsp;<a style='margin-left: 20px;' href='https://koolshare.cn/thread-38263-1-1.html' target='_blank'><i><u>&nbsp;游戏模式v2服务器一键安装脚本</u></i></a>");
@@ -426,16 +402,13 @@ function update_visibility() {
 		$j("#ss_info_table").html("游戏模式V2信息<i id='detail_show_hide' name='detail_show_hide' value='' class='clientlist_expander' style='cursor:pointer;margin-left: 587px;' onclick='show_detail(this);'>[ 简洁 ]</i>");
 	} else if (ssmode == "5"){
 		$j("#mode_state").html("SS运行状态【全局模式】");
-		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>Shadowsocks信息</em>表格中填入你的Shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
-		$j("#ss_switch").html("ShadowSocks 开关");
-		$j("#ss_title").html("ShadowSocks - 账号信息配置");
-		$j("#ss_info_table").html("ShadowSocks信息<i id='detail_show_hide' name='detail_show_hide' value='' class='clientlist_expander' style='cursor:pointer;margin-left: 565px;' onclick='show_detail(this);'>[ 简洁 ]</i>");
+		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>shadowsocks信息</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
+		$j("#ss_switch").html("shadowsocks 开关");
+		$j("#ss_title").html("shadowsocks - 账号信息配置");
+		$j("#ss_info_table").html("shadowsocks信息<i id='detail_show_hide' name='detail_show_hide' value='' class='clientlist_expander' style='cursor:pointer;margin-left: 565px;' onclick='show_detail(this);'>[ 简洁 ]</i>");
 	}
 
-
 	showhide("show_btn3", (ssmode == "1" || ssmode == "2" ));
-
-	
 	showhide("ss_state1", (ssmode == "0"));
 	showhide("ss_state2", (ssmode !== "0"));
 	showhide("ss_state3", (ssmode !== "0"));
@@ -461,9 +434,6 @@ function update_visibility() {
 	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode!== "4"));
 	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode!== "4"));
 	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode!== "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple"));
-
-
-
 	rdc = document.form.ss_redchn_dns_china.value;
 	rdf = document.form.ss_redchn_dns_foreign.value;
 	rs = document.form.ss_redchn_sstunnel.value
@@ -488,21 +458,20 @@ function update_visibility() {
 	showhide("ss_redchn_chinadns_china_user", (rcc == "4"));
 	showhide("ss_redchn_chinadns_foreign_user", (rcf == "4"));
 	showhide("ss_redchn_dns2socks_user", (rdf == "4"));
-
-    icd = document.form.ss_ipset_cdn_dns.value;
-    ifd = document.form.ss_ipset_foreign_dns.value;
-    it = document.form.ss_ipset_tunnel.value;
-    sipm= document.form.ss_ipset_pdnsd_method.value
-    showhide("ss_ipset_cdn_dns_user", (icd == "5"));
-    showhide("china_dns1", (icd !== "5"));
-    showhide("ss_ipset_opendns", (ifd == "0"));
-    showhide("ss_ipset_foreign_dns1", (ifd == "2"));
-    showhide("ss_ipset_foreign_dns2", (ifd == "0"));
-    showhide("ss_ipset_tunnel", (ifd == "1"));
-    showhide("ss_ipset_foreign_dns3", (ifd == "1"));
-    showhide("ss_ipset_tunnel_user", ((ifd == "1") && (it == "4")));
-    showhide("ss_ipset_dns2socks_user", (ifd == "2"));
-    showhide("DNS2SOCKS1", (ifd == "2"));
+	icd = document.form.ss_ipset_cdn_dns.value;
+	ifd = document.form.ss_ipset_foreign_dns.value;
+	it = document.form.ss_ipset_tunnel.value;
+	sipm= document.form.ss_ipset_pdnsd_method.value
+	showhide("ss_ipset_cdn_dns_user", (icd == "5"));
+	showhide("china_dns1", (icd !== "5"));
+	showhide("ss_ipset_opendns", (ifd == "0"));
+	showhide("ss_ipset_foreign_dns1", (ifd == "2"));
+	showhide("ss_ipset_foreign_dns2", (ifd == "0"));
+	showhide("ss_ipset_tunnel", (ifd == "1"));
+	showhide("ss_ipset_foreign_dns3", (ifd == "1"));
+	showhide("ss_ipset_tunnel_user", ((ifd == "1") && (it == "4")));
+	showhide("ss_ipset_dns2socks_user", (ifd == "2"));
+	showhide("DNS2SOCKS1", (ifd == "2"));
 	showhide("ipset_pdnsd_up_stream_tcp", (ifd == "4" && sipm == "2"));
 	showhide("ipset_pdnsd_up_stream_udp", (ifd == "4" && sipm == "1"));
 	showhide("ss_ipset_pdnsd_udp_server_dns2socks", (ifd == "4" && sipm == "1" && document.form.ss_ipset_pdnsd_udp_server.value == 1));
@@ -511,7 +480,6 @@ function update_visibility() {
 	showhide("ss_ipset_pdnsd_udp_server_ss_tunnel_user", (ifd == "4" && sipm == "1" && document.form.ss_ipset_pdnsd_udp_server.value == 3 && document.form.ss_ipset_pdnsd_udp_server_ss_tunnel.value == 4));
 	showhide("ipset_pdnsd_cache", (ifd == "4"));
 	showhide("ipset_pdnsd_method", (ifd == "4"));
-
 	gdc = document.form.ss_game_dns_china.value;
 	gdf = document.form.ss_game_dns_foreign.value;
 	gs = document.form.ss_game_sstunnel.value
@@ -536,14 +504,12 @@ function update_visibility() {
 	showhide("ss_game_pdnsd_udp_server_ss_tunnel_user", (gdf == "6" && grpm == "1" && document.form.ss_game_pdnsd_udp_server.value == 3 && document.form.ss_game_pdnsd_udp_server_ss_tunnel.value == 4));
 	showhide("game_pdnsd_cache", (gdf == "6"));
 	showhide("game_pdnsd_method", (gdf == "6"));
-
 	g2dc = document.form.ss_gameV2_dns_china.value;
 	g2df = document.form.ss_gameV2_dns_foreign.value;
 	showhide("gameV2_show_isp_dns", (g2dc == "1"));
 	showhide("ss_gameV2_dns_china_user", (g2dc == "5"));
 	showhide("ss_gameV2_dns_china_user_txt1", (g2dc !== "5"));
 	showhide("ss_gameV2_dns_china_user_txt2", (g2dc == "5"));
-
 	generate_options();
 }
 
@@ -555,7 +521,6 @@ function generate_options(){
 	var obj3=$G('ss_ipset_pdnsd_udp_server_dnscrypt'); 
 	var obj4=$G('ss_game_opendns'); 
 	var obj5=$G('ss_game_pdnsd_udp_server_dnscrypt'); 
-	
 	for(var i = 0; i < confs.length; i++) {
 		obj.options.add(new Option(confs[i],confs[i]));
 		obj1.options.add(new Option(confs[i],confs[i]));
@@ -575,7 +540,6 @@ function oncheckclick(obj) {
 }
 
 var global_status_enable = true;
-
 function checkSSStatus() {
 	if (db_ss['ss_basic_enable'] !== "0") {
 	    if(!global_status_enable) {//not enabled
@@ -615,7 +579,6 @@ function checkSSStatus() {
 	}
 }
 
-
 function updatelist() {
     $j.ajax({
         url: 'apply.cgi?current_page=Main_Ss_Update.asp&next_page=Main_Ss_Content.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=update.sh&firmver=3.0.0.4',
@@ -641,12 +604,13 @@ function ssconf_node2obj(node_sel) {
             "ss_basic_rss_obfs": "",
             "ss_basic_use_rss": "",
             "ss_basic_rss_obfs_param": "",
-            "ss_basic_onetime_auth": ""
+            "ss_basic_onetime_auth": "",
+            "ss_basic_koolgame_udp": ""
         };
         return obj;
     } else {
         var obj = {};
-        var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth"];
+        var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth", "koolgame_udp"];
         for (var i = 0; i < params.length; i++) {
             obj["ss_basic_" + params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel];
         }
@@ -659,7 +623,6 @@ function ss_node_sel() {
     var obj = ssconf_node2obj(node_sel);
     update_visibility();
     update_ss_ui(obj);
-
 }
 
 function ss_node_object(node_sel, obj, isSubmit, end) {
@@ -724,23 +687,6 @@ function closeSs_node_listView() {
     fadeOut($G("ss_node_list_viewlist_content"), 10, 0);
 }
 
-function refresh_popup_listview(confs) {
-    $j("#ss_node_list_viewlist_content").remove();
-    $j("<div class='ss_node_list_viewlist' id='ss_node_list_viewlist_content' style='display:none'>").appendTo(document.body);
-    create_ss_node_list_listview(confs);
-    registerIframeClick("statusframe", hide_ss_node_list_view_block);
-}
-
-function pop_ss_node_list_listview() {
-    confs = getAllConfigs();
-    refresh_popup_listview(confs);
-    fadeIn($G("ss_node_list_viewlist_content"));
-    cal_panel_block_clientList("ss_node_list_viewlist_content", 0.045);
-    ss_node_list_view_hide_flag = false;
-   	global_ss_node_refresh=true;
-   	updateSs_node_listView();
-}
-
 function getAllConfigs() {
     var dic = {};
     node_global_max = 0;
@@ -750,7 +696,7 @@ function getAllConfigs() {
     }
     confs = {};
     var p = "ssconf_basic";
-    var params = ["name", "server", "port", "password", "method" ];
+    var params = ["mode", "name", "server", "port", "password", "method"];
     for (var field in dic) {
         var obj = {};
         if (typeof db_ss[p + "_name_" + field] == "undefined") {
@@ -758,6 +704,7 @@ function getAllConfigs() {
         } else {
             obj["name"] = db_ss[p + "_name_" + field];
         }
+        
         if (typeof db_ss[p + "_ping_" + field] == "undefined") {
             obj["ping"] = '';
         } else if (db_ss[p + "_ping_" + field] == "failed") {
@@ -765,6 +712,7 @@ function getAllConfigs() {
 	    } else {
             obj["ping"] = parseFloat(db_ss[p + "_ping_" + field].split(" ")[0]).toPrecision(3) + " ms / " + parseFloat(db_ss[p + "_ping_" + field].split(" ")[3]) + "%";
         }
+        
         if (typeof db_ss[p + "_webtest_" + field] == "undefined") {
             obj["webtest"] = '';
         } else {
@@ -775,6 +723,47 @@ function getAllConfigs() {
 		         obj["webtest"] = parseFloat(db_ss[p + "_webtest_" + field].split(":")[0]).toFixed(2) + " s";
 	        }
         }
+        
+		if (typeof db_ss[p + "_mode_" + field] == "undefined"){
+			obj["mode"] = '';
+		}else {
+            obj["mode"] = db_ss[p + "_mode_" + field];
+        }
+
+        if (typeof db_ss[p + "_onetime_auth_" + field] == "undefined"){
+			obj["onetime_auth"] = '';
+		}else {
+            obj["onetime_auth"] = db_ss[p + "_onetime_auth_" + field];
+        }
+        
+        if (typeof db_ss[p + "_koolgame_udp_" + field] == "undefined"){
+			obj["koolgame_udp"] = '';
+		}else {
+            obj["koolgame_udp"] = db_ss[p + "_koolgame_udp_" + field];
+        }
+        if (typeof db_ss[p + "_use_rss_" + field] == "undefined"){
+			obj["use_rss"] = '';
+		}else {
+            obj["use_rss"] = db_ss[p + "_use_rss_" + field];
+        }
+        if (typeof db_ss[p + "_rss_protocol_" + field] == "undefined"){
+			obj["rss_protocol"] = '';
+		}else {
+            obj["rss_protocol"] = db_ss[p + "_rss_protocol_" + field];
+        }
+        
+        if (typeof db_ss[p + "_rss_obfs_" + field] == "undefined"){
+			obj["rss_obfs"] = '';
+		}else {
+            obj["rss_obfs"] = db_ss[p + "_rss_obfs_" + field];
+        }
+        
+        if (typeof db_ss[p + "_rss_obfs_param_" + field] == "undefined"){
+			obj["rss_obfs_param"] = '';
+		}else {
+            obj["rss_obfs_param"] = db_ss[p + "_rss_obfs_param_" + field];
+        }
+
         for (var i = 1; i < params.length; i++) {
             var ofield = p + "_" + params[i] + "_" + field;
             if (typeof db_ss[ofield] == "undefined") {
@@ -796,33 +785,35 @@ function getAllConfigs() {
 }
 
 function ping_test(){
-    global_ss_node_refresh = true;
-	updateSs_node_listView();
-	document.node_form.action_mode.value = ' Refresh ';
-    document.node_form.submit();
+    document.form.SystemCmd.value = "ss_ping.sh";
+	document.form.action_mode.value = ' Refresh ';
+	if (validForm()){
+		document.form.submit();
+		checkTime = 0;
+		refresh_ss_node_list();
+		
+	}
 }
 
 function web_test(){
-    global_ss_node_refresh = true;
 	updateSs_node_listView();
-	document.node_form.SystemCmd.value = "ss_webtest.sh";
-	document.node_form.action_mode.value = ' Refresh ';
-    document.node_form.submit();
+	document.form.SystemCmd.value = "ss_webtest.sh";
+	document.form.action_mode.value = ' Refresh ';
+	if (validForm()){
+		document.form.submit();
+		checkTime = 0
+		refresh_ss_node_list();
+	}
 }
 
-function load_test_value(){
-	if (typeof db_ss['ssconf_basic_Ping_Method']  == "undefined" ){
-		$j("#ssconf_basic_Ping_Method").val("1");
-	}else{
-		$j("#ssconf_basic_Ping_Method").val(db_ss['ssconf_basic_Ping_Method']);
+var checkTime = 0;
+function refresh_ss_node_list(){
+	if (checkTime < 200) {
+		checkTime++;
+		updateSs_node_listView();
+		refresh_table();
+		setTimeout("refresh_ss_node_list()", 1000)
 	}
-
-	if (typeof db_ss['ssconf_basic_test_domain']  == "undefined" ){
-		$j("#ssconf_basic_test_domain").val("https://www.google.com/");
-	}else{
-		$j("#ssconf_basic_test_domain").val(db_ss['ssconf_basic_test_domain']);
-	}
-
 }
 
 function loadBasicOptions(confs) {
@@ -848,18 +839,135 @@ function loadBasicOptions(confs) {
 function loadAllConfigs() {
     confs = getAllConfigs();
     loadBasicOptions(confs);
-    refresh_popup_listview(confs);
-    load_test_value();
 }
 
-function add_conf_in_table(o) {
-    var ns = {};
-    var p = "ssconf_basic";
-    node_global_max += 1;
-    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth"];
-    for (var i = 0; i < params.length; i++) {
-        ns[p + "_" + params[i] + "_" + node_global_max] = $j('#ssconf_table_' + params[i]).val();
-    }
+function show_ss_node_info(){
+		//$G("head_illustrate").style.display = "none";
+		//$G("ss_switch_show").style.display = "none";
+		//$G("ss_status1").style.display = "none";
+		$G("tablet_show").style.display = "none";
+		$G("basic_show").style.display = "none";
+		$G("add_fun").style.display = "none";
+		$G("apply_button").style.display = "none";
+		$G("line_image1").style.display = "none";
+		$G("ss_node_list_table").style.display = "";
+		refresh_table();
+}
+function ss_node_info_return(){
+		//$G("head_illustrate").style.display = "";
+		//$G("ss_switch_show").style.display = "";
+		//$G("ss_status1").style.display = "";
+		$G("tablet_show").style.display = "";
+		$G("basic_show").style.display = "";
+		$G("apply_button").style.display = "";
+		$G("line_image1").style.display = "";
+		$G("ss_node_list_table").style.display = "none";
+}
+
+function Add_profile(){
+	document.form.ss_node_table_name.value = "";
+	document.form.ss_node_table_server.value = "";
+	document.form.ss_node_table_port.value = "";
+	document.form.ss_node_table_password.value = "";
+	document.form.ss_node_table_rss_obfs_param.value = "";
+	document.form.ss_node_table_method.value = "aes-256-cfb";
+	document.form.ss_node_table_mode.value = "1";
+	document.form.ss_node_table_onetime_auth.value = "0";
+	document.form.ss_node_table_rss_protocol.value = "origin";;
+	document.form.ss_node_table_rss_obfs.value = "plain";
+	document.form.ss_node_table_koolgame_udp.value = "0";
+	document.getElementById("Hintinfo").style.display = "none";
+	tabclickhandler(0);
+	document.getElementById("cancelBtn").style.display = "";
+	document.getElementById("ssTitle").style.display = "";
+	document.getElementById("ssrTitle").style.display = "";
+	document.getElementById("gamev2Title").style.display = "";
+	$G("add_node").style.display = "";
+	$G("edit_node").style.display = "none";
+    $j("#vpnc_settings").fadeIn(300);
+}
+function cancel_add_rule(){
+	$j("#vpnc_settings").fadeOut(300);
+}
+var save_flag;	//type of Saving profile
+function tabclickhandler(_type){
+	document.getElementById('ssTitle').className = "vpnClientTitle_td_unclick";
+	document.getElementById('ssrTitle').className = "vpnClientTitle_td_unclick";
+	document.getElementById('gamev2Title').className = "vpnClientTitle_td_unclick";
+	
+	if(_type == 0){
+		save_flag = "shadowsocks";
+		document.form.vpnc_type.value = "shadowsocks";
+		document.getElementById('ssTitle').className = "vpnClientTitle_td_click";
+		document.getElementById('ota_support').style.display = "";
+		document.getElementById('ssr_protocol_tr').style.display = "none";
+		document.getElementById('ssr_obfs_tr').style.display = "none";
+		document.getElementById('ssr_obfs_param_tr').style.display = "none";
+		document.getElementById('gameV2_udp_tr').style.display = "none";
+		generate_options1(0);
+	} else if(_type == 1){
+		save_flag = "shadowsocksR";
+		document.form.vpnc_type.value = "shadowsocksR";
+		document.getElementById('ssrTitle').className = "vpnClientTitle_td_click";
+		document.getElementById('ota_support').style.display = "none";
+		document.getElementById('ssr_protocol_tr').style.display = "";
+		document.getElementById('ssr_obfs_tr').style.display = "";
+		document.getElementById('ssr_obfs_param_tr').style.display = "";
+		document.getElementById('gameV2_udp_tr').style.display = "none";
+		generate_options1(0);
+	} else if(_type == 2){
+		save_flag = "gameV2";
+		document.form.vpnc_type.value = "gameV2";
+		document.getElementById('gamev2Title').className = "vpnClientTitle_td_click";
+		document.getElementById('ota_support').style.display = "none";
+		document.getElementById('ssr_protocol_tr').style.display = "none";
+		document.getElementById('ssr_obfs_tr').style.display = "none";
+		document.getElementById('ssr_obfs_param_tr').style.display = "none";
+		document.getElementById('gameV2_udp_tr').style.display = "";
+		generate_options1(1);
+	}
+}
+
+function generate_options1(w){
+	var obj=$G('ss_node_table_mode');
+	obj.options.remove(new Option("【1】 GFWlist模式","1"));
+	obj.options.remove(new Option("【2】 大陆白名单模式","2"));
+	obj.options.remove(new Option("【3】 游戏模式","3"));
+	obj.options.remove(new Option("【4】 游戏模式V2","4"));
+	obj.options.remove(new Option("【5】 全局代理模式","5"));
+	if(w == 0){
+			obj.options.add(new Option("【1】 GFWlist模式","1"));
+			obj.options.add(new Option("【2】 大陆白名单模式","2"));
+			obj.options.add(new Option("【3】 游戏模式","3"));
+			obj.options.add(new Option("【5】 全局代理模式","5"));
+	} else if (w == 1){
+			obj.options.add(new Option("【4】 游戏模式V2","4"));
+	}
+}
+
+function add_ss_node_conf(flag){
+	var ns = {};
+	var p = "ssconf_basic";
+	node_global_max += 1;	
+	var params1 = ["name", "server", "mode",  "port", "password", "method", "onetime_auth"];//for ss
+	var params2 = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param"];//for ssr
+	var params3 = ["name", "server", "mode",  "port", "password", "method", "koolgame_udp"];//for ssr
+	if(flag == 'shadowsocks'){
+    		for (var i = 0; i < params1.length; i++) {
+    	 	   ns[p + "_" + params1[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params1[i]).val();
+    	 	   ns[p + "_use_rss_" + node_global_max] = 0;
+    		}
+	}else if(flag == 'shadowsocksR'){
+    		for (var i = 0; i < params2.length; i++) {
+    	   	 ns[p + "_" + params2[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params2[i]).val();
+    	   	 ns[p + "_use_rss_" + node_global_max] = 1;
+    		}
+	}else if(flag == 'gameV2'){
+    		for (var i = 0; i < params3.length; i++) {
+    	 	   ns[p + "_" + params3[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params3[i]).val();
+    	 	   ns[p + "_use_rss_" + node_global_max] = 0;
+    		}
+	}
     $j.ajax({
         url: '/applydb.cgi?p=ss',
         contentType: "application/x-www-form-urlencoded",
@@ -869,7 +977,99 @@ function add_conf_in_table(o) {
             console.log("error in posting config of table");
         },
         success: function(response) {
-            updateSs_node_listView1();
+            //updateSs_node_listView1();
+		refresh_table();
+		document.form.ss_node_table_name.value = "";
+		document.form.ss_node_table_server.value = "";
+		document.form.ss_node_table_port.value = "";
+		document.form.ss_node_table_password.value = "";
+		document.form.ss_node_table_rss_obfs_param.value = "";
+		document.form.ss_node_table_method.value = "aes-256-cfb";
+		document.form.ss_node_table_mode.value = "1";
+		document.form.ss_node_table_onetime_auth.value = "0";
+		document.form.ss_node_table_rss_protocol.value = "origin";
+		document.form.ss_node_table_rss_obfs.value = "plain";
+		document.form.ss_node_table_koolgame_udp.value = "0";
+		updateSs_node_listView();
+        }
+    });
+}
+
+function refresh_table() {
+	$j.ajax({
+		url: '/dbconf?p=ss',
+		dataType: 'html',
+		error: function(xhr){
+		},
+		success: function(response){
+			$j.globalEval(response);
+			$j("#ss_node_list_table_main").find("tr:gt(0)").remove();
+			$j('#ss_node_list_table_main tr:last').after(refresh_html());
+		}
+	});
+}
+
+function refresh_html() {
+	confs = getAllConfigs();
+	var html = '';
+    for (var field in confs) {
+        var c = confs[field];
+    html = html + '<tr>';
+    if(c["mode"] == 1){
+	    html = html + '<td style="text-align: center;height:30px;"><img src="/res/gfw.png"  style="margin-left: -5px;padding: -10px 0px -10px 0px;" /></td>';
+    }else if(c["mode"] == 2){
+	    html = html + '<td style="text-align: center;"><img src="/res/chn.png"  style="margin-left: -5px;" /></td>';
+    }else if(c["mode"] == 3){
+	    html = html + '<td style="text-align: center;"><img src="/res/game.png"  style="margin-left: -5px;" /></td>';
+    }else if(c["mode"] == 4){
+	    html = html + '<td style="text-align: center;"><img src="/res/gameV2.png"  style="margin-left: -5px;" /></td>';
+    }else if(c["mode"] == 5){
+	    html = html + '<td style="text-align: center;"><img src="/res/all.png"  style="margin-left: -5px;" /></td>';
+    }else{
+	    html = html + '<td></td>';
+    }
+    html = html + '<td  style="text-align: center;">' + c["name"] + '</td>';
+    html = html + '<td style="text-align: center;">' + c["server"] + '</td>';
+    html = html + '<td style="text-align: center;">' + c["port"] + '</td>';
+    html = html + '<td style="text-align: center;">' + c["method"] +'</td>';
+	html = html + '<td id="ping_test_td_' + c["node"] + '" style="text-align: center;">' + c["ping"] + '</td>';
+	if(c["mode"] == 4){
+   		html = html + '<td id="web_test_td_' +c["node"] + '" style="text-align: center;">' + '不支持' + '</td>';
+	}else{
+		html = html + '<td id="web_test_td_' +c["node"] + '" style="text-align: center;">' + c["webtest"] + '</td>';
+	}
+    html = html + '<td style="text-align: center;">'
+    html = html + '<input style="width:27px;" id="dd_node_' + c["node"] + '" class="edit_btn" type="button" onclick="return edit_conf_table(this);" value="">'
+    html = html + '</td>';
+    html = html + '<td style="text-align: center;">'
+    html = html + '<input style="margin-top: 3px;width:27px;" id="td_node_' + c["node"] + '" class="remove_btn" type="button" onclick="return remove_conf_table(this);" value="">'
+    html = html + '</td>';
+    html = html + '<td style="text-align: center;">'
+
+    if(c["use_rss"] == "1"){
+		html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #f072a5;" onclick="apply_this_ss_node(this);" value="Apply">'
+	}else{
+		if(c["koolgame_udp"] == "0" || c["koolgame_udp"] == "1"){
+			html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #33CC33;" onclick="apply_this_ss_node(this);" value="Apply">'
+		}else{
+			html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #00CCFF;" onclick="apply_this_ss_node(this);" value="Apply">'
+		}
+	}
+    html = html + '</td>';
+    html = html + '</tr>';
+    }
+    return html;
+}
+
+function updateSs_node_listView() {
+    $j.ajax({
+        url: '/dbconf?p=ss',
+        dataType: 'html',
+        error: function(xhr) {            
+	        },
+        success: function(response) {
+            $j.globalEval(response);
+            loadAllConfigs();
         }
     });
 }
@@ -880,7 +1080,7 @@ function remove_conf_table(o) {
     var p = "ssconf_basic";
     id = ids[ids.length - 1];
     var ns = {};
-    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth"];
+    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth", "koolgame_udp"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + id] = "";
     }
@@ -893,129 +1093,131 @@ function remove_conf_table(o) {
             console.log("error in posting config of table");
         },
         success: function(response) {
-            updateSs_node_listView1();
+            refresh_table();
+            updateSs_node_listView();
         }
     });
 }
 
-function create_ss_node_list_listview(confs) {
-    field_code = "";
-    for (var field in confs) {
-        var c = confs[field];
-        field_code += "<tr height='40px'>";
-        field_code += "<td>" + c["name"] + "</td>";
-        field_code += "<td>" + c["server"] + "</td>";
-        field_code += "<td>" + c["port"] + "</td>";
-        field_code += "<td>" + c["password"] + "</td>";
-        field_code += "<td>" + c["method"] + "</td>";
-        field_code += "<td title='延迟/丢包'>" + c["ping"] + "</td>";
-        field_code += "<td title='请求网页总时间'>" + c["webtest"] + "</td>";
-        field_code += "<td><input id='td_node_" + c["node"] + "' class='remove_btn' type='button' onclick='return remove_conf_table(this);' value=''></td>";
-        field_code += "</tr>";
-    }
-    if ($G("ss_node_list_viewlist_block") != null) {
-        removeElement($G("ss_node_list_viewlist_block"));
-    }
-    var divObj = document.createElement("div");
-    divObj.setAttribute("id", "ss_node_list_viewlist_block");
-    var obj_width_map = [["15%", "45%", "20%", "20%"], ["10%", "45%", "19%", "19%", "7%"], ["14%", "14%", "10%", "14%", "14%", "14%", "10%", "10%"]];
-    var obj_width = stainfo_support ? obj_width_map[2] : obj_width_map[1];
-    var wl_colspan = stainfo_support ? 8 : 5;
-    var code = "";
-   
-    code += "<div style='text-align:right;width:30px;position:relative;margin-top:0px;margin-left:96%;'><img src='/images/button-close.gif' style='width:30px;cursor:pointer' onclick='closeSs_node_listView();'></div>";
-    code += "<form method='POST' name='node_form' action='/applydb.cgi?p=ssconf_basic_' target='hidden_frame'>";
-    code += "<table width='100%' border='1' align='center' cellpadding='0' cellspacing='0' class='FormTable_table' style='margin-top:10px;'>";
-    code += "<thead>";
-    code += "<tr height='28px'>";
-    code += "<td id='td_all_list_title' colspan='" + wl_colspan + "'>Shadowsocks节点配置</td>";
-    code += "</tr>";
-    code += "</thead>";
-    code += "<tr id='tr_all_title' height='40px'>";
-    code += "<th width=" + obj_width[0] + ">节点名称</th>";
-    code += "<th width=" + obj_width[1] + ">服务器地址</th>";
-    code += "<th width=" + obj_width[2] + ">端口</th>";
-    code += "<th width=" + obj_width[3] + ">密码</th>";
-    code += "<th width=" + obj_width[4] + ">加密方式</th>";
-    code += "<th width=" + obj_width[5] + "><input type='button' id='ping_btn' name='ping_btn' class='button_gen' onclick='ping_test();' value='ping test'/></th>";
-    code += "<th width=" + obj_width[6] + "><input type='button' id='connec_btn' name='connec_btn' class='button_gen'  onclick='web_test();' value='web test'/></th>";
-    code += "<th width=" + obj_width[7] + ">添加<br>删除</th>";
-    code += "</tr>";
-    code += "<tr height='40px'>";
-    code += "<td><input type='text' class='input_ss_table' id='ssconf_table_name' style='width:120px' onclick='disable_ss_node_list_refresh();' name='ssconf_table_name' value='' ></td>";
-    code += "<td><input type='text' class='input_ss_table' id='ssconf_table_server' style='width:120px' onclick='disable_ss_node_list_refresh();' name='ssconf_table_server' value='' ></td>";
-    code += "<td><input type='text' class='input_ss_table' id='ssconf_table_port' style='width:120px' onclick='disable_ss_node_list_refresh();' name='ssconf_table_port' value='' ></td>";
-    code += "<td><input type='text' class='input_ss_table' id='ssconf_table_password' style='width:120px' onclick='disable_ss_node_list_refresh();' name='ssconf_table_password' value='' ></td>";
-    code += "<td><select id='ssconf_table_method' name='ssconf_table_method' style='width:130px;margin:0px 0px 0px 2px;' onclick='disable_ss_node_list_refresh();' class='input_option' />"
-    code += "<option class='content_input_fd' value='table'>table</option>";
-    code += "<option class='content_input_fd' value='rc4'>rc4</option>";
-    code += "<option class='content_input_fd' value='rc4-md5'>rc4-md5</option>";
-    code += "<option class='content_input_fd' value='aes-128-cfb'>aes-128-cfb</option>";
-    code += "<option class='content_input_fd' value='aes-192-cfb'>aes-192-cfb</option>";
-    code += "<option class='content_input_fd' value='aes-256-cfb' selected=''>aes-256-cfb</option>";
-    code += "<option class='content_input_fd' value='bf-cfb'>bf-cfb</option>";
-    code += "<option class='content_input_fd' value='camellia-128-cfb'>camellia-128-cfb</option>";
-    code += "<option class='content_input_fd' value='camellia-192-cfb'>camellia-192-cfb</option>";
-    code += "<option class='content_input_fd' value='camellia-256-cfb'>camellia-256-cfb</option>";
-    code += "<option class='content_input_fd' value='cast5-cfb'>cast5-cfb</option>";
-    code += "<option class='content_input_fd' value='des-cfb'>des-cfb</option>";
-    code += "<option class='content_input_fd' value='idea-cfb'>idea-cfb</option>";
-    code += "<option class='content_input_fd' value='rc2-cfb'>rc2-cfb</option>";
-    code += "<option class='content_input_fd' value='seed-cfb'>seed-cfb</option>";
-    code += "<option class='content_input_fd' value='salsa20'>salsa20</option>";
-    code += "<option class='content_input_fd' value='chacha20'>chacha20</option>";
-    code += "<option class='content_input_fd' value='chacha20-ietf'>chacha20-ietf</option>";
-    code += "</select>";
-    code += "</td>"; 
-    code += "<input type='hidden' name='action_mode' value=''/>"
-    code += "<input type='hidden' name='SystemCmd' value='ss_ping.sh'/>"
-    code += "<input type='hidden' name='current_page' value='Main_Ss_Content.asp'/>"
-    code += "<td><select id='ssconf_basic_Ping_Method' name='ssconf_basic_Ping_Method' style='width:130px;margin:0px 0px 0px 2px;' onclick='disable_ss_node_list_refresh();' class='input_option' />"
-    code += "<option class='content_input_fd' value='1'>单线ping(10次/节点)</option>";
-    code += "<option class='content_input_fd' value='2'>并发ping(10次/节点)</option>";
-    code += "<option class='content_input_fd' value='3'>并发ping(20次/节点)</option>";
-    code += "<option class='content_input_fd' value='4'>并发ping(50次/节点)</option>";
-    code += "</select>";
-    code += "</td>";
-    code += "<td><select id='ssconf_basic_test_domain' name='ssconf_basic_test_domain' style='width:auto;margin:0px 0px 0px 2px;' onclick='disable_ss_node_list_refresh();' class='input_option' />"
-    code += "<option class='content_input_fd' value='https://www.google.com/'>google.com</option>";
-    code += "<option class='content_input_fd' value='https://www.youtube.com/'>youtube.com</option>";
-    code += "</select>";
-    code += "</td>";
-    code += "<td><input class='add_btn' onclick='add_conf_in_table(this);' type='button' value=''></td>";
-    code += "</tr>";
-    code += field_code;
-    code += "<tr>";
-    code += "</tr>";
-    code += "</table>";
-    code += "</form>";
-    code += "<div style='align:center;margin-left:220px;margin-top:15px'>";
-    code += "<form method='POST' name='file_form' action='/ssupload.cgi?a=/tmp/ss_conf_backup.txt' target='hidden_frame'>";
-    code += "<table>";
-    code += "<tr>";
-    code += "<td style='border:1px'>";
-    code += "<input type='button' class='button_gen' onclick='remove_SS_node();' value='清空配置'/>";
-    code += "</td>";
-    code += "<td style='border:1px'>";
-    code += "<input style='margin-left:50px;' type='button' class='button_gen' onclick='download_SS_node();' value='导出配置'/>";
-    code += "</td>";
-    code += "<td style='border:1px'>";
-    code += "<input style='margin-left:50px;' type='button' id='upload_btn' class='button_gen' onclick='upload_SS_node();' value='恢复配置'/>";
-    code += "</td>";
-    code += "<td style='border:1px'>";
-    code += "<input style='color:#FFCC00;*color:#000;width: 200px;'id='ss_file' onclick='disable_ss_node_list_refresh();' type='file' name='file'/>";
-    code += "<img id='loadingicon' style='margin-left:5px;margin-right:5px;display:none;' src='/images/InternetScan.gif'/>";
-    code += "<span id='ss_file_info' style='display:none;'>完成</span>";
-    code += "</td>";
-    code += "</tr>";
-    code += "</table>";
-    code += "</form>";
-    code += "<div style='align:center;margin-left:180px;margin-top:20px;margin-bottom:20px;'><input type='button' class='button_gen' onclick='closeSs_node_listView();' value='返回'></div>";
-    code += "</div>";
-    code += "<div id='clientlist_all_list_Block'></div>";
-    divObj.innerHTML = code;
-    $G("ss_node_list_viewlist_content").appendChild(divObj);
+function edit_conf_table(o){
+    var id = $j(o).attr("id");
+    var ids = id.split("_");
+    var p = "ssconf_basic";
+    confs = getAllConfigs();
+    id = ids[ids.length - 1];
+	var c = confs[id];
+	document.form.ss_node_table_mode.value = c["mode"];
+	document.form.ss_node_table_name.value = c["name"];
+	document.form.ss_node_table_server.value = c["server"];
+	document.form.ss_node_table_port.value = c["port"];
+	document.form.ss_node_table_password.value = c["password"];
+	document.form.ss_node_table_method.value = c["method"];
+	document.form.ss_node_table_onetime_auth.value = c["onetime_auth"];
+	document.form.ss_node_table_rss_obfs_param.value = c["rss_obfs_param"];
+	document.form.ss_node_table_rss_protocol.value = c["rss_protocol"];
+	document.form.ss_node_table_rss_obfs.value = c["rss_obfs"];
+	document.form.ss_node_table_koolgame_udp.value = c["koolgame_udp"];
+	document.getElementById("cancelBtn").style.display = "";
+	document.getElementById("ssTitle").style.display = "";
+	document.getElementById("ssrTitle").style.display = "";
+	document.getElementById("gamev2Title").style.display = "";
+	$G("add_node").style.display = "none";
+	$G("edit_node").style.display = "";
+	if(c["use_rss"] == "1"){
+		$j("#vpnc_settings").fadeIn(300);
+		document.getElementById("ssTitle").style.display = "none";
+		document.getElementById("ssrTitle").style.display = "";
+		document.getElementById("gamev2Title").style.display = "none";
+		$j("#ssrTitle").html("编辑SSR账号");
+		tabclickhandler(1);
+		//edit_ss_node_conf(1,id)
+	}else{
+		if(c["koolgame_udp"] == "0" || c["koolgame_udp"] == "1"){
+			$j("#vpnc_settings").fadeIn(300);
+			document.getElementById("ssTitle").style.display = "none";
+			document.getElementById("ssrTitle").style.display = "none";
+			document.getElementById("gamev2Title").style.display = "";
+			$j("#gamev2Title").html("编辑GameV2账号");
+			tabclickhandler(2);
+			//edit_ss_node_conf(2,id)
+		}else{
+			$j("#vpnc_settings").fadeIn(300);
+			document.getElementById("ssTitle").style.display = "";
+			document.getElementById("ssrTitle").style.display = "none";
+			document.getElementById("gamev2Title").style.display = "none";
+			$j("#ssTitle").html("编辑SS账号");
+			tabclickhandler(0);
+			//edit_ss_node_conf(0,id)
+		}
+	}
+	myid=id;
 }
+var myid;
+
+function edit_ss_node_conf(flag){
+    var ns = {};
+    var p = "ssconf_basic";	
+	var params1 = ["name", "server", "mode",  "port", "password", "method", "onetime_auth"];//for ss
+	var params2 = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param"];//for ssr
+	var params3 = ["name", "server", "mode",  "port", "password", "method", "koolgame_udp"];//for ssr
+	if(flag == 'shadowsocks'){
+    	for (var i = 0; i < params1.length; i++) {
+    	    ns[p + "_" + params1[i] + "_" + myid] = $j('#ss_node_table' + "_" + params1[i]).val();
+    	    ns[p + "_use_rss_" + myid] = 0;
+    	}
+	}else if(flag == 'shadowsocksR'){
+    	for (var i = 0; i < params2.length; i++) {
+    	    ns[p + "_" + params2[i] + "_" + myid] = $j('#ss_node_table' + "_" + params2[i]).val();
+    	    ns[p + "_use_rss_" + myid] = 1;
+    	}
+	}else if(flag == 'gameV2'){
+    	for (var i = 0; i < params3.length; i++) {
+    	    ns[p + "_" + params3[i] + "_" + myid] = $j('#ss_node_table' + "_" + params3[i]).val();
+    	    ns[p + "_use_rss_" + myid] = 0;
+    	}
+	}
+    $j.ajax({
+        url: '/applydb.cgi?p=ssconf_basic',
+        contentType: "application/x-www-form-urlencoded",
+        dataType: 'text',
+        data: $j.param(ns),
+        error: function(xhr) {
+            console.log("error in posting config of table");
+        },
+        success: function(response) {
+            //updateSs_node_listView1();
+            refresh_table();
+			document.form.ss_node_table_name.value = "";
+			document.form.ss_node_table_server.value = "";
+			document.form.ss_node_table_port.value = "";
+			document.form.ss_node_table_password.value = "";
+			document.form.ss_node_table_rss_obfs_param.value = "";
+			document.form.ss_node_table_method.value = "aes-256-cfb";
+			document.form.ss_node_table_mode.value = "1";
+			document.form.ss_node_table_onetime_auth.value = "0";
+			document.form.ss_node_table_rss_protocol.value = "origin";
+			document.form.ss_node_table_rss_obfs.value = "plain";
+			document.form.ss_node_table_koolgame_udp.value = "0";
+			updateSs_node_listView();
+        }
+    });
+    $j("#vpnc_settings").fadeOut(300);
+}
+
+
+function apply_this_ss_node(s) {
+    var node = $j(s).attr("id");
+    var nodes = node.split("_");
+    node = nodes[nodes.length - 1];
+    var node_sel = node;
+    var obj = ssconf_node2obj(node_sel);
+    ss_node_info_return();
+    document.getElementById("ssconf_basic_node").value = node;
+    update_ss_ui(obj);
+    update_visibility();
+}
+
+
 
 function download_SS_node() {
 	location.href='ss_conf_backup.txt';
@@ -1026,16 +1228,20 @@ function upload_SS_node() {
 	global_ss_node_refresh = false;
 	$G('ss_file_info').style.display = "none";
 	$G('loadingicon').style.display = "block";
-	document.file_form.enctype = "multipart/form-data";
-	document.file_form.encoding = "multipart/form-data";
-	document.file_form.submit();	
+	document.form.enctype = "multipart/form-data";
+	document.form.encoding = "multipart/form-data";
+	document.form.action = "/ssupload.cgi?a=/tmp/ss_conf_backup.txt";
+	if (validForm()){
+		document.form.submit();
 	}
-	
+}
+
+
 function upload_ok(isok) {
 	var info = $G('ss_file_info');
 	if(isok==1){
 		info.innerHTML="上传完成";
-		restore_ss_conf();
+		setTimeout("restore_ss_conf();", 1000);
 	} else {
 		info.innerHTML="上传失败";
 	}
@@ -1045,149 +1251,15 @@ function upload_ok(isok) {
 
 function restore_ss_conf() {
 	document.form.action_mode.value = ' Refresh ';
+	document.form.action = "/applydb.cgi?p=ss";
     document.form.SystemCmd.value = "ss_conf_restore.sh";
+	document.form.enctype = "";
+	document.form.encoding = "";
 	if (validForm()){
 		document.form.submit();
 	}
     //setTimeout("onSubmitCtrl();", 2000);
-    refreshpage(2);
-}
-
-function remove_SS_node() {
-	global_status_enable=false;
-	checkSSStatus();
-	document.form.action_mode.value = ' Refresh ';
-    document.form.SystemCmd.value = "ss_conf_remove.sh";
-	if (validForm()){
-		document.form.submit();
-	}
-    refreshpage(2);
-}
-
-var global_ss_node_refresh = false;
-function updateSs_node_listView() {
-    if(!global_ss_node_refresh) {
-	   	return;
-	}
-    $j.ajax({
-        url: '/dbconf?p=ss',
-        dataType: 'html',
-        error: function(xhr) {            
-	        },
-        success: function(response) {
-            $j.globalEval(response);
-            loadAllConfigs();
-            cal_panel_block_clientList("ss_node_list_viewlist_content", 0.037);
-            $j("#ss_node_list_viewlist_content").show();
-        }
-    });
-    setTimeout("updateSs_node_listView()", 2000);
-}
-
-function disable_ss_node_list_refresh(){
-	global_ss_node_refresh = false;
-	updateSs_node_listView();
-}
-
-function updateSs_node_listView1() {
-    $j.ajax({
-        url: '/dbconf?p=ss',
-        dataType: 'html',
-        error: function(xhr) {            
-	        },
-        success: function(response) {
-            $j.globalEval(response);
-            loadAllConfigs();
-            cal_panel_block_clientList("ss_node_list_viewlist_content", 0.037);
-            $j("#ss_node_list_viewlist_content").show();
-        }
-    });
-}
-
-function cal_panel_block_clientList(obj, multiple) {
-	var isMobile = function() {
-		var tmo_support = ('<% nvram_get("rc_support"); %>'.search("tmo") == -1) ? false : true;
-		if(!tmo_support)
-			return false;
-		
-		if(	navigator.userAgent.match(/iPhone/i)	|| 
-			navigator.userAgent.match(/iPod/i)		||
-			navigator.userAgent.match(/iPad/i)		||
-			(navigator.userAgent.match(/Android/i) && (navigator.userAgent.match(/Mobile/i) || navigator.userAgent.match(/Tablet/i))) ||
-			(navigator.userAgent.match(/Opera/i) && (navigator.userAgent.match(/Mobi/i) || navigator.userAgent.match(/Mini/i))) ||	// Opera mobile or Opera Mini
-			navigator.userAgent.match(/IEMobile/i)	||	// IE Mobile
-			navigator.userAgent.match(/BlackBerry/i)	//BlackBerry
-		 ) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	};
-	var blockmarginLeft;
-	if (window.innerWidth) {
-		winWidth = window.innerWidth;
-	}
-	else if ((document.body) && (document.body.clientWidth)) {
-		winWidth = document.body.clientWidth;
-	}
-	//if (document.documentElement  && document.documentElement.clientHeight && document.documentElement.clientWidth) {
-	//	winWidth = document.documentElement.clientWidth;
-	//}
-
-	if(winWidth > 1050) {
-		winPadding = (winWidth - 1050) / 2;
-		winWidth = 1105;
-		blockmarginLeft = (winWidth * multiple) + winPadding;
-	}
-	else if(winWidth <= 1050) {
-		if(isMobile()) {
-			if(document.body.scrollLeft < 50) {
-				blockmarginLeft= (winWidth) * multiple + document.body.scrollLeft;
-			}
-			else if(document.body.scrollLeft >320) {
-				blockmarginLeft = 320;
-			}
-			else {
-				blockmarginLeft = document.body.scrollLeft;
-			}	
-		}
-		else {
-			blockmarginLeft = (winWidth) * multiple + document.body.scrollLeft;	
-		}
-	}
-
-	$G(obj).style.marginLeft = blockmarginLeft + "px";
-}
-
-function show_detail(thisObj) {
-    var state1 = readCookie("ss_table_detail")
-    var ssmode = $G("ss_basic_mode").value;
-    if (state1 == "1") {
-        slideDown("add_fun", 350);
-        //slideDown("help_mode", 350);
-        thisObj.innerHTML = "[ 简洁 ]";
-        createCookie("ss_table_detail", 0, 365);
-    } else {
-        slideUp("add_fun", 350);
-        //slideUp("help_mode", 350);
-        thisObj.innerHTML = "[ 详细 ]";
-        createCookie("ss_table_detail", 1, 365);
-    }
-}
-
-function init_detail() {
-    var std = readCookie("ss_table_detail")
-    var ssmode = $G("ss_basic_mode").value;
-    if (std == "1") {
-        $G("add_fun").style.display = "none";
-        //$G("help_mode").style.display = "none";
-        $j("#detail_show_hide").html("[ 详细 ]");
-    } else {
-        $G("add_fun").style.display = "";
-        //$G("help_mode").style.display = "";
-        $j("#detail_show_hide").html("[ 简洁 ]");
-    }
+    refreshpage(3);
 }
 
 function createCookie(name, value, days) {
@@ -1302,6 +1374,8 @@ function update_ss(){
 	if (validForm()){
 		document.form.submit();
 	}
+	$G("basic_show").style.display = "none";
+	show_log_info();
 }
 function buildswitch(){
 	$j("#switch").click(
@@ -1532,7 +1606,7 @@ function show_log_info(){
 		$G("apply_button").style.display = "none";
 		$G("line_image1").style.display = "none";
 		$G("log_content").style.display = "";
-		$G("return_button").style.display = "";
+		$G("log_return_button").style.display = "";
 		checkCmdRet();
 }
 function return_basic(){
@@ -1541,9 +1615,10 @@ function return_basic(){
 		$G("apply_button").style.display = "";
 		$G("line_image1").style.display = "";
 		$G("log_content").style.display = "none";
-		$G("return_button").style.display = "none";
+		$G("log_return_button").style.display = "none";
 		$G("loading_icon").style.display = "none";
 }
+
 
 var _responseLen;
 var noChange = 0;
@@ -1587,7 +1662,7 @@ function checkCmdRet(){
 		}
 	});
 }
-
+		
 </script>
 </head>
 <body onload="init();">
@@ -1618,12 +1693,14 @@ function checkCmdRet(){
 <input type="hidden" name="action_script" value=""/>
 <input type="hidden" name="action_wait" value="6"/>
 <input type="hidden" name="first_time" value=""/>
+<input type="hidden" name="vpnc_type" value="PPTP">
 <input type="hidden" id="ss_basic_enable" name="ss_basic_enable" value="0" />
 <input type="hidden" id="ss_basic_action" name="ss_basic_action" value="1" />
 <input type="hidden" id="ss_basic_install_status" name="ss_basic_install_status" value="0" />
 <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
 <input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value=""/>
 <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
+
 <table class="content" align="center" cellpadding="0" cellspacing="0">
 	<tr>
 		<td width="17">&nbsp;</td>
@@ -1634,6 +1711,156 @@ function checkCmdRet(){
 		</td>
 		<td valign="top">
 			<div id="tabMenu" class="submenuBlock"></div>
+
+			<div id="vpnc_settings"  class="contentM_qis" style="box-shadow: 3px 3px 10px #000;">
+				<table class="QISform_wireless" border=0 align="center" cellpadding="5" cellspacing="0">
+					<tr style="height:32px;">
+						<td>		
+							<table width="100%" border="0" align="left" cellpadding="0" cellspacing="0" class="vpnClientTitle">
+								<tr>
+						  		<td width="33%" align="center" id="ssTitle" onclick="tabclickhandler(0);">添加SS账号</td>
+						  		<td width="33%" align="center" id="ssrTitle" onclick="tabclickhandler(1);">添加SSR账号</td>
+						  		<td width="33%" align="center" id="gamev2Title" onclick="tabclickhandler(2);">添加GameV2账号</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<!---- vpnc_pptp/l2tp start  ---->
+							<div>
+							<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" class="FormTable">
+								<tr>
+									<th>使用模式</th>
+									<td>
+										<select id="ss_node_table_mode" name="ss_node_table_mode" class="input_option" style="width:350px;margin:0px 0px 0px 2px;">
+											<option value="1">【1】 GFWlist模式</option>
+											<option value="2">【2】 大陆白名单模式</option>
+											<option value="3">【3】 游戏模式</option>
+											<option value="4">【4】 游戏模式V2</option>
+											<option value="5">【5】 全局代理模式</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>节点别名</th>
+									<td>
+									  	<input type="text" maxlength="64" id="ss_node_table_name" name="ss_node_table_name" value="" class="input_ss_table" style="width:342px;float:left;" autocorrect="off" autocapitalize="off"></input>
+									</td>
+								</tr>
+								<tr>
+									<th>服务器地址</th>
+									<td>
+										<input type="text" maxlength="64" id="ss_node_table_server" name="ss_node_table_server" value="" class="input_ss_table" style="width:342px;float:left;" autocorrect="off" autocapitalize="off"></input>
+									</td>
+								</tr>
+			
+								<tr>
+									<th>服务器端口</th>
+									<td>
+										<input type="text" maxlength="64" id="ss_node_table_port" name="ss_node_table_port" value="" class="input_ss_table" style="width:342px;float:left;" autocomplete="off" autocorrect="off" autocapitalize="off"></input>
+									</td>
+								</tr>
+			
+								<tr>
+									<th>密码</th>
+									<td>
+										<input type="text" maxlength="64" id="ss_node_table_password" name="ss_node_table_password" value="" class="input_ss_table" style="width:342px;float:left;" autocomplete="off" autocorrect="off" autocapitalize="off"></input>
+									</td>
+								</tr>
+								<tr>
+									<th>加密方式</th>
+									<td>
+										<select id="ss_node_table_method" name="ss_node_table_method" class="input_option" style="width:350px;margin:0px 0px 0px 2px;">
+											<option value="table">table</option>
+											<option value="rc4">rc4</option>
+											<option value="rc4-md5">rc4-md5</option>
+											<option value="aes-128-cfb">aes-128-cfb</option>
+											<option value="aes-192-cfb">aes-192-cfb</option>
+											<option value="aes-256-cfb" selected>aes-256-cfb</option>
+											<option value="bf-cfb">bf-cfb</option>
+											<option value="camellia-128-cfb">camellia-128-cfb</option>
+											<option value="camellia-192-cfb">camellia-192-cfb</option>
+											<option value="camellia-256-cfb">camellia-256-cfb</option>
+											<option value="cast5-cfb">cast5-cfb</option>
+											<option value="des-cfb">des-cfb</option>
+											<option value="idea-cfb">idea-cfb</option>
+											<option value="rc2-cfb">rc2-cfb</option>
+											<option value="seed-cfb">seed-cfb</option>
+											<option value="salsa20">salsa20</option>
+											<option value="chacha20">chacha20</option>
+											<option value="chacha20-ietf">chacha20-ietf</option>
+										</select>
+										<div id="Hintinfo" style="display:none;">
+											<span>hahahah</span>
+										</div>
+									</td>	
+								</tr>
+								<tr id="ota_support">
+									<th>OTA支持</th>
+									<td>
+										<select name="ss_node_table_onetime_auth" id="ss_node_table_onetime_auth" class="input_option" style="width:350px;margin:0px 0px 0px 2px;">
+											<option value="0" selected>否</option>
+											<option value="1">是</option>
+										</select>
+									</td>
+								</tr>
+								<tr id="ssr_protocol_tr">
+									<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>协议 (protocol)</u></a></th>
+									<td>
+										<select id="ss_node_table_rss_protocol" name="ss_node_table_rss_protocol" style="width:350px;margin:0px 0px 0px 2px;" class="input_option" onchange="update_visibility();" >
+											<option value="origin" selected>origin</option>
+											<option value="verify_simple">verify_simple</option>
+											<option value="verify_deflate">verify_deflate</option>
+											<option value="verify_sha1">verify_sha1</option>
+											<option value="auth_simple">auth_simple</option>
+											<option value="auth_sha1">auth_sha1</option>
+											<option value="auth_sha1_v2">auth_sha1_v2</option>
+										</select>
+									</td>
+								</tr>
+								<tr id="ssr_obfs_tr">
+									<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>混淆插件 (obfs)</u></a></th>
+									<td>
+										<select id="ss_node_table_rss_obfs" name="ss_node_table_rss_obfs" style="width:350px;margin:0px 0px 0px 2px;" class="input_option"  onchange="update_visibility();" >
+											<option value="plain">plain</option>
+											<option value="http_simple">http_simple</option>
+											<option value="tls_simple">tls_simple</option>
+											<option value="random_head">random_head</option>
+											<option value="tls1.0_session_auth">tls1.0_session_auth</option>
+											<option value="tls1.2_ticket_auth">tls1.2_ticket_auth</option>
+										</select>
+									</td>
+								</tr>
+								<tr id="ssr_obfs_param_tr">
+									<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md" target="_blank"><u>自定义参数 (obfs_param)</u></a></th>
+									<td>
+										<input type="text" name="ss_node_table_rss_obfs_param" id="ss_node_table_rss_obfs_param" placeholder="cloudflare.com"  class="input_ss_table" style="width:342px;" maxlength="100" value=""></input>
+									</td>
+								</tr>
+								<tr id="gameV2_udp_tr" >
+									<th width="35%">UDP通道</th>
+									<td>
+										<select id="ss_node_table_koolgame_udp" name="ss_node_table_koolgame_udp" style="width:350px;margin:0px 0px 0px 2px;" class="ssconfig input_option" onchange="update_visibility();" >
+											<option value="0">udp in udp</option>
+											<option value="1">udp in tcp</option>
+										</select>
+									</td>
+								</tr>
+								</table>
+					 		</div>
+					 		<!---- vpnc_pptp/l2tp end  ---->		 			 	
+						</td>
+					</tr>
+				</table>
+				<div style="margin-top:5px;padding-bottom:10px;width:100%;text-align:center;">
+					<input class="button_gen" type="button" onclick="cancel_add_rule();" id="cancelBtn" value="返回">
+					<input id="add_node" class="button_gen" type="button" onclick="add_ss_node_conf(save_flag);" value="添加">
+					<input id="edit_node" style="display: none;" class="button_gen" type="button" onclick="edit_ss_node_conf(save_flag);" value="修改">	
+				</div>	
+			      <!--===================================Ending of vpnc setting Content===========================================-->			
+			</div>
+			
 			<!--=====Beginning of Main Content=====-->
 			<table width="98%" border="0" align="left" cellpadding="0" cellspacing="0" id="table_for_all" style="display: block;">
 				<tr>
@@ -1643,39 +1870,41 @@ function checkCmdRet(){
 								<tr>
 									<td bgcolor="#4D595D" colspan="3" valign="top">
 										<div>&nbsp;</div>
-										<div class="formfonttitle" id="ss_title">Shadowsocks - 账号信息配置</div>
+										<div class="formfonttitle" id="ss_title">shadowsocks - 账号信息配置</div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
-										<div class="SimpleNote" id="head_illustrate"><i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的Shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。</div>
+										<div class="SimpleNote" id="head_illustrate"><i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。</div>
 										<div style="margin-top: 20px;text-align: center;font-size: 18px;margin-bottom: 20px;"class="formfontdesc" id="cmdDesc"></div>
-										<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="ss_switch_table">
-											<thead>
-											<tr>
-												<td colspan="2">开关</td>
-											</tr>
-											</thead>
-											<tr>
-											<th id="ss_switch">ShadowSocks 开关</th>
-												<td colspan="2">
-													<div class="switch_field" style="display:table-cell;float: left;">
-														<label for="switch">
-															<input id="switch" class="switch" type="checkbox" style="display: none;">
-															<div class="switch_container" >
-																<div class="switch_bar"></div>
-																<div class="switch_circle transition_style">
-																	<div></div>
+										<div id="ss_switch_show">
+											<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="ss_switch_table">
+												<thead>
+												<tr>
+													<td colspan="2">开关</td>
+												</tr>
+												</thead>
+												<tr>
+												<th id="ss_switch">shadowsocks 开关</th>
+													<td colspan="2">
+														<div class="switch_field" style="display:table-cell;float: left;">
+															<label for="switch">
+																<input id="switch" class="switch" type="checkbox" style="display: none;">
+																<div class="switch_container" >
+																	<div class="switch_bar"></div>
+																	<div class="switch_circle transition_style">
+																		<div></div>
+																	</div>
 																</div>
-															</div>
-														</label>
-													</div>
-													<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-38px;float: left;">
-														<button id="updateBtn" class="button_gen" onclick="update_ss();">检查更新</button>
-														<a style="margin-left: 178px;" href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
-													</div>
-													<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i></div>
-													<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"></div>	
-												</td>
-											</tr>
-                                    	</table>
+															</label>
+														</div>
+														<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-38px;float: left;">
+															<button id="updateBtn" class="button_gen" onclick="update_ss();">检查更新</button>
+															<a style="margin-left: 178px;" href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
+														</div>
+														<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i></div>
+														<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"></div>	
+													</td>
+												</tr>
+                                    		</table>
+                                    	</div>
                                     	<div id="ss_status1">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
 												<tr id="ss_state">
@@ -1713,7 +1942,7 @@ function checkCmdRet(){
 															<select id="ssconf_basic_node" name="ssconf_basic_node" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" onchange="ss_node_sel();update_visibility();" >
 															</select>
 														</div>
-														<div id="ss_node_edit" style="float:left; width:35px; height:35px;margin:-3px 0px -5px 2px;cursor:pointer" onclick="pop_ss_node_list_listview(true);"></div>
+														<div id="ss_node_edit" style="float:left; width:35px; height:35px;margin:-3px 0px -5px 2px;cursor:pointer" onclick="show_ss_node_info();"></div>
 													</td>
 												</tr>
 												<tr>
@@ -1840,6 +2069,70 @@ function checkCmdRet(){
 											</table>
 										</div>
 										
+										<div id="ss_node_list_table" style="display: none;">
+											<table id="ss_node_list_table_main" ss_node_list_table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
+												<tr id="tr_all_title" height="40px">
+													<td style="background-color: #2F3A3E;width:6%;text-align: center;">模式</td>
+													<td style="background-color: #2F3A3E;width:10%;text-align: center;">节点名称</td>
+													<td style="background-color: #2F3A3E;width:15%;text-align: center;">服务器地址</td>
+													<td style="background-color: #2F3A3E;width:7%;text-align: center;">端口</td>
+													<td style="background-color: #2F3A3E;width:13%;text-align: center;">加密方式</td>
+													<td style="background-color: #2F3A3E;width:14%;text-align: center;">ping/丢包</td>
+													<td style="background-color: #2F3A3E;width:8%;text-align: center;">延迟</td>
+													<td style="background-color: #2F3A3E;width:5%;text-align: center;">编辑</td>
+													<td style="background-color: #2F3A3E;width:5%;text-align: center;">删除</td>
+													<td style="background-color: #2F3A3E;width:7%;text-align: center;">使用</td>
+												</tr>
+											</table>
+											<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
+												<tr>
+													<th width="20%">导出恢复</th>
+													<td>
+														<input type="button" class="button_gen" onclick="download_SS_node();" value="导出配置">
+
+														<input type="button" id="upload_btn" class="button_gen" onclick="upload_SS_node();" value="恢复配置">
+
+														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file">
+														<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif">
+														<span id="ss_file_info" style="display:none;">完成</span>
+													</td>
+												</tr>
+												</tr>
+												<tr>
+													<th width="20%">ping测试</th>
+													<td>
+														<input class="button_gen" onClick="ping_test()" type="button" value="ping测试"/>
+														<select id="ssconf_basic_Ping_Method" name="ssconf_basic_Ping_Method" style="width:300px;margin:0px 0px 0px 2px;" class="input_option">
+															<option class="content_input_fd" value="1">单线ping(10次/节点)</option>
+															<option class="content_input_fd" value="2">并发ping(10次/节点)</option>
+															<option class="content_input_fd" value="3">并发ping(20次/节点)</option>
+															<option class="content_input_fd" value="4">并发ping(50次/节点)</option>
+														</select>
+													</td>
+												</tr>
+												<tr>
+													<th width="20%">web测试</th>
+													<td>
+														<input class="button_gen" onClick="web_test()" type="button" value="web测试"/>
+														<select id="ssconf_basic_test_domain" name="ssconf_basic_test_domain" style="width:300px;margin:0px 0px 0px 2px;" class="input_option">
+															<option class="content_input_fd" value="https://www.google.com/">google.com</option>
+															<option class="content_input_fd" value="https://www.youtube.com/">youtube.com</option>
+														</select>
+													</td>
+												</tr>
+											</table>
+											<table>
+												<tr>
+													<td>
+														<div id="node_return_button" class="apply_gen" style="margin-left: 179px;;float: left;">
+															<input type="button" class="button_gen" onclick="ss_node_info_return();" value="返回">
+															<input class="button_gen" onClick="Add_profile()" type="button" value="添加节点"/>
+														</div>
+													</td>
+												</tr>
+											</table>
+										</div>
+
 										<!--=====gfwlist_dns=====-->
 										<div id="ipset_dns" style="display: none;">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
@@ -1875,8 +2168,8 @@ function checkCmdRet(){
 														<select id="ss_ipset_opendns" name="ss_ipset_opendns" class="input_option"></select>
 														<select id="ss_ipset_tunnel" name="ss_ipset_tunnel" class="input_option" onclick="update_visibility();" >
 															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">Goole DNS1 [8.8.8.8]</option>
-															<option value="3">Goole DNS2 [8.8.4.4]</option>
+															<option value="2">google DNS1 [8.8.8.8]</option>
+															<option value="3">google DNS2 [8.8.4.4]</option>
 															<option value="4">自定义</option>
 														</select>
 															<input type="text" class="ssconfig input_ss_table" id="ss_ipset_tunnel_user" name="ss_ipset_tunnel_user" placeholder="需端口号如：8.8.8.8:53" maxlength="100" value="">
@@ -1921,8 +2214,8 @@ function checkCmdRet(){
 														<select id="ss_ipset_pdnsd_udp_server_dnscrypt" name="ss_ipset_pdnsd_udp_server_dnscrypt" class="input_option"></select>
 														<select id="ss_ipset_pdnsd_udp_server_ss_tunnel" name="ss_ipset_pdnsd_udp_server_ss_tunnel" class="input_option" onclick="update_visibility();" >
 															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">Goole DNS1 [8.8.8.8]</option>
-															<option value="3">Goole DNS2 [8.8.4.4]</option>
+															<option value="2">google DNS1 [8.8.8.8]</option>
+															<option value="3">google DNS2 [8.8.4.4]</option>
 															<option value="4">自定义</option>
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_ipset_pdnsd_udp_server_ss_tunnel_user" name="ss_ipset_pdnsd_udp_server_ss_tunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8">
@@ -1987,8 +2280,8 @@ bogus-nxdomain=220.250.64.18
 														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_dns2socks_user" name="ss_redchn_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
 														<select id="ss_redchn_sstunnel" name="ss_redchn_sstunnel" class="input_option" onclick="update_visibility();" >
 															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">Goole DNS1 [8.8.8.8]</option>
-															<option value="3">Goole DNS2 [8.8.4.4]</option>
+															<option value="2">google DNS1 [8.8.8.8]</option>
+															<option value="3">google DNS2 [8.8.4.4]</option>
 															<option value="4">自定义</option>
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_sstunnel_user" name="ss_redchn_sstunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
@@ -2050,8 +2343,8 @@ bogus-nxdomain=220.250.64.18
 														<select id="ss_redchn_pdnsd_udp_server_dnscrypt" name="ss_redchn_pdnsd_udp_server_dnscrypt" class="input_option"></select>
 														<select id="ss_redchn_pdnsd_udp_server_ss_tunnel" name="ss_redchn_pdnsd_udp_server_ss_tunnel" class="input_option" onclick="update_visibility();" >
 															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">Goole DNS1 [8.8.8.8]</option>
-															<option value="3">Goole DNS2 [8.8.4.4]</option>
+															<option value="2">google DNS1 [8.8.8.8]</option>
+															<option value="3">google DNS2 [8.8.4.4]</option>
 															<option value="4">自定义</option>
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_pdnsd_udp_server_ss_tunnel_user" name="ss_redchn_pdnsd_udp_server_ss_tunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8">
@@ -2129,8 +2422,8 @@ bogus-nxdomain=220.250.64.18" rows="7" style="width:99%; font-family:'Courier Ne
 														<input type="text" class="ssconfig input_ss_table" id="ss_game_dns2socks_user" name="ss_game_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
 														<select id="ss_game_sstunnel" name="ss_game_sstunnel" class="input_option" onclick="update_visibility();" >
 															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">Goole DNS1 [8.8.8.8]</option>
-															<option value="3">Goole DNS2 [8.8.4.4]</option>
+															<option value="2">google DNS1 [8.8.8.8]</option>
+															<option value="3">google DNS2 [8.8.4.4]</option>
 															<option value="4">自定义</option>
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_game_sstunnel_user" name="ss_game_sstunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
@@ -2192,8 +2485,8 @@ bogus-nxdomain=220.250.64.18" rows="7" style="width:99%; font-family:'Courier Ne
 														<select id="ss_game_pdnsd_udp_server_dnscrypt" name="ss_game_pdnsd_udp_server_dnscrypt" class="input_option"></select>
 														<select id="ss_game_pdnsd_udp_server_ss_tunnel" name="ss_game_pdnsd_udp_server_ss_tunnel" class="input_option" onclick="update_visibility();" >
 															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">Goole DNS1 [8.8.8.8]</option>
-															<option value="3">Goole DNS2 [8.8.4.4]</option>
+															<option value="2">google DNS1 [8.8.8.8]</option>
+															<option value="3">google DNS2 [8.8.4.4]</option>
 															<option value="4">自定义</option>
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_udp_server_ss_tunnel_user" name="ss_game_pdnsd_udp_server_ss_tunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8">
@@ -2477,7 +2770,7 @@ taobao.com
 													</td>
 												</tr>
 												<tr id="update_rules">
-													<th width="35%">Shadowsocks规则自动更新</th>
+													<th width="35%">shadowsocks规则自动更新</th>
 													<td>
 														<select id="ss_basic_rule_update" name="ss_basic_rule_update" class="ssconfig input_option" onchange="update_visibility();" >
 															<option value="0">禁用</option>
@@ -2554,20 +2847,19 @@ taobao.com
 										<div id="log_content" style="margin-top:10px;display: none;">
 											<textarea cols="63" rows="30" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;"></textarea>
 										</div>
+										<div id="log_return_button" class="apply_gen" style="display: none;">
+											<input class="button_gen" id="returnBtn" onClick="return_basic()" type="button" value="返回"/>
+										</div>
 
 										<div class="apply_gen" id="loading_icon">
 											<img id="loadingIcon" style="display:none;" src="/images/InternetScan.gif">
 										</div>
-										<div id="return_button" class="apply_gen" style="display: none;">
-											<input class="button_gen" id="returnBtn" onClick="return_basic()" type="button" value="返回"/>
-										</div>
-										
+
 										<div id="apply_button"class="apply_gen">
 											<button id="cmdBtn" class="button_gen" onclick="onSubmitCtrl()">提交</button>
 										</div>
-										<div id="warn1" style="display: none;margin-top: 20px;text-align: center;font-size: 20px;margin-bottom: 20px;"class="formfontdesc" id="cmdDesc"><i>你开启了kcptun,请先关闭后才能开启Shadowsocks</i></div>
+										<div id="warn1" style="display: none;margin-top: 20px;text-align: center;font-size: 20px;margin-bottom: 20px;"class="formfontdesc" id="cmdDesc"><i>你开启了kcptun,请先关闭后才能开启shadowsocks</i></div>
 										<div id="line_image1" style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"/></div>
-
 										<div class="KoolshareBottom">
 											论坛技术支持： <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a> <br/>
 											博客技术支持： <a href="http://www.mjy211.com" target="_blank"> <i><u>www.mjy211.com</u></i> </a> <br/>
