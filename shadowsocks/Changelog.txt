@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+2.2
+   - fix	Forget about the new png files in 2.1, let's go to 2.2 and fix it~
+
 2.1
    - 说明	此版本重在更新节点增加，编辑，删除的交互，除了游戏模式的一个小bug有过一行后台脚本的改动，其余全部是前端改动。
    - update	重写节点管理页面，移除节点页面的密码一栏，添加每个节点使用的模式，并显示相应logo；
