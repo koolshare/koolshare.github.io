@@ -32,11 +32,11 @@ chmod +x /tmp/shadowsocks/install.sh
 sh /tmp/shadowsocks/install.sh
 </pre>
 
-## 如果你需要更新历史版本，这里以 1.5.0版本为例：(需要更新其它版本，只需要自行更改版本号，所有历史版本存档目录：https://github.com/koolshare/koolshare.github.io/tree/master/shadowsocks/history)
+## 如果你需要更新历史版本，这里以 1.5.0版本为例：(需要更新其它版本，只需要自行更改版本号，所有历史版本存档目录：https://github.com/koolshare/koolshare.github.io/tree/acelan_softcenter_ui/shadowsocks/history)
 
 <pre>
 cd /tmp
-wget --no-check-certificate https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/history/shadowsocks_1.5.0.tar.gz
+wget --no-check-certificate https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks/history/shadowsocks_1.5.0.tar.gz
 tar -zxvf /tmp/shadowsocks.tar.gz
 chmod +x /tmp/shadowsocks/install.sh
 sh /tmp/shadowsocks/install.sh
