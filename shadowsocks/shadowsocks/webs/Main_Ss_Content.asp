@@ -2642,7 +2642,7 @@ function checkCmdRet(){
 												</tr>
 											</table>
 										</div>
-										<div id="ss_node_list_table_btn" style="display: none;position: static; bottom: 0px;">
+										<div id="ss_node_list_table_btn" style="display: none;position: static;width: 98.8%; bottom: 0px;">
 											<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
 													<th width="20%">导出恢复
