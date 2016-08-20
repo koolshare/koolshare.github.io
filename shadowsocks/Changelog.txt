@@ -1,5 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+2.4
+   - fix	fix ss node page get really slow after adding sonme ss node;
+   - fix	fix the height of the ss node table when note add pannel in static position;
+   - fix	fix the ss node table banner showd on main page when ss disabled;
+   - fix	fix a wrong log print in game mode.
+
 2.3
    软件中心内图标更新内容：
    - update 单独更新ssconfig文件，给2.0-2.2版本的用户提前更新主服务器替换为github;

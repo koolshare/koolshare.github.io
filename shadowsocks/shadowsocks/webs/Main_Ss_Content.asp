@@ -130,8 +130,6 @@ input[type=button]:focus {
 	border: 1px solid #000000;
 	border-collapse: collapse;
 }
-
-
 .FormTable1 th{
 	table-layout:fixed;
 	overflow:hidden;
@@ -878,7 +876,7 @@ function loadAllConfigs() {
 
 function show_ss_node_info(){
 		checkTime = 1;
-		refresh_ss_node_list();
+		setTimeout("refresh_ss_node_list()", 2000);
 		//$G("head_illustrate").style.display = "none";
 		//$G("ss_switch_show").style.display = "none";
 		//$G("ss_status1").style.display = "none";
@@ -901,8 +899,8 @@ function show_ss_node_info(){
 		refresh_table();
 }
 function ss_node_info_return(){
-	checkTime = 20001;
-	$j("#vpnc_settings").fadeOut(0);
+		
+		$j("#vpnc_settings").fadeOut(0);
 		cancel_add_rule();
 		//$G("head_illustrate").style.display = "";
 		//$G("ss_switch_show").style.display = "";
@@ -927,10 +925,11 @@ function ss_node_info_return(){
 		}else if(ssmode == "5"){
 			$G("help_mode5").style.display = "";
 		}
-		
+		checkTime = 20001;
 }
 
 function Add_profile(){
+	checkTime = 20001;
 	document.form.ss_node_table_name.value = "";
 	document.form.ss_node_table_server.value = "";
 	document.form.ss_node_table_port.value = "";
@@ -956,6 +955,8 @@ function Add_profile(){
     $j("#vpnc_settings").fadeIn(300);
 }
 function cancel_add_rule(){
+	checkTime = 1;
+	setTimeout("refresh_ss_node_list()", 2000);
 	save_flag = "";
 	$G("vpnc_settings").style.position = "fixed";
 	$G("flow_display_box").checked = false;
@@ -985,6 +986,8 @@ function cancel_add_rule(){
 		
 	}
 }
+
+
 var save_flag = "";	//type of Saving profile
 function tabclickhandler(_type){
 	$G('ssTitle').className = "vpnClientTitle_td_unclick";
@@ -1014,8 +1017,8 @@ function tabclickhandler(_type){
 				$G("ss_status1").style.display = "none";
 				$G("line1").style.display = "none";
 				$G("cmdDesc").style.display = "none";
-    			$G("ss_node_list_table_td").style.top = "402px";
-				$G("ss_node_list_table").style.top = "362px";
+    			$G("ss_node_list_table_td").style.top = "432px";
+				$G("ss_node_list_table").style.top = "392px";
 			}else{
 				$G("ss_title").style.display = "none";
 				$G("head_illustrate").style.display = "none";
@@ -1043,8 +1046,8 @@ function tabclickhandler(_type){
 				$G("ss_status1").style.display = "none";
 				$G("line1").style.display = "none";
 				$G("cmdDesc").style.display = "none";
-    			$G("ss_node_list_table_td").style.top = "478px";
-				$G("ss_node_list_table").style.top = "438px";
+    			$G("ss_node_list_table_td").style.top = "508px";
+				$G("ss_node_list_table").style.top = "468px";
 			}else{
 				$G("ss_title").style.display = "none";
 				$G("head_illustrate").style.display = "none";
@@ -1072,8 +1075,8 @@ function tabclickhandler(_type){
 				$G("ss_status1").style.display = "none";
 				$G("line1").style.display = "none";
 				$G("cmdDesc").style.display = "none";
-    			$G("ss_node_list_table_td").style.top = "402px";
-				$G("ss_node_list_table").style.top = "362px";
+    			$G("ss_node_list_table_td").style.top = "432px";
+				$G("ss_node_list_table").style.top = "392px";
 			}else{
 				$G("ss_title").style.display = "none";
 				$G("head_illustrate").style.display = "none";
@@ -1176,7 +1179,9 @@ function refresh_table() {
 	});
 }
 
-
+function hide_text(){
+	
+}
 
 function refresh_html() {
 	confs = getAllConfigs();
@@ -1195,11 +1200,11 @@ function refresh_html() {
 		$G("ss_node_list_table").style.display = "";
 		if(($G("flow_display_box").checked) == true){ //节点添加static 状态
 			if(save_flag == 'shadowsocks' || save_flag == 'gameV2'){
-    			$G("ss_node_list_table_td").style.top = "402px";
-				$G("ss_node_list_table").style.top = "362px";
+    			$G("ss_node_list_table_td").style.top = "432px";
+				$G("ss_node_list_table").style.top = "392px";
 			}else if(save_flag == 'shadowsocksR'){
-    			$G("ss_node_list_table_td").style.top = "478px";
-				$G("ss_node_list_table").style.top = "438px";
+    			$G("ss_node_list_table_td").style.top = "508px";
+				$G("ss_node_list_table").style.top = "468px";
 			}else{
     			$G("ss_node_list_table_td").style.top = "242px";
 				$G("ss_node_list_table").style.top = "202px";
@@ -1364,6 +1369,7 @@ function remove_conf_table(o) {
 }
 
 function edit_conf_table(o){
+	checkTime = 20001;
     var id = $j(o).attr("id");
     var ids = id.split("_");
     var p = "ssconf_basic";
@@ -1420,6 +1426,8 @@ function edit_conf_table(o){
 var myid;
 
 function edit_ss_node_conf(flag){
+	checkTime = 1;
+	setTimeout("refresh_ss_node_list()", 2000);
     var ns = {};
     var p = "ssconf_basic";	
 	var params1 = ["name", "server", "mode",  "port", "password", "method", "onetime_auth"];//for ss
@@ -1664,6 +1672,8 @@ function buildswitch(){
 				document.form.submit();
 			}
 			$G("basic_show").style.display = "none";
+			
+			
 		}
 	});
 }
@@ -1678,7 +1688,9 @@ function toggle_switch(){
 		$G("tablet_show").style.display = "none";
 		$G("basic_show").style.display = "none";
 		$G("apply_button").style.display = "none";
-		$G("ss_node_list_table").style.display = "";		
+		$G("ss_node_list_table").style.display = "none";
+		$G("help_mode1").style.display = "none";
+				
 	}
 }
 
@@ -2069,23 +2081,7 @@ function checkCmdRet(){
 		}
 	});
 }
-$j.fn.attachDragger = function(){
-    var attachment = false, lastPosition, position, difference;
-    $j( $j(this).selector ).on("mousedown mouseup mousemove",function(e){
-        if( e.type == "mousedown" ) attachment = true, lastPosition = [e.clientX, e.clientY];
-        if( e.type == "mouseup" ) attachment = false;
-        if( e.type == "mousemove" && attachment == true ){
-            position = [e.clientX, e.clientY];
-            difference = [ (position[0]-lastPosition[0]), (position[1]-lastPosition[1]) ];
-            $j(this).scrollLeft( $j(this).scrollLeft() - difference[0] );
-            $j(this).scrollTop( $j(this).scrollTop() - difference[1] );
-            lastPosition = [e.clientX, e.clientY];
-        }
-    });
-    $j(window).on("mouseup", function(){
-        attachment = false;
-    });
-}
+
 </script>
 </head>
 <body onload="init();">
@@ -2532,7 +2528,8 @@ $j.fn.attachDragger = function(){
 										<div id="ss_node_list_table_btn" style="display: none;position: static;width: 99%; bottom: 0px;width: 98.8%;">
 											<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
-													<th width="20%">导出恢复</th>
+													<th width="20%">导出恢复
+													</th>
 													<td>
 														<input type="button" class="button_gen" onclick="download_SS_node();" value="导出配置">
 
@@ -2571,6 +2568,7 @@ $j.fn.attachDragger = function(){
 													<td>
 														<div id="node_return_button" class="apply_gen" style="margin-left: 179px;;float: left;">
 															<input type="button" class="button_gen" onclick="ss_node_info_return();" value="返回">
+															<input class="button_gen" id="returnBtn" onClick="hide_text()" type="button" value="黑科技按钮"/>
 															<input class="button_gen" onClick="Add_profile()" type="button" value="添加节点"/>
 														</div>
 													</td>

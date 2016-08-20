@@ -145,7 +145,7 @@ nat_auto_start(){
 		EOF
 	fi
 	echo $(date): Add service to nat-start...
-	writenat=$(cat /jffs/scripts/nat-start start_all | grep "nat-start")
+	writenat=$(cat /jffs/scripts/nat-start | grep "nat-start")
 	if [ -z "$writenat" ];then
 		sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/nat-start
 		sed -i '3a sh /koolshare/ss/game/nat-start' /jffs/scripts/nat-start
