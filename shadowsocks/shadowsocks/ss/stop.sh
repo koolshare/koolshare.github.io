@@ -263,9 +263,11 @@ remove_conf_and_settings(){
 	rm -rf /jffs/configs/dnsmasq.d/gfwlist.conf
 	rm -rf /jffs/configs/dnsmasq.d/cdn.conf
 	rm -rf /jffs/configs/dnsmasq.d/custom.conf
+	rm -rf /jffs/configs/dnsmasq.d/wblist.conf
 	rm -rf /tmp/sscdn.conf
 	rm -rf /tmp/custom.conf
 	rm -rf /tmp/cdn.conf
+	rm -rf /tmp/wblist.conf
 	rm -rf /jffs/configs/dnsmasq.conf.add
 	
 
@@ -306,7 +308,7 @@ stop_part)
 	echo $(date):
 	;;
 *)
-	echo "Usage: $0 (start_all|restart_kcptun|restart_wb_list|restart_dns)"
+	echo "Usage: $0 (stop_all|stop_part)"
 	exit 1
 	;;
 esac

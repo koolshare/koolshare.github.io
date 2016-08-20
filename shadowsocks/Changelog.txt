@@ -1,7 +1,21 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
-2.2
-   - fix	Forget about the new png files in 2.1, let's go to 2.2 and fix it~
+2.3
+   软件中心内图标更新内容：
+   - update 单独更新ssconfig文件，给2.0-2.2版本的用户提前更新主服务器替换为github;
+
+   shadowsocks页面内更新按钮更新内容：
+   - fix	修复gfwlist模式自定义dnsmasq和黑白名单冲突的问题；
+   - fix	修复safari浏览器中,节点添加窗口中，ss模式重复显示的问题；
+   - update	更新shadowsocksR-libev为最新（修复auth_sha1_v2问题版本）；
+   - update	为了避免添加节点时界面覆盖，添加节点面本新增取消浮动勾选项；
+   - update	为了方便批量添加同端口，密码，加密方式的节点，新增连续添加勾选项；
+   - update	为了方便多节点用户管理页面，现在节点默认显示13个，其余节点需要滚动或者拖拽表格查看；
+   - update 现在正在使用的节点会显示在节点列表中;
+   - update 各个模式的启动时间加快25%（其实就是5秒变4秒）;
+   - update 内置更新主服务器替换为github;
+   - add	新增各个模式的简单说明窗口和详细说明展开按钮（内部文字还需进一步完善）;
+   - known issue pdnsd几率性的启动不起来，暂时无法解决。
 
 2.1
    - 说明	此版本重在更新节点增加，编辑，删除的交互，除了游戏模式的一个小bug有过一行后台脚本的改动，其余全部是前端改动。

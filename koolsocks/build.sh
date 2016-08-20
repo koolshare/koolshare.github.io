@@ -2,7 +2,7 @@
 
 
 MODULE=koolsocks
-VERSION=1.2
+VERSION=1.3
 TITLE=shadowsocks
 DESCRIPTION=科学上网
 HOME_URL=Main_Ss_Content.asp

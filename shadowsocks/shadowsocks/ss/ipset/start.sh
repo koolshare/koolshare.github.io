@@ -118,6 +118,8 @@ append_gfwlist(){
 
 custom_dnsmasq(){
 	# append custom host
+	rm -rf /tmp/custom.conf
+	rm -rf /jffs/configs/dnsmasq.d/custom.conf
 	if [ ! -z "$ss_ipset_dnsmasq" ];then
 		echo $(date): append custom host into dnsmasq.conf
 		echo "$ss_ipset_dnsmasq" | sed "s/,/\n/g" | sort -u >> /tmp/custom.conf
@@ -127,17 +129,17 @@ custom_dnsmasq(){
 }
 
 append_white_black_conf(){
-	rm -rf /jffs/configs/dnsmasq.d/custom.conf
-	rm -rf /tmp/custom.conf
+	rm -rf /jffs/configs/dnsmasq.d/wblist.conf
+	rm -rf /tmp/wblist.conf
 	# append white domain list
 	wanwhitedomain=$(echo $ss_ipset_white_domain_web | sed 's/,/\n/g')
 	if [ ! -z $ss_ipset_white_domain_web ];then
 		echo $(date): append white_domain
-		echo "#for white_domain" >> /tmp/custom.conf
+		echo "#for white_domain" >> /tmp/wblist.conf
 		for wan_white_domain in $wanwhitedomain
 		do
-			echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /tmp/custom.conf
-			echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_domain/g" >> /tmp/custom.conf
+			echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /tmp/wblist.conf
+			echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_domain/g" >> /tmp/wblist.conf
 		done
 		echo $(date): done
 		echo $(date):
@@ -146,9 +148,9 @@ append_white_black_conf(){
 	# append black domain list
 	if [ ! -z "$ss_ipset_black_domain_web" ];then
 		echo $(date): append black_domain
-		echo "#for_black_domain" >> /tmp/custom.conf
-		echo "$ss_ipset_black_domain_web" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#7913/g" >> /tmp/custom.conf
-		echo "$ss_ipset_black_domain_web" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/gfwlist/g" >> /tmp/custom.conf
+		echo "#for_black_domain" >> /tmp/wblist.conf
+		echo "$ss_ipset_black_domain_web" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#7913/g" >> /tmp/wblist.conf
+		echo "$ss_ipset_black_domain_web" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/gfwlist/g" >> /tmp/wblist.conf
 		echo $(date): done
 		echo $(date):
 	fi
@@ -157,13 +159,22 @@ append_white_black_conf(){
 ln_custom_conf(){
 	# ln_custom_conf
 	if [ -f /tmp/custom.conf ];then
-	echo $(date): append dnsmasq.conf.add..
+	echo $(date): append custom dnsmasq setting..
 		ln -sf /tmp/custom.conf /jffs/configs/dnsmasq.d/custom.conf
 	echo $(date): done
 	echo $(date):
 	fi
 }
 
+ln_wblist_conf(){
+	# ln_wblist_conf
+	if [ -f /tmp/wblist.conf ];then
+	echo $(date): append wblist..
+		ln -sf /tmp/wblist.conf /jffs/configs/dnsmasq.d/wblist.conf
+	echo $(date): done
+	echo $(date):
+	fi
+}
 
 #---------------------------------------------------------------------------------------------------------
 nat_auto_start(){
@@ -321,9 +332,9 @@ start_dns(){
 					rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 				elif  [ "$ss_basic_use_rss" == "0" ];then
 					if [ "$ss_basic_onetime_auth" == "1" ];then
-						ss-local -b 0.0.0.0 -l 23456 -A -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid
+						ss-local -b 0.0.0.0 -l 23456 -A -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid > /dev/null 2>&1 &
 					elif [ "$ss_basic_onetime_auth" == "0" ];then
-						ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid
+						ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid > /dev/null 2>&1 &
 					fi
 				fi
 				dns2socks 127.0.0.1:23456 "$ss_ipset_pdnsd_udp_server_dns2socks" 127.0.0.1:1099 > /dev/null 2>&1 &
@@ -341,14 +352,15 @@ start_dns(){
 				[ "$ss_ipset_pdnsd_udp_server_ss_tunnel" == "4" ] && dns1="$ss_ipset_pdnsd_udp_server_ss_tunnel_user"
 				echo $(date): Starting ss-tunnel \for pdnsd...
 				if [ "$ss_basic_use_rss" == "1" ];then
-					rss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid
+					rss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid > /dev/null 2>&1 &
 				elif  [ "$ss_basic_use_rss" == "0" ];then
 					if [ "$ss_basic_onetime_auth" == "1" ];then
-						ss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -A -f /var/run/sstunnel.pid
+						ss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -A -f /var/run/sstunnel.pid > /dev/null 2>&1 &
 					elif [ "$ss_basic_onetime_auth" == "0" ];then
-						ss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid
+						ss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid > /dev/null 2>&1 &
 					fi
 				fi
+				sleep 1
 				echo $(date): done
 				echo $(date):
 			fi
@@ -385,11 +397,11 @@ start_dns(){
 		GROUP=nogroup
 
 		if ! test -f "$CACHE"; then
-		        dd if=/dev/zero of=/koolshare/ss/pdnsd/pdnsd.cache bs=1 count=4 2> /dev/null
-		        chown -R $USER.$GROUP $CACHEDIR 2> /dev/null
+		        dd if=/dev/zero of=/koolshare/ss/pdnsd/pdnsd.cache bs=1 count=4 >/dev/null 2>&1
+		        chown -R $USER.$GROUP $CACHEDIR
 		fi
 		
-			pdnsd --daemon -c /koolshare/ss/pdnsd/pdnsd.conf -p /var/run/pdnsd.pid
+			pdnsd --daemon -c /koolshare/ss/pdnsd/pdnsd.conf -p /var/run/pdnsd.pid >/dev/null 2>&1
 			echo $(date): done
 			echo $(date):
 	fi
@@ -519,6 +531,7 @@ start_all)
 	custom_dnsmasq
 	append_white_black_conf
 	ln_custom_conf
+	ln_wblist_conf
 	nat_auto_start
 	wan_auto_start
 	write_cron_job
@@ -551,7 +564,7 @@ restart_wb_list)
 	ipset -F white_domain >/dev/null 2>&1
 	ipset -F black_domain >/dev/null 2>&1
 	append_white_black_conf
-	ln_custom_conf
+	ln_wblist_conf
 	sh /koolshare/ss/ipset/nat-start add_black_wan_ip
 	restart_dnsmasq
 	remove_status
