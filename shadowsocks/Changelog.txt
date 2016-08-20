@@ -22,6 +22,9 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    - update 内置更新主服务器替换为github;
    - add	新增各个模式的简单说明窗口和详细说明展开按钮（内部文字还需进一步完善）;
    - known issue pdnsd几率性的启动不起来，暂时无法解决。
+   
+2.2
+   - fix	Forget about the new png files in 2.1, let's go to 2.2 and fix it~
 
 2.1
    - 说明	此版本重在更新节点增加，编辑，删除的交互，除了游戏模式的一个小bug有过一行后台脚本的改动，其余全部是前端改动。
