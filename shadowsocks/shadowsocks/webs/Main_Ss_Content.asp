@@ -518,6 +518,8 @@ function update_visibility_tab2_redchn(){
 	showhide("ss_redchn_chinadns_china_user", (rcc == "4"));
 	showhide("ss_redchn_chinadns_foreign_user", (rcf == "4"));
 	showhide("ss_redchn_dns2socks_user", (rdf == "4"));
+	generate_options();
+	
 }
 function update_visibility_tab2_ipset(){
 	icd = document.form.ss_ipset_cdn_dns.value;
@@ -542,6 +544,7 @@ function update_visibility_tab2_ipset(){
 	showhide("ss_ipset_pdnsd_udp_server_ss_tunnel_user", (ifd == "4" && sipm == "1" && document.form.ss_ipset_pdnsd_udp_server.value == 3 && document.form.ss_ipset_pdnsd_udp_server_ss_tunnel.value == 4));
 	showhide("ipset_pdnsd_cache", (ifd == "4"));
 	showhide("ipset_pdnsd_method", (ifd == "4"));
+	generate_options();
 }
 function update_visibility_tab2_game(){
 	gdc = document.form.ss_game_dns_china.value;
@@ -568,6 +571,7 @@ function update_visibility_tab2_game(){
 	showhide("ss_game_pdnsd_udp_server_ss_tunnel_user", (gdf == "6" && grpm == "1" && document.form.ss_game_pdnsd_udp_server.value == 3 && document.form.ss_game_pdnsd_udp_server_ss_tunnel.value == 4));
 	showhide("game_pdnsd_cache", (gdf == "6"));
 	showhide("game_pdnsd_method", (gdf == "6"));
+	generate_options();
 }
 function update_visibility_tab2_gameV2(){
 	g2dc = document.form.ss_gameV2_dns_china.value;
@@ -1194,7 +1198,7 @@ function refresh_html1() {
 		$G("ss_node_list_table_td").style.overflow = "visible";
 		$G("ss_node_list_table_td").style.position = "static";
 		$G("ss_node_list_table_btn").style.position = "static";
-		$G("ss_node_list_table_btn").style.width = "600px";
+		$G("ss_node_list_table_btn").style.width = "747px";
 		$G("ss_node_list_table_main").style.margin = "10px 0px 0px 0px";
 		$G("hide_when_folw").style.display = "";
 		$G("ss_node_list_table_th").style.display = "none";

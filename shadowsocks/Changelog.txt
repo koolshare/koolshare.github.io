@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+2.6 
+   - fix	fix back science bottom changs layout of ping function aera
+   - fix	fix change ss node and apply won't work
+   - fix	fix dnscrypt-proxy options
+
 2.5 
    - 说明	此版本更新全是web前端更改。
    - fix	修复大陆白名单模式添加添加域名黑白名单后变成全局的bug；
