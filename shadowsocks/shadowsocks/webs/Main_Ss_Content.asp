@@ -74,7 +74,7 @@ input[type=button]:focus {
 	z-index: 200;
 	background-color:#2B373B;
 	margin-left: 50px;
-	top: 385px;
+	top: 290px;
 	width:650px;
 	return height:auto;
 	box-shadow: 3px 3px 10px #000;
@@ -250,10 +250,15 @@ function onSubmitCtrl() {
             function(a) {
 			setTimeout("checkSSStatus();", 50000); //make sure ss_status do not update during reloading
 			if(ssaction == 1){
-				if (ssmode == "2" || ssmode == "3" || smode == "4" || smode == "5" || smode == "0"){
-					showSSLoadingBar(4);
+				if (ssmode == "2" || ssmode == "3"){			
 				} else if (ssmode == "1"){
-					showSSLoadingBar(3);
+					showSSLoadingBar(4);
+				} else if (ssmode == "0"){
+					showSSLoadingBar(4);
+				} else if (ssmode == "4"){
+					showSSLoadingBar(4);
+				} else if (ssmode == "5"){
+					showSSLoadingBar(4);
 				}
 			}else if(ssaction == 2 || ssaction == 3 || ssaction == 4){
 					showSSLoadingBar(2);
@@ -268,10 +273,16 @@ function onSubmitCtrl() {
             function(a) {
 			setTimeout("checkSSStatus();", 50000);
 			if(ssaction == 1){
-				if (ssmode == "2" || ssmode == "3" || smode == "4" || smode == "5" || smode == "0"){
+				if (ssmode == "2" || ssmode == "3"){
 					showSSLoadingBar(4);
 				} else if (ssmode == "1"){
 					showSSLoadingBar(3);
+				} else if (ssmode == "0"){
+					showSSLoadingBar(4);
+				} else if (ssmode == "4"){
+					showSSLoadingBar(4);
+				} else if (ssmode == "5"){
+					showSSLoadingBar(4);
 				}
 			}else if(ssaction == 2 || ssaction == 3 || ssaction == 4){
 					showSSLoadingBar(2);
