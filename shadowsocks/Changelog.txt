@@ -1,5 +1,20 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+2.5 
+   - 说明	此版本更新全是web前端更改。
+   - fix	修复大陆白名单模式添加添加域名黑白名单后变成全局的bug；
+   - fix	修复更新后SS规则后不能自动重启的bug；
+   - fix	修复可能导致浏览器卡顿的bug；
+   - fix	修复编辑节点功能，模式显示不正确的bug；
+   - fix	修复删除节点功能不会删除掉ping和web test信息；
+   - fix	修复Firefox浏览器下，节点页面混乱的问题；
+   - fix	修复模式说明框不会跟随模式变化的问题；
+   - fix	修复，日志文本框，黑白名单输入框等输入内容后不能缩放大小的问题；
+   - fix	修复在非主界面点击更新时，界面错乱的问题；
+   - add	完善黑科技按钮；
+   - update	ping测试和web test测试改为写入数据到内存
+   - del	移除取消浮动功能；
+
 2.4
    - fix	fix ss node page get really slow after adding sonme ss node;
    - fix	fix the height of the ss node table when note add pannel in static position;

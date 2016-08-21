@@ -137,7 +137,7 @@ nvram set cdn_numbers=$(cat /jffs/ss/redchn/cdn.txt | grep -c .)
 # reboot ss
 if [ "$reboot" == "1" ];then
 echo $(date): reboot shadowsocks service automaticly to apply newly updated list >> /tmp/syscmd.log
-sh /koolshare/ss/ssconfig.sh
+sh /koolshare/ss/ssconfig.sh start_all
 fi
 echo ========================================================================================================== >> /tmp/syscmd.log
 exit

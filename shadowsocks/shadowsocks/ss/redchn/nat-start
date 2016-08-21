@@ -44,7 +44,7 @@ flush_nat(){
 
 flush_ipset(){
 	#ipset -F router >/dev/null 2>&1
-	ipset -F chnroute >/dev/null 2>&1
+	#ipset -F chnroute >/dev/null 2>&1
 	ipset -F white_domain >/dev/null 2>&1
 	ipset -F black_domain >/dev/null 2>&1
 	ipset -F white_ip >/dev/null 2>&1
@@ -228,6 +228,7 @@ start_all)
 	resolv_server_ip
 	flush_nat
 	flush_ipset
+	ipset -F chnroute >/dev/null 2>&1
 	ipset -F router >/dev/null 2>&1
 	destory_ipset
 	creat_ipset
