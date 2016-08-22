@@ -7,4 +7,4 @@ else
 log='[ '$LOGTIME' ] Problem detected!'
 fi
 #nvram set ss_china_state="$log"
-dbus ram ss_basic_state_china="$log"
+dbus set ss_basic_state_china="$log"

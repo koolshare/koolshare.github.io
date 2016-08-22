@@ -219,8 +219,6 @@ function init() {
 		document.form.ss_basic_enable.value = 0;
 		inputCtrl(document.form.switch,0);
 	}
-	var _responseLen;
-	var noChange = 0;
 	var retArea = $G('log_content');
 	retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
 }
@@ -470,7 +468,7 @@ function update_visibility_main() {
 	showhide("ss_state2", (ssmode !== "0"));
 	showhide("ss_state3", (ssmode !== "0"));
 	showhide("game_alert", (ssmode == "3"));
-	showhide("help_mode", (ssmode !== "0"));
+	showhide("help_mode", (ssenable != "0"));
 	showhide("help_mode1", (ssmode == "1"));
 	showhide("help_mode2", (ssmode == "2"));
 	showhide("help_mode3", (ssmode == "3"));
@@ -876,7 +874,7 @@ function show_ss_node_info(){ //进入节点显示，编辑页面
 		$G("add_fun").style.display = "none";
 		$G("apply_button").style.display = "none";
 		$G("line_image1").style.display = "none";
-		$G("ss_node_list_table_th").style.display = "";
+		//$G("ss_node_list_table_th").style.display = "";
 		$G("ss_node_list_table_td").style.display = "";
 		$G("ss_node_list_table_btn").style.display = "";
 		$G("help_mode").style.display = "none";
@@ -1026,7 +1024,7 @@ function add_ss_node_conf(flag){ //点击添加按钮动作
     	}
 	}
     $j.ajax({
-        url: '/applydb.cgi?p=ss',
+        url: '/applydb.cgi?p=ssconf_basic',
         contentType: "application/x-www-form-urlencoded",
         dataType: 'text',
         data: $j.param(ns),
@@ -1047,7 +1045,7 @@ function add_ss_node_conf(flag){ //点击添加按钮动作
 				document.form.ss_node_table_rss_protocol.value = "origin";
 				document.form.ss_node_table_rss_obfs.value = "plain";
 				document.form.ss_node_table_koolgame_udp.value = "0";
-				updateSs_node_listView();
+				//updateSs_node_listView();
 			}
         }
     });
@@ -1070,14 +1068,14 @@ function refresh_table() {
 function refresh_html() {
 	confs = getAllConfigs();
 	var n = 0; for(var i in confs){n++;} //获取节点的数目
-	if(eval(n) > "12"){ //当节点数目大于12个的时候，显示为overflow，节点可以滚动
-		$G("ss_node_list_table_th").style.display = "";
+	if(eval(n) > "13"){ //当节点数目大于12个的时候，显示为overflow，节点可以滚动
 		if(isFirefox=navigator.userAgent.indexOf("Firefox")>0){ 
 			$G("ss_node_list_table_th").style.top = "354px";
 			$G("ss_node_list_table_td").style.top = "394px";
 			$G("ss_node_list_table_td").style.bottom = "-108px";
 			$G("ss_node_list_table_btn").style.bottom = "-290px";
 		}
+		$G("ss_node_list_table_th").style.display = "";
 		$G("ss_node_list_table_td").style.overflow = "auto";
 		$G("ss_node_list_table_td").style.position = "absolute";
 		$G("ss_node_list_table_btn").style.position = "absolute";
@@ -1088,7 +1086,7 @@ function refresh_html() {
 		$G("ss_node_list_table_td").style.overflow = "visible";
 		$G("ss_node_list_table_td").style.position = "static";
 		$G("ss_node_list_table_btn").style.position = "static";
-		$G("ss_node_list_table_main").style.margin = "10px 0px 0px 0px";
+		$G("ss_node_list_table_main").style.margin = "6px 0px 0px 0px";
 		$G("hide_when_folw").style.display = "";
 	}
 	var html = '';
@@ -1164,12 +1162,28 @@ function remove_running_node(){
 }
 
 function apply_this_ss_node(s) { //应用此节点
+	cancel_add_rule(); //隐藏节点编辑面板
+	$G("tablet_show").style.display = "";
+	$G("basic_show").style.display = "";
+	$G("apply_button").style.display = "";
+	$G("line_image1").style.display = "";
+	$G("ss_node_list_table_th").style.display = "none";
+	$G("ss_node_list_table_td").style.display = "none";
+	$G("ss_node_list_table_btn").style.display = "none";
+	$G("help_note_main").style.display = "";
+	$G("help_mode").style.display = "";
+	for (var i = 1; i < 5; i++){
+		showhide("help_mode" + i, (ssmode == i));
+	}
+	$G("KoolshareBottom_div").style.display = "";
+	//updateSs_node_listView(); //更新主面板内的节点
+	checkTime = 2001; //停止节点页面刷新
+    //ss_node_info_return();
     var node = $j(s).attr("id");
     var nodes = node.split("_");
     node = nodes[nodes.length - 1];
     var node_sel = node;
     var obj = ssconf_node2obj(node_sel);
-    ss_node_info_return();
     $G("ssconf_basic_node").value = node;
     update_ss_ui(obj);
     update_visibility_main();
@@ -1210,7 +1224,7 @@ function refresh_html1() {
 		$G("ss_node_list_table_td").style.position = "static";
 		$G("ss_node_list_table_btn").style.position = "static";
 		$G("ss_node_list_table_btn").style.width = "747px";
-		$G("ss_node_list_table_main").style.margin = "10px 0px 0px 0px";
+		$G("ss_node_list_table_main").style.margin = "6px 0px 0px 0px";
 		$G("hide_when_folw").style.display = "";
 		$G("ss_node_list_table_th").style.display = "none";
 	}
@@ -1231,7 +1245,7 @@ function refresh_html1() {
     	}else{
 		    html = html + '<td style="width:45px;"></td>';
     	}
-    	html = html + '<td id="ss_node_name_' + c["node"] + '" style="width:85px;">你猜' + c["node"] + '</td>';
+    	html = html + '<td id="ss_node_name_' + c["node"] + '" style="width:85px;">节点' + c["node"] + '</td>';
     	html = html + '<td id="ss_node_server_' + c["node"] + '" style="width:85px;">你猜' + c["node"] + '</td>';
     	html = html + '<td id="ss_node_port_' + c["node"] + '" style="width:37px;">23333</td>';
     	html = html + '<td id="ss_node_method_' + c["node"] + '" style="width:75px;">666666</td>';
@@ -1299,7 +1313,7 @@ function remove_conf_table(o) { //删除节点功能
         },
         success: function(response) {
             refresh_table();
-            updateSs_node_listView();
+            //updateSs_node_listView();
         }
     });
 }
@@ -1567,16 +1581,17 @@ function write_ss_install_status(){
 			$j("#ss_install_show").html("<i>正在检查是否有更新~</i>");
 			$G('update_button').style.display = "none";
 		} else if (db_ss['ss_basic_install_status'] == "7"){
-			$j("#ss_install_show").html("<i>检测更新错误！</i>");
+			$j("#ss_install_show").html("<i>主服务器检测更新错误！</i>");
 		} else if (db_ss['ss_basic_install_status'] == "8"){
 			$j("#ss_install_show").html("<i>更换备用更新服务器1！</i>");
 		} else if (db_ss['ss_basic_install_status'] == "0"){
 			$j("#ss_install_show").html("");
-			//$G('update_button').style.display = "";
 			$G('ss_version_show').style.display = "";
-		}else {
+		} else if (db_ss['ss_basic_install_status'] == "9"){
+			$j("#ss_install_show").html("<i>备用服务器检测更新错误！</i>");
+			$G('update_button').style.display = "";
+		} else {
 			$j("#ss_install_show").html("");
-			//$G('update_button').style.display = "";
 			$G('ss_version_show').style.display = "";
 		}
 		setTimeout("write_ss_install_status()", 2000);
@@ -1635,8 +1650,12 @@ function toggle_switch(){
 		$G("basic_show").style.display = "none";
 		$G("apply_button").style.display = "none";
 		$G("ss_node_list_table_th").style.display = "none";
-		$G("help_mode1").style.display = "none";
-				
+		$G("help_mode").style.display = "none";
+		$G("help_mode1").style.display = "none";		
+		$G("help_mode2").style.display = "none";		
+		$G("help_mode3").style.display = "none";		
+		$G("help_mode4").style.display = "none";		
+		$G("help_mode5").style.display = "none";		
 	}
 }
 
@@ -1645,7 +1664,7 @@ function toggle_func(){
 	ssmode = $G("ss_basic_mode").value;
 	document.form.ss_basic_action.value = 1;
 	$G("help_note_main").style.display = "";
-	$G("help_mode1").style.display = "";
+	//$G("help_mode1").style.display = "";
 	$j('.show-btn1').addClass('active');
 	$j(".show-btn1").click(
 	function(){
@@ -2003,21 +2022,23 @@ function checkCmdRet(){
 				retArea.value = response.replace("XU6J03M6", " ");
 				//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
 				retArea.scrollTop = retArea.scrollHeight;
-				return false;
+				//return false;
 			}
 			
-			if(_responseLen == response.length)
+			if(_responseLen == response.length){
 				noChange++;
-			else
+			}else{
 				noChange = 0;
-				
+			}
+
 			if(noChange > 10){
 				$G("loadingIcon").style.display = "none";
 				//retArea.scrollTop = retArea.scrollHeight;
-				setTimeout("checkCmdRet();", 1000);
+				//setTimeout("checkCmdRet();", 2000);
+				return false;
 			}else{
 				$G("loadingIcon").style.display = "";
-				setTimeout("checkCmdRet();", 1000);
+				setTimeout("checkCmdRet();", 500);
 			}
 			
 			retArea.value = response;
@@ -2112,12 +2133,12 @@ function checkCmdRet(){
 																</div>
 															</label>
 														</div>
-														<div id="update_button" style="padding-top:5px;margin-left:100px;margin-top:-38px;float: left;">
+														<div id="update_button" style="padding-top:5px;margin-left:90px;margin-top:-38px;float: left;">
 															<button id="updateBtn" class="button_gen" onclick="update_ss();">检查并更新</button>
 															<a style="margin-left: 170px;" href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt" target="_blank"><em><u>[ 更新日志 ]</u></em></a>
 														</div>
-														<div id="ss_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i></div>
-														<div id="ss_install_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"></div>	
+														<div id="ss_version_show" style="padding-top:5px;margin-left:220px;margin-top:0px;"><i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i></div>
+														<div id="ss_install_show" style="padding-top:5px;margin-left:220px;margin-top:0px;"></div>	
 													</td>
 												</tr>
                                     		</table>
@@ -2467,7 +2488,7 @@ function checkCmdRet(){
 											</table>
 										</div>
 										<div id="ss_node_list_table_btn" style="display: none;position: static;width: 747px; bottom: 0px;">
-											<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
+											<table style="margin:7px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
 													<th width="20%">导出恢复
 													</th>

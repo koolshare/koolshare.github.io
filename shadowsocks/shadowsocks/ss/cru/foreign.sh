@@ -9,4 +9,4 @@ else
 fi
 
 # nvram set ss_foreign_state="$log"
-dbus ram ss_basic_state_foreign="$log"
+dbus set ss_basic_state_foreign="$log"

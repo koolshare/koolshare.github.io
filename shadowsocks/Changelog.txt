@@ -1,5 +1,15 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+2.7 
+   - fix	修复可能导致skipd停止运行的bug，此bug可能导致页面无响应，web无妨访问（待观察）;
+   - fix	修复ss关闭状态下，显示简要说明的问题;
+   - fix	修复节点列表高度刷新问题;
+   - fix	修复点击apply按钮，实际不会填写的问题;
+   - fix	修复更新失败后，更新按钮消失的问题;
+   - update	修复日志显示有时不刷新的问题;
+   - update	更新时显示中文说明;
+   - update	更新功能检测在线版本超时更改为5秒.  
+
 2.6 
    - fix	fix back science bottom changs layout of ping function aera
    - fix	fix change ss node and apply won't work
