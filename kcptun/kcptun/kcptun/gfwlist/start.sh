@@ -345,12 +345,14 @@ Start_kcptun(){
 			sh /koolshare/perp/perp.sh start
 		fi
 		echo $(date): start kcptun with guardian...
+		export GOGC=40		
 		perpctl A kcptun >/dev/null 2>&1
 		#/koolshare/bin/perpctl A kcptun
 		echo $(date): done
 		echo $(date):
 	else
 		echo $(date): start kcptun without guardian...
+		export GOGC=40		
 		start-stop-daemon -S -q -b -m -p /tmp/var/kcptun.pid -x /koolshare/bin/kcp_router -- -c /koolshare/kcptun/kcptun_config.json
 		echo $(date): done
 		echo $(date):
@@ -452,6 +454,7 @@ restart_addon)
 				sh /koolshare/perp/perp.sh stop
 				sh /koolshare/perp/perp.sh start
 			fi
+			export GOGC=40		
 			perpctl A kcptun >/dev/null 2>&1
 			echo $(date): done
 			echo $(date):
@@ -461,6 +464,7 @@ restart_addon)
 			echo $(date): start kcptun without guardian...
 			perpctl X kcptun >/dev/null 2>&1
 			killall kcp_router >/dev/null 2>&1
+			export GOGC=40		
 			start-stop-daemon -S -q -b -m -p /tmp/var/kcptun.pid -x /koolshare/bin/kcp_router -- -c /koolshare/kcptun/kcptun_config.json
 			echo $(date): done
 			echo $(date):

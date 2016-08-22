@@ -61,14 +61,14 @@
             "version": "1.8"
         }, 
         {
-            "build_date": "2016-08-17_01:03:05", 
+            "build_date": "2016-08-22_11:00:38", 
             "description": "基于kcp协议的udp网络加速", 
             "home_url": "Module_kcptun.asp", 
-            "md5": "fd1c8332d19f71a5c10025da1d651bdd", 
+            "md5": "4961769aaf2c3b64e6ca68a509ba3551", 
             "name": "kcptun", 
             "tar_url": "kcptun/kcptun.tar.gz", 
             "title": "kcptun", 
-            "version": "1.6"
+            "version": "1.7"
         }, 
         {
             "build_date": "2016-05-09_23:58:50", 

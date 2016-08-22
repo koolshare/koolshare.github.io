@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin kcptun Changelog
 ===========================================
+1.7
+   - fix	use GOGC=40 to limit the mem usage
+   - update	use cdn list in shadowsocks for better cdn
+
 1.6
    - fix	fix kcptun won't start after reboot
 
