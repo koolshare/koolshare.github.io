@@ -1,5 +1,21 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+
+2.8
+   - fix	修复更新完毕后，实际是重启的附加功能，而不是整个ss服务;
+   - fix	(回滚)使用dbus ram 写入状态数据，减少jffs写入量;
+   - fix	修复gfwlist模式下显示了cdn名单数量的bug;
+   - fix	修复新增加的节点，马上点击应用，不会选择则点的问题;
+   - fix	修复一个可能导致skipd死掉的问题;;
+   - fix	修复系统日志每隔5秒显示sync tick的问题;
+   - fix	修复当有自定义名单的时候，点击更新规则按钮，网页js代码错误，界面配置丢失的问题;
+   - fix	修复详细说明文字在Firefox中的错位未问题;
+   - update	同步shadowsocks-libev最新代码;
+   - update	优化节点为域名时的DNS解析（待观察，仍然建议使用IP地址）;
+   - update	更改chromecast支持功能为默认开启;
+   - update	规则更新采用中文日志;
+   - update	去掉版本号旁更新状态显示（因为现在有更好的日志显示了）.
+
 2.7 
    - fix	修复可能导致skipd停止运行的bug，此bug可能导致页面无响应，web无妨访问（待观察）;
    - fix	修复ss关闭状态下，显示简要说明的问题;

@@ -7,7 +7,8 @@ source /koolshare/scripts/base.sh
 #--------------------------------------------------------------------------------------
 
 resolv_server_ip(){
-	server_ip=`resolvip $ss_basic_server`
+	#server_ip=`resolvip $ss_basic_server`
+	server_ip=`nslookup "$ss_basic_server" 114.114.114.114 | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
 	if [ -z "$shadowsocks_server_ip" ];then
 	        if [ ! -z "$server_ip" ];then
 	                export shadowsocks_server_ip="$server_ip"
@@ -567,8 +568,8 @@ restart_dnsmasq(){
 }
 
 remove_status(){
-	dbus remove ss_basic_state_china
-	dbus remove ss_basic_state_foreign
+	dbus ram ss_basic_state_china="Waiting for first refresh..."
+	dbus ram ss_basic_state_foreign="Waiting for first refresh..."
 }
 
 case $1 in

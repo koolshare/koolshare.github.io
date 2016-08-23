@@ -504,8 +504,8 @@ restart_dnsmasq(){
 }
 
 remove_status(){
-	dbus remove ss_basic_state_china
-	dbus remove ss_basic_state_foreign
+	dbus ram ss_basic_state_china="Waiting for first refresh..."
+	dbus ram ss_basic_state_foreign="Waiting for first refresh..."
 }
 
 

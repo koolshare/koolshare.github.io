@@ -174,6 +174,10 @@ input[type=button]:focus {
 	margin-top:50px;
 	float:right;
 }
+#iframe1{
+   font-family: sans-serif;
+   color: red;
+}
 </style>
 <script>
 var socks5 = 0
@@ -221,6 +225,7 @@ function init() {
 	}
 	var retArea = $G('log_content');
 	retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
+	//setTimeout(setIframeSrc, 5000);	
 }
 
 function detect_kcptun(){
@@ -496,6 +501,7 @@ function update_visibility_tab4(){
 	showhide("chromecast1", (crst == "0"));
 	showhide("gfw_number", (ssmode == "1"));
 	showhide("chn_number", (ssmode == "2" || ssmode == "3"));
+	showhide("cdn_number", (ssmode == "2" || ssmode == "3"));
 	showhide("ss_basic_rule_update_time", (sru == "1"));
 	showhide("update_choose", (sru == "1"));
 	showhide("ss_basic_black_lan", (slc == "1"));
@@ -630,15 +636,15 @@ function checkSSStatus() {
             setTimeout("checkSSStatus();", refreshRate * 1000);
         },
 		success: function() {
-			if (db_ss['ss_basic_state_foreign'] == undefined){
+			if (db_ss_basic_state_foreign['ss_basic_state_foreign'] == undefined){
 				$G("ss_state2").innerHTML = "国外连接 - " + "Waiting for first refresh...";
         		$G("ss_state3").innerHTML = "国内连接 - " + "Waiting for first refresh...";
         		refreshRate = getRefresh();
 				if (refreshRate > 0)
         		setTimeout("checkSSStatus();", refreshRate * 1000);
 			} else {
-				$j("#ss_state2").html("国外连接 - " + db_ss['ss_basic_state_foreign']);
-				$j("#ss_state3").html("国内连接 - " + db_ss['ss_basic_state_china']);
+				$j("#ss_state2").html("国外连接 - " + db_ss_basic_state_foreign['ss_basic_state_foreign']);
+				$j("#ss_state3").html("国内连接 - " + db_ss_basic_state_china['ss_basic_state_china']);
 				$G('update_button').style.display = "";
 				refreshRate = getRefresh();
 				if (refreshRate > 0)
@@ -652,18 +658,7 @@ function checkSSStatus() {
 	}
 }
 
-function updatelist() {
-    $j.ajax({
-        url: 'apply.cgi?current_page=Main_Ss_Update.asp&next_page=Main_Ss_Content.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=update.sh&firmver=3.0.0.4',
-        dataType: 'html',
-        error: function(xhr) {},
-        success: function(response) {
-            if (response == "ok") {
-                show_log_info();
-            }
-        }
-    });
-}
+
 
 function ssconf_node2obj(node_sel) {
     var p = "ssconf_basic";
@@ -1176,6 +1171,28 @@ function apply_this_ss_node(s) { //应用此节点
 		showhide("help_mode" + i, (ssmode == i));
 	}
 	$G("KoolshareBottom_div").style.display = "";
+
+    confs = getAllConfigs();
+    
+    var option = $j("#ssconf_basic_node");
+    option.find('option').remove().end();
+    for (var field in confs) {
+        var c = confs[field];
+        option.append($j("<option>", {
+            value: field,
+            text: c.name
+        }));
+    }
+    if (node_global_max > 0) {
+        var node_sel = "1";
+        if (typeof db_ss.ssconf_basic_node != "undefined") {
+            node_sel = db_ss.ssconf_basic_node;
+        }
+        option.val(node_sel);
+        //ss_node_sel();
+    }
+
+	
 	//updateSs_node_listView(); //更新主面板内的节点
 	checkTime = 2001; //停止节点页面刷新
     //ss_node_info_return();
@@ -1212,6 +1229,9 @@ function hide_text() {
 function refresh_html1() {
 	confs = getAllConfigs();
 	var n = 0; for(var i in confs){n++;} //获取节点的数目
+
+	var random = parseInt(Math.random()*9);
+	var phrase = ["看你妹", "你猜", "你猜不到", "我是马赛克", "我是节点", "火星节点", "引力波节点"];
 	if(eval(n) > "12"){ //当节点数目大于12个的时候，显示为overflow，节点可以滚动
 		$G("ss_node_list_table_td").style.overflow = "auto";
 		$G("ss_node_list_table_td").style.position = "absolute";
@@ -1245,7 +1265,7 @@ function refresh_html1() {
     	}else{
 		    html = html + '<td style="width:45px;"></td>';
     	}
-    	html = html + '<td id="ss_node_name_' + c["node"] + '" style="width:85px;">节点' + c["node"] + '</td>';
+    	html = html + '<td id="ss_node_name_' + c["node"] + '" style="width:85px;">' + phrase[random] + c["node"] + '</td>';
     	html = html + '<td id="ss_node_server_' + c["node"] + '" style="width:85px;">你猜' + c["node"] + '</td>';
     	html = html + '<td id="ss_node_port_' + c["node"] + '" style="width:37px;">23333</td>';
     	html = html + '<td id="ss_node_method_' + c["node"] + '" style="width:75px;">666666</td>';
@@ -1495,6 +1515,18 @@ function refresh_ss_node_list(){
 	}
 }
 
+
+function updatelist(){
+    document.form.SystemCmd.value = "ss_rule_update.sh";
+	document.form.action_mode.value = ' Refresh ';
+	if (validForm()){
+		document.form.submit();
+		refresh_ss_node_list();
+		show_log_info();
+	}
+}
+
+
 function createCookie(name, value, days) {
     var expires;
     if (days) {
@@ -1552,47 +1584,17 @@ function version_show(){
 function write_ss_install_status(){
 		$j.ajax({
 		type: "get",
-		url: "dbconf?p=ss",
+		url: "dbconf?p=ss_basic_install_status,ss_basic_state_china,ss_basic_state_foreign",
 		dataType: "script",
 		success: function() {
-		if (db_ss['ss_basic_install_status'] == "1"){
-			$j("#ss_install_show").html("<i>正在下载更新...</i>");
-			$G('ss_version_show').style.display = "none";
-		} else if (db_ss['ss_basic_install_status'] == "2"){
-			$j("#ss_install_show").html("<i>正在安装更新...</i>");
-			$G('ss_version_show').style.display = "none";
-		} else if (db_ss['ss_basic_install_status'] == "3"){
-			$j("#ss_install_show").html("<i>安装更新成功，5秒自动重启SS！</i>");
-			$G('ss_version_show').style.display = "none";
-			version_show();
+		if (db_ss['ss_basic_install_status'] == "3"){
+			document.form.ss_basic_action.value = 1;
 			setTimeout("write_ss_install_status()", 200000);
 			setTimeout("onSubmitCtrl();", 4000);
-		} else if (db_ss['ss_basic_install_status'] == "4"){
-			$j("#ss_install_show").html("<i>下载文件校验不一致！</i>");
-			$G('ss_version_show').style.display = "none";
 		} else if (db_ss['ss_basic_install_status'] == "5"){
-			$j("#ss_install_show").html("<i>然而并没有更新！</i>");
-			$G('ss_version_show').style.display = "none";
 			$G('update_button').style.display = "";
-			global_status_enable=true;
-			checkSSStatus();
-		} else if (db_ss['ss_basic_install_status'] == "6"){
-			$G('ss_version_show').style.display = "none";
-			$j("#ss_install_show").html("<i>正在检查是否有更新~</i>");
-			$G('update_button').style.display = "none";
-		} else if (db_ss['ss_basic_install_status'] == "7"){
-			$j("#ss_install_show").html("<i>主服务器检测更新错误！</i>");
-		} else if (db_ss['ss_basic_install_status'] == "8"){
-			$j("#ss_install_show").html("<i>更换备用更新服务器1！</i>");
 		} else if (db_ss['ss_basic_install_status'] == "0"){
-			$j("#ss_install_show").html("");
-			$G('ss_version_show').style.display = "";
-		} else if (db_ss['ss_basic_install_status'] == "9"){
-			$j("#ss_install_show").html("<i>备用服务器检测更新错误！</i>");
 			$G('update_button').style.display = "";
-		} else {
-			$j("#ss_install_show").html("");
-			$G('ss_version_show').style.display = "";
 		}
 		setTimeout("write_ss_install_status()", 2000);
 		}
@@ -1600,15 +1602,12 @@ function write_ss_install_status(){
 	}
 
 function update_ss(){
-	global_status_enable=false;
-	checkSSStatus();
-	//document.form.ss_basic_update_check.value = 1;
+	$G('update_button').style.display = "none";
 	document.form.action_mode.value = ' Refresh ';
     document.form.SystemCmd.value = "ss_update.sh";
 	if (validForm()){
 		document.form.submit();
 	}
-	$G("basic_show").style.display = "none";
 	show_log_info();
 }
 function buildswitch(){
@@ -1655,7 +1654,7 @@ function toggle_switch(){
 		$G("help_mode2").style.display = "none";		
 		$G("help_mode3").style.display = "none";		
 		$G("help_mode4").style.display = "none";		
-		$G("help_mode5").style.display = "none";		
+		$G("help_mode5").style.display = "none";	
 	}
 }
 
@@ -2049,6 +2048,25 @@ function checkCmdRet(){
 	});
 }
 
+/*
+function setIframeSrc() {
+    var s1 = "http://1212.ip138.com/ic.asp";
+    var s2 = "http://x302.rashost.com/ip.php";
+    var s3 = "http://ip111cn.appspot.com/";
+    var iframe1 = document.getElementById('iframe1');
+    var iframe2 = document.getElementById('iframe2');
+    var iframe3 = document.getElementById('iframe3');
+    if ( - 1 == navigator.userAgent.indexOf("MSIE")) {
+        iframe1.src = s1;
+        iframe2.src = s2;
+        iframe3.src = s3;
+    } else {
+        iframe1.location = s1;
+        iframe2.location = s2;
+        iframe3.location = s3;
+    }
+}
+*/
 </script>
 </head>
 <body onload="init();">
@@ -3170,7 +3188,7 @@ taobao.com
 													<td>
 														<select id="ss_basic_chromecast" name="ss_basic_chromecast" class="ssconfig input_option" onchange="update_visibility_tab4();" >
 															<option value="0">禁用</option>
-															<option value="1">开启</option>
+															<option value="1" selected>开启</option>
 														</select>
 															<span id="chromecast1"> 建议开启chromecast支持 </span>
 													</td>
@@ -3218,7 +3236,6 @@ taobao.com
 																<input type="hidden" id="hd_ss_basic_cdn_update" name="ss_basic_cdn_update" value=""/>
 															</a>
 																<input id="update_now" onclick="updatelist()" style="font-family:'Courier New'; Courier, mono; font-size:11px;" type="submit" value="立即更新" />
-															<a href="http://192.168.1.1/Main_SsLog_Content.asp" target="_blank"></a>
 													</td>
 												</tr>
 												<tr id="ss_lan_control">
@@ -3311,8 +3328,33 @@ taobao.com
 														<p><b> 缺点：</b>国内网站全部走ss，迅雷下载和BT全部走SS流量。</p>
 													</td>
 												</tr>
-											</table>									
+											</table>
+											<!-- not for this version
+											<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="Routing_rules_table1">
+												<thead>
+												<tr>
+													<td colspan="2">双线双拨策略路由状态</td>
+												</tr>
+												</thead>
+												<tr>
+													<th>国内连接</th>
+													<td>
+														<iframe id="iframe1" src="" width="100%" height="22" scrolling="no" frameborder="0" marginheight="3" marginwidth="0"></iframe>
+													</td>
+												<tr>
+													<th>国外连接</th>
+													<td >
+														<iframe id="iframe2" src="" width="100%" height="22" scrolling="no" frameborder="0" marginheight="3" marginwidth="0"></iframe>
+													</td>
+												<tr>
+													<th>谷歌网站</th>
+													<td>
+														<iframe id="iframe3" src="" width="100%" height="22" scrolling="no" frameborder="0" marginheight="3" marginwidth="0"></iframe>
+													</td>
+												</tr>
+											</table>
 										</div>
+										-->
 										<div id="apply_button" class="apply_gen">
 											<button id="cmdBtn" class="button_gen" onclick="onSubmitCtrl()">提交</button>
 										</div>
@@ -3324,7 +3366,7 @@ taobao.com
 										<div id="help_note_game" class="titledropdownbtn" style="cursor:pointer;padding: 0px 2px;display: none;" onclick="openShutManager(this,'NoteBox_game_dns',false,'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击关闭详细说明','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明')" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明</div>
 										<div id="help_note_gameV2" class="titledropdownbtn" style="cursor:pointer;padding: 0px 2px;display: none;" onclick="openShutManager(this,'NoteBox_gameV2_dns',false,'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击关闭详细说明','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明')" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明</div>
 										<div id="help_note_overall" class="titledropdownbtn" style="cursor:pointer;padding: 0px 2px;display: none;" onclick="openShutManager(this,'NoteBox_overall_dns',false,'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击关闭详细说明','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明')" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明</div>
-										<div id="NoteBox_main" style="display:none">
+										<div id="NoteBox_main" style="display:none;margin-left:0px;" >
 												<h2>特别注意事项</h2>
 													<li>启用服务后建议刷新电脑后台缓存，windows下运行CMD，输入 <b>ipconfig /flushdns </b> 能更快看到代理效果。</li>
 													<li>请勿在你的设备上定义第三方DNS，如果你曾经定义过翻墙host文件，也请删掉这些host。</li>

@@ -29,6 +29,7 @@ install_ss(){
 	echo $(date): 一点点清理工作... >> /tmp/syscmd.log
 	rm -rf /tmp/shadowsocks* >/dev/null 2>&1
 	echo $(date): 安装更新成功，你为什么这么屌？... >> /tmp/syscmd.log
+	echo $(date): 请等待5秒，界面将自动重启... >> /tmp/syscmd.log
 	exit
 }
 
@@ -54,7 +55,7 @@ update_ss(){
 		echo $(date): 检测到主服务器在线版本号：$ss_basic_version_web1 >> /tmp/syscmd.log
 		dbus set ss_basic_version_web=$ss_basic_version_web1
 		if [ "$ss_basic_version_local" != "$ss_basic_version_web1" ];then
-		echo $(date): 主服务器在线版本号："$ss_basic_version_web1" 和本地版本号："ss_basic_version_local" 不同！ >> /tmp/syscmd.log
+		echo $(date): 主服务器在线版本号："$ss_basic_version_web1" 和本地版本号："$ss_basic_version_local" 不同！ >> /tmp/syscmd.log
 			dbus set ss_basic_install_status="1"
 			cd /tmp
 			md5_web1=`curl -s "$main_url"/version | sed -n 2p`
@@ -75,7 +76,7 @@ update_ss(){
 				install_ss
 			fi
 		else
-			echo $(date): 主服务器在线版本号："$ss_basic_version_web1" 和本地版本号："ss_basic_version_local" 相同！ >> /tmp/syscmd.log
+			echo $(date): 主服务器在线版本号："$ss_basic_version_web1" 和本地版本号："$ss_basic_version_local" 相同！ >> /tmp/syscmd.log
 			dbus set ss_basic_install_status="5"
 			sleep 1
 			echo $(date): 那还更新个毛啊，关闭更新进程! >> /tmp/syscmd.log

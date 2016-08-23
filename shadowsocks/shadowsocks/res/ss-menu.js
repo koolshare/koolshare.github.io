@@ -174,7 +174,10 @@ function openShutManager(oSourceObj, oTargetObj, shutAble, oOpenTip, oShutTip) {
 			sourceObj.innerHTML = shutTip;
 		}
 	} else {
-		targetObj.style.display = "block";
+		if(isFirefox=navigator.userAgent.indexOf("Firefox")>0){
+			$G(oTargetObj).style.margin = "0px 0px 0px 15px";
+		}
+			targetObj.style.display = "block";
 		if (openTip && shutTip) {
 		    sourceObj.innerHTML = openTip;
 		}

@@ -29,5 +29,5 @@ chmod 755 /koolshare/bin/*
 
 # add icon into softerware center
 dbus set softcenter_module_koolsocks_install=1
-dbus set softcenter_module_koolsocks_md5=4d22f06e6daf0a7cec8aa4892ba44daa
-dbus set softcenter_module_koolsocks_version=1.2
+
+dbus set softcenter_module_koolsocks_version=1.3
