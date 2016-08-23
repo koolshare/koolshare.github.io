@@ -144,6 +144,15 @@
     .install-status-1 .update-btn{
         display: none;
     }
+    .install-status-4 .uninstall-btn{
+        display: none;
+    }
+    .install-status-4 .install-btn{
+        display: none;
+    }
+    .install-status-4 .update-btn{
+        display: none;
+    }
     .install-status-2 .uninstall-btn{
         display: block;
         width: 40%;
@@ -472,6 +481,16 @@ function softceterInitData(data) {
                     }
                 }
             });
+            //shadowsocks 将默认安装在软件中心
+            result["koolsocks"] = {};
+            result["koolsocks"].name = "koolsocks";
+            result["koolsocks"].title = "shadowsocks";
+            result["koolsocks"].install = "4";
+            result["koolsocks"].home_url = "Main_Ss_Content.asp";
+            result["koolsocks"].description = "科学上网";
+            result["koolsocks"].version = "1.3";
+            result["koolsocks"].order = "1";
+            return result;
             return result;
         }
         //将本地和远程进行一次对比合并
