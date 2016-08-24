@@ -1,4 +1,5 @@
 {
-"title":"hello, there!",
-"content":"what you see here is the push message we would like to see"
+"title":"<em>梅林改版固件&nbsp;-&nbsp;软件中心</em>",
+"content1":"此处从软件中心1.1.1开始为大家推送一些相关的消息。",
+"content2":"近日出现软件中心未安装为0，检测不到在线版本号等问题，请大家不要惊慌，这是国内中转服务器出现问题所致，请等待恢复。"
 }
