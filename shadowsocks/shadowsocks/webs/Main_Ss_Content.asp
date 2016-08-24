@@ -67,7 +67,7 @@ input[type=button]:focus {
 	outline: none;
 }
 .contentM_qis {
-	position: fixed;
+	position: absolute;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
@@ -1028,6 +1028,9 @@ function add_ss_node_conf(flag){ //点击添加按钮动作
         },
         success: function(response) {
             refresh_table();
+            //尝试将table拉动到最下方
+            var nodeaera = $G('ss_node_list_table_td');
+			nodeaera.scrollTop = nodeaera.scrollHeight;
 			document.form.ss_node_table_server.value = ""; //选择连续添加的时候，只清空服务器一栏
 			if(($G("continue_add_box").checked) == false){ //不选择连续添加的时候，清空其他数据
 				document.form.ss_node_table_name.value = "";
@@ -1105,11 +1108,11 @@ function refresh_html() {
     	html = html + '<td id="ss_node_server_' + c["node"] + '" style="width:85px;">' + c["server"] + '</td>';
     	html = html + '<td id="ss_node_port_' + c["node"] + '" style="width:37px;">' + c["port"] + '</td>';
     	html = html + '<td id="ss_node_method_' + c["node"] + '" style="width:75px;">' + c["method"] + '</td>';
-		html = html + '<td id="ss_node_ping_' + c["node"] + '" style="width:78px;" id="ping_test_td_' + c["node"] + '" style="text-align: center;">' + c["ping"] + '</td>';
+		html = html + '<td class="data_ping" id="ss_node_ping_' + c["node"] + '" style="width:78px;" id="ping_test_td_' + c["node"] + '" style="text-align: center;">' + c["ping"] + '</td>';
 		if(c["mode"] == 4){
-   			html = html + '<td id="ss_node_webtest_' + c["node"] + '" style="width:36px;" id="web_test_td_' +c["node"] + '">' + '不支持' + '</td>';
+   			html = html + '<td class="data_webtest" id="ss_node_webtest_' + c["node"] + '" style="width:36px;" id="web_test_td_' +c["node"] + '">' + '不支持' + '</td>';
 		}else{
-			html = html + '<td id="ss_node_webtest_' + c["node"] + '" style="width:36px;" id="web_test_td_' +c["node"] + '">' + c["webtest"] + '</td>';
+			html = html + '<td class="data_webtest" id="ss_node_webtest_' + c["node"] + '" style="width:36px;" id="web_test_td_' +c["node"] + '">' + c["webtest"] + '</td>';
 		}
     	html = html + '<td style="width:33px;">'
     	html = html + '<input style="margin-left:-3px;" id="dd_node_' + c["node"] + '" class="edit_btn" type="button" onclick="return edit_conf_table(this);" value="">'
@@ -1229,8 +1232,7 @@ function hide_text() {
 function refresh_html1() {
 	confs = getAllConfigs();
 	var n = 0; for(var i in confs){n++;} //获取节点的数目
-
-	var random = parseInt(Math.random()*9);
+	var random = parseInt(Math.random()*7);
 	var phrase = ["看你妹", "你猜", "你猜不到", "我是马赛克", "我是节点", "火星节点", "引力波节点"];
 	if(eval(n) > "12"){ //当节点数目大于12个的时候，显示为overflow，节点可以滚动
 		$G("ss_node_list_table_td").style.overflow = "auto";
@@ -1489,7 +1491,7 @@ function ping_test(){
 	if (validForm()){
 		document.form.submit();
 		checkTime = 0;
-		refresh_ss_node_list();
+		refresh_ss_node_list_ping();
 	}
 }
 
@@ -1501,19 +1503,59 @@ function web_test(){
 	if (validForm()){
 		document.form.submit();
 		checkTime = 0;
-		refresh_ss_node_list();
+		refresh_ss_node_list_webtest();
 	}
 }
 
+
+var ping_flag;
 var checkTime = 0;
-function refresh_ss_node_list(){
+function refresh_ss_node_list_ping(){
 	if (checkTime < 200){
 		checkTime++;
-		//updateSs_node_listView();
 		refresh_table();
-		setTimeout("refresh_ss_node_list()", 1000);
+		setTimeout("refresh_ss_node_list_ping()", 1000);
+	}
+	if (checkTime > 4){
+		confs = getAllConfigs();
+		var n = 0; for(var i in confs){n++;} //获取节点的数目
+		var ping_flag = 0;
+    	for (var field in confs) {
+    	    var c = confs[field].ping;
+				if(c != "" ){
+					ping_flag++;
+				}
+			}
+		if (ping_flag == eval(n)){ //当ping被填满时，停止刷新
+			checkTime = 2001;
+		}
 	}
 }
+
+var webtest_flag;
+function refresh_ss_node_list_webtest(){
+	if (checkTime < 200){
+		checkTime++;
+		refresh_table();
+		setTimeout("refresh_ss_node_list_webtest()", 3000); //ping 出结果较慢，3秒刷新一次
+	}
+	if (checkTime > 2){
+		confs = getAllConfigs();
+		var n = 0; for(var i in confs){n++;} //获取节点的数目
+		var webtest_flag = 0;
+    	for (var field in confs) {
+    	    var c = confs[field].webtest;
+				if(c != "" ){
+					webtest_flag++;
+				}
+			}
+		if (webtest_flag == eval(n)){ //当ping被填满时，停止刷新
+			checkTime = 2001;
+		}
+	}
+}
+
+
 
 
 function updatelist(){
@@ -1999,6 +2041,8 @@ function return_basic(){
 		$j('.show-btn2').removeClass('active');
 		$j('.show-btn3').removeClass('active');
 		$j('.show-btn4').removeClass('active');
+		$j("#cmdBtn").html("提交");
+		document.form.ss_basic_action.value = 1;
 		update_visibility_main();
 }
 
@@ -2190,7 +2234,7 @@ function setIframeSrc() {
 										</div>
 
 
-										<div id="vpnc_settings"  class="contentM_qis" style="box-shadow: 3px 3px 10px #000;margin-top: -30px;">
+										<div id="vpnc_settings"  class="contentM_qis" style="box-shadow: 3px 3px 10px #000;margin-top: -65px;">
 											<table class="QISform_wireless" border=0 align="center" cellpadding="5" cellspacing="0">
 												<tr style="height:32px;">
 													<td>		
