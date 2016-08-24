@@ -1629,13 +1629,13 @@ function write_ss_install_status(){
 		url: "dbconf?p=ss_basic_install_status,ss_basic_state_china,ss_basic_state_foreign",
 		dataType: "script",
 		success: function() {
-		if (db_ss['ss_basic_install_status'] == "3"){
+		if (db_ss_basic_install_status['ss_basic_install_status'] == "3"){
 			document.form.ss_basic_action.value = 1;
 			setTimeout("write_ss_install_status()", 200000);
 			setTimeout("onSubmitCtrl();", 4000);
-		} else if (db_ss['ss_basic_install_status'] == "5"){
+		} else if (db_ss_basic_install_status['ss_basic_install_status'] == "5"){
 			$G('update_button').style.display = "";
-		} else if (db_ss['ss_basic_install_status'] == "0"){
+		} else if (db_ss_basic_install_status['ss_basic_install_status'] == "0"){
 			$G('update_button').style.display = "";
 		}
 		setTimeout("write_ss_install_status()", 2000);

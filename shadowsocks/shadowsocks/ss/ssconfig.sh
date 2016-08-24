@@ -22,9 +22,9 @@ install_ss(){
 	echo $(date): 开始安装更新文件... >> /tmp/syscmd.log
 	/tmp/shadowsocks/install.sh
 	dbus set ss_basic_version_local=$ss_basic_version_web1
-	sleep 2
+	sleep 1
 	dbus set ss_basic_install_status="3"
-	sleep 2
+	sleep 1
 	dbus set ss_basic_install_status="0"
 	echo $(date): 一点点清理工作... >> /tmp/syscmd.log
 	rm -rf /tmp/shadowsocks* >/dev/null 2>&1

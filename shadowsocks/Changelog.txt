@@ -1,6 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 
+2.8.2
+   - fix	fix ss web won't restart after update success
+
 2.8.1
     说明	此次更新全部为前端更新，不涉及后台脚本与逻辑.
    - fix	修复点击黑科技按钮节点名变成undefined；
