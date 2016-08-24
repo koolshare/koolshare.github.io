@@ -1,4 +1,4 @@
 {
-"version":"1.1.0",
-"md5":"54fb5115b8266d202bb76acb49fab88c"
+"version":"1.1.1",
+"md5":"41b0f71c3c1c16e42e441fce13fe0197"
 }
