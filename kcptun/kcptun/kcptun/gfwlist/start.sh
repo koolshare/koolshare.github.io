@@ -385,6 +385,11 @@ restart_dnsmasq(){
 	echo $(date):
 }
 
+remove_status(){
+	dbus ram ss_basic_state_china="Waiting for first refresh..."
+	dbus ram ss_basic_state_foreign="Waiting for first refresh..."
+}
+
 case $1 in
 start_all)
 	#KCP_basic_action=0 应用所有设置
@@ -400,8 +405,7 @@ start_all)
 	Start_kcptun
 	load_nat
 	restart_dnsmasq
-	dbus remove ss_basic_state_china
-	dbus remove ss_basic_state_foreign
+	remove_status
 	nvram set KCP_mode=1
 	nvram commit
 	echo $(date): -------------------- kcptu gfwlist mode Started -------------------------
@@ -415,8 +419,7 @@ restart_dns)
 	ln_custom_conf
 	start_dns
 	restart_dnsmasq
-	dbus remove ss_basic_state_china
-	dbus remove ss_basic_state_foreign
+	remove_status
 	echo $(date): -------------------------- dns Restarted --------------------------------
 	;;
 restart_wb_list)
@@ -430,8 +433,7 @@ restart_wb_list)
 	ln_custom_conf 
 	sh /koolshare/kcptun/gfwlist/nat-start add_black_wan_ip
 	restart_dnsmasq
-	dbus remove ss_basic_state_china
-	dbus remove ss_basic_state_foreign
+	remove_status
 	echo $(date): --------------------- white_black_list applied --------------------------
 	;;
 restart_addon)

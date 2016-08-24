@@ -430,6 +430,10 @@ restart_dnsmasq(){
 	echo $(date):
 }
 
+remove_status(){
+	dbus ram ss_basic_state_china="Waiting for first refresh..."
+	dbus ram ss_basic_state_foreign="Waiting for first refresh..."
+}
 
 
 case $1 in
@@ -447,8 +451,7 @@ start_all)
 	Start_kcptun
 	load_nat
 	restart_dnsmasq
-	dbus remove ss_basic_state_china
-	dbus remove ss_basic_state_foreign
+	remove_status
 	nvram set KCP_mode=2
 	nvram commit
 	echo $(date): ---------------------- kcptu chn mode Started ---------------------------
@@ -464,8 +467,7 @@ restart_dns)
 	start_dns
 	#load_nat
 	restart_dnsmasq
-	dbus remove ss_basic_state_china
-	dbus remove ss_basic_state_foreign
+	remove_status
 	echo $(date): -------------------------- dns Restarted --------------------------------
 	;;
 restart_wb_list)
@@ -479,8 +481,7 @@ restart_wb_list)
 	ln_conf
 	sh /koolshare/kcptun/chnmode/nat-start add_new_ip
 	restart_dnsmasq
-	dbus remove ss_basic_state_china
-	dbus remove ss_basic_state_foreign
+	remove_status
 	echo $(date): --------------------- white_black_list applied --------------------------
 	;;
 restart_addon)

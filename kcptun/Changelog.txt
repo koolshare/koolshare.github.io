@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin kcptun Changelog
 ===========================================
+1.8
+   - fix	fix use off dbus remove cause issue of skipd
+
 1.7
    - fix	use GOGC=40 to limit the mem usage
    - update	use cdn list in shadowsocks for better cdn
