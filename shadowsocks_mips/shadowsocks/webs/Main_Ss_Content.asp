@@ -1919,7 +1919,7 @@ function checkCmdRet(){
 														</div>
 														<div id="update_button" style="padding-top:5px;margin-left:90px;margin-top:-38px;float: left;">
 															<button id="updateBtn" class="button_gen" onclick="update_ss();">检查并更新</button>
-															<a style="margin-left: 170px;" href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt" target="_blank"><em><u>[ 更新日志 ]</u></em></a>
+															<a style="margin-left: 170px;" href="https://github.com/koolshare/koolshare.github.io/blob/master/shadowsocks_mips/Changelog.txt" target="_blank"><em><u>[ 更新日志 ]</u></em></a>
 														</div>
 														<div id="ss_version_show" style="padding-top:5px;margin-left:220px;margin-top:0px;"><i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i></div>
 														<div id="ss_install_show" style="padding-top:5px;margin-left:220px;margin-top:0px;"></div>	
