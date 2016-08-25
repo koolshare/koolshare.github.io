@@ -694,7 +694,7 @@ function ss_node_sel() {
 function ss_node_object(node_sel, obj, isSubmit, end) {
     var ns = {};
     var p = "ssconf_basic";
-    var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth"];
+    var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth", "koolgame_udp"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
         db_ss[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];

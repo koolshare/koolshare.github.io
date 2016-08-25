@@ -85,31 +85,31 @@ apply_nat_rules(){
 			do
 				iptables -t nat -A SHADOWSOCKS -p tcp -s $balck_ip -j RETURN
 			done
-				[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 80 -j REDIRECT --to-ports 3333
-				[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
-				[ $ss_overall_mode == 2 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
+				[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 80 -j REDIRECT --to-ports 3333
+				[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
+				[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
 		else
-		[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 80 -j REDIRECT --to-ports 3333
-		[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
-		[ $ss_overall_mode == 2 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
+		[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 80 -j REDIRECT --to-ports 3333
+		[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
+		[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
 		fi
 	elif [ $ss_basic_lan_control == 2 ];then
 		if [ ! -z $ss_basic_white_lan ];then
 			for white_ip in $white
 			do
-				[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp  -s $white_ip --dport 80 -j REDIRECT --to-ports 3333
-				[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp  -s $white_ip --dport 443 -j REDIRECT --to-ports 3333
-				[ $ss_overall_mode == 2 ] && iptables -t nat -A SHADOWSOCKS -p tcp  -s $white_ip -j REDIRECT --to-ports 3333
+				[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp  -s $white_ip --dport 80 -j REDIRECT --to-ports 3333
+				[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp  -s $white_ip --dport 443 -j REDIRECT --to-ports 3333
+				[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp  -s $white_ip -j REDIRECT --to-ports 3333
 			done
 		else
-		[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 80 -j REDIRECT --to-ports 3333
-		[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
-		[ $ss_overall_mode == 2 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
+		[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 80 -j REDIRECT --to-ports 3333
+		[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
+		[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
 		fi
 	else
-		[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 80 -j REDIRECT --to-ports 3333
-		[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
-		[ $ss_overall_mode == 2 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
+		[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 80 -j REDIRECT --to-ports 3333
+		[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
+		[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
 	fi
 	
 	# Apply the rules
