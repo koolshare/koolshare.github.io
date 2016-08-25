@@ -1,7 +1,0 @@
-#!/bin/sh
-#sed -i "s/cache-size=1500/cache-size=15000/" /tmp/etc/dnsmasq.conf
-
-CONFIG=$1
-source /usr/sbin/helper.sh
-
-pc_replace "cache-size=1500" "cache-size=9999" $CONFIG

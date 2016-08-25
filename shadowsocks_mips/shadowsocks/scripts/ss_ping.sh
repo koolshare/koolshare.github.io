@@ -52,49 +52,5 @@ else
 
 fi
 
-# problem
-# servers=`dbus list ssconf_basic_server | sort -n -t "_" -k 4`
-# for server in $servers
-# do
-# 	server_mu=`echo $server|cut -d "=" -f 1|cut -d "_" -f 4`
-# 	server_address=`echo $server|cut -d "=" -f 2`
-# 	ping_text=`ping -4 $server_address -c 10 -w 10 -q`
-# 	ping_time=`echo $ping_text | grep "round-trip" | awk '{print $4}'|cut -d "/" -f 2`
-# 	ping_loss=`echo $ping_text | grep "loss" | awk '{print $7}'`
-# 	if [ ! -z "$ping_time" ];then
-# 		dbus ram ssconf_basic_ping_"$server_mu"="$ping_time" ms
-# 	else
-# 		dbus ram ssconf_basic_ping_"$server_mu"="failed"
-# 	fi
-# done
-
-# servers=`dbus list ssconf_basic_server | sort -n -t "_" -k 4`
-# for server in $servers
-# do
-# 	server_mu=`echo $server|cut -d "=" -f 1|cut -d "_" -f 4`
-# 	server_address=`echo $server|cut -d "=" -f 2`
-# 	ping=`ping -4 $server_address -c 10 -w 10 -q | grep round | awk '{print $4}'|cut -d "/" -f 2`
-# 	loss=`ping -4 $server_address -c 10 -w 10 -q | grep loss | awk '{print $7}'`
-# 	if [ ! -z "$ping" ];then
-# 		dbus ram ssconf_basic_ping_"$server_mu"="$ping" ms / "$loss"
-# 	else
-# 		dbus ram ssconf_basic_ping_"$server_mu"="failed"
-# 	fi
-# done
-
-# dbus set ssconf_basic_ping_1="110ms"
-# sleep 1
-# dbus set ssconf_basic_ping_10="120ms"
-# sleep 1
-# dbus set ssconf_basic_ping_11="210ms"
-# sleep 1
-# dbus set ssconf_basic_ping_12="120ms"
-# sleep 1
-# dbus set ssconf_basic_ping_13="114ms"
-# sleep 1
-# dbus set ssconf_basic_ping_14="320ms"
-# curl -vLo --socks5-hostname 127.0.0.1:23456 https://www.google.com/
-# curl -o /dev/null -s -w %{time_connect}:%{time_starttransfer}:%{time_total}:%{speed_download} --socks5-hostname 127.0.0.1:23456 https://www.google.com/
-# curl -o /dev/null -s -w %{time_connect}:%{time_starttransfer}:%{time_total}:%{speed_download} --socks5-hostname 127.0.0.1:23456 https://www.google.com/
 
 

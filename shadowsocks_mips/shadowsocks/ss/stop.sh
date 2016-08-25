@@ -32,53 +32,49 @@ case $(uname -m) in
     ;;
 esac
 
-echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
-echo $(date):
-echo $(date): --------------------Stopping Shadowsock service--------------------------
-#--------------------------------------------------------------------------		
-# dectect disable or switching mode
-    if [ "$ss_mode" == "0" ];then
-    	echo $(date): Shadowsocks service will be disabled !!
-    else
-    	echo $(date): Stopping last mode !
-    fi
-    	echo $(date):
+
 #--------------------------------------------------------------------------
-# restore dnsmasq conf file
+
+restore_conf(){
+	# restore dnsmasq conf file
 	if [ -f /jffs/configs/dnsmasq.conf.add ]; then
 		echo $(date): restore dnsmasq conf file
 		rm -f /jffs/configs/dnsmasq.conf.add
 		echo $(date): done
 		echo $(date):
 	fi
-#--------------------------------------------------------------------------
-# delete dnsmasq postconf file
+	#--------------------------------------------------------------------------
+	# delete dnsmasq postconf file
 	if [ -f /jffs/scripts/dnsmasq.postconf ]; then
 		echo $(date): delete dnsmasq postconf file
 		rm -f /jffs/scripts/dnsmasq.postconf
 		echo $(date): done
 		echo $(date):
 	fi
-#--------------------------------------------------------------------------
-# delete custom.conf
+	#--------------------------------------------------------------------------
+	# delete custom.conf
 	if [ -f /jffs/configs/dnsmasq.d/custom.conf ];then
 		echo $(date): delete custom.conf file
 		rm -rf /jffs/configs/dnsmasq.d/custom.conf
 		echo $(date): done
 		echo $(date):
-	fi
-# Bring up dnsmasq
+	fi	
+}
+
+bring_up_dnsmasq(){
+	# Bring up dnsmasq
 	echo $(date): Bring up dnsmasq service
 	service restart_dnsmasq >/dev/null 2>&1
 	echo $(date): done
 	echo $(date):
-#--------------------------------------------------------------------------
-# flush iptables and destory REDSOCKS2 chain
+}
+
+restore_nat(){
+	# flush iptables and destory REDSOCKS2 chain
 	echo $(date): flush iptables and destory chain...
 	iptables -t nat -D PREROUTING -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p udp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j REDSOCKS2 >/dev/null 2>&1
-	iptables -t nat -D PREROUTING -i br0 -p tcp -j REDSOCKS2 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j SHADOWSOCKS >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -j SHADOWSOCKS >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j REDSOCKS2 >/dev/null 2>&1
@@ -90,6 +86,7 @@ echo $(date): --------------------Stopping Shadowsock service-------------------
 	iptables -t nat -D OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 1089 >/dev/null 2>&1
 	iptables -t nat -F OUTPUT  >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
+	iptables -t nat -D PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 	iptables -t nat -F SHADOWSOCKS >/dev/null 2>&1
 	iptables -t nat -X SHADOWSOCKS >/dev/null 2>&1
 	iptables -t nat -F REDSOCKS2 >/dev/null 2>&1
@@ -99,6 +96,7 @@ echo $(date): --------------------Stopping Shadowsock service-------------------
 	iptables -t mangle -D PREROUTING -p udp -j SHADOWSOCKS2 >/dev/null 2>&1
 	iptables -t mangle -F SHADOWSOCKS2 >/dev/null 2>&1
 	iptables -t mangle -X SHADOWSOCKS2 >/dev/null 2>&1
+	
 	if [ ! -z "ip_rule_exist" ];then
 		until [ "$ip_rule_exist" = 0 ]
 		do 
@@ -109,10 +107,9 @@ echo $(date): --------------------Stopping Shadowsock service-------------------
 	echo $(date): done
 	echo $(date):
 	
-#--------------------------------------------------------------------------
-	# reset ipset list number
-	# nvram set ipset_numbers=0
-#--------------------------------------------------------------------------
+}
+
+destory_ipset(){
 	# flush and destory ipset
 	echo $(date): flush and destory ipset
 	ipset -F gfwlist >/dev/null 2>&1
@@ -125,39 +122,54 @@ echo $(date): --------------------Stopping Shadowsock service-------------------
 	ipset -F black_domain >/dev/null 2>&1
 	ipset -X white_domain >/dev/null 2>&1
 	ipset -X black_domain >/dev/null 2>&1
+	ipset -F white_ip >/dev/null 2>&1
+	ipset -F black_ip >/dev/null 2>&1
+	ipset -X white_ip >/dev/null 2>&1
+	ipset -X black_ip >/dev/null 2>&1
+	#flush and destory white_cidr in chnmode mode
+	ipset -F white_cidr >/dev/null 2>&1
+	ipset -X white_cidr >/dev/null 2>&1
+	#flush and destory black_cidr in gfwlist mode
+	ipset -F black_cidr >/dev/null 2>&1
+	ipset -X black_cidr >/dev/null 2>&1
 	echo $(date): done
 	echo $(date):
-#--------------------------------------------------------------------------
-# restore nat-start file if any
-sed -i '/source/,/warning/d' /jffs/scripts/nat-start >/dev/null 2>&1
-sed -i '/nat-start/d' /jffs/scripts/nat-start >/dev/null 2>&1
-sed -i '/koolshare/d' /jffs/scripts/nat-start >/dev/null 2>&1
-sed -i '/sleep 5/d' /jffs/scripts/nat-start >/dev/null 2>&1
-#--------------------------------------------------------------------------
-# clear start up command line in wan-start
-sed -i '/start.sh/d' /jffs/scripts/wan-start >/dev/null 2>&1
-sed -i '/ssconfig/d' /jffs/scripts/wan-start >/dev/null 2>&1
-sed -i '/koolshare/d' /jffs/scripts/wan-start >/dev/null 2>&1
-sed -i '/sleep/d' /jffs/scripts/wan-start >/dev/null 2>&1
-sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
-#--------------------------------------------------------------------------
-# kill dnscrypt-proxy
+}
+
+restore_start_file(){
+	# restore nat-start file if any
+	sed -i '/source/,/warning/d' /jffs/scripts/nat-start >/dev/null 2>&1
+	sed -i '/nat-start/d' /jffs/scripts/nat-start >/dev/null 2>&1
+	sed -i '/koolshare/d' /jffs/scripts/nat-start >/dev/null 2>&1
+	sed -i '/sleep 5/d' /jffs/scripts/nat-start >/dev/null 2>&1
+	
+	# clear start up command line in wan-start
+	sed -i '/start.sh/d' /jffs/scripts/wan-start >/dev/null 2>&1
+	sed -i '/ssconfig/d' /jffs/scripts/wan-start >/dev/null 2>&1
+	sed -i '/koolshare/d' /jffs/scripts/wan-start >/dev/null 2>&1
+	sed -i '/sleep/d' /jffs/scripts/wan-start >/dev/null 2>&1
+	sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1	
+}
+
+kill_process(){
+	#--------------------------------------------------------------------------
+	# kill dnscrypt-proxy
 	if [ ! -z "$dnscrypt" ]; then 
 		echo $(date): kill dnscrypt-proxy...
 		killall dnscrypt-proxy
 		echo $(date): done
 		echo $(date):
 	fi
-#--------------------------------------------------------------------------
-# kill redsocks2
+	#--------------------------------------------------------------------------
+	# kill redsocks2
 	if [ ! -z "$redsocks2" ]; then 
 		echo $(date): kill redsocks2...
 		killall redsocks2
 		echo $(date): done
 		echo $(date):
 	fi
-#--------------------------------------------------------------------------
-# kill ss-redir
+	#--------------------------------------------------------------------------
+	# kill ss-redir
 	if [ ! -z "$ssredir" ]; then 
 		echo $(date): kill ss-redir...
 		killall ss-redir
@@ -172,13 +184,13 @@ sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
 		echo $(date): done
 		echo $(date):
 	fi
-#--------------------------------------------------------------------------
-# kill ss-local
+	#--------------------------------------------------------------------------
+	# kill ss-local
 
 	kill `ps | grep ss-local | grep -v "grep" | grep -w "23456"|awk '{print $1}'`  >/dev/null 2>&1
 	kill `ps | grep rss-local | grep -v "grep" | grep -w "23456"|awk '{print $1}'`  >/dev/null 2>&1
-#--------------------------------------------------------------------------
-# kill ss-tunnel
+	#--------------------------------------------------------------------------
+	# kill ss-tunnel
 	if [ ! -z "$sstunnel" ]; then 
 		echo $(date): kill ss-tunnel...
 		killall ss-tunnel >/dev/null 2>&1
@@ -193,16 +205,16 @@ sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
 		echo $(date):
 	fi
 	
-#--------------------------------------------------------------------------
-# kill pdnsd
+	#--------------------------------------------------------------------------
+	# kill pdnsd
 	if [ ! -z "$pdnsd" ]; then 
 	echo $(date): kill pdnsd...
 	killall pdnsd
 	echo $(date): done
 	echo $(date):
 	fi
-#--------------------------------------------------------------------------
-# kill Pcap_DNSProxy
+	#--------------------------------------------------------------------------
+	# kill Pcap_DNSProxy
 	if [ ! -z "$Pcap_DNSProxy" ]; then 
 	echo $(date): kill Pcap_DNSProxy...
 	killall dns.sh >/dev/null 2>&1
@@ -210,43 +222,93 @@ sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
 	echo $(date): done
 	echo $(date):
 	fi
-#--------------------------------------------------------------------------
-# kill chinadns
+	#--------------------------------------------------------------------------
+	# kill chinadns
 	if [ ! -z "$chinadns" ]; then 
 		echo $(date): kill chinadns...
 		killall chinadns
 		echo $(date): done
 		echo $(date):
 	fi
-#--------------------------------------------------------------------------
-# kill dns2socks
+	#--------------------------------------------------------------------------
+	# kill dns2socks
 	if [ ! -z "$DNS2SOCK" ]; then 
 		echo $(date): kill dns2socks...
 		killall dns2socks
 		echo $(date): done
 		echo $(date):
 	fi
-# kill all koolgame
+	# kill all koolgame
 	if [ ! -z "$koolgame" ]; then 
 		echo $(date): kill koolgame...
 		killall koolgame >/dev/null 2>&1
 		echo $(date): done
 		echo $(date):
 	fi
-#--------------------------------------------------------------------------
-# kill crontab job
+
+}
+
+kill_cron_job(){
+	# kill crontab job
 	echo $(date): kill crontab job
 	sed -i '/ssupdate/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
 	echo $(date): done
 	echo $(date): -------------------- Shadowsock service Stopped--------------------------
 	echo $(date):
+}
 
-# remove conf under /jffs/configs/dnsmasq.d
+
+remove_conf_and_settings(){
+	# remove conf under /jffs/configs/dnsmasq.d
 	rm -rf /jffs/configs/dnsmasq.d/gfwlist.conf
+	rm -rf /jffs/configs/dnsmasq.d/cdn.conf
+	rm -rf /jffs/configs/dnsmasq.d/custom.conf
+	rm -rf /jffs/configs/dnsmasq.d/wblist.conf
+	rm -rf /tmp/sscdn.conf
+	rm -rf /tmp/custom.conf
+	rm -rf /tmp/cdn.conf
+	rm -rf /tmp/wblist.conf
+	rm -rf /jffs/configs/dnsmasq.conf.add
+	
 
-
-# remove ss state
+	# remove ss state
 	dbus remove ss_basic_state_china
 	dbus remove ss_basic_state_foreign
+}
 
-
+case $1 in
+stop_all)
+	#KCP_basic_action=0 应用所有设置
+	echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
+	echo $(date):
+	echo $(date): --------------------Stopping Shadowsock service--------------------------
+	restore_conf
+	bring_up_dnsmasq
+	restore_nat
+	destory_ipset
+	restore_start_file
+	kill_process
+	kill_cron_job
+	remove_conf_and_settings
+	echo $(date): ----------------------- Shadowsocks stopped  ----------------------------
+	;;
+stop_part)
+	#KCP_basic_action=1 应用DNS设置
+	echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
+	echo $(date):
+	echo $(date): ------------------------ Stopping last mode -----------------------------
+	restore_conf
+	#bring_up_dnsmasq
+	restore_nat
+	destory_ipset
+	restore_start_file
+	kill_process
+	#kill_cron_job
+	remove_conf_and_settings
+	echo $(date):
+	;;
+*)
+	echo "Usage: $0 (stop_all|stop_part)"
+	exit 1
+	;;
+esac
