@@ -266,7 +266,6 @@ function onSubmitCtrl() {
 			}else if(ssaction == 2 || ssaction == 3 || ssaction == 4){
 					showSSLoadingBar(2);
 			}
-        	document.form.action_mode.value = ' Refresh ';
         	updateOptions();
             });
         } else {
@@ -290,7 +289,6 @@ function onSubmitCtrl() {
 			}else if(ssaction == 2 || ssaction == 3 || ssaction == 4){
 					showSSLoadingBar(2);
 			}
-    		document.form.action_mode.value = ' Refresh ';
     		updateOptions();
             });
         }
@@ -299,7 +297,7 @@ function onSubmitCtrl() {
 
 
 function updateOptions() {
-	
+	document.form.action_mode.value = ' Refresh ';
 	document.form.action = "/applydb.cgi?p=ss";
 	document.form.SystemCmd.value = "ss_config.sh";
 	document.form.submit();
@@ -1563,7 +1561,7 @@ function updatelist(){
 	document.form.action_mode.value = ' Refresh ';
 	if (validForm()){
 		document.form.submit();
-		refresh_ss_node_list();
+		//refresh_ss_node_list();
 		show_log_info();
 	}
 }
@@ -1725,7 +1723,8 @@ function toggle_func(){
 		$G("gameV2_list").style.display = "none";
 		$G("overall_dns").style.display = "none";
 		$G("overall_list").style.display = "none";	
-		$j("#cmdBtn").html("提交");
+		$G("cmdBtn").value = "提交";
+		//$j("#cmdBtn").html("提交");
 		$G("help_note_main").style.display = "";
 		$G("help_note_ipset").style.display = "none";
 		$G("help_note_redchn").style.display = "none";
@@ -1754,7 +1753,8 @@ function toggle_func(){
 		$G("help_mode3").style.display = "none";
 		$G("help_mode4").style.display = "none";
 		$G("help_mode5").style.display = "none";
-		$j("#cmdBtn").html("应用DNS设定");
+		$G("cmdBtn").value = "应用DNS设定";
+		//$j("#cmdBtn").html("应用DNS设定");
 		document.form.ss_basic_action.value = 2;
 		if (ssmode == "1"){
 			$G("ipset_dns").style.display = "";
@@ -1866,7 +1866,8 @@ function toggle_func(){
 		$G("help_mode3").style.display = "none";
 		$G("help_mode4").style.display = "none";
 		$G("help_mode5").style.display = "none";
-		$j("#cmdBtn").html("应用黑白名单");
+		$G("cmdBtn").value = "应用黑白名单";
+		//$j("#cmdBtn").html("应用黑白名单");
 		document.form.ss_basic_action.value = 3;
 		if (ssmode == "1"){
 			$G("ipset_dns").style.display = "none";
@@ -1984,7 +1985,8 @@ function toggle_func(){
 		$G("help_mode3").style.display = "none";
 		$G("help_mode4").style.display = "none";
 		$G("help_mode5").style.display = "none";
-		$j("#cmdBtn").html("应用附加功能");
+		//$j("#cmdBtn").html("应用附加功能");
+		$G("cmdBtn").value = "应用附加功能";
 		document.getElementById("NoteBox_main").style.display = "none";
 		document.getElementById("NoteBox_ipset_dns").style.display = "none";
 		document.getElementById("NoteBox_redchn_dns").style.display = "none";
@@ -2041,7 +2043,8 @@ function return_basic(){
 		$j('.show-btn2').removeClass('active');
 		$j('.show-btn3').removeClass('active');
 		$j('.show-btn4').removeClass('active');
-		$j("#cmdBtn").html("提交");
+		//$j("#cmdBtn").html("提交");
+		$G("cmdBtn").value = "提交";
 		document.form.ss_basic_action.value = 1;
 		update_visibility_main();
 }
@@ -2074,7 +2077,7 @@ function checkCmdRet(){
 				noChange = 0;
 			}
 
-			if(noChange > 10){
+			if(noChange > 20){
 				$G("loadingIcon").style.display = "none";
 				//retArea.scrollTop = retArea.scrollHeight;
 				//setTimeout("checkCmdRet();", 2000);
@@ -2141,12 +2144,12 @@ function setIframeSrc() {
 <input type="hidden" name="action_script" value=""/>
 <input type="hidden" name="action_wait" value="6"/>
 <input type="hidden" name="first_time" value=""/>
-<input type="hidden" name="vpnc_type" value="PPTP">
+<input type="hidden" name="vpnc_type" value="">
 <input type="hidden" id="ss_basic_enable" name="ss_basic_enable" value="0" />
 <input type="hidden" id="ss_basic_action" name="ss_basic_action" value="1" />
 <input type="hidden" id="ss_basic_install_status" name="ss_basic_install_status" value="0" />
 <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
-<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value=""/>
+<input type="hidden" name="SystemCmd" value=""/>
 <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
 <div>
 <table class="content" style="margin:auto;" align="center" cellspacing="0">
@@ -3400,7 +3403,7 @@ taobao.com
 										</div>
 										-->
 										<div id="apply_button" class="apply_gen">
-											<button id="cmdBtn" class="button_gen" onclick="onSubmitCtrl()">提交</button>
+											<input id="cmdBtn" class="button_gen" type="button" onclick="onSubmitCtrl()" value="提交">
 										</div>
 										<div id="warn1" style="display: none;font-size: 20px;position: absolute; bottom: 350px; left: 0px;" class="formfontdesc" id="cmdDesc"><i>你开启了kcptun,请先关闭后才能开启shadowsocks</i></div>
 										<div id="line_image1" style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"/></div>
