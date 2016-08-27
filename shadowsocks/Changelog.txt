@@ -1,6 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 
+2.8.4
+   - remove	去除原先的说明文档和模式简介;
+   - add	添加新的说明文档。
+
 2.8.3
    - fix	修复全局模式选择全局http(s),实际不走ss的bug；
    - fix	修复点击提交是，数据被提交两次，导致dbus传输数据过多可能死掉的bug；
