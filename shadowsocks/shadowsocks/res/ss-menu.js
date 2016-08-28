@@ -190,7 +190,6 @@ function openssHint(itemNum){
 	width="350px";
 
 	if(itemNum == 10){
-		
 		statusmenu ="如果发现开关不能开启，那么请检查<a href='Advanced_System_Content.asp'><u><font color='#00F'>系统管理 -- 系统设置</font></u></a>页面内Enable JFFS custom scripts and configs是否开启。";
 		_caption = "服务器说明";
 	}
@@ -198,7 +197,6 @@ function openssHint(itemNum){
 	if(itemNum == 0){
 		width="750px";
 		bgcolor="#CC0066",
-		//gfwlist
 		statusmenu ="<li>通过对路由器内ss访问(<a href='https://www.google.com.tw/' target='_blank'><u><font color='#00F'>https://www.google.com.tw/</font></u></a>)状态的检测，返回状态信息。状态检测默认每10秒进行一次，可以通过附加设置中的选项，更改检测时间间隔，每次检测都会请求<a href='https://www.google.com.tw/' target='_blank'><u><font color='#00F'>https://www.google.com.tw/</font></u></a>，该请求不会进行下载，仅仅请求HTTP头部，请求成功后，会返回working信息，请求失败，会返回Problem detected!</li>"
 		statusmenu +="</br><li>状态检测只在SS主界面打开时进行，网页关闭后，后台是不会进行检测的，每次进入页面，或者切换模式，重新提交等操作，状态检测会在此后5秒后进行，在这之前，状态会显示为watting... 如果显示Waiting for first refresh...则表示正在等待首次状态检测的结果。</li>"
 		statusmenu +="</br><li>状态检测反应的是路由器本身访问https://www.google.com.tw/的结果，并不代表电脑或路由器下其它终端的访问结果，透过状态检测，可以为使用SS代理中遇到的一些问题进行排查,一下列举一些常见的情况：</li>"
@@ -238,7 +236,7 @@ function openssHint(itemNum){
 		statusmenu +="<b><font color='#669900'>缺点：</font></b>代理受限于名单内的4000多个被墙网站，需要维护黑名单。一些不走域名解析的应用，比如telegram，需要单独添加IP/CIDR黑名单。</span></br></br>"
 		//redchn
 		statusmenu +="<span><b><font color='#CC0066'>【2】大陆白名单模式:</font></b></br>"
-		statusmenu +="&nbsp;&nbsp;&nbsp;&nbsp;该模式使用chnroute IP网段区分国内外流量，redsocks2会将所有到国外的TCP链接转发ss-local程序，然后由s-local将流量转发到Shadowsocks服务器，实现透明代理；</br>"
+		statusmenu +="&nbsp;&nbsp;&nbsp;&nbsp;该模式使用chnroute IP网段区分国内外流量，ss-redir将流量转发到Shadowsocks服务器，实现透明代理；</br>"
 		statusmenu +="&nbsp;&nbsp;&nbsp;&nbsp;由于采用了预先定义的ip地址块(chnroute)，所以DNS解析就非常重要，如果一个国内有的网站被解析到了国外地址，那么这个国内网站是会走ss的；</br>"
 		statusmenu +="&nbsp;&nbsp;&nbsp;&nbsp;因为使用了大量的cdn名单，能够保证常用的国内网站都获得国内的解析结果，但是即使如此还是不能完全保证国内的一些网站解析到国内地址，这个时候就推荐使用具备cdn解析能力的chinaDNS或者PcapDNSProxy。</br>"
 		statusmenu +="<b><font color='#669900'>优点：</font></b>所有被墙国外网站均能通过代理访问，无需维护域名黑名单；主机玩家用此模式可以实现TCP代理UDP国内直连。</br>"
@@ -246,19 +244,18 @@ function openssHint(itemNum){
 		//game
 		statusmenu +="<span><b><font color='#CC0066'>【3】游戏模式(NAT 2 ready):</font></b></br>"
 		statusmenu +="&nbsp;&nbsp;&nbsp;&nbsp;游戏模式较于其它模式最大的特点就是支持UDP代理，能让游戏的UDP链接走SS，主机玩家用此模式可以实现TCP+UDP走SS代理；</br>"
-		statusmenu +="&nbsp;&nbsp;&nbsp;&nbsp;游戏模式同样使用了chnroute IP网段区分国内外流量,和大陆白名单模式采用redsocks2+ss-local的组合不同的是该模式仅用了ss-reidr；</br>"
 		statusmenu +="&nbsp;&nbsp;&nbsp;&nbsp;由于采用了预先定义的ip地址块(chnroute)，所以DNS解析就非常重要，如果一个国内有的网站被解析到了国外地址，那么这个国内网站是会走ss的。</br>"
 		statusmenu +="<b><font color='#669900'>优点：</font></b>除了具有大陆白名单模式的优点外，还能代理UDP链接，并且实现主机游戏<b> NAT2!</b></br>"
 		statusmenu +="<b><font color='#669900'>缺点：</font></b>由于UDP链接也走SS，而迅雷等BT下载多为UDP链接，如果下载资源的P2P链接中有国外链接，这部分流量就会走SS！</span></br></br>"
 		//gameV2
-		statusmenu +="<span><b><font color='#CC0066'>【3】游戏模式(NAT 2 ready):</font></b></br>"
+		statusmenu +="<span><b><font color='#CC0066'>【4】游戏模式V2:</font></b></br>"
 		statusmenu +="&nbsp;&nbsp;&nbsp;&nbsp;游戏模式V2较于其它模式最大的特点就是支持UDP代理，能让游戏的UDP链接走SS，主机玩家用此模式可以实现TCP+UDP走SS代理；</br>"
 		statusmenu +="&nbsp;&nbsp;&nbsp;&nbsp;和游戏模式想比较，游戏模式V2使用了小宝自己写的程序(koolgame)，针对UDP发包和PS4 nat类型检测都有优化，如果你的运营商或者VPS服务商封锁UDP，还能使用udp in tcp功能；</br>"
 		statusmenu +="&nbsp;&nbsp;&nbsp;&nbsp;由于采用了预先定义的ip地址块(chnroute)，所以DNS解析就非常重要，如果一个国内有的网站被解析到了国外地址，那么这个国内网站是会走ss的。</br>"
-		statusmenu +="<b><font color='#669900'>优点：</font></b>主机游戏玩家福音。</br>"
+		statusmenu +="<b><font color='#669900'>优点：</font></b>专门的UDP发包优化，PS4 NAT2!</br>"
 		statusmenu +="<b><font color='#669900'>缺点：</font></b>需要配合良好的线路和自己搭建服务端。</span></br></br>"
 		//overall
-		statusmenu +="<span><b><font color='#CC0066'>【3】游戏模式(NAT 2 ready):</font></b></br>"
+		statusmenu +="<span><b><font color='#CC0066'>【5】全局模式:</font></b></br>"
 		statusmenu +="&nbsp;&nbsp;&nbsp;&nbsp;除局域网和ss服务器等流量不走代理，其它都走代理(udp不走)，高级设置中提供了对代理协议的选择。</br>"
 		statusmenu +="<b><font color='#669900'>优点：</font></b>简单暴力，全部出国；可选仅web浏览走ss，还是全部tcp代理走ss，因为不需要区分国内外流量，因此性能最好。</br>"
 		statusmenu +="<b><font color='#669900'>缺点：</font></b>国内网站全部走ss，迅雷下载和BT全部走SS流量。</span></br></br>"
@@ -594,6 +591,11 @@ function openssHint(itemNum){
 		statusmenu +="</br>选择全局UDP转发方式，将使用ss-tunnel解析dns。"
 		statusmenu +="</br>选择全局OpenDNS方式 + UDP转发方式，将使用dnscrypt-proxy 和 ss-tunnel并发解析dns。"
 		_caption = "全局模式";
+	}
+	else if(itemNum == 50){
+		statusmenu ="通过此开关，你可以开启或者关闭侧边栏面板上的shadowsocks入口;"
+		statusmenu +="</br>该开关在固件版本6.6.1（不包括6.6.1）以上起作用。"
+		_caption = "侧边栏开关";
 	}
 		//return overlib(statusmenu, OFFSETX, -160, LEFT, DELAY, 200);
 		//return overlib(statusmenu, OFFSETX, -160, LEFT, STICKY, WIDTH, 'width', CAPTION, " ", FGCOLOR, "#4D595D", CAPCOLOR, "#000000", CLOSECOLOR, "#000000", MOUSEOFF, "1",TEXTCOLOR, "#FFF", CLOSETITLE, '');

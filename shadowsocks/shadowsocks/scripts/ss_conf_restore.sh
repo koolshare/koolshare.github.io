@@ -3,18 +3,18 @@
 confs=`cat /tmp/ss_conf_backup.txt`
 
 format=`echo $confs|grep "{"`
-
 if [ -z "$format" ];then
-
+	cat /tmp/ss_conf_backup.txt | sed '/webtest/d' | sed '/ping/d' |sed '/version/d'|sed '/ss_node_table/d' |sed '/_state_/d' > /tmp/ss_conf_backup_tmp.txt
 	while read conf
 	do
 	# echo $conf
 		dbus set $conf >/dev/null 2>&1
-	done </tmp/ss_conf_backup.txt
+	done < /tmp/ss_conf_backup_tmp.txt
 
-	dbus remove ss_basic_state_china
-	dbus remove ss_basic_foreign_china
-	dbus set ss_basic_version=`cat /koolshare/ss/version`
+	dbus ram ss_basic_state_china="Waiting for first refresh..."
+	dbus ram ss_basic_state_foreign="Waiting for first refresh..."
+	dbus set ss_basic_enable="0"
+	dbus set ss_basic_version_local=`cat /koolshare/ss/version` 
 
 else
 
@@ -75,5 +75,7 @@ else
 	done  
 
 fi
-	sleep 3
+	sleep 2
+	rm -rf /tmp/ss_conf*
 	rm -rf /tmp/ss_conf_backup.txt
+	rm -rf /tmp/ss_conf_backup_tmp.txt

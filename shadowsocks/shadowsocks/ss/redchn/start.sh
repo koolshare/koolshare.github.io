@@ -37,7 +37,7 @@ creat_ss_json(){
 			{
 			    "server":"$ss_basic_server",
 			    "server_port":$ss_basic_port,
-			    "local_port":3333,
+			    "local_port":1089,
 			    "password":"$ss_basic_password",
 			    "timeout":600,
 			    "method":"$ss_basic_method"
@@ -48,7 +48,7 @@ creat_ss_json(){
 			{
 			    "server":"$ss_basic_server",
 			    "server_port":$ss_basic_port,
-			    "local_port":3333,
+			    "local_port":1089,
 			    "password":"$ss_basic_password",
 			    "timeout":600,
 			    "protocol":"$ss_basic_rss_protocol",
@@ -62,32 +62,33 @@ creat_ss_json(){
 	echo $(date):
 }
 
-creat_redsocks2_conf(){
-	lan_ipaddr=$(nvram get lan_ipaddr)
-	echo $(date): Creating redsocks config file...
-	cat > /koolshare/ss/redchn/redsocks2.conf <<-EOF
-		base {
-		  log_debug = off; 
-		  log_info = on;
-		  daemon = on;
-		  redirector= iptables;
-		}
-		
-		redsocks {
-		 local_ip = 0.0.0.0;
-		 local_port = 1089;
-		 ip = $lan_ipaddr;
-		 port = 23456;
-		 type = socks5;
-		 timeout = 3;
-		 autoproxy = 0;
-		 //login = "$ss_basic_method";
-		 //password = "$ss_basic_password";
-		}
-		EOF
-	echo $(date): done
-	echo $(date):
-}
+# creat_redsocks2_conf(){
+# 	lan_ipaddr=$(nvram get lan_ipaddr)
+# 	echo $(date): Creating redsocks config file...
+# 	cat > /koolshare/ss/redchn/redsocks2.conf <<-EOF
+# 		base {
+# 		  log_debug = off; 
+# 		  log_info = on;
+# 		  daemon = on;
+# 		  redirector= iptables;
+# 		}
+# 		
+# 		redsocks {
+# 		 local_ip = 0.0.0.0;
+# 		 local_port = 1089;
+# 		 ip = $lan_ipaddr;
+# 		 port = 23456;
+# 		 type = socks5;
+# 		 timeout = 3;
+# 		 autoproxy = 0;
+# 		 //login = "$ss_basic_method";
+# 		 //password = "$ss_basic_password";
+# 		}
+# 		EOF
+# 	echo $(date): done
+# 	echo $(date):
+# }
+
 # create dnsmasq.conf.add
 
 creat_dnsmasq_basic_conf(){
@@ -253,16 +254,32 @@ wan_auto_start(){
 
 #=======================================================================================
 
-start_sslocal(){
-	# start ss-local on port 23456
-	echo $(date): Socks5 enable on port 23456 \for DNS2SOCKS..
+# start_sslocal(){
+# 	# start ss-local on port 23456
+# 	echo $(date): Socks5 enable on port 23456 \for DNS2SOCKS..
+# 	if [ "$ss_basic_use_rss" == "1" ];then
+# 		rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+# 	elif  [ "$ss_basic_use_rss" == "0" ];then
+# 		if [ "$ss_basic_onetime_auth" == "1" ];then
+# 			ss-local -b 0.0.0.0 -l 23456 -A -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid
+# 		elif [ "$ss_basic_onetime_auth" == "0" ];then
+# 			ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid
+# 		fi
+# 	fi
+# 	echo $(date): done
+# 	echo $(date):
+# }
+
+start_ss_redir(){
+	# Start ss-redir
+	echo $(date): Starting ss-redir...
 	if [ "$ss_basic_use_rss" == "1" ];then
-		rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+		rss-redir -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -f /var/run/shadowsocks.pid >/dev/null 2>&1
 	elif  [ "$ss_basic_use_rss" == "0" ];then
 		if [ "$ss_basic_onetime_auth" == "1" ];then
-			ss-local -b 0.0.0.0 -l 23456 -A -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid
+			ss-redir -b 0.0.0.0 -A -c /koolshare/ss/redchn/ss.json -f /var/run/shadowsocks.pid
 		elif [ "$ss_basic_onetime_auth" == "0" ];then
-			ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid
+			ss-redir -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -f /var/run/shadowsocks.pid
 		fi
 	fi
 	echo $(date): done
@@ -351,6 +368,20 @@ start_dns(){
 	
 	# Start DNS2SOCKS
 	if [ "4" == "$ss_redchn_dns_foreign" ]; then
+		# start ss-local on port 23456
+		echo $(date): Socks5 enable on port 23456 \for DNS2SOCKS..
+		if [ "$ss_basic_use_rss" == "1" ];then
+			rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+		elif  [ "$ss_basic_use_rss" == "0" ];then
+			if [ "$ss_basic_onetime_auth" == "1" ];then
+				ss-local -b 0.0.0.0 -l 23456 -A -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid
+			elif [ "$ss_basic_onetime_auth" == "0" ];then
+				ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid
+			fi
+		fi
+		echo $(date): done
+		echo $(date):
+
 		echo $(date): Starting DNS2SOCKS..
 		dns2socks 127.0.0.1:23456 "$ss_redchn_dns2socks_user" 127.0.0.1:1053 > /dev/null 2>&1 &
 		echo $(date): done
@@ -533,13 +564,13 @@ stop_dns(){
 }
 
 #---------------------------------------------------------------------------------------------------------
-start_redsocks2(){
-	# Start REDSOCKS2
-	echo $(date): starting REDSOCKS2...
-	redsocks2 -c /koolshare/ss/redchn/redsocks2.conf -p /var/run/redsocks2.pid
-	echo $(date): done
-	echo $(date):
-}
+# start_redsocks2(){
+# 	# Start REDSOCKS2
+# 	echo $(date): starting REDSOCKS2...
+# 	redsocks2 -c /koolshare/ss/redchn/redsocks2.conf -p /var/run/redsocks2.pid
+# 	echo $(date): done
+# 	echo $(date):
+# }
 
 
 load_nat(){
@@ -572,13 +603,23 @@ remove_status(){
 	dbus ram ss_basic_state_foreign="Waiting for first refresh..."
 }
 
+main_portal(){
+	if [ "$ss_main_portal" == "1" ];then
+		nvram set enable_ss=1
+		nvram commit
+	else
+		nvram set enable_ss=0
+		nvram commit
+	fi
+}
+
 case $1 in
 start_all)
 	#ss_basic_action=1 搴旂敤鎵€鏈夎缃?
 	echo $(date): ------------------- Shadowsock CHN mode Starting-------------------------
 	resolv_server_ip
 	creat_ss_json
-	creat_redsocks2_conf
+	#creat_redsocks2_conf
 	creat_dnsmasq_basic_conf
 	user_cdn_site
 	custom_dnsmasq
@@ -586,10 +627,11 @@ start_all)
 	ln_conf
 	nat_auto_start
 	wan_auto_start
-	start_sslocal
+	#start_sslocal
 	write_cron_job
 	start_dns
-	start_redsocks2
+	#start_redsocks2
+	start_ss_redir
 	load_nat
 	restart_dnsmasq
 	remove_status
@@ -656,8 +698,7 @@ restart_addon)
 	write_cron_job
 	#remove_status
 	remove_status
-
-
+	main_portal
 	echo $(date): ----------------------  chnmode addon applied ---------------------------
 	;;
 *)

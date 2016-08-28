@@ -228,6 +228,16 @@ remove_status(){
 	dbus ram ss_basic_state_china="Waiting for first refresh..."
 	dbus ram ss_basic_state_foreign="Waiting for first refresh..."
 }
+
+main_portal(){
+	if [ "$ss_main_portal" == "1" ];then
+		nvram set enable_ss=1
+		nvram commit
+	else
+		nvram set enable_ss=0
+		nvram commit
+	fi
+}
 	
 case $1 in
 start_all)
@@ -298,6 +308,7 @@ restart_addon)
 	write_cron_job
 	#remove_status
 	remove_status
+	main_portal
 
 	echo $(date): --------------------------- addon applied -------------------------------
 	;;

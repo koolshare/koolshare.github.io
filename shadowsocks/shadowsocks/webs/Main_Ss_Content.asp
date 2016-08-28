@@ -1440,6 +1440,7 @@ function upload_ok(isok) {
 }
 
 function restore_ss_conf() {
+	checkTime = 2001;  //停止可能在进行的刷新
 	document.form.action_mode.value = ' Refresh ';
 	document.form.action = "/applydb.cgi?p=ss";
     document.form.SystemCmd.value = "ss_conf_restore.sh";
@@ -1449,7 +1450,26 @@ function restore_ss_conf() {
 		document.form.submit();
 	}
     //setTimeout("onSubmitCtrl();", 2000);
-    refreshpage(3);
+    //refreshpage(5);
+    showLoadingBar(8);
+    $j("#loading_block3").html("恢复SS配置");
+    $j("#loading_block2").html("<li><font color='#ffcc00'>正在恢复相关配置中...</font></li></br><li><font color='#ffcc00'>配置恢复后需要重新提交！</font></li></br><li><font color='#ffcc00'>恢复配置后将返回网络地图！</font></li>");
+}
+
+function remove_SS_node(){
+	checkTime = 2001;  //停止可能在进行的刷新
+	document.form.action_mode.value = ' Refresh ';
+	document.form.action = "/applydb.cgi?p=ss";
+    document.form.SystemCmd.value = "ss_conf_remove.sh";
+	document.form.enctype = "";
+	document.form.encoding = "";
+	if (validForm()){
+		document.form.submit();
+	}
+	//refreshpage(5);
+	showLoadingBar(8);
+	 $j("#loading_block3").html("清除SS配置");
+	 $j("#loading_block2").html("<li><font color='#ffcc00'>正在清除所有SS配置...</font></li></br><li><font color='#ffcc00'>配置清除后将自动关闭SS...</font></li></br><li><font color='#ffcc00'>恢复配置后将返回网络地图！</font></li>");
 }
 
 function ping_test(){
@@ -1462,7 +1482,17 @@ function ping_test(){
 		refresh_ss_node_list_ping();
 	}
 }
-
+/*
+function remove_ping(){
+	checkTime = 2001;  //停止可能在进行的刷新
+    document.form.SystemCmd.value = "ss_ping_remove.sh";
+	document.form.action_mode.value = ' Refresh ';
+	if (validForm()){
+		document.form.submit();
+	}
+	setTimeout(refresh_table(), 3000);
+}
+*/
 function web_test(){
 	checkTime = 2001; //停止可能在进行的刷新
 	//updateSs_node_listView();
@@ -1474,8 +1504,18 @@ function web_test(){
 		refresh_ss_node_list_webtest();
 	}
 }
-
-
+/*
+function remove_web_test(){
+	checkTime = 2001; //停止可能在进行的刷新
+	//updateSs_node_listView();
+	document.form.SystemCmd.value = "ss_webtest_remove.sh";
+	document.form.action_mode.value = ' Refresh ';
+	if (validForm()){
+		document.form.submit();
+	}
+	setTimeout(refresh_table(), 3000);
+}
+*/
 var ping_flag;
 var checkTime = 0;
 function refresh_ss_node_list_ping(){
@@ -1979,7 +2019,7 @@ function setIframeSrc() {
 			<div id="proceeding_img"></div>
 		</div>
 		
-		<div id="loading_block2" style="margin:10px auto; width:85%;">此期间请勿访问屏蔽网址，以免污染DNS进入缓存</div>
+		<div id="loading_block2" style="margin:10px auto; width:85%;"></div>
 		</td>
 	</tr>
 </table>
@@ -2402,10 +2442,10 @@ function setIframeSrc() {
 										<div id="ss_node_list_table_btn" style="display: none;position: static;width: 747px; bottom: 0px;">
 											<table style="margin:7px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
-													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(24)">导出恢复</a></th>
+													<th style="width:20%;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(24)">导出恢复</a></th>
 													<td>
 														<input type="button" class="button_gen" onclick="download_SS_node();" value="导出配置">
-
+														<input type="button" class="button_gen" onclick="remove_SS_node();" value="清空配置">
 														<input type="button" id="upload_btn" class="button_gen" onclick="upload_SS_node();" value="恢复配置">
 
 														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file">
@@ -2414,8 +2454,9 @@ function setIframeSrc() {
 													</td>
 												</tr>
 												<tr>
-													<th width="20%">ping测试</th>
+													<th style="width:20%;">ping测试</th>
 													<td>
+														<!--<input class="button_gen" onClick="remove_ping()" type="button" value="移除ping"/>-->
 														<input class="button_gen" onClick="ping_test()" type="button" value="ping测试"/>
 														<select id="ssconf_basic_Ping_Method" name="ssconf_basic_Ping_Method" style="width:300px;margin:0px 0px 0px 2px;" class="input_option">
 															<option class="content_input_fd" value="1">单线ping(10次/节点)</option>
@@ -2426,8 +2467,9 @@ function setIframeSrc() {
 													</td>
 												</tr>
 												<tr>
-													<th width="20%">web测试</th>
+													<th style="width:20%;">web测试</th>
 													<td>
+														<!--<input class="button_gen" onClick="remove_test()" type="button" value="移除web测试"/>-->
 														<input class="button_gen" onClick="web_test()" type="button" value="web测试"/>
 														<select id="ssconf_basic_test_domain" name="ssconf_basic_test_domain" style="width:300px;margin:0px 0px 0px 2px;" class="input_option">
 															<option class="content_input_fd" value="https://www.google.com/">google.com</option>
@@ -2439,7 +2481,7 @@ function setIframeSrc() {
 											<table>
 												<tr>
 													<td>
-														<div id="node_return_button" class="apply_gen" style="margin-left: 179px;;float: left;">
+														<div id="node_return_button" class="apply_gen" style="margin-left: 105px;;float: left;">
 															<input type="button" class="button_gen" onclick="ss_node_info_return();" value="返回">
 															<input class="button_gen" id="returnBtn" onClick="hide_text()" type="button" value="黑科技按钮"/>
 															<input class="button_gen" onClick="Add_profile()" type="button" value="添加节点"/>
@@ -3143,6 +3185,15 @@ taobao.com
 															<option value="15">15s</option>
 															<option value="30">30s</option>
 															<option value="60">60s</option>
+														</select>
+													</td>
+												</tr>
+												<tr id="ss_main_portal_tr">
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(50)">侧边栏入口开关</a></th>
+													<td>
+														<select id="ss_main_portal" name="ss_main_portal" class="ssconfig input_option" onchange="update_visibility_tab4();" >
+															<option value="0" selected>关闭</option>
+															<option value="1">开启</option>
 														</select>
 													</td>
 												</tr>
