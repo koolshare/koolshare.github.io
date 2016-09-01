@@ -1,0 +1,6 @@
+Koolshare Asuswrt-Merlin DDnspod Changelog
+===========================================
+0.1.1 ( 01/06/2016 14:49:28 )
+	- init 初始版本
+0.1.2 ( 13/06/2016 14:49:28 )
+	- Change icon
