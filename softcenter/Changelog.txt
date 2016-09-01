@@ -1,0 +1,14 @@
+Koolshare Asuswrt-Merlin softeware center Changelog
+===========================================
+1.1.0
+   - fix	make shadowsocks the first icon in softerware center when using local data
+
+1.0.9
+   - fix	fix shadowsocks turn to koolsocks when software center server is down
+   - add	make shadowsocks default installed in softerware center(prepare for the next fw)
+
+1.0.8
+   - fix	icon position adjustmet
+
+1.0.5
+   - fix	插件隐藏按钮移动到右侧
