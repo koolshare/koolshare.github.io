@@ -1,0 +1,43 @@
+!  -----更新时间:  2016-9-1 12:19:39   by:xwhyc-----------------------------------------------
+!  -----广告反馈:http://www.adbyby.com/help.htm   QQ群: 79547134(满), 364066294(满)，470705224，534897434,438394572--------------
+||zh.thegreatdaily.com$s@setTimeout(function()@@
+||gamer.com.tw$s@AntiAd.check = function(element)@@
+|http://www.baiy.net/js/function.js$s@function head(){*function player4(){*}@@
+||gamer.com.tw/$s@setInterval("NOTIFY_getnum()",60000);@setInterval("NOTIFY_getnum()",0);@
+
+
+!-------------------------------------------
+|http://www.epinv.com/wp-content/themes/ep/ep.css
+|http://qidian.gtimg.com/qd/js/index/banner
+|http://b.baiy.net^
+|http://a.baiy.net^
+|http://www.baiy.net/pic/1000.gif
+|http://www.wogala.com/statics/inc/$script
+|http://mvip.zhuba8.com/js/mob/bottom.js
+||diaojiaoji168.com^
+||yzh360.com^
+|http://*.com/js/cnzz.js
+|http://www.56xu.com/js/cnzz.js
+|http://gg.$third-party
+|http://ark.letv.com/adx?adzone=
+|http://ark.letv.com/s?res=jsonp&ark=
+
+
+
+
+!-----------------------
+epinv.com##.yin
+mobile01.com##[id^="ad"]
+gamer.com.tw###flyRightBox,#flySalve,.goAPP
+apk.tw###confirmBox,#confirmOverlay
+thegreatdaily.com##[id^="ads"],#fbbox,.adsbygoogle,#rightAds
+baiy.net##.ad300
+sg169.com##.jy-pos-2,.jy-bg-2
+fun01.net##.adsbygoogle,.ui_adblock,[id^="win_like"]
+crsky.com##.row_down,.banner-square,.fast_down
+ispot.news##.adsbygoogle,.ui_adblock,[id^="win_like"],.adunit
+
+!---------adbyby---------
+thegreatdaily.com/cat##.col-lg-8.col-md-8{width:1190px;}
+
+

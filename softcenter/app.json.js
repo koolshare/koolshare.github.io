@@ -21,6 +21,16 @@
             "version": "1.8"
         }, 
         {
+            "build_date": "2016-09-01_18:38:21", 
+            "description": "广告屏蔽大师", 
+            "home_url": "Module_adbyby.asp", 
+            "md5": "68dccce19191b93152352354a57e3348", 
+            "name": "adbyby", 
+            "tar_url": "adbyby/adbyby.tar.gz", 
+            "title": "adbyby", 
+            "version": "1.0"
+        }, 
+        {
             "build_date": "2016-09-01_17:20:52", 
             "description": "迅雷快鸟，为上网加速而生~", 
             "home_url": "Module_kuainiao.asp", 

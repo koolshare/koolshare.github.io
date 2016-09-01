@@ -1,0 +1,4 @@
+#!/bin/sh
+
+killall adbyby
+iptables -t nat -D PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8118
