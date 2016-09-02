@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin softeware center Changelog
 ===========================================
+1.1.3
+   - fix	fix blank bar on top
+   - fix	fix shadowsocks appear in both install and uninstall
+
 1.1.0
    - fix	make shadowsocks the first icon in softerware center when using local data
 
