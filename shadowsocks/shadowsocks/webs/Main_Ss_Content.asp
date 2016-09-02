@@ -195,9 +195,6 @@ function init() {
     toggle_switch();
     detect_kcptun();
     refreshRate = getRefresh();
-    for (var field in db_ss) {
-		$j('#'+field).val(db_ss[field]);
-	}
     if (typeof db_ss != "undefined") {
         update_ss_ui(db_ss);
         loadAllConfigs();
@@ -221,6 +218,9 @@ function init() {
 	var retArea = $G('log_content');
 	retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
 	//setTimeout(setIframeSrc, 5000);	
+	for (var field in db_ss) {
+		$j('#'+field).val(db_ss[field]);
+	}
 }
 
 function detect_kcptun(){
@@ -1622,13 +1622,13 @@ function version_show(){
             if(typeof(res["version"]) != "undefined" && res["version"].length > 0) {
 	            if(res["version"] == db_ss["ss_basic_version_local"]){
 		        	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
-
-
-
-		        	
 	       		}else if(res["version"] !== db_ss["ss_basic_version_local"]) {
-                    $j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
-                    $j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
+					 if(typeof(db_ss["ss_basic_version_local"]) != "undefined") {
+                    	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
+						$j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
+                	}else{
+	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：2.8.5</i></a>");
+                	}
 		        }
             }
         }
@@ -1984,7 +1984,9 @@ function checkCmdRet(){
 		}
 	});
 }
-
+function reload_Soft_Center(){
+	location.href = "/Main_Soft_center.asp";
+}
 /*
 function setIframeSrc() {
     var s1 = "http://1212.ip138.com/ic.asp";
@@ -2047,15 +2049,15 @@ function setIframeSrc() {
 		<td width="17">&nbsp;</td>
 		<!--=====Beginning of Main Menu=====-->
 		<td valign="top" width="202">
-			<div id="mainMenu"></div>
+			<div id="mainMenu" style="margin-top:-171px;"></div>
 			<div id="subMenu"></div>
 		</td>
 		<td valign="top">
-			<div id="tabMenu" class="submenuBlock"></div>
+			<div id="tabMenu" class="submenuBlock" style="width:768px;"></div>
 			
 			<!--=====Beginning of Main Content=====-->
 			
-			<table width="760px" border="0" align="left" cellpadding="0" cellspacing="0" id="table_for_all" style="display: block;">
+			<table width="98%" border="0" align="left" cellpadding="0" cellspacing="0" id="table_for_all" style="display: block;">
 				<tr>
 					<td align="left" valign="top">
 						<div>
@@ -2064,7 +2066,8 @@ function setIframeSrc() {
 									<td bgcolor="#4D595D" colspan="3" valign="top">									
 										<div>&nbsp;</div>
 										<div class="formfonttitle" style="margin-top: -18px;" id="ss_title">shadowsocks - 账号信息配置</div>
-										<div id="line1" style="margin-left:3px;margin-top:5px;margin-bottom:3px"><img src="/images/New_ui/export/line_export.png"></div>
+										<div style="float:right; width:15px; height:0px;margin-top:-6px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
+										<div id="line1" style="margin-left:3px;margin-top:0px;margin-bottom:3px;"><img src="/images/New_ui/export/line_export.png"></div>
 										<div class="SimpleNote"  id="head_illustrate"><i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。</div>
 										<div style="margin-top: 0px;text-align: center;font-size: 18px;margin-bottom: 0px;"class="formfontdesc" id="cmdDesc"></div>
 										<div id="ss_switch_show">
@@ -3241,7 +3244,7 @@ taobao.com
 										</div>
 										<div id="warn1" style="display: none;font-size: 20px;position: absolute; bottom: 350px; left: 0px;" class="formfontdesc" id="cmdDesc"><i>你开启了kcptun,请先关闭后才能开启shadowsocks</i></div>
 										<div id="line_image1" style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"/></div>
-										<div id ="KoolshareBottom_div" class="KoolshareBottom" style="position: static; bottom: 0px; left: 420px;">
+										<div id ="KoolshareBottom_div" class="KoolshareBottom" style="position: static;">
 											论坛技术支持： <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a> <br/>
 											博客技术支持： <a href="http://www.mjy211.com" target="_blank"> <i><u>www.mjy211.com</u></i> </a> <br/>
 											Github项目： <a href="https://github.com/koolshare/koolshare.github.io" target="_blank"> <i><u>github.com/koolshare</u></i> </a> <br/>

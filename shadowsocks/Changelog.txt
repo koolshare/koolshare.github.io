@@ -1,6 +1,14 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
-
+2.8.6
+		This is a minor fix version, which is designed to put into the coming firmware
+		In the next firmware shadowsocks in merlin is default installed in software center,
+		you can access shadowsocks main page both in software center and sidebar.
+		softer center 1.1.3 is recommand.
+   - fix	fix displacement of the ss main page;
+   - fix	fix udp tunnel in gameV2 won't show some times;
+   - fix	fix version show undefined when dbus value not obtain;
+   - add	add back port to software center
 
 2.8.5
      建议	建议从2.0以下版本的升级上来的朋友，都使用清空配置清除一次所有配置，然后全部重新手动配置，配置完后再保存一份新的用于以后的恢复。
