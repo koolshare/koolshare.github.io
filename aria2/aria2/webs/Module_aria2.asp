@@ -241,6 +241,7 @@
               document.getElementById('aria2_bt_table').style.display = "";
               document.getElementById('aria2_install_table').style.display = "";
               document.getElementById('cmdBtn1').style.display = "";
+          toggle_func();
           }
           showhide("aria2_check_time_tr", (document.aria2_form.f_aria2_check.value !== "false"));
           showhide("aria2_rpc_listen_port_tr", (document.aria2_form.f_aria2_enable_rpc.value !== "false"));
@@ -253,7 +254,6 @@
           showhide("aria2_save_session_interval_tr", (document.aria2_form.f_aria2_force_save.value !== "false"));
           showhide("aria2_dht_listen_port_tr", (document.aria2_form.f_aria2_enable_dht.value !== "false"));
           showhide("aria2_cpulimit_value", (document.aria2_form.f_aria2_cpulimit_enable.value !== "false"));
-          toggle_func();
       }
       function onSubmitCtrl(o, s) {
         alert_custom();
@@ -264,7 +264,7 @@
         }
       }
       function conf2obj(){
-              var params1 = ["aria2_cpulimit_value", "aria2_bt_max_peers", "aria2_check_time", "aria2_custom", "aria2_dht_listen_port", "aria2_dir", "aria2_disk_cache", "aria2_enable", "aria2_event_poll", "aria2_file_allocation", "aria2_force_save", "aria2_install_status", "aria2_listen_port", "aria2_lowest_speed_limit", "aria2_max_concurrent_downloads", "aria2_max_connection_per_server", "aria2_max_download_limit", "aria2_max_overall_download_limit", "aria2_max_overall_upload_limit", "aria2_max_tries", "aria2_max_upload_limit", "aria2_min_split_size", "aria2_peer_id_prefix", "aria2_referer", "aria2_retry_wait", "aria2_rpc_listen_port", "aria2_rpc_secret", "aria2_save_session_interval", "aria2_seed_ratio", "aria2_sleep", "aria2_split", "aria2_update_enable", "aria2_update_sel", "aria2_user_agent"];
+              var params1 = ["aria2_cpulimit_value", "aria2_bt_tracker", "aria2_bt_max_peers", "aria2_check_time", "aria2_custom", "aria2_dht_listen_port", "aria2_dir", "aria2_disk_cache", "aria2_enable", "aria2_event_poll", "aria2_file_allocation", "aria2_force_save", "aria2_install_status", "aria2_listen_port", "aria2_lowest_speed_limit", "aria2_max_concurrent_downloads", "aria2_max_connection_per_server", "aria2_max_download_limit", "aria2_max_overall_download_limit", "aria2_max_overall_upload_limit", "aria2_max_tries", "aria2_max_upload_limit", "aria2_min_split_size", "aria2_peer_id_prefix", "aria2_referer", "aria2_retry_wait", "aria2_rpc_listen_port", "aria2_rpc_secret", "aria2_save_session_interval", "aria2_seed_ratio", "aria2_sleep", "aria2_split", "aria2_update_enable", "aria2_update_sel", "aria2_user_agent"];
               for (var i = 0; i < params1.length; i++) {
                 if (typeof db_aria2_[params1[i]] !== "undefined") {
                   $("#"+params1[i]).val(db_aria2_[params1[i]]);
@@ -1505,7 +1505,7 @@ function toggle_func(){
                               <label>添加额外的Tracker</label>
                             </td>
                             <td>
-                              <input type="text" class="input_ss_table" style="width:auto;" name="aria2_bt_tracker" value="" maxlength="512" size="64" id="aria2_bt_tracker">
+                              <textarea rows=6 style="width:99%; font-size:11px;background:#475A5F;color:#FFFFFF;border:1px solid gray;height:auto;" name="aria2_bt_tracker" id="aria2_bt_tracker"></textarea>
                             </td>
                           </tr>
                           <tr>

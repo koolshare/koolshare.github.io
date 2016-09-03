@@ -1,8 +1,8 @@
 {
-"version":"1.7.1",
-"md5":"cdb2560d086e95d2d22293ccb2de67c6",
+"version":"1.7.2",
+"md5":"6b21ce1fce765c003aa92fafd5751fe2",
 "home_url":"Module_aria2.asp",
 "title":"Aria2",
 "description":"linux下载利器",
-"build_date":"2016-09-03_12:50:00"
+"build_date":"2016-09-03_15:30:53"
 }
