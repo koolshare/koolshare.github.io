@@ -1505,7 +1505,7 @@ function toggle_func(){
                               <label>添加额外的Tracker</label>
                             </td>
                             <td>
-                              <input type="text" class="input_ss_table" style="width:auto;" name="aria2_bt_tracker" value="" maxlength="256" size="64" id="aria2_bt_tracker">
+                              <input type="text" class="input_ss_table" style="width:auto;" name="aria2_bt_tracker" value="" maxlength="512" size="64" id="aria2_bt_tracker">
                             </td>
                           </tr>
                           <tr>
