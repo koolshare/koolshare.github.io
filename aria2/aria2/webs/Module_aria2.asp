@@ -173,8 +173,7 @@
         buildswitch();
         conf2obj();
         line_show();
-        toggle_func();
-        update_visibility();
+	update_visibility();
         version_check();
         initial_dir();
         check_dir_path();
@@ -254,6 +253,7 @@
           showhide("aria2_save_session_interval_tr", (document.aria2_form.f_aria2_force_save.value !== "false"));
           showhide("aria2_dht_listen_port_tr", (document.aria2_form.f_aria2_enable_dht.value !== "false"));
           showhide("aria2_cpulimit_value", (document.aria2_form.f_aria2_cpulimit_enable.value !== "false"));
+          toggle_func();
       }
       function onSubmitCtrl(o, s) {
         alert_custom();
