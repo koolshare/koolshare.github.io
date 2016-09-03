@@ -3,6 +3,7 @@
 # define variables
 eval `dbus export aria2`
 source /koolshare/scripts/base.sh
+export PERP_BASE=/koolshare/perp
 #old_token=$(cat /koolshare/aria2/aria2.conf|grep rpc-secret|cut -d "=" -f2)
 token=$(head -200 /dev/urandom | md5sum | cut -d " " -f 1)
 ddns=$(nvram get ddns_hostname_x)
@@ -36,27 +37,8 @@ EOF
 }
 
 start_aria2(){
-
-	if [ "$aria2_binary" = entware ];then
-		/opt/bin/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
-	elif [ "$aria2_binary" = custom ];then
-		if [ ! -z "$aria2_binary_custom" ];then
-			$aria2_binary_custom/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
-		else
-			dbus set aria2_warning="当前目录没有找到aria2可执行文件"
-		fi
-	elif [ "$aria2_binary" = internal ];then
-		/koolshare/aria2/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
-	fi
-
-
-
-	aria2_run=$(ps|grep aria2c|grep -v grep)
-	if [ ! -z "$aria2_run" ];then
-		echo aria2c start success!
-	else
-		echo aria2c start failure！
-	fi
+	#/koolshare/aria2/aria2c --conf-path=/koolshare/aria2/aria2.conf -D >/dev/null 2>&1 &
+	perpctl A aria2
 }
 
 # generate token
@@ -88,24 +70,10 @@ close_port(){
 
 # kill aria2
 kill_aria2(){
+    perpctl X aria2
     killall aria2c >/dev/null 2>&1
-    sleep 2
-    aria2_run1=$(ps|grep aria2c|grep -v grep|grep -v killall)
-
-	if [ -z "$aria2_run1" ];then
-		echo aria2c stoped!
-	else
-		echo aria2c stop failure!
-	fi
 }
 
-
-add_process_check(){
-	if [ "$aria2_check" = "true" ];then
-		echo add_process_check
-		cru a aria2_guard "*/$aria2_check_time * * * * /bin/sh /koolshare/scripts/aria2_guard.sh"
-	fi
-}
 
 del_process_check(){
 	cru d aria2_guard >/dev/null 2>&1
@@ -143,13 +111,13 @@ start)
 	creat_conf
 	generate_token
 	start_aria2
-	add_process_check
 	open_port
 	add_cpulimit
 	fi
 	;;
 stop | kill )
 	kill_aria2
+	killall cpulimit
 	close_port
 	dbus remove aria2_custom
 	;;
@@ -162,7 +130,6 @@ restart)
 	creat_conf
 	generate_token
 	start_aria2
-	add_process_check
 	open_port
 	add_cpulimit
 	;;
@@ -170,7 +137,7 @@ default)
 	load_default
 	;;
 *)
-	echo "Usage: $0 (start|stop|restart|check|kill|update)"
+	echo "Usage: $0 (start|stop|restart|check|kill)"
 	exit 1
 	;;
 esac
