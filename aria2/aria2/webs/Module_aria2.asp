@@ -243,7 +243,6 @@
               document.getElementById('cmdBtn1').style.display = "";
           toggle_func();
           }
-          showhide("aria2_check_time_tr", (document.aria2_form.f_aria2_check.value !== "false"));
           showhide("aria2_rpc_listen_port_tr", (document.aria2_form.f_aria2_enable_rpc.value !== "false"));
           showhide("aria2_rpc_allow_origin_all_tr", (document.aria2_form.f_aria2_enable_rpc.value !== "false"));
           showhide("aria2_rpc_listen_all_tr", (document.aria2_form.f_aria2_enable_rpc.value !== "false"));
@@ -264,13 +263,13 @@
         }
       }
       function conf2obj(){
-              var params1 = ["aria2_cpulimit_value", "aria2_bt_tracker", "aria2_bt_max_peers", "aria2_check_time", "aria2_custom", "aria2_dht_listen_port", "aria2_dir", "aria2_disk_cache", "aria2_enable", "aria2_event_poll", "aria2_file_allocation", "aria2_force_save", "aria2_install_status", "aria2_listen_port", "aria2_lowest_speed_limit", "aria2_max_concurrent_downloads", "aria2_max_connection_per_server", "aria2_max_download_limit", "aria2_max_overall_download_limit", "aria2_max_overall_upload_limit", "aria2_max_tries", "aria2_max_upload_limit", "aria2_min_split_size", "aria2_peer_id_prefix", "aria2_referer", "aria2_retry_wait", "aria2_rpc_listen_port", "aria2_rpc_secret", "aria2_save_session_interval", "aria2_seed_ratio", "aria2_sleep", "aria2_split", "aria2_update_enable", "aria2_update_sel", "aria2_user_agent"];
+              var params1 = ["aria2_cpulimit_value", "aria2_bt_tracker", "aria2_bt_max_peers", "aria2_custom", "aria2_dht_listen_port", "aria2_dir", "aria2_disk_cache", "aria2_enable", "aria2_event_poll", "aria2_file_allocation", "aria2_force_save", "aria2_install_status", "aria2_listen_port", "aria2_lowest_speed_limit", "aria2_max_concurrent_downloads", "aria2_max_connection_per_server", "aria2_max_download_limit", "aria2_max_overall_download_limit", "aria2_max_overall_upload_limit", "aria2_max_tries", "aria2_max_upload_limit", "aria2_min_split_size", "aria2_peer_id_prefix", "aria2_referer", "aria2_retry_wait", "aria2_rpc_listen_port", "aria2_rpc_secret", "aria2_save_session_interval", "aria2_seed_ratio", "aria2_sleep", "aria2_split", "aria2_user_agent"];
               for (var i = 0; i < params1.length; i++) {
                 if (typeof db_aria2_[params1[i]] !== "undefined") {
                   $("#"+params1[i]).val(db_aria2_[params1[i]]);
                 }
               }
-              var params2 = ["aria2_cpulimit_enable", "aria2_disable_ipv6", "aria2_check", "aria2_continue", "aria2_enable_mmap", "aria2_enable_rpc", "aria2_rpc_allow_origin_all", "aria2_rpc_listen_all", "aria2_bt_enable_lpd", "aria2_enable_dht", "aria2_bt_require_crypto", "aria2_follow_torrent", "aria2_enable_peer_exchange", "aria2_force_save", "aria2_bt_hash_check_seed", "aria2_bt_seed_unverified", "aria2_bt_save_metadata"];
+              var params2 = ["aria2_cpulimit_enable", "aria2_disable_ipv6", "aria2_continue", "aria2_enable_mmap", "aria2_enable_rpc", "aria2_rpc_allow_origin_all", "aria2_rpc_listen_all", "aria2_bt_enable_lpd", "aria2_enable_dht", "aria2_bt_require_crypto", "aria2_follow_torrent", "aria2_enable_peer_exchange", "aria2_force_save", "aria2_bt_hash_check_seed", "aria2_bt_seed_unverified", "aria2_bt_save_metadata"];
           for (var i = 0; i < params2.length; i++) {
             if (typeof db_aria2_[params2[i]] !== "undefined") {
               $("#f_"+params2[i]).val(db_aria2_[params2[i]]);
@@ -1150,27 +1149,7 @@ function toggle_func(){
                           </tr>
 
 
-                          <tr>
-                            <td style="background-color: #2F3A3E;width:25%;">
-                              <label>启用守护进程</label>
-                            </td>
-                            <td>
-                              <input type="checkbox" id="aria2_check" checked="" onclick="oncheckclick(this)" onchange="update_visibility();">
-                              <input type="hidden" id="f_aria2_check" name="aria2_check" value="" />
-                              <small>*</small>
 
-                            </td>
-                          </tr>
-                          <tr id="aria2_check_time_tr">
-                            <td style="background-color: #2F3A3E;width:25%;">
-                              <label>检测时间间隔</label>
-                            </td>
-                            <td>
-                              <input type="text" class="input_ss_table" style="width:80px;" name="aria2_check_time" value="15" maxlength="5" size="7" id="aria2_check_time">
-                              <small>分钟 (范围: 1 - 55; 默认: 15)</small>
-
-                            </td>
-                          </tr>
                           <tr>
                             <td style="background-color: #2F3A3E;width:25%;">
                               <label>启动延迟</label>
@@ -1179,42 +1158,6 @@ function toggle_func(){
                               <input type="text" class="input_ss_table" style="width:80px;" name="aria2_sleep" value="10" maxlength="5" size="7" id="aria2_sleep">
                               <small>秒 (范围: 1 - 60; 默认: 10)</small>
 
-                            </td>
-                          </tr>
-                          <tr id="update_rules">
-                            <td  style="background-color: #2F3A3E;width:25%;">Aria2更新检测</td>
-                            <td>
-                              <select id="aria2_update_enable" name="aria2_update_enable" class="input_ss_table" style="width:86px;height:25px;" onchange="update_visibility();" >
-                                <option value="0">禁用</option>
-                                <option value="1">开启</option>
-                              </select>
-                              <select id="aria2_update_sel" name="aria2_update_sel" class="input_ss_table" style="width:86px;height:25px;" title="选择规则列表自动更新时间，更新后将自动重启SS" onchange="update_visibility();" >
-                                <option value="0">00:00点</option>
-                                <option value="1">01:00点</option>
-                                <option value="2">02:00点</option>
-                                <option value="3">03:00点</option>
-                                <option value="4">04:00点</option>
-                                <option value="5">05:00点</option>
-                                <option value="6">06:00点</option>
-                                <option value="7">07:00点</option>
-                                <option value="8">08:00点</option>
-                                <option value="9">09:00点</option>
-                                <option value="10">10:00点</option>
-                                <option value="11">11:00点</option>
-                                <option value="12">12:00点</option>
-                                <option value="13">13:00点</option>
-                                <option value="14">14:00点</option>
-                                <option value="15">15:00点</option>
-                                <option value="16">16:00点</option>
-                                <option value="17">17:00点</option>
-                                <option value="18">18:00点</option>
-                                <option value="19">19:00点</option>
-                                <option value="20">20:00点</option>
-                                <option value="21">21:00点</option>
-                                <option value="22">22:00点</option>
-                                <option value="23">23:00点</option>
-                              </select>
-                              <small>开启时检测aria2有无更新，并在右上版本号处提示</small>
                             </td>
                           </tr>
                           <tr>
