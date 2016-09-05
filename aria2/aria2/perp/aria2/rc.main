@@ -3,7 +3,7 @@ Aria2_enable=`dbus get aria2_enable`
 exec 2>&1
 if test ${1} = 'start' ; then
   if [ "$Aria2_enable" == "1" ];then
-   /koolshare/aria2/aria2c --conf-path=/koolshare/aria2/aria2.conf -D
+   exec /koolshare/aria2/aria2c --conf-path=/koolshare/aria2/aria2.conf
   fi
 fi
   

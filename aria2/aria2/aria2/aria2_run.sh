@@ -54,7 +54,10 @@ open_port(){
 	echo open firewall port $aria2_rpc_listen_port and 8088
 	iptables -I INPUT -p tcp --dport $aria2_rpc_listen_port -j ACCEPT >/dev/null 2>&1
 	iptables -I INPUT -p tcp --dport 8088 -j ACCEPT >/dev/null 2>&1
+	iptables -I INPUT -p tcp --dport 6881:6889 -j ACCEPT >/dev/null 2>&1
+	iptables -I INPUT -p tcp --dport 51413 -j ACCEPT >/dev/null 2>&1
 	iptables -I INPUT -p tcp --dport 52413 -j ACCEPT >/dev/null 2>&1
+	iptables -I INPUT -p udp --dport 52413 -j ACCEPT >/dev/null 2>&1
 	echo done
 }
 
@@ -63,7 +66,10 @@ close_port(){
 	echo close firewall port $aria2_rpc_listen_port and 8088
 	iptables -D INPUT -p tcp --dport $aria2_rpc_listen_port -j ACCEPT >/dev/null 2>&1
 	iptables -D INPUT -p tcp --dport 8088 -j ACCEPT >/dev/null 2>&1
+	iptables -D INPUT -p tcp --dport 6881:6889 -j ACCEPT >/dev/null 2>&1
+	iptables -D INPUT -p tcp --dport 51413 -j ACCEPT >/dev/null 2>&1
 	iptables -D INPUT -p tcp --dport 52413 -j ACCEPT >/dev/null 2>&1
+	iptables -D INPUT -p udp --dport 52413 -j ACCEPT >/dev/null 2>&1
 	echo done
 }
 
