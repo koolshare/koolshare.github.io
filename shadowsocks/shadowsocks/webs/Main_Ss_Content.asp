@@ -195,6 +195,9 @@ function init() {
     toggle_switch();
     detect_kcptun();
     refreshRate = getRefresh();
+    for (var field in db_ss) {
+        $j('#'+field).val(db_ss[field]);
+    }
     if (typeof db_ss != "undefined") {
         update_ss_ui(db_ss);
         loadAllConfigs();
@@ -218,9 +221,7 @@ function init() {
 	var retArea = $G('log_content');
 	retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
 	//setTimeout(setIframeSrc, 5000);	
-	for (var field in db_ss) {
-		$j('#'+field).val(db_ss[field]);
-	}
+
 }
 
 function detect_kcptun(){
@@ -715,6 +716,7 @@ function ssform2obj() {
     obj["rss_obfs_param"] = $G("ss_basic_rss_obfs_param").value;
     obj["use_rss"] = $G("hd_ss_basic_use_rss").value;
     obj["onetime_auth"] = $G("ss_basic_onetime_auth").value;
+    obj["koolgame_udp"] = $G("ss_basic_koolgame_udp").value;
     return obj;
 }
 
