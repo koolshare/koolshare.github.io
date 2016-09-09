@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin kcptun Changelog
 ===========================================
+1.9
+   - fix	fix cndlist won't work
+   - update	update kcptun binary to latest
+
 1.8
    - fix	fix use off dbus remove cause issue of skipd
 

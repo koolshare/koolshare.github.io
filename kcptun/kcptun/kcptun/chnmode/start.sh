@@ -13,19 +13,18 @@ creat_kcptun_conf(){
 	echo $(date): create kcptun config file...
 	cat > /koolshare/kcptun/kcptun_config.json <<-EOF
 		{
-		    "server":"$server_ip",
-		    "server_port":$KCP_basic_port,
-		    "password":"$KCP_basic_password",
-		    "crypt":"$KCP_basic_crypt",
-		    "socks5_port":23456,
-		    "redir_port":3333,
-		    "mode":"$KCP_basic_mode",
-		    "conn":$KCP_basic_conn,
-		    "sndwnd":$KCP_basic_sndwnd,
-		    "rcvwnd":$KCP_basic_rndwnd,
-		    "mtu":$KCP_basic_mtu,
-		    "nocomp":$KCP_basic_nocomp
-		    
+		    "localaddr": ":23456",
+		    "redir": ":3333",
+		    "remoteaddr": "$server_ip:$KCP_basic_port",
+		    "key": "$KCP_basic_password",
+		    "crypt": "$KCP_basic_crypt",
+		    "mode": "$KCP_basic_mode",
+		    "conn": $KCP_basic_conn,
+		    "mtu": $KCP_basic_mtu,
+		    "sndwnd": $KCP_basic_sndwnd,
+		    "rcvwnd": $KCP_basic_rndwnd,
+		    "nocomp": $KCP_basic_nocomp,
+		    "dscp": $KCP_basic_dscp
 		}
 		EOF
 	echo $(date): done
@@ -451,6 +450,7 @@ start_all)
 	Start_kcptun
 	load_nat
 	restart_dnsmasq
+	ln_conf
 	remove_status
 	nvram set KCP_mode=2
 	nvram commit

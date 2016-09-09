@@ -883,7 +883,15 @@ function hideKCPLoadingBar(){
 												<td>
 													<select id="KCP_basic_crypt" name="KCP_basic_crypt" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
 														<option value="aes" selected="">aes</option>
+														<option value="aes-128">aes-128</option>
+														<option value="aes-192">aes-192</option>
+														<option value="salsa20">salsa20</option>
+														<option value="blowfish">blowfish</option>
+														<option value="twofish">twofish</option>
+														<option value="cast5">cast5</option>
+														<option value="3des">3des</option>
 														<option value="tea">tea</option>
+														<option value="xtea">xtea</option>
 														<option value="xor">xor</option>
 														<option value="none">none</option>
 													</select>
@@ -940,6 +948,14 @@ function hideKCPLoadingBar(){
 													<input type="text" name="KCP_basic_rndwnd" id="KCP_basic_rndwnd" class="input_KCP_table" maxlength="100" value="1024"></input>
 												</td>
 											</tr>
+
+											<tr id="sdcp _tr">
+												<th width="35%">dscp</th>
+												<td>
+													<input type="text" name="KCP_basic_dscp" id="KCP_basic_dscp" class="input_KCP_table" maxlength="100" value="0"></input>
+												</td>
+											</tr>
+											
 										</table>
 									</div>
 
