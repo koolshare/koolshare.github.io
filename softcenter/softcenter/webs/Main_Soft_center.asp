@@ -610,8 +610,8 @@ function softceterInitData(data) {
     });
 function menu_hook(title, tab) {
 	var ss_mode = '<% nvram_get("ss_mode"); %>';
-	tabtitle[17] = new Array("", "软件中心");
-	tablink[17] = new Array("", "Main_Soft_center.asp");
+	tabtitle[17] = new Array("", "软件中心", "离线安装");
+	tablink[17] = new Array("", "Main_Soft_center.asp", "Main_Soft_setting.asp");
 }
 function notice_show(){
     $.ajax({

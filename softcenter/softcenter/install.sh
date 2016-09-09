@@ -12,6 +12,7 @@ softcenter_install() {
 		chmod 755 /koolshare/perp/.boot/*
 		chmod 755 /koolshare/perp/.control/*
 		chmod 755 /koolshare/perp/adm/*
+		chmod 755 /koolshare/scripts/*
 		rm -rf /tmp/softcenter
 		if [ ! -f "/koolshare/init.d/S10Softcenter.sh" ]; then
 		ln -sf /koolshare/scripts/app_install.sh /koolshare/init.d/S10Softcenter.sh
