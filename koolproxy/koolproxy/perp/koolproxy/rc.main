@@ -1,0 +1,16 @@
+#!/bin/sh
+
+eval `dbus export koolproxy`
+koolproxy_enable=`dbus get koolproxy_enable`
+exec 2>&1
+if test ${1} = 'start' ; then
+  if [ "$koolproxy_enable" == "1" ];then
+	[ "$koolproxy_rule_sel" == "1" ] && rule="/koolshare/koolproxy/rule/lazy.txt"
+	[ "$koolproxy_rule_sel" == "2" ] && rule="/koolshare/koolproxy/rule/chinalist.conf"
+	[ "$koolproxy_rule_sel" == "3" ] && rule="/koolshare/koolproxy/rule/easylist.conf"
+	[ "$koolproxy_rule_sel" == "4" ] && rule="/koolshare/koolproxy/rule/easylistchina+easylist.conf"
+	exec /koolshare/koolproxy/koolproxy -p 3000 -a $rule
+  fi
+fi
+  
+exit 0
