@@ -91,14 +91,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2016-09-09_11:33:18", 
+            "build_date": "2016-09-11_11:43:05", 
             "description": "koolproxy，支持正则的网络代理~", 
             "home_url": "Module_koolproxy.asp", 
-            "md5": "54da2ff561b11cd68017639eeb842dd3", 
+            "md5": "9661f3fdc996a3d84caaf36f9b122aea", 
             "name": "koolproxy", 
             "tar_url": "koolproxy/koolproxy.tar.gz", 
             "title": "koolproxy", 
-            "version": "1.0"
+            "version": "1.1"
         }, 
         {
             "build_date": "2016-05-19_22:37:04", 
@@ -141,14 +141,14 @@
             "version": "1.7.4"
         }, 
         {
-            "build_date": "2016-06-13_17:50:51", 
+            "build_date": "2016-09-11_11:42:19", 
             "description": "使用Dnspod的ddns服务", 
             "home_url": "Module_ddnspod.asp", 
-            "md5": "4436d88728b79e1825ad5096b068f0c1", 
+            "md5": "232e4bfc7fd823f267dc8a1d1721fb46", 
             "name": "ddnspod", 
             "tar_url": "ddnspod/ddnspod.tar.gz", 
             "title": "DDnspod", 
-            "version": "0.1.3"
+            "version": "0.1.4"
         }, 
         {
             "build_date": "2016-05-11_19:20:01", 
@@ -172,7 +172,7 @@
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "89abe6b88ecd9b901bb35c4e620122fa", 
+    "md5": "0efd5d5cb41fe0c2848f1a91d7559be9", 
     "tar_url": "softcenter/softcenter.tar.gz", 
-    "version": "1.1.4"
+    "version": "1.1.5"
 }
