@@ -9,6 +9,7 @@ if test ${1} = 'start' ; then
 	[ "$koolproxy_rule_sel" == "2" ] && rule="/koolshare/koolproxy/rule/chinalist.conf"
 	[ "$koolproxy_rule_sel" == "3" ] && rule="/koolshare/koolproxy/rule/easylist.conf"
 	[ "$koolproxy_rule_sel" == "4" ] && rule="/koolshare/koolproxy/rule/easylistchina+easylist.conf"
+	[ "$koolproxy_rule_sel" == "5" ] && rule="/koolshare/koolproxy/rule/koolproxy.txt"
 	exec /koolshare/koolproxy/koolproxy -p 3000 -a $rule
   fi
 fi

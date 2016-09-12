@@ -141,10 +141,11 @@ location.href = "/Main_Soft_center.asp";
 												<th>选择规则</th>
 												<td>
 													<select id="koolproxy_rule_sel" name="koolproxy_rule_sel" style="width:350px;margin:0px 0px 0px 2px;" class="input_option">
-														<option value="1" selected >lazy.txt</option>
-														<option value="2">chinalist</option>
-														<option value="3">easylist</option>
-														<option value="4">easylistchina+easylist</option>
+														<option value="5" selected >koolproxy.txt (此名单由koolshare维护)</option>
+														<option value="1" selected >lazy.txt (adbyby使用的静态规则)</option>
+														<option value="2">chinalist (adblock官方规则)</option>
+														<option value="3">easylist (adblock官方规则)</option>
+														<option value="4">easylistchina+easylist (adblock官方规则)</option>
 													</select>
 												</td>
 											</tr>

@@ -16,7 +16,7 @@ start_koolproxy(){
 	[ "$koolproxy_rule_sel" == "2" ] && rule="/koolshare/koolproxy/rule/chinalist.conf"
 	[ "$koolproxy_rule_sel" == "3" ] && rule="/koolshare/koolproxy/rule/easylist.conf"
 	[ "$koolproxy_rule_sel" == "4" ] && rule="/koolshare/koolproxy/rule/easylistchina+easylist.conf"
-
+	[ "$koolproxy_rule_sel" == "5" ] && rule="/koolshare/koolproxy/rule/koolproxy.txt"
 	perp=`ps | grep perpd |grep -v grep`
 	if [ -z "$perp" ];then
 		sh /koolshare/perp/perp.sh stop
@@ -58,8 +58,6 @@ load_nat(){
 	iptables -t nat -A koolproxy -d 224.0.0.0/4 -j RETURN
 	iptables -t nat -A koolproxy -d 240.0.0.0/4 -j RETURN
 	iptables -t nat -A koolproxy -p tcp --dport 80 -j REDIRECT --to-ports 3000
-
-
 }
 
 flush_nat(){
@@ -99,9 +97,11 @@ restart)
 	write_nat_start
 	;;
 restart_nat)
-	flush_nat
-	sleep 2
-	load_nat
+	if [ "$koolproxy_enable" == "1" ];then
+		flush_nat
+		sleep 2
+		load_nat
+	fi
 	;;
 stop)
 	stop_koolproxy

@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin koolproxy Changelog
 ===========================================
+1.2
+   - update	update binary
+   - update	update rule koolproxy
+
 1.1
    - update	change icon
 
