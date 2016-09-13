@@ -1,8 +1,4 @@
 #! /bin/sh
-# ====================================变量定义====================================
-# 版本号定义
-version="1.0"
-dbus set koolproxy_version="$version"
 # 导入skipd数据
 eval `dbus export koolproxy`
 
