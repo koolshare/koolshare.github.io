@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin koolproxy Changelog
 ===========================================
+1.4
+   - update	update binary, update rule
+
 1.3
    - update	update binary, fix taobao app and other app issue
 

@@ -110,6 +110,7 @@ location.href = "/Main_Soft_center.asp";
 										<div style="padding-top:5px;margin-top:0px;" id="NoteBox" >
 											<li>koolproxy是能识别adblock规则的代理软件,目前正在完善中; </li>
 											<li>此插件兼容SS，但是建议开启前关闭adm。 </li>
+											<li>1.4版本精简了规则数量，如果规则框为空，清重新选择并提交，另外，看PC爱奇艺有惊喜 </li>
 										</div>					
 										<div class="formfontdesc" id="cmdDesc"></div>
 										<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="routing_table">
@@ -140,12 +141,9 @@ location.href = "/Main_Soft_center.asp";
 											<tr>
 												<th>选择规则</th>
 												<td>
-													<select id="koolproxy_rule_sel" name="koolproxy_rule_sel" style="width:350px;margin:0px 0px 0px 2px;" class="input_option">
-														<option value="5" selected >koolproxy.txt (此名单由koolshare维护)</option>
-														<option value="1" selected >lazy.txt (adbyby使用的静态规则)</option>
-														<option value="2">chinalist (adblock官方规则)</option>
-														<option value="3">easylist (adblock官方规则)</option>
-														<option value="4">easylistchina+easylist (adblock官方规则)</option>
+													<select id="koolproxy_rule_sel" name="koolproxy_rule_sel" style="width:200px;margin:0px 0px 0px 2px;" class="input_option">
+														<option value="1" selected >koolproxy.txt</option>
+														<option value="2">easylistchina+easylist</option>
 													</select>
 												</td>
 											</tr>

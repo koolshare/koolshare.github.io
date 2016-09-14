@@ -1,4 +1,4 @@
-!  -----update:  2016-9-12 21:35:45
+!  -----update:  2016-9-14 22:41:00
 @@|http://$domain=taobao.com|taobao.org|alipay.com|suning.com|51buy.com|ct10000.com|etao.com|hitao.com|paipai.com|yeepay.com|taoke.alimama.com|club.alimama.com|tenpay.com|tmall.com|tbcdn.cn|jd.com|jifen.qq.com|meishichina.com|vip.xunlei.com|lixian.xunlei.com|www.vmall.com|www.1688.com|www.mm111.net|www.fanxian.com|www.cmbchina.com|alibaba.com|meidebi.com|lifevc.com|gome.com.cn|ad.alimama.com|www.alimama.com|189.cn|3songshu.com|pili.com.tw|chinahr.com
 @@|http://*&username=400gb&adsid=
 @@|http://*.com/adsafe
@@ -1119,6 +1119,7 @@
 |http://api.bilibili.com/x/web-show/res/loc?callback=jQuery*&pf=0&id=*&jsonp=jsonp&_=
 |http://api.bilibili.com/x/web-show/res/loc?pf=0&id=*&aid=
 |http://api.bilibili.com/x/web-show/res/locs?jsonp=jsonp&pf=0&ids=*&callback=jQuery
+|http://api.cupid.iqiyi.com/show2?a=qc_100001_100329&
 |http://api.cupid.iqiyi.com/show2?u=*&a=qc_100001_300144
 |http://api.cupid.ptqy.gitv.tv/mixer?ap=
 |http://api.cupid.qiyi.com/policy2?a=qc_100001_
@@ -1672,6 +1673,8 @@
 |http://news.h9377
 |http://news.ks.js.cn/myad_
 |http://nl.rcd.iqiyi.com/cro
+|http://t7z.cupid.iqiyi.com/show2?*&a=qc_100001_300144&
+|http://www.iqiyi.com/common/clientPopLstyle.html
 |http://nsclick.baidu.com
 |http://o.aolcdn.com/os/ads/adsWrapperIntl.js$script
 |http://o.lianyexiuchang.cc/js/$script
@@ -1719,10 +1722,32 @@
 |http://playad.xjmg.com
 |http://player.bumimi.com:806/all.gif
 |http://pmm.people.com.cn
+||api.cupid.iqiyi.com/policy2
+||mixer.video.iqiyi.com/jp/mixin/resources/
+||qiyu.iqiyi.com/crossdomain.xml
+||www.iqiyi.com/player/cupid/common/icon_exclusive.swf
+61.iqiyi.com###J_ad_patch,.ad_box,[id^="J_ads"]
+dm456.com,dm456.iqiyi.com##DIV[style*="height:90px;"],IFRAME[width="978"][height="90"],IFRAME[src^="/m/"],DIV#bdLeft,IFRAME[width="980"][height="92"],DIV#p-right,DIV#p-left
+iqiyi.com##div[id^="1000000000"],div.crossAd.margin_b20,div#widget-indexad.ad-index,embed[src^="' + adurl + '"],#adflash,div.ad-wrapper.clearfix,[id^="flash1000000000"],div#addiv,div.s_main.liveTop_adv,div.leftAd,div.vip_rec_main,div[data-widget-3rdads="3rdads"],div.first_column,div#widget-jingdongAd,a.skin_link,div.rightAdv,div.banner,.banner980,.mzb_new,.m-downApp
 |http://policy.cupid.qiyi.com/policy2?a=qc_100001_$domain=~iqiyi.com|~v.pps.tv
+m.iqiyi.com##div#shortcut,div.banner_inner.bd-large.aaaa,div.appBar
+|http://www.iqiyi.com/*.html?key=$f@s@\.html\?key=.*@.html@
+||iqiyi.com/$s@&cpnv=1.0@@
+^http://www.iqiyi.com/common/flashplayer/\d{8}\/\w{32}\.swf
 |http://policy.video.iqiyi.com/qiyi-flash.policy?ran=
 |http://www.iqiyi.com/player/cupid/common/icon_exclusive.swf
+|http://iface2.iqiyi.com/php/xyz/entry/$s@"ad_str":@"":@
+||cupid.iqiyi.com/mixer?a*=qc_100001_100
 |http://www.iqiyi.com/player/cupid/common/skipgg_zz.swf
+|http://cache.m.iqiyi.com/jp/tmts/$s@,"ad":1,@,"ad":0,@
+|http://api.cupid.iqiyi.com/mixer
+||cupid.iqiyi.com/show2?a=qc_100001_100$s@"i":"qc_100001_100???",@"i":"qc_100001_100141",@
+||cupid.iqiyi.com/show2?a=qc_100001_$s@"a":[{"ds":1,"p":73,*}]}],"inv":@"a":[]}],"inv":@
+|http://www.iqiyi.com/crossdomain.xml$s@<allow-access-from domain="?.qiyi.com"/>@<allow-access-from domain="*"/>@
+||iqiyi.com/$s@cid=qc_100001_100???@cid=qc_100001_100141@
+||iqiyi.com/$s@cid=&@cid=qc_100001_100141&@
+|http://www.dmnico.cn/js/qiyi2.js$s@flashP2PCoreUrl=http://www.iqiyi.com/common/flashplayer/201*/300*.swf@flashP2PCoreUrl=http://www.iqiyi.com/common/flashplayer/20151119/3022.swf@
+|http://www.dmnico.cn/js/qiyi2.js$s@src="http://www.iqiyi.com/common/flashplayer/201*/MainPlayer_5_*.swf"@src="http://update.adbyby.com/swf/iqiyi5.swf"@
 |http://www.iqiyi.com/*/pause.swf|
 |http://dispatcher.video.qiyi.com/dispn/iamo.swf
 |http://popup.jointreport-switch.com/?uid=
@@ -3853,6 +3878,7 @@
 ||rsccs.com
 ||rwjfs.com$domain=~2mm.tv|~2mmei.com
 ||rxwan.com
+!||synacast.com^
 ||s.domob.cn
 ||s1.pplive.cn/sta.js
 ||sa.tuisong.baidu.com
@@ -3950,7 +3976,6 @@
 ||sxxjdz.com^
 ||syilm.net
 ||symboltech.com$third-party
-||synacast.com^
 ||sysy.baidu9048.com
 ||szfaq.com
 ||t.58xs.com/hot/
@@ -4302,6 +4327,7 @@
 ||dleke.com
 ||ishowbg.com
 ||caches.space/bootstrap3/js/bootstrap.js
+|http://www.jd.com/*$r@http://www.jd.com/*@https://www.jd.com/*@
 !----- pcbeta -----
 |http://bbs.pcbeta.com/static/image/microsoftstore/201$image
 |http://bbs.pcbeta.com/static/image/pcbeta/xbox_one_banner.jpg$image
@@ -4314,6 +4340,13 @@
 ||bbs.pcbeta.com/viewthread$s@{width:980px; position:relative; height:1??px;@{width:980px; position:relative; height:0px;@
 ||pcbeta.com$s@window.open('http://event.pcbeta.com/bing/NationalDay/api.php?action=popup');@@
 |http://www.pcbeta.com//data/cache/jquery.js$s@,e=d.css("display");d.remove();if(e==="none"||e==="")@@
+!---- anywlan -----
+||anywlan.com/-$s@<div class="area">@<div class="cl_frame_bm frame move-span cl frame-1">@
+||anywlan.com/link/*.gif
+||anywlan.com/link/*.jpg
+||anywlan.com/link/ikuai.jpg
+!---- chinaunix -----
+||chinaunix.net/www/static/images/*.jpg
+!---- qiushibaike.com ----
+||qiushibaike.com/-$s@<div class="shopwindow">@<div class="shopwindow" style="display:none">@
 !--------------------------------------- custom rules --------------------------------------------
-
-||qiushibaike.com/$s@<div class="shopwindow">@<div class="shopwindow" style="display:none">@

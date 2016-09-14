@@ -8,11 +8,8 @@ export PERP_BASE=/koolshare/perp
 
 
 start_koolproxy(){
-	[ "$koolproxy_rule_sel" == "1" ] && rule="/koolshare/koolproxy/rule/lazy.txt"
-	[ "$koolproxy_rule_sel" == "2" ] && rule="/koolshare/koolproxy/rule/chinalist.conf"
-	[ "$koolproxy_rule_sel" == "3" ] && rule="/koolshare/koolproxy/rule/easylist.conf"
-	[ "$koolproxy_rule_sel" == "4" ] && rule="/koolshare/koolproxy/rule/easylistchina+easylist.conf"
-	[ "$koolproxy_rule_sel" == "5" ] && rule="/koolshare/koolproxy/rule/koolproxy.txt"
+	[ "$koolproxy_rule_sel" == "1" ] && rule="/koolshare/koolproxy/rule/koolproxy.txt"
+	[ "$koolproxy_rule_sel" == "2" ] && rule="/koolshare/koolproxy/rule/easylistchina+easylist.conf"
 	perp=`ps | grep perpd |grep -v grep`
 	if [ -z "$perp" ];then
 		sh /koolshare/perp/perp.sh stop
