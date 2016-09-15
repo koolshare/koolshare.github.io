@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -69,7 +69,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        height: 100%;
+        height: 105%;
         visibility: hidden;
         font-size:0;
         width: 119px;
@@ -174,6 +174,9 @@
     .install-status-0{
         display: block;
     }
+    .install-status-4{
+        display: none;
+    }
     .install-view .install-status-1{
         display: block;
     }
@@ -182,6 +185,9 @@
     }
     .install-view .install-status-0{
         display: none;
+    }
+    .install-view .install-status-4{
+        display: block;
     }
     .cloud_main_radius h2 { border-bottom:1px #AAA dashed;}
 	.cloud_main_radius h3,
@@ -559,7 +565,7 @@ function softceterInitData(data) {
     //只要一次获取成功，以后不在重新获取，知道页面刷新重入
     $(function () {
     //梅林要求用这个函数来显示左测菜单
-    show_menu();
+    show_menu(menu_hook);
 
     if(!db_softcenter_["softcenter_version"]) {
         db_softcenter_["softcenter_version"] = "0.0";
@@ -601,7 +607,11 @@ function softceterInitData(data) {
         });
 
     });
-
+function menu_hook(title, tab) {
+	var ss_mode = '<% nvram_get("ss_mode"); %>';
+	tabtitle[17] = new Array("", "软件中心");
+	tablink[17] = new Array("", "Main_Soft_center.asp");
+}
 function notice_show(){
     $.ajax({
         url: 'http://mips.ngrok.wang:5000/softcenter/push_message.json.js',
@@ -648,7 +658,7 @@ function notice_show(){
         </td>
         <td valign="top">
             <div id="tabMenu" class="submenuBlock"></div>
-                <table id="softcenter_td" width="98%" border="0" align="left" cellpadding="0" cellspacing="0">
+                <table width="98%" border="0" align="left" cellpadding="0" cellspacing="0">
                     <tr>
                         <td align="left" valign="top">
                             <div>
@@ -656,7 +666,7 @@ function notice_show(){
                                     <tr>
                                         <td bgcolor="#4D595D" colspan="3" valign="top">
                                             <div>&nbsp;</div>
-                                            <div class="formfonttitle">Software Center - Mipsel</div>
+                                            <div class="formfonttitle">Software Center</div>
                                             <div style="margin-left:5px;margin-top:5px;margin-bottom:5px"><img src="/images/New_ui/export/line_export.png"></div>
                                                 <table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
                                                 </table>
@@ -673,7 +683,7 @@ function notice_show(){
                                                                                     <h2 id="push_titile"><em>欢迎</em></h2>
                                                                                 </li>
                                                                                 <li style="margin-top:-5px;">
-                                                                                    <h4 id="push_content1" >欢迎来到插件中心for mipsel，目前正在紧张开发中，各种插件酝酿中！</h4>
+                                                                                    <h4 id="push_content1" >欢迎来到插件中心，目前正在紧张开发中，各种插件酝酿中！</h4>
                                                                                 </li>
                                                                                 <li  style="margin-top:-5px;">
                                                                                     <h4 id="push_content2">如果你想加入我们的工作，在 <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a>联系我们！</h4>
