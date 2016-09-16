@@ -21,14 +21,14 @@
             "version": "1.8"
         }, 
         {
-            "build_date": "2016-09-01_18:38:21", 
+            "build_date": "2016-09-16_10:11:21", 
             "description": "广告屏蔽大师", 
             "home_url": "Module_adbyby.asp", 
-            "md5": "68dccce19191b93152352354a57e3348", 
+            "md5": "8822d84a21ec33db53bdb4c1a98b2394", 
             "name": "adbyby", 
             "tar_url": "adbyby/adbyby.tar.gz", 
             "title": "adbyby", 
-            "version": "1.0"
+            "version": "1.1"
         }, 
         {
             "build_date": "2016-09-01_17:20:52", 

@@ -2,7 +2,7 @@
 
 
 MODULE=adbyby
-VERSION=1.0
+VERSION=1.1
 TITLE=adbyby
 DESCRIPTION=广告屏蔽大师
 HOME_URL=Module_adbyby.asp
