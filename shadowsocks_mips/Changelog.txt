@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks_mips Changelog
 ===========================================
+
+2.8.8
+   - fix	sync with arm and fix minor issue
+
 2.8.3
    - fix	fix overall mode
    - fix	fix wrong address of changelog
