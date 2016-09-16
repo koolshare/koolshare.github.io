@@ -160,11 +160,6 @@ input[type=button]:focus {
 
 
 .SimpleNote { padding:5px 10px;}
-.NoteButton { padding:5px 10px; margin:10px 0}
-#NoteBox { padding:10px}
-.FormTable h2,#NoteBox h2,#NoteBox_main h2,#NoteBox_ipset_dns h2,#NoteBox_redchn_dns h2 { font-size:16px; border-bottom:1px #AAA dashed; height:26px; color:#1cfe16; margin-top:20px;}
-.FormTable h3,#NoteBox h3,#NoteBox_main h3,#NoteBox_ipset_dns h3,#NoteBox_redchn_dns h3,
-.FormTable h4,#NoteBox h4,#NoteBox_main h4,#NoteBox_ipset_dns h4,#NoteBox_redchn_dns h4{ color:#FC0;}
 .KoolshareBottom {
     width: 230px;
     height: 100px;
@@ -313,14 +308,14 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		} else if (field == "ss_basic_rss_protocol") {
-			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_deflate" &&  obj[field] != "auth_simple" && obj[field] != "auth_sha1" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1_v2" ) {
+			if (obj[field] != "origin" && obj[field] != "verify_simple" &&  obj[field] != "auth_simple" && obj[field] != "auth_sha1" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1_v2" ) {
 				$j("#ss_basic_rss_protocol").val("origin");
 			} else {
 				$j("#ss_basic_rss_protocol").val(obj.ss_basic_rss_protocol);
 			}
 			continue;
 		} else if (field == "ss_basic_rss_obfs") {
-			if (obj[field] != "plain" && obj[field] != "http_simple" && obj[field] != "tls_simple" &&  obj[field] != "random_head" && obj[field] != "tls1.0_session_auth" && obj[field] != "tls1.2_ticket_auth" ) {
+			if (obj[field] != "plain" && obj[field] != "http_simple" &&  obj[field] != "random_head"  && obj[field] != "tls1.2_ticket_auth" ) {
 				$j("#ss_basic_rss_obfs").val("plain");
 			} else {
 				$j("#ss_basic_rss_obfs").val(obj.ss_basic_rss_obfs);
@@ -391,8 +386,6 @@ function update_visibility_main() {
 		$j("#ss_basic_rss_protocol_alert").html("原版协议");
 	} else if (srp == "verify_simple"){
 		$j("#ss_basic_rss_protocol_alert").html("带校验的协议");
-	} else if (srp == "verify_deflate"){
-		$j("#ss_basic_rss_protocol_alert").html("带压缩的协议");
 	} else if (srp == "verify_sha1"){
 		$j("#ss_basic_rss_protocol_alert").html("带验证抗CCA攻击的协议可兼容libev的OTA");
 	} else if (srp == "auth_simple"){
@@ -407,12 +400,8 @@ function update_visibility_main() {
 		$j("#ss_basic_rss_obfs_alert").html("不混淆");
 	} else if (sro == "http_simple"){
 		$j("#ss_basic_rss_obfs_alert").html("伪装为http协议");
-	} else if (sro == "tls_simple"){
-		$j("#ss_basic_rss_obfs_alert").html("模拟https/TLS1.2的握手过程，不建议使用");
 	} else if (sro == "random_head"){
 		$j("#ss_basic_rss_obfs_alert").html("发送一个随机包再通讯的协议");
-	} else if (sro == "tls1.0_session_auth"){
-		$j("#ss_basic_rss_obfs_alert").html("模拟tls1.0，不建议使用");
 	} else if (sro == "tls1.2_ticket_auth"){
 		$j("#ss_basic_rss_obfs_alert").html("模拟TLS1.2，强烈推荐");
 	}
@@ -420,22 +409,22 @@ function update_visibility_main() {
 	if (ssmode == "0"){
 		$j("#mode_state").html("SS运行状态");
 		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
-		$j("#ss_switch").html("shadowsocks 开关");
+		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
 		$j("#ss_title").html("shadowsocks - 账号信息配置");
 	} else if (ssmode == "1"){
 		$j("#mode_state").html("SS运行状态【gfwlist模式】");
 		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
-		$j("#ss_switch").html("shadowsocks 开关");
+		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
 		$j("#ss_title").html("shadowsocks - 账号信息配置");
 	} else if (ssmode == "2"){
 		$j("#mode_state").html("SS运行状态【大陆白名单模式】");
 		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
-		$j("#ss_switch").html("shadowsocks 开关");
+		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
 		$j("#ss_title").html("shadowsocks - 账号信息配置");
 	} else if (ssmode == "5"){
 		$j("#mode_state").html("SS运行状态【全局模式】");
 		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
-		$j("#ss_switch").html("shadowsocks 开关");
+		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
 		$j("#ss_title").html("shadowsocks - 账号信息配置");
 	}
 
@@ -443,22 +432,14 @@ function update_visibility_main() {
 	showhide("ss_state1", (ssmode == "0"));
 	showhide("ss_state2", (ssmode !== "0"));
 	showhide("ss_state3", (ssmode !== "0"));
-	showhide("help_mode", (ssenable != "0"));
-	showhide("help_mode1", (ssmode == "1"));
-	showhide("help_mode2", (ssmode == "2"));
-	showhide("help_mode5", (ssmode == "5"));
 
 	showhide("onetime_auth", (sur !== "1" && ssmode!== "4"));
 	showhide("SSR_name", (ssmode!== "4"));	
 	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode!== "4"));
 	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode!== "4"));
 	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode!== "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple"));
-
-	
-
-
-
 }
+
 function update_visibility_tab4(){
 	ssmode = document.form.ss_basic_mode.value;
 	crst = document.form.ss_basic_chromecast.value;
@@ -501,8 +482,8 @@ function update_visibility_tab2_redchn(){
 	showhide("ss_redchn_chinadns_foreign_user", (rcf == "4"));
 	showhide("ss_redchn_dns2socks_user", (rdf == "4"));
 	generate_options();
-	
 }
+
 function update_visibility_tab2_ipset(){
 	icd = document.form.ss_ipset_cdn_dns.value;
     ifd = document.form.ss_ipset_foreign_dns.value;
@@ -549,7 +530,6 @@ function oncheckclick(obj) {
 }
 
 var global_status_enable = true;
-
 function checkSSStatus() {
 	if (db_ss['ss_basic_enable'] !== "0") {
 	    if(!global_status_enable) {//not enabled
@@ -795,8 +775,6 @@ function show_ss_node_info(){ //进入节点显示，编辑页面
 		//$G("ss_node_list_table_th").style.display = "";
 		$G("ss_node_list_table_td").style.display = "";
 		$G("ss_node_list_table_btn").style.display = "";
-		$G("help_mode").style.display = "none";
-		$G("help_note_main").style.display = "none";
 		$G("KoolshareBottom_div").style.display = "none";
 		refresh_table();
 }
@@ -809,11 +787,6 @@ function ss_node_info_return(){ //退出节点页面，进入主面板
 		$G("ss_node_list_table_th").style.display = "none";
 		$G("ss_node_list_table_td").style.display = "none";
 		$G("ss_node_list_table_btn").style.display = "none";
-		$G("help_note_main").style.display = "";
-		$G("help_mode").style.display = "";
-		showhide("help_mode1", (ssmode == 1));
-		showhide("help_mode2", (ssmode == 2));
-		showhide("help_mode5", (ssmode == 5));
 		$G("KoolshareBottom_div").style.display = "";
 		updateSs_node_listView(); //更新主面板内的节点
 		checkTime = 2001; //停止节点页面刷新
@@ -1052,11 +1025,6 @@ function apply_this_ss_node(s) { //应用此节点
 	$G("ss_node_list_table_th").style.display = "none";
 	$G("ss_node_list_table_td").style.display = "none";
 	$G("ss_node_list_table_btn").style.display = "none";
-	$G("help_note_main").style.display = "";
-	$G("help_mode").style.display = "";
-	showhide("help_mode1", (ssmode == 1));
-	showhide("help_mode2", (ssmode == 2));
-	showhide("help_mode5", (ssmode == 5));
 	$G("KoolshareBottom_div").style.display = "";
 
     confs = getAllConfigs();
@@ -1327,6 +1295,7 @@ function upload_ok(isok) {
 }
 
 function restore_ss_conf() {
+	checkTime = 2001;  //停止可能在进行的刷新
 	document.form.action_mode.value = ' Refresh ';
 	document.form.action = "/applydb.cgi?p=ss";
     document.form.SystemCmd.value = "ss_conf_restore.sh";
@@ -1336,7 +1305,26 @@ function restore_ss_conf() {
 		document.form.submit();
 	}
     //setTimeout("onSubmitCtrl();", 2000);
-    refreshpage(3);
+    //refreshpage(5);
+    showLoadingBar(8);
+    $j("#loading_block3").html("恢复SS配置");
+    $j("#loading_block2").html("<li><font color='#ffcc00'>正在恢复相关配置中...</font></li></br><li><font color='#ffcc00'>配置恢复后需要重新提交！</font></li></br><li><font color='#ffcc00'>恢复配置后将返回网络地图！</font></li>");
+}
+
+function remove_SS_node(){
+	checkTime = 2001;  //停止可能在进行的刷新
+	document.form.action_mode.value = ' Refresh ';
+	document.form.action = "/applydb.cgi?p=ss";
+    document.form.SystemCmd.value = "ss_conf_remove.sh";
+	document.form.enctype = "";
+	document.form.encoding = "";
+	if (validForm()){
+		document.form.submit();
+	}
+	//refreshpage(5);
+	showLoadingBar(8);
+	 $j("#loading_block3").html("清除SS配置");
+	 $j("#loading_block2").html("<li><font color='#ffcc00'>正在清除所有SS配置...</font></li></br><li><font color='#ffcc00'>配置清除后将自动关闭SS...</font></li></br><li><font color='#ffcc00'>恢复配置后将返回网络地图！</font></li>");
 }
 
 function ping_test(){
@@ -1468,10 +1456,14 @@ function version_show(){
         success: function(res) {
             if(typeof(res["version"]) != "undefined" && res["version"].length > 0) {
 	            if(res["version"] == db_ss["ss_basic_version_local"]){
-		        	$j("#ss_version_show").html("<i>当前版本：" + db_ss["ss_basic_version_local"]);
+		        	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 	       		}else if(res["version"] !== db_ss["ss_basic_version_local"]) {
-                    $j("#ss_version_show").html("<i>当前版本：" + db_ss["ss_basic_version_local"]);
+					 if(typeof(db_ss["ss_basic_version_local"]) != "undefined") {
+                    	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
                     $j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
+                	}else{
+	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：2.8.7</i></a>");
+                	}
 		        }
             }
         }
@@ -1493,7 +1485,7 @@ function write_ss_install_status(){
 		} else if (db_ss_basic_install_status['ss_basic_install_status'] == "0"){
 			$G('update_button').style.display = "";
 		}
-		setTimeout("write_ss_install_status()", 2000);
+		setTimeout("write_ss_install_status()", 1500);
 		}
 		});
 	}
@@ -1546,10 +1538,6 @@ function toggle_switch(){
 		$G("basic_show").style.display = "none";
 		$G("apply_button").style.display = "none";
 		$G("ss_node_list_table_th").style.display = "none";
-		$G("help_mode").style.display = "none";
-		$G("help_mode1").style.display = "none";		
-		$G("help_mode2").style.display = "none";				
-		$G("help_mode5").style.display = "none";	
 	}
 }
 
@@ -1557,8 +1545,6 @@ function toggle_switch(){
 function toggle_func(){
 	ssmode = $G("ss_basic_mode").value;
 	document.form.ss_basic_action.value = 1;
-	$G("help_note_main").style.display = "";
-	//$G("help_mode1").style.display = "";
 	$j('.show-btn1').addClass('active');
 	$j(".show-btn1").click(
 	function(){
@@ -1576,14 +1562,6 @@ function toggle_func(){
 		$G("overall_list").style.display = "none";	
 		$G("cmdBtn").value = "提交";
 		//$j("#cmdBtn").html("提交");
-		$G("help_note_main").style.display = "";
-		$G("help_note_ipset").style.display = "none";
-		$G("help_note_redchn").style.display = "none";
-		$G("help_note_overall").style.display = "none";
-		$G("NoteBox_main").style.display = "none";
-		$G("NoteBox_ipset_dns").style.display = "none";
-		$G("NoteBox_redchn_dns").style.display = "none";
-		$G("NoteBox_overall_dns").style.display = "none";
 		document.form.ss_basic_action.value = 1;
 		update_visibility_main();
 	});
@@ -1595,9 +1573,6 @@ function toggle_func(){
 		$j('.show-btn4').removeClass('active');
 		$G("basic_show").style.display = "none";
 		$G("add_fun").style.display = "none";
-		$G("help_mode1").style.display = "none";
-		$G("help_mode2").style.display = "none";
-		$G("help_mode5").style.display = "none";
 		$G("cmdBtn").value = "应用DNS设定";
 		//$j("#cmdBtn").html("应用DNS设定");
 		document.form.ss_basic_action.value = 2;
@@ -1608,10 +1583,6 @@ function toggle_func(){
 			$G("redchn_list").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
-			$G("help_note_main").style.display = "none";
-			$G("help_note_ipset").style.display = "";
-			$G("help_note_redchn").style.display = "none";
-			$G("help_note_overall").style.display = "none";
 			update_visibility_tab2_ipset();
 		}else if(ssmode == "2"){
 			$G("ipset_dns").style.display = "none";
@@ -1619,10 +1590,6 @@ function toggle_func(){
 			$G("redchn_dns").style.display = "";
 			$G("redchn_list").style.display = "none";
 			$G("overall_list").style.display = "none";
-			$G("help_note_main").style.display = "none";
-			$G("help_note_ipset").style.display = "none";
-			$G("help_note_redchn").style.display = "";
-			$G("help_note_overall").style.display = "none";	
 			update_visibility_tab2_redchn();
 
 		}else if(ssmode == "5"){
@@ -1632,15 +1599,7 @@ function toggle_func(){
 			$G("redchn_list").style.display = "none";
 			$G("overall_dns").style.display = "";
 			$G("overall_list").style.display = "none";	
-			$G("help_note_main").style.display = "none";
-			$G("help_note_ipset").style.display = "none";
-			$G("help_note_redchn").style.display = "none";
-			$G("help_note_overall").style.display = "";	
 		}
-			document.getElementById("NoteBox_main").style.display = "none";
-			document.getElementById("NoteBox_ipset_dns").style.display = "none";
-			document.getElementById("NoteBox_redchn_dns").style.display = "none";
-			document.getElementById("NoteBox_overall_dns").style.display = "none";
 	});
 	$j(".show-btn3").click(
 	function(){
@@ -1650,9 +1609,6 @@ function toggle_func(){
 		$j('.show-btn4').removeClass('active');
 		$G("basic_show").style.display = "none";
 		$G("add_fun").style.display = "none";
-		$G("help_mode1").style.display = "none";
-		$G("help_mode2").style.display = "none";
-		$G("help_mode5").style.display = "none";
 		$G("cmdBtn").value = "应用黑白名单";
 		//$j("#cmdBtn").html("应用黑白名单");
 		document.form.ss_basic_action.value = 3;
@@ -1663,10 +1619,6 @@ function toggle_func(){
 			$G("redchn_list").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
-			$G("help_note_main").style.display = "none";
-			$G("help_note_ipset").style.display = "";
-			$G("help_note_redchn").style.display = "none";
-			$G("help_note_overall").style.display = "none";	
 		}else if(ssmode == "2"){
 			$G("ipset_dns").style.display = "none";
 			$G("ipset_list").style.display = "none";
@@ -1674,10 +1626,6 @@ function toggle_func(){
 			$G("redchn_list").style.display = "";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
-			$G("help_note_main").style.display = "none";
-			$G("help_note_ipset").style.display = "none";
-			$G("help_note_redchn").style.display = "";
-			$G("help_note_overall").style.display = "none";
 		}else if(ssmode == "3"){
 			$G("ipset_dns").style.display = "none";
 			$G("ipset_list").style.display = "none";
@@ -1685,10 +1633,6 @@ function toggle_func(){
 			$G("redchn_list").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
-			$G("help_note_main").style.display = "none";
-			$G("help_note_ipset").style.display = "none";
-			$G("help_note_redchn").style.display = "none";
-			$G("help_note_overall").style.display = "none";
 		}else if(ssmode == "4"){
 			$G("ipset_dns").style.display = "none";
 			$G("ipset_list").style.display = "none";
@@ -1696,10 +1640,6 @@ function toggle_func(){
 			$G("redchn_list").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
-			$G("help_note_main").style.display = "none";
-			$G("help_note_ipset").style.display = "none";
-			$G("help_note_redchn").style.display = "none";
-			$G("help_note_overall").style.display = "none";
 		}else if(ssmode == "5"){
 			$G("ipset_dns").style.display = "none";
 			$G("ipset_list").style.display = "none";
@@ -1707,10 +1647,6 @@ function toggle_func(){
 			$G("redchn_list").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "";	
-			$G("help_note_main").style.display = "none";
-			$G("help_note_ipset").style.display = "none";
-			$G("help_note_redchn").style.display = "none";
-			$G("help_note_overall").style.display = "";
 		}
 			document.getElementById("NoteBox_main").style.display = "none";
 			document.getElementById("NoteBox_ipset_dns").style.display = "none";
@@ -1731,15 +1667,8 @@ function toggle_func(){
 		$G("ipset_list").style.display = "none";
 		$G("overall_dns").style.display = "none";
 		$G("overall_list").style.display = "none";	
-		$G("help_mode1").style.display = "none";
-		$G("help_mode2").style.display = "none";
-		$G("help_mode5").style.display = "none";
 		//$j("#cmdBtn").html("应用附加功能");
 		$G("cmdBtn").value = "应用附加功能";
-		document.getElementById("NoteBox_main").style.display = "none";
-		document.getElementById("NoteBox_ipset_dns").style.display = "none";
-		document.getElementById("NoteBox_redchn_dns").style.display = "none";
-		document.getElementById("NoteBox_overall_dns").style.display = "none";
 		document.form.ss_basic_action.value = 4;
 		update_visibility_tab4();
 	});	
@@ -1747,19 +1676,12 @@ function toggle_func(){
 function show_log_info(){
 		$G("basic_show").style.display = "none";
 		$G("add_fun").style.display = "none";
-		$G("help_mode1").style.display = "none";
-		$G("help_mode2").style.display = "none";
-		$G("help_mode5").style.display = "none";
 		$G("ipset_dns").style.display = "none";
 		$G("ipset_list").style.display = "none";
 		$G("redchn_dns").style.display = "none";
 		$G("redchn_list").style.display = "none";
 		$G("overall_dns").style.display = "none";
 		$G("overall_list").style.display = "none";
-		$G("help_note_main").style.display = "none";
-		$G("help_note_ipset").style.display = "none";
-		$G("help_note_redchn").style.display = "none";
-		$G("help_note_overall").style.display = "none";
 		$G("tablet_show").style.display = "none";
 		$G("apply_button").style.display = "none";
 		$G("line_image1").style.display = "none";
@@ -1833,7 +1755,9 @@ function checkCmdRet(){
 		}
 	});
 }
-
+function reload_Soft_Center(){
+	location.href = "/Main_Soft_center.asp";
+}
 </script>
 </head>
 <body onload="init();">
@@ -1848,7 +1772,8 @@ function checkCmdRet(){
 			<span id="proceeding_img_text"></span>
 			<div id="proceeding_img"></div>
 		</div>
-		<div id="loading_block2" style="margin:10px auto; width:85%;">此期间请勿访问屏蔽网址，以免污染DNS进入缓存</div>
+		
+		<div id="loading_block2" style="margin:10px auto; width:85%;"></div>
 		</td>
 	</tr>
 </table>
@@ -1876,15 +1801,15 @@ function checkCmdRet(){
 		<td width="17">&nbsp;</td>
 		<!--=====Beginning of Main Menu=====-->
 		<td valign="top" width="202">
-			<div id="mainMenu"></div>
+			<div id="mainMenu" style="margin-top:-171px;"></div>
 			<div id="subMenu"></div>
 		</td>
 		<td valign="top">
-			<div id="tabMenu" class="submenuBlock"></div>
+			<div id="tabMenu" class="submenuBlock" style="width:768px;"></div>
 			
 			<!--=====Beginning of Main Content=====-->
 			
-			<table width="760px" border="0" align="left" cellpadding="0" cellspacing="0" id="table_for_all" style="display: block;">
+			<table width="98%" border="0" align="left" cellpadding="0" cellspacing="0" id="table_for_all" style="display: block;">
 				<tr>
 					<td align="left" valign="top">
 						<div>
@@ -1893,7 +1818,8 @@ function checkCmdRet(){
 									<td bgcolor="#4D595D" colspan="3" valign="top">
 										<div>&nbsp;</div>
 										<div class="formfonttitle" style="margin-top: -18px;" id="ss_title">shadowsocks - 账号信息配置</div>
-										<div id="line1" style="margin-left:3px;margin-top:5px;margin-bottom:3px"><img src="/images/New_ui/export/line_export.png"></div>
+										<div style="float:right; width:15px; height:0px;margin-top:-6px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
+										<div id="line1" style="margin-left:3px;margin-top:0px;margin-bottom:3px;"><img src="/images/New_ui/export/line_export.png"></div>
 										<div class="SimpleNote"  id="head_illustrate"><i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。</div>
 										<div style="margin-top: 0px;text-align: center;font-size: 18px;margin-bottom: 0px;"class="formfontdesc" id="cmdDesc"></div>
 										<div id="ss_switch_show">
@@ -1904,7 +1830,7 @@ function checkCmdRet(){
 												</tr>
 												</thead>
 												<tr>
-												<th id="ss_switch">shadowsocks 开关</th>
+												<th id="ss_switch"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(10)">shadowsocks 开关</a></th>
 													<td colspan="2">
 														<div class="switch_field" style="display:table-cell;float: left;">
 															<label for="switch">
@@ -1919,9 +1845,9 @@ function checkCmdRet(){
 														</div>
 														<div id="update_button" style="padding-top:5px;margin-left:90px;margin-top:-38px;float: left;">
 															<button id="updateBtn" class="button_gen" onclick="update_ss();">检查并更新</button>
-															<a style="margin-left: 170px;" href="https://github.com/koolshare/koolshare.github.io/blob/master/shadowsocks_mips/Changelog.txt" target="_blank"><em><u>[ 更新日志 ]</u></em></a>
+															<a style="margin-left: 170px;" href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt" target="_blank"><em><u>[ 更新日志 ]</u></em></a>
 														</div>
-														<div id="ss_version_show" style="padding-top:5px;margin-left:220px;margin-top:0px;"><i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i></div>
+														<div id="ss_version_show" style="padding-top:5px;margin-left:220px;margin-top:0px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(12)"><i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i></a></div>
 														<div id="ss_install_show" style="padding-top:5px;margin-left:220px;margin-top:0px;"></div>	
 													</td>
 												</tr>
@@ -1930,9 +1856,9 @@ function checkCmdRet(){
                                     	<div id="ss_status1">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
 												<tr id="ss_state">
-												<th id="mode_state" width="35%">SS运行状态</th>
+												<th id="mode_state" width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(0)">SS运行状态</a></th>
 													<td>
-														<a>
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(0)">
 															<span style="display: none" id="ss_state1">尚未启用! </span>
 															<span id="ss_state2">国外连接 - Waiting...</span>
 															<br/>
@@ -2046,7 +1972,6 @@ function checkCmdRet(){
 																	<select id="ss_node_table_rss_protocol" name="ss_node_table_rss_protocol" style="width:350px;margin:0px 0px 0px 2px;" class="input_option">
 																		<option value="origin" selected>origin</option>
 																		<option value="verify_simple">verify_simple</option>
-																		<option value="verify_deflate">verify_deflate</option>
 																		<option value="verify_sha1">verify_sha1</option>
 																		<option value="auth_simple">auth_simple</option>
 																		<option value="auth_sha1">auth_sha1</option>
@@ -2060,9 +1985,7 @@ function checkCmdRet(){
 																	<select id="ss_node_table_rss_obfs" name="ss_node_table_rss_obfs" style="width:350px;margin:0px 0px 0px 2px;" class="input_option">
 																		<option value="plain">plain</option>
 																		<option value="http_simple">http_simple</option>
-																		<option value="tls_simple">tls_simple</option>
 																		<option value="random_head">random_head</option>
-																		<option value="tls1.0_session_auth">tls1.0_session_auth</option>
 																		<option value="tls1.2_ticket_auth">tls1.2_ticket_auth</option>
 																	</select>
 																</td>
@@ -2095,7 +2018,7 @@ function checkCmdRet(){
 										<div id="basic_show">
 											<table style="margin:-1px 0px 0px 0px;" width="100%"  border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
 												<tr id="node_select">
-													<th width="35%">节点选择</th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(15)">节点选择</a></th>
 													<td>
 														<div style="float:left; width:165px; height:25px">
 															<select id="ssconf_basic_node" name="ssconf_basic_node" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" onchange="ss_node_sel();update_visibility_main();" >
@@ -2105,7 +2028,7 @@ function checkCmdRet(){
 													</td>
 												</tr>
 												<tr>
-													<th width="35%">模式</th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(1)">模式</a></th>
 													<td>
 														<select id="ss_basic_mode" name="ss_basic_mode" style="width:164px;margin:0px 0px 0px 2px;" class="ssconfig input_option" onchange="update_visibility_main();" >
 															<option value="1">【1】 gfwlist模式</option>
@@ -2115,33 +2038,33 @@ function checkCmdRet(){
 														<div id="SSR_name"style="margin-left:170px;margin-top:-20px;margin-bottom:0px;">
 															<input type="checkbox" id="ss_basic_use_rss" onclick="oncheckclick(this);update_visibility_main();" />
 															<input type="hidden" id="hd_ss_basic_use_rss" name="ss_basic_use_rss" value="" />
-															使用SSR
+															<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(13)">使用SSR</a>
 														</div>
 													</td>
 												</tr>
 												<tr id="server_tr">
-													<th width="35%">服务器</th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(2)">服务器</a></th>
 													<td>
 														<input type="text" class="ssconfig input_ss_table" id="ss_basic_server" name="ss_basic_server" maxlength="100" value=""/>
 													</td>
 												</tr>
 												<tr id="port_tr">
-													<th width="35%">服务器端口</th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(3)">服务器端口</a></th>
 													<td>
 														<input type="text" class="ssconfig input_ss_table" id="ss_basic_port" name="ss_basic_port" maxlength="100" value="" />
 													</td>
 												</tr>
 												<tr id="pass_tr">
-													<th width="35%">密码</th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(4)">密码</a></th>
 													<td>
 														<input type="password" name="ss_basic_password" id="ss_basic_password" class="ssconfig input_ss_table" maxlength="100" value=""></input>
 														<div style="margin-left:170px;margin-top:-20px;margin-bottom:0px"><input type="checkbox" name="show_pass" onclick="pass_checked(document.form.ss_basic_password);">
-															显示密码
+															<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(14)">显示密码</a>
 														</div>
 													</td>
 												</tr>
 												<tr id="method_tr">
-													<th width="35%">加密方式</th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(5)">加密方式</a></th>
 													<td>
 														<select id="ss_basic_method" name="ss_basic_method" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
 															<option class="content_input_fd" value="table">table</option>
@@ -2166,7 +2089,7 @@ function checkCmdRet(){
 													</td>
 												</tr>
 												<tr id="onetime_auth">
-													<th width="35%"><a href="https://shadowsocks.org/en/spec/one-time-auth.html" target="_blank"><u>一次性验证(OTA)</font></u></a></th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(7)">一次性验证(OTA)</a></th>
 													<td>
 														<select id="ss_basic_onetime_auth" name="ss_basic_onetime_auth" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
 															<option class="content_input_fd" value="1">开启</option>
@@ -2176,36 +2099,33 @@ function checkCmdRet(){
 													</td>
 												</tr>
 												<tr id="ss_basic_rss_protocol_tr">
-													<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>协议 (protocol)</u></a></th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(8)">协议插件（protocol）</a></th>
 													<td>
 														<select id="ss_basic_rss_protocol" name="ss_basic_rss_protocol" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" onchange="update_visibility_main();" >
 															<option class="content_input_fd" value="origin">origin</option>
 															<option class="content_input_fd" value="verify_simple">verify_simple</option>
-															<option class="content_input_fd" value="verify_deflate">verify_deflate</option>
 															<option class="content_input_fd" value="verify_sha1">verify_sha1</option>
 															<option class="content_input_fd" value="auth_simple">auth_simple</option>
 															<option class="content_input_fd" value="auth_sha1">auth_sha1</option>
 															<option class="content_input_fd" value="auth_sha1_v2">auth_sha1_v2</option>
 														</select>
-														<span id="ss_basic_rss_protocol_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px">yuanben</span>
+														<span id="ss_basic_rss_protocol_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
 												</tr>
 												<tr id="ss_basic_rss_obfs_tr">
-													<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>混淆插件 (obfs)</u></a></th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(9)">混淆插件 (obfs)</a></th>
 													<td>
 														<select id="ss_basic_rss_obfs" name="ss_basic_rss_obfs" style="width:164px;margin:0px 0px 0px 2px;" class="input_option"  onchange="update_visibility_main();" >
 															<option class="content_input_fd" value="plain">plain</option>
 															<option class="content_input_fd" value="http_simple">http_simple</option>
-															<option class="content_input_fd" value="tls_simple">tls_simple</option>
 															<option class="content_input_fd" value="random_head">random_head</option>
-															<option class="content_input_fd" value="tls1.0_session_auth">tls1.0_session_auth</option>
 															<option class="content_input_fd" value="tls1.2_ticket_auth">tls1.2_ticket_auth</option>
 														</select>
 														<span id="ss_basic_rss_obfs_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
 												</tr>
 												<tr id="ss_basic_ticket_tr">
-													<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md" target="_blank"><u>自定义参数 (obfs_param)</u></a></th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(11)">自定义参数 (obfs_param)</a></th>
 													<td>
 														<input type="text" name="ss_basic_rss_obfs_param" id="ss_basic_rss_obfs_param" placeholder="cloudflare.com"  class="ssconfig input_ss_table" maxlength="100" value=""></input>
 														<span id="ss_basic_ticket_tr_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px">不知道如何填写请留空</span>
@@ -2217,16 +2137,16 @@ function checkCmdRet(){
 										<div id="ss_node_list_table_th" style="display: none; position: absolute; top: 202px; width: 98.8%;">
 											<table style="margin:0px 0px 0px 0px;table-layout:fixed;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable1">
 												<tr height="40px">
-													<th style="width:45px;">模式</th>
-													<th style="width:85px;">节点名称</th>
-													<th style="width:85px;">服务器地址</th>
+													<th style="width:45px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(16)">模式</a></th>
+													<th style="width:85px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(17)">节点名称</a></th>
+													<th style="width:85px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(18)">服务器地址</a></th>
 													<th style="width:37px;">端口</th>
 													<th style="width:75px;">加密方式</th>
-													<th style="width:78px;">ping/丢包</th>
-													<th style="width:36px;">延迟</th>
-													<th style="width:33px;">编辑</th>
-													<th style="width:33px;">删除</th>
-													<th style="width:85px;">使用</th>
+													<th style="width:78px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(19)">ping/丢包</a></th>
+													<th style="width:36px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(20)">延迟</a></th>
+													<th style="width:33px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(21)">编辑</a></th>
+													<th style="width:33px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(22)">删除</a></th>
+													<th style="width:85px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(23)">使用</a></th>
 												</tr>
 											</table>
 										</div>
@@ -2234,27 +2154,27 @@ function checkCmdRet(){
 										<div id="ss_node_list_table_td"  style="display: none; position: static; top: 242px; bottom: 183px; width: 98.8%; overflow: visible">
 											<table id="ss_node_list_table_main" style="margin:0px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable1">
 												<tr id="hide_when_folw" height="40px" style="display: none;">
-													<th style="width:45px;">模式</th>
-													<th style="width:85px;">节点名称</th>
-													<th style="width:85px;">服务器地址</th>
+													<th style="width:45px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(16)">模式</a></th>
+													<th style="width:85px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(17)">节点名称</a></th>
+													<th style="width:85px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(18)">服务器地址</a></th>
 													<th style="width:37px;">端口</th>
 													<th style="width:75px;">加密方式</th>
-													<th style="width:78px;">ping/丢包</th>
-													<th style="width:36px;">延迟</th>
-													<th style="width:33px;">编辑</th>
-													<th style="width:33px;">删除</th>
-													<th style="width:85px;">使用</th>
+													<th style="width:78px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(19)">ping/丢包</a></th>
+													<th style="width:36px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(20)">延迟</a></th>
+													<th style="width:33px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(21)">编辑</a></th>
+													<th style="width:33px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(22)">删除</a></th>
+													<th style="width:85px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(23)">使用</a></th>
 												</tr>
 											</table>
 										</div>
 										<div id="ss_node_list_table_btn" style="display: none;position: static;width: 747px; bottom: 0px;">
 											<table style="margin:7px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
-													<th width="20%">导出恢复
+													<th style="width:20%;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(24)">导出恢复</a></th>
 													</th>
 													<td>
 														<input type="button" class="button_gen" onclick="download_SS_node();" value="导出配置">
-
+														<input type="button" class="button_gen" onclick="remove_SS_node();" value="清空配置">
 														<input type="button" id="upload_btn" class="button_gen" onclick="upload_SS_node();" value="恢复配置">
 
 														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file">
@@ -2263,8 +2183,9 @@ function checkCmdRet(){
 													</td>
 												</tr>
 												<tr>
-													<th width="20%">ping测试</th>
+													<th style="width:20%;">ping测试</th>
 													<td>
+														<!--<input class="button_gen" onClick="remove_ping()" type="button" value="移除ping"/>-->
 														<input class="button_gen" onClick="ping_test()" type="button" value="ping测试"/>
 														<select id="ssconf_basic_Ping_Method" name="ssconf_basic_Ping_Method" style="width:300px;margin:0px 0px 0px 2px;" class="input_option">
 															<option class="content_input_fd" value="1">单线ping(10次/节点)</option>
@@ -2275,8 +2196,9 @@ function checkCmdRet(){
 													</td>
 												</tr>
 												<tr>
-													<th width="20%">web测试</th>
+													<th style="width:20%;">web测试</th>
 													<td>
+														<!--<input class="button_gen" onClick="remove_test()" type="button" value="移除web测试"/>-->
 														<input class="button_gen" onClick="web_test()" type="button" value="web测试"/>
 														<select id="ssconf_basic_test_domain" name="ssconf_basic_test_domain" style="width:300px;margin:0px 0px 0px 2px;" class="input_option">
 															<option class="content_input_fd" value="https://www.google.com/">google.com</option>
@@ -2288,7 +2210,7 @@ function checkCmdRet(){
 											<table>
 												<tr>
 													<td>
-														<div id="node_return_button" class="apply_gen" style="margin-left: 179px;;float: left;">
+														<div id="node_return_button" class="apply_gen" style="margin-left: 105px;;float: left;">
 															<input type="button" class="button_gen" onclick="ss_node_info_return();" value="返回">
 															<input class="button_gen" id="returnBtn" onClick="hide_text()" type="button" value="黑科技按钮"/>
 															<input class="button_gen" onClick="Add_profile()" type="button" value="添加节点"/>
@@ -2303,7 +2225,7 @@ function checkCmdRet(){
 										<div id="ipset_dns" style="display: none;">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
-													<th id="china_dns" width="20%">选择国内DNS</th>
+													<th id="china_dns" width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(25)">选择国内DNS</a></th>
 													<td>
 														<select id="ss_ipset_cdn_dns" name="ss_ipset_cdn_dns" class="input_option" onclick="update_visibility_tab2_ipset();" >
 															<option value="1">运营商DNS【自动获取】</option>
@@ -2322,7 +2244,7 @@ function checkCmdRet(){
 													</td>
 												</tr>
 												<tr>
-													<th width="20%">选择国外DNS</th>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(26)">选择国外DNS</a></th>
 													<td>
 														<select id="ss_ipset_foreign_dns" name="ss_ipset_foreign_dns" class="input_option" onclick="update_visibility_tab2_ipset();" >
 															<option value="2">DNS2SOCKS</option>
@@ -2349,7 +2271,7 @@ function checkCmdRet(){
 													</td>
 												</tr>
 												<tr id="ipset_pdnsd_method">
-													<th width="20%" ><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd查询方式</font></th>
+													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(29)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd查询方式</font></a></th>
 													<td>
 														<select id="ss_ipset_pdnsd_method" name="ss_ipset_pdnsd_method" class="input_option" onclick="update_visibility_tab2_ipset();" >
 															<option value="1" selected >仅udp查询</option>
@@ -2358,7 +2280,7 @@ function checkCmdRet(){
 													</td>
 												</tr>
 												<tr id="ipset_pdnsd_up_stream_tcp">
-													<th width="20%" ><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（TCP）</font></th>
+													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(30)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（TCP）</font></a></th>
 													<td>
 														<input type="text" class="ssconfig input_ss_table" id="ss_ipset_pdnsd_server_ip" name="ss_ipset_pdnsd_server_ip" placeholder="DNS地址：8.8.4.4" style="width:128px;" maxlength="100" value="8.8.4.4">
 														：
@@ -2368,7 +2290,7 @@ function checkCmdRet(){
 													</td>
 												</tr>
 												<tr id="ipset_pdnsd_up_stream_udp">
-													<th width="20%" ><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（UDP）</font></th>
+													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(31)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（UDP）</font></a></th>
 													<td>
 														<select id="ss_ipset_pdnsd_udp_server" name="ss_ipset_pdnsd_udp_server" class="input_option" onclick="update_visibility_tab2_ipset();" >
 															<option value="1">DNS2SOCKS</option>
@@ -2388,7 +2310,7 @@ function checkCmdRet(){
 													</td>
 												</tr>
 												<tr id="ipset_pdnsd_cache">
-													<th width="20%"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd缓存设置</font></th>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(32)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd缓存设置</font></a></th>
 													<td>
 														<input type="text" class="ssconfig input_ss_table" id="ss_ipset_pdnsd_server_cache_min" name="ss_ipset_pdnsd_server_cache_min" title="最小TTL时间" style="width:30px;" maxlength="100" value="24h">
 														→
@@ -2398,7 +2320,7 @@ function checkCmdRet(){
 													</td>
 												</tr>
 												<tr>
-													<th width="20%">自定义dnsmasq</th>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(34)">自定义dnsmasq</a></th>
 													<td>
 														<textarea placeholder="# 填入自定义的dnsmasq设置，一行一个
 # 例如hosts设置：
@@ -2415,7 +2337,7 @@ bogus-nxdomain=220.250.64.18
 										<div id="redchn_dns" style="display: none;">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr id="redchn_dns_plan_china">
-													<th width="20%">选择国内DNS</th>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(25)">选择国内DNS</a></th>
 													<td>
 														<select id="ss_redchn_dns_china" name="ss_redchn_dns_china" class="input_option" onclick="update_visibility_tab2_redchn();" >
 															<option value="1">运营商DNS【自动获取】</option>
@@ -2432,7 +2354,7 @@ bogus-nxdomain=220.250.64.18
 													</td>
 												</tr>
 												<tr id="dns_plan_foreign">
-													<th width="20%">选择国外DNS</th>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(26)">选择国外DNS</a></th>
 													<td>
 														<select id="ss_redchn_dns_foreign" name="ss_redchn_dns_foreign" class="input_option" onclick="update_visibility_tab2_redchn();" >
 															<option value="4">DNS2SOCKS</option>
@@ -2454,7 +2376,7 @@ bogus-nxdomain=220.250.64.18
 													</td>
 												</tr>
 												<tr id="redchn_chinadns_china">
-													<th width="20%"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*ChinaDNS国内DNS</font></th>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(27)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*ChinaDNS国内DNS</font></a></th>
 													<td>
 														<select id="ss_redchn_chinadns_china" name="ss_redchn_chinadns_china" class="input_option" onclick="update_visibility_tab2_redchn();" >
 															<option value="1">阿里DNS1【223.5.5.5】</option>
@@ -2466,7 +2388,7 @@ bogus-nxdomain=220.250.64.18
 													</td>
 												</tr>
 												<tr id="redchn_chinadns_foreign">
-													<th width="20%"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*ChinaDNS国外DNS</font></th>
+													<th width="20%"><font color="#66FF66"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(28)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*ChinaDNS国外DNS</font></a></th>
 													<td>
 														<select id="ss_redchn_chinadns_foreign" name="ss_redchn_chinadns_foreign" class="input_option" onclick="update_visibility_tab2_redchn();" >
 															<option value="1">OpenDNS [208.67.220.220]</option>
@@ -2479,7 +2401,7 @@ bogus-nxdomain=220.250.64.18
 													</td>
 												</tr>
 												<tr id="redchn_pdnsd_method">
-													<th width="20%" ><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd查询方式</font></th>
+													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(29)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd查询方式</font></th>
 													<td>
 														<select id="ss_redchn_pdnsd_method" name="ss_redchn_pdnsd_method" class="input_option" onclick="update_visibility_tab2_redchn();" >
 															<option value="1" selected >仅udp查询</option>
@@ -2488,7 +2410,7 @@ bogus-nxdomain=220.250.64.18
 													</td>
 												</tr>
 												<tr id="redchn_pdnsd_up_stream_tcp">
-													<th width="20%" ><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（TCP）</font></th>
+													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(30)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（TCP）</font></a></th>
 													<td>
 														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_pdnsd_server_ip" name="ss_redchn_pdnsd_server_ip" placeholder="DNS地址：8.8.4.4" style="width:128px;" maxlength="100" value="8.8.4.4">
 														：
@@ -2498,7 +2420,7 @@ bogus-nxdomain=220.250.64.18
 													</td>
 												</tr>
 												<tr id="redchn_pdnsd_up_stream_udp">
-													<th width="20%" ><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（UDP）</font></th>
+													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(31)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（UDP）</font></a></th>
 													<td>
 														<select id="ss_redchn_pdnsd_udp_server" name="ss_redchn_pdnsd_udp_server" class="input_option" onclick="update_visibility_tab2_redchn();" >
 															<option value="1">DNS2SOCKS</option>
@@ -2517,7 +2439,7 @@ bogus-nxdomain=220.250.64.18
 													</td>
 												</tr>
 												<tr id="redchn_pdnsd_cache">
-													<th width="20%"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd缓存设置</font></th>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(32)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd缓存设置</font></a></th>
 													<td>
 														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_pdnsd_server_cache_min" name="ss_redchn_pdnsd_server_cache_min" title="最小TTL时间" style="width:30px;" maxlength="100" value="24h">
 														→
@@ -2527,11 +2449,7 @@ bogus-nxdomain=220.250.64.18
 													</td>
 												</tr>
 												<tr>
-													<th width="20%">自定义需要CDN加速网站
-														<br/>
-														<br/>
-														<a href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt" target="_blank"><font color="#ffcc00"><u>查看默认添加的<% nvram_get("cdn_numbers"); %>条国内域名</u></font></a>
-													</th>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(33)">自定义需要CDN加速名单</a></th>
 													<td>
 														<textarea placeholder="# 填入需要强制用国内DNS解析的域名，一行一个，格式如下：
 koolshare.cn
@@ -2541,7 +2459,7 @@ baidu.com
 													</td>
 												</tr>
 												<tr>
-												<th width="20%">自定义dnsmasq</th>
+												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(34)">自定义dnsmasq</a></th>
 													<td>
 														<textarea placeholder="# 填入自定义的dnsmasq设置，一行一个
 # 例如hosts设置：
@@ -2558,7 +2476,7 @@ bogus-nxdomain=220.250.64.18" rows="7" style="width:99%; font-family:'Courier Ne
                     						  <tr>
                     						    <th width="10%"><b>
                     						      <center>
-                    						        <font color="#ffcc00">全局模式</font>
+                    						        <a class="hintstyle" href="javascript:void(0);" onclick="openssHint(48)"><font color="#ffcc00">全局模式</font></a>
                     						      </center>
                     						      </b></th>
                     						    <td><select id="ss_overall_mode" name="ss_overall_mode" class="input_option">
@@ -2569,7 +2487,7 @@ bogus-nxdomain=220.250.64.18" rows="7" style="width:99%; font-family:'Courier Ne
                     						  </tr>
                     						  <tr>
                     						    <th width="20%"><center>
-                    						        <b><font color="#ffcc00">全局模式DNS</font></b>
+                    						        <b><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(49)"><font color="#ffcc00">全局模式DNS</font></a></b>
                     						      </center></th>
                     						    <td><select id="ss_overall_dns" name="ss_overall_dns" class="input_option">
                     						        <option value="0">OpenDNS方式</option>
@@ -2585,7 +2503,7 @@ bogus-nxdomain=220.250.64.18" rows="7" style="width:99%; font-family:'Courier Ne
 										<div id="ipset_list" style="display: none;">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
-													<th width="20%">域名白名单（新增）</th>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(35)">域名白名单（新增）</a></th>
 													<td>
 														<textarea placeholder="# 此处填入不需要走ss的域名，一行一个，格式如下：
 google.com.sg
@@ -2596,13 +2514,7 @@ youtube.com
 													</td>
 												</tr>
 												<tr>
-													<th width="20%">域名黑名单
-														<br/>
-														<br/>
-														<a href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf" target="_blank">
-															<u>查看默认添加的<% nvram_get("ss_ipset_numbers"); %>条域名黑名单(gfwlist)</u>
-														</a>
-													</th>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(36)">域名黑名单</a></th>
 													<td>
 														<textarea placeholder="# 此处填入需要强制走ss的域名，一行一个，格式如下：
 koolshare.cn
@@ -2611,7 +2523,7 @@ baidu.com
 													</td>
 												</tr>	
 												<tr>
-													<th width="20%">IP/CIDR黑名单</th>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(37)">IP/CIDR黑名单</a></th>
 													<td>
 														<textarea placeholder="# 此处填入需要强制走kcptun的IP或IP段（CIDR格式），一行一个，格式如下：
 91.108.4.0/22
@@ -2628,7 +2540,7 @@ baidu.com
 										<div id="redchn_list" style="display: none;">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
-													<th width="20%">IP白名单<br>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(38)">IP/CIDR白名单</a><br>
 														<br>
 														<font color="#ffcc00">添加不需要走代理的外网ip地址</font>
 													</th>
@@ -2641,7 +2553,7 @@ baidu.com
 													</td>
 												</tr>
 												<tr>
-													<th width="20%">域名白名单<br>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(39)">域名白名单</a><br>
 														<br>
 														<font color="#ffcc00">添加不需要走代理的域名</font>
 													</th>
@@ -2654,7 +2566,7 @@ facebook.com
 													</td>
 												</tr>
 												<tr>
-													<th width="20%">IP黑名单<br>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(40)">IP/CIDR黑名单</a><br>
 														<br>
 														<font color="#ffcc00">添加需要强制走代理的外网ip地址</font>
 													</th>
@@ -2667,7 +2579,7 @@ facebook.com
 													</td>
 												</tr>
 												<tr>
-													<th width="20%">域名黑名单<br>
+													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(41)">域名黑名单</a><br>
 														<br>
 														<font color="#ffcc00">添加需要强制走代理的域名</font>
 													</th>
@@ -2696,7 +2608,7 @@ taobao.com
 													</td>
 												</tr>
 												<tr>
-												<th>状态更新间隔</th>
+													<th><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(42)">状态更新间隔</a></th>
 													<td>
 														<select title="立即生效，无须提交" name="refreshrate" id="refreshrate" class="input_option" onchange="setRefresh(this);">
 															<option value="0">不更新</option>
@@ -2729,7 +2641,7 @@ taobao.com
 												</td>
 												</tr>
 												<tr  id="cdn_number">
-													<th id="cdn_nu1" width="35%">当前国内域名数量</th>
+													<th id="cdn_nu1" width="35%">当前国内域名数量（cdn名单）</th>
 													<td id="cdn_nu2">
 														<p>
 														<% nvram_get("cdn_numbers"); %>&nbsp;条，最后更新版本：
@@ -2740,7 +2652,7 @@ taobao.com
 													</td>
 												</tr>
 												<tr id="chromecast">
-													<th width="35%">Chromecast支持</th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(43)">Chromecast支持</a></th>
 													<td>
 														<select id="ss_basic_chromecast" name="ss_basic_chromecast" class="ssconfig input_option" onchange="update_visibility_tab4();" >
 															<option value="0">禁用</option>
@@ -2750,7 +2662,7 @@ taobao.com
 													</td>
 												</tr>
 												<tr id="update_rules">
-													<th width="35%">shadowsocks规则自动更新</th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(44)">shadowsocks规则自动更新</a></th>
 													<td>
 														<select id="ss_basic_rule_update" name="ss_basic_rule_update" class="ssconfig input_option" onchange="update_visibility_tab4();" >
 															<option value="0">禁用</option>
@@ -2795,7 +2707,7 @@ taobao.com
 													</td>
 												</tr>
 												<tr id="ss_lan_control">
-													<th width="35%">局域网客户端控制&nbsp;&nbsp;&nbsp;&nbsp;<select id="ss_basic_lan_control" name="ss_basic_lan_control" class="input_ss_table" style="width:auto;height:25px;margin-left: 0px;" onchange="update_visibility_tab4();">
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(45)">局域网客户端控制</a>&nbsp;&nbsp;&nbsp;&nbsp;<select id="ss_basic_lan_control" name="ss_basic_lan_control" class="input_ss_table" style="width:auto;height:25px;margin-left: 0px;" onchange="update_visibility_tab4();">
 															<option value="0">禁用</option>
 															<option value="1">黑名单模式</option>
 															<option value="2">白名单模式</option>
@@ -2807,7 +2719,7 @@ taobao.com
 													</td>
 												</tr>
 												<tr id="ss_sleep_tr">
-													<th width="35%">开机启动延时</th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(46)">开机启动延时</a></th>
 													<td>
 														<select id="ss_basic_sleep" name="ss_basic_sleep" class="ssconfig input_option" onchange="update_visibility_tab4();" >
 															<option value="0">0s</option>
@@ -2816,6 +2728,15 @@ taobao.com
 															<option value="15">15s</option>
 															<option value="30">30s</option>
 															<option value="60">60s</option>
+														</select>
+													</td>
+												</tr>
+												<tr id="ss_main_portal_tr">
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(50)">侧边栏入口开关</a></th>
+													<td>
+														<select id="ss_main_portal" name="ss_main_portal" class="ssconfig input_option" onchange="update_visibility_tab4();" >
+															<option value="0" selected>关闭</option>
+															<option value="1">开启</option>
 														</select>
 													</td>
 												</tr>
@@ -2831,160 +2752,13 @@ taobao.com
 										</div>
 										<div class="apply_gen" id="loading_icon">
 											<img id="loadingIcon" style="display:none;" src="/images/InternetScan.gif">
-										</div>
-										<div id="help_mode" >
-											<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
-												<tr id="help_mode1" style="display:none">
-													<th>
-														<h3>【1】 gfwlist模式</h3>
-													</th>
-													<td>
-														<p> 该模式使用gfwlist区分流量，Shadowsocks会将所有访问gfwlist内域名的TCP链接转发到Shadowsocks服务器，实现透明代理。 </p>
-														<p><b> 优点：</b>节省SS流量，可防止迅雷和PT流量。 </p>
-														<p><b> 缺点：</b>代理受限于名单内的3000多个被墙网站，需要维护黑名单。</p>
-													</td>
-												</tr>
-												<tr id="help_mode2" style="display:none">
-													<th>
-														<h3>【2】 大陆白名单模式</h3>
-													</th>
-													<td>
-														<p> 该模式使用chnroute IP网段区分国内外流量，Redsocks2会将所有到国外的TCP链接转发到Shadowsocks服务器，实现透明代理。 </p>
-														<p><b> 优点：</b>所有国外网站通过代理访问；主机玩家用此模式可以实现TCP代理UDP国内直连 </p>
-														<p><b> 缺点：</b>消耗更多的Shadowsocks流量，迅雷下载和BT可能消耗SS流量。</p>
-													</td>
-												</tr>
-												<tr id="help_mode5" style="display:none">
-													<th>
-														<h3>【5】 全局代理模式</h3>
-													</th>
-													<td>
-														<p> 该除局域网和ss服务器等流量不走代理，其它都走代理，高级设置中提供了对代理协议的选择。 </p>
-														<p><b> 优点：</b>简单暴力，全部出国。 </p>
-														<p><b> 缺点：</b>国内网站全部走ss，迅雷下载和BT全部走SS流量。</p>
-													</td>
-												</tr>
-											</table>
+										</div>									
 										<div id="apply_button" class="apply_gen">
 											<input id="cmdBtn" class="button_gen" type="button" onclick="onSubmitCtrl()" value="提交">
 										</div>
 										<div id="warn1" style="display: none;font-size: 20px;position: absolute; bottom: 350px; left: 0px;" class="formfontdesc" id="cmdDesc"><i>你开启了kcptun,请先关闭后才能开启shadowsocks</i></div>
 										<div id="line_image1" style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"/></div>
-										<div id="help_note_main" class="titledropdownbtn" style="cursor:pointer;padding: 0px 2px;display: none;" onclick="openShutManager(this,'NoteBox_main',false,'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击关闭详细说明','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明')" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明</div>
-										<div id="help_note_ipset" class="titledropdownbtn" style="cursor:pointer;padding: 0px 2px;display: none;" onclick="openShutManager(this,'NoteBox_ipset_dns',false,'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击关闭详细说明','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明')" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明</div>
-										<div id="help_note_redchn" class="titledropdownbtn" style="cursor:pointer;padding: 0px 2px;display: none;" onclick="openShutManager(this,'NoteBox_redchn_dns',false,'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击关闭详细说明','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明')" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明</div>
-										<div id="help_note_overall" class="titledropdownbtn" style="cursor:pointer;padding: 0px 2px;display: none;" onclick="openShutManager(this,'NoteBox_overall_dns',false,'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击关闭详细说明','&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明')" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;点击查看详细说明</div>
-										<div id="NoteBox_main" style="display:none;margin-left:0px;" >
-												<h2>特别注意事项</h2>
-													<li>启用服务后建议刷新电脑后台缓存，windows下运行CMD，输入 <b>ipconfig /flushdns </b> 能更快看到代理效果。</li>
-													<li>请勿在你的设备上定义第三方DNS，如果你曾经定义过翻墙host文件，也请删掉这些host。</li>
-													<li>如果使用安卓手机，可以通过开启飞行模式，然后再关闭飞行模式，清除DNS缓存。</li>
-												<h2>各模式说明</h2>
-												<h3>【1】 gfwlist模式</h3>
-													<li> 该模式使用gfwlist区分流量，Shadowsocks会将所有访问gfwlist内域名的TCP链接转发到Shadowsocks服务器，实现透明代理。 </li>
-													<li> 和真正的gfwlist模式相比较，路由器内的gfwlist模式还是有一定缺点，因为它没法做到像gfwlist PAC文件一样，对某些域名的二级域名有例外规则 </li>
-													<li><b> 优点：</b>节省SS流量，可防止迅雷和PT流量。 </li>
-													<li><b> 缺点：</b>代理受限于名单内的3000多个被墙网站，需要维护黑名单。</li>
-												<h3>【2】 大陆白名单模式</h3>
-													<li> 该模式使用chnroute IP网段区分国内外流量，Redsocks2会将所有到国外的TCP链接转发到Shadowsocks服务器，实现透明代理； </li>
-													<li> 由于采用了预先定义的ip地址块，所以DNS解析就非常重要，如果一个国内有的网站被解析到了国外地址，那么这个国内网站是会走ss的； </li>
-													<li> 虽然使用了大量的cdn白名单，但是还是不能完全保证国内的一些网站解析到国内地址，因此推荐使用cdn解析能力的chinaDNS或者PcapDNSProxy。</li>
-													<li><b> 优点：</b>所有被墙国外网站均能通过代理访问，无需维护域名黑名单；主机玩家用此模式可以实现TCP代理UDP国内直连 </li>
-													<li><b> 缺点：</b>消耗更多的Shadowsocks流量，迅雷下载和BT可能消耗SS流量。</li>
-												<h3>【5】 全局代理模式</h3>
-													<li> 除局域网和ss服务器等流量不走代理，其它都走代理(udp不走代理)，高级设置中提供了对代理协议的选择。 </li>
-													<li><b> 优点：</b>简单暴力，全部出国；可选仅web浏览走ss，还是全部tcp代理走ss </li>
-													<li><b> 缺点：</b>国内网站全部走ss，迅雷下载和BT全部走SS流量。</li>
-												<h2>功能详解</h2>
-												<h4>Shadowsocks运行状态</h4>
-													<li> 此处会显示Shadowsocks到国内和到国外的联通状况，如果出现问题，会显示错误； </li>
-													<li> 该运行状态默认10秒更新一次，此状态显示可以用于故障检测 ； </li>
-													<li> 如果国外是waiting...状态，那么请等待它自动刷新； </li>
-													<li> 如果国外是working...状态，而你电脑不能访问google，请检查你的电脑设置（DNS,HOST）； </li>
-													<li> 如果国外是problem detected！状态，那么请检查国外DNS设置，SS服务器状态 ； </li>
-													<li> 如果国内是problem detected！状态，那么请检查国内DNS设置，你的网络连通状态 ；</li>
-														<li> </li>
-												<h4>当前gfwlist域名数量</h4>
-													<li> 这里显示当前gfwlist中的国外被墙域名数量，如果你开启了自动更新，那么更新版本号也会显示在这里（以日期表示）</li>
-													<li> 只有你激活了gfwlist模式，才会显示该项目。</li>
-												<h4>当前大陆白名单IP段数量</h4>
-													<li> 这里显示当前chnroute中IP段的行数，如果你开启了自动更新，那么更新版本号也会显示在这里（以日期表示）</li>
-													<li> 只有你激活了大陆白名单模式或者游戏模式，才会显示该项目。</li>
-												<h4>当前国内域名数量</h4>
-													<li> 这里显示当前CDN站点中的国内域名数量，如果你开启了自动更新，那么更新版本号也会显示在这里（以日期表示）</li>
-													<li> 只有你激活了大陆白名单模式或者游戏模式，才会显示该项目。</li>
-												<h4>chromecast支持</h4>
-													<li> 启用该项可以将局域网内客户端自定义的DNS进行接管，强制转发到路由器DNS，对于chromecast这样的设备非常有用。</li>
-												<h4>Shadowsocks规则自动更新</h4>
-													<li> 开启此功能并选择你需要自动更新的文件，这些文件我们放在 &</li>;<a href="https://github.com/koolshare/koolshare.github.io/tree/acelan_softcenter_ui" target="_blank"><i><u>https://github.com/koolshare/koolshare.github.io/tree/acelan_softcenter_ui</u></i></a></li>
-													<li> 自动更新会首先检测服务器上的文件的版本号，如果发现不一致，则会下载相应文件，更新到路由器。 </li>
-													<li> 一旦有任何文件更新到路由器，SS服务就会重启，确保更新过程中别点击任何被墙网站，避免污染DNS进入缓存！。 </li>
-													<li> 点击<b>立即更新</b>后，会马上运行更新脚本，检测是否有新版本，如果有新版本，将会立即下载更新，下载完后会自动重启SS。 </li>
-													<li> 建议你将自动更新，设置到网络使用闲时，因为更新过程中会重启SS，如果你在游戏中，可能会引起掉线等不必要的麻烦。 </li>
-												<h4>局域网客户端控制</h4>
-													<li> 如果有多个局域网ip需要设置，请用英文逗号","隔开；需要注意的是，如果设定了某个机器不走该SS模式，但是因为消除了DNS污染，一些采用DNS污染屏蔽的网站，仍然可以访问（国内直连），但是不会走ss </li>
-													<li> 禁用：局域网内所有机器都将走选定的模式 </li>
-													<li> 黑名单模式：设定的局域网ip地址将走国内直连，其它机器将走选定的模式 </li>
-													<li> 白名单模式：设定的局域网ip地址将走选定的模式，其它机器将走国内直连 </li>
-												<h4>启动延时</h4>
-													<li> 根据你自己的情况，设置启动延时，能保证ss在开机后自动启动</li>
-											</div>
-										<div id="NoteBox_ipset_dns" style="display:none">
-												<h3>选择国内DNS：</h3>
-													<p>将用此处定义的国内DNS解析gfwlist以外的网址，包括全部国内网址和国外位被墙的网址。</p>
-												<h3>选择国外DNS：</h3>
-													<p>这里你需要先选择用于DNS解析的程序，再由选择程序中定义的DNSDNS解析gfwlist中的网址名单。</p>
-												<blockquote>
-												<h4>● DNS2SOCKS </h4>
-													<p> 作用是将 DNS请求通过一个SOCKS隧道转发到DNS服务器，和下文中ss-tunnel类似，不过DNS2SOCKS是利用了SOCK5隧道代理，ss-tunnel是利用了加密UDP；该DNS方案不受到ss服务是否支持udp限制，不受到运营商是否封Opendns限制，只要能建立socoks5链接，就能使用。</p>
-												<h4>● dnscrypt-proxy </h4>
-													<p> 原理是通过加密连接到支持该程序的国外DNS服务器，由这些DNS服务器解析出gfwlist中域名的IP地址，但是解析出的IP地址离SS服务器的距离随机，国外CDN较弱。</p>
-												<h4>● ss-tunnel </h4>
-													<p> 原理是将DNS请求，通过ss-tunnel利用UDP发送到ss服务器上，由ss服务器向你定义的DNS服务器发送解析请求，解析出gfwlist中域名的IP地址，这种方式解析出来的IP地址会距离ss服务器更近，具有较强的CDN效果</p>
-													<p> 若果你的账号不支持UDP转发，默认提供OpenDNS方式，请保留默认选项即可。</p>
-												</blockquote>
-												<h4> 当前gfwlist域名数量：</h4>
-													<p>如果你使用本模式,那么这里会正确的显示当前已经被路由器使用的域名黑名单条目数量。</p>
-												<h4> gfwlist自动更新：</h4>
-													<p>更新文件托管在github上，默认每天凌晨4点会检测一次是否有更新，如果有更新，则会自动下载最新的gfwlist文件，并且自动重启ss服务器。</p>
-													<p>同时也欢迎你到 <a href="https://github.com/koolshare/koolshare.github.io/blob/master/maintain_files/gfwlist.conf" target="_blank"><i><u>https://github.com/koolshare/koolshare.github.io/blob/master/maintain_files/gfwlist.conf</u></i></a> 我们的维护项目中提交你的gfwlist名单。</p>
-												<h3>域名黑名单：</h3>
-													<p>在此处填入的域名将会被加入到gfwlist中，并且强制走ss流量，在自定义域名前你可以去我们的github项目中查看你要添加的域名是否已经被添加到gfwlist中。此处的添加格式请参照示例。</p>
-												<h3> 自定义host：</h3>
-													<p>指定的域名用指定的ip地址访问，比如能这个功能给你的PS4加速，而且当ip地址为127.0.0.1时，可以达到广告屏蔽的效果，格式见默认值。</p>
-											</div>
-										<div id="NoteBox_redchn_dns" style="display:none">
-										<h3>选择国内DNS：</h3>
-										<p>将用此处定义的国内DNS解析国内6000+个域名，你可以到 <a href="https://github.com/koolshare/koolshare.github.io" target="_blank"><font color="#ffcc00"><u>github.com/koolshare/koolshare.github.io</u></font></a> 参与维护这个列表。</p>
-										<h3>选择国外DNS：</h3>
-										<p> 这里你需要先选择用于DNS解析的程序，再由选择程序中定义的DNS解析gfwlist中的网址名单。</p>
-										<blockquote>
-										<h4>● DNS2SOCKS </h4>
-										<p> 作用是将 DNS请求通过一个SOCKS隧道转发到DNS服务器，和下文中ss-tunnel类似，不过DNS2SOCKS是利用了SOCK5隧道代理，ss-tunnel是利用了加密UDP；该DNS方案不受到ss服务是否支持udp限制，不受到运营商是否封Opendns限制，只要能建立socoks5链接，就能使用。</p>
-										<h4>● dnscrypt-proxy </h4>
-										<p> 原理是通过加密连接到支持该程序的国外DNS服务器，由这些DNS服务器解析出gfwlist中域名的IP地址，但是解析出的IP地址离SS服务器的距离随机，国外CDN较弱。</p>
-										<h4>● ss-tunnel </h4>
-										<p> 原理是将DNS请求，通过ss-tunnel利用UDP发送到ss服务器上，由ss服务器向你定义的DNS服务器发送解析请求，解析出gfwlist中域名的IP地址，这种方式解析出来的IP地址会距离ss服务器更近，具有较强的CDN效果</p>
-										<p> 若果你的账号不支持UDP转发，默认提供OpenDNS方式，请保留默认选项即可。</p>
-										<h4>● ChinaDNS </h4>
-										<p>原理是通过DNS并发查询，同时将你要请求的域名同时向国内和国外DNS发起查询，然后用ChinaDNS内置的双向过滤+指针压缩功能来过滤掉污染ip，双向过滤保证了国内地址都用国内域名查询，因此使用ChinaDNS能够获得最佳的国内CDN效果，这里ChinaDNS国内服务器的选择是有要求的，这个DNS的ip地址必须在chnroute定义的IP段内，同理你选择或者自定义的国外DNS必须在chnroute定义的IP段外，所以比如你在国内DNS处填写你的上级路由器的ip地址，类似192.168.1.1这种，会被ChinaDNS判断为国外IP地址,从而使得双向过滤功能失效，国外DNS解析的IP地址就会进入DNS缓存。</p>
-										</blockquote>
-										<h3>自定义需要CDN加速网站</h3>
-										<p> 如果你访问国内网站速度过慢，可以将网址加入此栏，将使用你上面选择的DNS对这些域名进行解析。此处加入的DNS会强制使用你选择的国内DNS进行解析，我已经预定义了6000+个国内域名，强制使用国内DNS来进行解析，如果你要添加自己定义的，那么你可以到<a href="https://github.com/koolshare/koolshare.github.io/blob/master/maintain_files/cdn.txt" target="_blank"><font color="#ffcc00"><u> https://github.com/koolshare/koolshare.github.io/blob/master/maintain_files/cdn.txt </u></font></a>去查看你要添加的是否已经默认添加过了，同时也欢迎你在项目里提交你自己的cdn站点文件。</p>
-										<h3>外网黑名单：</h3>
-										<p> 添加不需要走代理的外网ip地址或ip地址段，因为已经默认已经排除了中国大陆网段，所以此处建议添加国外ip，添加同样用英文","隔开各个IP地址。</p>
-										<h3>外网白名单：</h3>
-										<p> 添加需要强制走代理的外网ip地址或ip地址段，因为已经排除了国外网段，所以此处建议添加国内ip。</p>
-										</div>
-                    					<div id="NoteBox_overall_dns" style="display:none">
-                    					  <h3> 全局模式：</h3>
-                    					  <p><b>全局HTTP(s)：</b>该模式将只代理TCP链接的80和443端口。</p>
-                    					  <p><b>全局TCP：</b>该模式将代理全部的TCP链接(局域网除外)。</p>
-                    					  <h3>全局模式DNS：</h3>
-                    					  <p>选择你将使用的用以解析被代理网站的DNS服务器。</p>
-                    					  <p> Shadowsocks账号支持UDP转发的能三个都能选择，你可以根据解析效果自己确定一个。如果你的账号不支持UDP转发，默认提供OpenDNS方式。</p>
-                    					</div>
-										<div id ="KoolshareBottom_div" class="KoolshareBottom" style="position: static; bottom: 0px; left: 420px;">
+										<div id ="KoolshareBottom_div" class="KoolshareBottom" style="position: static;">
 											论坛技术支持： <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a> <br/>
 											博客技术支持： <a href="http://www.mjy211.com" target="_blank"> <i><u>www.mjy211.com</u></i> </a> <br/>
 											Github项目： <a href="https://github.com/koolshare/koolshare.github.io" target="_blank"> <i><u>github.com/koolshare</u></i> </a> <br/>
@@ -3002,6 +2776,7 @@ taobao.com
 		<td width="10" align="center" valign="top"></td>
 	</tr>
 </table>
+</div>
 </form>
 <div id="footer"></div>
 </body>
