@@ -1,5 +1,5 @@
 <script language="javascript">
-window.location="http://"+window.location.host+":4200/"
+location.href = "http://" + location.hostname + ":4200/"
 </script>
 
 
