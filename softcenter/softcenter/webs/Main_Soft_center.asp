@@ -500,6 +500,15 @@ function softceterInitData(data) {
             result["koolsocks"].description = "科学上网";
             result["koolsocks"].version = "1.3";
             result["koolsocks"].order = "1";
+
+            result["shellinabox"] = {};
+            result["shellinabox"].name = "shellinabox";
+            result["shellinabox"].title = "shellinabox";
+            result["shellinabox"].install = "4";
+            result["shellinabox"].home_url = "Module_shellinabox.asp";
+            result["shellinabox"].description = "超强的SSH网页客户端，webshell替代品";
+            result["shellinabox"].version = "1.0";
+            result["shellinabox"].order = "1";     
             return result;
         }
         //将本地和远程进行一次对比合并
