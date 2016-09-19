@@ -420,12 +420,8 @@ function update_visibility_main() {
 		$j("#ss_basic_rss_obfs_alert").html("不混淆");
 	} else if (sro == "http_simple"){
 		$j("#ss_basic_rss_obfs_alert").html("伪装为http协议");
-	} else if (sro == "tls_simple"){
-		$j("#ss_basic_rss_obfs_alert").html("模拟https/TLS1.2的握手过程，不建议使用");
 	} else if (sro == "random_head"){
 		$j("#ss_basic_rss_obfs_alert").html("发送一个随机包再通讯的协议");
-	} else if (sro == "tls1.0_session_auth"){
-		$j("#ss_basic_rss_obfs_alert").html("模拟tls1.0，不建议使用");
 	} else if (sro == "tls1.2_ticket_auth"){
 		$j("#ss_basic_rss_obfs_alert").html("模拟TLS1.2，强烈推荐");
 	}
@@ -1629,7 +1625,7 @@ function version_show(){
                     	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
                 	}else{
-	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：2.8.5</i></a>");
+	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：2.8.8</i></a>");
                 	}
 		        }
             }
@@ -2223,7 +2219,6 @@ function setIframeSrc() {
 																	<select id="ss_node_table_rss_protocol" name="ss_node_table_rss_protocol" style="width:350px;margin:0px 0px 0px 2px;" class="input_option">
 																		<option value="origin" selected>origin</option>
 																		<option value="verify_simple">verify_simple</option>
-																		<option value="verify_deflate">verify_deflate</option>
 																		<option value="verify_sha1">verify_sha1</option>
 																		<option value="auth_simple">auth_simple</option>
 																		<option value="auth_sha1">auth_sha1</option>
@@ -2237,9 +2232,7 @@ function setIframeSrc() {
 																	<select id="ss_node_table_rss_obfs" name="ss_node_table_rss_obfs" style="width:350px;margin:0px 0px 0px 2px;" class="input_option">
 																		<option value="plain">plain</option>
 																		<option value="http_simple">http_simple</option>
-																		<option value="tls_simple">tls_simple</option>
 																		<option value="random_head">random_head</option>
-																		<option value="tls1.0_session_auth">tls1.0_session_auth</option>
 																		<option value="tls1.2_ticket_auth">tls1.2_ticket_auth</option>
 																	</select>
 																</td>

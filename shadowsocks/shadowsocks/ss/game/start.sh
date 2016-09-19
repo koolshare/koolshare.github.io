@@ -358,7 +358,7 @@ start_dns(){
 					server_port = 1053;
 					server_ip = 127.0.0.1;
 					status_ctl = on;
-					query_method=$ss_game_pdnsd_method;
+					query_method=tcp_only;
 					min_ttl=$ss_game_pdnsd_server_cache_min;
 					max_ttl=$ss_game_pdnsd_server_cache_max;
 					timeout=10;

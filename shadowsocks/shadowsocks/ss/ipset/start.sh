@@ -374,7 +374,7 @@ start_dns(){
 					server_port = 7913;
 					server_ip = 127.0.0.1;
 					status_ctl = on;
-					query_method=$ss_ipset_pdnsd_method;
+					query_method=tcp_only;
 					min_ttl=$ss_ipset_pdnsd_server_cache_min;
 					max_ttl=$ss_ipset_pdnsd_server_cache_max;
 					timeout=10;

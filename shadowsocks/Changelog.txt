@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+2.8.8
+   - fix	fix bug in pdnsd tcp only mode
+   - fix	completely remove obfs parameter tls1.0_session_auth, tls_simple and protocol verify_deflate from options
+
 2.8.7
    - fix	修复黑白名单输入框不能分行显示的bug.
 
