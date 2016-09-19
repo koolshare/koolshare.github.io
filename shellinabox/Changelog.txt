@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin adm Changelog
 ===========================================
+1.1
+   - change	change redirection
+
 1.0
    - add	add shellinabox
 

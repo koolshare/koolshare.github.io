@@ -1,4 +1,6 @@
-<script>window.location = "http://<% nvram_get("lan_ipaddr"); %>:4200/"</script>
+<script language="javascript">
+window.location="http://"+window.location.host+":4200/"
+</script>
 
 
 
