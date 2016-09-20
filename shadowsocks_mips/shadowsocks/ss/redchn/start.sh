@@ -389,7 +389,6 @@ start_dns(){
 	fi
 		echo $(date): done
 		echo $(date):
-	fi
 	
 	# Start pdnsd
 	if [ "6" == "$ss_redchn_dns_foreign"  ]; then
