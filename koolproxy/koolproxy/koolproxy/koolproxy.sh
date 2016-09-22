@@ -8,15 +8,12 @@ export PERP_BASE=/koolshare/perp
 
 
 start_koolproxy(){
-	[ "$koolproxy_rule_sel" == "1" ] && rule="/koolshare/koolproxy/rule/koolproxy.txt"
-	[ "$koolproxy_rule_sel" == "2" ] && rule="/koolshare/koolproxy/rule/easylistchina+easylist.conf"
 	perp=`ps | grep perpd |grep -v grep`
 	if [ -z "$perp" ];then
 		sh /koolshare/perp/perp.sh stop
 		sh /koolshare/perp/perp.sh start
 	fi
 	perpctl A koolproxy >/dev/null 2>&1
-	#/koolshare/koolproxy/koolproxy -p 3000 -a $rule >/dev/null 2>&1 &
 }
 
 stop_koolproxy(){
@@ -41,7 +38,7 @@ load_nat(){
 	echo $(date): "Apply nat rules!"
 
 	iptables -t nat -N koolproxy
-	iptables -t nat -A PREROUTING -p tcp -j koolproxy
+	iptables -t nat -A PREROUTING -p tcp --dport 80 -j koolproxy
 	iptables -t nat -A koolproxy -d 0.0.0.0/8 -j RETURN
 	iptables -t nat -A koolproxy -d 10.0.0.0/8 -j RETURN
 	iptables -t nat -A koolproxy -d 127.0.0.0/8 -j RETURN
@@ -50,13 +47,13 @@ load_nat(){
 	iptables -t nat -A koolproxy -d 192.168.0.0/16 -j RETURN
 	iptables -t nat -A koolproxy -d 224.0.0.0/4 -j RETURN
 	iptables -t nat -A koolproxy -d 240.0.0.0/4 -j RETURN
-	iptables -t nat -A koolproxy -p tcp --dport 80 -j REDIRECT --to-ports 3000
+	iptables -t nat -A koolproxy -p tcp -j REDIRECT --to-ports 3000
 }
 
 flush_nat(){
-	iptables -t nat -D PREROUTING -p tcp -j koolproxy
-	iptables -t nat -F koolproxy
-	iptables -t nat -X koolproxy
+	cd /tmp
+	iptables -t nat -S | grep koolproxy | sed 's/-A/iptables -t nat -D/g'|sed 1d > clean.sh && chmod 700 clean.sh && ./clean.sh && rm clean.sh
+	iptables -t nat -X koolproxy > /dev/null 2>&1
 }
 
 creat_start_up(){
@@ -65,12 +62,13 @@ creat_start_up(){
 }
 
 write_nat_start(){
-	dbus set __event__onnatstart_koolproxy="/koolshare/koolproxy/koolproxy.sh restart_nat"
+	dbus set __event__onnatstart_koolproxy="/koolshare/koolproxy/nat_load.sh"
 }
 
 remove_nat_start(){
 	dbus remove __event__onnatstart_koolproxy
 }
+
 
 case $ACTION in
 start)

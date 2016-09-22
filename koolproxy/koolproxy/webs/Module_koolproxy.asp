@@ -24,7 +24,12 @@
 <script type="text/javascript" src="/dbconf?p=koolproxy_&v=<% uptime(); %>"></script>
 <script type="text/javascript" src="/res/softcenter.js"></script>
 <script language="JavaScript" type="text/javascript" src="/client_function.js"></script>
-
+<style>
+    .cloud_main_radius h2 { border-bottom:1px #AAA dashed;}
+	.cloud_main_radius h3 { font-size:12px;color:#FFF;font-weight:normal;font-style: normal;}
+	.cloud_main_radius h4 { font-size:12px;color:#FC0;font-weight:normal;font-style: normal;}
+	.cloud_main_radius h5 { color:#FFF;font-weight:normal;font-style: normal;}
+</style>
 
 <script>
 function init() {
@@ -53,7 +58,7 @@ function buildswitch(){
 
 function onSubmitCtrl(o, s) {
 		document.form.action_mode.value = s;
-		showLoading(7);
+		showLoading(5);
 		document.form.submit();
 }
 
@@ -102,18 +107,48 @@ location.href = "/Main_Soft_center.asp";
 								<tr>
 									<td bgcolor="#4D595D" colspan="3" valign="top">
 										<div>&nbsp;</div>
-										<div style="float:left;" class="formfonttitle">koolproxy</div>
-										<div style="float:right; width:15px; height:25px;margin-top:10px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
-										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
-										<div class="formfontdesc" style="padding-top:5px;margin-top:0px;" id="cmdDesc">koolproxy</div>
-										<div id="koolproxy_version_status" style="padding-top:5px;margin-left:99px;margin-top:-35px;"><i>当前版本：<% dbus_get_def("koolproxy_version", "1.0"); %></i></div>
-										<div style="padding-top:5px;margin-top:0px;" id="NoteBox" >
-											<li>koolproxy是能识别adblock规则的代理软件,目前正在完善中; </li>
-											<li>此插件兼容SS，但是建议开启前关闭adm。 </li>
-											<li>1.4版本精简了规则数量，如果规则框为空，清重新选择并提交，另外，看PC爱奇艺有惊喜 </li>
-										</div>					
-										<div class="formfontdesc" id="cmdDesc"></div>
-										<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="routing_table">
+										
+
+
+												<table width="100%" height="150px" style="border-collapse:collapse;">
+                                                    <tr >
+                                                        <td colspan="5" class="cloud_main_radius">
+                                                            <div style="padding:10px;width:95%;font-style:italic;font-size:14px;">
+                                                                <br/><br/>
+                                                                <table width="100%" >
+                                                                    <tr>
+                                                                        <td>
+                                                                            <ul style="margin-top:-50px;padding-left:15px;" >
+                                                                                <li style="margin-top:-5px;">
+                                                                                    <h2 id="push_titile"><em>koolproxy <% dbus_get_def("koolproxy_version", "1.7"); %></em></h2>
+                                                                                    <div style="float:auto; width:15px; height:25px;margin-top:-40px;margin-left:680px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
+                                                                                </li>
+                                                                                <li style="margin-top:-5px;">
+                                                                                    <h3 id="push_content1" >koolproxy是能识别adblock规则的代理软件，目前正在完善中。</h3>
+                                                                                </li>
+                                                                                <li  style="margin-top:-5px;">
+                                                                                    <h3 id="push_content2"><i>koolproxy静态规则：</i>更新日期：2016-9-21 21:25:45；4382条</h3>
+                                                                                </li>
+                                                                                <li id="push_content3_li" style="margin-top:-5px;">
+                                                                                    <h3 id="push_content3"><i>koolproxy视频规则：</i>更新日期：2016-9-21 23:40:00</h3>
+                                                                                </li>
+                                                                                <li id="push_content4_li" style="margin-top:-5px;display: none;">
+                                                                                    <h3 id="push_content4"></h3>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr height="10px">
+                                                        <td colspan="3"></td>
+                                                    </tr>
+
+                                                </table>
+
+										<table style="margin:-20px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="routing_table">
 											<thead>
 											<tr>
 												<td colspan="2">开关设置</td>
@@ -137,16 +172,33 @@ location.href = "/Main_Soft_center.asp";
 													</div>
 													<div id="koolproxy_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>	
 												</td>
-											</tr>
-											<tr>
-												<th>选择规则</th>
+											<!--
+											<tr id="rule_update_switch">
+												<th>规则更新开关</th>
 												<td>
-													<select id="koolproxy_rule_sel" name="koolproxy_rule_sel" style="width:200px;margin:0px 0px 0px 2px;" class="input_option">
-														<option value="1" selected >koolproxy.txt</option>
-														<option value="2">easylistchina+easylist</option>
+													<select name="koolproxy_update" id="koolproxy_update" class="input_option" style="width:auto;margin:0px 0px 0px 2px;">
+														<option value="1" selected>开启</option>
+														<option value="0">关闭</option>
 													</select>
 												</td>
 											</tr>
+
+											<tr id="update_rules">
+												<th width="35%">koolproxy规则更新间隔</a></th>
+												<td>
+													<select id="ss_basic_rule_update_time" name="ss_basic_rule_update_time" class="ssconfig input_option" title="选择规则列表自动更新时间，更新后将自动重启SS" onchange="update_visibility_tab4();" >
+														<option value="0">1小时</option>
+														<option value="1">2小时</option>
+														<option value="2">4小时</option>
+														<option value="3">6小时</option>
+														<option value="4">8小时</option>
+														<option value="5">12小时</option>
+														<option value="6">24小时</option>
+													</select>
+															<input id="update_now" onclick="updatelist()" style="font-family:'Courier New'; Courier, mono; font-size:11px;" type="submit" value="立即更新" />
+												</td>
+											</tr>
+											-->
                                     	</table>
 										<div class="apply_gen">
 											<button id="cmdBtn" class="button_gen" onclick="onSubmitCtrl(this, ' Refresh ')">提交</button>
