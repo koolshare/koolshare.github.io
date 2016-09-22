@@ -141,6 +141,9 @@
     .install-status-1 .install-btn{
         display: none;
     }
+    .update-btn{
+        display: none;
+    }
     .install-status-1 .update-btn{
         display: none;
     }
@@ -412,6 +415,7 @@ function appUninstallModule(moduleInfo) {
                 '<dd class="icon-pic">',
                     //当图标娶不到的时候，使用默认图标，如果已经是默认图标且娶不到，就狗带了，不管
                     '<img src="#{icon}" onerror="this.src.indexOf(\'icon-default.png\')===-1 && (this.src=\'/res/icon-default.png\');" alt="图标出走了～"/>',
+                    '<img class="update-btn" style="position: absolute;width:20px;height:20px;margin-top:-66px;margin-left:44px;" src="/res/upgrade.png"',
                 '</dd>',
                 '<dt class="icon-title">#{title}</dt>',
                 '<dd class="icon-desc">',
