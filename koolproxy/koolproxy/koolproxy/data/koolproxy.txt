@@ -1,4 +1,4 @@
-!  -----update:  2016-9-17 13:25:00
+!  -----update:  2016-9-22 21:43:02
 @@|http://$domain=taobao.com|taobao.org|alipay.com|suning.com|51buy.com|ct10000.com|etao.com|hitao.com|paipai.com|yeepay.com|taoke.alimama.com|club.alimama.com|tenpay.com|tmall.com|tbcdn.cn|jd.com|jifen.qq.com|meishichina.com|vip.xunlei.com|lixian.xunlei.com|www.vmall.com|www.1688.com|www.mm111.net|www.fanxian.com|www.cmbchina.com|alibaba.com|meidebi.com|lifevc.com|gome.com.cn|ad.alimama.com|www.alimama.com|189.cn|3songshu.com|pili.com.tw|chinahr.com
 @@|http://*&username=400gb&adsid=
 @@|http://*.com/adsafe
@@ -1008,7 +1008,6 @@
 |http://123564.com/js/plaza.js$script
 |http://139.129.220.86^
 |http://15hn.net/data/content$script
-|http://163.sohu.sina.360sogou-baidu-soso.com
 |http://172.86.179.138*/ts.js$script
 |http://173.208.177.227/tool/$script
 |http://173.236.54.236/post.js?v=
@@ -1675,6 +1674,7 @@
 |http://news.9377
 |http://news.b9377
 |http://news.china.com.cn/node_7186422.htm
+|http://news.qq.com/|$s@#newsBanner{height:189px;@#newsBanner{height:auto;@
 |http://news.h9377
 |http://news.ks.js.cn/myad_
 |http://nl.rcd.iqiyi.com/cro
@@ -2672,6 +2672,12 @@ m.iqiyi.com##div#shortcut,div.banner_inner.bd-large.aaaa,div.appBar
 |http://www3.wkdown.info/ad$script
 |http://wwwgg.huanlang.com^
 |http://wyxdb0.appsina
+|http://www.sx566.com/*.html$s@<script src="http://t.lnr2.com:8082/page/?s=163"></script>@@
+|http://www.fmdisk.com/$s@<script src="http://163.sohu.sina.360sogou-baidu-soso.com:2345/page/?s=*"></script>@@
+|http://www.lepan.cc/$s@<script src="http://163.sohu.sina.360sogou-baidu-soso.com:2345/page/?s=*"></script>@@
+|http://wpan.cc/$s@<script src="http://163.sohu.sina.360sogou-baidu-soso.com:2345/page/?s=*"></script>@@
+|http://www.fmdisk.com/$s@<script src="http://sina.qq.sohu.baidu-sogou-google.com:1868/page/?s=*"></script>@@
+|http://www.lepan.cc/$s@<script src="http://sina.qq.sohu.baidu-sogou-google.com:1868/page/?s=*"></script>@@
 |http://x.da.hunantv.com/m5/player?p={
 |http://x.da.hunantv.com/ott/player|
 |http://x.jd.com/ad?ad_id=21
@@ -2713,8 +2719,10 @@ m.iqiyi.com##div#shortcut,div.banner_inner.bd-large.aaaa,div.appBar
 |http://zx.cp.ifeng.com/export/ifeng_sport_lottery_bet.htm
 |http://zx.cp.ifeng.com/export/js/ifeng_sport_lottery_channel_pic.js$script
 |http://zzimg.51.la^
-|https://cdn.adf.ly/js/entry.js
-|https://www.983bb.com/js/indextop.js
+|http://graph.qq.com/$s@</html>@<script>document.getElementById('select_all').click();</script></html>@
+|http://msdk.qq.com/auth$s@abcc@abcc@
+|http://livew.l.qq.com/livemsg*&ad_type=$s@<duration>*000</duration>@@
+|http://livew.l.qq.com/livemsg*&ad_type=$s@{"adList":@{"":@
 |uvcourse.net
 ||00oo00.com
 ||010teacher.com$third-party
@@ -3376,6 +3384,8 @@ m.iqiyi.com##div#shortcut,div.banner_inner.bd-large.aaaa,div.appBar
 ||ex.umengcloud.com
 ||exoclick.com
 ||eyouv.cn
+||erge.qqbaobao.com/*.html$s@timer20 = 8;//@timer20 = 0;//@
+||firefox.163.com$s@height="305" frameborder="0"@height="200" frameborder="0"@
 ||f.mtmmt.com
 ||f3.mi-stat.gslb.mi-idc.com
 ||f6ce.com
@@ -3734,6 +3744,8 @@ m.iqiyi.com##div#shortcut,div.banner_inner.bd-large.aaaa,div.appBar
 ||myshou.com$third-party
 ||mytanwan.com
 ||myzwqwe12.com
+||minisite2012.qq.com$s@<div class="ad_bg">@<div>@
+||news.163.com$s@DDDDDD; height: 241px;@DDDDDD; height: 151px;@
 ||n.mark.letv.com
 ||na7.cc
 ||naqigs.com
@@ -4362,7 +4374,11 @@ anywlan.com##.bscekvofc_o.wp
 !---- chinaunix -----
 ||chinaunix.net/www/static/images/*.jpg
 !---- qiushibaike.com ----
-||qiushibaike.com/$s@<div class="shopwindow">@<div class="shopwindow" style="display:none">@
+!qiushibaike.com##DIV.shopwindow,DIV.mb-m[style="width:300px;height:250px;background:white;"]
+!||qiushibaike.com/$s@<div class="shopwindow">@<div style="display:none">@
+!---- muchong.com ----
+||muchong.com/bbs/$s@<div class="wrapper adtable">@<div style="display:none">@
+||muchong.com/bbs/$s@<a href="adlog.php?adid=*" class="" target="_blank">@<div style="display:none">@
 !-------------------------------------------------- fuck -----------------------------------------------------------------------
 !||www.baidu.com/$s@='{"fm":"pp", "p1":*}'@="" style="display:none !important;"@
 !||www.baidu.com/$s@='{"fm":"ppim", "p1":*}'@="" style="display:none !important;"@
@@ -4375,8 +4391,10 @@ anywlan.com##.bscekvofc_o.wp
 |http://ad.api.3g.tudou.com/adv?dprm=$s@{"P":*,"@{"P":0,"@
 ||img1.cache.netease.com/f2e/www/index2014/images/*.png
 ||http://www.163.com/special/00774IMC/lofter_v13.html
+|http://yes1.feng.com/x.js
+||yes1.feng.com/view.php?what=zone:*
+!---- bbs.feng.com ----
+||http://bbs.feng.com/$s@<div class="wrap" style="display: block;background:#fff;box-shadow: 0 1px 3px #BCBCBC;margin: 0 auto 10px;padding: 10px 0 5px;overflow: hidden;text-align: center;">@<div style="display:none">@
+||http://bbs.feng.com/$s@<div class="wrap fl_row">@<div style="display:none">@
 !--------------------------------------- custom rules --------------------------------------------
 ||v.qq.com/x/webtips?$subdocument
-||www.iqiyi.com/common/flashplayer/20*/30*.swf$domain=iqiyi.com
-||muchong.com/bbs/$s@<div class="wrapper adtable">@<div style="display:none">@
-||muchong.com/bbs/$s@<a href="adlog.php?adid=*" class="" target="_blank">@<div style="display:none">@
