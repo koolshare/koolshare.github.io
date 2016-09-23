@@ -91,14 +91,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2016-09-22_23:17:11", 
+            "build_date": "2016-09-23_23:22:02", 
             "description": "koolproxy，支持正则的网络代理~", 
             "home_url": "Module_koolproxy.asp", 
-            "md5": "200be31ae873b3f7b5785eaadba26d3e", 
+            "md5": "085109a23018eb5365832c4188546e75", 
             "name": "koolproxy", 
             "tar_url": "koolproxy/koolproxy.tar.gz", 
             "title": "koolproxy", 
-            "version": "1.8"
+            "version": "1.9"
         }, 
         {
             "build_date": "2016-05-19_22:37:04", 
@@ -161,14 +161,14 @@
             "version": "1.3"
         }, 
         {
-            "build_date": "2016-05-11_19:20:01", 
+            "build_date": "2016-09-23_23:22:32", 
             "description": "让分流更简单", 
             "home_url": "Module_policy_route.asp", 
-            "md5": "38cd706eb85c05dd4da74b4490694473", 
+            "md5": "621e4d7d45a7b15fdb4fb93d83370431", 
             "name": "dualwan", 
             "tar_url": "dualwan/dualwan.tar.gz", 
             "title": "策略路由", 
-            "version": "0.6"
+            "version": "0.7"
         }, 
         {
             "build_date": "2016-05-13_16:14:27", 

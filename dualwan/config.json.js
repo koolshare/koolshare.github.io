@@ -1,8 +1,8 @@
 {
-"version":"0.6",
-"md5":"38cd706eb85c05dd4da74b4490694473",
+"version":"0.7",
+"md5":"621e4d7d45a7b15fdb4fb93d83370431",
 "home_url":"Module_policy_route.asp",
 "title":"策略路由",
 "description":"让分流更简单",
-"build_date":"2016-05-11_19:20:01"
+"build_date":"2016-09-23_23:22:32"
 }
