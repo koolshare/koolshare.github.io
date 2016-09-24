@@ -12,3 +12,7 @@ Koolshare Asuswrt-Merlin dualwan Changelog
    - 优化路由表
 0.6 (28/04/2016 16:21:00)
    - 针对移动用户特别优化
+0.7 (28/04/2016 16:21:00)
+   - update ip database
+0.8 (28/04/2016 16:21:00)
+   - revert to 0.6
