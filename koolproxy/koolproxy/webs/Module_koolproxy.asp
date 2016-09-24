@@ -133,10 +133,10 @@ function update_visibility(){
                                                                                     <h3 id="push_content1" >koolproxy是能识别adblock规则的代理软件，目前正在完善中。</h3>
                                                                                 </li>
                                                                                 <li  style="margin-top:-5px;">
-                                                                                    <h3 id="push_content2"><i>koolproxy静态规则：</i>更新日期：2016-9-23 23:21:00；4409条</h3>
+                                                                                    <h3 id="push_content2"><i>koolproxy静态规则：</i>更新日期：2016-9-24 20:45:00；4409条</h3>
                                                                                 </li>
                                                                                 <li id="push_content3_li" style="margin-top:-5px;">
-                                                                                    <h3 id="push_content3"><i>koolproxy视频规则：</i>更新日期：2016-9-23 23:21:00</h3>
+                                                                                    <h3 id="push_content3"><i>koolproxy视频规则：</i>更新日期：2016-9-24 23:25:00</h3>
                                                                                 </li>
                                                                                 <li id="push_content4_li" style="margin-top:-5px;display: none;">
                                                                                     <h3 id="push_content4"></h3>
