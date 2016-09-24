@@ -326,7 +326,7 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		} else if (field == "ss_basic_rss_protocol") {
-			if (obj[field] != "origin" && obj[field] != "verify_simple" &&  obj[field] != "auth_simple" && obj[field] != "auth_sha1" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1_v2" ) {
+			if (obj[field] != "origin" && obj[field] != "verify_simple" &&  obj[field] != "auth_simple" && obj[field] != "auth_sha1" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v3" && obj[field] != "auth_sha1_v4" ) {
 				$j("#ss_basic_rss_protocol").val("origin");
 			} else {
 				$j("#ss_basic_rss_protocol").val(obj.ss_basic_rss_protocol);
@@ -414,6 +414,10 @@ function update_visibility_main() {
 		$j("#ss_basic_rss_protocol_alert").html("抗重放、CCA攻击协议");
 	} else if (srp == "auth_sha1_v2"){
 		$j("#ss_basic_rss_protocol_alert").html("抗重放、CCA攻击升级版协议");
+	} else if (srp == "auth_sha1_v3"){
+		$j("#ss_basic_rss_protocol_alert").html("");
+	} else if (srp == "auth_sha1_v4"){
+		$j("#ss_basic_rss_protocol_alert").html("");
 	}
 
 	if (sro == "plain"){
@@ -1625,7 +1629,7 @@ function version_show(){
                     	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
                 	}else{
-	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：2.8.8</i></a>");
+	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：2.8.9</i></a>");
                 	}
 		        }
             }
@@ -2223,6 +2227,8 @@ function setIframeSrc() {
 																		<option value="auth_simple">auth_simple</option>
 																		<option value="auth_sha1">auth_sha1</option>
 																		<option value="auth_sha1_v2">auth_sha1_v2</option>
+																		<option value="auth_sha1_v3">auth_sha1_v3</option>
+																		<option value="auth_sha1_v4">auth_sha1_v4</option>
 																	</select>
 																</td>
 															</tr>
@@ -2378,6 +2384,8 @@ function setIframeSrc() {
 															<option class="content_input_fd" value="auth_simple">auth_simple</option>
 															<option class="content_input_fd" value="auth_sha1">auth_sha1</option>
 															<option class="content_input_fd" value="auth_sha1_v2">auth_sha1_v2</option>
+															<option class="content_input_fd" value="auth_sha1_v3">auth_sha1_v3</option>
+															<option class="content_input_fd" value="auth_sha1_v4">auth_sha1_v4</option>
 														</select>
 														<span id="ss_basic_rss_protocol_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>

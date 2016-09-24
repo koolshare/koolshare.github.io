@@ -1,5 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+
+2.8.9
+   - update	update shadowsocks-libev binary to 2.5.3 release
+   - update	update shadowsocksR-libev binary to latest (support auth_sha1_v3 and auth_sha1_v4 protocol)
+   - update	add support for auth_sha1_v3 and auth_sha1_v4 protocol in web
+
 2.8.8
    - fix	fix bug in pdnsd tcp only mode
    - fix	completely remove obfs parameter tls1.0_session_auth, tls_simple and protocol verify_deflate from options
