@@ -1,9 +1,10 @@
-!  -----update:  2016-9-23 21:15
+!  -----update:  2016-9-24 20:45
 @@|http://$domain=code.google.com|yeepay.com|taoke.alimama.com|club.alimama.com|tenpay.com|tmall.com|tbcdn.cn|jd.com
 @@|http://$domain=meidebi.com|alibaba.com|lifevc.com|ad.alimama.com|www.alimama.com|gome.com.cn|3songshu.com
 @@|http://$domain=meishichina.com|vip.xunlei.com|lixian.xunlei.com|www.vmall.com|www.1688.com|www.mm111.net|jifen.qq.com
 @@|http://$domain=taobao.com|taobao.org|alipay.com|suning.com|51buy.com|ct10000.com|etao.com|hitao.com|paipai.com|189.cn
 @@|http://$domain=banggo.com|pili.com.tw|yunhou.com|voicecloud.cn|xunfei.cn
+@@|http://img.vip.xunlei.com/
 @@|http://*&username=400gb&adsid=
 @@|http://*.org/admin$image
 @@|http://*/ad_js.php?aid=10004
@@ -106,6 +107,7 @@
 @@|http://tajs.qq.com/stats?sId=
 @@|http://tb1.bdstatic.com/*.css
 @@|http://v.aty.sohu.com/ct?vid=
+@@|http://v.aty.sohu.com/v$object-subrequest
 @@|http://v.gdt.qq.com/gdt_stats.fcg?
 @@|http://wn.pos.baidu.com/adx.php?c=$domain=400gb.com|pipipan.com|bego.cc
 @@|http://wvw.9377.com/api/qq.php
@@ -225,6 +227,9 @@
 @@|http://www.77vcd.com/js/player/common.js
 @@|http://*.com/index0data/*.css
 @@|http://i2.bahamut.com.tw/JS/ad/animeVideo.js
+@@|http://hc.yinyuetai.com/partner/yyt/
+@@||atm.youku.com/v$object-subrequest
+@@||atm.youku.com/crossdomain.xml
 |http:/*/7mad.$image
 |http:/*/adPicture$image
 |http:/*/adfile$domain=~abchina.com
@@ -323,7 +328,6 @@
 |http://*.com/?q=$domain=torrentkitty.la|diggbt.net|btkitty.biz|btkitty.uno|cishuge.com
 |http://*.com/?q=*|*
 |http://*.com/?ss=*_*_
-|http://*.com/?uid=*|*|*
 |http://*.com/AShow.aspx?AID=$script
 |http://*.com/aajjss/$script
 |http://*.com/ad-
@@ -751,7 +755,6 @@
 |http://*/info.js?sn=ads
 |http://*/inner_center1
 |http://*/intf/bbs_expert
-|http://img1.cache.netease.com/f2e/www/index2014/images/*.png
 |http://*/ja486$image,object,object-subrequest
 |http://*/jbk.gif$image
 |http://*/js/1.htm
@@ -1242,7 +1245,7 @@
 |http://content.s8bbs.com/g.php?id=
 |http://cop.my
 |http://copy.ousns$image,object,object-subrequest
-|http://count.vrs.sohu.com/crossdomain.xml
+!|http://count.vrs.sohu.com/crossdomain.xml
 |http://cpro.$domain=~www.epinv.com
 |http://cpv.channelray
 |http://cr.15hn.net:8818/lb.asp
@@ -1373,7 +1376,6 @@
 |http://hackp.com/images/tienei.js$script
 |http://hackp.com/xiaojiu/$script
 |http://hao.360.cn/festival_shuang11.html
-|http://hc.yinyuetai.com/partner/yyt/
 |http://hdp.sfcdn.org/poster/exitpic$image
 |http://health.t56.net/index.php?m=poster&c=index&a=show_poster&id=
 |http://henan.sina.com.cn/iframe/7/
@@ -1729,9 +1731,10 @@
 |http://playad.xjmg.com
 |http://player.bumimi.com:806/all.gif
 |http://pmm.people.com.cn
+|http://v.aty.sohu.com/v
 ||api.cupid.iqiyi.com/policy2
 ||mixer.video.iqiyi.com/jp/mixin/resources/
-||qiyu.iqiyi.com/crossdomain.xml
+!||qiyu.iqiyi.com/crossdomain.xml
 ||www.iqiyi.com/player/cupid/common/icon_exclusive.swf
 |http://policy.cupid.qiyi.com/policy2?a=qc_100001_$domain=~iqiyi.com|~v.pps.tv
 m.iqiyi.com##div#shortcut,div.banner_inner.bd-large.aaaa,div.appBar
@@ -1878,6 +1881,7 @@ m.iqiyi.com##div#shortcut,div.banner_inner.bd-large.aaaa,div.appBar
 |http://static.hd.baofeng.com/script/baidu_4790.js
 |http://static.hd.baofeng.com/script/play_4790.js
 |http://static.hdslb.com/js/core-v5/picment.min.js
+|http://static.hdslb.com/sohu.swf
 |http://static.icili.com/cpma.js$script
 |http://static.ikafan
 |http://static.imanke.com/imanke/m/t.js?v=
@@ -1995,12 +1999,11 @@ m.iqiyi.com##div#shortcut,div.banner_inner.bd-large.aaaa,div.appBar
 |http://v.tf.360.cn
 |http://v2html.atm.youku.com/vhtml?p=320&ct=
 |http://valb.atm.youku.com/vb?vip=0&site=1
-|http://valc.atm.youku.com/
-|http://valf.atm.youku.com/crossdomain.xml
+!|http://valf.atm.youku.com/crossdomain.xml
 |http://valf.atm.youku.com/mshow?v=
 |http://valf.atm.youku.com/vf?vip=0&site=1$~image
 |http://valf.atm.youku.com/vf?vip=0&uk=
-|http://valp.atm.youku.com
+!|http://valp.atm.youku.com
 |http://vas.funshion.com
 |http://vasd.fun.tv/Wkw.php
 |http://vda.fh77.net/$third-party
@@ -2708,7 +2711,7 @@ m.iqiyi.com##div#shortcut,div.banner_inner.bd-large.aaaa,div.appBar
 |http://yanu.qiniudn.com/760x90.gif
 |http://yes1.feng.com/js.php?n=
 |http://yirongdao.com/template/default/ads/head.js
-|http://yk.pp.navi.youku.com/crossdomain.xml
+!|http://yk.pp.navi.youku.com/crossdomain.xml
 |http://yk.pp.navi.youku.com/playpolicy/get.json?
 |http://yui.honglei.net/52/adphoto/
 |http://zalra.cn/wp-content/uploads/2014/05/xs009.jpg
@@ -3856,7 +3859,7 @@ m.iqiyi.com##div#shortcut,div.banner_inner.bd-large.aaaa,div.appBar
 ||qiqiww.com
 ||qiyipic.com/common/ad/
 ||qiyou.com
-||qiyu.iqiyi.com/crossdomain.xml
+!||qiyu.iqiyi.com/crossdomain.xml
 ||qizhao.com
 ||qling.com
 ||qm92.com$third-party
@@ -4056,6 +4059,7 @@ m.iqiyi.com##div#shortcut,div.banner_inner.bd-large.aaaa,div.appBar
 ||tunka.com.cn/images/1234.gif
 ||tv.sohu.com/interaction/get/getListByVid.do
 ||tv.sohu.com/upload/Trace/$script
+||js.tv.itc.cn/gg.seed.js
 ||tv.sohu.com/upload/advert/sohuhd.ad.js
 ||tv.sohu.com/upload/static/global/hdpv.js
 ||tvf4.com/*.htm$subdocument
@@ -4351,8 +4355,6 @@ m.iqiyi.com##div#shortcut,div.banner_inner.bd-large.aaaa,div.appBar
 ||caches.space/bootstrap3/js/bootstrap.js
 |http://www.jd.com/*$r@http://www.jd.com/*@https://www.jd.com/*@
 ||www.163.com/special/00774IMC/lofter_v13.html
-||http://tv.sohu.com/upload/swf/20160908/Main.swf$r@http://entware.mirrors.ligux.com/adblock/swf/sohu_live.swf@http://entware.mirrors.ligux.com/adblock/swf/sohu_live.swf@
-!||tv.sohu.com/upload/swf/.*?/PlayerShell.swf\?$r@http://tv.sohu.com/upload/swf/.*?/PlayerShell.swf@http://update.adbyby.com/swf/sohu_livezb.swf@
 ||pl.youku.com/playlist/m3u8\?keyframe=0&$r@pl.youku.com/playlist/m3u8\?keyframe=0&.*@update.adbyby.com/youku.m3u8@
 ||hot.vrs.sohu.com/vrs_flash.action\?vid=$r@&plid=\d+&uid=@&plid=7038006&uid=@
 !----- pcbeta -----
@@ -4377,7 +4379,7 @@ anywlan.com##.bscekvofc_o.wp
 ||chinaunix.net/www/static/images/*.jpg
 !---- qiushibaike.com ----
 !qiushibaike.com##DIV.shopwindow,DIV.mb-m[style="width:300px;height:250px;background:white;"]
-!||qiushibaike.com/$s@<div class="shopwindow">@<div style="display:none">@
+||qiushibaike.com/$s@<div class="shopwindow">@<div style="display:none">@
 !---- muchong.com ----
 ||muchong.com/bbs/$s@<div class="wrapper adtable">@<div style="display:none">@
 ||muchong.com/bbs/$s@<a href="adlog.php?adid=*" class="" target="_blank">@<div style="display:none">@
@@ -4392,7 +4394,6 @@ anywlan.com##.bscekvofc_o.wp
 ||v.ku6.com/*.html$s@/player.swf'@/player.swf?adss=0'@
 ||ku6.com/*.html$s@adss:1@adss:0@
 |http://ad.api.3g.tudou.com/adv?dprm=$s@{"P":*,"@{"P":0,"@
-||img1.cache.netease.com/f2e/www/index2014/images/*.png
 ||http://www.163.com/special/00774IMC/lofter_v13.html
 |http://yes1.feng.com/x.js
 ||yes1.feng.com/view.php?what=zone:*
@@ -4405,5 +4406,16 @@ anywlan.com##.bscekvofc_o.wp
 ||imgsrc.baidu.com/forum/pic/item/0bcf9c82251dca8d6c8119ed.jpg?v=tbs
 !tieba.baidu.com##.video_list
 !tieba.baidu.com##.j_video_list_wrap.video_list_wrap
-||/http:\/\/[^\/]+\.(youku|tudou|ku6|i?qiyi|le(tv)?|lecloud|pptv|pps|sina|sohu|56)[^.]*?\.(com(\.cn)?|tv)\/crossdomain\.xml/
+!||/http:\/\/[^\/]+\.(youku|tudou|ku6|i?qiyi|le(tv)?|lecloud|pptv|pps|sina|sohu|56)[^.]*?\.(com(\.cn)?|tv)\/crossdomain\.xml/
 ||http://www.iqiyi.com/dianshiju/$s@<div id="1000000000123" class="ad-wrapper clearfix">@<div style="display:none">@
+|http://ark.le.com/
+|http://ark.letv.com/
+||scorecardresearch.com^$third-party
+||wrating.com^$third-party,domain=~tudou.com
+|http://fz.letv.com/
+||letvimg.com/$object,object-subrequest
+||irs01.net/$third-party
+*/stat.$domain=~chouti.com
+||webp2p.letv.com/
+||stat.
+||my.le.com/

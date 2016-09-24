@@ -36,9 +36,11 @@ load_nat(){
 	    sleep 1
 	done
 	echo $(date): "Apply nat rules!"
-
+	[ "$koolproxy_policy" == "2" ] && ipset -N black_koolproxy iphash
 	iptables -t nat -N koolproxy
-	iptables -t nat -A PREROUTING -p tcp --dport 80 -j koolproxy
+	[ "$koolproxy_policy" == "2" ] && iptables -t nat -A PREROUTING -p tcp --dport 80 -m set --match-set black_koolproxy dst -j koolproxy
+	[ "$koolproxy_policy" == "1" ] && iptables -t nat -A PREROUTING -p tcp --dport 80 -j koolproxy
+	iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-ports 3333
 	iptables -t nat -A koolproxy -d 0.0.0.0/8 -j RETURN
 	iptables -t nat -A koolproxy -d 10.0.0.0/8 -j RETURN
 	iptables -t nat -A koolproxy -d 127.0.0.0/8 -j RETURN
@@ -51,9 +53,12 @@ load_nat(){
 }
 
 flush_nat(){
+	ipset -F black_koolproxy > /dev/null 2>&1
+	ipset -X black_koolproxy > /dev/null 2>&1
 	cd /tmp
 	iptables -t nat -S | grep koolproxy | sed 's/-A/iptables -t nat -D/g'|sed 1d > clean.sh && chmod 700 clean.sh && ./clean.sh && rm clean.sh
 	iptables -t nat -X koolproxy > /dev/null 2>&1
+	iptables -t nat -X PREROUTING -p tcp --dport 80 -m --match-set black_koolproxy dst -j koolproxy > /dev/null 2>&1
 }
 
 creat_start_up(){
@@ -69,20 +74,32 @@ remove_nat_start(){
 	dbus remove __event__onnatstart_koolproxy
 }
 
+add_ipset_conf(){
+	[ "$koolproxy_policy" == "2" ] && ln -sf /koolshare/koolproxy/data/koolproxy_ipset.conf /jffs/configs/dnsmasq.d/koolproxy_ipset.conf
+}
+
+remove_ipset_conf(){
+	[ "$koolproxy_policy" == "2" ] && rm -rf /jffs/configs/dnsmasq.d/koolproxy_ipset.conf
+}
 
 case $ACTION in
 start)
 	start_koolproxy
+	add_ipset_conf
+	service restart_dnsmasq
 	load_nat
 	creat_start_up
 	write_nat_start
 	;;
 restart)
 	stop_koolproxy
+	remove_ipset_conf
 	remove_nat_start
 	flush_nat
 	sleep 2
 	start_koolproxy
+	add_ipset_conf
+	service restart_dnsmasq
 	load_nat
 	creat_start_up
 	write_nat_start
@@ -96,6 +113,8 @@ restart_nat)
 	;;
 stop)
 	stop_koolproxy
+	remove_ipset_conf
+	service restart_dnsmasq
 	remove_nat_start
 	flush_nat
 	rm -rf /koolshare/init.d/S93koolproxy.sh

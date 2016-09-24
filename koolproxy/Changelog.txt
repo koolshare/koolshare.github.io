@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin koolproxy Changelog
 ===========================================
+1.9.2
+   - update	update rule, update web, add ipset mode
+
 1.9.1
    - update	update binary
 

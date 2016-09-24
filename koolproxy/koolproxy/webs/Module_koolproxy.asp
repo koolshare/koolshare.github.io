@@ -36,6 +36,7 @@ function init() {
 	show_menu();
 	buildswitch();
 	conf2obj();
+	update_visibility();
     var rrt = document.getElementById("switch");
     if (document.form.koolproxy_enable.value != "1") {
         rrt.checked = false;
@@ -70,6 +71,11 @@ function conf2obj(){
 
 function reload_Soft_Center(){
 location.href = "/Main_Soft_center.asp";
+}
+
+function update_visibility(){
+	showhide("koolproxy_policy_read1", (document.form.koolproxy_policy.value == 1));
+	showhide("koolproxy_policy_read2", (document.form.koolproxy_policy.value == 2));
 }
 
 </script>
@@ -172,6 +178,18 @@ location.href = "/Main_Soft_center.asp";
 													</div>
 													<div id="koolproxy_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>	
 												</td>
+											</tr>
+											<tr id="policy_tr">
+												<th>选择过滤模式</th>
+												<td>
+													<select name="koolproxy_policy" id="koolproxy_policy" class="input_option" onchange="update_visibility();" style="width:auto;margin:0px 0px 0px 2px;">
+														<option value="1" selected>全局过滤</option>
+														<option value="2">黑名单模式</option>
+													</select>
+														<span id="koolproxy_policy_read1" style="display: none;">全局模式下，所有80端口的流量都会走koolproxy过，过滤效果最好</span>
+														<span id="koolproxy_policy_read2" style="display: none;">黑名单模式下只有黑名单内的域名走koolproxy过，效果不及全局模式</span>
+												</td>
+											</tr>
 											<!--
 											<tr id="rule_update_switch">
 												<th>规则更新开关</th>
