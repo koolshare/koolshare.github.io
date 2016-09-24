@@ -80,24 +80,23 @@ start_policy(){
 [ "$dualwanpolicy_wan2" == "3" ] && operators2_config="$CONFIG/cnc.txt"
 [ "$dualwanpolicy_wan2" == "4" ] && operators2_config="$CONFIG/crc.txt"
 [ "$dualwanpolicy_wan2" == "5" ] && operators2_config=$dualwanpolicy_wan2_custom
-if [ "$dualwanpolicy_wan2" == "2" ];then
-   use_wanoperators=$operators2_config
-   sed -e "s/^/-A wanoperators &/g" -e "1 i\-N wanoperators nethash --hashsize 91260" $use_wanoperators | awk '{print $0} END{print "COMMIT"}' | ipset -R
-   iptables -t mangle -A PREROUTING  -m set --match-set wanoperators dst  -j MARK --set-mark 7777
-   iptables -t mangle -A PREROUTING  -m set ! --match-set wanoperators dst -j MARK --set-mark 8888
-   iptables -t mangle -A OUTPUT  -m set --match-set wanoperators dst  -j MARK --set-mark 7777
-   iptables -t mangle -A OUTPUT  -m set ! --match-set wanoperators dst -j MARK --set-mark 8888
+if [ "$dualwanpolicy_wan2" != "1" ];then
+	sed -e "s/^/-A wanoperators &/g" -e "1 i\-N wanoperators nethash --hashsize 91260" $use_wanoperators | awk '{print $0} END{print "COMMIT"}' | ipset -R
+	iptables -t mangle -A PREROUTING -m set --match-set wanoperators dst -j MARK --set-mark 7777
+	iptables -t mangle -A PREROUTING -m set ! --match-set wanoperators dst  -j MARK --set-mark 8888
+	iptables -t mangle -A OUTPUT -m set --match-set wanoperators dst -j MARK --set-mark 7777
+	iptables -t mangle -A OUTPUT -m set ! --match-set wanoperators dst  -j MARK --set-mark 8888
 else
-   use_wan1operators=$operators1_config
-   sed -e "s/^/-A wan1operators &/g" -e "1 i\-N wan1operators nethash --hashsize 91260" $use_wan1operators | awk '{print $0} END{print "COMMIT"}' | ipset -R
-   use_wan2operators=$operators2_config
-   sed -e "s/^/-A wan2operators &/g" -e "1 i\-N wan2operators nethash --hashsize 4096" $use_wan2operators | awk '{print $0} END{print "COMMIT"}' | ipset -R
-   iptables -t mangle -A PREROUTING -m set --match-set wan2operators dst  -j MARK --set-mark 8888 >/dev/null 2>&1
-   iptables -t mangle -A PREROUTING -m set ! --match-set wan1operators dst -j MARK --set-mark $operators_foreign >/dev/null 2>&1
-   iptables -t mangle -A PREROUTING -m set --match-set wan1operators dst -j MARK --set-mark 7777 >/dev/null 2>&1
-   iptables -t mangle -A OUTPUT -m set --match-set wan2operators dst  -j MARK --set-mark 8888 >/dev/null 2>&1
-   iptables -t mangle -A OUTPUT -m set ! --match-set wan1operators dst -j MARK --set-mark $operators_foreign >/dev/null 2>&1
-   iptables -t mangle -A OUTPUT -m set --match-set wan1operators dst -j MARK --set-mark 7777 >/dev/null 2>&1
+	use_wan1operators=$operators1_config
+	sed -e "s/^/-A wan1operators &/g" -e "1 i\-N wan1operators nethash --hashsize 91260" $use_wan1operators | awk '{print $0} END{print "COMMIT"}' | ipset -R
+	use_wan2operators=$operators2_config
+	sed -e "s/^/-A wan2operators &/g" -e "1 i\-N wan2operators nethash --hashsize 4096" $use_wan2operators | awk '{print $0} END{print "COMMIT"}' | ipset -R
+	iptables -t mangle -A PREROUTING -m set --match-set wan2operators dst  -j MARK --set-mark 8888 >/dev/null 2>&1
+	iptables -t mangle -A PREROUTING -m set ! --match-set wan1operators dst -j MARK --set-mark $operators_foreign >/dev/null 2>&1
+	iptables -t mangle -A PREROUTING -m set --match-set wan1operators dst -j MARK --set-mark 7777 >/dev/null 2>&1
+	iptables -t mangle -A OUTPUT -m set --match-set wan2operators dst  -j MARK --set-mark 8888 >/dev/null 2>&1
+	iptables -t mangle -A OUTPUT -m set ! --match-set wan1operators dst -j MARK --set-mark $operators_foreign >/dev/null 2>&1
+	iptables -t mangle -A OUTPUT -m set --match-set wan1operators dst -j MARK --set-mark 7777 >/dev/null 2>&1
 fi
 if [ ! -z "$shadowsocks_server_ip" ] && [ "$ss_mode" != "0" ];then
 	ip rule add from $shadowsocks_server_ip table $sstable pref 123
