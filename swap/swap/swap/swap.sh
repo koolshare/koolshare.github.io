@@ -78,6 +78,9 @@ swap_unload_start(){
 }
 
 case $ACTION in
+start)
+	check_usb_status
+	;;
 load)
 	check_usb_status
 	mkswap
@@ -91,6 +94,7 @@ unload)
 	;;
 check)
 	check_usb_status
+	swap_load_start
 	;;
 esac
 
