@@ -25,7 +25,6 @@
 <script type="text/javascript" src="/dbconf?p=dualwanpolicy_&v=<% uptime(); %>"></script>
 <script>
 var $j = jQuery.noConflict();
-
 function init() {
 show_menu();
 buildswitch();
@@ -86,7 +85,6 @@ document.form.action_mode.value = s;
 showLoading(3);
 document.form.submit();
 }
-
 function conf2obj(){
 $j.ajax({
 type: "get",
@@ -105,7 +103,6 @@ for (var i = 0; i < params.length; i++) {
 	}
 	}
 	});
-
 }
 function update_visibility() {
 showhide("dualwanpolicy_wan1_custom", (document.form.dualwanpolicy_wan1.value == "2"));
@@ -114,10 +111,8 @@ showhide("dualwanpolicy_wan2_custom", (document.form.dualwanpolicy_wan2.value ==
 function reload_Soft_Center(){
 location.href = "/Main_Soft_center.asp";
 }
-
- 
 function setIframeSrc() {
-    var s1 = "http://119228.vhost131.cloudvhost.cn/ip.php";
+    var s1 = "http://1212.ip138.com/ic.asp";
     var s2 = "http://x302.rashost.com/ip.php";
     var s3 = "http://ip111cn.appspot.com/";
     var iframe1 = document.getElementById('iframe1');
@@ -134,10 +129,8 @@ function setIframeSrc() {
     }
 }
 setTimeout(setIframeSrc, 5000);	
-
 function version_show(){
 	$j("#dualwan_version_status").html("<i>当前版本：" + db_dualwanpolicy_['dualwan_version']);
-
     $j.ajax({
         url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/dualwan/config.json.js',
         type: 'GET',
@@ -154,7 +147,6 @@ function version_show(){
         }
     });
 }
-
 </script>
 </head>
 <body onload="init();">
@@ -326,4 +318,3 @@ Shell, Web by： <i>fw867</i><br/>
 <div id="footer"></div>
 </body>
 </html>
-
