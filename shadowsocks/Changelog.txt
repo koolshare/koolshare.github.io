@@ -1,6 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 
+2.9.0
+   - update	remove auth_sha1_v3 option in web
+
 2.8.9
    - update	update shadowsocks-libev binary to 2.5.3 release
    - update	update shadowsocksR-libev binary to latest (support auth_sha1_v3 and auth_sha1_v4 protocol)
