@@ -1,6 +1,9 @@
 Koolshare Asuswrt-Merlin softeware center Changelog
 ===========================================
 
+1.1.9
+   - fix	fix hightlight of submeunL2
+
 1.1.7
    - fix	revert to 1.1.5
 
