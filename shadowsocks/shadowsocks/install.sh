@@ -28,6 +28,9 @@ chmod 755 /koolshare/scripts/*
 chmod 755 /koolshare/bin/*
 
 # add icon into softerware center
-dbus set softcenter_module_koolsocks_install=1
+dbus remove softcenter_module_koolsocks_install
+dbus remove softcenter_module_koolsocks_version
 
-dbus set softcenter_module_koolsocks_version=1.3
+dbus set softcenter_module_shadowsocks_install=1
+dbus set softcenter_module_shadowsocks_version=2.8.8
+dbus set softcenter_module_shadowsocks_home_url=Main_Ss_Content.asp
