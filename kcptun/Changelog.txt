@@ -1,5 +1,7 @@
 Koolshare Asuswrt-Merlin kcptun Changelog
 ===========================================
+2.0
+   - update	update kcptun binary to latest
 1.9
    - fix	fix cndlist won't work
    - update	update kcptun binary to latest
