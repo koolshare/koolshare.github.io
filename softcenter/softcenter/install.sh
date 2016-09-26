@@ -17,6 +17,11 @@ softcenter_install() {
 		if [ ! -f "/koolshare/init.d/S10Softcenter.sh" ]; then
 			ln -sf /koolshare/scripts/app_install.sh /koolshare/init.d/S10Softcenter.sh
 		fi
+		rm -rf /koolshare/res/icon-koolsocks.png
+		dbus remove softcenter_module_koolsocks_install
+		dbus remove softcenter_module_koolsocks_version
+		dbus set softcenter_module_shadowscoks_install=1
+		dbus set softcenter_module_shadowscoks_version=1.3
 	fi
 }
 
