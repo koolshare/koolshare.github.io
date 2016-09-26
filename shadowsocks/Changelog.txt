@@ -1,6 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 
+2.9.1
+   - update	更改软件中心后台图标koolsocks为shadowsocks，为下次固件做准备。
+
 2.9.0
    - update	remove auth_sha1_v3 option in web
 
