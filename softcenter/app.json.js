@@ -91,6 +91,16 @@
             "version": "0.2"
         }, 
         {
+            "build_date": "2016-09-26_11:54:04", 
+            "description": "科学上网", 
+            "home_url": "Main_Ss_Content.asp", 
+            "md5": "f848816f4885dc05366d67e8c48338a3", 
+            "name": "shadowsocks", 
+            "tar_url": "shadowsocks/shadowsocks.tar.gz", 
+            "title": "shadowsocks", 
+            "version": "2.9.0"
+        }, 
+        {
             "build_date": "2016-09-25_00:39:45", 
             "description": "koolproxy，支持正则的网络代理~", 
             "home_url": "Module_koolproxy.asp", 
@@ -182,7 +192,7 @@
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "6281968869b1b2f2578d33c4b470ac6a", 
+    "md5": "cd212cb318496527bef4da1de40aa19f", 
     "tar_url": "softcenter/softcenter.tar.gz", 
-    "version": "1.1.9"
+    "version": "1.2.0"
 }

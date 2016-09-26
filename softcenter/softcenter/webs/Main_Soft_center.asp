@@ -495,15 +495,7 @@ function softceterInitData(data) {
                     }
                 }
             });
-            //shadowsocks 将默认安装在软件中心
-            result["koolsocks"] = {};
-            result["koolsocks"].name = "koolsocks";
-            result["koolsocks"].title = "shadowsocks";
-            result["koolsocks"].install = "4";
-            result["koolsocks"].home_url = "Main_Ss_Content.asp";
-            result["koolsocks"].description = "科学上网";
-            result["koolsocks"].version = "1.3";
-            result["koolsocks"].order = "1";
+
             return result;
         }
         //将本地和远程进行一次对比合并
@@ -517,11 +509,20 @@ function softceterInitData(data) {
                 result[name] = $.extend(oldApp, app);
                 result[name].install = install;
             });
+            
             $.map(localData, function (app, name) {
                 if (!result[name]) {
                     result[name] = app;
                 }
             });
+             //shadowsocks 将默认安装在软件中心
+            result["shadowsocks"] = {};
+            result["shadowsocks"].name = "shadowsocks";
+            result["shadowsocks"].title = "shadowsocks";
+            result["shadowsocks"].install = "4";
+            result["shadowsocks"].home_url = "Main_Ss_Content.asp";
+            result["shadowsocks"].description = "科学上网";
+            result["shadowsocks"].version = "2.9.0";
             //设置默认值和设置icon的路径
             $.map(result, function (item, name) {
                 _setDefault(item, {
