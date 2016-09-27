@@ -1,0 +1,5 @@
+Koolshare Asuswrt-Merlin aliddns Changelog
+===========================================
+
+0.2
+   - add	add aliddns

@@ -101,6 +101,16 @@
             "version": "2.9.1"
         }, 
         {
+            "build_date": "2016-09-27_18:40:27", 
+            "description": "阿里云解析自动更新IP", 
+            "home_url": "Module_adiddns.asp", 
+            "md5": "752e37fb2380953a77f5d9093a93fcb6", 
+            "name": "aliddns", 
+            "tar_url": "aliddns/aliddns.tar.gz", 
+            "title": "aliddns", 
+            "version": "0.2"
+        }, 
+        {
             "build_date": "2016-09-25_00:39:45", 
             "description": "koolproxy，支持正则的网络代理~", 
             "home_url": "Module_koolproxy.asp", 
