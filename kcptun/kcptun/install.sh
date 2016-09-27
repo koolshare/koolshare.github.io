@@ -3,7 +3,7 @@
 # stop kcptun first
 sh /koolshare/kcptun/stop.sh
 dbus set KCP_basic_enable=0
-dbus set KCP_basic_version="1.5"
+dbus set KCP_basic_version="2.0"
 
 cd /tmp
 cp -rf /tmp/kcptun/bin/kcp_router /koolshare/bin/
