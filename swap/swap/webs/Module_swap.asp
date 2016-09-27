@@ -49,11 +49,9 @@
 <script>
 function init() {
 	show_menu();
-    version_show();
     write_usb_status();
     setTimeout("write_usb_status()", 1500);
     setTimeout("check_usb()", 500);
-    setTimeout("version_show()", 3000);
 }
 
 
@@ -140,26 +138,6 @@ function conf2obj(){
         }
 	}
 	});
-}
-
-function version_show(){
-	$j("#swap_version_status").html("<i>当前版本：" + db_swap_['swap_version']);
-
-    $j.ajax({
-        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/swap/config.json.js',
-        type: 'GET',
-        success: function(res) {
-            var txt = $j(res.responseText).text();
-            if(typeof(txt) != "undefined" && txt.length > 0) {
-                //console.log(txt);
-                var obj = $j.parseJSON(txt.replace("'", "\""));
-		$j("#swap_version_status").html("<i>当前版本：" + obj.version);
-		if(obj.version != db_swap_["swap_version"]) {
-			$j("#swap_version_status").html("<i>有新版本：" + obj.version);
-		}
-            }
-        }
-    });
 }
 
 
