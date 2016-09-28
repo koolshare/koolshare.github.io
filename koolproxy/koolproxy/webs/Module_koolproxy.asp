@@ -59,8 +59,10 @@ function buildswitch(){
 
 function onSubmitCtrl(o, s) {
 		document.form.action_mode.value = s;
+		document.form.SystemCmd.value = "koolproxy_config.sh";
 		showLoading(5);
 		document.form.submit();
+		refreshpage(5);
 }
 
 function conf2obj(){
@@ -76,6 +78,61 @@ location.href = "/Main_Soft_center.asp";
 function update_visibility(){
 	showhide("koolproxy_policy_read1", (document.form.koolproxy_policy.value == 1));
 	showhide("koolproxy_policy_read2", (document.form.koolproxy_policy.value == 2));
+	showhide("update_rules", (document.form.koolproxy_update.value == 1));
+	
+}
+
+function start_update() {
+	checkCmdRet();
+	document.getElementById("log_content").style.display = "";
+	document.form.action_mode.value = ' Refresh ';
+	document.form.action = "/applydb.cgi?p=koolproxy";
+    document.form.SystemCmd.value = "koolproxy_rule_update.sh";
+	document.form.submit();
+}
+
+var _responseLen;
+var noChange = 0;
+function checkCmdRet(){
+
+	$j.ajax({
+		url: '/cmdRet_check.htm',
+		dataType: 'html',
+		
+		error: function(xhr){
+			setTimeout("checkCmdRet();", 1000);
+			},
+		success: function(response){
+			var retArea = $G("log_content1");
+			if(response.search("XU6J03M6") != -1){
+				retArea.value = response.replace("XU6J03M6", " ");
+				//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
+				retArea.scrollTop = retArea.scrollHeight;
+				//return false;
+			}
+			
+			if(_responseLen == response.length){
+				noChange++;
+			}else{
+				noChange = 0;
+			}
+
+			if(noChange > 15){
+				//retArea.scrollTop = retArea.scrollHeight;
+				//setTimeout("checkCmdRet();", 2000);
+				document.getElementById("log_content").style.display = "none";
+				noChange = 0;
+				return false;
+			}else{
+				setTimeout("checkCmdRet();", 500);
+			}
+			
+			retArea.value = response;
+			//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
+			retArea.scrollTop = retArea.scrollHeight;
+			_responseLen = response.length;
+		}
+	});
 }
 
 </script>
@@ -133,10 +190,10 @@ function update_visibility(){
                                                                                     <h3 id="push_content1" >koolproxy是能识别adblock规则的代理软件，目前正在完善中。</h3>
                                                                                 </li>
                                                                                 <li  style="margin-top:-5px;">
-                                                                                    <h3 id="push_content2"><i>koolproxy静态规则：</i>更新日期：2016-9-24 20:45:00；4409条</h3>
+                                                                                    <h3 id="push_content2"><i>koolproxy静态规则：</i><% dbus_get_def("koolproxy_rule_info", "0"); %></h3>
                                                                                 </li>
                                                                                 <li id="push_content3_li" style="margin-top:-5px;">
-                                                                                    <h3 id="push_content3"><i>koolproxy视频规则：</i>更新日期：2016-9-24 23:25:00</h3>
+                                                                                    <h3 id="push_content3"><i>koolproxy视频规则：</i><% dbus_get_def("koolproxy_video_info", "0"); %></h3>
                                                                                 </li>
                                                                                 <li id="push_content4_li" style="margin-top:-5px;display: none;">
                                                                                     <h3 id="push_content4"></h3>
@@ -190,34 +247,37 @@ function update_visibility(){
 														<span id="koolproxy_policy_read2" style="display: none;">黑名单模式下只有黑名单内的域名走koolproxy过，效果不及全局模式</span>
 												</td>
 											</tr>
-											<!--
+
 											<tr id="rule_update_switch">
 												<th>规则更新开关</th>
 												<td>
-													<select name="koolproxy_update" id="koolproxy_update" class="input_option" style="width:auto;margin:0px 0px 0px 2px;">
+													<select name="koolproxy_update" id="koolproxy_update" class="input_option" style="width:auto;margin:0px 0px 0px 2px;" onchange="update_visibility();">
 														<option value="1" selected>开启</option>
 														<option value="0">关闭</option>
 													</select>
+
 												</td>
 											</tr>
 
 											<tr id="update_rules">
 												<th width="35%">koolproxy规则更新间隔</a></th>
 												<td>
-													<select id="ss_basic_rule_update_time" name="ss_basic_rule_update_time" class="ssconfig input_option" title="选择规则列表自动更新时间，更新后将自动重启SS" onchange="update_visibility_tab4();" >
-														<option value="0">1小时</option>
-														<option value="1">2小时</option>
-														<option value="2">4小时</option>
-														<option value="3">6小时</option>
-														<option value="4">8小时</option>
-														<option value="5">12小时</option>
-														<option value="6">24小时</option>
+													<select id="koolproxy_update_time" name="koolproxy_update_time" class="ssconfig input_option" title="选择规则列表自动更新时间，更新后将自动重启koolproxy"  >
+														<option value="6">6小时</option>
+														<option value="12">12小时</option>
+														<option value="24">24小时</option>
 													</select>
-															<input id="update_now" onclick="updatelist()" style="font-family:'Courier New'; Courier, mono; font-size:11px;" type="submit" value="立即更新" />
+														<input id="update_now" onclick="start_update()" style="font-family:'Courier New'; Courier, mono; font-size:11px;" type="submit" value="立即更新" />
+														<span>
+															<a style="margin-left: 20px;" href="https://github.com/koolproxy/koolproxy_rules" target="_blank"><i><u>规则维护地址</u></i></a>
+														</span>
 												</td>
 											</tr>
-											-->
                                     	</table>
+                                    	<div id="log_content" style="margin-top:10px;display: none;">
+											<textarea cols="63" rows="21" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;"></textarea>
+										</div>
+                                    	
 										<div class="apply_gen">
 											<button id="cmdBtn" class="button_gen" onclick="onSubmitCtrl(this, ' Refresh ')">提交</button>
 										</div>

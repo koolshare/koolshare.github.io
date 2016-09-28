@@ -1,8 +1,8 @@
 {
-"version":"1.9.3",
-"md5":"4b5b15f4e0c1edca10a33082fa6ee8a2",
+"version":"1.9.4",
+"md5":"8e6479e75c3f5aa1b7aebeeea36b1327",
 "home_url":"Module_koolproxy.asp",
 "title":"koolproxy",
 "description":"koolproxy，支持正则的网络代理~",
-"build_date":"2016-09-25_00:39:45"
+"build_date":"2016-09-29_00:53:40"
 }
