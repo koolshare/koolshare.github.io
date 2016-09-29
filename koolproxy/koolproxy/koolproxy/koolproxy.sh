@@ -25,7 +25,7 @@ start_koolproxy(){
 	echo $(date): 加载静态规则条数：$rules_nu_local
 	dbus set koolproxy_rule_info="更新日期：$rules_date_local / $rules_nu_local条"
 	echo $(date): 加载视频规则日期：$video_date_local
-	dbus set koolproxy_video_info="更新日期：$rules_date_local"
+	dbus set koolproxy_video_info="更新日期：$video_date_local"
 }
 
 stop_koolproxy(){
