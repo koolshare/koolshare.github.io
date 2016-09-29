@@ -1,4 +1,4 @@
-!  -----update:  2016-9-28 22:00 -- by houzi
+!  -----update:  2016-9-29 20:39 -- by houzi
 !  -----base: adblock <koolproxy dedicated>
 !  -----thanks: /zt whyc CJX
 @@|http://$domain=code.google.com|yeepay.com|taoke.alimama.com|club.alimama.com|tenpay.com|tmall.com|tbcdn.cn|jd.com
@@ -16,6 +16,9 @@
 @@|http://hudong.pl.youku.com/crossdomain.xml
 @@|http://hudong.pl.youku.com/interact/live/get/live
 @@|http://hudong.pl.youku.com/player/getLive?liveid=
+@@|http://valf.atm.youku.com
+@@||atm.youku.com/v*?vip=
+@@|http://ad.api.3g.youku.com/adv?dprm=*&device_type=
 @@|http://images.sohu.com/bill/default/wei/wei_v1.4.js$script
 @@|http://v.aty.sohu.com/ct?vid=
 @@|http://17173.tv.sohu.com/
@@ -3247,6 +3250,10 @@
 ||e706.net
 ||e708.net
 ||e719.net$domain=~www.flv.tv
+||cmsjs.eastmoney.com^$subdocument
+||cp.eastmoney.com/wap/*.js
+||eastmoney.com/js/headbiggg_
+||same.eastmoney.com^
 ||ebp.renren.com^
 ||ec.yimg.com
 ||ecuc123.net
@@ -3441,7 +3448,6 @@
 ||jhzl001.com^
 ||jiajv.net
 ||jianmei123.com
-||jiathis.com
 ||jiathis.com/*cm.js?p=
 ||jiawen88.com
 ||jiayuwl.com
@@ -4186,7 +4192,6 @@
 |http://api.cupid.iqiyi.com/show2?a=qc_100001_100329&
 |http://api.cupid.iqiyi.com/show2?u=*&a=qc_100001_300144
 |http://api.cupid.qiyi.com/policy2?a=qc_100001_
-|http://cbjs.$script,domain=~www.colafile.com|~61.iqiyi.com|~61.hz.letv.com|~play.v.61.com|~7958.com|~www.u148.net|~www.redocn.com|~www.narutom.com|~tiexue.net|~xdf.cn
 |http://dispatcher.video.qiyi.com/dispn/iamo.swf
 |http://iface.iqiyi.com/api/getNewAdInfo?key=
 |http://nl.rcd.iqiyi.com/cro
@@ -4197,7 +4202,6 @@
 |http://www.iqiyi.com/common/clientPopLstyle.html
 ||api.cupid.iqiyi.com/policy2
 ||api.cupid.qiyi.com/show2
-||data.video.qiyi.com/videos/other
 ||mixer.video.iqiyi.com/jp/mixin/resources/
 ||qiyu.iqiyi.com/crossdomain.xml
 ||www.iqiyi.com/player/cupid/common/icon_exclusive.swf
@@ -4207,10 +4211,11 @@
 ||qiyipic.com/common/ad/
 |http://cache.m.iqiyi.com/jp/tmts/$s@,"ad":1,@,"ad":0,@
 |http://api.cupid.iqiyi.com/mixer
-!||cupid.iqiyi.com/show2?a=qc_100001_100
 ||cupid.iqiyi.com/show2?a=qc_100001_100$s@"i":"qc_100001_100???",@"i":"qc_100001_100141",@
 ||cupid.iqiyi.com/show2?a=qc_100001_$s@"a":[{"ds":1,"p":73,*}]}],"inv":@"a":[]}],"inv":@
 |http://api.cupid.qiyi.com/show2$s@"adxTracking"@""@
+|http://api.cupid.qiyi.com/policy2?a=qc_100001_300*&b=$s@"ads":{"schedule":[{"adZoneId":10000000@"":{"schedule":[{"adZoneId":10000000@
+|http://api.cupid.qiyi.com/policy2?a=qc_100001_100017&b=$s@"ads":{"schedule":[{"@"":{"schedule":[{"@
 |http://www.iqiyi.com/crossdomain.xml$s@<allow-access-from domain="?.qiyi.com"/>@<allow-access-from domain="*"/>@
 !|http://data.video.qiyi.com/crossdomain.xml$s@<allow-access-from domain="?.qiyi.com"/>@<allow-access-from domain="*"/>@
 ||iqiyi.com/$s@cid=qc_100001_100???@cid=qc_100001_100141@
@@ -4223,6 +4228,26 @@
 |http://www.iqiyi.com/*.html?key=$f@s@\.html\?key=.*@.html@
 ||iqiyi.com/$s@&cpnv=1.0@@
 ||http://www.iqiyi.com/dianshiju/$s@<div id="1000000000123" class="ad-wrapper clearfix">@<div style="display:none">@
+! ----- mobile filter -----
+||iqiyi.com/show2?a=qc_
+||iqiyi.com/show2?cb=
+||info.vip.iqiyi.com/promotion/
+||iqiyi.com/common/flashplayer*_1380x
+||iqiyi.com/common/flashplayer/*-banner-
+||iqiyi.com/common/flashplayer/*/980
+||iqiyi.com/common/flashplayer/*/pageer.swf
+||iqiyi.com/common/flashplayer/*/pause.swf
+||iqiyi.com/common/flashplayer/*250%C3%97230.swf
+||iqiyi.com/common/flashplayer/*980-100
+||iqiyi.com/marketing/*/oppo.
+||iqiyi.com/player/*/a.swf
+||iqiyi.com/player/*/bannery.swf
+||iqiyi.com/player/common/adflash
+||iqiyi.com/player/common/rebull
+||iqiyi.com/player/cupid/*/pageer.swf
+||iqiyi.com/player/cupid/common/flash980100.swf
+||iqiyi.com/show2?a=qc_
+||iqiyi.com/show2?c
 ! ----LETV----
 ||ark.letv.com
 ||n.mark.letv.com
@@ -4276,6 +4301,7 @@ v.qq.com##div.pop_ads_wide,div#QQlive_SP_RM.l_qq_com,DIV[class^="mod_ads mod_ads
 ||l.qq.com/lview?
 ||qq.com/livemsg?
 ! ----YOUKU TUDOU----
+! ---- tudou ----
 |http://ad.api.3g.tudou.com/adv?
 |http://js.tudouui.com/bin/lingtong/app_$object,object-subrequest
 |http://js.tudouui.com/bin/lingtong/app_4.jpg
@@ -4283,6 +4309,7 @@ v.qq.com##div.pop_ads_wide,div#QQlive_SP_RM.l_qq_com,DIV[class^="mod_ads mod_ads
 ||js.tudouui.com/tspecial/assets/PauseContainer.swf
 ||wrating.com^$third-party,domain=~tudou.com|~v.ifeng.com
 |http://ad.api.3g.tudou.com/adv?dprm=$s@{"P":*,"@{"P":0,"@
+! ---- youku ----
 |http://*.com/view/youkuvip/*ad.gif|$image
 |http://23youku.com/Runtime/js/$script
 |http://ad.api.3g.youku.com/adv?
@@ -4298,7 +4325,9 @@ v.qq.com##div.pop_ads_wide,div#QQlive_SP_RM.l_qq_com,DIV[class^="mod_ads mod_ads
 |http://static.atm.youku.com/idea/201*.jpg$image
 |http://static.atm.youku.com/miaozhen/mz_ad_$script
 |http://static.youku.com/v1.*/index/js/ikuAdapterNew.js
+|http://v2html.atm.youku.com/vhtml?p=
 |http://v2html.atm.youku.com/vhtml?p=320&ct=
+|http://vhtml.atm.youku.com/vhtml?p=
 |http://valb.atm.youku.com/vb?vip=0&site=1
 |http://valc.atm.youku.com/
 |http://valf.atm.youku.com/crossdomain.xml
@@ -4311,8 +4340,33 @@ v.qq.com##div.pop_ads_wide,div#QQlive_SP_RM.l_qq_com,DIV[class^="mod_ads mod_ads
 |http://www.saaee.com/view/youkuvip/750.png$image
 |http://yk.pp.navi.youku.com/crossdomain.xml
 |http://yk.pp.navi.youku.com/playpolicy/get.json?
+||youku.com/QVideo/~ajax/getDefaultItem?
+|http://ad.api.3g.youku.com/adv?
+|http://mf.atm.youku.com/mf?site=1&p=$s@adpluginobject.adParse(*)@adpluginobject.adParse()@
+|http://mf.atm.youku.com/mf?&site=
+|http://ad.api.3g.youku.com/adv?dprm=$s@{"P":*,"@{"P":0,"@
+|http://mf.atm.youku.com/mf?site=1&p=$s@adpluginobject.adParseUnited(*)@adpluginobject.adParseUnited()@
+||val*.atm.youku.com/v*?vip=$s@"http\u003a//?\u002eyouku@"http\u003a//policy@
+||val*.atm.youku.com/v*?vip=$s@"P":?,"SKIP":1,@"P":0,"SKIP":1,@
+||val*.atm.youku.com/v*?vip=$s@"SKIP":1,"P":?,"BAK":[{@"SKIP":1,"P":0,"BAK":[{@
+||val*.atm.youku.com/v*?vip=$s@,"P":?,"JS":[*,"VAL":[{"@,"P":0,"JS":[],"VAL":[{"@
+||val*.atm.youku.com/v*?vip=$s@"RS":"http*"@"RS":"http://policy.com"@
+||val*.atm.youku.com/v*?vip=$s@U":"http*"@U":"http://policy.com/"@
+||youku.com/v_$s@</body>@<script>document.cookie="view=1";</script></body>@
+|http://v.youku.com/crossdomain.xml$s@<allow-access-from domain="*.youku.com"*</cross-domain-policy>@<allow-access-from domain="*" to-ports="*"/>	</cross-domain-policy>@
+|http://valp.atm.youku.com/vp?vip=0&$s@,"RST":"swf","@,"RST":"jpg","@
+|http://mf.atm.youku.com/mf?$f@s@&p=\d&@&p=0&@
+|http://static.youku.com/v/swf/qplayer.swf$f@s@winType=adshow&@@
+|http://valc.atm.youku.com/vc?vip=0&site=$s@,"P":?@,"P":0@
+|http://valf.atm.youku.com/vf?vip=$s@"RST":"video","AL":15,"BRS":"","SU":[]}],"P":1}@"RST":"video","AL":1,"BRS":"","SU":[]}],"P":0}@
+|http://valo.atm.youku.com/vo?vip=0&site=$s@,"P":?@,"P":0@
+|http://www.bosw.net/js/player/youku.html$s@>15</span>@>1</span>@
+||api.3g.youku.com/v$f@s@&position=\d+&is_fullscreen=@&position=0&is_fullscreen=@
+||atm.youku.com/v*?vip=0&site=$f@s@&p=\d(.*)&vl=@&p=0$1&vl=@
+|http://openapi.mobile.youku.com/adv?_t_=$f@s@&position=\d&@&position=0&@
 ||gamex.mobile.youku.com
 ||hudong.pl.youku.com^
+||youku.com/QVideo/~ajax/getDefaultItem?
 ||l.youku.com^*log?
 ||static.arm.youku.com/idea/
 ||urchin.lstat.youku.com/index/js/

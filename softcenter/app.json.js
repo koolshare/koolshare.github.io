@@ -111,14 +111,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2016-09-30_00:48:32", 
+            "build_date": "2016-09-30_01:57:29", 
             "description": "koolproxy，支持正则的网络代理~", 
             "home_url": "Module_koolproxy.asp", 
-            "md5": "3facd946fb7ca3a3d1d4db8fb1602626", 
+            "md5": "43ae2bbbe67c4f204f9bc87e040d01af", 
             "name": "koolproxy", 
             "tar_url": "koolproxy/koolproxy.tar.gz", 
             "title": "koolproxy", 
-            "version": "1.9.5"
+            "version": "1.9.6"
         }, 
         {
             "build_date": "2016-05-19_22:37:04", 
