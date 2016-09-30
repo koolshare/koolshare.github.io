@@ -1,6 +1,12 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 
+2.9.2
+   - update	因为X7.1固件瘦身计划，ss不再集成于固件内，固件内去除了相关的一些软件，而2.9.1及其以下的ss安装包内没有相关软件，导致了一些问题，
+   		因此将缺少的pdnsd，dnscrypt-proxy，chinadns打包进安装包。
+   		如果你使用X7.1固件，在2.9.1的基础上回滚了ss，那么也会面临到缺少以上软件的问题，如果还是需要回滚，那么我建议先升级到最新版本，再进行回滚。
+  
+
 2.9.1
    - update	更改软件中心后台图标koolsocks为shadowsocks，为下次固件做准备。
 
