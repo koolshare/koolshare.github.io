@@ -2,10 +2,23 @@
 
 
 MODULE=frpc
-VERSION="1.0"
+VERSION="1.1"
 TITLE=frpc
 DESCRIPTION=内网穿透利器，谁用谁知道。
 HOME_URL=Module_frpc.asp
+
+old_version=`cat version | sed -n 1p`
+old_md5sum=`cat version | sed -n 2p`
+
+# backup old package
+if [ "$old_version" != "$VERSION" ];then
+  [ ! -d ./history/ ] && mkdir -p ./history/
+  echo old_version $old_version
+  echo VERSION $VERSION
+  mv ${MODULE}.tar.gz ./history/"${MODULE}"_"$old_version".tar.gz
+  echo $old_version $old_md5sum >> ./history/version
+fi
+
 
 # Check and include base
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"

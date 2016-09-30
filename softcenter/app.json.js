@@ -51,14 +51,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2016-09-30_23:15:26", 
+            "build_date": "2016-10-01_00:23:54", 
             "description": "内网穿透利器，谁用谁知道。", 
             "home_url": "Module_frpc.asp", 
-            "md5": "99e232fe44e1da70fdbd4c2e483d679c", 
+            "md5": "0d11c414b40975156bd9161a9038d624", 
             "name": "frpc", 
             "tar_url": "frpc/frpc.tar.gz", 
             "title": "frpc", 
-            "version": "1.0"
+            "version": "1.1"
         }, 
         {
             "build_date": "2016-05-19_22:37:04", 
