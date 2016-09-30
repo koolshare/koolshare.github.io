@@ -3,7 +3,7 @@
 # stop kcptun first
 sh /koolshare/kcptun/stop.sh
 dbus set KCP_basic_enable=0
-dbus set KCP_basic_version="2.0"
+dbus set KCP_basic_version="2.1"
 
 cd /tmp
 cp -rf /tmp/kcptun/bin/kcp_router /koolshare/bin/
@@ -24,5 +24,3 @@ chmod 755 /koolshare/kcptun/gfwlist/start.sh
 chmod 755 /koolshare/kcptun/gfwlist/nat-start
 chmod 755 /tmp/kcptun/perp/kcptun/*
 chmod 755 /koolshare/scripts/kcp_config.sh
-
-

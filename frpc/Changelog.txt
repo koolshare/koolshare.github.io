@@ -1,0 +1,4 @@
+Koolshare Asuswrt-Merlin Frpc Changelog
+===========================================
+1.0 ( 2016-09-30 23:12:00 )
+	- Add	添加Frp穿透神器

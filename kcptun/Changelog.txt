@@ -1,5 +1,7 @@
 Koolshare Asuswrt-Merlin kcptun Changelog
 ===========================================
+2.1
+   - fix	fix uninstall shell
 2.0
    - update	update kcptun binary to latest
 1.9
