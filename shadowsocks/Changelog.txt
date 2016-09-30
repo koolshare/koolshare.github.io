@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+2.9.3
+   - fix	fix ss rule update bug
+
 
 2.9.2
    - update	因为X7.1固件瘦身计划，ss不再集成于固件内，固件内去除了相关的一些软件，而2.9.1及其以下的ss安装包内没有相关软件，导致了一些问题，
