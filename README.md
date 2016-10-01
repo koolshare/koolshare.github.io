@@ -25,8 +25,6 @@
 微信扫码捐赠我们
 ======
 
- <img src="https://github.com/koolshare/firmware/blob/master/.resources/img/qr.png" alt="QR" width="120"/>
-
 * [贡献名单详情](https://github.com/koolshare/koolshare.github.io/tree/master/donate)
 
 交流场地
