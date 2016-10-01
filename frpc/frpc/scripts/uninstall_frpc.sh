@@ -16,4 +16,5 @@ do
 dbus remove $value 
 done
 dbus remove __event__onwanstart_frpc
+cru d frpc_monitor
 rm -f /koolshare/scripts/uninstall_frpc.sh
