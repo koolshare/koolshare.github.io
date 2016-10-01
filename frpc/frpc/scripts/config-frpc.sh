@@ -8,9 +8,10 @@ INI_FILE=/koolshare/configs/frpc.ini
 PID_FILE=/tmp/frpc.pid
 
 onstart() {
-dbus set frpc_client_version=`${BIN} --version`
 killall frpc || true
+dbus set frpc_client_version=`${BIN} --version`
 en=$frpc_enable
+if [ "$en" == "1" ]; then
 cat > ${INI_FILE}<<-EOF
 [common]
 server_addr = $frpc_common_server_addr
@@ -23,7 +24,6 @@ EOF
 
 server_nu=`dbus list frpc_subname_node | sort -n -t "_" -k 4|cut -d "=" -f 1|cut -d "_" -f 4`
 for nu in $server_nu
-
 do
 	array_subname=`dbus get frpc_subname_node_$nu`
 	array_type=`dbus get frpc_proto_node_$nu`
@@ -45,17 +45,23 @@ use_encryption = ${array_use_encryption}
 use_gzip = ${array_use_gzip}
 EOF
 done
-if [ "$en" == "1" ]; then
 echo -n "starting kcptun..."
 start-stop-daemon -S -q -b -m -p ${PID_FILE} -x ${BIN} -- -c ${INI_FILE}
 echo " done"
 fi
-
+}
+stop() {
+	echo -n "stop kcptun..."
+		killall frpc || true
+	echo " done"
 }
 
 case $ACTION in
 start)
 	onstart
+	;;
+stop)
+	stop
 	;;
 *)
 	onstart

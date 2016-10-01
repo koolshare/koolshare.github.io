@@ -2,8 +2,8 @@
 
 
 MODULE=frpc
-VERSION="1.1"
-TITLE=frpc
+VERSION="1.2"
+TITLE=frpc穿透
 DESCRIPTION=内网穿透利器，谁用谁知道。
 HOME_URL=Module_frpc.asp
 
@@ -19,7 +19,6 @@ if [ "$old_version" != "$VERSION" ];then
   echo $old_version $old_md5sum >> ./history/version
 fi
 
-
 # Check and include base
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ "$MODULE" == "" ]; then
@@ -31,7 +30,7 @@ if [ -f "$DIR/$MODULE/$MODULE/install.sh" ]; then
 	echo "install script not found"
 	exit 2
 fi
-
+sed -i "s/VERSION=.*/VERSION=\"${VERSION}\"/g" $DIR/$MODULE/$MODULE/install.sh
 # now include build_base.sh
 . $DIR/../softcenter/build_base.sh
 
