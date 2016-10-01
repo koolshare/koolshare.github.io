@@ -22,7 +22,7 @@ log_level = $frpc_common_log_level
 log_max_days = $frpc_common_log_max_days
 EOF
 
-server_nu=`dbus list frpc_subname_node | sort -n -t "_" -k 4|cut -d "=" -f 1|cut -d "_" -f 4`
+server_nu=`dbus list frpc_localhost_node | sort -n -t "_" -k 4|cut -d "=" -f 1|cut -d "_" -f 4`
 for nu in $server_nu
 do
 	array_subname=`dbus get frpc_subname_node_$nu`

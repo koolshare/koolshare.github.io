@@ -148,7 +148,7 @@ function addTr(o) { //添加配置行操作
             //回传成功后，重新生成表格
             refresh_table();
             // 添加成功一个后将输入框清空
-            document.form.proto_node.value = "http";
+            document.form.proto_node.value = "tcp";
             document.form.subname_node.value = "";
             document.form.subdomain_node.value = "";
             document.form.localhost_node.value = "";
