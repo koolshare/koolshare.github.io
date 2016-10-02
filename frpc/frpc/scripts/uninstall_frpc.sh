@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=frpc
-/koolshare/init.d/S98frpc.sh
+rm -f /koolshare/init.d/S98frpc.sh
 rm -f /koolshare/bin/frpc
 rm -f /koolshare/res/frpc-menu.js
 rm -f /koolshare/res/icon-frpc.png

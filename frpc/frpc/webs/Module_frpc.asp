@@ -458,6 +458,17 @@ function version_show(){
                                                 </select>
                                             </td>
                                         </tr>
+
+                                        <tr>
+                                            <th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(17)">定时注册服务</a>(<i>0为关闭</i>)</th>
+                                            <td>
+                                                每 <input type="text" id="frpc_common_cron_time" name="frpc_common_cron_time" class="input_3_table" maxlength="2" value="30" placeholder="" />
+                                                <select id="frpc_common_cron_hour_min" name="frpc_common_cron_hour_min" style="width:60px;margin:3px 2px 0px 2px;" class="input_option">
+                                                    <option value="min" selected="selected">分钟</option>
+                                                    <option value="hour">小时</option>
+                                                </select> 重新注册一次服务
+                                            </td>
+                                        </tr>
                                     </table>
 
                                 <table id="conf_table" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" class="FormTable_table" style="margin-top:8px;">
@@ -528,9 +539,10 @@ function version_show(){
                                       </table>
                                     <div class="formfontdesc" id="cmdDesc">
                                         <i>* 注意事项：</i><br>
-                                        <i>1. 上面所有内容都为必填项，请认真填写，不然无法穿透。</i><br>
-                                        <i>2. 每一个文字都可以点击查看相应的帮助信息。</i><br>
-                                        <i>3. 穿透设置中添加删除为本地实时生效，请谨慎操作，修改后请提交以便服务器端生效。</i><br>
+                                        <i>1. 请使用虚拟内存！请使用虚拟内存！请使用虚拟内存！重要的事说三遍</i><br>
+                                        <i>2. 上面所有内容都为必填项，请认真填写，不然无法穿透。</i><br>
+                                        <i>3. 每一个文字都可以点击查看相应的帮助信息。</i><br>
+                                        <i>4. 穿透设置中添加删除为本地实时生效，请谨慎操作，修改后请提交以便服务器端生效。</i><br>
                                     </div>
                                     <div class="apply_gen">
                                         <span><input class="button_gen_long" id="cmdBtn" onclick="onSubmitCtrl(this, ' Refresh ')" type="button" value="提交"/></span>

@@ -11,11 +11,6 @@
             "version": "0.1.4"
         }, 
         {
-            "name": "history", 
-            "tar_url": "history/history.tar.gz", 
-            "title": "history"
-        }, 
-        {
             "build_date": "2016-06-20_17:00:29", 
             "description": "迅雷快鸟，为上网加速而生~", 
             "home_url": "Module_kuainiao.asp", 
@@ -56,14 +51,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2016-10-01_23:20:55", 
+            "build_date": "2016-10-02_13:15:47", 
             "description": "内网穿透利器，谁用谁知道。", 
             "home_url": "Module_frpc.asp", 
-            "md5": "b82361029b4235b832d77e28580adb78", 
+            "md5": "d1f9dd43bea0fb9cc797583334532b16", 
             "name": "frpc", 
             "tar_url": "frpc/frpc.tar.gz", 
             "title": "frpc穿透", 
-            "version": "1.5"
+            "version": "1.6"
         }, 
         {
             "build_date": "2016-05-19_22:37:04", 

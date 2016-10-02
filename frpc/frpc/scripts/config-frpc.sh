@@ -45,14 +45,28 @@ use_encryption = ${array_use_encryption}
 use_gzip = ${array_use_gzip}
 EOF
 done
-echo -n "starting kcptun..."
+echo -n "setting ${NAME} crontab..."
+if [ "$frpc_common_cron_time" == "0" ]; then
+	cru d frpc_monitor
+else
+	if [ "$frpc_common_cron_hour_min" == "min" ]; then
+		cru a frpc_monitor "*/"$frpc_common_cron_time" * * * * /bin/sh /koolshare/scripts/config-frpc.sh"
+	elif [ "$frpc_common_cron_hour_min" == "hour" ]; then
+		cru a frpc_monitor "0 */"$frpc_common_cron_time" * * * /bin/sh /koolshare/scripts/config-frpc.sh"
+	fi
+fi
+echo " done"
+echo -n "starting ${NAME}..."
 start-stop-daemon -S -q -b -m -p ${PID_FILE} -x ${BIN} -- -c ${INI_FILE}
 echo " done"
+else
+	stop
 fi
 }
 stop() {
-	echo -n "stop kcptun..."
+	echo -n "stop ${NAME}..."
 		killall frpc || true
+		cru d frpc_monitor
 	echo " done"
 }
 
