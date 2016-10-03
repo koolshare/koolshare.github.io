@@ -61,7 +61,33 @@ load_nat(){
 	iptables -t nat -A koolproxy -d 192.168.0.0/16 -j RETURN
 	iptables -t nat -A koolproxy -d 224.0.0.0/4 -j RETURN
 	iptables -t nat -A koolproxy -d 240.0.0.0/4 -j RETURN
-	iptables -t nat -A koolproxy -p tcp -j REDIRECT --to-ports 3000
+
+	# lan control
+	# 不需要走koolproxy的局域网ip地址：白名单
+	white=$(echo $koolproxy_white_lan | sed "s/,/ /g")
+	if [ "$koolproxy_lan_control" == "2" ] && [ ! -z "$koolproxy_white_lan" ];then
+		for white_ip in $white
+		do
+			iptables -t nat -A koolproxy -s $white_ip -j RETURN
+		done
+		iptables -t nat -A koolproxy -p tcp -j REDIRECT --to-ports 3000
+	fi
+
+	# 需要走koolproxy的局域网ip地址：黑名单
+	black=$(echo $koolproxy_black_lan | sed "s/,/ /g")
+	if [ "$koolproxy_lan_control" == "1" ] && [ ! -z "$koolproxy_black_lan" ];then
+		for balck_ip in $black
+		do
+			iptables -t nat -A koolproxy -p tcp -s $balck_ip -j REDIRECT --to-ports 3000
+		done
+	elif [ "$koolproxy_lan_control" == "1" ] && [ -z "$koolproxy_black_lan" ];then
+		iptables -t nat -A koolproxy -p tcp -j REDIRECT --to-ports 3000
+	fi
+
+	#所有客户端都走koolproxy
+	if [ "$koolproxy_lan_control" == "0" ];then
+		iptables -t nat -A koolproxy -p tcp -j REDIRECT --to-ports 3000
+	fi
 }
 
 flush_nat(){
@@ -111,7 +137,7 @@ write_cron_job(){
 	# start setvice
 	if [ "1" == "$koolproxy_update" ]; then
 		echo $(date): 开启规则定时更新，每"$koolproxy_update_time"个小时检查在线规则更新...
-		cru a koolproxy_update "0 */"$koolproxy_update_time" * * * /bin/sh /koolshare/koolproxy/rule_update.sh"
+		cru a koolproxy_update "0 */"$koolproxy_update_time" * * * /bin/sh /koolshare/scripts/koolproxy_rule_update.sh"
 	else
 		echo $(date): 规则自动更新关闭状态，不启用自动更新...
 	fi

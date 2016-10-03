@@ -24,6 +24,7 @@ chmod 755 /koolshare/perp//koolproxy/*
 
 
 dbus set koolproxy_policy=1
+dbus set koolproxy_lan_control=0
 sleep 1
 # start
 if [ "$koolproxy_enable" == "1" ];then

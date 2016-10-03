@@ -43,7 +43,33 @@ load_nat(){
 	iptables -t nat -A koolproxy -d 192.168.0.0/16 -j RETURN
 	iptables -t nat -A koolproxy -d 224.0.0.0/4 -j RETURN
 	iptables -t nat -A koolproxy -d 240.0.0.0/4 -j RETURN
-	iptables -t nat -A koolproxy -p tcp -j REDIRECT --to-ports 3000
+
+	# lan control
+	# 不需要走koolproxy的局域网ip地址：白名单
+	white=$(echo $koolproxy_white_lan | sed "s/,/ /g")
+	if [ "$koolproxy_lan_control" == "2" ] && [ ! -z "$koolproxy_white_lan" ];then
+		for white_ip in $white
+		do
+			iptables -t nat -A koolproxy -s $white_ip -j RETURN
+		done
+		iptables -t nat -A koolproxy -p tcp -j REDIRECT --to-ports 3000
+	fi
+
+	# 需要走koolproxy的局域网ip地址：黑名单
+	black=$(echo $koolproxy_black_lan | sed "s/,/ /g")
+	if [ "$koolproxy_lan_control" == "1" ] && [ ! -z "$koolproxy_black_lan" ];then
+		for balck_ip in $black
+		do
+			iptables -t nat -A koolproxy -p tcp -s $balck_ip -j REDIRECT --to-ports 3000
+		done
+	elif [ "$koolproxy_lan_control" == "1" ] && [ -z "$koolproxy_black_lan" ];then
+		iptables -t nat -A koolproxy -p tcp -j REDIRECT --to-ports 3000
+	fi
+
+	#所有客户端都走koolproxy
+	if [ "$koolproxy_lan_control" == "0" ];then
+		iptables -t nat -A koolproxy -p tcp -j REDIRECT --to-ports 3000
+	fi
 }
 
 if [ "$koolproxy_enable" == "1" ];then

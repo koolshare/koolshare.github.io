@@ -79,6 +79,8 @@ function update_visibility(){
 	showhide("koolproxy_policy_read1", (document.form.koolproxy_policy.value == 1));
 	showhide("koolproxy_policy_read2", (document.form.koolproxy_policy.value == 2));
 	showhide("update_rules", (document.form.koolproxy_update.value == 1));
+	showhide("koolproxy_black_lan", (document.form.koolproxy_lan_control.value == 1));
+	showhide("koolproxy_white_lan", (document.form.koolproxy_lan_control.value == 2));
 	
 }
 
@@ -263,6 +265,9 @@ function checkCmdRet(){
 												<th width="35%">koolproxy规则更新间隔</a></th>
 												<td>
 													<select id="koolproxy_update_time" name="koolproxy_update_time" class="ssconfig input_option" title="选择规则列表自动更新时间，更新后将自动重启koolproxy"  >
+														<option value="1">1小时</option>
+														<option value="2">2小时</option>
+														<option value="4">4小时</option>
 														<option value="6">6小时</option>
 														<option value="12">12小时</option>
 														<option value="24">24小时</option>
@@ -273,6 +278,20 @@ function checkCmdRet(){
 														</span>
 												</td>
 											</tr>
+
+												<tr id="lan_control">
+													<th width="35%"><a>局域网客户端控制</a>&nbsp;&nbsp;&nbsp;&nbsp;<select id="koolproxy_lan_control" name="koolproxy_lan_control" class="input_ss_table" style="width:auto;height:25px;margin-left: 0px;" onchange="update_visibility();">
+															<option value="0">禁用</option>
+															<option value="1">黑名单模式</option>
+															<option value="2">白名单模式</option>
+														</select>
+													</th>
+													<td>
+														<textarea placeholder="填入需要走koolproxy的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=2 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="koolproxy_black_lan" name="koolproxy_black_lan" title=""></textarea>
+														<textarea placeholder="填入不需要走koolproxy的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=2 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="koolproxy_white_lan" name="koolproxy_white_lan" title=""></textarea>
+													</td>
+												</tr>
+											
                                     	</table>
                                     	<div id="log_content" style="margin-top:10px;display: none;">
 											<textarea cols="63" rows="21" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;"></textarea>
