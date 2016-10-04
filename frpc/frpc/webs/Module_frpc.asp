@@ -107,20 +107,30 @@ function validForm(){
 }
 
 function onSubmitCtrl(o, s) { //提交操作，提交时运行config-frpc.sh，显示5秒的载入画面
-        document.form.action_mode.value = s;
-        document.form.SystemCmd.value = "config-frpc.sh";
-        document.form.submit();
-        showLoading(5);
+    var _form = document.form;
+    if(trim(_form.frpc_common_server_addr.value)=="" || trim(_form.frpc_common_server_port.value)=="" || trim(_form.frpc_common_privilege_token.value)=="" || trim(_form.frpc_common_vhost_http_port.value)=="" || trim(_form.frpc_common_vhost_https_port.value)=="" || trim(_form.frpc_common_cron_time.value)==""){   
+        alert("提交的表单不能为空!");           
+        return false;   
+    }
+    document.form.action_mode.value = s;
+    document.form.SystemCmd.value = "config-frpc.sh";
+    document.form.submit();
+    showLoading(5);
 }
 
 function done_validating(action) { //提交操作5秒后刷洗网页
     refreshpage(5);
 }
 function reload_Soft_Center(){ //返回软件中心按钮
-location.href = "/Main_Soft_center.asp";
+    location.href = "/Main_Soft_center.asp";
 }
 
 function addTr(o) { //添加配置行操作
+    var _form_addTr = document.form;
+    if(trim(_form_addTr.subname_node.value)=="" || trim(_form_addTr.subdomain_node.value)=="" || trim(_form_addTr.localhost_node.value)=="" || trim(_form_addTr.localport_node.value)=="" || trim(_form_addTr.remoteport_node.value)==""){   
+        alert("提交的表单不能为空!");           
+        return false;   
+    }
     var ns = {};
     var p = "frpc";
     node_max += 1;
