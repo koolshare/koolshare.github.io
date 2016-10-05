@@ -2,7 +2,7 @@
 
 
 MODULE=shellinabox
-VERSION=1.3
+VERSION=1.4
 TITLE=shellinabox
 DESCRIPTION=超强的SSH网页客户端，webshell替代品~
 HOME_URL=Module_shellinabox.asp
