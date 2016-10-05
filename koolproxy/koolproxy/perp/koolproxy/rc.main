@@ -5,7 +5,11 @@ koolproxy_enable=`dbus get koolproxy_enable`
 exec 2>&1
 if test ${1} = 'start' ; then
   if [ "$koolproxy_enable" == "1" ];then
-	exec /koolshare/koolproxy/koolproxy -b /koolshare/koolproxy/data
+  	if [ "$koolproxy_debug" == "1" ];then
+		exec /koolshare/koolproxy/koolproxy -b /koolshare/koolproxy/data -l 257
+	else
+		exec /koolshare/koolproxy/koolproxy -b /koolshare/koolproxy/data
+	fi
   fi
 fi
   

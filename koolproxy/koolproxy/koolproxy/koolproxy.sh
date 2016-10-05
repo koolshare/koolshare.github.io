@@ -177,6 +177,7 @@ restart)
 	creat_start_up
 	write_nat_start
 	write_cron_job
+	echo $(date): koolproxy启用成功，请等待日志窗口自动关闭，页面会自动刷新...
 	;;
 restart_nat)
 	if [ "$koolproxy_enable" == "1" ];then

@@ -1,6 +1,12 @@
 #!/bin/sh
+eval `dbus export koolproxy`
 if test ${1} = 'start' ; then
-   exec tinylog -k 5 -t /var/log/${2}
+	if [ "$koolproxy_debug" == "1" ];then
+		sissylog
+	else
+		rm -rf /var/log/${2}/current
+		exec tinylog -k 5 -t /var/log/${2}
+	fi
 fi
     
 exit 0

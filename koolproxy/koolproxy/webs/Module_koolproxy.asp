@@ -43,6 +43,7 @@ function init() {
     } else {
         rrt.checked = true;
     }
+    notice_show();
 }
 
 function buildswitch(){
@@ -81,16 +82,19 @@ function update_visibility(){
 	showhide("update_rules", (document.form.koolproxy_update.value == 1));
 	showhide("koolproxy_black_lan", (document.form.koolproxy_lan_control.value == 1));
 	showhide("koolproxy_white_lan", (document.form.koolproxy_lan_control.value == 2));
+	showhide("koolproxy_debug1", (document.form.koolproxy_debug.value == 1));
 	
 }
 
 function start_update() {
-	checkCmdRet();
 	document.getElementById("log_content").style.display = "";
 	document.form.action_mode.value = ' Refresh ';
 	document.form.action = "/applydb.cgi?p=koolproxy";
     document.form.SystemCmd.value = "koolproxy_rule_update.sh";
 	document.form.submit();
+	document.getElementById("cmdBtn").disabled = true;
+	document.getElementById("cmdBtn").style.color = "#666";
+	setTimeout("checkCmdRet();", 500);
 }
 
 var _responseLen;
@@ -103,9 +107,10 @@ function checkCmdRet(){
 		
 		error: function(xhr){
 			setTimeout("checkCmdRet();", 1000);
-			},
+		},
 		success: function(response){
 			var retArea = $G("log_content1");
+			var _cmdBtn = document.getElementById("cmdBtn");
 			if(response.search("XU6J03M6") != -1){
 				retArea.value = response.replace("XU6J03M6", " ");
 				//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
@@ -119,12 +124,12 @@ function checkCmdRet(){
 				noChange = 0;
 			}
 
-			if(noChange > 15){
+			if(noChange > 12){
 				//retArea.scrollTop = retArea.scrollHeight;
 				//setTimeout("checkCmdRet();", 2000);
 				document.getElementById("log_content").style.display = "none";
 				noChange = 0;
-				return false;
+				refreshpage();
 			}else{
 				setTimeout("checkCmdRet();", 500);
 			}
@@ -135,6 +140,20 @@ function checkCmdRet(){
 			_responseLen = response.length;
 		}
 	});
+}
+
+function notice_show(){
+    $j.ajax({
+        url: 'http://rules.ngrok.wang:5000/config.json.js',
+        type: 'GET',
+        dataType: 'jsonp',
+        success: function(res) {
+			$j("#rule_date_web").html(res.rules_date);
+			$j("#video_date_web").html(res.video_date);
+        }
+
+        
+    });
 }
 
 </script>
@@ -192,10 +211,22 @@ function checkCmdRet(){
                                                                                     <h3 id="push_content1" >koolproxy是能识别adblock规则的代理软件，目前正在完善中。</h3>
                                                                                 </li>
                                                                                 <li  style="margin-top:-5px;">
-                                                                                    <h3 id="push_content2"><i>koolproxy静态规则：</i><% dbus_get_def("koolproxy_rule_info", "0"); %></h3>
+                                                                                    <h3 id="push_content2">
+	                                                                                    <i>koolproxy静态规则：</i>
+	                                                                                    <% dbus_get_def("koolproxy_rule_info", "0"); %>
+	                                                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+	                                                                                    <font color="#66FF66">在线版本：</font>
+	                                                                                    <span id="rule_date_web"></span>
+	                                                                                 </h3>
                                                                                 </li>
                                                                                 <li id="push_content3_li" style="margin-top:-5px;">
-                                                                                    <h3 id="push_content3"><i>koolproxy视频规则：</i><% dbus_get_def("koolproxy_video_info", "0"); %></h3>
+                                                                                    <h3 id="push_content3">
+	                                                                                    <i>koolproxy视频规则：</i>
+	                                                                                    <% dbus_get_def("koolproxy_video_info", "0"); %>
+                                                                                    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                                    	<font color="#66FF66">在线版本：</font>
+                                                                                    	<span id="video_date_web"></span>
+                                                                                    </h3>
                                                                                 </li>
                                                                                 <li id="push_content4_li" style="margin-top:-5px;display: none;">
                                                                                     <h3 id="push_content4"></h3>
@@ -238,6 +269,16 @@ function checkCmdRet(){
 													<div id="koolproxy_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>	
 												</td>
 											</tr>
+											<tr id="debug_tr">
+												<th>日志显示</th>
+												<td>
+													<select name="koolproxy_debug" id="koolproxy_debug" class="input_option" onchange="update_visibility();" style="width:auto;margin:0px 0px 0px 2px;">
+														<option value="0" selected>不启用</option>
+														<option value="1">启用</option>
+													</select>
+														<span id="koolproxy_debug1" style="display: none;">开启日志显示后，在<a style="margin-left: 3px;margin-right: 3px" href="Main_LogStatus_Content.asp" target="_blank"><font color="#66FFCC"><u>系统日志</u></font></i></a>就能看到规则命中日志。</span>
+												</td>
+											</tr>		
 											<tr id="policy_tr">
 												<th>选择过滤模式</th>
 												<td>
@@ -245,11 +286,10 @@ function checkCmdRet(){
 														<option value="1" selected>全局过滤</option>
 														<option value="2">黑名单模式</option>
 													</select>
-														<span id="koolproxy_policy_read1" style="display: none;">全局模式下，所有80端口的流量都会走koolproxy过，过滤效果最好</span>
-														<span id="koolproxy_policy_read2" style="display: none;">黑名单模式下只有黑名单内的域名走koolproxy过，效果不及全局模式</span>
+														<span id="koolproxy_policy_read1" style="display: none;">全局模式下，所有80端口的流量都会走koolproxy过，过滤效果最好。</span>
+														<span id="koolproxy_policy_read2" style="display: none;">黑名单模式下只有黑名单内的域名走koolproxy过，效果不及全局模式。</span>
 												</td>
 											</tr>
-
 											<tr id="rule_update_switch">
 												<th>规则更新开关</th>
 												<td>
@@ -274,7 +314,7 @@ function checkCmdRet(){
 													</select>
 														<input id="update_now" onclick="start_update()" style="font-family:'Courier New'; Courier, mono; font-size:11px;" type="submit" value="立即更新" />
 														<span>
-															<a style="margin-left: 20px;" href="https://github.com/koolproxy/koolproxy_rules" target="_blank"><i><u>规则维护地址</u></i></a>
+															<a style="margin-left: 20px;" href="https://github.com/koolproxy/koolproxy_rules" target="_blank"><i><u>规则反馈</u></i></a>
 														</span>
 												</td>
 											</tr>
@@ -294,7 +334,9 @@ function checkCmdRet(){
 											
                                     	</table>
                                     	<div id="log_content" style="margin-top:10px;display: none;">
-											<textarea cols="63" rows="21" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;"></textarea>
+											<textarea cols="63" rows="21" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;">
+												<% nvram_dump("syscmd.log","syscmd.sh"); %>
+											</textarea>
 										</div>
                                     	
 										<div class="apply_gen">
