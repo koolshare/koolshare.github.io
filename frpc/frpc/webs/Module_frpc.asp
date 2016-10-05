@@ -365,7 +365,7 @@ function version_show(){
                                     <div style="float:left;" class="formfonttitle">软件中心 - Frpc</div>
                                     <div style="float:right; width:15px; height:25px;margin-top:10px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
                                     <div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"/></div>
-                                    <div class="formfontdesc" id="cmdDesc"><i>* 为了Frpc稳定运行，请开启虚拟内存功能！！！</i><br><a href="http://koolshare.cn/thread-65379-1-1.html"  target="_blank"><i>服务器搭建教程</i></a></div>
+                                    <div class="formfontdesc" id="cmdDesc"><i>* 为了Frpc稳定运行，请开启虚拟内存功能！！！</i>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://koolshare.cn/thread-65379-1-1.html"  target="_blank"><i>服务器搭建教程</i></a></div>
                                     <table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
                                         <tr id="switch_tr">
                                             <th>
@@ -470,6 +470,16 @@ function version_show(){
                                         </tr>
 
                                         <tr>
+                                            <th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(18)">DDNS显示设置</a></th>
+                                            <td>
+                                                <select id="frpc_common_ddns" name="frpc_common_ddns" style="width:60px;margin:3px 2px 0px 2px;" class="input_option">
+                                                    <option value="1">开</option>
+                                                    <option value="0" selected="selected">关</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
                                             <th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(17)">定时注册服务</a>(<i>0为关闭</i>)</th>
                                             <td>
                                                 每 <input type="text" id="frpc_common_cron_time" name="frpc_common_cron_time" class="input_3_table" maxlength="2" value="30" placeholder="" />
@@ -550,9 +560,10 @@ function version_show(){
                                     <div class="formfontdesc" id="cmdDesc">
                                         <i>* 注意事项：</i><br>
                                         <i>1. 请使用虚拟内存！请使用虚拟内存！请使用虚拟内存！重要的事说三遍</i><br>
-                                        <i>2. 上面所有内容都为必填项，请认真填写，不然无法穿透。</i><br>
-                                        <i>3. 每一个文字都可以点击查看相应的帮助信息。</i><br>
-                                        <i>4. 穿透设置中添加删除为本地实时生效，请谨慎操作，修改后请提交以便服务器端生效。</i><br>
+                                        <i>2. DDNS显示设置功能与系统自带的DDNS设置冲突，frp的DDNS显示设置会覆盖系统自带的DDNS设置！</i><br>
+                                        <i>3. 上面所有内容都为必填项，请认真填写，不然无法穿透。</i><br>
+                                        <i>4. 每一个文字都可以点击查看相应的帮助信息。</i><br>
+                                        <i>5. 穿透设置中添加删除为本地实时生效，请谨慎操作，修改后请提交以便服务器端生效。</i><br>
                                     </div>
                                     <div class="apply_gen">
                                         <span><input class="button_gen_long" id="cmdBtn" onclick="onSubmitCtrl(this, ' Refresh ')" type="button" value="提交"/></span>
