@@ -251,7 +251,7 @@ function onSubmitCtrl() {
 			if(ssaction == 1){
 				if (ssmode == "2" || ssmode == "3"){			
 				} else if (ssmode == "1"){
-					showSSLoadingBar(40);
+					showSSLoadingBar(4);
 				} else if (ssmode == "0"){
 					showSSLoadingBar(4);
 				} else if (ssmode == "4"){
@@ -272,9 +272,9 @@ function onSubmitCtrl() {
 			setTimeout("checkSSStatus();", 50000);
 			if(ssaction == 1){
 				if (ssmode == "2" || ssmode == "3"){
-					showSSLoadingBar(40);
+					showSSLoadingBar(4);
 				} else if (ssmode == "1"){
-					showSSLoadingBar(300);
+					showSSLoadingBar(3);
 				} else if (ssmode == "0"){
 					showSSLoadingBar(4);
 				} else if (ssmode == "4"){
