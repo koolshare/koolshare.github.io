@@ -1,7 +1,7 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 2.9.4
-   - fix	界面：修复当用户Enable JFFS custom scripts and configs未开启时开关关闭，没有信息提示;
+   - fix	界面：修复当用户Enable JFFS custom scripts and configs未开启时开关关闭，但是没有信息提示，可能造成用户困惑;
    - fix	界面：修复当初次使用时，在主界面输入节点（不是在节点页面输入节点）点击提交后，ss没有启动的bug;
    - fix	脚本：修复ss规则自动更新定时脚本运行一个不存在的脚本的bug.
 
