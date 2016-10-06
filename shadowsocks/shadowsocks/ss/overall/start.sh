@@ -139,7 +139,7 @@ wan_auto_start(){
 write_cron_job(){
 	if [ "1" == "$ss_basic_rule_update" ]; then
 		echo $(date): ss rule schedual update enabled
-		cru a ssupdate "0 $ss_basic_rule_update_time * * * /bin/sh /koolshare/ss/cru/update.sh"
+		cru a ssupdate "0 $ss_basic_rule_update_time * * * /bin/sh /koolshare/scripts/ss_rule_update.sh"
 		echo $(date): done
 		echo $(date):
 	else

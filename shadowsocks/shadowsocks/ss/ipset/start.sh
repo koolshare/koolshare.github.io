@@ -223,7 +223,7 @@ write_cron_job(){
 	# start setvice
 	if [ "1" == "$ss_basic_rule_update" ]; then
 		echo $(date): add schedual update
-		cru a ssupdate "0 $ss_basic_rule_update_time * * * /bin/sh /koolshare/ss/cru/update.sh"
+		cru a ssupdate "0 $ss_basic_rule_update_time * * * /bin/sh /koolshare/scripts/ss_rule_update.sh"
 		echo $(date): done
 		echo $(date):
 	else

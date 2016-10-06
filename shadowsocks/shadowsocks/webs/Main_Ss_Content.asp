@@ -214,6 +214,7 @@ function init() {
     
     var jffs2_scripts = '<% nvram_get("jffs2_scripts"); %>';
 	if(jffs2_scripts == "0"){
+		$G("warn").style.display = "";
 		$j("#warn").html("<i>发现Enable JFFS custom scripts and configs选项未开启！</br></br>请开启并重启路由器后才能正常使用SS。<a href='/Advanced_System_Content.asp'><em><u> 前往设置 </u></em></a> </i>");
 		document.form.ss_basic_enable.value = 0;
 		inputCtrl(document.form.switch,0);
@@ -221,7 +222,6 @@ function init() {
 	var retArea = $G('log_content');
 	retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
 	//setTimeout(setIframeSrc, 5000);	
-
 }
 
 function detect_kcptun(){
@@ -251,7 +251,7 @@ function onSubmitCtrl() {
 			if(ssaction == 1){
 				if (ssmode == "2" || ssmode == "3"){			
 				} else if (ssmode == "1"){
-					showSSLoadingBar(4);
+					showSSLoadingBar(40);
 				} else if (ssmode == "0"){
 					showSSLoadingBar(4);
 				} else if (ssmode == "4"){
@@ -272,9 +272,9 @@ function onSubmitCtrl() {
 			setTimeout("checkSSStatus();", 50000);
 			if(ssaction == 1){
 				if (ssmode == "2" || ssmode == "3"){
-					showSSLoadingBar(4);
+					showSSLoadingBar(40);
 				} else if (ssmode == "1"){
-					showSSLoadingBar(3);
+					showSSLoadingBar(300);
 				} else if (ssmode == "0"){
 					showSSLoadingBar(4);
 				} else if (ssmode == "4"){
@@ -728,7 +728,7 @@ function getAllConfigs() {
     }
     confs = {};
     var p = "ssconf_basic";
-    var params = ["mode", "name", "server", "port", "password", "method"];
+    var params = ["name", "server", "port", "password", "method"];
     for (var field in dic) {
         var obj = {};
         if (typeof db_ss[p + "_name_" + field] == "undefined") {
@@ -2365,8 +2365,8 @@ function setIframeSrc() {
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(7)">一次性验证(OTA)</a></th>
 													<td>
 														<select id="ss_basic_onetime_auth" name="ss_basic_onetime_auth" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
+															<option class="content_input_fd" value="0" selected>关闭</option>
 															<option class="content_input_fd" value="1">开启</option>
-															<option class="content_input_fd" value="0">关闭</option>
 														</select>
 														<span id="ss_basic_onetime_auth_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
@@ -3241,7 +3241,8 @@ taobao.com
 										<div id="apply_button" class="apply_gen">
 											<input id="cmdBtn" class="button_gen" type="button" onclick="onSubmitCtrl()" value="提交">
 										</div>
-										<div id="warn1" style="display: none;font-size: 20px;position: absolute; bottom: 350px; left: 0px;" class="formfontdesc" id="cmdDesc"><i>你开启了kcptun,请先关闭后才能开启shadowsocks</i></div>
+										<div id="warn" style="display: none;font-size: 20px;position: static;" class="formfontdesc" id="cmdDesc"><i>你开启了kcptun,请先关闭后才能开启shadowsocks</i></div>
+										<div id="warn1" style="display: none;font-size: 20px;position: static;" class="formfontdesc" id="cmdDesc"><i>你开启了kcptun,请先关闭后才能开启shadowsocks</i></div>
 										<div id="line_image1" style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"/></div>
 										<div id ="KoolshareBottom_div" class="KoolshareBottom" style="position: static;">
 											论坛技术支持： <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a> <br/>
