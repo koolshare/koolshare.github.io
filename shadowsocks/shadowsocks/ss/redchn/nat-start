@@ -39,7 +39,7 @@ flush_nat(){
 	iptables -t nat -F REDSOCKS2 > /dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j REDSOCKS2 >/dev/null 2>&1
 	iptables -t nat -X REDSOCKS2 > /dev/null 2>&1
-	iptables -t nat -D OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 1089 >/dev/null 2>&1
+	iptables -t nat -D OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 3333 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 }
 
@@ -158,13 +158,13 @@ apply_nat_rules(){
 	iptables -t nat -A REDSOCKS2 -p tcp -m set $MATCH_SET white_domain dst -j RETURN
 
 	# IP黑名单控制（走ss）
-	iptables -t nat -A REDSOCKS2 -p tcp -m set $MATCH_SET black_ip dst -j REDIRECT --to-ports 1089
+	iptables -t nat -A REDSOCKS2 -p tcp -m set $MATCH_SET black_ip dst -j REDIRECT --to-ports 3333
 	
 	# 域名黑名单控制（走ss）
-	iptables -t nat -A REDSOCKS2 -p tcp -m set $MATCH_SET black_domain dst -j REDIRECT --to-ports 1089
+	iptables -t nat -A REDSOCKS2 -p tcp -m set $MATCH_SET black_domain dst -j REDIRECT --to-ports 3333
 	
 	# router itself
-	iptables -t nat -A OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 1089
+	iptables -t nat -A OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 3333
 	
 	# lan black_white list
 	black=$(echo $ss_basic_black_lan | sed "s/,/\n/g")
@@ -177,12 +177,12 @@ apply_nat_rules(){
 			do
 				iptables -t nat -A REDSOCKS2 -p tcp -s $balck_ip -j RETURN
 			done
-			iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 1089
+			iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
 			echo $(date): done
 			echo $(date):
 		else
 		echo $(date): no balck lan ip fill，do nothing
-		iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 1089
+		iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
 		echo $(date): done
 		echo $(date):
 		fi
@@ -191,19 +191,19 @@ apply_nat_rules(){
 			echo $(date): appply lan white ip for lan control
 			for white_ip in $white
 			do
-				iptables -t nat -A REDSOCKS2 -p tcp -s $white_ip -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 1089
+				iptables -t nat -A REDSOCKS2 -p tcp -s $white_ip -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
 			done
 			echo $(date): done
 			echo $(date):
 		else
 		echo $(date): no white lan ip fill，do nothing
-		iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 1089
+		iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
 		echo $(date): done
 		echo $(date):
 		fi
 	else
 		echo $(date): lan control not enabled
-		iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 1089
+		iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
 		echo $(date): done
 		echo $(date):
 	fi
