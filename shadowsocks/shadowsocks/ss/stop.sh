@@ -15,6 +15,7 @@ pdnsd=$(ps | grep "pdnsd" | grep -v "grep")
 chinadns=$(ps | grep "chinadns" | grep -v "grep")
 DNS2SOCK=$(ps | grep "dns2socks" | grep -v "grep")
 koolgame=$(ps | grep "koolgame" | grep -v "grep")
+client_linux_arm5=$(ps | grep "client_linux_arm5" | grep -v "grep")
 Pcap_DNSProxy=$(ps | grep "Pcap_DNSProxy" | grep -v "grep")
 lan_ipaddr=$(nvram get lan_ipaddr)
 ip_rule_exist=`ip rule show | grep "fwmark 0x1/0x1 lookup 300" | grep -c 300`
@@ -245,7 +246,13 @@ kill_process(){
 		echo $(date): done
 		echo $(date):
 	fi
-
+	
+	if [ ! -z "$client_linux_arm5" ]; then 
+		echo $(date): kill client_linux_arm5...
+		killall client_linux_arm5 >/dev/null 2>&1
+		echo $(date): done
+		echo $(date):
+	fi
 }
 
 kill_cron_job(){

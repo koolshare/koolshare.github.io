@@ -29,31 +29,60 @@ resolv_server_ip(){
 # create shadowsocks config file...
 creat_ss_json(){
 	echo $(date): create shadowsocks config file...
-	if [ "$ss_basic_use_rss" == "0" ];then
-		cat > /koolshare/ss/ipset/ss.json <<-EOF
-			{
-			    "server":"$ss_basic_server",
-			    "server_port":$ss_basic_port,
-			    "local_port":3333,
-			    "password":"$ss_basic_password",
-			    "timeout":600,
-			    "method":"$ss_basic_method"
-			}
-		EOF
-	elif [ "$ss_basic_use_rss" == "1" ];then
-		cat > /koolshare/ss/ipset/ss.json <<-EOF
-			{
-			    "server":"$ss_basic_server",
-			    "server_port":$ss_basic_port,
-			    "local_port":3333,
-			    "password":"$ss_basic_password",
-			    "timeout":600,
-			    "protocol":"$ss_basic_rss_protocol",
-			    "obfs":"$ss_basic_rss_obfs",
-			    "obfs_param":"$ss_basic_rss_obfs_param",
-			    "method":"$ss_basic_method"
-			}
-		EOF
+	if [ "$ss_basic_use_kcp" == "1" ];then
+		if [ "$ss_basic_use_rss" == "0" ];then
+			cat > /koolshare/ss/ipset/ss.json <<-EOF
+				{
+				    "server":"127.0.0.1",
+				    "server_port":1091,
+				    "local_port":3333,
+				    "password":"$ss_basic_password",
+				    "timeout":600,
+				    "method":"$ss_basic_method"
+				}
+			EOF
+		elif [ "$ss_basic_use_rss" == "1" ];then
+			cat > /koolshare/ss/ipset/ss.json <<-EOF
+				{
+				    "server":"127.0.0.1",
+				    "server_port":1091,
+				    "local_port":3333,
+				    "password":"$ss_basic_password",
+				    "timeout":600,
+				    "protocol":"$ss_basic_rss_protocol",
+				    "obfs":"$ss_basic_rss_obfs",
+				    "obfs_param":"$ss_basic_rss_obfs_param",
+				    "method":"$ss_basic_method"
+				}
+			EOF
+		fi
+	else
+		if [ "$ss_basic_use_rss" == "0" ];then
+			cat > /koolshare/ss/ipset/ss.json <<-EOF
+				{
+				    "server":"$ss_basic_server",
+				    "server_port":$ss_basic_port,
+				    "local_port":3333,
+				    "password":"$ss_basic_password",
+				    "timeout":600,
+				    "method":"$ss_basic_method"
+				}
+			EOF
+		elif [ "$ss_basic_use_rss" == "1" ];then
+			cat > /koolshare/ss/ipset/ss.json <<-EOF
+				{
+				    "server":"$ss_basic_server",
+				    "server_port":$ss_basic_port,
+				    "local_port":3333,
+				    "password":"$ss_basic_password",
+				    "timeout":600,
+				    "protocol":"$ss_basic_rss_protocol",
+				    "obfs":"$ss_basic_rss_obfs",
+				    "obfs_param":"$ss_basic_rss_obfs_param",
+				    "method":"$ss_basic_method"
+				}
+			EOF
+		fi
 	fi
 	echo $(date): done
 	echo $(date):
@@ -473,6 +502,16 @@ delete_conf_files(){
 	rm -rf /jffs/configs/dnsmasq.conf.add
 }
 
+start_kcp(){
+	# Start ss-redir
+	echo $(date): Starting kcp...
+	if [ "$ss_basic_use_kcp" == "1" ];then
+		start-stop-daemon -S -q -b -m -p /tmp/var/kcp.pid -x /koolshare/bin/client_linux_arm5 -- -l 127.0.0.1:1091 -r $ss_basic_server:$ss_basic_kcp_port $ss_basic_kcp_parameter
+	fi
+	echo $(date): done
+	echo $(date):
+}
+
 start_ss_redir(){
 	# Start ss-redir
 	echo $(date): Starting ss-redir...
@@ -548,6 +587,7 @@ start_all)
 	write_cron_job
 	start_dns
 	start_ss_redir
+	start_kcp
 	load_nat
 	restart_dnsmasq
 	remove_status

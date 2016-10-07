@@ -51,8 +51,9 @@
 	width: 30px;
 	height: 35px;
 }
-.show-btn1, .show-btn2, .show-btn3, .show-btn4 {
+.show-btn1, .show-btn2, .show-btn3, .show-btn4, .show-btn5, .show-btn6 {
 	border: 1px solid #222;
+	background: linear-gradient(to bottom, #76a0ba  0%, #688292 100%); /* W3C */
 	background: #576d73;
 	font-size:10pt;
 	color: #fff;
@@ -61,6 +62,7 @@
 	width:8.45601%;
 }
 .active {
+	background: linear-gradient(to bottom, #61b5de  0%, #279fd9 100%); /* W3C */
 	background: #2f3a3e;
 }
 input[type=button]:focus {
@@ -172,6 +174,24 @@ input[type=button]:focus {
 #iframe1{
    font-family: sans-serif;
    color: red;
+}
+.FormTable thead td{
+	color: #FFF;
+	font-size:12px;
+	background-color:#4D595D;
+	text-align:left;
+	font-weight:bolder;
+	border: 0px solid #222;
+	padding: 3px;
+	padding-left: 10px;
+	border-collapse: collapse;
+ 	background: #92A0A5; /* Old browsers */
+	background: -moz-linear-gradient(top, #92A0A5  0%, #66757C 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#92A0A5 ), color-stop(100%,#66757C)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #92A0A5  0%, #66757C 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #92A0A5 0%, #66757C 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #92A0A5  0%, #66757C 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #92A0A5  0%, #66757C 100%); /* W3C */
 }
 </style>
 <script>
@@ -400,6 +420,7 @@ function update_visibility_main() {
 	srp = document.form.ss_basic_rss_protocol.value;
 	sro = document.form.ss_basic_rss_obfs.value;
 	sur = document.form.hd_ss_basic_use_rss.value;
+	suk = document.form.hd_ss_basic_use_kcp.value;
 	if (srp == "origin"){
 		$j("#ss_basic_rss_protocol_alert").html("原版协议");
 	} else if (srp == "verify_simple"){
@@ -463,14 +484,18 @@ function update_visibility_main() {
 	showhide("ss_state1", (ssmode == "0"));
 	showhide("ss_state2", (ssmode !== "0"));
 	showhide("ss_state3", (ssmode !== "0"));
-	showhide("game_alert", (ssmode == "3"));
 	showhide("ss_koolgame_udp_tr", (ssmode == "4"));
 
 	showhide("onetime_auth", (sur !== "1" && ssmode!== "4"));
-	showhide("SSR_name", (ssmode!== "4"));	
+	showhide("SSR_name", (ssmode!== "4"));
+	showhide("KCP_name", (ssmode!== "4"));
 	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode!== "4"));
 	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode!== "4"));
 	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode!== "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple"));
+
+	showhide("ss_basic_kcp_port_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
+	showhide("ss_basic_kcp_parameter_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
+
 }
 
 function update_visibility_tab4(){
@@ -654,6 +679,7 @@ function ssconf_node2obj(node_sel) {
             "ss_basic_rss_protocol": "",
             "ss_basic_rss_obfs": "",
             "ss_basic_use_rss": "",
+            "ss_basic_use_kcp": "",
             "ss_basic_rss_obfs_param": "",
             "ss_basic_onetime_auth": "",
             "ss_basic_koolgame_udp": ""
@@ -661,7 +687,7 @@ function ssconf_node2obj(node_sel) {
         return obj;
     } else {
         var obj = {};
-        var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth", "koolgame_udp"];
+        var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "koolgame_udp"];
         for (var i = 0; i < params.length; i++) {
             obj["ss_basic_" + params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel];
         }
@@ -679,7 +705,7 @@ function ss_node_sel() {
 function ss_node_object(node_sel, obj, isSubmit, end) {
     var ns = {};
     var p = "ssconf_basic";
-    var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth", "koolgame_udp"];
+    var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "koolgame_udp"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
         db_ss[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
@@ -713,6 +739,7 @@ function ssform2obj() {
     obj["rss_obfs"] = $G("ss_basic_rss_obfs").value;
     obj["rss_obfs_param"] = $G("ss_basic_rss_obfs_param").value;
     obj["use_rss"] = $G("hd_ss_basic_use_rss").value;
+    obj["use_kcp"] = $G("hd_ss_basic_use_kcp").value;
     obj["onetime_auth"] = $G("ss_basic_onetime_auth").value;
     obj["koolgame_udp"] = $G("ss_basic_koolgame_udp").value;
     return obj;
@@ -778,6 +805,12 @@ function getAllConfigs() {
 		}else {
             obj["use_rss"] = db_ss[p + "_use_rss_" + field];
         }
+        if (typeof db_ss[p + "_use_kcp_" + field] == "undefined"){
+			obj["use_kcp"] = '';
+		}else {
+            obj["use_kcp"] = db_ss[p + "_use_kcp_" + field];
+        }
+        
         if (typeof db_ss[p + "_rss_protocol_" + field] == "undefined"){
 			obj["rss_protocol"] = '';
 		}else {
@@ -1289,7 +1322,7 @@ function remove_conf_table(o) { //删除节点功能
     var p = "ssconf_basic";
     id = ids[ids.length - 1];
     var ns = {};
-    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth", "koolgame_udp", "ping", "web_test"];
+    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "koolgame_udp", "ping", "web_test"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + id] = "";
     }
@@ -1967,7 +2000,7 @@ function checkCmdRet(){
 				noChange = 0;
 			}
 
-			if(noChange > 20){
+			if(noChange > 25){
 				$G("loadingIcon").style.display = "none";
 				//retArea.scrollTop = retArea.scrollHeight;
 				//setTimeout("checkCmdRet();", 2000);
@@ -2124,6 +2157,10 @@ function setIframeSrc() {
                                     	                <input id="show_btn2" class="show-btn2" style="cursor:pointer" type="button" value="DNS设定"/>
                                     	                <input id="show_btn3" class="show-btn3" style="cursor:pointer" type="button" value="黑白名单"/>
                                     	                <input id="show_btn4" class="show-btn4" style="cursor:pointer" type="button" value="附加功能"/>
+                                    	                <!--
+                                    	                <input id="show_btn4" class="show-btn5" style="cursor:pointer" type="button" value="kcp协议"/>
+                                    	                <input id="show_btn4" class="show-btn6" style="cursor:pointer" type="button" value="负载均衡"/>
+                                    	                -->
                                     	            </td>
                                     	        </tr>
 											</table>
@@ -2275,7 +2312,8 @@ function setIframeSrc() {
 										
 										<!--=====bacic show =====-->
 										<div id="basic_show">
-											<table style="margin:-1px 0px 0px 0px;" width="100%"  border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
+											<table style="margin:-1px 0px 0px 0px;" width="100%" border="0" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
+
 												<tr id="node_select">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(15)">节点选择</a></th>
 													<td>
@@ -2301,9 +2339,14 @@ function setIframeSrc() {
 															<input type="hidden" id="hd_ss_basic_use_rss" name="ss_basic_use_rss" value="" />
 															<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(13)">使用SSR</a>
 														</div>
-														<div id="game_alert" style="margin-left:270px;margin-top:-20px;margin-bottom:0px;">
-															<a href="http://koolshare.cn/thread-4519-1-1.html" target="_blank"><i>&nbsp;账号需支持UDP转发&nbsp;&nbsp;<u>FAQ</u></i></a>
+
+														<div id="KCP_name"style="margin-left:250px;margin-top:-23px;margin-bottom:0px;">
+															<input type="checkbox" id="ss_basic_use_kcp" onclick="oncheckclick(this);update_visibility_main();" />
+															<input type="hidden" id="hd_ss_basic_use_kcp" name="ss_basic_use_kcp" value="" />
+															<a>启用KCP协议</a>
 														</div>
+
+														
 													</td>
 												</tr>
 												<tr id="server_tr">
@@ -2404,7 +2447,19 @@ function setIframeSrc() {
 														<input type="text" name="ss_basic_rss_obfs_param" id="ss_basic_rss_obfs_param" placeholder="cloudflare.com"  class="ssconfig input_ss_table" maxlength="100" value=""></input>
 														<span id="ss_basic_ticket_tr_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px">不知道如何填写请留空</span>
 													</td>
-												</tr>											
+												</tr>
+												<tr id="ss_basic_kcp_port_tr" style="display: none;">
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(11)">KCP端口</a></th>
+													<td>
+														<input type="text" name="ss_basic_kcp_port" id="ss_basic_kcp_port"  class="ssconfig input_ss_table" maxlength="200" value=""></input>
+													</td>
+												</tr>
+												<tr id="ss_basic_kcp_parameter_tr" style="display: none;">
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(11)">KCP参数</a></th>
+													<td>
+														<input type="text" name="ss_basic_kcp_parameter" id="ss_basic_kcp_parameter"  class="ssconfig input_ss_table" style="width:450px" maxlength="200" value="--crypt none --mode fast2 --mtu 1350 --nocomp --dscp 46"></input>
+													</td>
+												</tr>
 											</table>
 										</div>
 										
