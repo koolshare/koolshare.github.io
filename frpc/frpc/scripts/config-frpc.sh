@@ -5,7 +5,7 @@ source /koolshare/scripts/base.sh
 NAME=frpc
 BIN=/koolshare/bin/frpc
 INI_FILE=/koolshare/configs/frpc.ini
-PID_FILE=/tmp/frpc.pid
+PID_FILE=/var/run/frpc.pid
 lan_ip=`nvram get lan_ipaddr`
 lan_port="80"
 ddns_flag=false

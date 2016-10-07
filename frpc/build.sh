@@ -2,7 +2,7 @@
 
 
 MODULE=frpc
-VERSION="1.8"
+VERSION="1.8.1"
 TITLE=frpc穿透
 DESCRIPTION=内网穿透利器，谁用谁知道。
 HOME_URL=Module_frpc.asp
