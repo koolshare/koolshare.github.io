@@ -229,9 +229,7 @@ function init() {
 		temp_str = $G(temp_ss[i]).value;
 			$G(temp_ss[i]).value = temp_str.replaceAll(",","\n");
 	}
-    setTimeout("checkSSStatus();", 5000);
-    setTimeout("write_ss_install_status()", 1000);
-    
+    setTimeout("get_ss_status_data()", 1000);
     var jffs2_scripts = '<% nvram_get("jffs2_scripts"); %>';
 	if(jffs2_scripts == "0"){
 		$G("warn").style.display = "";
@@ -241,7 +239,6 @@ function init() {
 	}
 	var retArea = $G('log_content');
 	retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
-	//setTimeout(setIframeSrc, 5000);	
 }
 
 function detect_kcptun(){
@@ -260,23 +257,16 @@ function detect_kcptun(){
 function onSubmitCtrl() {
 	ssmode = $G("ss_basic_mode").value;
 	ssaction = $G("ss_basic_action").value;
-	global_status_enable=false;
-	checkSSStatus();
+
     if (validForm()) {
         if (0 == node_global_max) {
             var obj = ssform2obj();
             ss_node_object("1", obj, true,
             function(a) {
-			setTimeout("checkSSStatus();", 50000); //make sure ss_status do not update during reloading
 			if(ssaction == 1){
-				if (ssmode == "2" || ssmode == "3"){			
-				} else if (ssmode == "1"){
+				if (ssmode == "0"){
 					showSSLoadingBar(4);
-				} else if (ssmode == "0"){
-					showSSLoadingBar(4);
-				} else if (ssmode == "4"){
-					showSSLoadingBar(4);
-				} else if (ssmode == "5"){
+				} else {
 					showSSLoadingBar(4);
 				}
 			}else if(ssaction == 2 || ssaction == 3 || ssaction == 4){
@@ -289,21 +279,14 @@ function onSubmitCtrl() {
             var obj = ssform2obj();
             ss_node_object(node_sel, obj, true,
             function(a) {
-			setTimeout("checkSSStatus();", 50000);
 			if(ssaction == 1){
-				if (ssmode == "2" || ssmode == "3"){
+				if (ssmode == "0"){
 					showSSLoadingBar(4);
-				} else if (ssmode == "1"){
-					showSSLoadingBar(3);
-				} else if (ssmode == "0"){
-					showSSLoadingBar(4);
-				} else if (ssmode == "4"){
-					showSSLoadingBar(4);
-				} else if (ssmode == "5"){
+				} else {
 					showSSLoadingBar(4);
 				}
 			}else if(ssaction == 2 || ssaction == 3 || ssaction == 4){
-					showSSLoadingBar(2);
+				showSSLoadingBar(2);
 			}
     		updateOptions();
             });
@@ -625,48 +608,6 @@ function oncheckclick(obj) {
 		$G("hd_" + obj.id).value = "0";
 	}
 }
-
-var global_status_enable = true;
-function checkSSStatus() {
-	if (db_ss['ss_basic_enable'] !== "0") {
-	    if(!global_status_enable) {//not enabled
-		    if(refreshRate > 0) {
-			    setTimeout("checkSSStatus();", refreshRate * 100000);
-		    }
-		    return;
-	    }
-		$j.ajax({
-		url: '/ss_status',
-		dataType: "html",
-        error: function(xhr) {
-	        refreshRate = getRefresh();
-	        if (refreshRate > 0)
-            setTimeout("checkSSStatus();", refreshRate * 1000);
-        },
-		success: function() {
-			if (db_ss_basic_state_foreign['ss_basic_state_foreign'] == undefined){
-				$G("ss_state2").innerHTML = "国外连接 - " + "Waiting for first refresh...";
-        		$G("ss_state3").innerHTML = "国内连接 - " + "Waiting for first refresh...";
-        		refreshRate = getRefresh();
-				if (refreshRate > 0)
-        		setTimeout("checkSSStatus();", refreshRate * 1000);
-			} else {
-				$j("#ss_state2").html("国外连接 - " + db_ss_basic_state_foreign['ss_basic_state_foreign']);
-				$j("#ss_state3").html("国内连接 - " + db_ss_basic_state_china['ss_basic_state_china']);
-				$G('update_button').style.display = "";
-				refreshRate = getRefresh();
-				if (refreshRate > 0)
-        		setTimeout("checkSSStatus();", refreshRate * 1000);
-    		}
-		}
-		});
-	} else {
-		$G("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
-        $G("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
-	}
-}
-
-
 
 function ssconf_node2obj(node_sel) {
     var p = "ssconf_basic";
@@ -1636,7 +1577,7 @@ function readCookie(name) {
 function setRefresh(obj) {
 	refreshRate = obj.value;
 	cookie.set('status_restart', refreshRate, 300);
-	checkSSStatus();
+	get_ss_status_data();
 }
 function getRefresh() {
 	val = parseInt(cookie.get('status_restart'));
@@ -1668,27 +1609,68 @@ function version_show(){
     });
 }
 
-function write_ss_install_status(){
-		$j.ajax({
+function get_ss_status_data(){
+	$j.ajax({
 		type: "get",
-		url: "dbconf?p=ss_basic_install_status,ss_basic_state_china,ss_basic_state_foreign",
+		url: "dbconf?p=ss_basic_state_china,ss_basic_state_foreign,ss_basic_enable",
 		dataType: "script",
 		success: function() {
-		if (db_ss_basic_install_status['ss_basic_install_status'] == "3"){
-			document.form.ss_basic_action.value = 1;
-			setTimeout("write_ss_install_status()", 200000);
-			setTimeout("onSubmitCtrl();", 4000);
-		} else if (db_ss_basic_install_status['ss_basic_install_status'] == "5"){
-			$G('update_button').style.display = "";
-		} else if (db_ss_basic_install_status['ss_basic_install_status'] == "0"){
-			$G('update_button').style.display = "";
+			if(refreshRate !== 0){
+				if (db_ss_basic_enable['ss_basic_enable'] == "1"){
+					$j.ajax({
+					url: '/ss_status',
+					dataType: "html",
+					success: function() {
+						if (db_ss_basic_state_foreign['ss_basic_state_foreign'] == undefined || db_ss_basic_state_china['ss_basic_state_china'] == undefined){
+							$G("ss_state2").innerHTML = "国外连接 - " + "Waiting for first refresh...";
+        					$G("ss_state3").innerHTML = "国内连接 - " + "Waiting for first refresh...";
+						} else {
+							$j("#ss_state2").html("国外连接 - " + db_ss_basic_state_foreign['ss_basic_state_foreign']);
+							$j("#ss_state3").html("国内连接 - " + db_ss_basic_state_china['ss_basic_state_china']);
+    					}
+					}
+					});
+				} else {
+					$G("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
+					$G("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
+				}
+			}
+			refreshRate = getRefresh();
+			if(refreshRate !== 0){
+				setTimeout("get_ss_status_data();", refreshRate * 1000);
+			}
 		}
-		setTimeout("write_ss_install_status()", 1500);
-		}
+	});
+}
+
+var checkNu = 0;
+function get_ss_install_status(){
+	if (checkNu < 1000){
+		checkNu++;
+		$j.ajax({
+			type: "get",
+			url: "dbconf?p=ss_basic_install_status",
+			dataType: "script",
+			success: function() {
+				if (db_ss_basic_install_status['ss_basic_install_status'] == "3"){
+					$G('update_button').style.display = "none";
+					document.form.ss_basic_action.value = 1;
+					checkNu = 1001;
+					setTimeout("onSubmitCtrl();", 2000);
+				} else if (db_ss_basic_install_status['ss_basic_install_status'] == "5"){
+					$G('update_button').style.display = "";
+				} else if (db_ss_basic_install_status['ss_basic_install_status'] == "0"){
+					$G('update_button').style.display = "";
+				}
+				setTimeout("get_ss_install_status();", 1000);
+			}
 		});
 	}
+}
 
 function update_ss(){
+	checkNu = 0;
+	get_ss_install_status();
 	$G('update_button').style.display = "none";
 	document.form.action_mode.value = ' Refresh ';
     document.form.SystemCmd.value = "ss_update.sh";
@@ -1718,7 +1700,11 @@ function buildswitch(){
 			if (validForm()){
 				document.form.submit();
 			}
+			$G("ss_status1").style.display = "none";
+			$G("tablet_show").style.display = "none";
 			$G("basic_show").style.display = "none";
+			$G("apply_button").style.display = "none";
+			$G("ss_node_list_table_th").style.display = "none";
 			
 			
 		}
@@ -1732,10 +1718,26 @@ function toggle_switch(){
 	} else {
 		$G("switch").checked = false;
 		$G("ss_status1").style.display = "none";
-		$G("tablet_show").style.display = "none";
 		$G("basic_show").style.display = "none";
+		$G("add_fun").style.display = "none";
+		$G("ipset_dns").style.display = "none";
+		$G("ipset_list").style.display = "none";
+		$G("redchn_dns").style.display = "none";
+		$G("redchn_list").style.display = "none";
+		$G("game_dns").style.display = "none";
+		$G("game_list").style.display = "none";
+		$G("gameV2_dns").style.display = "none";
+		$G("gameV2_list").style.display = "none";
+		$G("overall_dns").style.display = "none";
+		$G("overall_list").style.display = "none";
+		$G("tablet_show").style.display = "none";
 		$G("apply_button").style.display = "none";
+		$G("line_image1").style.display = "none";
 		$G("ss_node_list_table_th").style.display = "none";
+		$G("ss_node_list_table_td").style.display = "none";
+		$G("ss_node_list_table_btn").style.display = "none";
+		$G("log_content").style.display = "none";
+		$G("log_return_button").style.display = "none";
 	}
 }
 
@@ -1970,6 +1972,7 @@ function return_basic(){
 		$G("cmdBtn").value = "提交";
 		document.form.ss_basic_action.value = 1;
 		update_visibility_main();
+		checkNu = 1001;
 }
 
 

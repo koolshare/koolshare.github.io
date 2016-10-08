@@ -1,5 +1,12 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+2.9.6
+   - fix	界面：修复从2.0版本以来web提交导致httpd进程死掉，导致路由器管理页面不能访问的bug(finally!);
+   - fix	脚本：修复使用了kcp通道后，ss-tunnel，chinadns不能使用的问题（ss-tunnel数据仍然走ss通道，tcp数据走kcp通道）;
+   - fix	界面：修复ss更新后自动重启界面超时（此次更新后，下次更新才能体现出来）;
+   - fix	脚本：修复X7.1固件webtest失效的bug;
+   - update	界面：优化ss状态检测代码;
+
 2.9.5
    - add	添加kcp协议支持，现在能用kcp协议作为通道，为ss/ssr加速了；
    		服务器端搭建参考https://github.com/shadowsocks/shadowsocks-libev#shadowsocks-over-kcp

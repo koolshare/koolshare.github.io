@@ -367,12 +367,12 @@ start_dns(){
 	if [ "2" == "$ss_redchn_dns_foreign" ];then
 		echo $(date): Starting ss-tunnel...
 		if [ "$ss_basic_use_rss" == "1" ];then
-			rss-tunnel -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -l 1053 -L "$gs" -u -f /var/run/sstunnel.pid
+			rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1053 -L "$gs" -u -f /var/run/sstunnel.pid
 		elif  [ "$ss_basic_use_rss" == "0" ];then
 			if [ "$ss_basic_onetime_auth" == "1" ];then
-				ss-tunnel -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -l 1053 -L "$gs" -u -A -f /var/run/sstunnel.pid
+				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1053 -L "$gs" -u -A -f /var/run/sstunnel.pid
 			elif [ "$ss_basic_onetime_auth" == "0" ];then
-				ss-tunnel -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -l 1053 -L "$gs" -u -f /var/run/sstunnel.pid
+				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1053 -L "$gs" -u -f /var/run/sstunnel.pid
 			fi
 		fi
 		echo $(date): done
@@ -391,12 +391,12 @@ start_dns(){
 	if [ "3" == "$ss_redchn_dns_foreign" ];then
 		echo $(date): Starting chinadns
 		if [ "$ss_basic_use_rss" == "1" ];then
-			rss-tunnel -b 127.0.0.1 -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rdf" -u -f /var/run/sstunnel.pid
+			rss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rdf" -u -f /var/run/sstunnel.pid
 		elif  [ "$ss_basic_use_rss" == "0" ];then
 			if [ "$ss_basic_onetime_auth" == "1" ];then
-				ss-tunnel -b 127.0.0.1 -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rdf" -u -A -f /var/run/sstunnel.pid
+				ss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rdf" -u -A -f /var/run/sstunnel.pid
 			elif [ "$ss_basic_onetime_auth" == "0" ];then
-				ss-tunnel -b 127.0.0.1 -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rdf" -u -f /var/run/sstunnel.pid
+				ss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rdf" -u -f /var/run/sstunnel.pid
 			fi
 		fi
 		chinadns -p 1053 -s "$rcc",127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
@@ -479,12 +479,12 @@ start_dns(){
 				[ "$ss_redchn_pdnsd_udp_server_ss_tunnel" == "4" ] && dns1="$ss_redchn_pdnsd_udp_server_ss_tunnel_user"
 				echo $(date): Starting ss-tunnel \for pdnsd...
 				if [ "$ss_basic_use_rss" == "1" ];then
-					rss-tunnel -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid
+					rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid
 				elif  [ "$ss_basic_use_rss" == "0" ];then
 					if [ "$ss_basic_onetime_auth" == "1" ];then
-						ss-tunnel -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -l 1099 -L "$dns1" -u -A -f /var/run/sstunnel.pid
+						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1099 -L "$dns1" -u -A -f /var/run/sstunnel.pid
 					elif [ "$ss_basic_onetime_auth" == "0" ];then
-						ss-tunnel -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid
+						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid
 					fi
 				fi
 				echo $(date): done
@@ -681,6 +681,7 @@ start_all)
 restart_dns)
 	#ss_basic_action=2 搴旂敤DNS璁剧疆
 	echo $(date): --------------------------- Restart DNS ---------------------------------
+	resolv_server_ip
 	stop_dns
 	creat_dnsmasq_basic_conf
 	user_cdn_site

@@ -123,9 +123,12 @@ function LoadingSSProgress(seconds){
 			document.getElementById("proceeding_img_text").innerHTML = "完成";
 			y = 0;
 				setTimeout("hideSSLoadingBar();",1000);
-				refreshpage()
+				//refreshpage()
+				htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
+				htmlbodyforIE[0].style.overflow = "visible";	  //hidden the Y-scrollbar for preventing from user scroll it.
 		}
 	}
+
 }
 
 function LoadingLocalProgress(seconds){
@@ -149,7 +152,7 @@ function LoadingLocalProgress(seconds){
 			document.getElementById("proceeding_img_text").innerHTML = "完成";
 			y = 0;
 				setTimeout("hideSSLoadingBar();",1000);
-				refreshpage()
+				//refreshpage()
 		}
 	}
 }

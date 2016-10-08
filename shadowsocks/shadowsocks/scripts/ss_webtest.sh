@@ -1,5 +1,5 @@
 #!/bin/sh
-
+source /koolshare/scripts/base.sh
 eval `dbus export ssconf_basic`
 
 # flush previous test value in the table

@@ -290,12 +290,12 @@ start_dns(){
 	if [ "$ss_ipset_foreign_dns" == "1" ]; then
 		echo $(date): Starting ss-tunnel...
 		if [ "$ss_basic_use_rss" == "1" ];then
-			rss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+			rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_use_rss" == "0" ];then
 			if [ "$ss_basic_onetime_auth" == "1" ];then
-				ss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -A -f /var/run/sstunnel.pid
+				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -A -f /var/run/sstunnel.pid
 			elif [ "$ss_basic_onetime_auth" == "0" ];then
-				ss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -f /var/run/sstunnel.pid
+				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -f /var/run/sstunnel.pid
 			fi
 		fi
 		echo $(date): done
@@ -382,12 +382,12 @@ start_dns(){
 				[ "$ss_ipset_pdnsd_udp_server_ss_tunnel" == "4" ] && dns1="$ss_ipset_pdnsd_udp_server_ss_tunnel_user"
 				echo $(date): Starting ss-tunnel \for pdnsd...
 				if [ "$ss_basic_use_rss" == "1" ];then
-					rss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid > /dev/null 2>&1 &
+					rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid > /dev/null 2>&1 &
 				elif  [ "$ss_basic_use_rss" == "0" ];then
 					if [ "$ss_basic_onetime_auth" == "1" ];then
-						ss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -A -f /var/run/sstunnel.pid > /dev/null 2>&1 &
+						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -A -f /var/run/sstunnel.pid > /dev/null 2>&1 &
 					elif [ "$ss_basic_onetime_auth" == "0" ];then
-						ss-tunnel -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid > /dev/null 2>&1 &
+						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid > /dev/null 2>&1 &
 					fi
 				fi
 				sleep 1
@@ -503,7 +503,6 @@ delete_conf_files(){
 }
 
 start_kcp(){
-	# Start ss-redir
 	echo $(date): Starting kcp...
 	if [ "$ss_basic_use_kcp" == "1" ];then
 		start-stop-daemon -S -q -b -m -p /tmp/var/kcp.pid -x /koolshare/bin/client_linux_arm5 -- -l 127.0.0.1:1091 -r $ss_basic_server:$ss_basic_kcp_port $ss_basic_kcp_parameter
@@ -598,6 +597,7 @@ start_all)
 restart_dns)
 	#ss_basic_action=2 应用DNS设置
 	echo $(date): --------------------------- Restart DNS ---------------------------------
+	resolv_server_ip
 	stop_dns
 	rm -rf /tmp/custom.conf
 	rm -rf /jffs/configs/dnsmasq.d/custom.conf
