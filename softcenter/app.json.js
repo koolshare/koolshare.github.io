@@ -41,14 +41,14 @@
             "version": "2.7"
         }, 
         {
-            "build_date": "2016-08-08_21:12:31", 
+            "build_date": "2016-10-09_11:35:50", 
             "description": "ss-server", 
             "home_url": "Module_ssserver.asp", 
-            "md5": "8410c415cd52dcf229ed2d1625c02434", 
+            "md5": "3e3c9c3ce21cc74e680379135569949f", 
             "name": "ssserver", 
             "tar_url": "ssserver/ssserver.tar.gz", 
             "title": "ss-server", 
-            "version": "1.3"
+            "version": "1.4"
         }, 
         {
             "build_date": "2016-05-14_21:11:08", 
@@ -61,14 +61,14 @@
             "version": "1.5"
         }, 
         {
-            "build_date": "2016-09-27_19:27:32", 
+            "build_date": "2016-10-09_11:36:08", 
             "description": "老板，来一斤虚拟内存~", 
             "home_url": "Module_swap.asp", 
-            "md5": "5bb2ae0fb175f345cb8e7ba176f54229", 
+            "md5": "3e4533c59df877abfee9489d93f2cdae", 
             "name": "swap", 
             "tar_url": "swap/swap.tar.gz", 
             "title": "虚拟内存", 
-            "version": "2.0"
+            "version": "2.1"
         }, 
         {
             "build_date": "2016-09-30_23:21:55", 

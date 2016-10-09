@@ -1,5 +1,6 @@
 #! /bin/sh
 cd /tmp
+cp -rf /tmp/ssserver/bin/* /koolshare/bin
 cp -rf /tmp/ssserver/ssserver /koolshare/
 cp -rf /tmp/ssserver/scripts/* /koolshare/scripts/
 cp -rf /tmp/ssserver/webs/* /koolshare/webs/
@@ -9,7 +10,7 @@ cd /
 rm -rf /tmp/ssserver* >/dev/null 2>&1
 
 
-
+chmod 755 /koolshare/bin/ss-server
 chmod 755 /koolshare/ssserver/*
 chmod 755 /koolshare/bin/*
 chmod 755 /koolshare/init.d/*

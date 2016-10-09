@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin ss-server Changelog
 ===========================================
+1.4
+   - fix	add ss-server binary
+
 1.3
    - fix	fix nat-rule won't clean when disadble ssserver
 

@@ -2,7 +2,7 @@
 
 
 MODULE=ssserver
-VERSION=1.3
+VERSION=1.4
 TITLE=ss-server
 DESCRIPTION=ss-server
 HOME_URL=Module_ssserver.asp

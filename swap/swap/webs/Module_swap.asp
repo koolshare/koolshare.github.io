@@ -50,8 +50,8 @@
 function init() {
 	show_menu();
     write_usb_status();
-    setTimeout("write_usb_status()", 1500);
-    setTimeout("check_usb()", 500);
+    check_usb();
+    setTimeout("write_usb_status()", 200);
 }
 
 
