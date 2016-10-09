@@ -60,7 +60,7 @@ mkswap(){
 swap_load_start(){
 	if [ -f /jffs/scripts/post-mount ]; then
 		startswap=$(cat /jffs/scripts/post-mount | grep "swap_load" |wc -l)
-		if [ "$startswap" !== "1" ];then
+		if [ "$startswap" != "1" ];then
 			echo "#! /bin/sh" > /jffs/scripts/post-mount
 			echo " " >> /jffs/scripts/post-mount
 			sed -i '$a\sh\ \/koolshare/scripts/swap_load.sh' /jffs/scripts/post-mount

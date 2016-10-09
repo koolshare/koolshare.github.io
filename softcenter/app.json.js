@@ -61,14 +61,14 @@
             "version": "1.5"
         }, 
         {
-            "build_date": "2016-10-09_11:36:08", 
+            "build_date": "2016-10-09_14:54:55", 
             "description": "老板，来一斤虚拟内存~", 
             "home_url": "Module_swap.asp", 
-            "md5": "3e4533c59df877abfee9489d93f2cdae", 
+            "md5": "d7e8e92a0454dd57f1a31681c912a0f5", 
             "name": "swap", 
             "tar_url": "swap/swap.tar.gz", 
             "title": "虚拟内存", 
-            "version": "2.1"
+            "version": "2.2"
         }, 
         {
             "build_date": "2016-09-30_23:21:55", 
