@@ -15,7 +15,6 @@ start_koolproxy(){
 	fi
 	echo $(date): 开启koolproxy主进程！
 	perpctl A koolproxy >/dev/null 2>&1
-
 	
 	rules_date_local=`cat /koolshare/koolproxy/data/version|awk 'NR==2{print}'`
 	rules_nu_local=`cat /koolshare/koolproxy/data/koolproxy.txt | grep -v ! | wc -l`
@@ -88,7 +87,33 @@ load_nat(){
 	if [ "$koolproxy_lan_control" == "0" ];then
 		iptables -t nat -A koolproxy -p tcp -j REDIRECT --to-ports 3000
 	fi
+	
 }
+
+dns_takeover(){
+	ss_chromecast=`dbus get ss_basic_chromecast`
+	lan_ipaddr=`nvram get lan_ipaddr`
+	#chromecast=`iptables -t nat -L PREROUTING -v -n|grep "dpt:53"`
+	chromecast_nu=`iptables -t nat -L PREROUTING -v -n --line-numbers|grep "dpt:53"|awk '{print $1}'`
+	if [ "$koolproxy_policy" == "2" ]; then
+		if [ -z "$chromecast_nu" ]; then
+			echo $(date): 黑名单模式开启DNS劫持
+			iptables -t nat -A PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
+		else
+			echo $(date): DNS劫持规则已经添加，跳过~
+		fi
+	else
+		if [ "$ss_chromecast" != "1" ]; then
+			if [ ! -z "$chromecast_nu" ]; then
+				echo $(date): 全局过滤模式下删除DNS劫持
+				iptables -t nat -D PREROUTING $chromecast_nu >/dev/null 2>&1
+				echo $(date): done
+				echo $(date):
+			fi
+		fi
+	fi
+}
+
 
 flush_nat(){
 	echo $(date): 移除nat规则...
@@ -158,6 +183,7 @@ start)
 	add_ipset_conf
 	service restart_dnsmasq > /dev/null 2>&1
 	load_nat
+	dns_takeover
 	creat_start_up
 	write_nat_start
 	write_cron_job
@@ -174,6 +200,7 @@ restart)
 	echo $(date): 重启dnsmasq进程...
 	service restart_dnsmasq > /dev/null 2>&1
 	load_nat
+	dns_takeover
 	creat_start_up
 	write_nat_start
 	write_cron_job
