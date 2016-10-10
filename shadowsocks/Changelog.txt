@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+2.9.7
+   - update	程序：升级shadowsocks-libev到2.5.4release；
+   - update	程序：升级kcptun程序到到20161009版本，请自行更新服务器端版本；
+   - update	脚本：为kcptun添加GOGC=40，以限制内存占用。
+
 2.9.6
    - fix	界面：修复从2.0版本以来web提交导致httpd进程死掉，导致路由器管理页面不能访问的bug(finally!);
    - fix	脚本：修复使用了kcp通道后，ss-tunnel，chinadns不能使用的问题（ss-tunnel数据仍然走ss通道，tcp数据走kcp通道）;

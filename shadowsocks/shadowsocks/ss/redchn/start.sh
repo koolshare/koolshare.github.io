@@ -302,6 +302,7 @@ start_kcp(){
 	# Start ss-redir
 	echo $(date): Starting kcp...
 	if [ "$ss_basic_use_kcp" == "1" ];then
+		export GOGC=40
 		start-stop-daemon -S -q -b -m -p /tmp/var/kcp.pid -x /koolshare/bin/client_linux_arm5 -- -l 127.0.0.1:1091 -r $ss_basic_server:$ss_basic_kcp_port $ss_basic_kcp_parameter
 	fi
 	echo $(date): done
