@@ -1,7 +1,7 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 2.9.7
-   - update	程序：升级shadowsocks-libev到2.5.4release；
+   - update	程序：升级shadowsocks-libev到2.5.4 release；
    - update	程序：升级kcptun程序到到20161009版本，请自行更新服务器端版本；
    - update	脚本：为kcptun添加GOGC=40，以限制内存占用。
 
