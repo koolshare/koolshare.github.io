@@ -71,6 +71,7 @@ fi
 echo " done"
 if [ "$en" == "1" ]; then
 echo -n "starting ${NAME}..."
+export GOGC=40
 start-stop-daemon -S -q -b -m -p ${PID_FILE} -x ${BIN} -- -c ${INI_FILE}
 echo " done"
 else

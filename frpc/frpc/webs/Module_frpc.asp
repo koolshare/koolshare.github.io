@@ -369,7 +369,7 @@ function version_show(){
                                     <div style="float:left;" class="formfonttitle">软件中心 - Frpc</div>
                                     <div style="float:right; width:15px; height:25px;margin-top:10px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
                                     <div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"/></div>
-                                    <div class="formfontdesc" id="cmdDesc"><i>* 为了Frpc稳定运行，请开启虚拟内存功能！！！</i>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://koolshare.cn/thread-65379-1-1.html"  target="_blank"><i>服务器搭建教程</i></a></div>
+                                    <div class="formfontdesc" id="cmdDesc"><i>* 为了Frpc稳定运行，请开启虚拟内存功能！！！</i>&nbsp;&nbsp;&nbsp;&nbsp;【<a href="http://koolshare.cn/thread-65379-1-1.html"  target="_blank"><i>服务器搭建教程</i></a>】</div>
                                     <table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
                                         <tr id="switch_tr">
                                             <th>
@@ -400,6 +400,7 @@ function version_show(){
                                         <td>
                                             <div id="frpc_version_show" style="padding-top:5px;margin-left:0px;margin-top:0px;float: left;"><i>插件版本：<% dbus_get_def("frpc_version", "未知"); %></i></div>
                                             <div id="frpc_client_version_show" style="padding-top:5px;margin-left:50px;margin-top:0px;float: left;"><i>Frpc版本：<% dbus_get_def("frpc_client_version", "未知"); %></i></div>
+                                            <a style="margin-left: 170px;" href="https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/frpc/Changelog.txt" target="_blank"><em><u>[ 更新日志 ]</u></em></a>
                                         </td>
                                         <tr>
                                             <th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(1)">服务器</a></th>
