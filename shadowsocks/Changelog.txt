@@ -1,6 +1,7 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 2.9.8
+   - add	界面：添加https支持，现在https模式下也能获取更新版本信息了；
    - add	界面：现在如果服务器处填写域名，如果解析不正确将会有提示；
    - update	脚本：更换ss服务器解析：因为nslookup方式可能导致卡脚本，现更换为resolveip方式；
    - update	脚本：更换ss状态清空方式；
