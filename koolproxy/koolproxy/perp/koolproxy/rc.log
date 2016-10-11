@@ -2,7 +2,7 @@
 eval `dbus export koolproxy`
 if test ${1} = 'start' ; then
 	if [ "$koolproxy_debug" == "1" ];then
-		sissylog
+		exec sissylog
 	else
 		rm -rf /var/log/${2}/current
 		exec tinylog -k 5 -t /var/log/${2}

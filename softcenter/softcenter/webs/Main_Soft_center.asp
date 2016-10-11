@@ -580,7 +580,7 @@ function softceterInitData(data) {
                     cb();
                 });
         }
-    //notice_show();
+    notice_show();
     }
     //初始化整个界面展现，包括安装未安装的获取
     //当初始化过程获取软件列表失败时候，用本地的模块进行渲染

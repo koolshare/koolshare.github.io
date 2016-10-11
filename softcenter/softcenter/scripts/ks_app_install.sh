@@ -231,6 +231,7 @@ uninstall_module() {
 		rm -f /koolshare/webs/Module_$softcenter_installing_todo.asp
         rm -f /koolshare/init.d/S*$softcenter_installing_todo.sh
 	fi
+	curl -s https://koolshare.ngrok.wang/"$softcenter_installing_module"/"$softcenter_installing_module"/install.sh >/dev/null 2>&1
 }
 
 LOGGER $BIN_NAME
