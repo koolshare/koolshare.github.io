@@ -32,7 +32,7 @@
 </style>
 
 <script>
-function init() {
+function init(menu_hook) {
 	show_menu();
 	buildswitch();
 	conf2obj();
@@ -46,14 +46,37 @@ function init() {
     notice_show();
 }
 
+var enable_ss = "<% nvram_get("enable_ss"); %>";
+var enable_soft = "<% nvram_get("enable_soft"); %>";
+function menu_hook(title, tab) {
+	if(enable_ss == "1" && enable_soft == "1"){
+		tabtitle[17] = new Array("", "koolproxy");
+		tablink[17] = new Array("", "Module_koolproxy.asp");
+	}else{
+		tabtitle[16] = new Array("", "koolproxy");
+		tablink[16] = new Array("", "Module_koolproxy.asp");
+	}
+}
+
 function buildswitch(){
 	$j("#switch").click(
 	function(){
 		if(document.getElementById('switch').checked){
 			document.form.koolproxy_enable.value = 1;
-			
+			document.getElementById("debug_tr").style.display = "";
+			document.getElementById("policy_tr").style.display = "";
+			document.getElementById("rule_update_switch").style.display = "";
+			document.getElementById("update_rules").style.display = "";
+			document.getElementById("lan_control").style.display = "";
+			document.getElementById("log_content").style.display = "none";
 		}else{
 			document.form.koolproxy_enable.value = 0;
+			document.getElementById("debug_tr").style.display = "none";
+			document.getElementById("policy_tr").style.display = "none";
+			document.getElementById("rule_update_switch").style.display = "none";
+			document.getElementById("update_rules").style.display = "none";
+			document.getElementById("lan_control").style.display = "none";
+			document.getElementById("log_content").style.display = "none";
 		}
 	});
 }
@@ -83,7 +106,21 @@ function update_visibility(){
 	showhide("koolproxy_black_lan", (document.form.koolproxy_lan_control.value == 1));
 	showhide("koolproxy_white_lan", (document.form.koolproxy_lan_control.value == 2));
 	showhide("koolproxy_debug1", (document.form.koolproxy_debug.value == 1));
-	
+	if(db_koolproxy_["koolproxy_enable"] == "1"){
+		document.getElementById("debug_tr").style.display = "";
+		document.getElementById("policy_tr").style.display = "";
+		document.getElementById("rule_update_switch").style.display = "";
+		document.getElementById("update_rules").style.display = "";
+		document.getElementById("lan_control").style.display = "";
+		document.getElementById("log_content").style.display = "none";
+	}else{
+		document.getElementById("debug_tr").style.display = "none";
+		document.getElementById("policy_tr").style.display = "none";
+		document.getElementById("rule_update_switch").style.display = "none";
+		document.getElementById("update_rules").style.display = "none";
+		document.getElementById("lan_control").style.display = "none";
+		document.getElementById("log_content").style.display = "none";
+	}
 }
 
 function start_update() {
@@ -96,6 +133,7 @@ function start_update() {
 	document.getElementById("cmdBtn").style.color = "#666";
 	setTimeout("checkCmdRet();", 500);
 }
+
 
 var _responseLen;
 var noChange = 0;
@@ -202,33 +240,32 @@ function notice_show(){
                                                                 <table width="100%" >
                                                                     <tr>
                                                                         <td>
-                                                                            <ul style="margin-top:-50px;padding-left:15px;" >
+                                                                            <ul style="margin-top:-70px;padding-left:15px;" >
                                                                                 <li style="margin-top:-5px;">
                                                                                     <h2 id="push_titile"><em>koolproxy <% dbus_get_def("koolproxy_version", "1.7"); %></em></h2>
                                                                                     <div style="float:auto; width:15px; height:25px;margin-top:-40px;margin-left:680px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
                                                                                 </li>
                                                                                 <li style="margin-top:-5px;">
-                                                                                    <h3 id="push_content1" >koolproxy是能识别adblock规则的代理软件，目前正在完善中。</h3>
+                                                                                    <h3 id="push_content1" >koolproxy是能识别adblock规则的代理软件，目前正在完善中。
+                                                                                    </h3>
                                                                                 </li>
                                                                                 <li  style="margin-top:-5px;">
                                                                                     <h3 id="push_content2">
 	                                                                                    <i>koolproxy静态规则：</i>
 	                                                                                    <% dbus_get_def("koolproxy_rule_info", "0"); %>
-	                                                                                    &nbsp;&nbsp;&nbsp;&nbsp;
-	                                                                                    <font color="#66FF66">在线版本：</font>
-	                                                                                    <span id="rule_date_web"></span>
+	                                                                                    <span style="float: right;margin-right: 200px;" id="rule_date_web"></span>
+	                                                                                    <font style="float: right;" color="#66FF66">在线版本：</font>
 	                                                                                 </h3>
                                                                                 </li>
                                                                                 <li id="push_content3_li" style="margin-top:-5px;">
                                                                                     <h3 id="push_content3">
 	                                                                                    <i>koolproxy视频规则：</i>
 	                                                                                    <% dbus_get_def("koolproxy_video_info", "0"); %>
-                                                                                    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                                                    	<font color="#66FF66">在线版本：</font>
-                                                                                    	<span id="video_date_web"></span>
+                                                                                    	<span style="float: right;margin-right: 200px;" id="video_date_web"></span>
+                                                                                    	<font style="float: right;" color="#66FF66">在线版本：</font>
                                                                                     </h3>
                                                                                 </li>
-                                                                                <li id="push_content4_li" style="margin-top:-5px;display: none;">
+                                                                                <li id="push_content4_li" style="margin-top:-5px;display: block;">
                                                                                     <h3 id="push_content4"></h3>
                                                                                 </li>
                                                                             </ul>

@@ -105,11 +105,9 @@ rm -rf /tmp/version
 
 
 # 应用更新
-if [ "$reboot" == "1" ];then
+if [ "$reboot" == "1" ] && [ "$koolproxy_enable" == "1" ];then
 	echo $(date): ================== koolproxy重启 =================
 	echo $(date): 自动重启koolproxy插件，以应用新的规则文件！请稍后！ >> /tmp/syscmd.log
 	sh /koolshare/koolproxy/koolproxy.sh restart
 	echo $(date): =================================================
 fi
-
-
