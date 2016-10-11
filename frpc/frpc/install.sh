@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=frpc
-VERSION="1.8.1"
+VERSION="1.9.0"
 cd /
 cp -f /tmp/$MODULE/bin/* /koolshare/bin/
 cp -f /tmp/$MODULE/scripts/* /koolshare/scripts/
