@@ -13,28 +13,6 @@ case $(uname -m) in
     ;;
 esac
 
-resolv_server_ip(){
-	#server_ip=`resolvip $ss_basic_server`
-	server_ip=`nslookup "$ss_basic_server" 114.114.114.114 | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
-	if [ -z "$shadowsocks_server_ip" ];then
-	        if [ ! -z "$server_ip" ];then
-	                export shadowsocks_server_ip="$server_ip"
-	                ss_basic_server="$server_ip"
-	                dbus save shadowsocks
-	        fi
-	else
-	        if [ "$shadowsocks_server_ip"x = "$server_ip"x ];then
-	                ss_basic_server="$shadowsocks_server_ip"
-	        elif [ "$shadowsocks_server_ip"x != "$server_ip"x ] && [ ! -z "$server_ip" ];then
-	                ss_basic_server="$server_ip"
-	                export shadowsocks_server_ip="$server_ip"
-	                dbus save shadowsocks
-	        else
-	                ss_basic_server="$ss_basic_server"
-	        fi
-	fi
-}
-
 load_tproxy(){
 	MODULES="nf_tproxy_core xt_TPROXY xt_socket xt_comment"
 	OS=$(uname -r)
@@ -119,6 +97,7 @@ apply_nat_rules(){
 	# not redirect these
 	iptables -t nat -A SHADOWSOCKS -d 0.0.0.0/8 -j RETURN
 	iptables -t nat -A SHADOWSOCKS -d 10.0.0.0/8 -j RETURN
+	iptables -t nat -A SHADOWSOCKS -d 100.64.0.0/10 -j RETURN
 	iptables -t nat -A SHADOWSOCKS -d 127.0.0.0/8 -j RETURN
 	iptables -t nat -A SHADOWSOCKS -d 169.254.0.0/16 -j RETURN
 	iptables -t nat -A SHADOWSOCKS -d 172.16.0.0/12 -j RETURN
@@ -126,7 +105,7 @@ apply_nat_rules(){
 	iptables -t nat -A SHADOWSOCKS -d 224.0.0.0/4 -j RETURN
 	iptables -t nat -A SHADOWSOCKS -d 240.0.0.0/4 -j RETURN
 	iptables -t nat -A SHADOWSOCKS -d $ip1.0.0/16 -j RETURN
-	iptables -t nat -A SHADOWSOCKS -d $ss_basic_server -j RETURN
+	[ ! -z "$ss_basic_server_ip" ] && iptables -t nat -A SHADOWSOCKS -d $ss_basic_server_ip -j RETURN
 	
 	# create ip rules
 	ip rule add fwmark 0x01/0x01 table 300
@@ -138,6 +117,7 @@ apply_nat_rules(){
 	# return these ip
 	iptables -t mangle -A SHADOWSOCKS2 -d 0.0.0.0/8 -j RETURN
 	iptables -t mangle -A SHADOWSOCKS2 -d 10.0.0.0/8 -j RETURN
+	iptables -t mangle -A SHADOWSOCKS2 -d 100.64.0.0/10 -j RETURN
 	iptables -t mangle -A SHADOWSOCKS2 -d 127.0.0.0/8 -j RETURN
 	iptables -t mangle -A SHADOWSOCKS2 -d 169.254.0.0/16 -j RETURN
 	iptables -t mangle -A SHADOWSOCKS2 -d 172.16.0.0/12 -j RETURN
@@ -145,7 +125,7 @@ apply_nat_rules(){
 	iptables -t mangle -A SHADOWSOCKS2 -d 224.0.0.0/4 -j RETURN
 	iptables -t mangle -A SHADOWSOCKS2 -d 240.0.0.0/4 -j RETURN
 	iptables -t mangle -A SHADOWSOCKS2 -d $ip1.0.0/16 -j RETURN
-	iptables -t mangle -A SHADOWSOCKS2 -d $ss_basic_server -j RETURN
+	[ ! -z "$ss_basic_server_ip" ] && iptables -t mangle -A SHADOWSOCKS2 -d $ss_basic_server_ip -j RETURN
 	
 	
 	# Apply the rules
@@ -205,7 +185,6 @@ chromecast(){
 
 case $1 in
 start_all)
-	resolv_server_ip
 	load_tproxy
 	flush_nat_mangle
 	remove_redundant_rule

@@ -134,19 +134,17 @@ apply_nat_rules(){
 	iptables -t nat -A PREROUTING -p tcp -j REDSOCKS2
 	
 	# default wan_blacklist 强制局域网ip，DNS ip地址不走代理
-	iptables -t nat -A REDSOCKS2 -d $ss_basic_server -j RETURN
 	iptables -t nat -A REDSOCKS2 -d 0.0.0.0/8 -j RETURN
 	iptables -t nat -A REDSOCKS2 -d 10.0.0.0/8 -j RETURN
+	iptables -t nat -A REDSOCKS2 -d 100.64.0.0/10 -j RETURN
 	iptables -t nat -A REDSOCKS2 -d 127.0.0.0/8 -j RETURN
 	iptables -t nat -A REDSOCKS2 -d 169.254.0.0/16 -j RETURN
 	iptables -t nat -A REDSOCKS2 -d 172.16.0.0/12 -j RETURN
 	iptables -t nat -A REDSOCKS2 -d 192.168.0.0/16 -j RETURN
 	iptables -t nat -A REDSOCKS2 -d 224.0.0.0/4 -j RETURN
 	iptables -t nat -A REDSOCKS2 -d 240.0.0.0/4 -j RETURN
-	iptables -t nat -A REDSOCKS2 -d 114.114.114.114 -j RETURN
-	iptables -t nat -A REDSOCKS2 -d 235.6.6.6 -j RETURN
-	iptables -t nat -A REDSOCKS2 -d 236.6.6.6 -j RETURN
 	iptables -t nat -A REDSOCKS2 -d $ip1.0.0/16 -j RETURN
+	[ ! -z "$ss_basic_server_ip" ] && iptables -t nat -A SHADOWSOCKS -d $ss_basic_server_ip -j RETURN
 	
 	# IP白名单控制（不走ss）
 	iptables -t nat -A REDSOCKS2 -p tcp -m set --match-set white_ip dst -j RETURN
@@ -226,7 +224,6 @@ chromecast(){
 
 case $1 in
 start_all)
-	resolv_server_ip
 	flush_nat
 	flush_ipset
 	ipset -F chnroute >/dev/null 2>&1

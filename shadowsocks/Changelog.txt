@@ -1,5 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+2.9.8
+   - add	界面：现在如果服务器处填写域名，如果解析不正确将会有提示；
+   - update	脚本：更换ss服务器解析：因为nslookup方式可能导致卡脚本，现更换为resolveip方式；
+   - update	脚本：更换ss状态清空方式；
+   - update	脚本：删除一些iptables不必要的RETURN项目，添加100.64.0.0/10(常见于移动私网)。
+
 2.9.7
    - update	程序：升级shadowsocks-libev到2.5.4 release；
    - update	程序：升级kcptun程序到到20161009版本，请自行更新服务器端版本；

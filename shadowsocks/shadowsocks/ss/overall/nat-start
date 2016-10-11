@@ -18,27 +18,6 @@ case $(uname -m) in
     ;;
 esac
 
-resolv_server_ip(){
-	#server_ip=`resolvip $ss_basic_server`
-	server_ip=`nslookup "$ss_basic_server" 114.114.114.114 | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
-	if [ -z "$shadowsocks_server_ip" ];then
-	        if [ ! -z "$server_ip" ];then
-	                export shadowsocks_server_ip="$server_ip"
-	                ss_basic_server="$server_ip"
-	                dbus save shadowsocks
-	        fi
-	else
-	        if [ "$shadowsocks_server_ip"x = "$server_ip"x ];then
-	                ss_basic_server="$shadowsocks_server_ip"
-	        elif [ "$shadowsocks_server_ip"x != "$server_ip"x ] && [ ! -z "$server_ip" ];then
-	                ss_basic_server="$server_ip"
-	                export shadowsocks_server_ip="$server_ip"
-	                dbus save shadowsocks
-	        else
-	                ss_basic_server="$ss_basic_server"
-	        fi
-	fi
-}
 flush_nat(){
 	# flush rules if any
 	iptables -t nat -F SHADOWSOCKS > /dev/null 2>&1
@@ -63,11 +42,9 @@ creat_ipset(){
 apply_nat_rules(){
 	ip1=$(nvram get wan0_ipaddr | cut -d"." -f1,2)
 	iptables -t nat -N SHADOWSOCKS
-	iptables -t nat -A SHADOWSOCKS -d $ss_basic_server -j RETURN
-	iptables -t nat -A SHADOWSOCKS -d 208.67.220.220 -j RETURN
-	iptables -t nat -A SHADOWSOCKS -d 8.8.8.8 -j RETURN
 	iptables -t nat -A SHADOWSOCKS -d 0.0.0.0/8 -j RETURN
 	iptables -t nat -A SHADOWSOCKS -d 10.0.0.0/8 -j RETURN
+	iptables -t nat -A SHADOWSOCKS -d 100.64.0.0/10 -j RETURN
 	iptables -t nat -A SHADOWSOCKS -d 127.0.0.0/8 -j RETURN
 	iptables -t nat -A SHADOWSOCKS -d 169.254.0.0/16 -j RETURN
 	iptables -t nat -A SHADOWSOCKS -d 172.16.0.0/12 -j RETURN
@@ -75,6 +52,7 @@ apply_nat_rules(){
 	iptables -t nat -A SHADOWSOCKS -d 224.0.0.0/4 -j RETURN
 	iptables -t nat -A SHADOWSOCKS -d 240.0.0.0/4 -j RETURN
 	iptables -t nat -A SHADOWSOCKS -d $ip1.0.0/16 -j RETURN
+	[ ! -z "$ss_basic_server_ip" ] && iptables -t nat -A SHADOWSOCKS -d $ss_basic_server_ip -j RETURN
 
 	# lan control
 	black=$(echo $ss_basic_black_lan | sed "s/,/\n/g")
@@ -133,7 +111,6 @@ chromecast(){
 
 case $1 in
 start_all)
-	resolv_server_ip
 	flush_nat
 	flush_ipset
 	destory_ipset

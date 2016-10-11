@@ -8,26 +8,18 @@ source /koolshare/scripts/base.sh
 #--------------------------------------------------------------------------------------
 
 resolv_server_ip(){
-	#server_ip=`resolvip $ss_basic_server`
-	server_ip=`nslookup "$ss_basic_server" 114.114.114.114 | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
-	if [ -z "$shadowsocks_server_ip" ];then
-	        if [ ! -z "$server_ip" ];then
-	                export shadowsocks_server_ip="$server_ip"
-	                ss_basic_server="$server_ip"
-	                dbus save shadowsocks
-	        fi
+	#server_ip=`nslookup "$ss_basic_server" 114.114.114.114 | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
+	server_ip=`resolveip -4 -t 2 $ss_basic_server|awk 'NR==1{print}'`
+
+	if [ ! -z "$server_ip" ];then
+		ss_basic_server="$server_ip"
+		dbus set ss_basic_server_ip="$server_ip"
+		dbus set ss_basic_dns_success="1"
 	else
-	        if [ "$shadowsocks_server_ip"x = "$server_ip"x ];then
-	                ss_basic_server="$shadowsocks_server_ip"
-	        elif [ "$shadowsocks_server_ip"x != "$server_ip"x ] && [ ! -z "$server_ip" ];then
-	                ss_basic_server="$server_ip"
-	                export shadowsocks_server_ip="$server_ip"
-	                dbus save shadowsocks
-	        else
-	                ss_basic_server="$ss_basic_server"
-	        fi
+		dbus set ss_basic_dns_success="0"
 	fi
 }
+
 creat_ss_json(){
 # create shadowsocks config file...
 	echo $(date): create shadowsocks config file...
@@ -225,8 +217,8 @@ restart_dnsmasq(){
 }
 
 remove_status(){
-	dbus ram ss_basic_state_china="Waiting for first refresh..."
-	dbus ram ss_basic_state_foreign="Waiting for first refresh..."
+	dbus remove ss_basic_state_china
+	dbus remove ss_basic_state_foreign
 }
 
 main_portal(){

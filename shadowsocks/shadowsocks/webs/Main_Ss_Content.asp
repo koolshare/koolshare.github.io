@@ -1612,7 +1612,7 @@ function version_show(){
 function get_ss_status_data(){
 	$j.ajax({
 		type: "get",
-		url: "dbconf?p=ss_basic_state_china,ss_basic_state_foreign,ss_basic_enable",
+		url: "dbconf?p=ss_basic_state_china,ss_basic_state_foreign,ss_basic_enable,ss_basic_dns_success",
 		dataType: "script",
 		success: function() {
 			if(refreshRate !== 0){
@@ -1635,6 +1635,12 @@ function get_ss_status_data(){
 					$G("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
 				}
 			}
+			if (db_ss_basic_dns_success['ss_basic_dns_success'] == "0"){
+				$G('SS_IP').style.display = "";
+			}else{
+				$G('SS_IP').style.display = "none";
+			}
+			
 			refreshRate = getRefresh();
 			if(refreshRate !== 0){
 				setTimeout("get_ss_status_data();", refreshRate * 1000);
@@ -2348,14 +2354,15 @@ function setIframeSrc() {
 															<input type="hidden" id="hd_ss_basic_use_kcp" name="ss_basic_use_kcp" value="" />
 															<a>启用KCP协议</a>
 														</div>
-
-														
 													</td>
 												</tr>
 												<tr id="server_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(2)">服务器</a></th>
 													<td>
 														<input type="text" class="ssconfig input_ss_table" id="ss_basic_server" name="ss_basic_server" maxlength="100" value=""/>
+														<div id="SS_IP"style="margin-left:170px;margin-top:-20px;margin-bottom:0px;display: none;">
+															<font color="#66FF66">服务器DNS解析异常，请填写ip地址！</font>
+														</div>
 													</td>
 												</tr>
 												<tr id="port_tr">
