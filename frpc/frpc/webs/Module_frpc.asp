@@ -315,7 +315,7 @@ function refresh_html() { //用conf数据生成配置表格
 
 function version_show(){
     $j.ajax({
-        url: 'http://koolshare.ngrok.wang:5000/frpc/config.json.js',
+        url: 'https://koolshare.ngrok.wang/frpc/config.json.js',
         type: 'GET',
         dataType: 'jsonp',
         success: function(res) {        
