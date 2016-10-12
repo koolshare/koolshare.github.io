@@ -10,7 +10,7 @@ fi
 
 now=`date`
 
-ip=`curl http://whatismyip.akamai.com/ 2>/dev/null`
+ip=`curl --interface ppp0 http://whatismyip.akamai.com/ 2>/dev/null`
 current_ip=`nslookup $aliddns_name.$aliddns_domain | grep "Address 1"|tail -n1|cut -d' ' -f3`
 
 if [ "$ip" = "$current_ip" ]
