@@ -6,7 +6,7 @@ exec 2>&1
 if test ${1} = 'start' ; then
   if [ "$koolproxy_enable" == "1" ];then
   	if [ "$koolproxy_debug" == "1" ];then
-		exec /koolshare/koolproxy/koolproxy -b /koolshare/koolproxy/data -l 257
+		exec /koolshare/koolproxy/koolproxy -b /koolshare/koolproxy/data -l 287
 	else
 		exec /koolshare/koolproxy/koolproxy -b /koolshare/koolproxy/data
 	fi
