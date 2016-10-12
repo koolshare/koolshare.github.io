@@ -11,7 +11,7 @@ rm -rf /koolshare/koolproxy/rule*
 # copy new files
 cd /tmp
 
-if [ ! -f / /koolshare/koolproxy/data/user.txt ];then
+if [ ! -f /koolshare/koolproxy/data/user.txt ];then
 	cp -rf /tmp/koolproxy/koolproxy /koolshare/
 else
 	mv /koolshare/koolproxy/data/user.txt /tmp/user.txt.tmp
@@ -30,8 +30,8 @@ chmod 755 /koolshare/koolproxy/*
 chmod 755 /koolshare/scripts/*
 chmod 755 /koolshare/perp//koolproxy/*
 
-if [ -z "$koolproxy_dbug" ];then
-	dbus set koolproxy_dbug=1
+if [ -z "$koolproxy_debug" ];then
+	dbus set koolproxy_debug=1
 fi
 
 if [ -z "$koolproxy_policy" ];then
@@ -41,6 +41,9 @@ fi
 if [ -z "$koolproxy_lan_control" ];then
 	dbus set koolproxy_lan_control=0
 fi
+
+dbus set koolproxy_rule_info=`cat /koolshare/koolproxy/data/version | awk 'NR==2{print}'`
+dbus set koolproxy_video_info=`cat /koolshare/koolproxy/data/version | awk 'NR==4{print}'`
 
 sleep 1
 # start

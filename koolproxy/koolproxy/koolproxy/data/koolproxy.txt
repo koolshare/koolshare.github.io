@@ -1,4 +1,4 @@
-!  -----update:  2016-10-5 21:44 --- by houzi /zt
+!  -----update:  2016-10-12 23:00 --- by houzi /zt
 !  -----base: adblock <koolproxy dedicated>
 !  -----thanks: whyc CJX yiclear
 !  -------------------------------------- white rules ---------------------------------------------
@@ -7,10 +7,15 @@
 @@|http://$domain=meishichina.com|vip.xunlei.com|lixian.xunlei.com|www.vmall.com|www.1688.com|www.mm111.net|jifen.qq.com
 @@|http://$domain=taobao.com|taobao.org|alipay.com|suning.com|51buy.com|ct10000.com|etao.com|hitao.com|paipai.com|189.cn
 @@|http://$domain=banggo.com|pili.com.tw|yunhou.com|voicecloud.cn|xunfei.cn
+@@||c.wrating.com/a1.js$domain=tudou.com
+@@/view.php?what=zone:93&$domain=feng.com
 @@|http://www.cnbeta.com/
 @@|http://ad.api.3g.youku.com/adv?dprm=*&device_type=
+@@|http://de.as.pptv.com/crossdomain.xml
 !@@|http://valf.atm.youku.com
 !@@||atm.youku.com/v*?vip=
+@@|http://17173im.qtmojo.com/main/s?user=||17173_video&
+@@||stat.letv.com/$script
 @@|http://hc.yinyuetai.com/partner/yyt/
 @@|http://image.res.hunantv.com/mediafiles/creative/u3154/
 @@|http://v.aty.sohu.com/v$object-subrequest
@@ -3255,6 +3260,7 @@
 ||fwt0.com^
 ||fxsqsng.com^
 ||fxxgw.com
+||gdt.qq.com^
 ||g-ec4.images-amazon.com$domain=www.17qingsong.com
 ||g.alicdn.com/kg/??slide/2.0.2/index-min.js?t=
 ||g35.cc$third-party
@@ -3385,7 +3391,7 @@
 ||ipic.staticsdo.com^
 ||ipinyou.com$third-party,domain=~www.v1.cn|~ipinyou.com.cn
 ||iridiumsergeiprogenitor.info
-||irs01.net/
+!||irs01.net/
 ||is686.com
 ||istreamsche.com
 ||it760.com
@@ -4050,7 +4056,6 @@
 ||yndianju.com
 ||ynet.com/c/js/meat_china.js
 ||ynwqls.com^
-||yongkang6.com^
 ||yongv.com
 ||youfumei.com^
 ||youle55.com^
@@ -4217,9 +4222,9 @@
 |http://games.qq.com/playgame/gamesad/js/swfobject.js$script
 |http://l.qq.com/lview?c=www&loc=AllInOne_15_UpRight
 |http://l.qq.com/lview?c=www&loc=hb_xW_Full
-|http://livec.l.qq.com/livemsg?
-|http://livew.l.qq.com/livemsg?ty=web&ad_type=LD|KB&pf=in&pt=0
-|http://livew.l.qq.com/livemsg?ty=web&ad_type=ZT&pf=in&pt=0
+!|http://livec.l.qq.com/livemsg?
+!|http://livew.l.qq.com/livemsg?ty=web&ad_type=LD|KB&pf=in&pt=0
+!|http://livew.l.qq.com/livemsg?ty=web&ad_type=ZT&pf=in&pt=0
 |http://music.qq.com/miniframe/static/qmgg/
 |http://ossweb-img.qq.com/images/lol/web201310/lolad0908.jpg$image
 |http://qzs.qq.com/qzone/biz/res/tmpl/vehicle.html
@@ -4337,7 +4342,6 @@
 ||www.61baobao.com$s@timer20 = 8;//@timer20 = 0;//@
 ||www.61baobao.com$s@timer20=8;//@timer20=0;//@
 ||www.azpan.com$s@<script src="http://360.safe.go.366safego.com:88/code/400.do" charset="gb2312"></script>@@
-||www.baidu.com/$s@</head>@</head><script>document.cookie = "ISSW=1";</script>@
 ||www.bxwx.cc$s@<script type="text/javascript" src="http://js.bxwx.cc:999/js/c.js"></script>@@
 ||www.colafile.com/smartdown/$s@&antiadsv2='+antiadsv2+'&t=@&antiadsv2='+0+'&t=@
 ||www.duowan.com/public/s/market_count.js$script
@@ -4591,7 +4595,6 @@
 |http://www.loldk.com/$s@Hide_before_video_ad,??000@Hide_before_video_ad,1000@
 |http://www.loldk.com/$s@id="time">??</font>@id="time">1</font>@
 |http://www.mfgun.com/file/$s@<script type="text/javascript">if (*</script>@@
-|http://www.mp4ba.com/$s@<script type="text/javascript" src="http://mp4ba.qucaigg.com:8080/*></script>@@
 |http://www.ndwww.cn/video/$s@t:10,//@t:1,//@
 |http://www.ppdaili.com/$s@<script> ?wdurl='"http://s.click.taobao.com/t*</script>@@
 |http://www.remenxs.com/css/page.js$s@//ad*function rd_s(){@function rd_s(){@
@@ -4722,7 +4725,7 @@
 |http://www.wucuowx.com/$s@<script src="http://js5798.zzbaowen.com*</script>@@
 |http://www.wxguan.com/js/bqg.js$s@function banner()*var prevpage='';@var prevpage='';@
 |http://www.xianzhenyuan.cn/$s@<script type="text/javascript">??if(typeof(ad)=='undefined'*</script>@@
-|http://www.y4dg.cc/$s@<script src="http://js634.yongkang6.com:*"></script>@@
+|http://www.y4dg.cc$r@http://www.y4dg.cc/portal.php@http://nfinfo2.cnc114dns.com.cn:8080@
 |http://www.youshishumeng.com/book/$s@<script src=?http://js2699.yongkang6.com:*></script>@@
 |http://www.yunlaige.com/configs/article/conheader.js$s@function ads_yuedu*(){*}@@
 |http://zhongzicili.com/$s@<script language="javascript" type="text/javascript">document.write(decodeURIComponent("%3Csc"+"ript%"*;</script>@@
@@ -4769,3 +4772,60 @@
 ||zimuzu.tv/$s@function(img_url,link)@@
 |http://bbs.kafan.cn/$s@</head>@</head><script>document.cookie="r6pb_69df_widthauto=1;domain=.kafan.cn";</script>@
 |http://image.res.hunantv.com/mediafiles/creative/
+|http://www.qiyipic.com/20161001/fix/site/gq-1400.png
+||images.sohu.com/bill/
+||cpro.baidustatic.com^
+||mediav.com^$third-party
+||jd.com/exsites?spread_type=
+||optaim.com^$third-party
+||tanx.com^$third-party,domain=~1688.com|~alimama.com|~taobao.com|~tmall.com
+||irs01.$third-party
+.com/pv.gif?
+||3dwwwgame.com^$third-party
+||niuxgame77.com^
+||8ox.cn^$third-party
+||cpro.baidustatic.com^
+||dup.baidustatic.com/js/
+||discuz.gtimg.cn/cloud/scripts/discuz_tips.js
+||cnzz.com^$third-party
+||hm.baidu.com^$third-party
+||gugeys.com/9602.gif$domain=y4dg.cc
+||gugeys.com/9601.gif$domain=y4dg.cc
+||gugeys.com/9605.gif$domain=y4dg.cc
+||gugeys.com/ad2.jpg$domain=y4dg.cc
+||163.com/special/00774IMC/lofter_v13.html$domain=163.com
+||rec.g.163.com/kaolaad/api/smartad/rec.s?type=750x100&location=1&site=netease&affiliate=homepage&cat=homepage&uuid=d6036ced1bb5400cb69dd6d4c94d68ce$domain=163.com
+||img1.cache.netease.com/f2e/www/index2014/images/newsapp0120.png$domain=163.com
+||g.163.com/r?site=netease&affiliate=homepage&cat=homepage&type=column960x130&location=2$domain=163.com
+||yes1.feng.com^$domain=feng.com
+||fengbuy.com/recommend-new.
+||yes1.feng.com/view.php?what=zone:42&n=aab2e426$domain=bbs.feng.com
+||yes1.feng.com/view.php?what=zone:43&n=a50b3212$domain=bbs.feng.com
+|http://pic9.qiyipic.com/common/201*.jpg|
+||msg.71.am^
+||iqiyi.com/js/pingback/
+|http://static.iqiyi.com/js/common/ares$script
+|http://www.iqiyi.com/player/cupid/common/clear.swf
+|http://nl.notice.iqiyi.com/apis/msg/$script
+||niuxgame77.com^
+||jointreport-switch.com^$third-party
+||users.51.la^$third-party
+/common/ad_
+||ww4.sinaimg.cn/mw690/b8e08c2fjw1f6gitmc519g205k05kgmy.gif$domain=bitebt.com
+|http://*.com/s.php?id=$script,third-party
+|http://www.y4dg.cc$s@<div class="a_mu"@<div style="display:none"@
+|http://www.y4dg.cc$s@<div class="a_pt"@<div style="display:none"@
+|http://www.y4dg.cc$s@<div class="ad-widget-imageplus-sticker ad-widget-imageplus-sticker-theme-v2 ad-widget-imageplus-sticker-cut"@<div style="display:none"@
+!|http://www.y4dg.cc$s@<iframe id="iframe2455995_0"@<iframe style="display:none"@
+|http://www.y4dg.cc$s@<div class="wp a_f"@<div style="display:none">@
+|http://www.bitebt.com$s@<div class="a_mu"@<div style="display:none"@
+|http://www.bitebt.com$s@<div class="wp a_f"@<div style="display:none"@
+|http://www.bitebt.com$s@<div class="bm a_c"@<div style="display:none"@
+|http://www.bitebt.com$s@<div class="portal_block_summary"@<div style="display:none"@
+|http://www.bitebt.com$s@<div class="a_pt"@<div style="display:none"@
+|http://www.bitebt.com$s@<span style="background-color:#FFE500;color:#000000;"@<span style="display:none"@
+|http://www.bitebt.com$s@<div class="a_fl a_cb"@<div style="display:none"@
+|http://www.mp4ba.com/$s@<script type="text/javascript" src="http://*.qucaigg.com:8080/*></script>@
+|http://www.mp4ba.com$s@<div class="clear text_center"@<div style="display:none"@
+|http://www.mp4ba.com$s@<tr id="ad_list_middle"@<tr style="display:none"@
+||baidu.com/feproxy/ad/list?
