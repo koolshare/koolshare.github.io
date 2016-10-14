@@ -8,21 +8,34 @@ source /koolshare/scripts/base.sh
 #--------------------------------------------------------------------------------------
 
 resolv_server_ip(){
-	#server_ip=`nslookup "$ss_basic_server" 114.114.114.114 | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
-	server_ip=`resolveip -4 -t 2 $ss_basic_server|awk 'NR==1{print}'`
+	IFIP=`echo $server_ip|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
+	if [ -z "$IFIP" ];then
+		echo $(date): 检测到你的SS服务器为域名格式，将尝试进行解析...
+		if [ "$ss_basic_dnslookup" == "1" ];then
+			echo $(date): 使用nslookup方式解析SS服务器的ip地址.
+			server_ip=`nslookup "$ss_basic_server" $ss_basic_dnslookup_server | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
+		else
+			echo $(date): 使用resolveip方式解析SS服务器的ip地址.
+			server_ip=`resolveip -4 -t 2 $ss_basic_server|awk 'NR==1{print}'`
+		fi
 
-	if [ ! -z "$server_ip" ];then
-		ss_basic_server="$server_ip"
-		dbus set ss_basic_server_ip="$server_ip"
-		dbus set ss_basic_dns_success="1"
+		if [ ! -z "$server_ip" ];then
+			echo $(date): SS服务器的ip地址解析成功：$server_ip.
+			ss_basic_server="$server_ip"
+			dbus set ss_basic_server_ip="$server_ip"
+			dbus set ss_basic_dns_success="1"
+		else
+			echo $(date): SS服务器的ip地址解析失败，将由ss-redir自己解析.
+			dbus set ss_basic_dns_success="0"
+		fi
 	else
-		dbus set ss_basic_dns_success="0"
+		echo $(date): 检测到你的SS服务器已经是IP格式，跳过解析... 
 	fi
 }
 
 creat_ss_json(){
 # create shadowsocks config file...
-	echo $(date): create shadowsocks config file...
+	echo $(date): 创建SS配置文件到/koolshare/ss/koolgame/ss.json
 	cat > /koolshare/ss/koolgame/ss.json <<-EOF
 		{
 		    "server":"$ss_basic_server",
@@ -39,8 +52,6 @@ creat_ss_json(){
 		    "use_tcp":$ss_basic_koolgame_udp
 		}
 	EOF
-	echo $(date): done
-	echo $(date):
 }
 #--------------------------------------------------------------------------------------
 
@@ -60,55 +71,46 @@ creat_dnsmasq_basic_conf(){
 	mkdir -p /jffs/configs/dnsmasq.d
 
 	# append dnsmasq basic conf
-	echo $(date): create dnsmasq.conf.add..
+	echo $(date): 创建dnsmasq基础配置到/jffs/configs/dnsmasq.conf.add
 	cat > /jffs/configs/dnsmasq.conf.add <<-EOF
 		no-resolv
 		server=127.0.0.1#1053
 		EOF
-	echo $(date): done
-	echo $(date):
 
 	# append router output chain rules
-	echo $(date): append router output chain rules
+	echo $(date): 创建路由内部走代理的规则，用于SS状态检测.
 	cat /koolshare/ss/redchn/output.conf >> /jffs/configs/dnsmasq.conf.add
-	echo $(date): done
-	echo $(date):
 
 	# append china site
-	echo $(date): append CDN list into dnsmasq conf \file
+	echo $(date): 生成cdn加速列表到/tmp/sscdn.conf，加速用的dns：$CDN
 		rm -rf /tmp/sscdn.conf
 		echo "#for china site CDN acclerate" > /tmp/sscdn.conf
 		cat /koolshare/ss/redchn/cdn.txt | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" | sort | awk '{if ($0!=line) print;line=$0}' >/tmp/sscdn.conf
-	echo $(date): done
-	echo $(date):
 
 	# create dnsmasq postconf
-	echo $(date): create dnsmasq.postconf
+	echo $(date): 创建dnsmasq.postconf软连接到/jffs/scripts/文件夹.
 		#cp /koolshare/ss/redchn/dnsmasq.postconf /jffs/scripts/dnsmasq.postconf
 		ln -sf /koolshare/ss/redchn/dnsmasq.postconf /jffs/scripts/dnsmasq.postconf
 		chmod +x /jffs/scripts/dnsmasq.postconf
-	echo $(date): done
-	echo $(date):
 }
 
 custom_dnsmasq(){
 	# append coustom dnsmasq settings
 	custom_dnsmasq=$(echo $ss_gameV2_dnsmasq | sed "s/,/\n/g")
 	if [ ! -z $ss_gameV2_dnsmasq ];then
-		echo $(date): append coustom dnsmasq settings
+		echo $(date): 添加自定义dnsmasq设置到/jffs/configs/dnsmasq.conf.add
 		echo "#for coustom dnsmasq settings" >> /jffs/configs/dnsmasq.conf.add
 		for line in $custom_dnsmasq
 		do 
 			echo "$line" >> /jffs/configs/dnsmasq.conf.add
 		done
-		echo $(date): done
-		echo $(date):
 	fi
 }
 
 ln_conf(){
 	rm -rf /jffs/configs/cdn.conf
 	if [ -f /tmp/sscdn.conf ];then
+		echo $(date): 创建cdn加速列表软链接/jffs/configs/dnsmasq.d/cdn.conf
 		ln -sf /tmp/sscdn.conf /jffs/configs/dnsmasq.d/cdn.conf
 	fi
 }
@@ -123,15 +125,13 @@ nat_auto_start(){
 		
 		EOF
 	fi
-	echo $(date): Add service to nat-start...
 	writenat=$(cat /jffs/scripts/nat-start | grep "nat-start")
 	if [ -z "$writenat" ];then
+		echo $(date): 添加nat-start触发事件...用于ss的nat规则重启后或网络恢复后的加载.
 		sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/nat-start
 		sed -i '3a sh /koolshare/ss/koolgame/nat-start start_all' /jffs/scripts/nat-start
 		chmod +x /jffs/scripts/nat-start
 	fi
-	echo $(date): done
-	echo $(date):
 }
 #--------------------------------------------------------------------------------------
 wan_auto_start(){
@@ -143,27 +143,21 @@ wan_auto_start(){
 			
 			EOF
 	fi
-	echo $(date): Add service to wan-start...
 	startss=$(cat /jffs/scripts/wan-start | grep "/koolshare/scripts/ss_config.sh")
 	if [ -z "$startss" ];then
+		echo $(date): 添加wan-start触发事件...用于ss的各种程序的开机启动，启动延迟$ss_basic_sleep
 		sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/wan-start
 		sed -i '3a sh /koolshare/scripts/ss_config.sh' /jffs/scripts/wan-start
 	fi
 	chmod +x /jffs/scripts/wan-start
-	echo $(date): done
-	echo $(date):
 }
 
 write_cron_job(){
 	if [ "1" == "$ss_basic_rule_update" ]; then
-		echo $(date): ss rule schedual update enabled
+		echo $(date): 添加ss规则定时更新任务，每天"$ss_basic_rule_update_time"自动检测更新规则.
 		cru a ssupdate "0 $ss_basic_rule_update_time * * * /bin/sh /koolshare/scripts/ss_rule_update.sh"
-		echo $(date): done
-		echo $(date):
 	else
-		echo $(date): ss rule schedual update not enabled
-		echo $(date): done
-		echo $(date):
+		echo $(date): ss规则定时更新任务未启用！
 	fi
 }
 
@@ -171,24 +165,21 @@ kill_cron_job(){
 	jobexist=`cru l|grep ssupdate`
 	# kill crontab job
 	if [ ! -z "$jobexist" ];then
-		echo $(date): kill crontab job
+		echo $(date): 删除ss规则定时更新任务.
 		sed -i '/ssupdate/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
 	fi
 }
 
 start_koolgame(){
 	# Start koolgame
-	echo $(date): Starting koolgame...
 	pdu=`ps|grep pdu|grep -v grep`
 	if [ -z "$pdu" ]; then
+	echo $(date): 开启pdu进程，用于优化mtu...
 		/koolshare/ss/koolgame/pdu br0 /tmp/var/pdu.pid >/dev/null 2>&1
 		sleep 1
 	fi
+	echo $(date): 开启koolgame主进程...
 	start-stop-daemon -S -q -b -m -p /tmp/var/koolgame.pid -x /koolshare/ss/koolgame/koolgame -- -c /koolshare/ss/koolgame/ss.json
-	echo $(date): done
-	echo $(date):
 }
 
 load_nat(){
@@ -198,27 +189,25 @@ load_nat(){
 	do
 	    i=$(($i-1))
 	    if [ "$i" -lt 1 ];then
-	        echo $(date): "Could not load nat rules!"
+	        echo $(date): "错误：不能正确加载nat规则!"
 	        sh /koolshare/ss/stop.sh
 	        exit
 	    fi
 	    sleep 2
 	done
-	echo $(date): "Apply nat rules!"
+	echo $(date): "加载nat规则!"
 	sh /koolshare/ss/koolgame/nat-start start_all
 }
 
 restart_dnsmasq(){
 	# Restart dnsmasq
-	echo $(date): restarting dnsmasq...
+	echo $(date): 重启dnsmasq服务...
 	/sbin/service restart_dnsmasq >/dev/null 2>&1
-	echo $(date): done
-	echo $(date):
 }
 
 remove_status(){
-	dbus remove ss_basic_state_china
-	dbus remove ss_basic_state_foreign
+	nvram set ss_foreign_state=""
+	nvram set ss_china_state=""
 }
 
 main_portal(){
@@ -234,7 +223,7 @@ main_portal(){
 case $1 in
 start_all)
 	#ss_basic_action=1 应用所有设置
-	echo $(date): ------------------ Shadowsock GAME V2 mode Starting ---------------------
+	echo $(date): -------------------- 梅林固件 shadowsocks 游戏模式V2 -----------------------
 	resolv_server_ip
 	creat_ss_json
 	#creat_redsocks2_conf
@@ -252,11 +241,11 @@ start_all)
 	remove_status
 	nvram set ss_mode=4
 	nvram commit
-	echo $(date): ------------------ Shadowsock GAME V2 mode Started ----------------------
+	echo $(date): --------------------- shadowsocks 游戏模式V2启动完毕 ----------------------
 	;;
 restart_dns)
 	#ss_basic_action=2 应用DNS设置
-	echo $(date): --------------------------- Restart DNS ---------------------------------
+	echo $(date): ------------------------ 游戏模式V2-重启dns服务 ---------------------------
 	stop_dns
 	creat_dnsmasq_basic_conf
 	#user_cdn_site
@@ -265,18 +254,16 @@ restart_dns)
 	#load_nat
 	restart_dnsmasq
 	remove_status
-	echo $(date): -------------------------- DNS Restarted --------------------------------
+	echo $(date): ----------------------- 游戏模式V2-dns服务重启完毕 -------------------------
 	;;
 restart_addon)
 	#ss_basic_action=4 应用附加设置
-	echo $(date): -------------------------- Restart addon  -------------------------------
+	echo $(date): ------------------------ 游戏模式V2-重启附加功能 ---------------------------
 	# for sleep walue in start up files
 	old_sleep=`cat /jffs/scripts/nat-start | grep sleep | awk '{print $2}'`
 	new_sleep="$ss_basic_sleep"
 	if [ "$old_sleep" = "$new_sleep" ];then
 		echo $(date): boot delay time not changing, still "$ss_basic_sleep" seconds
-		echo $(date): done
-		echo $(date):
 	else
 		echo $(date): set boot delay to "$ss_basic_sleep" seconds before starting kcptun service
 		# delete boot delay in nat-start and wan-start
@@ -287,8 +274,6 @@ restart_addon)
 		# re add delay in nat-start and wan-start
 		nat_auto_start >/dev/null 2>&1
 		wan_auto_start >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
 	fi
 	
 	# for chromecast surpport
@@ -302,10 +287,16 @@ restart_addon)
 	remove_status
 	main_portal
 
-	echo $(date): --------------------------- addon applied -------------------------------
+	if [ "$ss_basic_dnslookup" == "1" ];then
+		echo $(date): 设置使用nslookup方式解析SS服务器的ip地址.
+	else
+		echo $(date): 设置使用resolveip方式解析SS服务器的ip地址.
+	fi
+
+	echo $(date): ---------------------- 游戏模式V2-附加功能重启完毕！ ------------------------
 	;;
 *)
-	echo "Usage: $0 (start_all|restart_kcptun|restart_wb_list|restart_dns)"
+	echo "Usage: $0 (start_all|restart_dns|restart_addon)"
 	exit 1
 	;;
 esac

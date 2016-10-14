@@ -20,9 +20,8 @@
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
 <script type="text/javascript" src="/client_function.js"></script>
 <script type="text/javascript" src="/help.js"></script>
-<script type="text/javascript" src="/dbconf?p=ss&v=<% uptime(); %>"></script>
 <script type="text/javascript" src="/res/ss-menu.js"></script>
-
+<script type="text/javascript" src="/dbconf?p=ss&v=<% uptime(); %>"></script>
 <style>
 .Bar_container {
 	width:85%;
@@ -68,6 +67,7 @@
 input[type=button]:focus {
 	outline: none;
 }
+
 .contentM_qis {
 	position: absolute;
 	-webkit-border-radius: 5px;
@@ -118,10 +118,17 @@ input[type=button]:focus {
 }
 
 /* Oculta la scroll-bar pero sigue permitiendo hacer scroll con el </li> */
-#ss_node_list_table_td { -ms-overflow-style: none; overflow: auto; } /* for IE hide scrollbar on ss node ta */
+#ss_node_list_table_td,#log_content3 { -ms-overflow-style: none; overflow: auto; } /* for IE hide scrollbar on ss node ta */
 #ss_node_list_table_td::-webkit-scrollbar {
     width: 0px;  /* remove scrollbar space */
     background: transparent;  /* optional: just make scrollbar invisible */
+}
+#log_content3::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+#log_content3:focus {
+	outline: none;
 }
 .FormTable1{
 	table-layout:fixed;
@@ -193,6 +200,7 @@ input[type=button]:focus {
 	background: -ms-linear-gradient(top,  #92A0A5  0%, #66757C 100%); /* IE10+ */
 	background: linear-gradient(to bottom, #92A0A5  0%, #66757C 100%); /* W3C */
 }
+#log_content3,#loading_block2 {line-height:1.5}
 </style>
 <script>
 var socks5 = 0
@@ -224,12 +232,8 @@ function init() {
     } else {
         $G("logArea").innerHTML = "无法读取配置,jffs为空或配置文件不存在?";
     }
-	var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_dnsmasq", "ss_redchn_wan_white_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_ip", "ss_redchn_wan_black_domain", "ss_basic_black_lan", "ss_basic_white_lan","ss_ipset_black_domain_web", "ss_ipset_white_domain_web", "ss_ipset_dnsmasq", "ss_ipset_black_ip", "ss_game_dnsmasq", "ss_gameV2_dnsmasq"];
-	for (var i = 0; i < temp_ss.length; i++) {
-		temp_str = $G(temp_ss[i]).value;
-			$G(temp_ss[i]).value = temp_str.replaceAll(",","\n");
-	}
-    setTimeout("get_ss_status_data()", 1000);
+	line_show();
+    setTimeout("get_ss_status_data()", 500);
     var jffs2_scripts = '<% nvram_get("jffs2_scripts"); %>';
 	if(jffs2_scripts == "0"){
 		$G("warn").style.display = "";
@@ -238,7 +242,15 @@ function init() {
 		inputCtrl(document.form.switch,0);
 	}
 	var retArea = $G('log_content');
-	retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
+	update_visibility_main();
+}
+
+function line_show(){
+	var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_dnsmasq", "ss_redchn_wan_white_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_ip", "ss_redchn_wan_black_domain", "ss_basic_black_lan", "ss_basic_white_lan","ss_ipset_black_domain_web", "ss_ipset_white_domain_web", "ss_ipset_dnsmasq", "ss_ipset_black_ip", "ss_game_dnsmasq", "ss_gameV2_dnsmasq"];
+	for (var i = 0; i < temp_ss.length; i++) {
+		temp_str = $G(temp_ss[i]).value;
+			$G(temp_ss[i]).value = temp_str.replaceAll(",","\n");
+	}
 }
 
 function detect_kcptun(){
@@ -255,9 +267,11 @@ function detect_kcptun(){
 }
 
 function onSubmitCtrl() {
+	checkss = 10001;
 	ssmode = $G("ss_basic_mode").value;
 	ssaction = $G("ss_basic_action").value;
-
+		$G("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
+		$G("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
     if (validForm()) {
         if (0 == node_global_max) {
             var obj = ssform2obj();
@@ -273,6 +287,8 @@ function onSubmitCtrl() {
 					showSSLoadingBar(2);
 			}
         	updateOptions();
+        	noChange2 = 0;
+    		setTimeout("checkCmdRet2();", 500);
             });
         } else {
             var node_sel = $j('#ssconf_basic_node').val();
@@ -283,12 +299,16 @@ function onSubmitCtrl() {
 				if (ssmode == "0"){
 					showSSLoadingBar(4);
 				} else {
-					showSSLoadingBar(4);
+					
+					showSSLoadingBar(400);
+					
 				}
 			}else if(ssaction == 2 || ssaction == 3 || ssaction == 4){
 				showSSLoadingBar(2);
 			}
     		updateOptions();
+    		noChange2 = 0;
+    		setTimeout("checkCmdRet2();", 500);
             });
         }
     }
@@ -297,7 +317,6 @@ function onSubmitCtrl() {
 
 function updateOptions() {
 	document.form.action_mode.value = ' Refresh ';
-	document.form.action = "/applydb.cgi?p=ss";
 	document.form.SystemCmd.value = "ss_config.sh";
 	document.form.submit();
 }
@@ -495,6 +514,7 @@ function update_visibility_tab4(){
 	showhide("update_choose", (sru == "1"));
 	showhide("ss_basic_black_lan", (slc == "1"));
 	showhide("ss_basic_white_lan", (slc == "2"));
+	showhide("ss_basic_dnslookup_server", (document.form.ss_basic_dnslookup.value == "1"));
 }
 
 function update_visibility_tab2_redchn(){
@@ -685,7 +705,6 @@ function ssform2obj() {
     obj["koolgame_udp"] = $G("ss_basic_koolgame_udp").value;
     return obj;
 }
-
 
 function getAllConfigs() {
     var dic = {};
@@ -1450,11 +1469,10 @@ function ping_test(){
 	checkTime = 2001;  //停止可能在进行的刷新
     document.form.SystemCmd.value = "ss_ping.sh";
 	document.form.action_mode.value = ' Refresh ';
-	if (validForm()){
-		document.form.submit();
-		checkTime = 0;
-		refresh_ss_node_list_ping();
-	}
+	document.form.action = "/applydb.cgi?p=ssconf_basic_Ping_Method";
+	document.form.submit();
+	checkTime = 0;
+	refresh_ss_node_list_ping();
 }
 /*
 function remove_ping(){
@@ -1472,11 +1490,10 @@ function web_test(){
 	//updateSs_node_listView();
 	document.form.SystemCmd.value = "ss_webtest.sh";
 	document.form.action_mode.value = ' Refresh ';
-	if (validForm()){
-		document.form.submit();
-		checkTime = 0;
-		refresh_ss_node_list_webtest();
-	}
+	document.form.action = "/applydb.cgi?p=ssconf_basic_test_domain";
+	document.form.submit();
+	checkTime = 0;
+	refresh_ss_node_list_webtest();
 }
 /*
 function remove_web_test(){
@@ -1608,45 +1625,62 @@ function version_show(){
         }
     });
 }
-
+var checkss = 0;
 function get_ss_status_data(){
-	$j.ajax({
-		type: "get",
-		url: "dbconf?p=ss_basic_state_china,ss_basic_state_foreign,ss_basic_enable,ss_basic_dns_success",
-		dataType: "script",
-		success: function() {
-			if(refreshRate !== 0){
-				if (db_ss_basic_enable['ss_basic_enable'] == "1"){
-					$j.ajax({
-					url: '/ss_status',
-					dataType: "html",
-					success: function() {
-						if (db_ss_basic_state_foreign['ss_basic_state_foreign'] == undefined || db_ss_basic_state_china['ss_basic_state_china'] == undefined){
-							$G("ss_state2").innerHTML = "国外连接 - " + "Waiting for first refresh...";
-        					$G("ss_state3").innerHTML = "国内连接 - " + "Waiting for first refresh...";
-						} else {
-							$j("#ss_state2").html("国外连接 - " + db_ss_basic_state_foreign['ss_basic_state_foreign']);
-							$j("#ss_state3").html("国内连接 - " + db_ss_basic_state_china['ss_basic_state_china']);
-    					}
+	if (checkss < 10000){
+		checkss++;
+		$j.ajax({
+			type: "get",
+			url: "dbconf?p=ss_basic_enable,ss_basic_dns_success",
+			dataType: "script",
+			success: function() {
+				if(refreshRate !== 0){
+					if (db_ss_basic_enable['ss_basic_enable'] == "1"){
+						$j.ajax({
+							url: '/ss_status',
+							dataType: "html",
+							//success: function() {
+							//	if (db_ss_basic_state_foreign['ss_basic_state_foreign'] == undefined || db_ss_basic_state_china['ss_basic_state_china'] == undefined){
+							//		$G("ss_state2").innerHTML = "国外连接 - " + "Waiting for first refresh...";
+    	    				//		$G("ss_state3").innerHTML = "国内连接 - " + "Waiting for first refresh...";
+							//	} else {
+							//		$j("#ss_state2").html("国外连接 - " + db_ss_basic_state_foreign['ss_basic_state_foreign']);
+							//		$j("#ss_state3").html("国内连接 - " + db_ss_basic_state_china['ss_basic_state_china']);
+    						//	}
+							//}
+            				success: function(response) {
+            				    var arr = JSON.parse(response);
+            				    if (arr[0] == "" || arr[1] == ""){
+									$G("ss_state2").innerHTML = "国外连接 - " + "Waiting for first refresh...";
+    	    						$G("ss_state3").innerHTML = "国内连接 - " + "Waiting for first refresh...";
+            				    }else{
+            				    	$G("ss_state2").innerHTML = "国外连接 - " + arr[0];
+            				    	$G("ss_state3").innerHTML = "国内连接 - " + arr[1];
+            				    }
+            				    //if (refreshRate > 0)
+            				    //setTimeout("checkSSStatus();", refreshRate * 1000);
+            				}
+						});
+					} else {
+						$G("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
+						$G("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
 					}
-					});
-				} else {
-					$G("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
-					$G("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
 				}
-			}
 			if (db_ss_basic_dns_success['ss_basic_dns_success'] == "0"){
 				$G('SS_IP').style.display = "";
-			}else{
-				$G('SS_IP').style.display = "none";
+				$j('#SS_IP').html("<font color='#66FF66'>服务器IP地址解析异常！</font><a class='hintstyle' href='javascript:void(0);' onclick='openssHint(51)'><font color='#ffcc00'><u>查看帮助</u></font></a>");
+			}else if (db_ss_basic_dns_success['ss_basic_dns_success'] == "1"){
+				$G('SS_IP').style.display = "";
+				$j('#SS_IP').html("<font color='#66FF66'>服务器IP地址解析正常！</font><a class='hintstyle' href='javascript:void(0);' onclick='openssHint(51)'><font color='#ffcc00'><u>查看说明</u></font></a>");
 			}
-			
-			refreshRate = getRefresh();
-			if(refreshRate !== 0){
-				setTimeout("get_ss_status_data();", refreshRate * 1000);
+				refreshRate = getRefresh();
+				if(refreshRate > 0){
+					setTimeout("get_ss_status_data();", refreshRate * 1000);
+				}
 			}
-		}
-	});
+
+		});
+	}
 }
 
 var checkNu = 0;
@@ -1711,6 +1745,8 @@ function buildswitch(){
 			$G("basic_show").style.display = "none";
 			$G("apply_button").style.display = "none";
 			$G("ss_node_list_table_th").style.display = "none";
+			noChange2 = 0;
+			setTimeout("checkCmdRet2();", 500);
 			
 			
 		}
@@ -1769,7 +1805,9 @@ function toggle_func(){
 		$G("gameV2_dns").style.display = "none";
 		$G("gameV2_list").style.display = "none";
 		$G("overall_dns").style.display = "none";
-		$G("overall_list").style.display = "none";	
+		$G("overall_list").style.display = "none";
+		document.form.action = "/applydb.cgi?p=ss_basic";
+		
 		$G("cmdBtn").value = "提交";
 		//$j("#cmdBtn").html("提交");
 		document.form.ss_basic_action.value = 1;
@@ -1784,7 +1822,6 @@ function toggle_func(){
 		$G("basic_show").style.display = "none";
 		$G("add_fun").style.display = "none";
 		$G("cmdBtn").value = "应用DNS设定";
-		//$j("#cmdBtn").html("应用DNS设定");
 		document.form.ss_basic_action.value = 2;
 		if (ssmode == "1"){
 			$G("ipset_dns").style.display = "";
@@ -1797,6 +1834,7 @@ function toggle_func(){
 			$G("gameV2_list").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
+			document.form.action = "/applydb.cgi?p=ss_ipset,ss_basic_action";
 			update_visibility_tab2_ipset();
 		}else if(ssmode == "2"){
 			$G("ipset_dns").style.display = "none";
@@ -1809,6 +1847,7 @@ function toggle_func(){
 			$G("gameV2_list").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
+			document.form.action = "/applydb.cgi?p=ss_redchn,ss_basic_action";
 			update_visibility_tab2_redchn();
 		}else if(ssmode == "3"){
 			$G("ipset_dns").style.display = "none";
@@ -1821,6 +1860,7 @@ function toggle_func(){
 			$G("gameV2_list").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
+			document.form.action = "/applydb.cgi?p=ss_game,ss_basic_action";
 			update_visibility_tab2_game();
 		}else if(ssmode == "4"){
 			$G("ipset_dns").style.display = "none";
@@ -1833,6 +1873,7 @@ function toggle_func(){
 			$G("gameV2_list").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
+			document.form.action = "/applydb.cgi?p=ss_gameV2,ss_basic_action";
 		}else if(ssmode == "5"){
 			$G("ipset_dns").style.display = "none";
 			$G("ipset_list").style.display = "none";
@@ -1843,7 +1884,8 @@ function toggle_func(){
 			$G("gameV2_dns").style.display = "none";
 			$G("gameV2_list").style.display = "none";
 			$G("overall_dns").style.display = "";
-			$G("overall_list").style.display = "none";	
+			$G("overall_list").style.display = "none";
+			document.form.action = "/applydb.cgi?p=ss_overall,ss_basic_action";
 			update_visibility_tab2_gameV2();
 		}
 	});
@@ -1869,6 +1911,7 @@ function toggle_func(){
 			$G("gameV2_dns").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
+			document.form.action = "/applydb.cgi?p=ss_ipset,ss_basic_action";
 		}else if(ssmode == "2"){
 			$G("ipset_dns").style.display = "none";
 			$G("ipset_list").style.display = "none";
@@ -1880,6 +1923,7 @@ function toggle_func(){
 			$G("gameV2_dns").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
+			document.form.action = "/applydb.cgi?p=ss_redchn,ss_basic_action";
 		}else if(ssmode == "3"){
 			$G("ipset_dns").style.display = "none";
 			$G("ipset_list").style.display = "none";
@@ -1932,12 +1976,17 @@ function toggle_func(){
 		$G("gameV2_dns").style.display = "none";
 		$G("gameV2_list").style.display = "none";
 		$G("overall_dns").style.display = "none";
-		$G("overall_list").style.display = "none";	
+		$G("overall_list").style.display = "none";
 		//$j("#cmdBtn").html("应用附加功能");
 		$G("cmdBtn").value = "应用附加功能";
 		document.form.ss_basic_action.value = 4;
+		document.form.action = "/applydb.cgi?p=ss_basic,ss_main_portal";
 		update_visibility_tab4();
-	});	
+	});
+	$j("#log_content2").click(
+	function(){
+		x = -1;
+	});
 }
 function show_log_info(){
 		$G("basic_show").style.display = "none";
@@ -1999,7 +2048,7 @@ function checkCmdRet(){
 				$G("loadingIcon").style.display = "none";
 				retArea.value = response.replace("XU6J03M6", " ");
 				//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
-				retArea.scrollTop = retArea.scrollHeight;
+				//retArea.scrollTop = retArea.scrollHeight;
 				//return false;
 			}
 			
@@ -2021,11 +2070,79 @@ function checkCmdRet(){
 			
 			retArea.value = response;
 			//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
+			//retArea.scrollTop = retArea.scrollHeight;
+			_responseLen = response.length;
+		}
+	});
+}
+
+
+var noChange2 = 0;
+function checkCmdRet2(){
+	$j.ajax({
+		url: '/cmdRet_check.htm',
+		dataType: 'html',
+		error: function(xhr){
+			setTimeout("checkCmdRe2t();", 1000);
+			},
+		success: function(response){
+			var retArea = $G("log_content3");
+			if(response.search("XU6J03M6") != -1){
+				//$G("loadingIcon").style.display = "none";
+				retArea.value = response.replace("XU6J03M6", " ");
+				$G("ok_button").style.display = "";
+				retArea.scrollTop = retArea.scrollHeight;
+				x = 6;
+				count_down_close();
+				return true;
+				//refreshpage();
+				//htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
+				//htmlbodyforIE[0].style.overflow = "visible";	  //hidden the Y-scrollbar for preventing from user scroll it.
+				//line_show();
+				//checkss = 0;
+				//setTimeout("get_ss_status_data();",6000);
+			}else{
+				$G("ok_button").style.display = "none";
+			}
+			
+			if(_responseLen == response.length){
+				noChange2++;
+			}else{
+				noChange2 = 0;
+			}
+
+			if(noChange2 > 12){
+				//$G("loadingIcon").style.display = "none";
+				//retArea.scrollTop = retArea.scrollHeight;
+				//setTimeout("checkCmdRet();", 2000);
+				return false;
+			}else{
+				//$G("loadingIcon").style.display = "";
+				setTimeout("checkCmdRet2();", 1000);
+			}
+			
+			retArea.value = response;
+			//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
 			retArea.scrollTop = retArea.scrollHeight;
 			_responseLen = response.length;
 		}
 	});
 }
+
+var x = 6;
+function count_down_close(){
+	if (x == "0"){
+		hideSSLoadingBar();
+	}
+	if (x < 0){
+		$G("ok_button1").value = "手动关闭"
+		return false;
+	}
+	$G("ok_button1").value = "自动关闭（" + x + "）"
+	--x;
+	setTimeout("count_down_close();",1000);
+}
+
 function reload_Soft_Center(){
 	location.href = "/Main_Soft_center.asp";
 }
@@ -2054,22 +2171,23 @@ function setIframeSrc() {
 <div id="TopBanner"></div>
 <div id="Loading" class="popup_bg"></div>
 <div id="LoadingBar" class="popup_bar_bg">
-<table cellpadding="5" cellspacing="0" id="loadingBarBlock" class="loadingBarBlock" align="center">
+<table cellpadding="5" cellspacing="0" id="loadingBarBlock" class="loadingBarBlock"  align="center">
 	<tr>
 		<td height="100">
-		<div id="loading_block3" style="margin:10px auto;width:85%; font-size:12pt;"></div>
-		<div id="loading_block1" class="Bar_container">
-			<span id="proceeding_img_text"></span>
-			<div id="proceeding_img"></div>
+		<div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
+		<div id="loading_block2" style="margin:10px auto;width:95%;"></div>
+		<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;">
+		<textarea cols="63" rows="27" wrap="off" readonly="readonly" id="log_content3" style="border:1px solid #000;width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
 		</div>
-		
-		<div id="loading_block2" style="margin:10px auto; width:85%;"></div>
+		<div id="ok_button" class="apply_gen" style="background: #000;display: none;">
+			<input id="ok_button1" class="button_gen" type="button" onclick="hideSSLoadingBar()" value="确定">
+		</div>
 		</td>
 	</tr>
 </table>
 </div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
-<form method="post" name="form" action="/applydb.cgi?p=ss" target="hidden_frame">
+<form method="post" name="form" action="/applydb.cgi?p=ss_basic" target="hidden_frame">
 <input type="hidden" name="current_page" value="Main_Ss_Content.asp"/>
 <input type="hidden" name="next_page" value="Main_Ss_Content.asp"/>
 <input type="hidden" name="group_id" value=""/>
@@ -2360,9 +2478,6 @@ function setIframeSrc() {
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(2)">服务器</a></th>
 													<td>
 														<input type="text" class="ssconfig input_ss_table" id="ss_basic_server" name="ss_basic_server" maxlength="100" value=""/>
-														<div id="SS_IP"style="margin-left:170px;margin-top:-20px;margin-bottom:0px;display: none;">
-															<font color="#66FF66">服务器DNS解析异常，请填写ip地址！</font>
-														</div>
 													</td>
 												</tr>
 												<tr id="port_tr">
@@ -2515,7 +2630,7 @@ function setIframeSrc() {
 														<input type="button" class="button_gen" onclick="remove_SS_node();" value="清空配置">
 														<input type="button" id="upload_btn" class="button_gen" onclick="upload_SS_node();" value="恢复配置">
 
-														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file">
+														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file">
 														<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif">
 														<span id="ss_file_info" style="display:none;">完成</span>
 													</td>
@@ -3134,10 +3249,10 @@ taobao.com
 												<tr>
 													<th><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(42)">状态更新间隔</a></th>
 													<td>
-														<select title="立即生效，无须提交" name="refreshrate" id="refreshrate" class="input_option" onchange="setRefresh(this);">
+														<select title="立即生效，无须提交" id="refreshrate" class="input_option" onchange="setRefresh(this);">
 															<option value="0">不更新</option>
-															<option value="5">5s</option>
-															<option value="10" selected>10s</option>
+															<option value="5" selected>5s</option>
+															<option value="10">10s</option>
 															<option value="15">15s</option>
 															<option value="30">30s</option>
 															<option value="60">60s</option>
@@ -3220,9 +3335,9 @@ taobao.com
 														</select>
 															&nbsp;
 															<a id="update_choose">
-																<input type="checkbox" id="ss_basic_gfwlist_update" name="a" title="选择此项应用gfwlist自动更新" onclick="oncheckclick(this);">gfwlist
-																<input type="checkbox" id="ss_basic_chnroute_update" name="a2" onclick="oncheckclick(this);">chnroute
-																<input type="checkbox" id="ss_basic_cdn_update" name="a3" onclick="oncheckclick(this);">CDN
+																<input type="checkbox" id="ss_basic_gfwlist_update" title="选择此项应用gfwlist自动更新" onclick="oncheckclick(this);">gfwlist
+																<input type="checkbox" id="ss_basic_chnroute_update" onclick="oncheckclick(this);">chnroute
+																<input type="checkbox" id="ss_basic_cdn_update" onclick="oncheckclick(this);">CDN
 																<input type="hidden" id="hd_ss_basic_gfwlist_update" name="ss_basic_gfwlist_update" value=""/>
 																<input type="hidden" id="hd_ss_basic_chnroute_update" name="ss_basic_chnroute_update" value=""/>
 																<input type="hidden" id="hd_ss_basic_cdn_update" name="ss_basic_cdn_update" value=""/>
@@ -3264,6 +3379,18 @@ taobao.com
 														</select>
 													</td>
 												</tr>
+												<tr id="ss_basic_dnslookup_tr">
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(51)">SS服务器地址解析</a></th>
+													<td>
+														<select id="ss_basic_dnslookup" name="ss_basic_dnslookup" class="ssconfig input_option" onchange="update_visibility_tab4();" >
+															<option value="0">resolveip方式</option>
+															<option value="1" selected>nslookup方式</option>
+														</select>
+														<input type="text" class="ssconfig input_ss_table" id="ss_basic_dnslookup_server" name="ss_basic_dnslookup_server" style="width:128px;"  value="119.29.29.29">
+														<span id="SS_IP"style="margin-left:auto;margin-top:-23px;margin-bottom:0px;display: none;">
+														</span>
+													</td>
+												</tr>												
 											</table>
 										</div>
 

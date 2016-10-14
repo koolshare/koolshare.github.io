@@ -19,6 +19,7 @@ case $(uname -m) in
 esac
 
 flush_nat(){
+	echo $(date): 尝试先清除已存在的iptables规则，防止重复添加
 	# flush rules if any
 	iptables -t nat -F SHADOWSOCKS > /dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j SHADOWSOCKS >/dev/null 2>&1
@@ -28,18 +29,22 @@ flush_nat(){
 }
 
 flush_ipset(){
+	echo $(date): 先清空已存在的ipset名单，防止重复添加
 	ipset -F router >/dev/null 2>&1
 }
 
 destory_ipset(){
+	echo $(date): 摧毁ipset名单
 	ipset -X router >/dev/null 2>&1
 }
 
 creat_ipset(){
+	echo $(date): 创建ipset名单：router
 	ipset -N router iphash
 }
 
 apply_nat_rules(){
+	echo $(date): 写入iptables规则到nat表中...
 	ip1=$(nvram get wan0_ipaddr | cut -d"." -f1,2)
 	iptables -t nat -N SHADOWSOCKS
 	iptables -t nat -A SHADOWSOCKS -d 0.0.0.0/8 -j RETURN
@@ -59,6 +64,7 @@ apply_nat_rules(){
 	white=$(echo $ss_basic_white_lan | sed "s/,/\n/g")
 	if [ $ss_basic_lan_control == 1 ];then
 		if [ ! -z $ss_basic_black_lan ];then
+			echo $(date): 添加局域网黑名单IP，这些IP地址将不会走ss.
 			for balck_ip in $black
 			do
 				iptables -t nat -A SHADOWSOCKS -p tcp -s $balck_ip -j RETURN
@@ -67,12 +73,14 @@ apply_nat_rules(){
 				[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
 				[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
 		else
-		[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 80 -j REDIRECT --to-ports 3333
-		[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
-		[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
+			echo $(date): 你开启了局域网黑名单，但是未填写任何内容，跳过！
+			[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 80 -j REDIRECT --to-ports 3333
+			[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
+			[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
 		fi
 	elif [ $ss_basic_lan_control == 2 ];then
 		if [ ! -z $ss_basic_white_lan ];then
+			echo $(date): 添加局域网白名单IP，这些IP地址将会走ss.
 			for white_ip in $white
 			do
 				[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp  -s $white_ip --dport 80 -j REDIRECT --to-ports 3333
@@ -80,11 +88,13 @@ apply_nat_rules(){
 				[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp  -s $white_ip -j REDIRECT --to-ports 3333
 			done
 		else
-		[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 80 -j REDIRECT --to-ports 3333
-		[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
-		[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
+			echo $(date): 你开启了局域网白名单，但是未填写任何内容，跳过！
+			[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 80 -j REDIRECT --to-ports 3333
+			[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
+			[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
 		fi
 	else
+		echo $(date): 局域网控制功能未启用！
 		[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 80 -j REDIRECT --to-ports 3333
 		[ $ss_overall_mode == 0 ] && iptables -t nat -A SHADOWSOCKS -p tcp --dport 443 -j REDIRECT --to-ports 3333
 		[ $ss_overall_mode == 1 ] && iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 3333
@@ -97,15 +107,11 @@ apply_nat_rules(){
 
 chromecast(){
 	if [ "$ss_basic_chromecast" == "1" ]; then
-		echo $(date): enable lan dns take over: chromecast...
+		echo $(date): 开启chromecast功能（DNS劫持功能）
 		iptables -t nat -A PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
 	else
-		echo $(date): disable lan dns take over..
+		echo $(date): chromecast功能未开启，建议开启哦~
 		iptables -t nat -D PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
 	fi
 }
 

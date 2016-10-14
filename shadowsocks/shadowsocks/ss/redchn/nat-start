@@ -13,28 +13,8 @@ case $(uname -m) in
     ;;
 esac
 
-resolv_server_ip(){
-	#server_ip=`resolvip $ss_basic_server`
-	server_ip=`nslookup "$ss_basic_server" 114.114.114.114 | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
-	if [ -z "$shadowsocks_server_ip" ];then
-	        if [ ! -z "$server_ip" ];then
-	                export shadowsocks_server_ip="$server_ip"
-	                ss_basic_server="$server_ip"
-	                dbus save shadowsocks
-	        fi
-	else
-	        if [ "$shadowsocks_server_ip"x = "$server_ip"x ];then
-	                ss_basic_server="$shadowsocks_server_ip"
-	        elif [ "$shadowsocks_server_ip"x != "$server_ip"x ] && [ ! -z "$server_ip" ];then
-	                ss_basic_server="$server_ip"
-	                export shadowsocks_server_ip="$server_ip"
-	                dbus save shadowsocks
-	        else
-	                ss_basic_server="$ss_basic_server"
-	        fi
-	fi
-}
 flush_nat(){
+	echo $(date): 尝试先清除已存在的iptables规则，防止重复添加
 	# flush rules and set if any
 	iptables -t nat -F REDSOCKS2 > /dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j REDSOCKS2 >/dev/null 2>&1
@@ -44,6 +24,7 @@ flush_nat(){
 }
 
 flush_ipset(){
+	echo $(date): 先清空已存在的ipset名单，防止重复添加
 	#ipset -F router >/dev/null 2>&1
 	#ipset -F chnroute >/dev/null 2>&1
 	ipset -F white_domain >/dev/null 2>&1
@@ -54,6 +35,7 @@ flush_ipset(){
 }
 
 destory_ipset(){
+	echo $(date): 摧毁ipset名单
 	ipset -X router >/dev/null 2>&1
 	ipset -X chnroute >/dev/null 2>&1
 	ipset -X white_domain >/dev/null 2>&1
@@ -65,6 +47,7 @@ destory_ipset(){
 
 # creat ipset rules
 creat_ipset(){
+	echo $(date): 创建ipset名单：router，white_domain，black_domain，white_ip，black_ip
 	use_chnroute="/koolshare/ss/redchn/chnroute.txt"
 	sed -e "s/^/-A chnroute &/g" -e "1 i\-N chnroute nethash --hashsize 81920" $use_chnroute | awk '{print $0} END{print "COMMIT"}' | ipset -R
 	ipset -N router iphash
@@ -81,23 +64,19 @@ add_white_black_ip(){
 		ip_format=`dbus get ss_redchn_wan_black_ip|sed 's/,/\n/g'|grep -v "/"`
 		cidr_format=`dbus get ss_redchn_wan_black_ip|sed 's/,/\n/g'|grep "/"`
 		if [ ! -z "$ip_format" ];then
-			echo $(date): add your black ip into black_ip ipset...
+			echo $(date): 添加你定义的黑名单IP地址到ipset：black_ip中.
 			for ip in $ip_format
 			do
 				ipset -A black_ip $ip >/dev/null 2>&1
 			done
-			echo $(date): done
-			echo $(date):
 		fi
 		
 		if [ ! -z "$cidr_format" ];then
-			echo $(date): add your black cidr into chnroute ipset...
+			echo $(date): 添加你定义的黑名单CIDR地址到ipset：chnroute中.
 			for cidr in $cidr_format
 			do
 				ipset -A chnroute $cidr >/dev/null 2>&1
 			done
-			echo $(date): done
-			echo $(date):
 		fi
 	fi
 	# white ip/cidr
@@ -105,27 +84,24 @@ add_white_black_ip(){
 		ip_format=`dbus get ss_redchn_wan_white_ip|sed 's/,/\n/g'|grep -v "/"`
 		cidr_format=`dbus get ss_redchn_wan_white_ip|sed 's/,/\n/g'|grep "/"`
 		if [ ! -z "$ip_format" ];then
-			echo $(date): add your white ip into white_ip ipset...
+			echo $(date): 添加你定义的白名单IP地址到ipset：white_ip中.
 			for ip in $ip_format
 			do
 				ipset -A white_ip $ip >/dev/null 2>&1
 			done
-			echo $(date): done
-			echo $(date):
 		fi
 		
 		if [ ! -z "$cidr_format" ];then
-			echo $(date): add your white cidr into white_cidr ipset...
+			echo $(date): 添加你定义的白名单CIDR地址到ipset：white_cidr中.
 			for cidr in $cidr_format
 			do
 				ipset -A white_cidr $cidr >/dev/null 2>&1
 			done
-			echo $(date): done
-			echo $(date):
 		fi
 	fi
 }
 apply_nat_rules(){
+	echo $(date): 写入iptables规则到nat表中...
 	ip1=$(nvram get wan0_ipaddr | cut -d"." -f1,2)
 	# 创建REDSOCKS2 nat rule
 	iptables -t nat -N REDSOCKS2
@@ -144,7 +120,7 @@ apply_nat_rules(){
 	iptables -t nat -A REDSOCKS2 -d 224.0.0.0/4 -j RETURN
 	iptables -t nat -A REDSOCKS2 -d 240.0.0.0/4 -j RETURN
 	iptables -t nat -A REDSOCKS2 -d $ip1.0.0/16 -j RETURN
-	[ ! -z "$ss_basic_server_ip" ] && iptables -t nat -A SHADOWSOCKS -d $ss_basic_server_ip -j RETURN
+	[ ! -z "$ss_basic_server_ip" ] && iptables -t nat -A REDSOCKS2 -d $ss_basic_server_ip -j RETURN
 	
 	# IP白名单控制（不走ss）
 	iptables -t nat -A REDSOCKS2 -p tcp -m set --match-set white_ip dst -j RETURN
@@ -170,54 +146,40 @@ apply_nat_rules(){
 	
 	if [ "$ss_basic_lan_control" == "1" ];then
 		if [ ! -z $ss_basic_black_lan ];then
-			echo $(date): appply lan black ip for lan control
+			echo $(date): 添加局域网黑名单IP，这些IP地址将不会走ss.
 			for balck_ip in $black
 			do
 				iptables -t nat -A REDSOCKS2 -p tcp -s $balck_ip -j RETURN
 			done
 			iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
-			echo $(date): done
-			echo $(date):
 		else
-		echo $(date): no balck lan ip fill，do nothing
-		iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
-		echo $(date): done
-		echo $(date):
+			echo $(date): 你开启了局域网黑名单，但是未填写任何内容，跳过！
+			iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
 		fi
 	elif [ "$ss_basic_lan_control" == "2" ];then
 		if [ ! -z $ss_basic_white_lan ];then
-			echo $(date): appply lan white ip for lan control
+			echo $(date): 添加局域网白名单IP，这些IP地址将会走ss.
 			for white_ip in $white
 			do
 				iptables -t nat -A REDSOCKS2 -p tcp -s $white_ip -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
 			done
-			echo $(date): done
-			echo $(date):
 		else
-		echo $(date): no white lan ip fill，do nothing
-		iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
-		echo $(date): done
-		echo $(date):
+			echo $(date): 你开启了局域网白名单，但是未填写任何内容，跳过！
+			iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
 		fi
 	else
-		echo $(date): lan control not enabled
+		echo $(date): 局域网控制功能未启用！
 		iptables -t nat -A REDSOCKS2 -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
-		echo $(date): done
-		echo $(date):
 	fi
 }
 
 chromecast(){
 	if [ "$ss_basic_chromecast" == "1" ]; then
-		echo $(date): enable lan dns take over: chromecast...
+		echo $(date): 开启chromecast功能（DNS劫持功能）
 		iptables -t nat -A PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
 	else
-		echo $(date): disable lan dns take over..
+		echo $(date): chromecast功能未开启，建议开启哦~
 		iptables -t nat -D PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
 	fi
 }
 

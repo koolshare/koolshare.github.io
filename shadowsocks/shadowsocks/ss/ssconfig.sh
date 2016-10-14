@@ -291,10 +291,10 @@ start)
 stop | kill )
 	disable_ss
 	echo $(date):
-	echo $(date): You have disabled the shadowsocks service
+	echo $(date): 你已经成功关闭shadowsocks服务~
 	echo $(date): See you again!
 	echo $(date):
-	echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
+	echo $(date): =============== 梅林固件 - shadowsocks by sadoneli\&Xiaobao ===============
 	;;
 restart)
 	#disable_ss
@@ -305,7 +305,7 @@ restart)
 	echo $(date):
 	echo $(date): Enjoy surfing internet without "Great Fire Wall"!
 	echo $(date):
-	echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
+	echo $(date): =============== 梅林固件 - shadowsocks by sadoneli\&Xiaobao ===============
 	fire_ss_depend_scripts
 	dbus set ss_basic_install_status="0"
 	;;

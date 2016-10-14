@@ -39,40 +39,32 @@ esac
 restore_conf(){
 	# restore dnsmasq conf file
 	if [ -f /jffs/configs/dnsmasq.conf.add ]; then
-		echo $(date): restore dnsmasq conf file
+		echo $(date): 恢复dnsmasq配置文件.
 		rm -f /jffs/configs/dnsmasq.conf.add
-		echo $(date): done
-		echo $(date):
 	fi
 	#--------------------------------------------------------------------------
 	# delete dnsmasq postconf file
 	if [ -f /jffs/scripts/dnsmasq.postconf ]; then
-		echo $(date): delete dnsmasq postconf file
+		echo $(date): 删除/jffs/scripts/dnsmasq.postconf
 		rm -f /jffs/scripts/dnsmasq.postconf
-		echo $(date): done
-		echo $(date):
 	fi
 	#--------------------------------------------------------------------------
 	# delete custom.conf
 	if [ -f /jffs/configs/dnsmasq.d/custom.conf ];then
-		echo $(date): delete custom.conf file
+		echo $(date): 删除 /jffs/configs/dnsmasq.d/custom.conf
 		rm -rf /jffs/configs/dnsmasq.d/custom.conf
-		echo $(date): done
-		echo $(date):
 	fi	
 }
 
 bring_up_dnsmasq(){
 	# Bring up dnsmasq
-	echo $(date): Bring up dnsmasq service
+	echo $(date): 重启dnsmasq服务...
 	service restart_dnsmasq >/dev/null 2>&1
-	echo $(date): done
-	echo $(date):
 }
 
 restore_nat(){
 	# flush iptables and destory REDSOCKS2 chain
-	echo $(date): flush iptables and destory chain...
+	echo $(date): 删除SS相关的iptables设置，保证nat表干净...
 	iptables -t nat -D PREROUTING -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p udp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j REDSOCKS2 >/dev/null 2>&1
@@ -105,14 +97,12 @@ restore_nat(){
 			ip_rule_exist=`expr $ip_rule_exist - 1`
 		done
 	fi
-	echo $(date): done
-	echo $(date):
 	
 }
 
 destory_ipset(){
 	# flush and destory ipset
-	echo $(date): flush and destory ipset
+	echo $(date): 清除所有SS相关ipset名单...
 	ipset -F gfwlist >/dev/null 2>&1
 	ipset -F router >/dev/null 2>&1
 	ipset -F chnroute >/dev/null 2>&1
@@ -133,11 +123,11 @@ destory_ipset(){
 	#flush and destory black_cidr in gfwlist mode
 	ipset -F black_cidr >/dev/null 2>&1
 	ipset -X black_cidr >/dev/null 2>&1
-	echo $(date): done
-	echo $(date):
 }
 
 restore_start_file(){
+	echo $(date): 清除nat-start, wan-start中相关的SS启动命令...
+	
 	# restore nat-start file if any
 	sed -i '/source/,/warning/d' /jffs/scripts/nat-start >/dev/null 2>&1
 	sed -i '/nat-start/d' /jffs/scripts/nat-start >/dev/null 2>&1
@@ -156,116 +146,100 @@ kill_process(){
 	#--------------------------------------------------------------------------
 	# kill dnscrypt-proxy
 	if [ ! -z "$dnscrypt" ]; then 
-		echo $(date): kill dnscrypt-proxy...
+		echo $(date): 关闭dnscrypt-proxy进程...
 		killall dnscrypt-proxy
-		echo $(date): done
-		echo $(date):
 	fi
 	#--------------------------------------------------------------------------
 	# kill redsocks2
 	if [ ! -z "$redsocks2" ]; then 
-		echo $(date): kill redsocks2...
+		echo $(date): 关闭redsocks2进程...
 		killall redsocks2
-		echo $(date): done
-		echo $(date):
 	fi
 	#--------------------------------------------------------------------------
 	# kill ss-redir
-	if [ ! -z "$ssredir" ]; then 
-		echo $(date): kill ss-redir...
+	if [ ! -z "$ssredir" ];then 
+		echo $(date): 关闭ss-redir进程...
 		killall ss-redir
-		echo $(date): done
-		echo $(date):
 	fi
 
 
-	if [ ! -z "$rssredir" ]; then 
-		echo $(date): kill rss-redir...
+	if [ ! -z "$rssredir" ];then 
+		echo $(date): 关闭ssr-redir进程...
 		killall rss-redir
-		echo $(date): done
-		echo $(date):
 	fi
 	#--------------------------------------------------------------------------
 	# kill ss-local
+	sslocal=`ps | grep ss-local | grep -v "grep" | grep -w "23456" | awk '{print $1}'`
+	if [ ! -z "$sslocal" ];then 
+		echo $(date): 关闭ss-local进程:23456端口...
+		kill $sslocal
+	fi
 
-	kill `ps | grep ss-local | grep -v "grep" | grep -w "23456"|awk '{print $1}'`  >/dev/null 2>&1
-	kill `ps | grep rss-local | grep -v "grep" | grep -w "23456"|awk '{print $1}'`  >/dev/null 2>&1
+
+	ssrlocal=`ps | grep rss-local | grep -v "grep" | grep -w "23456" | awk '{print $1}'`
+	if [ ! -z "$ssrlocal" ];then 
+		echo $(date): 关闭ssr-local进程:23456端口...
+		kill -9 $ssrlocal
+	fi
+
 	#--------------------------------------------------------------------------
 	# kill ss-tunnel
-	if [ ! -z "$sstunnel" ]; then 
-		echo $(date): kill ss-tunnel...
-		killall ss-tunnel >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
+	if [ ! -z "$sstunnel" ];then 
+		echo $(date): 关闭ss-tunnel进程...
+		killall ss-tunnel
 	fi
 	
-	if [ ! -z "$rsstunnel" ]; then 
-		echo $(date): kill rss-tunnel...
-		killall rss-tunnel >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
+	if [ ! -z "$rsstunnel" ];then 
+		echo $(date): 关闭rss-tunnel进程...
+		killall rss-tunnel
 	fi
 	
 	#--------------------------------------------------------------------------
 	# kill pdnsd
-	if [ ! -z "$pdnsd" ]; then 
-	echo $(date): kill pdnsd...
+	if [ ! -z "$pdnsd" ];then 
+	echo $(date): 关闭pdnsd进程...
 	killall pdnsd
-	echo $(date): done
-	echo $(date):
 	fi
 	#--------------------------------------------------------------------------
 	# kill Pcap_DNSProxy
-	if [ ! -z "$Pcap_DNSProxy" ]; then 
-	echo $(date): kill Pcap_DNSProxy...
+	if [ ! -z "$Pcap_DNSProxy" ];then 
+	echo $(date): 关闭Pcap_DNSProxy进程...
 	killall dns.sh >/dev/null 2>&1
 	killall Pcap_DNSProxy >/dev/null 2>&1
-	echo $(date): done
-	echo $(date):
 	fi
 	#--------------------------------------------------------------------------
 	# kill chinadns
-	if [ ! -z "$chinadns" ]; then 
-		echo $(date): kill chinadns...
+	if [ ! -z "$chinadns" ];then 
+		echo $(date): 关闭chinadns进程...
 		killall chinadns
-		echo $(date): done
-		echo $(date):
 	fi
 	#--------------------------------------------------------------------------
 	# kill dns2socks
-	if [ ! -z "$DNS2SOCK" ]; then 
-		echo $(date): kill dns2socks...
+	if [ ! -z "$DNS2SOCK" ];then 
+		echo $(date): 关闭dns2socks进程...
 		killall dns2socks
-		echo $(date): done
-		echo $(date):
 	fi
 	# kill all koolgame
-	if [ ! -z "$koolgame" ]; then 
-		echo $(date): kill koolgame...
+	if [ ! -z "$koolgame" ];then 
+		echo $(date): 关闭koolgame进程...
 		killall koolgame >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
 	fi
 	
-	if [ ! -z "$client_linux_arm5" ]; then 
-		echo $(date): kill client_linux_arm5...
+	if [ ! -z "$client_linux_arm5" ];then 
+		echo $(date): 关闭kcp协议进程...
 		killall client_linux_arm5 >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
 	fi
 }
 
 kill_cron_job(){
 	# kill crontab job
-	echo $(date): kill crontab job
+	echo $(date): 删除ss规则更新计划任务.
 	sed -i '/ssupdate/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
-	echo $(date): done
-	echo $(date): -------------------- Shadowsock service Stopped--------------------------
-	echo $(date):
 }
 
 
 remove_conf_and_settings(){
+	echo $(date): 删除ss相关的名单配置文件.
 	# remove conf under /jffs/configs/dnsmasq.d
 	rm -rf /jffs/configs/dnsmasq.d/gfwlist.conf
 	rm -rf /jffs/configs/dnsmasq.d/cdn.conf
@@ -276,7 +250,6 @@ remove_conf_and_settings(){
 	rm -rf /tmp/cdn.conf
 	rm -rf /tmp/wblist.conf
 	rm -rf /jffs/configs/dnsmasq.conf.add
-	
 
 	# remove ss state
 	dbus remove ss_basic_state_china
@@ -286,9 +259,9 @@ remove_conf_and_settings(){
 case $1 in
 stop_all)
 	#KCP_basic_action=0 应用所有设置
-	echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
+	echo $(date): =============== 梅林固件 - shadowsocks by sadoneli\&Xiaobao ===============
 	echo $(date):
-	echo $(date): --------------------Stopping Shadowsock service--------------------------
+	echo $(date): -------------------------- 关闭Shadowsocks -------------------------------
 	restore_conf
 	bring_up_dnsmasq
 	restore_nat
@@ -297,13 +270,13 @@ stop_all)
 	kill_process
 	kill_cron_job
 	remove_conf_and_settings
-	echo $(date): ----------------------- Shadowsocks stopped  ----------------------------
+	echo $(date): -------------------------- Shadowsocks已关闭 -----------------------------
 	;;
 stop_part)
 	#KCP_basic_action=1 应用DNS设置
-	echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
+	echo $(date): ================ 梅林固件 - shadowsocks by sadoneli\&Xiaobao ==============
 	echo $(date):
-	echo $(date): ------------------------ Stopping last mode -----------------------------
+	echo $(date): ----------------------------- 停止上个SS模式 ------------------------------
 	restore_conf
 	#bring_up_dnsmasq
 	restore_nat

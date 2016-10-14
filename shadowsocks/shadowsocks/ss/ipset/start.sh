@@ -5,20 +5,33 @@ eval `dbus export ss`
 source /koolshare/scripts/base.sh
 #--------------------------------------------------------------------------------------
 resolv_server_ip(){
-	#server_ip=`nslookup "$ss_basic_server" 114.114.114.114 | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
-	server_ip=`resolveip -4 -t 2 $ss_basic_server|awk 'NR==1{print}'`
+	IFIP=`echo $server_ip|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
+	if [ -z "$IFIP" ];then
+		echo $(date): 检测到你的SS服务器为域名格式，将尝试进行解析...
+		if [ "$ss_basic_dnslookup" == "1" ];then
+			echo $(date): 使用nslookup方式解析SS服务器的ip地址.
+			server_ip=`nslookup "$ss_basic_server" $ss_basic_dnslookup_server | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
+		else
+			echo $(date): 使用resolveip方式解析SS服务器的ip地址.
+			server_ip=`resolveip -4 -t 2 $ss_basic_server|awk 'NR==1{print}'`
+		fi
 
-	if [ ! -z "$server_ip" ];then
-		ss_basic_server="$server_ip"
-		dbus set ss_basic_server_ip="$server_ip"
-		dbus set ss_basic_dns_success="1"
+		if [ ! -z "$server_ip" ];then
+			echo $(date): SS服务器的ip地址解析成功：$server_ip.
+			ss_basic_server="$server_ip"
+			dbus set ss_basic_server_ip="$server_ip"
+			dbus set ss_basic_dns_success="1"
+		else
+			echo $(date): SS服务器的ip地址解析失败，将由ss-redir自己解析.
+			dbus set ss_basic_dns_success="0"
+		fi
 	else
-		dbus set ss_basic_dns_success="0"
+		echo $(date): 检测到你的SS服务器已经是IP格式，跳过解析... 
 	fi
 }
 # create shadowsocks config file...
 creat_ss_json(){
-	echo $(date): create shadowsocks config file...
+	echo $(date): 创建SS配置文件到/koolshare/ss/ipset/ss.json
 	if [ "$ss_basic_use_kcp" == "1" ];then
 		if [ "$ss_basic_use_rss" == "0" ];then
 			cat > /koolshare/ss/ipset/ss.json <<-EOF
@@ -74,10 +87,7 @@ creat_ss_json(){
 			EOF
 		fi
 	fi
-	echo $(date): done
-	echo $(date):
 }
-#---------------------------------------------------------------------------------------------------------
 
 creat_dnsmasq_basic_conf(){
 	ISP_DNS=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
@@ -95,19 +105,15 @@ creat_dnsmasq_basic_conf(){
 	mkdir -p /jffs/configs/dnsmasq.d
 
 	# append dnsmasq basic conf
-	echo $(date): create dnsmasq.conf.add..
+	echo $(date): 创建dnsmasq基础配置到/jffs/configs/dnsmasq.conf.add
 	cat > /jffs/configs/dnsmasq.conf.add <<-EOF
 		no-resolv
 		server=$dns
 		EOF
-	echo $(date): done
-	echo $(date):
 
 	# append router output chain rules for ss status check
-	echo $(date): append router output chain rules
+	echo $(date): 创建路由内部走代理的规则，用于SS状态检测.
 	cat /koolshare/ss/redchn/output.conf >> /jffs/configs/dnsmasq.conf.add
-	echo $(date): done
-	echo $(date):
 
 	# append custom conf dir
 	fm_version=`nvram get extendno|sed 's/alpha[0-9]-//g'|sed 's/beta[0-9]-//g'|cut -d "-" -f1|sed 's/X//g'`
@@ -118,21 +124,17 @@ creat_dnsmasq_basic_conf(){
 	fi
 
 	# create dnsmasq.postconf
-	echo $(date): create dnsmasq.postconf
+	echo $(date): 创建dnsmasq.postconf软连接到/jffs/scripts/文件夹.
 		ln -sf /koolshare/ss/redchn/dnsmasq.postconf /jffs/scripts/dnsmasq.postconf
 		chmod +x /jffs/scripts/dnsmasq.postconf
-	echo $(date): done
-	echo $(date):
 }
 
 append_gfwlist(){
 	# append gfwlist
 	if [ ! -f /jffs/configs/dnsmasq.d/gfwlist.conf ];then
-		echo $(date): creat gfwlist conf to dnsmasq.conf
+		echo $(date): 创建gfwlist的软连接到/jffs/configs/dnsmasq.d/文件夹.
 		#cp -rf /koolshare/ss/ipset/gfwlist.conf  /jffs/configs/dnsmasq.d/
 		ln -sf /koolshare/ss/ipset/gfwlist.conf /jffs/configs/dnsmasq.d/gfwlist.conf
-		echo $(date): done
-		echo $(date):
 	fi
 }
 
@@ -141,10 +143,8 @@ custom_dnsmasq(){
 	rm -rf /tmp/custom.conf
 	rm -rf /jffs/configs/dnsmasq.d/custom.conf
 	if [ ! -z "$ss_ipset_dnsmasq" ];then
-		echo $(date): append custom host into dnsmasq.conf
+		echo $(date): 添加自定义dnsmasq设置到/jffs/configs/dnsmasq.conf.add
 		echo "$ss_ipset_dnsmasq" | sed "s/,/\n/g" | sort -u >> /tmp/custom.conf
-		echo $(date): done
-		echo $(date):
 	fi
 }
 
@@ -154,45 +154,37 @@ append_white_black_conf(){
 	# append white domain list
 	wanwhitedomain=$(echo $ss_ipset_white_domain_web | sed 's/,/\n/g')
 	if [ ! -z $ss_ipset_white_domain_web ];then
-		echo $(date): append white_domain
+		echo $(date): 创建域名白名单到/tmp/wblist.conf
 		echo "#for white_domain" >> /tmp/wblist.conf
 		for wan_white_domain in $wanwhitedomain
 		do
 			echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /tmp/wblist.conf
 			echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_domain/g" >> /tmp/wblist.conf
 		done
-		echo $(date): done
-		echo $(date):
 	fi
 	
 	# append black domain list
 	if [ ! -z "$ss_ipset_black_domain_web" ];then
-		echo $(date): append black_domain
+		echo $(date): 创建域名黑名单到/tmp/wblist.conf
 		echo "#for_black_domain" >> /tmp/wblist.conf
 		echo "$ss_ipset_black_domain_web" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#7913/g" >> /tmp/wblist.conf
 		echo "$ss_ipset_black_domain_web" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/gfwlist/g" >> /tmp/wblist.conf
-		echo $(date): done
-		echo $(date):
 	fi
 }
 
 ln_custom_conf(){
 	# ln_custom_conf
 	if [ -f /tmp/custom.conf ];then
-	echo $(date): append custom dnsmasq setting..
+	echo $(date): 创建自定义dnsmasq配置链接到/jffs/configs/dnsmasq.d/custom.conf
 		ln -sf /tmp/custom.conf /jffs/configs/dnsmasq.d/custom.conf
-	echo $(date): done
-	echo $(date):
 	fi
 }
 
 ln_wblist_conf(){
 	# ln_wblist_conf
 	if [ -f /tmp/wblist.conf ];then
-	echo $(date): append wblist..
+		echo $(date): 创建域名黑/白名单软链接到/jffs/configs/dnsmasq.d/wblist.conf
 		ln -sf /tmp/wblist.conf /jffs/configs/dnsmasq.d/wblist.conf
-	echo $(date): done
-	echo $(date):
 	fi
 }
 
@@ -209,13 +201,11 @@ nat_auto_start(){
 	fi
 	writenat=$(cat /jffs/scripts/nat-start | grep "nat-start")
 	if [ -z "$writenat" ];then
-		echo $(date): Creating iptables rules \for shadowsocks
+		echo $(date): 添加nat-start触发事件...用于ss的nat规则重启后或网络恢复后的加载.
 		sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/nat-start
 		sed -i '3a sh /koolshare/ss/ipset/nat-start start_all' /jffs/scripts/nat-start
 		chmod +x /jffs/scripts/nat-start
 	fi
-	echo $(date): done
-	echo $(date):
 }
 #---------------------------------------------------------------------------------------------------------
 wan_auto_start(){
@@ -229,26 +219,20 @@ wan_auto_start(){
 	fi
 	startss=$(cat /jffs/scripts/wan-start | grep "/koolshare/scripts/ss_config.sh")
 	if [ -z "$startss" ];then
-		echo $(date): Add service to wan-start...
+		echo $(date): 添加wan-start触发事件...用于ss的各种程序的开机启动，启动延迟$ss_basic_sleep
 		sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/wan-start
 		sed -i '3a sh /koolshare/scripts/ss_config.sh' /jffs/scripts/wan-start
 	fi
 	chmod +x /jffs/scripts/wan-start
-	echo $(date): done
-	echo $(date):
 }
 #=========================================================================================================
 write_cron_job(){
 	# start setvice
 	if [ "1" == "$ss_basic_rule_update" ]; then
-		echo $(date): add schedual update
+		echo $(date): 添加ss规则定时更新任务，每天"$ss_basic_rule_update_time"自动检测更新规则.
 		cru a ssupdate "0 $ss_basic_rule_update_time * * * /bin/sh /koolshare/scripts/ss_rule_update.sh"
-		echo $(date): done
-		echo $(date):
 	else
-		echo $(date): will not apply schedual update
-		echo $(date): done
-		echo $(date):
+		echo $(date): ss规则定时更新任务未启用！
 	fi
 }
 
@@ -256,21 +240,16 @@ kill_cron_job(){
 	jobexist=`cru l|grep ssupdate`
 	# kill crontab job
 	if [ ! -z "$jobexist" ];then
-		echo $(date): kill crontab job
+		echo $(date): 删除ss规则定时更新任务.
 		sed -i '/ssupdate/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
-		echo $(date): done
-		echo $(date): -------------------- Shadowsock service Stopped--------------------------
-		echo $(date):
 	fi
 }
 
 start_dns(){
 	# Start dnscrypt-proxy
 	if [ "$ss_ipset_foreign_dns" == "0" ]; then
-		echo $(date): Starting dnscrypt-proxy...
+		echo $(date): 开启 dnscrypt-proxy，你选择了"$ss_redchn_opendns"节点.
 		dnscrypt-proxy --local-address=127.0.0.1:7913 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_ipset_opendns"
-		echo $(date): done
-		echo $(date):
 	fi
 	[ "$ss_ipset_tunnel" == "1" ] && it="208.67.220.220:53"
 	[ "$ss_ipset_tunnel" == "2" ] && it="8.8.8.8:53"
@@ -278,23 +257,22 @@ start_dns(){
 	[ "$ss_ipset_tunnel" == "4" ] && it="$ss_ipset_tunnel_user"
 
 	if [ "$ss_ipset_foreign_dns" == "1" ]; then
-		echo $(date): Starting ss-tunnel...
 		if [ "$ss_basic_use_rss" == "1" ];then
+			echo $(date): 开启ssr-tunnel...
 			rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_use_rss" == "0" ];then
+			echo $(date): 开启ss-tunnel...
 			if [ "$ss_basic_onetime_auth" == "1" ];then
 				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -A -f /var/run/sstunnel.pid
 			elif [ "$ss_basic_onetime_auth" == "0" ];then
 				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -f /var/run/sstunnel.pid
 			fi
 		fi
-		echo $(date): done
-		echo $(date):
 	fi
 
 	# Start DNS2SOCKS
 	if [ "$ss_ipset_foreign_dns" == "2" ]; then
-		echo $(date): Socks5 enable on port 23456 \for DNS2SOCKS..
+		echo $(date): 开启ss-local，提供socks5端口：23456
 		if [ "$ss_basic_use_rss" == "1" ];then
 			rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_use_rss" == "0" ];then
@@ -304,26 +282,26 @@ start_dns(){
 				ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid
 			fi
 		fi
+			echo $(date): 开启dns2socks，监听端口：23456
 			dns2socks 127.0.0.1:23456 "$ss_ipset_dns2socks_user" 127.0.0.1:7913 > /dev/null 2>&1 &
-		echo $(date): done
-		echo $(date):
 	fi
 
 	# Start Pcap_DNSProxy
 	if [ "$ss_ipset_foreign_dns" == "3" ]; then
-		echo $(date): Start Pcap_DNSProxy..
+		echo $(date): 开启Pcap_DNSProxy..
 		sed -i '/^Listen Port/c Listen Port = 7913' /koolshare/ss/dns/Config.conf
 		sed -i '/^Local Main/c Local Main = 0' /koolshare/ss/dns/Config.conf
 		/koolshare/ss/dns/dns.sh > /dev/null 2>&1 &
-		echo $(date): done
-		echo $(date):
 	fi
 
 # Start pdnsd
 	if [ "$ss_ipset_foreign_dns" == "4" ]; then
-		echo $(date): Start pdnsd..
+		echo $(date): 开启 pdnsd，pdnsd进程可能会不稳定，请自己斟酌.
+		echo $(date): 创建/koolshare/ss/pdnsd文件夹.
 		mkdir -p /koolshare/ss/pdnsd
 		if [ "$ss_ipset_pdnsd_method" == "1" ];then
+			echo $(date): 创建pdnsd配置文件到/koolshare/ss/pdnsd/pdnsd.conf
+			echo $(date): 你选择了-仅udp查询-，需要开启上游dns服务，以防止dns污染.
 			cat > /koolshare/ss/pdnsd/pdnsd.conf <<-EOF
 				global {
 					perm_cache=2048;
@@ -347,7 +325,7 @@ start_dns(){
 				}
 			EOF
 			if [ "$ss_ipset_pdnsd_udp_server" == "1" ];then
-				echo $(date): Starting DNS2SOCKS \for pdnsd..
+				echo $(date): 开启dns2socks作为pdnsd的上游服务器.
 				if [ "$ss_basic_use_rss" == "1" ];then
 					rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 				elif  [ "$ss_basic_use_rss" == "0" ];then
@@ -358,22 +336,19 @@ start_dns(){
 					fi
 				fi
 				dns2socks 127.0.0.1:23456 "$ss_ipset_pdnsd_udp_server_dns2socks" 127.0.0.1:1099 > /dev/null 2>&1 &
-				echo $(date): done
-				echo $(date):
 			elif [ "$ss_ipset_pdnsd_udp_server" == "2" ];then
-				echo $(date): Starting dnscrypt-proxy \for pdnsd...
+				echo $(date): 开启dnscrypt-proxy作为pdnsd的上游服务器.
 				dnscrypt-proxy --local-address=127.0.0.1:1099 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_ipset_pdnsd_udp_server_dnscrypt"
-				echo $(date): done
-				echo $(date):
 			elif [ "$ss_ipset_pdnsd_udp_server" == "3" ];then
 				[ "$ss_ipset_pdnsd_udp_server_ss_tunnel" == "1" ] && dns1="208.67.220.220:53"
 				[ "$ss_ipset_pdnsd_udp_server_ss_tunnel" == "2" ] && dns1="8.8.8.8:53"
 				[ "$ss_ipset_pdnsd_udp_server_ss_tunnel" == "3" ] && dns1="8.8.4.4:53"
 				[ "$ss_ipset_pdnsd_udp_server_ss_tunnel" == "4" ] && dns1="$ss_ipset_pdnsd_udp_server_ss_tunnel_user"
-				echo $(date): Starting ss-tunnel \for pdnsd...
 				if [ "$ss_basic_use_rss" == "1" ];then
+					echo $(date): 开启ssr-tunnel作为pdnsd的上游服务器.
 					rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid > /dev/null 2>&1 &
 				elif  [ "$ss_basic_use_rss" == "0" ];then
+					echo $(date): 开启ss-tunnel作为pdnsd的上游服务器.
 					if [ "$ss_basic_onetime_auth" == "1" ];then
 						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -A -f /var/run/sstunnel.pid > /dev/null 2>&1 &
 					elif [ "$ss_basic_onetime_auth" == "0" ];then
@@ -381,11 +356,11 @@ start_dns(){
 					fi
 				fi
 				sleep 1
-				echo $(date): done
-				echo $(date):
 			fi
 		elif [ "$ss_ipset_pdnsd_method" == "2" ];then
+			echo $(date): 创建pdnsd配置文件到/koolshare/ss/pdnsd/pdnsd.conf
 			cat > /koolshare/ss/pdnsd/pdnsd.conf <<-EOF
+			echo $(date): 你选择了-仅tcp查询-，使用"$ss_redchn_pdnsd_server_ip":"$ss_redchn_pdnsd_server_port"进行tcp查询.
 				global {
 					perm_cache=2048;
 					cache_dir="/koolshare/ss/pdnsd/";
@@ -417,13 +392,12 @@ start_dns(){
 		GROUP=nogroup
 
 		if ! test -f "$CACHE"; then
-		        dd if=/dev/zero of=/koolshare/ss/pdnsd/pdnsd.cache bs=1 count=4 >/dev/null 2>&1
-		        chown -R $USER.$GROUP $CACHEDIR
+			echo $(date): 创建pdnsd缓存文件.
+			dd if=/dev/zero of=/koolshare/ss/pdnsd/pdnsd.cache bs=1 count=4 >/dev/null 2>&1
+			chown -R $USER.$GROUP $CACHEDIR
 		fi
-		
-			pdnsd --daemon -c /koolshare/ss/pdnsd/pdnsd.conf -p /var/run/pdnsd.pid >/dev/null 2>&1
-			echo $(date): done
-			echo $(date):
+		echo $(date): 启动pdnsd进程...
+		pdnsd --daemon -c /koolshare/ss/pdnsd/pdnsd.conf -p /var/run/pdnsd.pid >/dev/null 2>&1
 	fi
 }
 
@@ -437,50 +411,39 @@ stop_dns(){
 	
 	# kill dnscrypt-proxy
 	if [ ! -z "$dnscrypt" ]; then 
-		echo $(date): kill dnscrypt-proxy...
+		echo $(date): 关闭dnscrypt-proxy进程...
 		killall dnscrypt-proxy
-		echo $(date): done
-		echo $(date):
 	fi
 
 	# kill ss-tunnel
 	if [ ! -z "$sstunnel" ]; then 
-		echo $(date): kill ss-tunnel...
+		echo $(date): 关闭ss-tunnel进程...
 		killall ss-tunnel >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
 	fi
 	
 	if [ ! -z "$rsstunnel" ]; then 
-		echo $(date): kill rss-tunnel...
+		echo $(date): 关闭rss-tunnel进程...
 		killall rss-tunnel >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
 	fi
 
 	# kill pdnsd
 	if [ ! -z "$pdnsd" ]; then 
+		echo $(date): 关闭pdnsd进程...
 		echo $(date): kill pdnsd...
 		killall pdnsd
-		echo $(date): done
-		echo $(date):
 	fi
 	
 	# kill Pcap_DNSProxy
 	if [ ! -z "$Pcap_DNSProxy" ]; then 
-		echo $(date): kill Pcap_DNSProxy...
+		echo $(date): 关闭Pcap_DNSProxy进程...
 		killall dns.sh >/dev/null 2>&1
 		killall Pcap_DNSProxy >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
 	fi
 	
 	# kill dns2socks
 	if [ ! -z "$DNS2SOCK" ]; then 
-		echo $(date): kill dns2socks...
+		echo $(date): 关闭dns2socks进程...
 		killall dns2socks
-		echo $(date): done
-		echo $(date):
 	fi
 }
 
@@ -492,29 +455,27 @@ delete_conf_files(){
 }
 
 start_kcp(){
-	echo $(date): Starting kcp...
 	if [ "$ss_basic_use_kcp" == "1" ];then
+		echo $(date): 启动KCP协议进程，为了更好的体验，建议在路由器上创建虚拟内存.
 		export GOGC=40
 		start-stop-daemon -S -q -b -m -p /tmp/var/kcp.pid -x /koolshare/bin/client_linux_arm5 -- -l 127.0.0.1:1091 -r $ss_basic_server:$ss_basic_kcp_port $ss_basic_kcp_parameter
 	fi
-	echo $(date): done
-	echo $(date):
 }
 
 start_ss_redir(){
 	# Start ss-redir
-	echo $(date): Starting ss-redir...
 	if [ "$ss_basic_use_rss" == "1" ];then
+		echo $(date): 开启ssr-redir进程，用于透明代理.
 		rss-redir -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -f /var/run/shadowsocks.pid >/dev/null 2>&1
 	elif  [ "$ss_basic_use_rss" == "0" ];then
+		echo $(date): 开启ss-redir进程，用于透明代理.
 		if [ "$ss_basic_onetime_auth" == "1" ];then
+			echo $(date): 你开启了ss-redir的一次性验证，请确保你的ss服务器是否支持.
 			ss-redir -b 0.0.0.0 -A -c /koolshare/ss/ipset/ss.json -f /var/run/shadowsocks.pid
 		elif [ "$ss_basic_onetime_auth" == "0" ];then
 			ss-redir -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -f /var/run/shadowsocks.pid
 		fi
 	fi
-	echo $(date): done
-	echo $(date):
 }
 
 load_nat(){
@@ -525,28 +486,26 @@ load_nat(){
 	do
 	    i=$(($i-1))
 	    if [ "$i" -lt 1 ];then
-	        echo $(date): "Could not load nat rules!"
+	        echo $(date): "错误：不能正确加载nat规则!"
 	        sh /koolshare/ss/stop.sh
 	        exit
 	    fi
 	    sleep 2
 	done
-	echo $(date): "Apply nat rules!"
+	echo $(date): "加载nat规则!"
 	sh /koolshare/ss/ipset/nat-start start_all
 }
 
 
 restart_dnsmasq(){
 	# Restart dnsmasq
-	echo $(date): restarting dnsmasq...
+	echo $(date): 重启dnsmasq服务...
 	/sbin/service restart_dnsmasq >/dev/null 2>&1
-	echo $(date): done
-	echo $(date):
 }
 
 remove_status(){
-	dbus remove ss_basic_state_china
-	dbus remove ss_basic_state_foreign
+	nvram set ss_foreign_state=""
+	nvram set ss_china_state=""
 }
 
 main_portal(){
@@ -562,7 +521,7 @@ main_portal(){
 case $1 in
 start_all)
 	#ss_basic_action=1 应用所有设置
-	echo $(date): ------------------ Shadowsock gfwlist mode Starting ---------------------
+	echo $(date): ------------------- 梅林固件 shadowsocks gfwlist模式 ----------------------
 	resolv_server_ip
 	creat_ss_json
 	creat_dnsmasq_basic_conf
@@ -582,11 +541,11 @@ start_all)
 	remove_status
 	nvram set ss_mode=1
 	nvram commit
-	echo $(date): ------------------ Shadowsock gfwlist mode Started ----------------------
+	echo $(date): --------------------- shadowsocks gfwlist模式启动完毕 ---------------------
 	;;
 restart_dns)
 	#ss_basic_action=2 应用DNS设置
-	echo $(date): --------------------------- Restart DNS ---------------------------------
+	echo $(date): ------------------------ gflist模式-重启dns服务 ---------------------------
 	resolv_server_ip
 	stop_dns
 	rm -rf /tmp/custom.conf
@@ -597,11 +556,11 @@ restart_dns)
 	start_dns
 	restart_dnsmasq
 	remove_status
-	echo $(date): -------------------------- DNS Restarted --------------------------------
+	echo $(date): ----------------------- gflist模式-dns服务重启完毕 -------------------------
 	;;
 restart_wb_list)
 	#ss_basic_action=3 应用黑白名单设置
-	echo $(date): --------------------- Restart white_black_list --------------------------
+	echo $(date): ----------------------- gflist模式-重启黑白名单服务 -------------------------
 	ipset -F white_domain >/dev/null 2>&1
 	ipset -F black_domain >/dev/null 2>&1
 	append_white_black_conf
@@ -609,18 +568,16 @@ restart_wb_list)
 	sh /koolshare/ss/ipset/nat-start add_black_wan_ip
 	restart_dnsmasq
 	remove_status
-	echo $(date): --------------------- white_black_list applied --------------------------
+	echo $(date): ----------------------- gflist模式-重启黑白名单服务 -------------------------
 	;;
 restart_addon)
 	#ss_basic_action=4 应用黑白名单设置
-	echo $(date): ---------------------- Restart gfwlist addon  ---------------------------
+	echo $(date): --------------------=--- gflist模式-重启附加功能 -----=---------------------
 	# for sleep walue in start up files
 	old_sleep=`cat /jffs/scripts/nat-start | grep sleep | awk '{print $2}'`
 	new_sleep="$ss_basic_sleep"
 	if [ "$old_sleep" = "$new_sleep" ];then
 		echo $(date): boot delay time not changing, still "$ss_basic_sleep" seconds
-		echo $(date): done
-		echo $(date):
 	else
 		echo $(date): set boot delay to "$ss_basic_sleep" seconds before starting kcptun service
 		# delete boot delay in nat-start and wan-start
@@ -631,8 +588,6 @@ restart_addon)
 		# re add delay in nat-start and wan-start
 		nat_auto_start >/dev/null 2>&1
 		wan_auto_start >/dev/null 2>&1
-		echo $(date): done
-		echo $(date):
 	fi
 	
 	# for chromecast surpport
@@ -645,11 +600,17 @@ restart_addon)
 	#remove_status
 	remove_status
 	main_portal
-
-	echo $(date): ----------------------  gfwlist addon applied ---------------------------
+	
+	if [ "$ss_basic_dnslookup" == "1" ];then
+		echo $(date): 设置使用nslookup方式解析SS服务器的ip地址.
+	else
+		echo $(date): 设置使用resolveip方式解析SS服务器的ip地址.
+	fi
+	
+	echo $(date): --------------------- gflist模式-附加功能重启完毕！ -------------------------
 	;;
 *)
-	echo "Usage: $0 (start_all|restart_kcptun|restart_wb_list|restart_dns)"
+	echo "Usage: $0 (start_all|restart_dns|restart_wb_list|restart_addon)"
 	exit 1
 	;;
 esac

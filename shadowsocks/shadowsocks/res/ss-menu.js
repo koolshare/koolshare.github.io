@@ -1,6 +1,8 @@
 ﻿function menu_hook(title, tab) {
 	var ss_mode = '<% nvram_get("ss_mode"); %>';
+	//tabtitle[16] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
 	tabtitle[16] = new Array("", "shadowsocks设置", "Socks5设置");
+	//tablink[16] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
 	tablink[16] = new Array("", "Main_Ss_Content.asp", "Main_SsLocal_Content.asp");
 }
 
@@ -36,21 +38,22 @@ function showSSLoadingBar(seconds){
 	
 		winPadding = (winWidth-1050)/2;	
 		winWidth = 1105;
-		blockmarginLeft= (winWidth*0.3)+winPadding;
+		blockmarginLeft= (winWidth*0.3)+winPadding-150;
 	}
 	else if(winWidth <=1050){
-		blockmarginLeft= (winWidth)*0.3+document.body.scrollLeft;	
+		blockmarginLeft= (winWidth)*0.3+document.body.scrollLeft-160;
 
 	}
 	
 	if(winHeight >660)
 		winHeight = 660;
 	
-	blockmarginTop= winHeight*0.3			
+	blockmarginTop= winHeight*0.3-140		
 	
 	document.getElementById("loadingBarBlock").style.marginTop = blockmarginTop+"px";
 	// marked by Jerry 2012.11.14 using CSS to decide the margin
 	document.getElementById("loadingBarBlock").style.marginLeft = blockmarginLeft+"px";
+	document.getElementById("loadingBarBlock").style.width = 770+"px";
 
 	
 	/*blockmarginTop = document.documentElement.scrollTop + 200;
@@ -81,19 +84,19 @@ function LoadingSSProgress(seconds){
 		if (document.form.ss_basic_action.value == 1){
 			if (document.form.ss_basic_mode.value == 5){
 				document.getElementById("loading_block3").innerHTML = "全局模式启用中 ..."
-				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>此模式非科学上网方式，会影响国内网页速度...</font></li><li><font color='#ffcc00'>注意：全局模式并非VPN，只支持TCP流量转发...</font></li>");
+				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>此模式非科学上网方式，会影响国内网页速度...</font></li><li><font color='#ffcc00'>注意：全局模式并非VPN，只支持TCP流量转发...</font></li><li><font color='#ffcc00'>请等待日志显示完毕，并出现自动关闭按钮！</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
 			} else if (document.form.ss_basic_mode.value == 4){
 				document.getElementById("loading_block3").innerHTML = "游戏模式V2启用中 ..."
-				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>游戏模式V2模式使用内建的DNS防污染解决方案...</font></li><li><font color='#ffcc00'>游戏模式加载时间较长，请等待进度条...</font></li>");
+				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>游戏模式V2模式使用内建的DNS防污染解决方案...</font></li><li><font color='#ffcc00'>请等待日志显示完毕，并出现自动关闭按钮！</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
 			} else if (document.form.ss_basic_mode.value == 3){
 				document.getElementById("loading_block3").innerHTML = "游戏模式启用中 ..."
-				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>为确保游戏工作，请确保你的SS账号支持UDP转发...</font></li><font color='#ffcc00'><li>游戏模式加载时间较长，请等待进度条...</font></li>");
+				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>为确保游戏工作，请确保你的SS账号支持UDP转发...</font></li><font color='#ffcc00'><li>请等待日志显示完毕，并出现自动关闭按钮！</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
 			} else if (document.form.ss_basic_mode.value == 2){
 				document.getElementById("loading_block3").innerHTML = "大陆白名单模式启用中 ..."
-				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>模式加载时间较长，请耐心等待进度条...</font></li>");
+				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>请等待日志显示完毕，并出现自动关闭按钮！</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
 			} else if (document.form.ss_basic_mode.value == 1){
 				document.getElementById("loading_block3").innerHTML = "gfwlist模式启用中 ..."
-				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>尝试不同的DNS解析方案，可以达到最佳的效果哦...</font></li>");
+				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>尝试不同的DNS解析方案，可以达到最佳的效果哦...</font></li><li><font color='#ffcc00'>请等待日志显示完毕，并出现自动关闭按钮！</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
 			}
 		}else if (document.form.ss_basic_action.value == 2){
 			document.getElementById("loading_block3").innerHTML = "快速重启DNS服务 ..."
@@ -106,11 +109,12 @@ function LoadingSSProgress(seconds){
 			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>无需重启全部服务，附加功能即可生效~</font></li>");
 		}
 	}
+	/*
 	y = y + progress;
 	if(typeof(seconds) == "number" && seconds >= 0){
 		if(seconds != 0){
-			document.getElementById("proceeding_img").style.width = Math.round(y) + "%";
-			document.getElementById("proceeding_img_text").innerHTML = Math.round(y) + "%";
+			//document.getElementById("proceeding_img").style.width = Math.round(y) + "%";
+			//document.getElementById("proceeding_img_text").innerHTML = Math.round(y) + "%";
 	
 			if(document.getElementById("loading_block1")){
 				document.getElementById("proceeding_img_text").style.width = document.getElementById("loading_block1").clientWidth;
@@ -126,8 +130,12 @@ function LoadingSSProgress(seconds){
 				//refreshpage()
 				htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
 				htmlbodyforIE[0].style.overflow = "visible";	  //hidden the Y-scrollbar for preventing from user scroll it.
+				line_show();
+				checkss = 0;
+				setTimeout("get_ss_status_data();",6000);
 		}
 	}
+	*/
 
 }
 
@@ -152,13 +160,19 @@ function LoadingLocalProgress(seconds){
 			document.getElementById("proceeding_img_text").innerHTML = "完成";
 			y = 0;
 				setTimeout("hideSSLoadingBar();",1000);
-				//refreshpage()
+				refreshpage()
 		}
 	}
 }
 
 function hideSSLoadingBar(){
 	document.getElementById("LoadingBar").style.visibility = "hidden";
+	//refreshpage()
+	htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
+	htmlbodyforIE[0].style.overflow = "visible";	  //hidden the Y-scrollbar for preventing from user scroll it.
+	line_show();
+	checkss = 0;
+	setTimeout("get_ss_status_data();",2000);
 }
 
 function pass_checked(obj){
@@ -599,6 +613,18 @@ function openssHint(itemNum){
 		statusmenu ="通过此开关，你可以开启或者关闭侧边栏面板上的shadowsocks入口;"
 		statusmenu +="</br>该开关在固件版本6.6.1（不包括6.6.1）以上起作用。"
 		_caption = "侧边栏开关";
+	}
+	else if(itemNum == 51){
+		width="600px";
+		statusmenu ="如果你的ss服务器填写了域名，可以通过此处的设置来定义域名的解析方式"
+		statusmenu +="</br></br><font color='#00F'>如果解析正确:</font>ip地址将用于ss的配置文件和iptables对vps ip的RETURN操作"
+		statusmenu +="</br></br><font color='#00F'>如果解析失败:</font>ss的配置文件将会使用域名，然后由ss-redir自己去解析；iptables对vps ip的RETURN将不会添加，就会造成两种情况："
+		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;1，如果ss-redir自己也解析失败，就会出现Problem detected!，然后你将不能访问自己的vps，除非关闭ss"
+		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;2，如果ss-redir自己解析成功，就会出现working...，虽然你能访问你的vps，但是是vps自己（127.0.0.1）访问自己，此时切换节点、关闭ss等操作，会断开你访问你vps的链接！当然，这对普通用户和购买ss帐号的用户没什么影响。"
+		statusmenu +="</br></br>nslookup解析方式比较自由，能自定义dns解析服务器，解析成功率比较高，但是解析失败的时候可能导致脚本开在nslookup处，可能导致过早提交结束，从而导致fq的dns污染。"
+		statusmenu +="</br></br>resolveip解析方式不会卡住脚本，如果4秒内不能解析成功，将不再尝试，然后把域名交给ss-redir自己取解析，并且不添加vps ip的RETURN条目。"
+		statusmenu +="</br></br>如果你使用IP地址作为服务器地址，那么选择两者没有区别，如果你使用域名，建议优先使用resolveip方式，如果还是不行再使用nslookup方式，再不行，就更换nslookup方式的解析服务器"
+		_caption = "SS服务器解析";
 	}
 		//return overlib(statusmenu, OFFSETX, -160, LEFT, DELAY, 200);
 		//return overlib(statusmenu, OFFSETX, -160, LEFT, STICKY, WIDTH, 'width', CAPTION, " ", FGCOLOR, "#4D595D", CAPCOLOR, "#000000", CLOSECOLOR, "#000000", MOUSEOFF, "1",TEXTCOLOR, "#FFF", CLOSETITLE, '');

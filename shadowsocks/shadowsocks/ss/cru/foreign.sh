@@ -8,5 +8,5 @@ else
   log='[ '$LOGTIME' ] Problem detected!'
 fi
 
-# nvram set ss_foreign_state="$log"
-dbus ram ss_basic_state_foreign="$log"
+nvram set ss_foreign_state="$log"
+#dbus ram ss_basic_state_foreign="$log"
