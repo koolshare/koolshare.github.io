@@ -177,6 +177,14 @@ kill_cron_job(){
 	fi
 }
 
+add_ss_event(){
+	start=`dbus list __event__onssstart_|grep koolproxy`
+	if [ -z "$start" ];then
+	echo $(date): 添加ss事件触发：当ss启用或者重启，重新加载koolproxy的nat规则.
+	dbus event onssstart_koolproxy /koolshare/koolproxy/nat_load.sh
+	fi
+}
+
 case $ACTION in
 start)
 	start_koolproxy
@@ -187,6 +195,7 @@ start)
 	creat_start_up
 	write_nat_start
 	write_cron_job
+	add_ss_event
 	;;
 restart)
 	remove_ipset_conf
@@ -204,6 +213,7 @@ restart)
 	creat_start_up
 	write_nat_start
 	write_cron_job
+	add_ss_event
 	echo $(date): koolproxy启用成功，请等待日志窗口自动关闭，页面会自动刷新...
 	;;
 restart_nat)

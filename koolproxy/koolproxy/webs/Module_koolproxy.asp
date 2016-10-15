@@ -99,13 +99,16 @@ function reload_Soft_Center(){
 location.href = "/Main_Soft_center.asp";
 }
 
-function update_visibility(){
+function update_visibility1(){
 	showhide("koolproxy_policy_read1", (document.form.koolproxy_policy.value == 1));
 	showhide("koolproxy_policy_read2", (document.form.koolproxy_policy.value == 2));
 	showhide("update_rules", (document.form.koolproxy_update.value == 1));
 	showhide("koolproxy_black_lan", (document.form.koolproxy_lan_control.value == 1));
 	showhide("koolproxy_white_lan", (document.form.koolproxy_lan_control.value == 2));
 	showhide("koolproxy_debug1", (document.form.koolproxy_debug.value == 1));
+}
+
+function update_visibility(){
 	if(db_koolproxy_["koolproxy_enable"] == "1"){
 		document.getElementById("debug_tr").style.display = "";
 		document.getElementById("policy_tr").style.display = "";
@@ -152,8 +155,9 @@ function checkCmdRet(){
 			if(response.search("XU6J03M6") != -1){
 				retArea.value = response.replace("XU6J03M6", " ");
 				//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
-				retArea.scrollTop = retArea.scrollHeight;
-				//return false;
+				//retArea.scrollTop = retArea.scrollHeight;
+				setTimeout("refreshpage();", 3000);
+				return false;
 			}
 			
 			if(_responseLen == response.length){
@@ -162,7 +166,7 @@ function checkCmdRet(){
 				noChange = 0;
 			}
 
-			if(noChange > 12){
+			if(noChange > 100){
 				//retArea.scrollTop = retArea.scrollHeight;
 				//setTimeout("checkCmdRet();", 2000);
 				document.getElementById("log_content").style.display = "none";
@@ -309,7 +313,7 @@ function notice_show(){
 											<tr id="debug_tr">
 												<th>日志显示</th>
 												<td>
-													<select name="koolproxy_debug" id="koolproxy_debug" class="input_option" onchange="update_visibility();" style="width:auto;margin:0px 0px 0px 2px;">
+													<select name="koolproxy_debug" id="koolproxy_debug" class="input_option" onchange="update_visibility1();" style="width:auto;margin:0px 0px 0px 2px;">
 														<option value="0" selected>不启用</option>
 														<option value="1">启用</option>
 													</select>
@@ -319,7 +323,7 @@ function notice_show(){
 											<tr id="policy_tr">
 												<th>选择过滤模式</th>
 												<td>
-													<select name="koolproxy_policy" id="koolproxy_policy" class="input_option" onchange="update_visibility();" style="width:auto;margin:0px 0px 0px 2px;">
+													<select name="koolproxy_policy" id="koolproxy_policy" class="input_option" onchange="update_visibility1();" style="width:auto;margin:0px 0px 0px 2px;">
 														<option value="1" selected>全局过滤</option>
 														<option value="2">黑名单模式</option>
 													</select>
@@ -330,11 +334,10 @@ function notice_show(){
 											<tr id="rule_update_switch">
 												<th>规则更新开关</th>
 												<td>
-													<select name="koolproxy_update" id="koolproxy_update" class="input_option" style="width:auto;margin:0px 0px 0px 2px;" onchange="update_visibility();">
+													<select name="koolproxy_update" id="koolproxy_update" class="input_option" style="width:auto;margin:0px 0px 0px 2px;" onchange="update_visibility1();">
 														<option value="1" selected>开启</option>
 														<option value="0">关闭</option>
 													</select>
-
 												</td>
 											</tr>
 
@@ -357,15 +360,15 @@ function notice_show(){
 											</tr>
 
 												<tr id="lan_control">
-													<th width="35%"><a>局域网客户端控制</a>&nbsp;&nbsp;&nbsp;&nbsp;<select id="koolproxy_lan_control" name="koolproxy_lan_control" class="input_ss_table" style="width:auto;height:25px;margin-left: 0px;" onchange="update_visibility();">
+													<th width="35%"><a>局域网客户端控制</a>&nbsp;&nbsp;&nbsp;&nbsp;<select id="koolproxy_lan_control" name="koolproxy_lan_control" class="input_ss_table" style="width:auto;height:25px;margin-left: 0px;" onchange="update_visibility1();">
 															<option value="0">禁用</option>
 															<option value="1">黑名单模式</option>
 															<option value="2">白名单模式</option>
 														</select>
 													</th>
 													<td>
-														<textarea placeholder="填入需要走koolproxy的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=2 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="koolproxy_black_lan" name="koolproxy_black_lan" title=""></textarea>
-														<textarea placeholder="填入不需要走koolproxy的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=2 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="koolproxy_white_lan" name="koolproxy_white_lan" title=""></textarea>
+														<textarea placeholder="填入需要走koolproxy的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=2 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;display:none" id="koolproxy_black_lan" name="koolproxy_black_lan" title=""></textarea>
+														<textarea placeholder="填入不需要走koolproxy的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=2 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;display:none" id="koolproxy_white_lan" name="koolproxy_white_lan" title=""></textarea>
 													</td>
 												</tr>
 											
