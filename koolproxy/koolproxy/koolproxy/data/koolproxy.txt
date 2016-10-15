@@ -1,4 +1,4 @@
-!  -----update:  2016-10-12 23:00 --- by houzi /zt
+!  -----update:  2016-10-14 18:00 --- by houzi /zt
 !  -----base: adblock <koolproxy dedicated>
 !  -----thanks: whyc CJX yiclear
 !  -------------------------------------- white rules ---------------------------------------------
@@ -7,6 +7,9 @@
 @@|http://$domain=meishichina.com|vip.xunlei.com|lixian.xunlei.com|www.vmall.com|www.1688.com|www.mm111.net|jifen.qq.com
 @@|http://$domain=taobao.com|taobao.org|alipay.com|suning.com|51buy.com|ct10000.com|etao.com|hitao.com|paipai.com|189.cn
 @@|http://$domain=banggo.com|pili.com.tw|yunhou.com|voicecloud.cn|xunfei.cn
+@@||sinaimg.cn/mw690/$image
+@@||sinaimg.cn/mw1024/$image
+@@||sinaimg.cn/large/$image
 @@||c.wrating.com/a1.js$domain=tudou.com
 @@/view.php?what=zone:93&$domain=feng.com
 @@|http://www.cnbeta.com/
@@ -3434,7 +3437,7 @@
 ||jp88.cc
 ||jq159.com$third-party
 ||jrj.com/static/js/cms_ad/
-||js.17173.com/ping.js
+!||js.17173.com/ping.js
 ||js.45bubu.com
 ||js.bju888.com
 ||js.bxwns.com
@@ -4725,7 +4728,6 @@
 |http://www.wucuowx.com/$s@<script src="http://js5798.zzbaowen.com*</script>@@
 |http://www.wxguan.com/js/bqg.js$s@function banner()*var prevpage='';@var prevpage='';@
 |http://www.xianzhenyuan.cn/$s@<script type="text/javascript">??if(typeof(ad)=='undefined'*</script>@@
-|http://www.y4dg.cc$r@http://www.y4dg.cc/portal.php@http://nfinfo2.cnc114dns.com.cn:8080@
 |http://www.youshishumeng.com/book/$s@<script src=?http://js2699.yongkang6.com:*></script>@@
 |http://www.yunlaige.com/configs/article/conheader.js$s@function ads_yuedu*(){*}@@
 |http://zhongzicili.com/$s@<script language="javascript" type="text/javascript">document.write(decodeURIComponent("%3Csc"+"ript%"*;</script>@@
@@ -4829,3 +4831,11 @@
 |http://www.mp4ba.com$s@<div class="clear text_center"@<div style="display:none"@
 |http://www.mp4ba.com$s@<tr id="ad_list_middle"@<tr style="display:none"@
 ||baidu.com/feproxy/ad/list?
+|http://r1.ykimg.com/material/0A03/201609/*/*/1300-100.jpg
+|http://r1.ykimg.com/material/0A03/201610/*/*/1300-100.jpg
+|http://www.iqiyi.com/dianshiju$s@<div id="1000000000123" class="ad-wrapper clearfix">@<div style="display:none">@
+|http://v.pic.fastapi.net/upload/2016/08/c73d84c90d9c4fd0075a71d08991f270.jpg
+|http://www.ku6.com$s@<div class="bottom-ad clear-float">@<div style="display:none">@
+|http://www.d5yuansu.com$s@<div style="background:#fff;margin:0 auto;width: 1018px;border:1px dashed #666;overflow: hidden;">@<div style="display:none">@
+|http://www.d5yuansu.com$s@<div class="" align="center" style="background:#fff;">@<div style="display:none">@
+|http://www.iqiyi.com$s@<div id="leftad" class="leftAd mt25">@<div style="display:none">@
