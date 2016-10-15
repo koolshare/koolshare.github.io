@@ -185,6 +185,10 @@ add_ss_event(){
 	fi
 }
 
+remove_ss_event(){
+	dbus remove __event__onssstart_koolproxy
+}
+
 case $ACTION in
 start)
 	start_koolproxy
@@ -198,6 +202,7 @@ start)
 	add_ss_event
 	;;
 restart)
+	remove_ss_event
 	remove_ipset_conf
 	remove_nat_start
 	flush_nat
@@ -224,6 +229,7 @@ restart_nat)
 	fi
 	;;
 stop)
+	remove_ss_event
 	remove_ipset_conf
 	service restart_dnsmasq > /dev/null 2>&1
 	remove_nat_start
