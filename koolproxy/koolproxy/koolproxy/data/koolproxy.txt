@@ -1,7 +1,8 @@
-!  -----update:  2016-10-14 18:00 --- by houzi /zt
-!  -----base: adblock <koolproxy dedicated>
-!  -----thanks: whyc CJX yiclear
-!  -------------------------------------- white rules ---------------------------------------------
+!x  -----update[rules]:  2016-10-16 15:00 --- by houzi /zt
+!x -----update[video]:  2016-10-16 15:45 --- by houzi /zt
+!x  -----base: adblock <koolproxy dedicated>
+!x  -----thanks: xwhyc CJX yiclear adsafe
+!x  -------------------------------------- white rules ---------------------------------------------
 @@|http://$domain=code.google.com|yeepay.com|taoke.alimama.com|club.alimama.com|tenpay.com|tmall.com|tbcdn.cn|jd.com
 @@|http://$domain=meidebi.com|alibaba.com|lifevc.com|ad.alimama.com|www.alimama.com|gome.com.cn|3songshu.com
 @@|http://$domain=meishichina.com|vip.xunlei.com|lixian.xunlei.com|www.vmall.com|www.1688.com|www.mm111.net|jifen.qq.com
@@ -248,7 +249,7 @@
 @@|http://i2.bahamut.com.tw/JS/ad/animeVideo.js
 @@|http://9zvip.net/wp-content/plugins/detect-adblock/js/ads.js
 @@|http://www.qitete.com/sp/uaredirect.js
-!  -------------------------------------- white rules ---------------------------------------------
+!x  -------------------------------------- white rules ---------------------------------------------
 |http:/*/7mad.$image
 |http:/*/adPicture$image
 |http:/*/adfile$domain=~abchina.com
@@ -1107,9 +1108,7 @@
 |http://adf.send.microad.jp
 |http://adimg.$domain=~bbcss.com|~09765.com|~szonline.net
 |http://adimgs.
-|http://adk.funshion.com
 |http://adm.265g.com/js/$script
-|http://adm.funshion.com
 |http://adp.cnool.net/
 |http://adpic.
 |http://ads.
@@ -1231,7 +1230,6 @@
 |http://cdn.zampdsp.com/v3/static/scripts/$script
 |http://cforum5.cari.com.my/cari/daybanner/
 |http://changyan.itc.cn/activity/activity_js/changyan_config.js?_=
-|http://clicklog.moviebox.baofeng.com/click.php?
 |http://cms.neotv.com.cn/index.php?m=luckypost&c=index&a=show
 |http://cmsjs.eastmoney.com/js/fixedSoft_v14.js$script
 |http://cmsjs.eastmoney.com/js/headbiggg_
@@ -1650,8 +1648,6 @@
 |http://mg.5pk
 |http://mgg1.txtnovel.com
 |http://mh.tsdm.net/template/*/images/g_js/
-|http://mid.houyi.baofeng.net/Consultation/index.php?uid=*&adtype=
-|http://midinfo.baofeng.com/conf/
 |http://mimg.127.net/external/js6public126.js$script
 |http://mimg.127.net/m/smartad/img/$image
 |http://mimg.127.net/p/js6/6.0b1601181144/js/p1.js
@@ -1822,8 +1818,6 @@
 |http://static.gg.uuu9.com
 |http://static.googleadsserving.cn/
 |http://static.haha.mx/images/banner/$image
-|http://static.hd.baofeng.com/script/baidu_4790.js
-|http://static.hd.baofeng.com/script/play_4790.js
 |http://static.hdslb.com/js/core-v5/picment.min.js
 |http://static.icili.com/cpma.js$script
 |http://static.ikafan
@@ -1923,11 +1917,9 @@
 |http://v.beta.yinyuetai.com/swf/plugins_new.xml?t=
 |http://v.bumimi.com/money/$script
 |http://v.tf.360.cn
-|http://vas.funshion.com
 |http://vasd.fun.tv/Wkw.php
 |http://vda.fh77.net/$third-party
 |http://vgg.ifeng
-|http://videodown.baofeng.com/media/conf/
 |http://videowood.tv/pop
 |http://vip5.7huoguo.com/tp/tp1.ashx?
 |http://vista.ptbus.com/s.js$script
@@ -1945,9 +1937,7 @@
 |http://we.1*bt.info
 |http://we.99btgongchang.info/p2p/08/$script
 |http://web.aipai.com/ahxx/0322/v1/aipai4.html
-|http://web.houyi.baofeng.net/Consultation/web.php?id=
 |http://widget.crowdynews.com/js/widget.js
-|http://wl.houyi.baofeng.net/media/img/houyi/web/*.html?&adid=
 |http://wlnews.zjol.com.cn/js/duilian/new.js$script
 |http://wuwho.cn
 |http://wvw.grabpo.com/bofangqi/
@@ -2566,8 +2556,6 @@
 |http://x.tiexue.net/domain-policy/
 |http://x.xso.$document
 |http://xl7xml.client.xunlei.com/7.9/thunder_stat2
-|http://xs.houyi.baofeng.net/Consultation/index.php?
-|http://xs.houyi.baofeng.net/crossdomain.xml
 |http://xunleihao.com/js/sc.js
 |http://xyz.tingroom.com/js/$script
 |http://y.imageter.com/s?tp=
@@ -3656,7 +3644,6 @@
 ||pstatp.com/origin/$domain=~toutiao.com
 ||pstatp.com/site/reads-sdk/$script
 ||ptfish.com/08html/ggf/cptdgg.html$document
-||pub.funshion.com
 ||pub.mop.com/show_script.jsp
 ||puhtml.com
 ||qdimg.com/css/baidu.js|
@@ -3827,7 +3814,6 @@
 ||tou100.com
 ||toy9090.com^
 ||trafficjunky.net
-||treezip.baofeng.net/iteminfo_xml
 ||tribalfusion.com^
 ||trzi30ic.com
 ||ttlm.cc^
@@ -4150,7 +4136,6 @@
 ||firefox.news.cn$s@height="305" frameborder="0"@height="200" frameborder="0"@
 ||firefox.163.com$s@height="305" frameborder="0"@height="200" frameborder="0"@
 ||de.as.pptv.com^
-!---------------------------- other rules ----------------------------------
 |http://su.bdimg.com/static/pad/js/ps/banner_
 ||302br.net
 ||ad.airad.com
@@ -4276,7 +4261,6 @@
 |http://www.lepan.cc/$s@<script src="http://sina.qq.sohu.baidu-sogou-google.com:1868/page/?s=*"></script>@@
 |http://lol.qq.com/v/go.shtml?$s@<span id="jVideoTipsTime">5</span>@<span id="jVideoTipsTime">1</span>@
 |http://graph.qq.com/$s@</html>@<script>document.getElementById('select_all').click();</script></html>@
-!-------------------------------------------------------------
 ||hitvs.cn/*.htm$s@playlist%26url=http://mediainfo.hitvs.cn:8088/media/ViewMedia-Normal-??????-mp4.mp4|http://mediainfo.hitvs.cn:8088/media/ViewMedia-Normal@playlist%26url=http://mediainfo.hitvs.cn:8088/media/ViewMedia-Normal@
 ||www.wodsj.com/wodsjckplayer/ckplayer.xml$s@{t->20}@{t->0}@
 ||17173im.allyes.com/main/s?user=$s@"A?": {@"AD": {@
@@ -4299,7 +4283,6 @@
 ||duowan.com$s@[{"adid":*}]@[]@
 |http://donghua.dmzj.com/js/donghua_play.js?t=$s@cid=qc_100001_300037@cid=qc_100001_100141@
 |http://www.kxddd.com/link.php?ref=$s@</style>*</head>@</style></head>@
-!------------------------------------------------------------------------
 |http://cdn.pcbeta.js.inimc.com//data/cache/common.js?$s@var $banner = @@
 |http://dd.ma/$s@<script src="http://ck.cp*"></script>@@
 |http://ecma.bdimg.com/public03/imageplus/common_loader.js?cache=
@@ -4527,7 +4510,6 @@
 |http://tmisc.home.news.cn/cloudnews/ln-xuanzhi/subnews/src/combine.js$s@function Ads@@
 |http://tv.51live.com/$s@<script>outputDa(i5ad.top)</script>@@
 |http://v.uggd.com/player/player*.xml$s@{d->http://v.uggd.com/player/temp/*{t->10|10}</flashvars>@{t->0|0}</flashvars>@
-|http://vxml.56.com/crossdomain.xml$s@<allow-access-from domain="?.56.com"/>@<allow-access-from domain="*"/>@
 |http://wpan.cc/$s@<script src='http://vipjs.csad.cc:99/s.php?id=*'></script>@@
 |http://www.04stream.tv/p2p/$s@,"9":""@,"0":""@
 |http://www.100shuai.com/play/player/cuplayer/$s@flashvars: '{f->http://*}{t->15}',@flashvars: '{t->0}',@
@@ -4839,3 +4821,6 @@
 |http://www.d5yuansu.com$s@<div style="background:#fff;margin:0 auto;width: 1018px;border:1px dashed #666;overflow: hidden;">@<div style="display:none">@
 |http://www.d5yuansu.com$s@<div class="" align="center" style="background:#fff;">@<div style="display:none">@
 |http://www.iqiyi.com$s@<div id="leftad" class="leftAd mt25">@<div style="display:none">@
+||cpro.
+||irs01.com/$third-party
+|http://union$third-party

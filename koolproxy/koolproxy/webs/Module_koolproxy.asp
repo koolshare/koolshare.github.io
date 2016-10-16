@@ -34,16 +34,46 @@
 <script>
 function init(menu_hook) {
 	show_menu();
+	
 	buildswitch();
 	conf2obj();
 	update_visibility();
+	update_visibility1();
     var rrt = document.getElementById("switch");
     if (document.form.koolproxy_enable.value != "1") {
         rrt.checked = false;
     } else {
         rrt.checked = true;
     }
+    get_uptime();
     notice_show();
+	setTimeout("showbootTime();", 1000);
+}
+
+function get_uptime1() {
+		document.form.action_mode.value = ' Refresh ';
+		document.form.SystemCmd.value = "koolproxy_uptime.sh";
+		document.form.submit();
+}
+function get_uptime() {
+    $j.ajax({
+        url: 'apply.cgi?current_page=Module_koolproxy.asp&next_page=Module_koolproxy.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=koolproxy_uptime.sh&firmver=3.0.0.4',
+        dataType: 'html',
+    });
+}
+uptime = eval("<% nvram_get("koolproxy_uptime"); %>");
+function showbootTime(){
+	Days = Math.floor(uptime / (60*60*24));	
+	Hours = Math.floor((uptime / 3600) % 24);
+	Minutes = Math.floor(uptime % 3600 / 60);
+	Seconds = Math.floor(uptime % 60);
+	
+	document.getElementById("boot_days").innerHTML = Days;
+	document.getElementById("boot_hours").innerHTML = Hours;
+	document.getElementById("boot_minutes").innerHTML = Minutes;
+	document.getElementById("boot_seconds").innerHTML = Seconds;
+	uptime += 1;
+	setTimeout("showbootTime()", 1000);
 }
 
 var enable_ss = "<% nvram_get("enable_ss"); %>";
@@ -186,7 +216,7 @@ function checkCmdRet(){
 
 function notice_show(){
     $j.ajax({
-        url: 'http://rules.ngrok.wang:5000/config.json.js',
+        url: 'https://rules.ngrok.wang/config.json.js',
         type: 'GET',
         dataType: 'jsonp',
         success: function(res) {
@@ -310,6 +340,10 @@ function notice_show(){
 													<div id="koolproxy_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>	
 												</td>
 											</tr>
+										<tr>
+											<th>运行时间</th>
+											<td><span id="boot_days"></span> 天 <span id="boot_hours"></span> 时 <span id="boot_minutes"></span> 分 <span id="boot_seconds"></span> 秒</td>
+										</tr>
 											<tr id="debug_tr">
 												<th>日志显示</th>
 												<td>

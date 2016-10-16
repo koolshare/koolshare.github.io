@@ -17,7 +17,8 @@ start_koolproxy(){
 	perpctl A koolproxy >/dev/null 2>&1
 	
 	rules_date_local=`cat /koolshare/koolproxy/data/version|awk 'NR==2{print}'`
-	rules_nu_local=`cat /koolshare/koolproxy/data/koolproxy.txt | grep -v ! | wc -l`
+	rules_nu_local=`grep -v !x /koolshare/koolproxy/data/koolproxy.txt | wc -l`
+	#rules_nu_local=`cat /koolshare/koolproxy/data/koolproxy.txt | grep -v ! | wc -l`
 	video_date_local=`cat /koolshare/koolproxy/data/version|awk 'NR==4{print}'`
 	
 	echo $(date): 加载静态规则日期：$rules_date_local
@@ -192,6 +193,7 @@ remove_ss_event(){
 case $ACTION in
 start)
 	start_koolproxy
+	nvram set koolproxy_uptime=1
 	add_ipset_conf
 	service restart_dnsmasq > /dev/null 2>&1
 	load_nat
@@ -210,6 +212,7 @@ restart)
 	kill_cron_job
 	sleep 2
 	start_koolproxy
+	nvram set koolproxy_uptime=1
 	add_ipset_conf
 	echo $(date): 重启dnsmasq进程...
 	service restart_dnsmasq > /dev/null 2>&1
