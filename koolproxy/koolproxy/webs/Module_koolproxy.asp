@@ -34,7 +34,7 @@
 <script>
 function init(menu_hook) {
 	show_menu();
-	
+    get_uptime();
 	buildswitch();
 	conf2obj();
 	update_visibility();
@@ -45,29 +45,64 @@ function init(menu_hook) {
     } else {
         rrt.checked = true;
     }
-    get_uptime();
     notice_show();
-	setTimeout("showbootTime();", 1000);
 }
 
-function get_uptime1() {
-		document.form.action_mode.value = ' Refresh ';
-		document.form.SystemCmd.value = "koolproxy_uptime.sh";
-		document.form.submit();
-}
 function get_uptime() {
     $j.ajax({
         url: 'apply.cgi?current_page=Module_koolproxy.asp&next_page=Module_koolproxy.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=koolproxy_uptime.sh&firmver=3.0.0.4',
         dataType: 'html',
+        error: function(xhr) {
+	        alert("error");
+	        },
+        success: function(response) {
+    		checkCmdRet2();
+        	}
     });
 }
-uptime = eval("<% nvram_get("koolproxy_uptime"); %>");
+
+function checkCmdRet2(){
+	$j.ajax({
+		url: '/cmdRet_check.htm',
+		dataType: 'html',
+		
+		error: function(xhr){
+			setTimeout("checkCmdRet2();", 1000);
+		},
+		success: function(response){
+			var _cmdBtn = document.getElementById("cmdBtn");
+			if(response.search("XU6J03M6") != -1){
+				uptime = eval(response.replace("XU6J03M6", " ")) + 1;
+   				showbootTime();
+				return true;
+			}
+			
+			if(_responseLen == response.length){
+				noChange++;
+			}else{
+				noChange = 0;
+			}
+
+			if(noChange > 100){
+				noChange = 0;
+				refreshpage();
+			}else{
+				setTimeout("checkCmdRet2();", 1000);
+			}
+			_responseLen = response.length;
+		}
+	});
+}
+
+function done_validating(action) {
+	return ok;
+}
+
 function showbootTime(){
-	Days = Math.floor(uptime / (60*60*24));	
+	Days = Math.floor((uptime) / (60*60*24));	
 	Hours = Math.floor((uptime / 3600) % 24);
 	Minutes = Math.floor(uptime % 3600 / 60);
 	Seconds = Math.floor(uptime % 60);
-	
 	document.getElementById("boot_days").innerHTML = Days;
 	document.getElementById("boot_hours").innerHTML = Hours;
 	document.getElementById("boot_minutes").innerHTML = Minutes;
@@ -99,6 +134,8 @@ function buildswitch(){
 			document.getElementById("update_rules").style.display = "";
 			document.getElementById("lan_control").style.display = "";
 			document.getElementById("log_content").style.display = "none";
+			document.getElementById("kp_uptime").style.display = "";
+			
 		}else{
 			document.form.koolproxy_enable.value = 0;
 			document.getElementById("debug_tr").style.display = "none";
@@ -107,6 +144,7 @@ function buildswitch(){
 			document.getElementById("update_rules").style.display = "none";
 			document.getElementById("lan_control").style.display = "none";
 			document.getElementById("log_content").style.display = "none";
+			document.getElementById("kp_uptime").style.display = "none";
 		}
 	});
 }
@@ -132,7 +170,6 @@ location.href = "/Main_Soft_center.asp";
 function update_visibility1(){
 	showhide("koolproxy_policy_read1", (document.form.koolproxy_policy.value == 1));
 	showhide("koolproxy_policy_read2", (document.form.koolproxy_policy.value == 2));
-	showhide("update_rules", (document.form.koolproxy_update.value == 1));
 	showhide("koolproxy_black_lan", (document.form.koolproxy_lan_control.value == 1));
 	showhide("koolproxy_white_lan", (document.form.koolproxy_lan_control.value == 2));
 	showhide("koolproxy_debug1", (document.form.koolproxy_debug.value == 1));
@@ -146,6 +183,7 @@ function update_visibility(){
 		document.getElementById("update_rules").style.display = "";
 		document.getElementById("lan_control").style.display = "";
 		document.getElementById("log_content").style.display = "none";
+		document.getElementById("kp_uptime").style.display = "";
 	}else{
 		document.getElementById("debug_tr").style.display = "none";
 		document.getElementById("policy_tr").style.display = "none";
@@ -153,6 +191,7 @@ function update_visibility(){
 		document.getElementById("update_rules").style.display = "none";
 		document.getElementById("lan_control").style.display = "none";
 		document.getElementById("log_content").style.display = "none";
+		document.getElementById("kp_uptime").style.display = "none";
 	}
 }
 
@@ -184,30 +223,22 @@ function checkCmdRet(){
 			var _cmdBtn = document.getElementById("cmdBtn");
 			if(response.search("XU6J03M6") != -1){
 				retArea.value = response.replace("XU6J03M6", " ");
-				//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
-				//retArea.scrollTop = retArea.scrollHeight;
 				setTimeout("refreshpage();", 3000);
 				return false;
 			}
-			
 			if(_responseLen == response.length){
 				noChange++;
 			}else{
 				noChange = 0;
 			}
-
 			if(noChange > 100){
-				//retArea.scrollTop = retArea.scrollHeight;
-				//setTimeout("checkCmdRet();", 2000);
 				document.getElementById("log_content").style.display = "none";
 				noChange = 0;
 				refreshpage();
 			}else{
 				setTimeout("checkCmdRet();", 500);
 			}
-			
 			retArea.value = response;
-			//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
 			retArea.scrollTop = retArea.scrollHeight;
 			_responseLen = response.length;
 		}
@@ -223,8 +254,6 @@ function notice_show(){
 			$j("#rule_date_web").html(res.rules_date);
 			$j("#video_date_web").html(res.video_date);
         }
-
-        
     });
 }
 
@@ -263,58 +292,53 @@ function notice_show(){
 								<tr>
 									<td bgcolor="#4D595D" colspan="3" valign="top">
 										<div>&nbsp;</div>
-										
-
-
-												<table width="100%" height="150px" style="border-collapse:collapse;">
-                                                    <tr >
-                                                        <td colspan="5" class="cloud_main_radius">
-                                                            <div style="padding:10px;width:95%;font-style:italic;font-size:14px;">
-                                                                <br/><br/>
-                                                                <table width="100%" >
-                                                                    <tr>
-                                                                        <td>
-                                                                            <ul style="margin-top:-70px;padding-left:15px;" >
-                                                                                <li style="margin-top:-5px;">
-                                                                                    <h2 id="push_titile"><em>koolproxy <% dbus_get_def("koolproxy_version", "1.7"); %></em></h2>
-                                                                                    <div style="float:auto; width:15px; height:25px;margin-top:-40px;margin-left:680px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
-                                                                                </li>
-                                                                                <li style="margin-top:-5px;">
-                                                                                    <h3 id="push_content1" >koolproxy是能识别adblock规则的代理软件，目前正在完善中。
-                                                                                    </h3>
-                                                                                </li>
-                                                                                <li  style="margin-top:-5px;">
-                                                                                    <h3 id="push_content2">
-	                                                                                    <i>koolproxy静态规则：</i>
-	                                                                                    <% dbus_get_def("koolproxy_rule_info", "0"); %>
-	                                                                                    <span style="float: right;margin-right: 200px;" id="rule_date_web"></span>
-	                                                                                    <font style="float: right;" color="#66FF66">在线版本：</font>
-	                                                                                 </h3>
-                                                                                </li>
-                                                                                <li id="push_content3_li" style="margin-top:-5px;">
-                                                                                    <h3 id="push_content3">
-	                                                                                    <i>koolproxy视频规则：</i>
-	                                                                                    <% dbus_get_def("koolproxy_video_info", "0"); %>
-                                                                                    	<span style="float: right;margin-right: 200px;" id="video_date_web"></span>
-                                                                                    	<font style="float: right;" color="#66FF66">在线版本：</font>
-                                                                                    </h3>
-                                                                                </li>
-                                                                                <li id="push_content4_li" style="margin-top:-5px;display: block;">
-                                                                                    <h3 id="push_content4"></h3>
-                                                                                </li>
-                                                                            </ul>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr height="10px">
-                                                        <td colspan="3"></td>
-                                                    </tr>
-
-                                                </table>
-
+											<table width="100%" height="150px" style="border-collapse:collapse;">
+                                            <tr >
+                                                <td colspan="5" class="cloud_main_radius">
+                                                    <div style="padding:10px;width:95%;font-style:italic;font-size:14px;">
+                                                        <br/><br/>
+                                                        <table width="100%" >
+                                                            <tr>
+                                                                <td>
+                                                                    <ul style="margin-top:-70px;padding-left:15px;" >
+                                                                        <li style="margin-top:-5px;">
+                                                                            <h2 id="push_titile"><em>koolproxy <% dbus_get_def("koolproxy_version", "1.7"); %></em></h2>
+                                                                            <div style="float:auto; width:15px; height:25px;margin-top:-40px;margin-left:680px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
+                                                                        </li>
+                                                                        <li style="margin-top:-5px;">
+                                                                            <h3 id="push_content1" >koolproxy是能识别adblock规则的代理软件，目前正在完善中。
+                                                                            </h3>
+                                                                        </li>
+                                                                        <li  style="margin-top:-5px;">
+                                                                            <h3 id="push_content2">
+	                                                                            <i>koolproxy静态规则：</i>
+	                                                                            <% dbus_get_def("koolproxy_rule_info", "0"); %>
+	                                                                            <span style="float: right;margin-right: 200px;" id="rule_date_web"></span>
+	                                                                            <font style="float: right;" color="#66FF66">在线版本：</font>
+	                                                                         </h3>
+                                                                        </li>
+                                                                        <li id="push_content3_li" style="margin-top:-5px;">
+                                                                            <h3 id="push_content3">
+	                                                                            <i>koolproxy视频规则：</i>
+	                                                                            <% dbus_get_def("koolproxy_video_info", "0"); %>
+                                                                            	<span style="float: right;margin-right: 200px;" id="video_date_web"></span>
+                                                                            	<font style="float: right;" color="#66FF66">在线版本：</font>
+                                                                            </h3>
+                                                                        </li>
+                                                                        <li id="push_content4_li" style="margin-top:-5px;display: block;">
+                                                                            <h3 id="push_content4"></h3>
+                                                                        </li>
+                                                                    </ul>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr height="10px">
+                                                <td colspan="3"></td>
+                                            </tr>
+                                        </table>
 										<table style="margin:-20px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="routing_table">
 											<thead>
 											<tr>
@@ -340,10 +364,10 @@ function notice_show(){
 													<div id="koolproxy_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>	
 												</td>
 											</tr>
-										<tr>
-											<th>运行时间</th>
-											<td><span id="boot_days"></span> 天 <span id="boot_hours"></span> 时 <span id="boot_minutes"></span> 分 <span id="boot_seconds"></span> 秒</td>
-										</tr>
+											<tr id="kp_uptime">
+												<th>koolproxy主程序运行时间</th>
+												<td><span id="boot_days"></span> 天 <span id="boot_hours"></span> 时 <span id="boot_minutes"></span> 分 <span id="boot_seconds"></span> 秒</td>
+											</tr>
 											<tr id="debug_tr">
 												<th>日志显示</th>
 												<td>
@@ -405,7 +429,6 @@ function notice_show(){
 														<textarea placeholder="填入不需要走koolproxy的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=2 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;display:none" id="koolproxy_white_lan" name="koolproxy_white_lan" title=""></textarea>
 													</td>
 												</tr>
-											
                                     	</table>
                                     	<div id="log_content" style="margin-top:10px;display: none;">
 											<textarea cols="63" rows="21" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;">

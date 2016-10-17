@@ -1,5 +1,5 @@
-!x  -----update[rules]:  2016-10-16 15:00 --- by houzi /zt
-!x -----update[video]:  2016-10-16 15:45 --- by houzi /zt
+!x  -----update[rules]:  2016-10-17 18:00 --- by houzi /zt
+!x  -----update[video]:  2016-10-17 18:48 --- by houzi /zt
 !x  -----base: adblock <koolproxy dedicated>
 !x  -----thanks: xwhyc CJX yiclear adsafe
 !x  -------------------------------------- white rules ---------------------------------------------
@@ -8,6 +8,14 @@
 @@|http://$domain=meishichina.com|vip.xunlei.com|lixian.xunlei.com|www.vmall.com|www.1688.com|www.mm111.net|jifen.qq.com
 @@|http://$domain=taobao.com|taobao.org|alipay.com|suning.com|51buy.com|ct10000.com|etao.com|hitao.com|paipai.com|189.cn
 @@|http://$domain=banggo.com|pili.com.tw|yunhou.com|voicecloud.cn|xunfei.cn
+@@||wrating.com/a1.js$domain=tudou.com|ynet.com
+@@||a.ads.cn.miaozhen.com^$domain=youku.com
+@@||atm.youku.com/cast/getFlvUrl.
+@@||static.atm.youku.com^*.swf
+@@||youku.com^*^adshow
+@@||youku.com^*^showAd
+@@|http://v2html.atm.youku.com/vhtml
+@@u-ads.adap.tv*youku.com
 @@||sinaimg.cn/mw690/$image
 @@||sinaimg.cn/mw1024/$image
 @@||sinaimg.cn/large/$image
@@ -20,6 +28,7 @@
 !@@||atm.youku.com/v*?vip=
 @@|http://17173im.qtmojo.com/main/s?user=||17173_video&
 @@||stat.letv.com/$script
+@@||letv.com*/tuiguang/$subdocument
 @@|http://hc.yinyuetai.com/partner/yyt/
 @@|http://image.res.hunantv.com/mediafiles/creative/u3154/
 @@|http://v.aty.sohu.com/v$object-subrequest
@@ -2586,6 +2595,9 @@
 |http://zx.cp.ifeng.com/export/ifeng_sport_lottery_bet.htm
 |http://zx.cp.ifeng.com/export/js/ifeng_sport_lottery_channel_pic.js$script
 |http://zzimg.51.la^
+|http://www.tudou.com/crp/getLoginLimit.action?
+|http://www.tudou.com/crp/getOtherItemInfo.action?
+|http://www.tudou.com/feeportal/getPayMsg.html?
 ||00oo00.com
 ||010teacher.com$third-party
 ||010xk.com
@@ -4824,3 +4836,4 @@
 ||cpro.
 ||irs01.com/$third-party
 |http://union$third-party
+/pos?act=dur$object-subrequest,domain=tudou.com
