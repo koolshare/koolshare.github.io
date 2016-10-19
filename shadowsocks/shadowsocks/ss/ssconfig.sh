@@ -63,7 +63,7 @@ update_ss(){
 			wget --no-check-certificate --timeout=5 "$main_url"/shadowsocks.tar.gz >> /tmp/syscmd.log
 			md5sum_gz=`md5sum /tmp/shadowsocks.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web1" ]; then
-				echo $(date): 更新包md5校验不一致！估计是下载的时候除了什么状况，请等待一会儿再试... >> /tmp/syscmd.log
+				echo $(date): 更新包md5校验不一致！估计是下载的时候出了什么状况，请等待一会儿再试... >> /tmp/syscmd.log
 				dbus set ss_basic_install_status="4"
 				rm -rf /tmp/shadowsocks* >/dev/null 2>&1
 				sleep 1
