@@ -112,9 +112,9 @@ function reload_Soft_Center(){
 location.href = "/Main_Soft_center.asp";
 }
 function setIframeSrc() {
-    var s1 = "http://1212.ip138.com/ic.asp";
-    var s2 = "http://x302.rashost.com/ip.php";
-    var s3 = "http://ip111cn.appspot.com/";
+    var s1 = "http://59.111.101.206/ip9.php";
+    var s2 = "http://ip100.info/ip9.php";
+    var s3 = "http://ip100info.appspot.com/ip9.php";
     var iframe1 = document.getElementById('iframe1');
     var iframe2 = document.getElementById('iframe2');
     var iframe3 = document.getElementById('iframe3');
@@ -262,7 +262,7 @@ function version_show(){
 </td>
 </tr>
 </table>
-<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="Routing_rules_table1">
+<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="left" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="Routing_rules_table1">
 <thead>
 <tr>
 <td colspan="2">双线双拨策略路由状态</td>
@@ -271,20 +271,20 @@ function version_show(){
 <tr>
 <th>国内连接</th>
 <td colspan="2">
-<iframe id="iframe1" src="" width="100%" height="30" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+<iframe id="iframe1" src="" height="55px" scrolling="no" frameborder="0"></iframe>
 <tr>
-<th>国外连接</th>
+<th>国外普通网站</th>
 <td colspan="2">
-<iframe id="iframe2" src="" width="100%" height="30" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+<iframe id="iframe2" src="" height="55px" scrolling="no" frameborder="0"></iframe>
 <tr>
-<th>谷歌网站</th>
+<th>谷歌等和谐网站</th>
 <td colspan="2">
-<iframe id="iframe3" src="" width="100%" height="30" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+<iframe id="iframe3" src="" height="55px" scrolling="no" frameborder="0"></iframe> 
 </td>
 </tr>
 </table>
-<div id="warn" style="display: none;margin-top: 20px;text-align: center;font-size: 20px;margin-bottom: 20px;"class="formfontdesc" id="cmdDesc"><i>开启双线路负载均衡模式才能进行本页面设置</i></div>
-<div class="apply_gen">
+<div id="warn" style="display: none;margin-top: 30px;text-align: center;font-size: 20px;margin-bottom: 20px;"class="formfontdesc" id="cmdDesc"><i>开启双线路负载均衡模式才能进行本页面设置</i></div>
+<div class="apply_gen" style="margin-top:240px;">
 <button id="cmdBtn" class="button_gen" onclick="onSubmitCtrl(this, ' Refresh ')">提交</button>
 </div>
 <div id="line_image1" style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"/></div>
