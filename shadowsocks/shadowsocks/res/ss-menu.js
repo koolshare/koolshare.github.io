@@ -1,9 +1,7 @@
 ﻿function menu_hook(title, tab) {
 	var ss_mode = '<% nvram_get("ss_mode"); %>';
-	//tabtitle[16] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
-	tabtitle[16] = new Array("", "shadowsocks设置", "Socks5设置");
-	//tablink[16] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
-	tablink[16] = new Array("", "Main_Ss_Content.asp", "Main_SsLocal_Content.asp");
+	tabtitle[16] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
+	tablink[16] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
 }
 
 function showSSLoadingBar(seconds){

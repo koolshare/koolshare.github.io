@@ -288,8 +288,6 @@ function onSubmitCtrl() {
 			}
         	updateOptions();
         	noChange2 = 0;
-			$G("loading_block1").style.display = "none";
-			$G("log_content2").style.display = "";
     		setTimeout("checkCmdRet2();", 500);
             });
         } else {
@@ -310,8 +308,6 @@ function onSubmitCtrl() {
 			}
     		updateOptions();
     		noChange2 = 0;
-			$G("loading_block1").style.display = "none";
-			$G("log_content2").style.display = "";
     		setTimeout("checkCmdRet2();", 500);
             });
         }
@@ -352,7 +348,7 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		} else if (field == "ss_basic_rss_protocol") {
-			if (obj[field] != "origin" && obj[field] != "verify_simple" &&  obj[field] != "auth_simple" && obj[field] != "auth_sha1" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" ) {
+			if (obj[field] != "origin" && obj[field] != "verify_simple" &&  obj[field] != "auth_simple" && obj[field] != "auth_sha1" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" && obj[field] != "auth_aes128_md5" && obj[field] != "auth_aes128_sha1" ) {
 				$j("#ss_basic_rss_protocol").val("origin");
 			} else {
 				$j("#ss_basic_rss_protocol").val(obj.ss_basic_rss_protocol);
@@ -1413,13 +1409,15 @@ function download_SS_node() {
 
 function upload_SS_node() {
 	if ($G('ss_file').value == "") return false;
+	global_ss_node_refresh = false;
 	$G('ss_file_info').style.display = "none";
 	$G('loadingicon').style.display = "block";
-	document.form.action_mode.value = ' Refresh ';
 	document.form.enctype = "multipart/form-data";
 	document.form.encoding = "multipart/form-data";
 	document.form.action = "/ssupload.cgi?a=/tmp/ss_conf_backup.txt";
-	document.form.submit();
+	if (validForm()){
+		document.form.submit();
+	}
 }
 
 function upload_ok(isok) {
@@ -1436,6 +1434,7 @@ function upload_ok(isok) {
 
 function restore_ss_conf() {
 	checkTime = 2001;  //停止可能在进行的刷新
+	document.form.action_mode.value = ' Refresh ';
 	document.form.action = "/applydb.cgi?p=ss";
     document.form.SystemCmd.value = "ss_conf_restore.sh";
 	document.form.enctype = "";
@@ -1445,8 +1444,6 @@ function restore_ss_conf() {
 	}
     //setTimeout("onSubmitCtrl();", 2000);
     //refreshpage(5);
-    $G("loading_block1").style.display = "";
-	$G("log_content2").style.display = "none";
     showLoadingBar(8);
     $j("#loading_block3").html("恢复SS配置");
     $j("#loading_block2").html("<li><font color='#ffcc00'>正在恢复相关配置中...</font></li></br><li><font color='#ffcc00'>配置恢复后需要重新提交！</font></li></br><li><font color='#ffcc00'>恢复配置后将返回网络地图！</font></li>");
@@ -1463,8 +1460,6 @@ function remove_SS_node(){
 		document.form.submit();
 	}
 	//refreshpage(5);
-    $G("loading_block1").style.display = "";
-	$G("log_content2").style.display = "none";
 	showLoadingBar(8);
 	 $j("#loading_block3").html("清除SS配置");
 	 $j("#loading_block2").html("<li><font color='#ffcc00'>正在清除所有SS配置...</font></li></br><li><font color='#ffcc00'>配置清除后将自动关闭SS...</font></li></br><li><font color='#ffcc00'>恢复配置后将返回网络地图！</font></li>");
@@ -1623,7 +1618,7 @@ function version_show(){
                     	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
                 	}else{
-	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：2.9.9</i></a>");
+	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.0.0</i></a>");
                 	}
 		        }
             }
@@ -1751,8 +1746,6 @@ function buildswitch(){
 			$G("apply_button").style.display = "none";
 			$G("ss_node_list_table_th").style.display = "none";
 			noChange2 = 0;
-			$G("loading_block1").style.display = "none";
-			$G("log_content2").style.display = "";
 			setTimeout("checkCmdRet2();", 500);
 			
 			
@@ -2086,7 +2079,6 @@ function checkCmdRet(){
 
 var noChange2 = 0;
 function checkCmdRet2(){
-
 	$j.ajax({
 		url: '/cmdRet_check.htm',
 		dataType: 'html',
@@ -2183,12 +2175,8 @@ function setIframeSrc() {
 	<tr>
 		<td height="100">
 		<div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
-		<div id="loading_block1" class="Bar_container">
-			<span id="proceeding_img_text"></span>
-			<div id="proceeding_img"></div>
-		</div>
 		<div id="loading_block2" style="margin:10px auto;width:95%;"></div>
-		<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;display: none;">
+		<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;">
 		<textarea cols="63" rows="27" wrap="off" readonly="readonly" id="log_content3" style="border:1px solid #000;width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
 		</div>
 		<div id="ok_button" class="apply_gen" style="background: #000;display: none;">
@@ -2199,7 +2187,7 @@ function setIframeSrc() {
 </table>
 </div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
-<form method="post" name="form" action="/applydb.cgi?p=ss" target="hidden_frame">
+<form method="post" name="form" action="/applydb.cgi?p=ss_basic" target="hidden_frame">
 <input type="hidden" name="current_page" value="Main_Ss_Content.asp"/>
 <input type="hidden" name="next_page" value="Main_Ss_Content.asp"/>
 <input type="hidden" name="group_id" value=""/>
@@ -2402,6 +2390,10 @@ function setIframeSrc() {
 																		<option value="auth_sha1">auth_sha1</option>
 																		<option value="auth_sha1_v2">auth_sha1_v2</option>
 																		<option value="auth_sha1_v4">auth_sha1_v4</option>
+																		<option value="auth_aes128_md5">auth_aes128_md5</option>
+																		<option value="auth_aes128_sha1">auth_aes128_sha1</option>
+																		
+																		
 																	</select>
 																</td>
 															</tr>
@@ -2562,6 +2554,8 @@ function setIframeSrc() {
 															<option class="content_input_fd" value="auth_sha1">auth_sha1</option>
 															<option class="content_input_fd" value="auth_sha1_v2">auth_sha1_v2</option>
 															<option class="content_input_fd" value="auth_sha1_v4">auth_sha1_v4</option>
+															<option value="auth_aes128_md5">auth_aes128_md5</option>
+															<option value="auth_aes128_sha1">auth_aes128_sha1</option>
 														</select>
 														<span id="ss_basic_rss_protocol_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
@@ -2642,7 +2636,7 @@ function setIframeSrc() {
 														<input type="button" class="button_gen" onclick="remove_SS_node();" value="清空配置">
 														<input type="button" id="upload_btn" class="button_gen" onclick="upload_SS_node();" value="恢复配置">
 
-														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file">
+														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file">
 														<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif">
 														<span id="ss_file_info" style="display:none;">完成</span>
 													</td>
