@@ -5,7 +5,6 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    - update	程序：更新shadowsocks-libev到2.5.5 release;
    - update	程序：更新shadowsocksR-libev到最新:"free mem";
    - update	界面：添加SSR支持auth_aes128_md5及auth_aes128_sha1协议;
-   - fix	脚本：修复对域名和ip格式判断的错误，现在ip格式的服务器地址不会再走解析了;
    - add	脚本：添加ss启动前触发脚本,用于选在负载均衡节点时，在ss启动前自动启动haproxy;
    - add	功能：添加负载均衡设置页面：为了尽量不改变现有ss的逻辑，负载均衡功能采用外挂的形式添加进ss插件
    		ss插件本身只添加了启动前触发脚本，而其它全部靠负载均衡页面本身；
