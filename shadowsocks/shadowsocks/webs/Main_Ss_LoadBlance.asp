@@ -550,7 +550,7 @@ function update_visibility(){
 											<tr>
 												<th>Haproxy端口(用于ss监听)</th>
 												<td>
-												  	<input type="text" maxlength="64" id="ss_lb_port" name="ss_lb_port" value="" class="input_ss_table" style="width:60px;" autocorrect="off" autocapitalize="off"></input>
+												  	<input type="text" maxlength="64" id="ss_lb_port" name="ss_lb_port" value="1181" class="input_ss_table" style="width:60px;" autocorrect="off" autocapitalize="off"></input>
 												</td>
 											</tr>
 
