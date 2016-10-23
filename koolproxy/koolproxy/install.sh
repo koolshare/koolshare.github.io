@@ -29,10 +29,9 @@ rm -rf /tmp/koolproxy* >/dev/null 2>&1
 chmod 755 /koolshare/koolproxy/*
 chmod 755 /koolshare/scripts/*
 chmod 755 /koolshare/perp//koolproxy/*
+rm -rf /koolshare/scripts/koolproxy_uptime.sh
 
-if [ -z "$koolproxy_debug" ];then
-	dbus set koolproxy_debug=1
-fi
+dbus set koolproxy_debug=0
 
 if [ -z "$koolproxy_policy" ];then
 	dbus set koolproxy_policy=1

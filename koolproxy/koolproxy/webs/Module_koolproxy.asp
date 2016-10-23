@@ -34,7 +34,7 @@
 <script>
 function init(menu_hook) {
 	show_menu();
-    get_uptime();
+    //get_uptime();
 	buildswitch();
 	conf2obj();
 	update_visibility();
@@ -47,7 +47,7 @@ function init(menu_hook) {
     }
     notice_show();
 }
-
+/*
 function get_uptime() {
     $j.ajax({
         url: 'apply.cgi?current_page=Module_koolproxy.asp&next_page=Module_koolproxy.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=koolproxy_uptime.sh&firmver=3.0.0.4',
@@ -110,7 +110,7 @@ function showbootTime(){
 	uptime += 1;
 	setTimeout("showbootTime()", 1000);
 }
-
+*/
 var enable_ss = "<% nvram_get("enable_ss"); %>";
 var enable_soft = "<% nvram_get("enable_soft"); %>";
 function menu_hook(title, tab) {
@@ -134,7 +134,7 @@ function buildswitch(){
 			document.getElementById("update_rules").style.display = "";
 			document.getElementById("lan_control").style.display = "";
 			document.getElementById("log_content").style.display = "none";
-			document.getElementById("kp_uptime").style.display = "";
+			//document.getElementById("kp_uptime").style.display = "";
 			
 		}else{
 			document.form.koolproxy_enable.value = 0;
@@ -144,7 +144,7 @@ function buildswitch(){
 			document.getElementById("update_rules").style.display = "none";
 			document.getElementById("lan_control").style.display = "none";
 			document.getElementById("log_content").style.display = "none";
-			document.getElementById("kp_uptime").style.display = "none";
+			//document.getElementById("kp_uptime").style.display = "none";
 		}
 	});
 }
@@ -183,7 +183,7 @@ function update_visibility(){
 		document.getElementById("update_rules").style.display = "";
 		document.getElementById("lan_control").style.display = "";
 		document.getElementById("log_content").style.display = "none";
-		document.getElementById("kp_uptime").style.display = "";
+		//document.getElementById("kp_uptime").style.display = "";
 	}else{
 		document.getElementById("debug_tr").style.display = "none";
 		document.getElementById("policy_tr").style.display = "none";
@@ -191,7 +191,7 @@ function update_visibility(){
 		document.getElementById("update_rules").style.display = "none";
 		document.getElementById("lan_control").style.display = "none";
 		document.getElementById("log_content").style.display = "none";
-		document.getElementById("kp_uptime").style.display = "none";
+		//document.getElementById("kp_uptime").style.display = "none";
 	}
 }
 
@@ -364,10 +364,12 @@ function notice_show(){
 													<div id="koolproxy_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>	
 												</td>
 											</tr>
+											<!--
 											<tr id="kp_uptime">
 												<th>koolproxy主程序运行时间</th>
 												<td><span id="boot_days"></span> 天 <span id="boot_hours"></span> 时 <span id="boot_minutes"></span> 分 <span id="boot_seconds"></span> 秒</td>
 											</tr>
+											-->
 											<tr id="debug_tr">
 												<th>日志显示</th>
 												<td>
