@@ -5,7 +5,7 @@ eval `dbus export ss`
 source /koolshare/scripts/base.sh
 #--------------------------------------------------------------------------------------
 resolv_server_ip(){
-	IFIP=`echo $server_ip|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
+	IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}"`
 	if [ -z "$IFIP" ];then
 		echo $(date): 检测到你的SS服务器为域名格式，将尝试进行解析...
 		if [ "$ss_basic_dnslookup" == "1" ];then

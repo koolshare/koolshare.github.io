@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.0.1
+   - fix	脚本：修复对域名和ip格式判断的错误，现在ip格式的服务器地址不会再走解析了;
+   - fix	脚本：修复haproxy启动权限问题
+   - update	界面：现在负载均衡控制台默认使用路由器登录帐号和密码
 
 3.0.0
    - update	程序：更新shadowsocks-libev到2.5.5 release;

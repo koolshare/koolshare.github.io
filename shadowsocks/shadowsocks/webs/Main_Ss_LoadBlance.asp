@@ -540,10 +540,11 @@ function update_visibility(){
                                 			      <div style="padding-top:5px;">
                                 			         <a id="link4.1" href="http://aria2.me/glutton/" target="_blank"></a>
 													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-													登录帐号：<i>amdin</i>
+													登录帐号：<i><% nvram_get("http_username"); %></i>
 													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 													登录密码：
-												  	<input type="text" maxlength="64" id="ss_lb_passwd" name="ss_lb_passwd" value="koolshare" class="input_ss_table" style="width:80px;" autocorrect="off" autocapitalize="off"></input>
+												  	<input type="password" maxlength="64" id="ss_lb_passwd" name="ss_lb_passwd" value="<% nvram_get("http_passwd"); %>" class="input_ss_table" style="width:80px;" autocorrect="off" autocapitalize="off"></input>
+													<div style="margin-left:420px;margin-top:-21px;margin-bottom:2px"><input type="checkbox" name="show_pass" onclick="pass_checked(document.form.ss_lb_passwd);">
                                 			      </div>
                                 			    </td>
                                 			</tr>

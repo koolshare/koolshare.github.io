@@ -1618,7 +1618,7 @@ function version_show(){
                     	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
                 	}else{
-	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.0.0</i></a>");
+	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.0.1</i></a>");
                 	}
 		        }
             }
