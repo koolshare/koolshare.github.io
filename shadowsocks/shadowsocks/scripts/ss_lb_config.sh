@@ -4,7 +4,7 @@ eval `dbus export ss`
 
 # 引用环境变量等
 source /koolshare/scripts/base.sh
-
+username=`nvram get http_username`
 
 write_haproxy_cfg(){
 	cat > /koolshare/configs/haproxy.cfg <<-EOF
@@ -38,7 +38,7 @@ write_haproxy_cfg(){
 		    mode http                
 		    stats refresh 30s    
 		    stats uri  /
-		    stats auth admin:$ss_lb_passwd
+		    stats auth $username:$ss_lb_passwd
 		    #stats hide-version  
 		    stats admin if TRUE
 
