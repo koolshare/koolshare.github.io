@@ -13,7 +13,7 @@ write_haproxy_cfg(){
 		    chroot      /usr/bin
 		    pidfile     /var/run/haproxy.pid
 		    maxconn     4000
-		    user        admin
+		    user        nobody
 		    daemon
 		defaults
 		    mode                    tcp
