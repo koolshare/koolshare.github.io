@@ -191,14 +191,14 @@
             "version": "1.4"
         }, 
         {
-            "build_date": "2016-10-22_23:40:26", 
+            "build_date": "2016-10-23_11:00:50", 
             "description": "让分流更简单", 
             "home_url": "Module_policy_route.asp", 
-            "md5": "6f94c5c12ee07ab15f84108cee10facf", 
+            "md5": "f9e8f175556cb4e51800a3c406a74039", 
             "name": "dualwan", 
             "tar_url": "dualwan/dualwan.tar.gz", 
             "title": "策略路由", 
-            "version": "1.3"
+            "version": "1.4"
         }, 
         {
             "build_date": "2016-05-13_16:14:27", 
