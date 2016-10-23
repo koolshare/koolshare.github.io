@@ -231,10 +231,6 @@ kill_process(){
 		killall client_linux_arm5 >/dev/null 2>&1
 	fi
 
-	if [ ! -z "$haproxy" ];then 
-		echo $(date): 关闭haproxy进程...
-		killall haproxy >/dev/null 2>&1
-	fi
 }
 
 kill_cron_job(){
