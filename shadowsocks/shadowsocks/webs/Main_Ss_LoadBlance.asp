@@ -164,6 +164,11 @@ function getAllConfigs() { //取得所有ss节点数据，并且格式化成数�
 		}else {
             obj["weight"] = db_ss[p + "_weight_" + field];
         }
+        if (typeof db_ss[p + "_lbmode_" + field] == "undefined"){
+			obj["lbmode"] = '';
+		}else {
+            obj["lbmode"] = db_ss[p + "_lbmode_" + field];
+        }
         if (typeof db_ss[p + "_rss_protocol_" + field] == "undefined"){
 			obj["rss_protocol"] = '';
 		}else {
@@ -218,7 +223,6 @@ function loadBasicOptions(confs) { //载入节点选择列表
     option.find('option').remove().end();
     for (var field in confs) {
         var c = confs[field];
-        min_lb_node=confs[1].use_lb
 		if (c["use_lb"] != 1 && c["server"] !== "127.0.0.1"){ //节点选择列表中显示所有的非负载均衡节点，并且不显示负载均衡节点本身
         option.append($j("<option>", {
             value: field,
@@ -279,7 +283,6 @@ function del_lb_node(o) { //删除节点功能
 			cur_lb_node=field;
 		}
 	}
-    min_lb_node=confs[1].use_lb
 
     var ns = {};
 	ns["ssconf_basic_name_" + cur_lb_node] = "";
@@ -314,6 +317,7 @@ function addTr(){ //点击添加按钮动作
 	var node_sel = $G("ss_lb_node").value;
 	ns["ssconf_basic_use_lb_" + node_sel] = 1;
 	ns["ssconf_basic_weight_" + node_sel] = $G("ss_lb_weight").value;
+	ns["ssconf_basic_lbmode_" + node_sel] = $G("ss_lb_mode").value;
     $j.ajax({
         url: '/applydb.cgi?p=ssconf_basic',
         contentType: "application/x-www-form-urlencoded",
@@ -338,6 +342,7 @@ function delTr(o) { //删除节点功能
     var ns = {};
 	ns["ssconf_basic_use_lb_" + id] = "";
 	ns["ssconf_basic_weight_" + id] = "";
+	ns["ssconf_basic_lbmode_" + id] = "";
     $j.ajax({
         url: '/applydb.cgi?use_rm=1&p=ssconf_basic',
         contentType: "application/x-www-form-urlencoded",
@@ -411,6 +416,13 @@ function refresh_html() {
     		html = html + '<td id="ss_node_port_' + c["node"] + '" style="width:37px;">' + c["port"] + '</td>';
     		html = html + '<td id="ss_node_password_' + c["node"] + '" style="width:75px;">' + c["password"] + '</td>';
     		html = html + '<td id="ss_node_method_' + c["node"] + '" style="width:75px;">' + c["method"] + '</td>';
+			if(c["lbmode"] == 3){
+    			html = html + '<td id="ss_node_mode_' + c["node"] + '" style="width:75px;">备用节点</td>';
+			}else if(c["lbmode"] == 2){
+    			html = html + '<td id="ss_node_mode_' + c["node"] + '" style="width:75px;">主用节点</td>';
+			}else if(c["lbmode"] == 1){
+    			html = html + '<td id="ss_node_mode_' + c["node"] + '" style="width:75px;">负载均衡</td>';
+			}
     		html = html + '<td id="ss_node_weight_' + c["node"] + '" style="width:75px;">' + c["weight"] + '</td>';
     		html = html + '<td style="width:33px;">'
     		html = html + '<input style="margin-top: 4px;margin-left:-3px;" id="td_node_' + c["node"] + '" class="remove_btn" type="button" onclick="delTr(this);" value="">'
@@ -587,22 +599,32 @@ function update_visibility(){
 											<tr>
 												<th>服务器添加</th>
                                         		<td>
-                                        		    <select id="ss_lb_node" name="ss_lb_node" style="width:180px;margin:0px 0px 0px 2px;" class="input_option" >
+                                        		    <select id="ss_lb_node" name="ss_lb_node" style="width:130px;margin:0px 0px 0px 2px;" class="input_option" >
                                         		    </select>
-                                        		    权重：
-													<input type="text" class="input_ss_table" style="width:50px" id="ss_lb_weight" name="ss_lb_weight" maxlength="100" value="50"/>
-                                        		    <input style="float:left;margin-top:-28px;margin-left:300px;" type="button" class="add_btn" onclick="addTr()" value=""/>
+                                        		    &nbsp;&nbsp;&nbsp;&nbsp;
+                                        		    权重:
+													<input type="text" class="input_ss_table" style="width:30px" id="ss_lb_weight" name="ss_lb_weight" maxlength="100" value="50"/>
+                                        		    &nbsp;&nbsp;&nbsp;&nbsp;
+													属性:
+													<select id="ss_lb_mode" name="ss_lb_mode" style="width:90px;margin:0px 0px 0px 2px;" class="input_option" onchange="update_visibility();">
+														<option value="1" selected>负载均衡</option>
+														<option value="2">主用节点</option>
+														<option value="3">备用节点</option>
+													</select>
+													
+                                        		    <input style="float:left;margin-top:-28px;margin-left:370px;" type="button" class="add_btn" onclick="addTr()" value=""/>
                                         		</td>
 											</tr>
                                     	</table>
 
 										<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="lb_node_table">
 											<tr>
-												<th style="width:60px;">服务器别名</th>
+												<th style="width:70px;">服务器别名</th>
 												<th style="width:90px;">服务器</th>
 												<th style="width:90px;">服务器端口</th>
 												<th style="width:90px;">密码</th>
 												<th style="width:90px;">加密方式</th>
+												<th style="width:35px;">属性</th>
 												<th style="width:35px;">权重</th>
 												<th style="width:35px;">删除</th>
 											</tr>

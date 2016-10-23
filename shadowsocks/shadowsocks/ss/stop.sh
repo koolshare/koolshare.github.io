@@ -17,6 +17,7 @@ DNS2SOCK=$(ps | grep "dns2socks" | grep -v "grep")
 koolgame=$(ps | grep "koolgame" | grep -v "grep")
 client_linux_arm5=$(ps | grep "client_linux_arm5" | grep -v "grep")
 Pcap_DNSProxy=$(ps | grep "Pcap_DNSProxy" | grep -v "grep")
+haproxy=$(ps | grep "haproxy" | grep -v "grep")
 lan_ipaddr=$(nvram get lan_ipaddr)
 ip_rule_exist=`ip rule show | grep "fwmark 0x1/0x1 lookup 300" | grep -c 300`
 nvram set ss_mode=0
@@ -228,6 +229,11 @@ kill_process(){
 	if [ ! -z "$client_linux_arm5" ];then 
 		echo $(date): 关闭kcp协议进程...
 		killall client_linux_arm5 >/dev/null 2>&1
+	fi
+
+	if [ ! -z "$haproxy" ];then 
+		echo $(date): 关闭haproxy进程...
+		killall haproxy >/dev/null 2>&1
 	fi
 }
 

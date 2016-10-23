@@ -60,9 +60,17 @@ if [ "$ss_lb_heartbeat" == "1" ];then
 		up=`dbus get ss_lb_up`
 		down=`dbus get ss_lb_down`
 		interval=`dbus get ss_lb_interval`
+		mode=`dbus get ssconf_basic_lbmode_$node`
+		if [ "$mode" == "3" ];then
+cat >> /koolshare/configs/haproxy.cfg <<EOF
+	server $server $server:$port weight $weight rise 2 fall 3 check inter 2000 backup
+EOF
+		else
 cat >> /koolshare/configs/haproxy.cfg <<EOF
 	server $server $server:$port weight $weight rise 2 fall 3 check inter 2000
 EOF
+		fi
+
 	done
 
 else
@@ -74,11 +82,17 @@ else
 		server_ip=`nslookup "$server" 119.29.29.29 | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
 		port=`dbus get ssconf_basic_port_$node`
 		weight=`dbus get ssconf_basic_weight_$node`
+		mode=`dbus get ssconf_basic_lbmode_$node`
+		if [ "$mode" == "3" ];then
+cat >> /koolshare/configs/haproxy.cfg <<EOF
+	server $server $server_ip:$port weight $weight backup
+EOF
+		else
 cat >> /koolshare/configs/haproxy.cfg <<EOF
 	server $server $server_ip:$port weight $weight
 EOF
+		fi
 	done
-
 fi
 }
 
