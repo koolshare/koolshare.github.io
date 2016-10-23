@@ -308,6 +308,8 @@ function onSubmitCtrl() {
 			}
     		updateOptions();
     		noChange2 = 0;
+			$G("loading_block1").style.display = "none";
+			$G("log_content2").style.display = "";
     		setTimeout("checkCmdRet2();", 500);
             });
         }
@@ -1444,6 +1446,8 @@ function restore_ss_conf() {
 	}
     //setTimeout("onSubmitCtrl();", 2000);
     //refreshpage(5);
+    $G("loading_block1").style.display = "";
+	$G("log_content2").style.display = "none";
     showLoadingBar(8);
     $j("#loading_block3").html("恢复SS配置");
     $j("#loading_block2").html("<li><font color='#ffcc00'>正在恢复相关配置中...</font></li></br><li><font color='#ffcc00'>配置恢复后需要重新提交！</font></li></br><li><font color='#ffcc00'>恢复配置后将返回网络地图！</font></li>");
@@ -1460,6 +1464,8 @@ function remove_SS_node(){
 		document.form.submit();
 	}
 	//refreshpage(5);
+    $G("loading_block1").style.display = "";
+	$G("log_content2").style.display = "none";
 	showLoadingBar(8);
 	 $j("#loading_block3").html("清除SS配置");
 	 $j("#loading_block2").html("<li><font color='#ffcc00'>正在清除所有SS配置...</font></li></br><li><font color='#ffcc00'>配置清除后将自动关闭SS...</font></li></br><li><font color='#ffcc00'>恢复配置后将返回网络地图！</font></li>");
@@ -1746,6 +1752,8 @@ function buildswitch(){
 			$G("apply_button").style.display = "none";
 			$G("ss_node_list_table_th").style.display = "none";
 			noChange2 = 0;
+			$G("loading_block1").style.display = "none";
+			$G("log_content2").style.display = "";
 			setTimeout("checkCmdRet2();", 500);
 			
 			
@@ -2175,6 +2183,10 @@ function setIframeSrc() {
 	<tr>
 		<td height="100">
 		<div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
+		<div id="loading_block1" class="Bar_container">
+			<span id="proceeding_img_text"></span>
+			<div id="proceeding_img"></div>
+		</div>
 		<div id="loading_block2" style="margin:10px auto;width:95%;"></div>
 		<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;">
 		<textarea cols="63" rows="27" wrap="off" readonly="readonly" id="log_content3" style="border:1px solid #000;width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
@@ -2636,7 +2648,7 @@ function setIframeSrc() {
 														<input type="button" class="button_gen" onclick="remove_SS_node();" value="清空配置">
 														<input type="button" id="upload_btn" class="button_gen" onclick="upload_SS_node();" value="恢复配置">
 
-														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file">
+														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file">
 														<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif">
 														<span id="ss_file_info" style="display:none;">完成</span>
 													</td>

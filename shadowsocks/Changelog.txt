@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.0.2	 	
+   - fix	界面：修复清空配置和恢复配置
+
 3.0.1
    - fix	脚本：修复对域名和ip格式判断的错误，现在ip格式的服务器地址不会再走解析了;
    - fix	脚本：修复haproxy启动权限问题
