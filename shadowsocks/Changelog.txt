@@ -1,5 +1,19 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.0.4
+   - fix	修复更新后页面不刷新问题；现在更新ss，更新规则，清除配置，恢复配置后都会刷新页面，提交ss，dns，黑白名单，附加功能不会刷新页面；
+   - fix	修复更新时当出现wget下载进度的时候，前面的日志被后面的日志覆盖的问题；
+   - update	添加移除配置，恢复配置的中文日志显示；
+   - update	添加负载均衡的中文日志显示；
+   - update	现在更新插件，更新规则，移除配置，恢复配置日志不再跳转到日志界面，而是直接打印在进度页面；
+   - fix	修复负载均衡模式开机不启动的问题；
+   - fix	修复规则更新后不会重启ss的bug；
+   - update	更改ss启动前触发脚本启动时机，现在触发发生在stop.sh后，start.sh前，更加合理；
+   - update	添加负载均衡节点的dns解析功能，另外如果解析不成功将由haproxy自己解析，同时haproxy也配置了dnspod dns和114dns来进行解析；
+   - update	更新shadowsocksr-libev最最新代码编译
+   - update	更新安装脚本，当准备开始安装的时候，会关闭ss，安装成功后自动开启；
+   - update	集成最新gfwlist和chnroute规则文件;
+
 3.0.3	 	
    - fix	脚本：修复解析ip地址时对ipv6地址判断为域名的bug;
    - fix	脚本：修复负载均衡模式下，关闭ss不会关闭haproxy进程的问题;

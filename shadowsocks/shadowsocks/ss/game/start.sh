@@ -9,7 +9,7 @@ resolv_server_ip(){
 	if [ -z "$IFIP" ];then
 		echo $(date): 检测到你的SS服务器为域名格式，将尝试进行解析...
 		if [ "$ss_basic_dnslookup" == "1" ];then
-			echo $(date): 使用nslookup方式解析SS服务器的ip地址.
+			echo $(date): 使用nslookup方式解析SS服务器的ip地址,解析dns：$ss_basic_dnslookup_server
 			server_ip=`nslookup "$ss_basic_server" $ss_basic_dnslookup_server | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
 		else
 			echo $(date): 使用resolveip方式解析SS服务器的ip地址.
@@ -26,7 +26,7 @@ resolv_server_ip(){
 			dbus set ss_basic_dns_success="0"
 		fi
 	else
-		echo $(date): 检测到你的SS服务器已经是IP格式，跳过解析... 
+		echo $(date): 检测到你的SS服务器已经是IP格式：$ss_basic_server,跳过解析... 
 	fi
 }
 # create shadowsocks config file...
@@ -42,7 +42,6 @@ creat_ss_json(){
 			    "timeout":600,
 			    "method":"$ss_basic_method"
 			}
-		
 		EOF
 	elif [ "$ss_basic_use_rss" == "1" ];then
 		cat > /koolshare/ss/game/ss.json <<-EOF
@@ -57,7 +56,6 @@ creat_ss_json(){
 			    "obfs_param":"$ss_basic_rss_obfs_param",
 			    "method":"$ss_basic_method"
 			}
-			
 		EOF
 	fi
 }
@@ -472,17 +470,30 @@ main_portal(){
 	fi
 }
 
+detect_qos(){
+	echo $(date): 检测是否符合游戏模式启动条件...
+	QOSO=`iptables -t mangle -S | grep -o QOSO`
+	if [ ! -z "$QOSO" ];then
+		echo $(date): 发现你开启了 Adaptive Qos - 传统带宽管理,该Qos模式和游戏模式冲突！
+		echo $(date): 如果你仍然希望在游戏模式下使用Qos，可以使用Adaptive QoS网络监控家模式，
+		echo $(date): 但是该模式下走ss的流量不会有Qos效果！
+		echo $(date): 退出应用游戏模式，关闭ss！
+		dbus set ss_basic_enable=0
+		exit
+	else
+		echo $(date): 未检测到系统设置冲突，符合启动条件！
+	fi
+}
+
 case $1 in
 start_all)
 	#ss_basic_action=1 应用所有设置
 	echo $(date): --------------------- 梅林固件 shadowsocks 游戏模式 -----------------------
+	detect_qos
 	resolv_server_ip
 	creat_ss_json
-	#creat_redsocks2_conf
 	creat_dnsmasq_basic_conf
-	#user_cdn_site
 	custom_dnsmasq
-	#append_white_black_conf
 	ln_conf
 	nat_auto_start
 	wan_auto_start
@@ -499,11 +510,8 @@ start_all)
 restart_dns)
 	#ss_basic_action=2 应用DNS设置
 	echo $(date): ------------------------- 游戏模式-重启dns服务 ----------------------------
-	creat_ss_json
 	creat_dnsmasq_basic_conf
 	custom_dnsmasq
-	killall koolgame
-	start_koolgame
 	restart_dnsmasq
 	remove_status
 	echo $(date): ------------------------ 游戏模式-dns服务重启完毕 --------------------------

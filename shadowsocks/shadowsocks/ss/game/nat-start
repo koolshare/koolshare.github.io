@@ -139,8 +139,8 @@ apply_nat_rules(){
 
 
 	# Apply the rules
-	iptables -t nat -A PREROUTING -p tcp -j SHADOWSOCKS
-	iptables -t mangle -A PREROUTING -p udp -j SHADOWSOCKS2
+	iptables -t nat -I PREROUTING 1 -p tcp -j SHADOWSOCKS
+	iptables -t mangle -I PREROUTING 1 -p udp -j SHADOWSOCKS2
 
 	# router itself
 	iptables -t nat -A OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 3333

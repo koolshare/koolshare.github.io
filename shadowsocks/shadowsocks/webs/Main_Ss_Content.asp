@@ -117,7 +117,6 @@ input[type=button]:focus {
 	border: 1px solid #222;
 }
 
-/* Oculta la scroll-bar pero sigue permitiendo hacer scroll con el </li> */
 #ss_node_list_table_td,#log_content3 { -ms-overflow-style: none; overflow: auto; } /* for IE hide scrollbar on ss node ta */
 #ss_node_list_table_td::-webkit-scrollbar {
     width: 0px;  /* remove scrollbar space */
@@ -218,7 +217,6 @@ function init() {
     show_menu(menu_hook);
     version_show();
     buildswitch();
-    //refresh_table();
     toggle_func();
     toggle_switch();
     detect_kcptun();
@@ -243,6 +241,7 @@ function init() {
 	}
 	var retArea = $G('log_content');
 	update_visibility_main();
+	document.form.ss_basic_action.value = 1;
 }
 
 function line_show(){
@@ -268,49 +267,21 @@ function detect_kcptun(){
 
 function onSubmitCtrl() {
 	checkss = 10001;
-	ssmode = $G("ss_basic_mode").value;
-	ssaction = $G("ss_basic_action").value;
-		$G("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
-		$G("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
+	$G("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
+	$G("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
     if (validForm()) {
         if (0 == node_global_max) {
             var obj = ssform2obj();
             ss_node_object("1", obj, true,
             function(a) {
-			if(ssaction == 1){
-				if (ssmode == "0"){
-					showSSLoadingBar(4);
-				} else {
-					showSSLoadingBar(4);
-				}
-			}else if(ssaction == 2 || ssaction == 3 || ssaction == 4){
-					showSSLoadingBar(2);
-			}
         	updateOptions();
-        	noChange2 = 0;
-    		setTimeout("checkCmdRet2();", 500);
             });
         } else {
             var node_sel = $j('#ssconf_basic_node').val();
             var obj = ssform2obj();
             ss_node_object(node_sel, obj, true,
             function(a) {
-			if(ssaction == 1){
-				if (ssmode == "0"){
-					showSSLoadingBar(4);
-				} else {
-					
-					showSSLoadingBar(400);
-					
-				}
-			}else if(ssaction == 2 || ssaction == 3 || ssaction == 4){
-				showSSLoadingBar(2);
-			}
     		updateOptions();
-    		noChange2 = 0;
-			$G("loading_block1").style.display = "none";
-			$G("log_content2").style.display = "";
-    		setTimeout("checkCmdRet2();", 500);
             });
         }
     }
@@ -321,20 +292,13 @@ function updateOptions() {
 	document.form.action_mode.value = ' Refresh ';
 	document.form.SystemCmd.value = "ss_config.sh";
 	document.form.submit();
+	showSSLoadingBar();
+    noChange2 = 0;
+    setTimeout("checkCmdRet2();", 500);
 }
 
 function done_validating(action) {
 	return true;
-}
-
-function save_ss_method(m) {
-    var o = $G("ss_basic_method");
-    for (var c = 0; c < o.length; c++) {
-        if (o.options[c].value == m) {
-            o.options[c].selected = true;
-            break;
-        }
-    }
 }
 
 function update_ss_ui(obj) {
@@ -489,17 +453,14 @@ function update_visibility_main() {
 	showhide("ss_state2", (ssmode !== "0"));
 	showhide("ss_state3", (ssmode !== "0"));
 	showhide("ss_koolgame_udp_tr", (ssmode == "4"));
-
 	showhide("onetime_auth", (sur !== "1" && ssmode!== "4"));
 	showhide("SSR_name", (ssmode!== "4"));
 	showhide("KCP_name", (ssmode!== "4"));
 	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode!== "4"));
 	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode!== "4"));
 	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode!== "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple"));
-
 	showhide("ss_basic_kcp_port_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
 	showhide("ss_basic_kcp_parameter_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
-
 }
 
 function update_visibility_tab4(){
@@ -725,7 +686,6 @@ function getAllConfigs() {
         } else {
             obj["name"] = db_ss[p + "_name_" + field];
         }
-        
         if (typeof db_ss[p + "_ping_" + field] == "undefined") {
             obj["ping"] = '';
         } else if (db_ss[p + "_ping_" + field] == "failed") {
@@ -744,7 +704,6 @@ function getAllConfigs() {
 		         obj["webtest"] = parseFloat(db_ss[p + "_webtest_" + field].split(":")[0]).toFixed(2) + " s";
 	        }
         }
-        
 		if (typeof db_ss[p + "_mode_" + field] == "undefined"){
 			obj["mode"] = '';
 		}else {
@@ -839,14 +798,11 @@ function loadAllConfigs() {
 }
 
 function show_ss_node_info(){ //进入节点显示，编辑页面
-		//checkTime = 1;
-		//setTimeout("refresh_ss_node_list()", 2000);
 		$G("tablet_show").style.display = "none";
 		$G("basic_show").style.display = "none";
 		$G("add_fun").style.display = "none";
 		$G("apply_button").style.display = "none";
 		$G("line_image1").style.display = "none";
-		//$G("ss_node_list_table_th").style.display = "";
 		$G("ss_node_list_table_td").style.display = "";
 		$G("ss_node_list_table_btn").style.display = "";
 		$G("KoolshareBottom_div").style.display = "none";
@@ -1157,7 +1113,6 @@ function apply_this_ss_node(s) { //应用此节点
         option.val(node_sel);
         //ss_node_sel();
     }
-
 	
 	//updateSs_node_listView(); //更新主面板内的节点
 	checkTime = 2001; //停止节点页面刷新
@@ -1441,16 +1396,13 @@ function restore_ss_conf() {
     document.form.SystemCmd.value = "ss_conf_restore.sh";
 	document.form.enctype = "";
 	document.form.encoding = "";
+	document.form.ss_basic_action.value = 7;
 	if (validForm()){
 		document.form.submit();
 	}
-    //setTimeout("onSubmitCtrl();", 2000);
-    //refreshpage(5);
-    $G("loading_block1").style.display = "";
-	$G("log_content2").style.display = "none";
-    showLoadingBar(8);
-    $j("#loading_block3").html("恢复SS配置");
-    $j("#loading_block2").html("<li><font color='#ffcc00'>正在恢复相关配置中...</font></li></br><li><font color='#ffcc00'>配置恢复后需要重新提交！</font></li></br><li><font color='#ffcc00'>恢复配置后将返回网络地图！</font></li>");
+	showSSLoadingBar();
+    noChange2 = 0;
+    setTimeout("checkCmdRet2();", 500);
 }
 
 function remove_SS_node(){
@@ -1463,12 +1415,13 @@ function remove_SS_node(){
 	if (validForm()){
 		document.form.submit();
 	}
-	//refreshpage(5);
-    $G("loading_block1").style.display = "";
-	$G("log_content2").style.display = "none";
-	showLoadingBar(8);
-	 $j("#loading_block3").html("清除SS配置");
-	 $j("#loading_block2").html("<li><font color='#ffcc00'>正在清除所有SS配置...</font></li></br><li><font color='#ffcc00'>配置清除后将自动关闭SS...</font></li></br><li><font color='#ffcc00'>恢复配置后将返回网络地图！</font></li>");
+	document.form.ss_basic_action.value = 8;
+	if (validForm()){
+		document.form.submit();
+	}
+	showSSLoadingBar();
+    noChange2 = 0;
+    setTimeout("checkCmdRet2();", 500);
 }
 
 function ping_test(){
@@ -1564,13 +1517,16 @@ function refresh_ss_node_list_webtest(){
 
 
 function updatelist(){
+	document.form.action = "/applydb.cgi?p=ss_basic";
     document.form.SystemCmd.value = "ss_rule_update.sh";
 	document.form.action_mode.value = ' Refresh ';
+	document.form.ss_basic_action.value = 6;
 	if (validForm()){
 		document.form.submit();
-		//refresh_ss_node_list();
-		show_log_info();
 	}
+    noChange2 = 0;
+	showSSLoadingBar();
+    setTimeout("checkCmdRet2();", 500);
 }
 
 
@@ -1624,7 +1580,7 @@ function version_show(){
                     	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
                 	}else{
-	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.0.3</i></a>");
+	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.0.4</i></a>");
                 	}
 		        }
             }
@@ -1645,15 +1601,6 @@ function get_ss_status_data(){
 						$j.ajax({
 							url: '/ss_status',
 							dataType: "html",
-							//success: function() {
-							//	if (db_ss_basic_state_foreign['ss_basic_state_foreign'] == undefined || db_ss_basic_state_china['ss_basic_state_china'] == undefined){
-							//		$G("ss_state2").innerHTML = "国外连接 - " + "Waiting for first refresh...";
-    	    				//		$G("ss_state3").innerHTML = "国内连接 - " + "Waiting for first refresh...";
-							//	} else {
-							//		$j("#ss_state2").html("国外连接 - " + db_ss_basic_state_foreign['ss_basic_state_foreign']);
-							//		$j("#ss_state3").html("国内连接 - " + db_ss_basic_state_china['ss_basic_state_china']);
-    						//	}
-							//}
             				success: function(response) {
             				    var arr = JSON.parse(response);
             				    if (arr[0] == "" || arr[1] == ""){
@@ -1663,8 +1610,6 @@ function get_ss_status_data(){
             				    	$G("ss_state2").innerHTML = "国外连接 - " + arr[0];
             				    	$G("ss_state3").innerHTML = "国内连接 - " + arr[1];
             				    }
-            				    //if (refreshRate > 0)
-            				    //setTimeout("checkSSStatus();", refreshRate * 1000);
             				}
 						});
 					} else {
@@ -1720,10 +1665,13 @@ function update_ss(){
 	$G('update_button').style.display = "none";
 	document.form.action_mode.value = ' Refresh ';
     document.form.SystemCmd.value = "ss_update.sh";
+    document.form.ss_basic_action.value = 5;
 	if (validForm()){
 		document.form.submit();
 	}
-	show_log_info();
+	showSSLoadingBar();
+    noChange2 = 0;
+    setTimeout("checkCmdRet2();", 500);
 }
 function buildswitch(){
 	$j("#switch").click(
@@ -1752,8 +1700,7 @@ function buildswitch(){
 			$G("apply_button").style.display = "none";
 			$G("ss_node_list_table_th").style.display = "none";
 			noChange2 = 0;
-			$G("loading_block1").style.display = "none";
-			$G("log_content2").style.display = "";
+			showSSLoadingBar(5);
 			setTimeout("checkCmdRet2();", 500);
 			
 			
@@ -1815,9 +1762,7 @@ function toggle_func(){
 		$G("overall_dns").style.display = "none";
 		$G("overall_list").style.display = "none";
 		document.form.action = "/applydb.cgi?p=ss_basic";
-		
 		$G("cmdBtn").value = "提交";
-		//$j("#cmdBtn").html("提交");
 		document.form.ss_basic_action.value = 1;
 		update_visibility_main();
 	});
@@ -1906,7 +1851,6 @@ function toggle_func(){
 		$G("basic_show").style.display = "none";
 		$G("add_fun").style.display = "none";
 		$G("cmdBtn").value = "应用黑白名单";
-		//$j("#cmdBtn").html("应用黑白名单");
 		document.form.ss_basic_action.value = 3;
 		if (ssmode == "1"){
 			$G("ipset_dns").style.display = "none";
@@ -1985,7 +1929,6 @@ function toggle_func(){
 		$G("gameV2_list").style.display = "none";
 		$G("overall_dns").style.display = "none";
 		$G("overall_list").style.display = "none";
-		//$j("#cmdBtn").html("应用附加功能");
 		$G("cmdBtn").value = "应用附加功能";
 		document.form.ss_basic_action.value = 4;
 		document.form.action = "/applydb.cgi?p=ss_basic,ss_main_portal";
@@ -2018,6 +1961,7 @@ function show_log_info(){
 		$G("log_content").style.display = "";
 		$G("log_return_button").style.display = "";
 		checkCmdRet();
+
 }
 function return_basic(){
 		$G("tablet_show").style.display = "";
@@ -2031,7 +1975,6 @@ function return_basic(){
 		$j('.show-btn2').removeClass('active');
 		$j('.show-btn3').removeClass('active');
 		$j('.show-btn4').removeClass('active');
-		//$j("#cmdBtn").html("提交");
 		$G("cmdBtn").value = "提交";
 		document.form.ss_basic_action.value = 1;
 		update_visibility_main();
@@ -2053,11 +1996,11 @@ function checkCmdRet(){
 		success: function(response){
 			var retArea = $G("log_content1");
 			if(response.search("XU6J03M6") != -1){
-				$G("loadingIcon").style.display = "none";
+				//$G("loadingIcon").style.display = "none";
 				retArea.value = response.replace("XU6J03M6", " ");
 				//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
 				//retArea.scrollTop = retArea.scrollHeight;
-				//return false;
+				return true;
 			}
 			
 			if(_responseLen == response.length){
@@ -2066,13 +2009,13 @@ function checkCmdRet(){
 				noChange = 0;
 			}
 
-			if(noChange > 25){
-				$G("loadingIcon").style.display = "none";
+			if(noChange > 50){
+				//$G("loadingIcon").style.display = "none";
 				//retArea.scrollTop = retArea.scrollHeight;
 				//setTimeout("checkCmdRet();", 2000);
 				return false;
 			}else{
-				$G("loadingIcon").style.display = "";
+				//$G("loadingIcon").style.display = "";
 				setTimeout("checkCmdRet();", 500);
 			}
 			
@@ -2183,13 +2126,9 @@ function setIframeSrc() {
 	<tr>
 		<td height="100">
 		<div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
-		<div id="loading_block1" class="Bar_container">
-			<span id="proceeding_img_text"></span>
-			<div id="proceeding_img"></div>
-		</div>
 		<div id="loading_block2" style="margin:10px auto;width:95%;"></div>
 		<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;">
-		<textarea cols="63" rows="27" wrap="off" readonly="readonly" id="log_content3" style="border:1px solid #000;width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
+			<textarea cols="63" rows="25" wrap="on" readonly="readonly" id="log_content3" style="border:1px solid #000;width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
 		</div>
 		<div id="ok_button" class="apply_gen" style="background: #000;display: none;">
 			<input id="ok_button1" class="button_gen" type="button" onclick="hideSSLoadingBar()" value="确定">

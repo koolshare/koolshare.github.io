@@ -74,7 +74,11 @@ function showSSLoadingBar(seconds){
 
 function LoadingSSProgress(seconds){
 	document.getElementById("LoadingBar").style.visibility = "visible";
-
+	if (document.form.ss_basic_action.value == 9){
+		document.getElementById("loading_block3").innerHTML = "应用负载均衡设置 ..."
+		$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，正在清空shadowsocks配置...</font></li>");
+		return true;
+	}
 	if (document.form.ss_basic_enable.value == 0){
 		document.getElementById("loading_block3").innerHTML = "SS服务关闭中 ..."
 		$j("#loading_block2").html("<li><font color='#ffcc00'><a href='http://www.koolshare.cn' target='_blank'></font>SS工作有问题？请来我们的<font color='#ffcc00'>论坛www.koolshare.cn</font>反应问题...</font></li>");
@@ -105,6 +109,19 @@ function LoadingSSProgress(seconds){
 		} else if (document.form.ss_basic_action.value == 4){
 			document.getElementById("loading_block3").innerHTML = "快速应用附加功能 ..."
 			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>无需重启全部服务，附加功能即可生效~</font></li>");
+		} else if (document.form.ss_basic_action.value == 5){
+			document.getElementById("loading_block3").innerHTML = "shadowsocks插件升级 ..."
+			//document.getElementById("log_content3").rows = 12;
+			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，等待脚本运行完毕后再刷新！</font></li><li><font color='#ffcc00'>升级服务会自动检测最新版本并下载升级...</font></li>");
+		} else if (document.form.ss_basic_action.value == 6){
+			document.getElementById("loading_block3").innerHTML = "shadowsocks规则更新 ..."
+			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，等待脚本运行完毕后再刷新！</font></li><li><font color='#ffcc00'>正在自动检测github上的更新...</font></li>");
+		} else if (document.form.ss_basic_action.value == 7){
+			document.getElementById("loading_block3").innerHTML = "恢复shadowsocks配置 ..."
+			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，配置恢复后需要重新提交！</font></li><li><font color='#ffcc00'>恢复配置中...</font></li>");
+		} else if (document.form.ss_basic_action.value == 8){
+			document.getElementById("loading_block3").innerHTML = "恢复shadowsocks配置 ..."
+			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，正在清空shadowsocks配置...</font></li>");
 		}
 	}
 	/*
@@ -158,19 +175,24 @@ function LoadingLocalProgress(seconds){
 			document.getElementById("proceeding_img_text").innerHTML = "完成";
 			y = 0;
 				setTimeout("hideSSLoadingBar();",1000);
-				refreshpage()
+				refreshpage();
 		}
 	}
 }
 
 function hideSSLoadingBar(){
 	document.getElementById("LoadingBar").style.visibility = "hidden";
-	//refreshpage()
-	htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
-	htmlbodyforIE[0].style.overflow = "visible";	  //hidden the Y-scrollbar for preventing from user scroll it.
-	line_show();
 	checkss = 0;
-	setTimeout("get_ss_status_data();",2000);
+	if (document.form.ss_basic_action.value == 5 || document.form.ss_basic_action.value == 6 ||document.form.ss_basic_action.value == 7 ||document.form.ss_basic_action.value == 8 || document.form.ss_basic_action.value == 9){
+		refreshpage();
+	}else{
+		htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
+		htmlbodyforIE[0].style.overflow = "visible";	  //hidden the Y-scrollbar for preventing from user scroll it.
+		line_show();
+		checkss = 0;
+		setTimeout("get_ss_status_data();",2000);
+	}
+
 }
 
 function pass_checked(obj){

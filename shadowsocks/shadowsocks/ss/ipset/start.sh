@@ -7,7 +7,7 @@ source /koolshare/scripts/base.sh
 resolv_server_ip(){
 	IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
 	if [ -z "$IFIP" ];then
-		echo $(date): 检测到你的SS服务器为域名格式，将尝试进行解析...
+		echo $(date): 使用nslookup方式解析SS服务器的ip地址,解析dns：$ss_basic_dnslookup_server
 		if [ "$ss_basic_dnslookup" == "1" ];then
 			echo $(date): 使用nslookup方式解析SS服务器的ip地址.
 			server_ip=`nslookup "$ss_basic_server" $ss_basic_dnslookup_server | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
@@ -26,7 +26,7 @@ resolv_server_ip(){
 			dbus set ss_basic_dns_success="0"
 		fi
 	else
-		echo $(date): 检测到你的SS服务器已经是IP格式，跳过解析... 
+		echo $(date): 检测到你的SS服务器已经是IP格式：$ss_basic_server,跳过解析... 
 	fi
 }
 # create shadowsocks config file...
@@ -572,14 +572,14 @@ restart_wb_list)
 	;;
 restart_addon)
 	#ss_basic_action=4 应用黑白名单设置
-	echo $(date): --------------------=--- gflist模式-重启附加功能 -----=---------------------
+	echo $(date): ------------------------ gflist模式 重启附加功能 --------------------------
 	# for sleep walue in start up files
 	old_sleep=`cat /jffs/scripts/nat-start | grep sleep | awk '{print $2}'`
 	new_sleep="$ss_basic_sleep"
 	if [ "$old_sleep" = "$new_sleep" ];then
-		echo $(date): boot delay time not changing, still "$ss_basic_sleep" seconds
+		echo $(date): 开机延迟时间未改变，仍然是"$ss_basic_sleep"秒.
 	else
-		echo $(date): set boot delay to "$ss_basic_sleep" seconds before starting kcptun service
+		echo $(date): 设置"$ss_basic_sleep"秒开机延迟...
 		# delete boot delay in nat-start and wan-start
 		sed -i '/koolshare/d' /jffs/scripts/nat-start >/dev/null 2>&1
 		sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
@@ -607,7 +607,7 @@ restart_addon)
 		echo $(date): 设置使用resolveip方式解析SS服务器的ip地址.
 	fi
 	
-	echo $(date): --------------------- gflist模式-附加功能重启完毕！ -------------------------
+	echo $(date): --------------------- gflist模式-附加功能重启完毕！ ------------------------
 	;;
 *)
 	echo "Usage: $0 (start_all|restart_dns|restart_wb_list|restart_addon)"

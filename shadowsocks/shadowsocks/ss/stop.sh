@@ -34,7 +34,6 @@ case $(uname -m) in
     ;;
 esac
 
-
 #--------------------------------------------------------------------------
 
 restore_conf(){
@@ -64,27 +63,18 @@ bring_up_dnsmasq(){
 }
 
 restore_nat(){
-	# flush iptables and destory REDSOCKS2 chain
+	# flush iptables and destory SHADOWSOCKS chain
 	echo $(date): 删除SS相关的iptables设置，保证nat表干净...
 	iptables -t nat -D PREROUTING -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p udp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
-	iptables -t nat -D PREROUTING -p tcp -j REDSOCKS2 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j SHADOWSOCKS >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -j SHADOWSOCKS >/dev/null 2>&1
-	iptables -t nat -D PREROUTING -p tcp -j REDSOCKS2 >/dev/null 2>&1
-	iptables -t nat -D PREROUTING -p tcp -j SHADOWSOCKS >/dev/null 2>&1
-	iptables -t nat -D PREROUTING -j SHADOWSOCKS >/dev/null 2>&1
-	iptables -t nat -D OUTPUT -p tcp -j SHADOWSOCKS >/dev/null 2>&1
-	iptables -t nat -D OUTPUT -j SHADOWSOCKS >/dev/null 2>&1
 	iptables -t nat -D OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 3333 >/dev/null 2>&1
-	iptables -t nat -D OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 1089 >/dev/null 2>&1
 	iptables -t nat -F OUTPUT  >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 	iptables -t nat -F SHADOWSOCKS >/dev/null 2>&1
 	iptables -t nat -X SHADOWSOCKS >/dev/null 2>&1
-	iptables -t nat -F REDSOCKS2 >/dev/null 2>&1
-	iptables -t nat -X REDSOCKS2 >/dev/null 2>&1
 	ip route del local 0.0.0.0/0 dev lo table 300  >/dev/null 2>&1
 	iptables -t mangle -D PREROUTING -j SHADOWSOCKS2 >/dev/null 2>&1
 	iptables -t mangle -D PREROUTING -p udp -j SHADOWSOCKS2 >/dev/null 2>&1
@@ -230,7 +220,11 @@ kill_process(){
 		echo $(date): 关闭kcp协议进程...
 		killall client_linux_arm5 >/dev/null 2>&1
 	fi
-
+	
+	if [ ! -z "$haproxy" ];then 
+		echo $(date): 关闭kcp协议进程...
+		killall haproxy >/dev/null 2>&1
+	fi
 }
 
 kill_cron_job(){
@@ -265,29 +259,28 @@ stop_all)
 	echo $(date):
 	echo $(date): -------------------------- 关闭Shadowsocks -------------------------------
 	restore_conf
+	remove_conf_and_settings
 	bring_up_dnsmasq
 	restore_nat
 	destory_ipset
 	restore_start_file
 	kill_process
 	kill_cron_job
-	remove_conf_and_settings
 	echo $(date): -------------------------- Shadowsocks已关闭 -----------------------------
 	;;
 stop_part)
 	#KCP_basic_action=1 应用DNS设置
 	echo $(date): ================ 梅林固件 - shadowsocks by sadoneli\&Xiaobao ==============
 	echo $(date):
-	echo $(date): ----------------------------- 停止上个SS模式 ------------------------------
+	echo $(date): ----------------------------- 停止上个SS模式 -----------------------------
 	restore_conf
+	remove_conf_and_settings
 	#bring_up_dnsmasq
 	restore_nat
 	destory_ipset
 	restore_start_file
 	kill_process
 	#kill_cron_job
-	remove_conf_and_settings
-	echo $(date):
 	;;
 *)
 	echo "Usage: $0 (stop_all|stop_part)"

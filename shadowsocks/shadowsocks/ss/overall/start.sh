@@ -11,7 +11,7 @@ resolv_server_ip(){
 	if [ -z "$IFIP" ];then
 		echo $(date): 检测到你的SS服务器为域名格式，将尝试进行解析...
 		if [ "$ss_basic_dnslookup" == "1" ];then
-			echo $(date): 使用nslookup方式解析SS服务器的ip地址.
+			echo $(date): 使用nslookup方式解析SS服务器的ip地址,解析dns：$ss_basic_dnslookup_server
 			server_ip=`nslookup "$ss_basic_server" $ss_basic_dnslookup_server | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
 		else
 			echo $(date): 使用resolveip方式解析SS服务器的ip地址.
@@ -28,7 +28,7 @@ resolv_server_ip(){
 			dbus set ss_basic_dns_success="0"
 		fi
 	else
-		echo $(date): 检测到你的SS服务器已经是IP格式，跳过解析... 
+		echo $(date): 检测到你的SS服务器已经是IP格式：$ss_basic_server,跳过解析... 
 	fi
 }
 # create shadowsocks config file...

@@ -1,0 +1,11 @@
+{
+    "server":"47.90.38.156",
+    "server_port":1984,
+    "local_port":3333,
+    "password":"mjy211",
+    "timeout":600,
+    "protocol":"auth_aes128_md5",
+    "obfs":"tls1.2_ticket_auth",
+    "obfs_param":"bing.com",
+    "method":"chacha20-ietf"
+}
