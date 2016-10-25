@@ -257,7 +257,7 @@ stop_all)
 	#KCP_basic_action=0 应用所有设置
 	echo $(date): =============== 梅林固件 - shadowsocks by sadoneli\&Xiaobao ===============
 	echo $(date):
-	echo $(date): -------------------------- 关闭Shadowsocks -------------------------------
+	echo $(date): -------------------------- 关闭Shadowsocks ------------------------------
 	restore_conf
 	remove_conf_and_settings
 	bring_up_dnsmasq

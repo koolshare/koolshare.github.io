@@ -1,8 +1,0 @@
-{
-    "server":"47.90.38.156",
-    "server_port":4049,
-    "local_port":3333,
-    "password":"fuckgfw",
-    "timeout":600,
-    "method":"chacha20-ietf"
-}
