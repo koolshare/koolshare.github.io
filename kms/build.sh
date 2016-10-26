@@ -1,6 +1,6 @@
 #!/bin/sh
 
-MODULE=dualwan
+MODULE=kms
 VERSION=0.1
 TITLE=KMS
 DESCRIPTION=Office自动激活工具
