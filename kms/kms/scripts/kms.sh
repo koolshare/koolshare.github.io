@@ -32,6 +32,7 @@ stop_kms(){
 	# clear start up command line in firewall-start
 	killall vlmcsd
 	rm /jffs/configs/dnsmasq.d/kms.conf
+	service restart_dnsmasq
 	sed -i '/sleep 15/d' /jffs/scripts/firewall-start >/dev/null 2>&1
 	sed -i '/kms/d' /jffs/scripts/firewall-start >/dev/null 2>&1
 	echo $(date): ------------------ Custom operators kms stop!------------------  >> /tmp/syslog.log
