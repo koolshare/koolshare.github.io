@@ -1,2 +1,4 @@
-2016年10月26日20:14:25
-新增KMS激活工具！
+Koolshare Asuswrt-Merlin kms Changelog
+===========================================
+0.1
+   - add kms tools
