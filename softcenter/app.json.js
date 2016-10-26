@@ -214,7 +214,7 @@
             "build_date": "2016-10-26_23:14:27", 
             "description": "Office自动激活工具", 
             "home_url": "Module_kms.asp", 
-            "md5": "1E3B79C0965A1593C32994629D8CEAAF", 
+            "md5": "73AE5192EFD462D1EB1AEB853D49D722", 
             "name": "kms", 
             "tar_url": "kms/kms.tar.gz", 
             "title": "KMS工具箱", 
