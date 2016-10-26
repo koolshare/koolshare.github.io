@@ -4,12 +4,12 @@ if [ ! -d /koolshare/kms ]; then
    mkdir -p /koolshare/kms
 fi
 
-rm /koolshare/dw/*
+rm /koolshare/kms/*
 
-cp -rf /tmp/kms/scripts/kms.sh /koolshare/scripts/kms.sh
-cp -rf /tmp/kms/bin/vlmcsd /koolshare/bin/vlmcsd
-cp -rf /tmp/kms/webs/Module_kms.asp /koolshare/webs/Module_kms.asp
-cp /tmp/kms/res/* /koolshare/res
+cp -rf /tmp/kms/scripts/* /koolshare/scripts/
+cp -rf /tmp/kms/bin/* /koolshare/bin/
+cp -rf /tmp/kms/webs/* /koolshare/webs/
+cp -rf /tmp/kms/res/* /koolshare/res/
 
 rm -rf /tmp/kms* >/dev/null 2>&1
 
