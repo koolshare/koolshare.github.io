@@ -1,4 +1,7 @@
 #!/bin/sh
+dbus set kms_version="0.1"
+dbus set softcenter_module_kms_version="0.1"
+dbus set softcenter_module_kms_description="Office自动激活工具"
 
 if [ ! -d /koolshare/kms ]; then
    mkdir -p /koolshare/kms
