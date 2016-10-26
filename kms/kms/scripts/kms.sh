@@ -1,26 +1,45 @@
-cd /jffs/
-wget "http://cheen.cn/koolshare/kms/vlmcsd.t"
-mv vlmcsd.t vlmcsd
-chmod 0755 vlmcsd
-/jffs/vlmcsd
-clear
-echo 
-netstat -an |grep 1688
-echo 
-touch /jffs/configs/dnsmasq.d/kms.conf
-chmod 0755 /jffs/configs/dnsmasq.d/kms.conf
-echo "domain=lan">/jffs/configs/dnsmasq.d/kms.conf
-echo "expand-hosts">>/jffs/configs/dnsmasq.d/kms.conf
-echo "bogus-priv">>/jffs/configs/dnsmasq.d/kms.conf
-echo "local=/lan/">>/jffs/configs/dnsmasq.d/kms.conf
-echo "dhcp-option=lan,15,lan">>/jffs/configs/dnsmasq.d/kms.conf
-echo "srv-host=_vlmcs._tcp.lan,`uname -n`.lan,1688">>/jffs/configs/dnsmasq.d/kms.conf
+#!/bin/sh
+# load path environment in dbus databse
+eval `dbus export kms`
 
-service restart_dnsmasq
-iptables -I INPUT -p tcp --dport 1688 -j ACCEPT
+start_kms(){
+	chmod 0755 /koolshare/bin/vlmcsd
+	/koolshare/bin/vlmcsd
+	touch /jffs/configs/dnsmasq.d/kms.conf
+	chmod 0755 /jffs/configs/dnsmasq.d/kms.conf
+	echo "srv-host=_vlmcs._tcp.lan,`uname -n`.lan,1688">>/jffs/configs/dnsmasq.d/kms.conf
+	service restart_dnsmasq
+# creating iptables rules to firewall-start
+   if [ ! -d /jffs/scripts ]; then 
+      mkdir -p /jffs/scripts
+   fi
+   
+   if [ ! -f /jffs/scripts/firewall-start ]; then 
+      cat > /jffs/scripts/firewall-start <<EOF
+#!/bin/sh
+EOF
+   fi
+   
+   writenat=$(cat /jffs/scripts/firewall-start | grep "kms")
+   if [ -z "$writenat" ];then
+	   sed -i "1a sleep 15" /jffs/scripts/firewall-start
+	   sed -i '2a /koolshare/scripts/kms.sh' /jffs/scripts/firewall-start
+	   chmod +x /jffs/scripts/firewall-start
+   fi
+	echo $(date): ------------------ Custom operators kms runs!------------------  >> /tmp/syslog.log
+}
+stop_kms(){
+	# clear start up command line in firewall-start
+	killall vlmcsd
+	rm /jffs/configs/dnsmasq.d/kms.conf
+	sed -i '/sleep 15/d' /jffs/scripts/firewall-start >/dev/null 2>&1
+	sed -i '/kms/d' /jffs/scripts/firewall-start >/dev/null 2>&1
+	echo $(date): ------------------ Custom operators kms stop!------------------  >> /tmp/syslog.log
+}
 
-echo "#!/bin/sh">>/jffs/scripts/firewall-start
-echo "/jffs/vlmcsd">>/jffs/scripts/firewall-start
-echo "service restart_dnsmasq">>/jffs/scripts/firewall-start
-echo "iptables -I INPUT -p tcp --dport 1688 -j ACCEPT">>/jffs/scripts/firewall-start
-chmod 0755 /jffs/scripts/firewall-start
+if [ "$kms_enable" == "1" ];then
+	stop_kms
+   	start_kms
+else
+  	stop_kms
+fi
