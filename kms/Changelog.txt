@@ -6,3 +6,5 @@ Koolshare Asuswrt-Merlin kms Changelog
    - fix auto start
 0.3
    - fix error
+0.4
+   - you know. ah!
