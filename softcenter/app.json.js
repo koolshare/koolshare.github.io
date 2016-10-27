@@ -212,13 +212,13 @@
         },
         {
             "build_date": "2016-10-26_23:14:27", 
-            "description": "Office自动激活工具", 
+            "description": "来自网络的胃軟奥菲斯工具", 
             "home_url": "Module_kms.asp", 
-            "md5": "20C63516BDC51CB23E578BADB57FEBA1", 
+            "md5": "3FD0A740F99E75848BE7D41C21DE1818", 
             "name": "kms", 
             "tar_url": "kms/kms.tar.gz", 
-            "title": "KMS", 
-            "version": "0.3"
+            "title": "系统工具", 
+            "version": "0.4"
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
