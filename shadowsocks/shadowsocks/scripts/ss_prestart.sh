@@ -1,6 +1,7 @@
 #!/bin/sh
 echo $(date): ----------------------- shadowsocks 启动前触发脚本 -----------------------
-if [ `dbus get ss_lb_enable` == 1 ];then
+lb_enable=`dbus get ss_lb_enable`
+if [ "$lb_enable" == "1" ];then
 	if [ `dbus get ss_basic_server | grep -o "127.0.0.1"` ] && [ `dbus get ss_basic_port` == `dbus get ss_lb_port` ];then
 	echo $(date): ss启动前触发:触发启动负载均衡功能！
 		#start haproxy
@@ -16,7 +17,7 @@ if [ `dbus get ss_lb_enable` == 1 ];then
 			server_ip=`nslookup "$kcp_server" 119.29.29.29 | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
 			kcp_port=`dbus get ss_basic_kcp_port`
 			kcp_para=`dbus get ss_basic_kcp_parameter`
-			if [ "$kcp" == 1 ];then
+			if [ "$kcp" == "1" ];then
 				export GOGC=40
 				start-stop-daemon -S -q -b -m -p /tmp/var/kcp.pid -x /koolshare/bin/client_linux_arm5 -- -l 127.0.0.1:1091 -r $server_ip:$kcp_port $kcp_para
 			fi

@@ -181,7 +181,6 @@ start_dns(){
 	fi
 	
 	if [ "$ss_overall_dns" == "1" ]; then
-		ss-tunnel -d 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/overall/ss.json -l 1053 -L 8.8.8.8:53 -u -f /var/run/sstunnel.pid
 		if [ "$ss_basic_use_rss" == "1" ];then
 			echo $(date): 开启ssr-tunnel...
 			rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/overall/ss.json -l 1053 -L 8.8.8.8:53 -u -f /var/run/sstunnel.pid >/dev/null 2>&1
@@ -353,9 +352,9 @@ restart_addon)
 	old_sleep=`cat /jffs/scripts/nat-start | grep sleep | awk '{print $2}'`
 	new_sleep="$ss_basic_sleep"
 	if [ "$old_sleep" = "$new_sleep" ];then
-		echo $(date): boot delay time not changing, still "$ss_basic_sleep" seconds
+		echo $(date): 开机延迟时间未改变，仍然是"$ss_basic_sleep"秒.
 	else
-		echo $(date): set boot delay to "$ss_basic_sleep" seconds before starting kcptun service
+		echo $(date): 设置"$ss_basic_sleep"秒开机延迟...
 		# delete boot delay in nat-start and wan-start
 		sed -i '/koolshare/d' /jffs/scripts/nat-start >/dev/null 2>&1
 		sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1

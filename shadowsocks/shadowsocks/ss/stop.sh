@@ -14,7 +14,7 @@ rsstunnel=$(ps | grep "rss-tunnel" | grep -v "grep" | grep -vw "ss-tunnel")
 pdnsd=$(ps | grep "pdnsd" | grep -v "grep")
 chinadns=$(ps | grep "chinadns" | grep -v "grep")
 DNS2SOCK=$(ps | grep "dns2socks" | grep -v "grep")
-koolgame=$(ps | grep "koolgame" | grep -v "grep")
+koolgame=$(ps | grep "koolgame" | grep -v "grep"|grep -v "pdu")
 client_linux_arm5=$(ps | grep "client_linux_arm5" | grep -v "grep")
 Pcap_DNSProxy=$(ps | grep "Pcap_DNSProxy" | grep -v "grep")
 haproxy=$(ps | grep "haproxy" | grep -v "grep")
@@ -170,7 +170,7 @@ kill_process(){
 	ssrlocal=`ps | grep rss-local | grep -v "grep" | grep -w "23456" | awk '{print $1}'`
 	if [ ! -z "$ssrlocal" ];then 
 		echo $(date): 关闭ssr-local进程:23456端口...
-		kill -9 $ssrlocal
+		kill $ssrlocal
 	fi
 
 	#--------------------------------------------------------------------------

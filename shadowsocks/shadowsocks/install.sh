@@ -49,7 +49,7 @@ dbus remove softcenter_module_koolsocks_install
 dbus remove softcenter_module_koolsocks_version
 
 dbus set softcenter_module_shadowsocks_install=1
-dbus set softcenter_module_shadowsocks_version=3.0.4
+dbus set softcenter_module_shadowsocks_version=3.0.5
 dbus set softcenter_module_shadowsocks_home_url=Main_Ss_Content.asp
 
 #if [ "$ss_basic_enable" == "1" ];then

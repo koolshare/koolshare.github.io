@@ -211,6 +211,9 @@ start_dns(){
 	[ "$ss_game_chinadns_china" == "2" ] && gcc="223.6.6.6"
 	[ "$ss_game_chinadns_china" == "3" ] && gcc="114.114.114.114"
 	[ "$ss_game_chinadns_china" == "4" ] && gcc="$ss_game_chinadns_china_user"
+	[ "$ss_game_chinadns_china" == "5" ] && gcc="180.76.76.76"
+	[ "$ss_game_chinadns_china" == "6" ] && gcc="1.2.4.8"
+	[ "$ss_game_chinadns_china" == "7" ] && gcc="119.29.29.29"
 	[ "$ss_game_chinadns_foreign" == "1" ] && cdf="208.67.220.220:53"
 	[ "$ss_game_chinadns_foreign" == "2" ] && cdf="8.8.8.8:53"
 	[ "$ss_game_chinadns_foreign" == "3" ] && cdf="8.8.4.4:53"
@@ -513,6 +516,7 @@ start_all)
 restart_dns)
 	#ss_basic_action=2 应用DNS设置
 	echo $(date): ------------------------- 游戏模式-重启dns服务 ----------------------------
+	detect_qos
 	creat_dnsmasq_basic_conf
 	custom_dnsmasq
 	restart_dnsmasq
@@ -522,6 +526,7 @@ restart_dns)
 restart_addon)
 	#ss_basic_action=4 应用黑白名单设置
 	echo $(date): ------------------------- 游戏模式-重启附加功能 ----------------------------
+	detect_qos
 	# for sleep walue in start up files
 	old_sleep=`cat /jffs/scripts/nat-start | grep sleep | awk '{print $2}'`
 	new_sleep="$ss_basic_sleep"
@@ -556,7 +561,7 @@ restart_addon)
 		echo $(date): 设置使用resolveip方式解析SS服务器的ip地址.
 	fi
 
-	echo $(date): ----------------------- 游戏模式-附加功能重启完毕！ -------------------------
+	echo $(date): ----------------------- 游戏模式-附加功能重启完毕！ ------------------------
 	;;
 *)
 	echo "Usage: $0 (start_all|restart_dns|restart_addon)"

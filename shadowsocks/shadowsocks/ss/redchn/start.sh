@@ -282,7 +282,7 @@ start_dns(){
 	# Start dnscrypt-proxy
 	if [ "1" == "$ss_redchn_dns_foreign" ];then
 		echo $(date): 开启 dnscrypt-proxy，你选择了"$ss_redchn_opendns"节点.
-		dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_redchn_opendns"
+		dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R $ss_redchn_opendns
 	fi
 	
 	# Start ss-tunnel
@@ -309,6 +309,9 @@ start_dns(){
 	[ "$ss_redchn_chinadns_china" == "2" ] && rcc="223.6.6.6"
 	[ "$ss_redchn_chinadns_china" == "3" ] && rcc="114.114.114.114"
 	[ "$ss_redchn_chinadns_china" == "4" ] && rcc="$ss_redchn_chinadns_china_user"
+	[ "$ss_redchn_chinadns_china" == "5" ] && rcc="180.76.76.76"
+	[ "$ss_redchn_chinadns_china" == "6" ] && rcc="1.2.4.8"
+	[ "$ss_redchn_chinadns_china" == "7" ] && rcc="119.29.29.29"
 	[ "$ss_redchn_chinadns_foreign" == "1" ] && rdf="208.67.220.220:53"
 	[ "$ss_redchn_chinadns_foreign" == "2" ] && rdf="8.8.8.8:53"
 	[ "$ss_redchn_chinadns_foreign" == "3" ] && rdf="8.8.4.4:53"
@@ -574,7 +577,7 @@ start_all)
 	;;
 restart_dns)
 	#ss_basic_action=2
-	echo $(date): ----------------------- 大陆白名单模式-重启dns服务 -------------------------
+	echo $(date): ----------------------- 大陆白名单模式-重启dns服务 ------------------------
 	resolv_server_ip
 	stop_dns
 	creat_dnsmasq_basic_conf
@@ -636,7 +639,7 @@ restart_addon)
 		echo $(date): 设置使用resolveip方式解析SS服务器的ip地址.
 	fi
 	
-	echo $(date): -------------------- 大陆白名单模式-附加功能重启完毕！ ----------------------
+	echo $(date): --------------------- 大陆白名单模式-附加功能重启完毕！ ---------------------
 	;;
 *)
 	echo "Usage: $0 (start_all|restart_dns|restart_wb_list|restart_addon)"

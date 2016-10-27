@@ -219,11 +219,30 @@ main_portal(){
 		nvram commit
 	fi
 }
+
+detect_qos(){
+	echo $(date): 检测是否符合游戏模式启动条件...
+	QOSO=`iptables -t mangle -S | grep -o QOSO`
+	if [ ! -z "$QOSO" ];then
+		echo $(date): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		echo $(date): !!!发现你开启了 Adaptive Qos - 传统带宽管理,该Qos模式和游戏模式V2冲突!!!
+		echo $(date): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		echo $(date): 如果你仍然希望在游戏模式下使用Qos，可以使用Adaptive QoS网络监控家模式，
+		echo $(date): 但是该模式下走ss的流量不会有Qos效果！
+		echo $(date): 退出应用游戏模式，关闭ss！请等待10秒！
+		dbus set ss_basic_enable=0
+		sleep 10
+		exit
+	else
+		echo $(date): 未检测到系统设置冲突，符合启动条件！
+	fi
+}
 	
 case $1 in
 start_all)
 	#ss_basic_action=1 应用所有设置
-	echo $(date): -------------------- 梅林固件 shadowsocks 游戏模式V2 -----------------------
+	echo $(date): -------------------- 梅林固件 shadowsocks 游戏模式V2 ----------------------
+	detect_qos
 	resolv_server_ip
 	creat_ss_json
 	#creat_redsocks2_conf
@@ -246,6 +265,7 @@ start_all)
 restart_dns)
 	#ss_basic_action=2 应用DNS设置
 	echo $(date): ------------------------ 游戏模式V2-重启dns服务 ---------------------------
+	detect_qos
 	stop_dns
 	creat_dnsmasq_basic_conf
 	#user_cdn_site
@@ -261,13 +281,14 @@ restart_dns)
 restart_addon)
 	#ss_basic_action=4 应用附加设置
 	echo $(date): ------------------------ 游戏模式V2-重启附加功能 ---------------------------
+	detect_qos
 	# for sleep walue in start up files
 	old_sleep=`cat /jffs/scripts/nat-start | grep sleep | awk '{print $2}'`
 	new_sleep="$ss_basic_sleep"
 	if [ "$old_sleep" = "$new_sleep" ];then
-		echo $(date): boot delay time not changing, still "$ss_basic_sleep" seconds
+		echo $(date): 开机延迟时间未改变，仍然是"$ss_basic_sleep"秒.
 	else
-		echo $(date): set boot delay to "$ss_basic_sleep" seconds before starting kcptun service
+		echo $(date): 设置"$ss_basic_sleep"秒开机延迟...
 		# delete boot delay in nat-start and wan-start
 		sed -i '/koolshare/d' /jffs/scripts/nat-start >/dev/null 2>&1
 		sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
@@ -295,7 +316,7 @@ restart_addon)
 		echo $(date): 设置使用resolveip方式解析SS服务器的ip地址.
 	fi
 
-	echo $(date): ---------------------- 游戏模式V2-附加功能重启完毕！ ------------------------
+	echo $(date): ---------------------- 游戏模式V2-附加功能重启完毕！ -----------------------
 	;;
 *)
 	echo "Usage: $0 (start_all|restart_dns|restart_addon)"
