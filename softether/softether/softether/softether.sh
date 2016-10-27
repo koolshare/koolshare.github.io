@@ -106,7 +106,7 @@ restart)
 	fi
 	/koolshare/softether/vpnserver start
 	
-	i=120
+	i=180
 	until [ ! -z "$tap" ]
 	do
 	    i=$(($i-1))
@@ -115,7 +115,7 @@ restart)
 	        echo $(date): "错误：不能正确启动vpnserver!"
 	        exit
 	    fi
-	    sleep 1
+	    sleep 2
 	done
 	open_port
 	brctl addif br0 $tap

@@ -151,10 +151,10 @@
             "version": "1.3"
         }, 
         {
-            "build_date": "2016-10-27_15:10:33", 
+            "build_date": "2016-10-27_15:20:15", 
             "description": "", 
             "home_url": "Module_softether.asp", 
-            "md5": "fa5fe69330cae761bc8caa94021f3cb4", 
+            "md5": "7ddc9083d3cff5dc7f95ddcea8e3a5a6", 
             "name": "softether", 
             "tar_url": "softether/softether.tar.gz", 
             "title": "SoftEther_VPN_Server", 
