@@ -6,11 +6,11 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    - fix	修复触发脚本错误；
    - update	更新日志打印，分割行不再提行（强迫症伤不起）；
    - update	完善附加游戏模式v2和全局模式日志中文显示；
-   - update	完善游戏模式和游戏模式启动前对QOS模式的检测，并给出冲突警告（需要注意的是：如果启用了"传统带宽管理",游戏模式和游戏模式V2国内将不能正常工作）；
+   - update	完善游戏模式/V2启动前对QOS模式的检测，并给出冲突警告（注意：如果启用了"传统带宽管理",游戏模式和游戏模式V2国内将不能正常工作）；
    - update	隐藏提交时日志打印firefox显示滚动条的问题，暂时不能滚动，如果需要查看完整日志，请在提交完毕后进入日志查看；
    - fix	修复选择dnscrypt-proxy的dns节点提交后，配置显示不正确的问题；
    - update	更新最新的dnscrypt-resolvers.csv文件，更多新的dns节点选择（79个）；
-   - update	现在web中显示电脑上dnscrypt-resolvers.csv中的节点的full name，方便识别；
+   - update	现在web中显示电脑上dnscrypt-resolvers.csv中的节点的full name，方便识别；（如果你更新前使用原先的节点，更新后需要重新选择一次！）
    - update	chinadns的国内dns选择中增加百度，cnnic，dnspod dns，和国内dns保持一致；
    - update	同步kcptun客户端client_linux_arm5到20161025版本，请更新对应服务器端版本。
 
