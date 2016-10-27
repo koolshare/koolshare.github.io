@@ -1,19 +1,10 @@
 #!/bin/sh
 
 MODULE=kms
-VERSION=0.3
-TITLE=KMS
-DESCRIPTION=Office自动激活工具
+VERSION=0.4
+TITLE=系统工具
+DESCRIPTION=来自网络的胃軟系统工具
 HOME_URL=Module_kms.asp
-
-#old_version=`cat version | sed -n 1p`
-#old_md5sum=`cat version | sed -n 2p`
-#if [ "$old_version" != "$VERSION" ];then
-#  echo old_version $old_version
-#  echo VERSION $VERSION
-#  mv ${MODULE}.tar.gz ./history/"${MODULE}"_"$old_version".tar.gz
-#  echo $old_version $old_md5sum >> ./history/version
-#fi
 
 # Check and include base
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
