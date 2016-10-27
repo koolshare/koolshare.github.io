@@ -24,6 +24,8 @@ EOF
    if [ -z "$writenat" ];then
 	   sed -i "1a sleep 15" /jffs/scripts/firewall-start
 	   sed -i '2a /koolshare/scripts/kms.sh' /jffs/scripts/firewall-start
+	   sed -i '3a /koolshare/bin/vlmcsd' /jffs/scripts/firewall-start
+	   sed -i '4a service restart_dnsmasq' /jffs/scripts/firewall-start
 	   chmod +x /jffs/scripts/firewall-start
    fi
 	echo $(date): ------------------ Custom operators kms runs!------------------  >> /tmp/syslog.log
@@ -35,6 +37,8 @@ stop_kms(){
 	service restart_dnsmasq
 	sed -i '/sleep 15/d' /jffs/scripts/firewall-start >/dev/null 2>&1
 	sed -i '/kms/d' /jffs/scripts/firewall-start >/dev/null 2>&1
+	sed -i '/koolshare/bin/vlmcsd/d' /jffs/scripts/firewall-start >/dev/null 2>&1
+	sed -i '/service restart_dnsmasq/d' /jffs/scripts/firewall-start >/dev/null 2>&1
 	echo $(date): ------------------ Custom operators kms stop!------------------  >> /tmp/syslog.log
 }
 
