@@ -4,3 +4,5 @@ Koolshare Asuswrt-Merlin kms Changelog
    - add kms tools
 0.2
    - fix auto start
+0.3
+   - fix error
