@@ -117,11 +117,13 @@ input[type=button]:focus {
 	border: 1px solid #222;
 }
 
-#ss_node_list_table_td,#log_content3 { -ms-overflow-style: none; overflow: auto; } /* for IE hide scrollbar on ss node ta */
+#ss_node_list_table_td { -ms-overflow-style: none; overflow: auto; } /* for IE hide scrollbar on ss node ta */
 #ss_node_list_table_td::-webkit-scrollbar {
     width: 0px;  /* remove scrollbar space */
     background: transparent;  /* optional: just make scrollbar invisible */
 }
+
+#log_content3 { -ms-overflow-style: none; overflow: auto; } /* for IE hide scrollbar on ss node ta */
 #log_content3::-webkit-scrollbar {
     width: 0px;  /* remove scrollbar space */
     background: transparent;  /* optional: just make scrollbar invisible */
@@ -129,6 +131,8 @@ input[type=button]:focus {
 #log_content3:focus {
 	outline: none;
 }
+
+#log_content3 {overflow: -moz-scrollbars-none;}
 .FormTable1{
 	table-layout:fixed;
 	width:748px;
@@ -574,13 +578,16 @@ function update_visibility_tab2_gameV2(){
 }
 
 function generate_options(){
-	var confs = ["4armed",  "cisco(opendns)",  "cisco-familyshield",  "cisco-ipv6",  "cisco-port53",  "cloudns-can",  "cloudns-syd",  "cs-cawest",  "cs-cfi",  "cs-cfii",  "cs-ch",  "cs-de",  "cs-fr",  "cs-fr2",  "cs-rome",  "cs-useast",  "cs-usnorth",  "cs-ussouth",  "cs-ussouth2",  "cs-uswest",  "cs-uswest2",  "d0wn-bg-ns1",  "d0wn-ch-ns1",  "d0wn-de-ns1",  "d0wn-fr-ns2",  "d0wn-gr-ns1",  "d0wn-hk-ns1",  "d0wn-it-ns1",  "d0wn-lv-ns1",  "d0wn-nl-ns1",  "d0wn-nl-ns2",  "d0wn-random-ns1",  "d0wn-random-ns2",  "d0wn-ro-ns1",  "d0wn-ru-ns1",  "d0wn-tz-ns1",  "d0wn-ua-ns1",  "dnscrypt.eu-dk",  "dnscrypt.eu-dk-ipv6",  "dnscrypt.eu-nl",  "dnscrypt.eu-nl-ipv6",  "dnscrypt.org-fr",  "fvz-rec-at-vie-01",  "fvz-rec-ca-tor-01",  "fvz-rec-ca-tor-01-ipv6",  "fvz-rec-de-fra-01",  "fvz-rec-gb-brs-01",  "fvz-rec-gb-lon-01",  "fvz-rec-gb-lon-03",  "fvz-rec-hk-ztw-01",  "fvz-rec-ie-du-01",  "fvz-rec-no-osl-01",  "fvz-rec-nz-akl-01",  "fvz-rec-nz-akl-01-ipv6",  "fvz-rec-us-ler-01",  "fvz-rec-us-mia-01",  "ipredator",  "ns0.dnscrypt.is",  "okturtles",  "opennic-tumabox",  "ovpnto-ro",  "ovpnto-se",  "ovpnto-se-ipv6",  "shea-us-noads",  "shea-us-noads-ipv6",  "soltysiak",  "soltysiak-ipv6",  "yandex"];
+var confs = [
+["adguard-dns-family-ns1 ", "Adguard DNS Family Protection 1"], ["adguard-dns-family-ns2 ", "Adguard DNS Family Protection 2"], ["adguard-dns-ns1 ", "Adguard DNS 1"], ["adguard-dns-ns2 ", "Adguard DNS 2"], ["cisco ", "Cisco OpenDNS"], ["cisco-familyshield ", "Cisco OpenDNS with FamilyShield"], ["cisco-ipv6 ", "Cisco OpenDNS over IPv6"], ["cisco-port53 ", "Cisco OpenDNS backward compatibility port 53"], ["cloudns-syd ", "CloudNS Sydney"], ["cs-cawest ", "CS Canada west DNSCrypt server"], ["cs-cfi ", "CS cryptofree France DNSCrypt server"], ["cs-cfii ", "CS secondary cryptofree France DNSCrypt server"], ["cs-ch ", "CS Switzerland DNSCrypt server"], ["cs-de ", "CS Germany DNSCrypt server"], ["cs-fr2 ", "CS secondary France DNSCrypt server"], ["cs-rome ", "CS Italy DNSCrypt server"], ["cs-useast ", "CS New York City NY US DNSCrypt server"], ["cs-usnorth ", "CS Chicago IL US DNSCrypt server"], ["cs-ussouth ", "CS Dallas TX US DNSCrypt server"], ["cs-ussouth2 ", "CS Atlanta GA US DNSCrypt server"], ["cs-uswest ", "CS Seattle WA US DNSCrypt server"], ["cs-uswest2 ", "CS Las Vegas NV US DNSCrypt server"], ["d0wn-au-ns1 ", "OpenNIC Resolver Australia 01 - d0wn"], ["d0wn-bg-ns1 ", "OpenNIC Resolver Bulgaria 01 - d0wn"], ["d0wn-cy-ns1 ", "OpenNIC Resolver Cyprus 01 - d0wn"], ["d0wn-de-ns1 ", "OpenNIC Resolver Germany 01 - d0wn"], ["d0wn-de-ns2 ", "OpenNIC Resolver Germany 02 - d0wn"], ["d0wn-dk-ns1 ", "OpenNIC Resolver Denmark 01 - d0wn"], ["d0wn-fr-ns2 ", "OpenNIC Resolver France 02 - d0wn"], ["d0wn-es-ns1 ", "OpenNIC Resolver Spain 01- d0wn"], ["d0wn-gr-ns1 ", "OpenNIC Resolver Greece 01 - d0wn"], ["d0wn-hk-ns1 ", "OpenNIC Resolver Hong Kong 01 - d0wn"], ["d0wn-is-ns1 ", "OpenNIC Resolver Iceland 01 - d0wn"], ["d0wn-lu-ns1 ", "OpenNIC Resolver Luxembourg 01 - d0wn"], ["d0wn-lu-ns1-ipv6 ", "OpenNIC Resolver Luxembourg 01 over IPv6 - d0wn"], ["d0wn-lv-ns1 ", "OpenNIC Resolver Latvia 01 - d0wn"], ["d0wn-lv-ns2 ", "OpenNIC Resolver Latvia 02 - d0wn"], ["d0wn-lv-ns2-ipv6 ", "OpenNIC Resolver Latvia 01 over IPv6 - d0wn"], ["d0wn-nl-ns3 ", "OpenNIC Resolver Netherlands 03 - d0wn"], ["d0wn-nl-ns3-ipv6 ", "OpenNIC Resolver Netherlands 03 over IPv6 - d0wn"], ["d0wn-random-ns1 ", "OpenNIC Resolver Moldova 01 - d0wn"], ["d0wn-random-ns2 ", "OpenNIC Resolver Netherlands 02 - d0wn"], ["d0wn-ro-ns1 ", "OpenNIC Resolver Romania 01 - d0wn"], ["d0wn-ro-ns1-ipv6 ", "OpenNIC Resolver Romania 01 over IPv6 - d0wn"], ["d0wn-ru-ns1 ", "OpenNIC Resolver Russia 01 - d0wn"], ["d0wn-se-ns1 ", "OpenNIC Resolver Sweden 01 - d0wn"], ["d0wn-se-ns1-ipv6 ", "OpenNIC Resolver Sweden 01 over IPv6 - d0wn"], ["d0wn-sg-ns1 ", "OpenNIC Resolver Singapore 01 - d0wn"], ["d0wn-sg-ns2 ", "OpenNIC Resolver Singapore 02 - d0wn"], ["d0wn-sg-ns2-ipv6 ", "OpenNIC Resolver Singapore 01 over IPv6 - d0wn"], ["d0wn-tz-ns1 ", "OpenNIC Resolver Tanzania 01 - d0wn"], ["d0wn-ua-ns1 ", "OpenNIC Resolver Ukraine 01 - d0wn"], ["d0wn-ua-ns1-ipv6 ", "OpenNIC Resolver Ukraine 01 over IPv6 - d0wn"], ["d0wn-uk-ns1 ", "OpenNIC Resolver United Kingdom 01 - d0wn"], ["d0wn-uk-ns1-ipv6 ", "OpenNIC Resolver United Kingdom 01 over IPv6 - d0wn"], ["d0wn-us-ns1 ", "OpenNIC Resolver United States of America 01 - d0wn"], ["d0wn-us-ns1-ipv6 ", "OpenNIC Resolver United States of America 01 over IPv6 - d0wn"], ["d0wn-us-ns2 ", "OpenNIC Resolver United States of America 02 - d0wn"], ["d0wn-us-ns2-ipv6 ", "OpenNIC Resolver United States of America 02 over IPv6 - d0wn"], ["dns-freedom ", "DNS Freedom"], ["dnscrypt.eu-dk ", "DNSCrypt.eu Denmark"], ["dnscrypt.eu-dk-ipv6 ", "DNSCrypt.eu Denmark over IPv6"], ["dnscrypt.eu-nl ", "DNSCrypt.eu Holland"], ["dnscrypt.eu-nl-ipv6 ", "DNSCrypt.eu Holland over IPv6"], ["dnscrypt.org-fr ", "DNSCrypt.org France"], ["fvz-anyone ", "Primary OpenNIC Anycast DNS Resolver"], ["fvz-anyone-ipv6 ", "Primary OpenNIC Anycast DNS IPv6 Resolver"], ["fvz-anytwo ", "Secondary OpenNIC Anycast DNS Resolver"], ["fvz-anytwo-ipv6 ", "Secondary OpenNIC Anycast DNS IPv6 Resolver"], ["ipredator ", "Ipredator.se Server"], ["ns0.dnscrypt.is ", "ns0.dnscrypt.is in Reykjav铆k, Iceland"], ["okturtles ", "okTurtles"], ["opennic-tumabox ", "TumaBox"], ["ovpnse ", "OVPN.se Integritet AB"], ["soltysiak ", "Soltysiak"], ["soltysiak-ipv6 ", "Soltysiak over IPv6"], ["ventricle.us ", "Anatomical DNS"], ["yandex ", "Yandex"]
+	];
+
 	for(var i = 0; i < confs.length; i++) {
-		$j("#ss_redchn_opendns").append("<option value='"  + confs[i] + "'>" + confs[i] + "</option>");
+		$j("#ss_redchn_opendns").append("<option value='"  + confs[i][0] + "'>" + confs[i][1] + "</option>");
 		$j("#ss_redchn_pdnsd_udp_server_dnscrypt").append("<option value='"  + confs[i] + "'>" + confs[i] + "</option>");
-		$j("#ss_ipset_opendns").append("<option value='"  + confs[i] + "'>" + confs[i] + "</option>");
+		$j("#ss_ipset_opendns").append("<option value='"  + confs[i][0] + "'>" + confs[i][1] + "</option>");
 		$j("#ss_ipset_pdnsd_udp_server_dnscrypt").append("<option value='"  + confs[i] + "'>" + confs[i] + "</option>");
-		$j("#ss_game_opendns").append("<option value='"  + confs[i] + "'>" + confs[i] + "</option>");
+		$j("#ss_game_opendns").append("<option value='"  + confs[i][0] + "'>" + confs[i][1] + "</option>");
 		$j("#ss_game_pdnsd_udp_server_dnscrypt").append("<option value='"  + confs[i] + "'>" + confs[i] + "</option>");
 	}
 }
@@ -2063,14 +2070,15 @@ function checkCmdRet2(){
 				noChange2 = 0;
 			}
 
-			if(noChange2 > 12){
+			if(noChange2 > 100){
 				//$G("loadingIcon").style.display = "none";
 				//retArea.scrollTop = retArea.scrollHeight;
 				//setTimeout("checkCmdRet();", 2000);
+				hideSSLoadingBar();
 				return false;
 			}else{
 				//$G("loadingIcon").style.display = "";
-				setTimeout("checkCmdRet2();", 1000);
+				setTimeout("checkCmdRet2();", 500);
 			}
 			
 			retArea.value = response;
@@ -2128,7 +2136,7 @@ function setIframeSrc() {
 		<td height="100">
 		<div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
 		<div id="loading_block2" style="margin:10px auto;width:95%;"></div>
-		<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;">
+		<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;overflow:hidden">
 			<textarea cols="63" rows="25" wrap="on" readonly="readonly" id="log_content3" style="border:1px solid #000;width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
 		</div>
 		<div id="ok_button" class="apply_gen" style="background: #000;display: none;">
@@ -2664,7 +2672,7 @@ function setIframeSrc() {
 															<option value="3">Pcap_DNSProxy</option>
 															<option value="4">pdnsd</option>
 														</select>
-														<select id="ss_ipset_opendns" name="ss_ipset_opendns" class="input_option"></select>
+														<select id="ss_ipset_opendns" name="ss_ipset_opendns" class="input_option" style="width:320px"></select>
 														<select id="ss_ipset_tunnel" name="ss_ipset_tunnel" class="input_option" onclick="update_visibility_tab2_ipset();" >
 															<option value="1">OpenDNS [208.67.220.220]</option>
 															<option value="2">google DNS1 [8.8.8.8]</option>
@@ -2710,7 +2718,7 @@ function setIframeSrc() {
 															
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_ipset_pdnsd_udp_server_dns2socks" name="ss_ipset_pdnsd_udp_server_dns2socks" style="width:128px;" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
-														<select id="ss_ipset_pdnsd_udp_server_dnscrypt" name="ss_ipset_pdnsd_udp_server_dnscrypt" class="input_option"></select>
+														<select id="ss_ipset_pdnsd_udp_server_dnscrypt" name="ss_ipset_pdnsd_udp_server_dnscrypt" class="input_option" style="width:320px"></select>
 														<select id="ss_ipset_pdnsd_udp_server_ss_tunnel" name="ss_ipset_pdnsd_udp_server_ss_tunnel" class="input_option" onclick="update_visibility_tab2_ipset();" >
 															<option value="1">OpenDNS [208.67.220.220]</option>
 															<option value="2">google DNS1 [8.8.8.8]</option>
@@ -2751,7 +2759,7 @@ bogus-nxdomain=220.250.64.18
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(25)">选择国内DNS</a></th>
 													<td>
 														<select id="ss_redchn_dns_china" name="ss_redchn_dns_china" class="input_option" onclick="update_visibility_tab2_redchn();" >
-															<option value="1">运营商DNS【自动获取】</option>
+															<option value="1" selected>运营商DNS【自动获取】</option>
 															<option value="2">阿里DNS1【223.5.5.5】</option>
 															<option value="3">阿里DNS2【223.6.6.6】</option>
 															<option value="4">114DNS【114.114.114.114】</option>
@@ -2768,18 +2776,18 @@ bogus-nxdomain=220.250.64.18
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(26)">选择国外DNS</a></th>
 													<td>
 														<select id="ss_redchn_dns_foreign" name="ss_redchn_dns_foreign" class="input_option" onclick="update_visibility_tab2_redchn();" >
-															<option value="4">DNS2SOCKS</option>
+															<option value="4" selected>DNS2SOCKS</option>
 															<option value="1">dnscrypt-proxy</option>
 															<option value="2">ss-tunnel</option>
 															<option value="3">ChinaDNS</option>
 															<option value="5">Pcap_DNSProxy</option>
 															<option value="6">pdnsd</option>
 														</select>
-														<select id="ss_redchn_opendns" name="ss_redchn_opendns" class="input_option"></select>
+														<select id="ss_redchn_opendns" name="ss_redchn_opendns" class="input_option" style="width:320px"></select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_dns2socks_user" name="ss_redchn_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
 														<select id="ss_redchn_sstunnel" name="ss_redchn_sstunnel" class="input_option" onclick="update_visibility_tab2_redchn();" >
 															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">google DNS1 [8.8.8.8]</option>
+															<option value="2" selected>google DNS1 [8.8.8.8]</option>
 															<option value="3">google DNS2 [8.8.4.4]</option>
 															<option value="4">自定义</option>
 														</select>
@@ -2793,6 +2801,9 @@ bogus-nxdomain=220.250.64.18
 															<option value="1">阿里DNS1【223.5.5.5】</option>
 															<option value="2">阿里DNS2【223.6.6.6】</option>
 															<option value="3">114DNS【114.114.114.114】</option>
+															<option value="5">百度DNS【180.76.76.76】</option>
+															<option value="6">cnnic DNS【1.2.4.8】</option>
+															<option value="7" selected>dnspod DNS【119.29.29.29】</option>
 															<option value="4">自定义</option>
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_chinadns_china_user" name="ss_redchn_chinadns_china_user" placeholder="需端口号如：8.8.8.8:53" maxlength="100" value="">
@@ -2802,9 +2813,9 @@ bogus-nxdomain=220.250.64.18
 													<th width="20%"><font color="#66FF66"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(28)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*ChinaDNS国外DNS</font></a></th>
 													<td>
 														<select id="ss_redchn_chinadns_foreign" name="ss_redchn_chinadns_foreign" class="input_option" onclick="update_visibility_tab2_redchn();" >
-															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">Google DNS1 [8.8.8.8]</option>
+															<option value="2" selected>Google DNS1 [8.8.8.8]</option>
 															<option value="3">Google DNS2 [8.8.4.4]</option>
+															<option value="1">OpenDNS [208.67.220.220]</option>
 															<option value="4">自定义</option>
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_chinadns_foreign_user" name="ss_redchn_chinadns_foreign_user" maxlength="100" value="">
@@ -2834,16 +2845,16 @@ bogus-nxdomain=220.250.64.18
 													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(31)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（UDP）</font></a></th>
 													<td>
 														<select id="ss_redchn_pdnsd_udp_server" name="ss_redchn_pdnsd_udp_server" class="input_option" onclick="update_visibility_tab2_redchn();" >
-															<option value="1">DNS2SOCKS</option>
+															<option value="1" selected>DNS2SOCKS</option>
 															<option value="2">dnscrypt-proxy</option>
 															<option value="3">ss-tunnel</option>
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_pdnsd_udp_server_dns2socks" name="ss_redchn_pdnsd_udp_server_dns2socks" style="width:128px;" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
-														<select id="ss_redchn_pdnsd_udp_server_dnscrypt" name="ss_redchn_pdnsd_udp_server_dnscrypt" class="input_option"></select>
+														<select id="ss_redchn_pdnsd_udp_server_dnscrypt" name="ss_redchn_pdnsd_udp_server_dnscrypt" class="input_option" style="width:320px"></select>
 														<select id="ss_redchn_pdnsd_udp_server_ss_tunnel" name="ss_redchn_pdnsd_udp_server_ss_tunnel" class="input_option" onclick="update_visibility_tab2_redchn();" >
-															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">google DNS1 [8.8.8.8]</option>
+															<option value="2" selected>google DNS1 [8.8.8.8]</option>
 															<option value="3">google DNS2 [8.8.4.4]</option>
+															<option value="1">OpenDNS [208.67.220.220]</option>
 															<option value="4">自定义</option>
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_pdnsd_udp_server_ss_tunnel_user" name="ss_redchn_pdnsd_udp_server_ss_tunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8">
@@ -2889,7 +2900,7 @@ bogus-nxdomain=220.250.64.18" rows="7" style="width:99%; font-family:'Courier Ne
 												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(25)">选择国内DNS</a></th>
 													<td>
 														<select id="ss_game_dns_china" name="ss_game_dns_china" class="input_option" onclick="update_visibility_tab2_game();" >
-															<option value="1">运营商DNS【自动获取】</option>
+															<option value="1" selected>运营商DNS【自动获取】</option>
 															<option value="2">阿里DNS1【223.5.5.5】</option>
 															<option value="3">阿里DNS2【223.6.6.6】</option>
 															<option value="4">114DNS【114.114.114.114】</option>
@@ -2906,19 +2917,19 @@ bogus-nxdomain=220.250.64.18" rows="7" style="width:99%; font-family:'Courier Ne
 												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(26)">选择国外DNS</a></th>
 													<td>
 														<select id="ss_game_dns_foreign" name="ss_game_dns_foreign" class="input_option" onclick="update_visibility_tab2_game();" >
-															<option value="4">DNS2SOCKS</option>
+															<option value="4" selected>DNS2SOCKS</option>
 															<option value="1">dnscrypt-proxy</option>
 															<option value="2">ss-tunnel</option>
-															<option value="3">ChinaDNS（CDN最优）</option>
+															<option value="3">ChinaDNS</option>
 															<option value="5">PcapDNSProxy</option>
 															<option value="6">pdnsd</option>
 														</select>
-														<select id="ss_game_opendns" name="ss_game_opendns" class="input_option"></select>
+														<select id="ss_game_opendns" name="ss_game_opendns" class="input_option" style="width:320px"></select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_game_dns2socks_user" name="ss_game_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
 														<select id="ss_game_sstunnel" name="ss_game_sstunnel" class="input_option" onclick="update_visibility_tab2_game();" >
-															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">google DNS1 [8.8.8.8]</option>
+															<option value="2" selected>google DNS1 [8.8.8.8]</option>
 															<option value="3">google DNS2 [8.8.4.4]</option>
+															<option value="1">OpenDNS [208.67.220.220]</option>
 															<option value="4">自定义</option>
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_game_sstunnel_user" name="ss_game_sstunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
@@ -2931,6 +2942,9 @@ bogus-nxdomain=220.250.64.18" rows="7" style="width:99%; font-family:'Courier Ne
 															<option value="1">阿里DNS1【223.5.5.5】</option>
 															<option value="2">阿里DNS2【223.6.6.6】</option>
 															<option value="3">114DNS【114.114.114.114】</option>
+															<option value="5">百度DNS【180.76.76.76】</option>
+															<option value="6">cnnic DNS【1.2.4.8】</option>
+															<option value="7" selected>dnspod DNS【119.29.29.29】</option>
 															<option value="4">自定义</option>
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_game_chinadns_china_user" name="ss_game_chinadns_china_user" placeholder="需端口号如：8.8.8.8:53" maxlength="100" value="">
@@ -2977,7 +2991,7 @@ bogus-nxdomain=220.250.64.18" rows="7" style="width:99%; font-family:'Courier Ne
 															<option value="3">ss-tunnel</option>
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_udp_server_dns2socks" name="ss_game_pdnsd_udp_server_dns2socks" style="width:128px;" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
-														<select id="ss_game_pdnsd_udp_server_dnscrypt" name="ss_game_pdnsd_udp_server_dnscrypt" class="input_option"></select>
+														<select id="ss_game_pdnsd_udp_server_dnscrypt" name="ss_game_pdnsd_udp_server_dnscrypt" class="input_option" style="width:320px"></select>
 														<select id="ss_game_pdnsd_udp_server_ss_tunnel" name="ss_game_pdnsd_udp_server_ss_tunnel" class="input_option" onclick="update_visibility_tab2_game();" >
 															<option value="1">OpenDNS [208.67.220.220]</option>
 															<option value="2">google DNS1 [8.8.8.8]</option>
