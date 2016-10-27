@@ -22,44 +22,18 @@
 <script type="text/javascript" src="/general.js"></script>
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
 <script language="JavaScript" type="text/javascript" src="/client_function.js"></script>
-<script type="text/javascript" src="/dbconf?p=dualwanpolicy_&v=<% uptime(); %>"></script>
+<script type="text/javascript" src="/dbconf?p=kms_&v=<% uptime(); %>"></script>
 <script>
 var $j = jQuery.noConflict();
 function init() {
 show_menu();
 buildswitch();
-conf2obj();
 version_show();
-var ss_mode = '<% nvram_get("ss_mode"); %>';
-if(ss_mode == '3'){
-$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式下会和策略路由相冲突，不要同时开启</font></span>");
-} else if (ss_mode == '2') {
-$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS大陆白名单模式下国外线路默认全部走SS</font></span>");
-} else if (ss_mode == '4') {
-$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS全局模式下国内外线路默认全部走SS</font></span>");
-} else if (ss_mode == '1') {
-$j("#foreign_line1").html("<span class='software_action'><font color='#ffcc00'>当前gfwlsit模式下，gfwlsit以外的国外线路默认全部此端口</font></span>");
-} else if (ss_mode == '0') {
-$j("#ss_line").html("<span class='software_action'><font color='#ffcc00'>不可用，因为SS未启用</font></span>");
-}
-var lb_mode = '<% nvram_get("wans_mode"); %>';
-if(lb_mode !== "lb"){
-document.getElementById('Routing_rules_table').style.display = "none";
-document.getElementById('Routing_rules_table1').style.display = "none";
-document.getElementById('warn').style.display = "";
-document.form.dualwanpolicy_enable.value = 0;
-inputCtrl(document.form.switch,0);
-document.form.cmdBtn.disabled = true;
-}
 var rrt = document.getElementById("switch");
-if (document.form.dualwanpolicy_enable.value != "1") {
+if (document.form.kms_enable.value != "1") {
 rrt.checked = false;
-document.getElementById('Routing_rules_table').style.display = "none";
-document.getElementById('Routing_rules_table1').style.display = "none";
 } else {
 rrt.checked = true;
-document.getElementById('Routing_rules_table').style.display = "";
-document.getElementById('Routing_rules_table1').style.display = "";
 }
 }
 function done_validating() {
@@ -70,13 +44,9 @@ function buildswitch(){
 $j("#switch").click(
 function(){
 if(document.getElementById('switch').checked){
-document.form.dualwanpolicy_enable.value = 1;
-document.getElementById('Routing_rules_table').style.display = "";
-document.getElementById('Routing_rules_table1').style.display = "";
+document.form.kms_enable.value = 1;
 }else{
-document.form.dualwanpolicy_enable.value = 0;
-document.getElementById('Routing_rules_table').style.display = "none";
-document.getElementById('Routing_rules_table1').style.display = "none";
+document.form.kms_enable.value = 0;
 }
 });
 }
@@ -85,46 +55,24 @@ document.form.action_mode.value = s;
 showLoading(3);
 document.form.submit();
 }
-function conf2obj(){
-$j.ajax({
-type: "get",
-url: "dbconf?p=dualwanpolicy_",
-dataType: "script",
-success: function(xhr) {
-var p = "dualwanpolicy_";
-var params = ["wan1", "wan2", "wan_foreign", "wan_ss", "wan1_custom", "wan2_custom"];
-for (var i = 0; i < params.length; i++) {
-        for (var i = 0; i < params.length; i++) {
-			if (typeof db_dualwanpolicy_[p + params[i]] !== "undefined") {
-				$j("#dualwanpolicy_"+params[i]).val(db_dualwanpolicy_[p + params[i]]);
-				}
-            update_visibility();
-        }
-	}
-	}
-	});
-}
-function update_visibility() {
-showhide("dualwanpolicy_wan1_custom", (document.form.dualwanpolicy_wan1.value == "2"));
-showhide("dualwanpolicy_wan2_custom", (document.form.dualwanpolicy_wan2.value == "5"));
-}
+
 function reload_Soft_Center(){
 location.href = "/Main_Soft_center.asp";
 }
 
 function version_show(){
-	$j("#dualwan_version_status").html("<i>当前版本：" + db_dualwanpolicy_['dualwan_version']);
+	$j("#kms_version_status").html("<i>当前版本：" + db_kms_['kms_version']);
     $j.ajax({
-        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/dualwan/config.json.js',
+        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/kms/config.json.js',
         type: 'GET',
         success: function(res) {
             var txt = $j(res.responseText).text();
             if(typeof(txt) != "undefined" && txt.length > 0) {
                 //console.log(txt);
                 var obj = $j.parseJSON(txt.replace("'", "\""));
-		$j("#dualwan_version_status").html("<i>当前版本：" + obj.version);
-		if(obj.version != db_dualwanpolicy_["dualwan_version"]) {
-			$j("#dualwan_version_status").html("<i>有新版本：" + obj.version);
+		$j("#kms_version_status").html("<i>当前版本：" + obj.version);
+		if(obj.version != db_kms_["kms_version"]) {
+			$j("#kms_version_status").html("<i>有新版本：" + obj.version);
 		}
             }
         }
@@ -136,9 +84,9 @@ function version_show(){
 <div id="TopBanner"></div>
 <div id="Loading" class="popup_bg"></div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
-<form method="POST" name="form" action="/applydb.cgi?p=dualwanpolicy_" target="hidden_frame">
-<input type="hidden" name="current_page" value="Module_policy_route.asp"/>
-<input type="hidden" name="next_page" value="Module_policy_route.asp"/>
+<form method="POST" name="form" action="/applydb.cgi?p=kms_" target="hidden_frame">
+<input type="hidden" name="current_page" value="Module_kms.asp"/>
+<input type="hidden" name="next_page" value="Module_kms.asp"/>
 <input type="hidden" name="group_id" value=""/>
 <input type="hidden" name="modified" value="0"/>
 <input type="hidden" name="action_mode" value=""/>
@@ -146,9 +94,9 @@ function version_show(){
 <input type="hidden" name="action_wait" value="5"/>
 <input type="hidden" name="first_time" value=""/>
 <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
-<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="dualwan_policy.sh"/>
+<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="kms.sh"/>
 <input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>"/>
-<input type="hidden" id="dualwanpolicy_enable" name="dualwanpolicy_enable" value='<% dbus_get_def("dualwanpolicy_enable", "0"); %>'/>
+<input type="hidden" id="kms_enable" name="kms_enable" value='<% dbus_get_def("kms_enable", "0"); %>'/>
 <table class="content" align="center" cellpadding="0" cellspacing="0">
 <tr>
 <td width="17">&nbsp;</td>
@@ -170,7 +118,7 @@ function version_show(){
 <div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 <div class="formfontdesc" id="cmdDesc">Office 自动激活工具，再也不用为寻找破解版烦恼了。</div>
 <div class="formfontdesc" id="cmdDesc"></div>
-<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="routing_table">
+<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="kms_table">
 <thead>
 <tr>
 <td colspan="2">KMS服务器选项</td>
@@ -190,8 +138,8 @@ function version_show(){
 </div>
 </label>
 </div>
-<div id="dualwan_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("dualwan_version", "未知"); %></i></div>
-<div id="dualwanpolicy_install_show" style="padding-top:5px;margin-left:330px;margin-top:-25px;"></div>
+<div id="kms_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("kms_version", "未知"); %></i></div>
+<div id="kms_install_show" style="padding-top:5px;margin-left:330px;margin-top:-25px;"></div>
 <a style="margin-left: 318px;" href="https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/kms/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
 </td>
 </tr>
@@ -200,6 +148,21 @@ function version_show(){
 <button id="cmdBtn" class="button_gen" onclick="onSubmitCtrl(this, ' Refresh ')">提交</button>
 </div>
 <div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
+<div id="NoteBox">
+<h2>自动激活使用说明：</h2>
+<h3>以管理员身份运行CMD输入以下命令，红色字体代表变量不是固定的，请参照自己的计算机修改。</h3>
+<h3>【1】 Office激活</h3>
+<p> CD <font color="red">X</font>:\Program Files<font color="red">(X86)</font>\Microsoft Office\Office<font color="red">14</font></p>
+<p>cscript ospp.vbs /sethst:<font color="red">192.168.0.1</font></p>
+<p>cscript ospp.vbs /act</p>
+<p>cscript ospp.vbs /dstatus</p>
+<h3>【2】 Windows激活</h3>
+<p>slmgr /ipk <font color="red">MHF9N-XY6XB-WVXMC-BTDCT-MKKG7</font></p>
+<p>slmgr /skms <font color="red">192.168.0.1</font></p>
+<p>slmgr /ato </p>
+</div>
+<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
+
 <div class="KoolshareBottom">
 <br/>论坛技术支持： <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a> <br/>
 后台技术支持： <i>Xiaobao</i> <br/>
