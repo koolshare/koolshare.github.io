@@ -7,7 +7,7 @@
 <meta HTTP-EQUIV="Expires" CONTENT="-1"/>
 <link rel="shortcut icon" href="images/favicon.png"/>
 <link rel="icon" href="images/favicon.png"/>
-<title>软件中心 - KMS Office自动激活工具</title>
+<title>软件中心 - 系统工具</title>
 <link rel="stylesheet" type="text/css" href="index_style.css"/>
 <link rel="stylesheet" type="text/css" href="form_style.css"/>
 <link rel="stylesheet" type="text/css" href="usp_style.css"/>
@@ -113,19 +113,19 @@ function version_show(){
 <tr>
 <td bgcolor="#4D595D" colspan="3" valign="top">
 <div>&nbsp;</div>
-<div style="float:left;" class="formfonttitle">KMS - Office自动激活工具</div>
+<div style="float:left;" class="formfonttitle">系统工具 - 来自网络的胃軟系统工具</div>
 <div style="float:right; width:15px; height:25px;margin-top:10px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
 <div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
-<div class="formfontdesc" id="cmdDesc">Office 自动激活工具，再也不用为寻找破解版烦恼了。</div>
+<div class="formfontdesc" id="cmdDesc">该工具用于“鸡或”“胃軟奥菲斯”和“胃軟操作系统”。</div>
 <div class="formfontdesc" id="cmdDesc"></div>
 <table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="kms_table">
 <thead>
 <tr>
-<td colspan="2">KMS服务器选项</td>
+<td colspan="2">系统工具选项</td>
 </tr>
 </thead>
 <tr>
-<th>开启KMS自动激活服务</th>
+<th>开启“胃軟”系统工具</th>
 <td colspan="2">
 <div class="switch_field" style="display:table-cell;float: left;">
 <label for="switch">
@@ -149,17 +149,18 @@ function version_show(){
 </div>
 <div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 <div id="NoteBox">
-<h2>自动激活使用说明：</h2>
+<h2>使用说明：</h2>
 <h3>以管理员身份运行CMD输入以下命令，红色字体代表变量不是固定的，请参照自己的计算机修改。</h3>
-<h3>【1】 Office激活</h3>
+<h3>【1】 奥菲斯鸡或</h3>
 <p> CD <font color="red">X</font>:\Program Files<font color="red">(X86)</font>\Microsoft Office\Office<font color="red">14</font></p>
 <p>cscript ospp.vbs /sethst:<font color="red">192.168.0.1</font></p>
 <p>cscript ospp.vbs /act</p>
 <p>cscript ospp.vbs /dstatus</p>
-<h3>【2】 Windows激活</h3>
+<h3>【2】 操作系统鸡或</h3>
 <p>slmgr /ipk <font color="red">MHF9N-XY6XB-WVXMC-BTDCT-MKKG7</font></p>
 <p>slmgr /skms <font color="red">192.168.0.1</font></p>
 <p>slmgr /ato </p>
+<h2>申明：本工具来自国外互联网 <a href="https://forums.mydigitallife.info/threads/50234-Emulated-KMS-Servers-on-non-Windows-platforms" target="_blank">点我跳转</a></h2>
 </div>
 <div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 

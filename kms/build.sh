@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=kms
-VERSION=0.4
+VERSION=0.5
 TITLE=系统工具
 DESCRIPTION=来自网络的胃軟系统工具
 HOME_URL=Module_kms.asp
