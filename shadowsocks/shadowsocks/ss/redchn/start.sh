@@ -574,7 +574,7 @@ start_all)
 	;;
 restart_dns)
 	#ss_basic_action=2
-	echo $(date): ----------------------- 大陆白名单模式-重启dns服务 --------------------------
+	echo $(date): ----------------------- 大陆白名单模式-重启dns服务 -------------------------
 	resolv_server_ip
 	stop_dns
 	creat_dnsmasq_basic_conf
@@ -585,11 +585,11 @@ restart_dns)
 	#load_nat
 	restart_dnsmasq
 	remove_status
-	echo $(date): ---------------------- 大陆白名单模式-dns服务重启完毕 ------------------------
+	echo $(date): ---------------------- 大陆白名单模式-dns服务重启完毕 ----------------------
 	;;
 restart_wb_list)
 	#ss_basic_action=3
-	echo $(date): ---------------------- 大陆白名单模式-重启黑白名单服务 ------------------------
+	echo $(date): ---------------------- 大陆白名单模式-重启黑白名单服务 ----------------------
 	ipset -F white_domain >/dev/null 2>&1
 	ipset -F black_domain >/dev/null 2>&1
 	append_white_black_conf
@@ -597,11 +597,11 @@ restart_wb_list)
 	sh /koolshare/ss/redchn/nat-start add_new_ip
 	restart_dnsmasq
 	remove_status
-	echo $(date): -------------------- 大陆白名单模式-黑白名单服务重启完毕 -----------------------
+	echo $(date): -------------------- 大陆白名单模式-黑白名单服务重启完毕 ---------------------
 	;;
 restart_addon)
 	#ss_basic_action=4
-	echo $(date): ----------------------- 大陆白名单模式-重启附加功能 --------------------------
+	echo $(date): ----------------------- 大陆白名单模式-重启附加功能 ------------------------
 	# for sleep walue in start up files
 	old_sleep=`cat /jffs/scripts/nat-start | grep sleep | awk '{print $2}'`
 	new_sleep="$ss_basic_sleep"
@@ -636,7 +636,7 @@ restart_addon)
 		echo $(date): 设置使用resolveip方式解析SS服务器的ip地址.
 	fi
 	
-	echo $(date): --------------------- 大陆白名单模式-附加功能重启完毕！ -----------------------
+	echo $(date): -------------------- 大陆白名单模式-附加功能重启完毕！ ----------------------
 	;;
 *)
 	echo "Usage: $0 (start_all|restart_dns|restart_wb_list|restart_addon)"

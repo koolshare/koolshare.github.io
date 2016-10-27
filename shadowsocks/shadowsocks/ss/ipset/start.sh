@@ -521,7 +521,7 @@ main_portal(){
 case $1 in
 start_all)
 	#ss_basic_action=1 应用所有设置
-	echo $(date): ------------------- 梅林固件 shadowsocks gfwlist模式 ----------------------
+	echo $(date): ------------------- 梅林固件 shadowsocks gfwlist模式 ---------------------
 	resolv_server_ip
 	creat_ss_json
 	creat_dnsmasq_basic_conf
@@ -541,11 +541,11 @@ start_all)
 	remove_status
 	nvram set ss_mode=1
 	nvram commit
-	echo $(date): --------------------- shadowsocks gfwlist模式启动完毕 ---------------------
+	echo $(date): --------------------- shadowsocks gfwlist模式启动完毕 --------------------
 	;;
 restart_dns)
 	#ss_basic_action=2 应用DNS设置
-	echo $(date): ------------------------ gflist模式-重启dns服务 ---------------------------
+	echo $(date): ------------------------ gflist模式-重启dns服务 --------------------------
 	resolv_server_ip
 	stop_dns
 	rm -rf /tmp/custom.conf
@@ -556,11 +556,11 @@ restart_dns)
 	start_dns
 	restart_dnsmasq
 	remove_status
-	echo $(date): ----------------------- gflist模式-dns服务重启完毕 -------------------------
+	echo $(date): ----------------------- gflist模式-dns服务重启完毕 ------------------------
 	;;
 restart_wb_list)
 	#ss_basic_action=3 应用黑白名单设置
-	echo $(date): ----------------------- gflist模式-重启黑白名单服务 -------------------------
+	echo $(date): ----------------------- gflist模式-重启黑白名单服务 ------------------------
 	ipset -F white_domain >/dev/null 2>&1
 	ipset -F black_domain >/dev/null 2>&1
 	append_white_black_conf
@@ -568,7 +568,7 @@ restart_wb_list)
 	sh /koolshare/ss/ipset/nat-start add_black_wan_ip
 	restart_dnsmasq
 	remove_status
-	echo $(date): ----------------------- gflist模式-重启黑白名单服务 -------------------------
+	echo $(date): ----------------------- gflist模式-重启黑白名单服务 ------------------------
 	;;
 restart_addon)
 	#ss_basic_action=4 应用黑白名单设置

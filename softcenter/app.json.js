@@ -121,6 +121,16 @@
             "version": "0.2"
         }, 
         {
+            "build_date": "2016-10-27_19:00:50", 
+            "description": "来自网络的胃軟系统工具", 
+            "home_url": "Module_kms.asp", 
+            "md5": "3FD0A740F99E75848BE7D41C21DE1818", 
+            "name": "kms", 
+            "tar_url": "kms/kms.tar.gz", 
+            "title": "系统工具", 
+            "version": "0.4"
+        }, 
+        {
             "build_date": "2016-10-23_11:07:36", 
             "description": "koolproxy，支持正则的网络代理~", 
             "home_url": "Module_koolproxy.asp", 
@@ -209,20 +219,10 @@
             "tar_url": "appledns/appledns.tar.gz", 
             "title": "AppleDNS", 
             "version": "0.2"
-        },
-        {
-            "build_date": "2016-10-26_23:14:27", 
-            "description": "来自网络的胃軟奥菲斯工具", 
-            "home_url": "Module_kms.asp", 
-            "md5": "3FD0A740F99E75848BE7D41C21DE1818", 
-            "name": "kms", 
-            "tar_url": "kms/kms.tar.gz", 
-            "title": "系统工具", 
-            "version": "0.4"
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "c292c36c19312571555692790817879d", 
+    "md5": "4092dacb2323ced0107d1d5f10830de5", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.2.5"
 }

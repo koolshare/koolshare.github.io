@@ -221,6 +221,7 @@ function init() {
     toggle_switch();
     detect_kcptun();
     refreshRate = getRefresh();
+    generate_options();
     for (var field in db_ss) {
         $j('#'+field).val(db_ss[field]);
     }
@@ -1580,7 +1581,7 @@ function version_show(){
                     	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
                 	}else{
-	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.0.4</i></a>");
+	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.0.5</i></a>");
                 	}
 		        }
             }

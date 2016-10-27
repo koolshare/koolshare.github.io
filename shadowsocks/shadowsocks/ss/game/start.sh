@@ -474,11 +474,14 @@ detect_qos(){
 	echo $(date): 检测是否符合游戏模式启动条件...
 	QOSO=`iptables -t mangle -S | grep -o QOSO`
 	if [ ! -z "$QOSO" ];then
-		echo $(date): 发现你开启了 Adaptive Qos - 传统带宽管理,该Qos模式和游戏模式冲突！
+		echo $(date): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		echo $(date): !!!发现你开启了 Adaptive Qos - 传统带宽管理,该Qos模式和游戏模式冲突!!!
+		echo $(date): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		echo $(date): 如果你仍然希望在游戏模式下使用Qos，可以使用Adaptive QoS网络监控家模式，
 		echo $(date): 但是该模式下走ss的流量不会有Qos效果！
-		echo $(date): 退出应用游戏模式，关闭ss！
+		echo $(date): 退出应用游戏模式，关闭ss！请等待10秒！
 		dbus set ss_basic_enable=0
+		sleep 10
 		exit
 	else
 		echo $(date): 未检测到系统设置冲突，符合启动条件！
