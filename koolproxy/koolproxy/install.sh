@@ -19,13 +19,17 @@ else
 	mv /tmp/user.txt.tmp /koolshare/koolproxy/data/user.txt
 fi
 
+cp -rf /tmp/koolproxy/bin/* /koolshare/bin/
 cp -rf /tmp/koolproxy/scripts/* /koolshare/scripts/
 cp -rf /tmp/koolproxy/webs/* /koolshare/webs/
 cp -rf /tmp/koolproxy/res/* /koolshare/res/
 cp -rf /tmp/koolproxy/perp/koolproxy /koolshare/perp/
+
 cd /
 rm -rf /tmp/koolproxy* >/dev/null 2>&1
+rm -rf /koolshare/koolproxy/koolproxy >/dev/null 2>&1
 
+chmod 755 /koolshare/koolproxy/koolproxy
 chmod 755 /koolshare/koolproxy/*
 chmod 755 /koolshare/scripts/*
 chmod 755 /koolshare/perp//koolproxy/*

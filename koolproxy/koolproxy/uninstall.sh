@@ -1,4 +1,4 @@
-#!/bin/sh
+#! /bin/sh
 
 sh /koolshare/koolproxy/koolproxy.sh stop
 rm -rf /koolshare/perp/koolproxy
