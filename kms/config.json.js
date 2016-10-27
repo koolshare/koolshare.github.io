@@ -1,6 +1,6 @@
 {
 "version":"0.3",
-"md5":"BA7501B561C5557BD1FBAA24D9DC2B5E",
+"md5":"20C63516BDC51CB23E578BADB57FEBA1",
 "home_url":"Module_kms.asp",
 "title":"KMS",
 "description":"Office自动激活工具",
