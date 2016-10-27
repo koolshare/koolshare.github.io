@@ -29,7 +29,7 @@ cd /
 rm -rf /tmp/koolproxy* >/dev/null 2>&1
 rm -rf /koolshare/koolproxy/koolproxy >/dev/null 2>&1
 
-chmod 755 /koolshare/koolproxy/koolproxy
+chmod 755 /koolshare/bin/koolproxy
 chmod 755 /koolshare/koolproxy/*
 chmod 755 /koolshare/scripts/*
 chmod 755 /koolshare/perp//koolproxy/*
