@@ -2,7 +2,7 @@
 
 MODULE=kms
 VERSION=0.3
-TITLE=KMS
+TITLE=kms
 DESCRIPTION=Office自动激活工具
 HOME_URL=Module_kms.asp
 
