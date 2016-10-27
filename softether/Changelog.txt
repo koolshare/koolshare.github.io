@@ -1,0 +1,4 @@
+Koolshare Asuswrt-Merlin adm Changelog
+===========================================
+1.0
+   - add	add SoftEther VPN Server

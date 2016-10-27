@@ -151,6 +151,16 @@
             "version": "1.3"
         }, 
         {
+            "build_date": "2016-10-27_15:10:33", 
+            "description": "", 
+            "home_url": "Module_softether.asp", 
+            "md5": "fa5fe69330cae761bc8caa94021f3cb4", 
+            "name": "softether", 
+            "tar_url": "softether/softether.tar.gz", 
+            "title": "SoftEther_VPN_Server", 
+            "version": "1.0"
+        }, 
+        {
             "build_date": "2016-06-20_17:00:29", 
             "description": "迅雷快鸟，为上网加速而生~", 
             "home_url": "Module_kuainiao.asp", 
