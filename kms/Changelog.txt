@@ -8,3 +8,9 @@ Koolshare Asuswrt-Merlin kms Changelog
    - fix error
 0.4
    - you know. ah!
+0.5
+   - you know. ah!
+0.6
+   - you know. ah!
+0.7
+   - fix auto active!
