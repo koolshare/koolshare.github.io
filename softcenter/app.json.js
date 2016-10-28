@@ -124,11 +124,11 @@
             "build_date": "2016-10-27_10:38:02", 
             "description": "来自网络的胃軟系统工具", 
             "home_url": "Module_kms.asp", 
-            "md5": "72b561d8681b639da394d7530ff1bad8", 
+            "md5": "d064609cdcc62bb30fdbcf754126fac0", 
             "name": "kms", 
             "tar_url": "kms/kms.tar.gz", 
             "title": "系统工具", 
-            "version": "0.5"
+            "version": "0.7"
         }, 
         {
             "build_date": "2016-10-23_11:07:36", 
