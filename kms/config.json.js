@@ -1,5 +1,5 @@
 {
-"version":"0.5",
+"version":"0.6",
 "md5":"72b561d8681b639da394d7530ff1bad8",
 "home_url":"Module_kms.asp",
 "title":"系统工具",
