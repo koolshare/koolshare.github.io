@@ -1,13 +1,12 @@
 #!/bin/sh
 # load path environment in dbus databse
 eval `dbus export kms`
-
-start_kms(){
-	if [ "$kms_diyport" == "" ];then
+if [ "$kms_diyport" == "" ];then
 	k_port="1688"
-	else
+else
 	k_port=$kms_diyport
-	fi
+fi
+start_kms(){
 	chmod 0755 /koolshare/bin/vlmcsd
 	/koolshare/bin/vlmcsd
 	touch /jffs/configs/dnsmasq.d/kms.conf
@@ -36,7 +35,6 @@ EOF
 		if ["$kms_opennat" == "1"];then
 			sed -i '5a iptables -A INPUT -p tcp --dport $k_port -j ACCEPT' /jffs/scripts/firewall-start
 		fi
-		
 	   chmod +x /jffs/scripts/firewall-start
    fi
 	echo $(date): ------------------ Custom operators kms runs!------------------  >> /tmp/syslog.log
@@ -51,7 +49,7 @@ stop_kms(){
 	sed -i '/vlmcsd/d' /jffs/scripts/firewall-start >/dev/null 2>&1
 	sed -i '/service restart_dnsmasq/d' /jffs/scripts/firewall-start >/dev/null 2>&1
 	sed -i '/iptables -A INPUT -p tcp --dport $k_port -j ACCEPT/d' /jffs/scripts/firewall-start >/dev/null 2>&1
-	iptables -D INPUT -p tcp --dport $kms_diyport -j ACCEPT
+	iptables -D INPUT -p tcp --dport $k_port -j ACCEPT
 	echo $(date): ------------------ Custom operators kms stop!------------------  >> /tmp/syslog.log
 	
 }
