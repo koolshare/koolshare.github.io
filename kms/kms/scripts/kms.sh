@@ -34,7 +34,7 @@ EOF
 	   sed -i '3a /koolshare/bin/vlmcsd' /jffs/scripts/firewall-start
 	   sed -i '4a service restart_dnsmasq' /jffs/scripts/firewall-start
 		if ["$kms_opennat" == "1"];then
-			sed -i '5a iptables -A INPUT -p tcp --dport $kms_diyport -j ACCEPT' /jffs/scripts/firewall-start
+			sed -i '5a iptables -A INPUT -p tcp --dport $k_port -j ACCEPT' /jffs/scripts/firewall-start
 		fi
 		
 	   chmod +x /jffs/scripts/firewall-start
