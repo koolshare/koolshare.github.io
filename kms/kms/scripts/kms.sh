@@ -50,7 +50,7 @@ stop_kms(){
 	sed -i '/kms/d' /jffs/scripts/firewall-start >/dev/null 2>&1
 	sed -i '/vlmcsd/d' /jffs/scripts/firewall-start >/dev/null 2>&1
 	sed -i '/service restart_dnsmasq/d' /jffs/scripts/firewall-start >/dev/null 2>&1
-	sed -i '/iptables -A INPUT -p tcp --dport $kms_diyport -j ACCEPT/d' /jffs/scripts/firewall-start >/dev/null 2>&1
+	sed -i '/iptables -A INPUT -p tcp --dport $k_port -j ACCEPT/d' /jffs/scripts/firewall-start >/dev/null 2>&1
 	iptables -D INPUT -p tcp --dport $kms_diyport -j ACCEPT
 	echo $(date): ------------------ Custom operators kms stop!------------------  >> /tmp/syslog.log
 	
