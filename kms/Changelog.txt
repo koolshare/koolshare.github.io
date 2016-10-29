@@ -14,3 +14,5 @@ Koolshare Asuswrt-Merlin kms Changelog
    - you know. ah!
 0.7
    - fix auto active!
+0.8
+   - fix scripts error.
