@@ -1,10 +1,21 @@
 #!/bin/sh
 # load path environment in dbus databse
 eval `dbus export kms`
+i=0
 if [ "$kms_diyport" == "" ];then
 	k_port="1688"
 else
 	k_port=$kms_diyport
+fi
+while [[ "$i" = 0 ]]
+do
+	iptables -D INPUT -p tcp --dport $k_port -j ACCEPT
+	i=$(iptables -C INPUT -p tcp --dport $k_port --jump ACCEPT|echo $?)
+done
+if [ "$kms_opennat" == "2" ];then
+	iptables -A INPUT -p tcp --dport $k_port -j ACCEPT
+else
+	iptables -D INPUT -p tcp --dport $k_port -j ACCEPT
 fi
 start_kms(){
 	chmod 0755 /koolshare/bin/vlmcsd
@@ -32,9 +43,6 @@ EOF
 	   sed -i '2a /koolshare/scripts/kms.sh' /jffs/scripts/firewall-start
 	   sed -i '3a /koolshare/bin/vlmcsd' /jffs/scripts/firewall-start
 	   sed -i '4a service restart_dnsmasq' /jffs/scripts/firewall-start
-		if ["$kms_opennat" == "1"];then
-			sed -i '5a iptables -A INPUT -p tcp --dport $k_port -j ACCEPT' /jffs/scripts/firewall-start
-		fi
 	   chmod +x /jffs/scripts/firewall-start
    fi
 	echo $(date): ------------------ Custom operators kms runs!------------------  >> /tmp/syslog.log
@@ -48,8 +56,6 @@ stop_kms(){
 	sed -i '/kms/d' /jffs/scripts/firewall-start >/dev/null 2>&1
 	sed -i '/vlmcsd/d' /jffs/scripts/firewall-start >/dev/null 2>&1
 	sed -i '/service restart_dnsmasq/d' /jffs/scripts/firewall-start >/dev/null 2>&1
-	sed -i '/iptables -A INPUT -p tcp --dport $k_port -j ACCEPT/d' /jffs/scripts/firewall-start >/dev/null 2>&1
-	iptables -D INPUT -p tcp --dport $k_port -j ACCEPT
 	echo $(date): ------------------ Custom operators kms stop!------------------  >> /tmp/syslog.log
 	
 }
