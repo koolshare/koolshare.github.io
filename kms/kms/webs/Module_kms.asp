@@ -33,8 +33,13 @@ version_show();
 var rrt = document.getElementById("switch");
 if (document.form.kms_enable.value != "1") {
 rrt.checked = false;
+document.getElementById("kms_opennat").disabled=true;
+document.getElementById("kms_diyport").disabled=true;
+kms_diyport
 } else {
 rrt.checked = true;
+document.getElementById("kms_opennat").disabled=false;
+document.getElementById("kms_diyport").disabled=false;
 }
 }
 function done_validating() {
@@ -46,8 +51,13 @@ $j("#switch").click(
 function(){
 if(document.getElementById('switch').checked){
 document.form.kms_enable.value = 1;
+document.getElementById("kms_opennat").disabled=false;
+document.getElementById("kms_diyport").disabled=false;
 }else{
 document.form.kms_enable.value = 0;
+document.form.kms_opennat.value = 1;
+document.getElementById("kms_opennat").disabled=true;
+document.getElementById("kms_diyport").disabled=true;
 }
 });
 }
@@ -179,8 +189,8 @@ for (var i = 0; i < params.length; i++) {
 <th width="35%">开放公网选项</th>
 <td>
 <select id="kms_opennat" name="kms_opennat" class="input_option">
-<option value="1">开启</option>
-<option value="2">关闭</option>
+<option value="1">关闭</option>
+<option value="2">开启</option>
 </select>
 </td>
 </tr>
