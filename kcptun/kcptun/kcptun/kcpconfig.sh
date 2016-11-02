@@ -96,11 +96,6 @@ set_ulimit(){
 	ulimit -n 8192
 }
 
-set_local_version(){
-	KCP_basic_version_local=`cat /koolshare/kcptun/version`
-	dbus set KCP_basic_version="$KCP_basic_version_local"
-}
-
 case $ACTION in
 start)
 	# start is for system startup
@@ -114,7 +109,6 @@ stop | kill )
 	disable_KCP
 	;;
 restart)
-	set_local_version
 	creat_folder
 	set_ulimit
 	apply_KCP

@@ -2,7 +2,7 @@
 
 
 MODULE=kcptun
-VERSION="2.2.0"
+VERSION="2.2.1"
 TITLE=kcptun
 DESCRIPTION=基于kcp协议的udp网络加速
 HOME_URL=Module_kcptun.asp
