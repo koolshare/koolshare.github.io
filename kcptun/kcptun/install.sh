@@ -1,10 +1,10 @@
 #! /bin/sh
 
 # stop kcptun first
+VERSION="2.2.0"
 sh /koolshare/kcptun/stop.sh
 dbus set KCP_basic_enable=0
-dbus set KCP_basic_version="2.1"
-
+dbus set KCP_basic_version="${VERSION}"
 cd /tmp
 cp -rf /tmp/kcptun/bin/kcp_router /koolshare/bin/
 cp -rf /tmp/kcptun/kcptun /koolshare/
@@ -24,3 +24,5 @@ chmod 755 /koolshare/kcptun/gfwlist/start.sh
 chmod 755 /koolshare/kcptun/gfwlist/nat-start
 chmod 755 /tmp/kcptun/perp/kcptun/*
 chmod 755 /koolshare/scripts/kcp_config.sh
+
+dbus set KCP_client_version=$(/koolshare/bin/kcp_router --version | awk '{print $3}')

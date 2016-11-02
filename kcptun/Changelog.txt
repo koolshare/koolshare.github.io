@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin kcptun Changelog
 ===========================================
+2.2.0
+   - update	update kcptun binary to latest
+   - update	update cdn list
+   - update	update gfwlist list
+   - fix	修复kcptun运行状态显示结果
 2.1
    - fix	fix uninstall shell
 2.0

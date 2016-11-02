@@ -2,7 +2,7 @@
 
 
 MODULE=kcptun
-VERSION=`cat kcptun/kcptun/version`
+VERSION="2.2.0"
 TITLE=kcptun
 DESCRIPTION=基于kcp协议的udp网络加速
 HOME_URL=Module_kcptun.asp
@@ -30,7 +30,7 @@ if [ -f "$DIR/$MODULE/$MODULE/install.sh" ]; then
 	echo "install script not found"
 	exit 2
 fi
-
+sed -i "s/VERSION=.*/VERSION=\"${VERSION}\"/g" $MODULE/install.sh
 # now include build_base.sh
 . $DIR/../softcenter/build_base.sh
 
