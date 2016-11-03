@@ -5,7 +5,7 @@ confs=`cat /tmp/ss_conf_backup.txt`
 format=`echo $confs|grep "{"`
 if [ -z "$format" ];then
 	echo $(date): 检测到ss备份文件...
-	cat /tmp/ss_conf_backup.txt | sed '/webtest/d' | sed '/ping/d' |sed '/version/d'|sed '/ss_node_table/d' |sed '/_state_/d' > /tmp/ss_conf_backup_tmp.txt
+	cat /tmp/ss_conf_backup.txt | sed '/webtest/d' | sed '/ping/d' |sed '/ss_node_table/d' |sed '/_state_/d' > /tmp/ss_conf_backup_tmp.txt
 	echo $(date): 开始恢复配置...
 	while read conf
 	do
@@ -13,8 +13,21 @@ if [ -z "$format" ];then
 		dbus set $conf >/dev/null 2>&1
 	done < /tmp/ss_conf_backup_tmp.txt
 
+	backup_version=`dbus get ss_basic_version_local`
+	comp=`versioncmp $backup_version 3.0.6`
+	if [ "$comp" == "1" ];then
+		echo $(date): 检测到备份文件来自低于3.0.6版本，开始对部分数据进行base64转换，以适应新版本！
+		node_pass=`dbus list ssconf_basic_password |cut -d "=" -f 1|cut -d "_" -f4|sort -n`
+		for node in $node_pass
+		do
+			dbus set ssconf_basic_password_$node=`dbus get ssconf_basic_password_$node|base64_encode`
+		done
+		dbus set ss_basic_password=`dbus get ss_basic_password|base64_encode`
+	fi
+
 	dbus set ss_basic_enable="0"
 	dbus set ss_basic_version_local=`cat /koolshare/ss/version` 
+	
 	echo $(date): 配置恢复成功！
 	
 else

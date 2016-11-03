@@ -3,6 +3,7 @@
 # Variable definitions
 eval `dbus export ss`
 source /koolshare/scripts/base.sh
+ss_basic_password=`echo $ss_basic_password|base64_decode`
 #--------------------------------------------------------------------------------------
 resolv_server_ip(){
 	IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
@@ -144,7 +145,7 @@ custom_dnsmasq(){
 	rm -rf /jffs/configs/dnsmasq.d/custom.conf
 	if [ ! -z "$ss_ipset_dnsmasq" ];then
 		echo $(date): 添加自定义dnsmasq设置到/jffs/configs/dnsmasq.conf.add
-		echo "$ss_ipset_dnsmasq" | sed "s/,/\n/g" | sort -u >> /tmp/custom.conf
+		echo "$ss_ipset_dnsmasq" | base64_decode | sort -u >> /tmp/custom.conf
 	fi
 }
 
@@ -152,23 +153,27 @@ append_white_black_conf(){
 	rm -rf /jffs/configs/dnsmasq.d/wblist.conf
 	rm -rf /tmp/wblist.conf
 	# append white domain list
-	wanwhitedomain=$(echo $ss_ipset_white_domain_web | sed 's/,/\n/g')
+	wanwhitedomain=$(echo $ss_ipset_white_domain_web | base64_decode)
 	if [ ! -z $ss_ipset_white_domain_web ];then
 		echo $(date): 创建域名白名单到/tmp/wblist.conf
 		echo "#for white_domain" >> /tmp/wblist.conf
 		for wan_white_domain in $wanwhitedomain
 		do
-			echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /tmp/wblist.conf
-			echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_domain/g" >> /tmp/wblist.conf
+			echo "$wan_white_domain" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /tmp/wblist.conf
+			echo "$wan_white_domain" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_domain/g" >> /tmp/wblist.conf
 		done
 	fi
 	
 	# append black domain list
+	wanblackdomain=$(echo $ss_ipset_black_domain_web | base64_decode)
 	if [ ! -z "$ss_ipset_black_domain_web" ];then
 		echo $(date): 创建域名黑名单到/tmp/wblist.conf
 		echo "#for_black_domain" >> /tmp/wblist.conf
-		echo "$ss_ipset_black_domain_web" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#7913/g" >> /tmp/wblist.conf
-		echo "$ss_ipset_black_domain_web" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/gfwlist/g" >> /tmp/wblist.conf
+		for wan_black_domain in $wanblackdomain
+		do
+			echo "$wan_black_domain" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#7913/g" >> /tmp/wblist.conf
+			echo "$wan_black_domain" | sed "s/^/ipset=&\/./g" | sed "s/$/\/gfwlist/g" >> /tmp/wblist.conf
+		done
 	fi
 }
 

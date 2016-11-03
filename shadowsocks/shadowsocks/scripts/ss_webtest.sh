@@ -20,7 +20,7 @@ for nu in $server_nu
 do
 	array1=`dbus get ssconf_basic_server_$nu`
 	array2=`dbus get ssconf_basic_port_$nu`
-	array3=`dbus get ssconf_basic_password_$nu`
+	array3=`dbus get ssconf_basic_password_$nu|base64_decode`
 	array4=`dbus get ssconf_basic_method_$nu`
 	array5=`dbus get ssconf_basic_use_rss_$nu`
 	array6=`dbus get ssconf_basic_onetime_auth_$nu`

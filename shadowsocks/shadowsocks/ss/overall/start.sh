@@ -4,7 +4,7 @@
 eval `dbus export shadowsocks`
 eval `dbus export ss`
 source /koolshare/scripts/base.sh
-
+ss_basic_password=`echo $ss_basic_password|base64_decode`
 #--------------------------------------------------------------------------------------
 resolv_server_ip(){
 	IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`

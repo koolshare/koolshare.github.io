@@ -1,8 +1,9 @@
-#!/bin/sh
+#! /bin/sh
 #--------------------------------------------------------------------------------------
 # Variable definitions
 eval `dbus export ss`
 source /koolshare/scripts/base.sh
+ss_basic_password=`echo $ss_basic_password|base64_decode`
 #--------------------------------------------------------------------------------------
 resolv_server_ip(){
 	IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
@@ -101,23 +102,22 @@ creat_dnsmasq_basic_conf(){
 }
 
 custom_dnsmasq(){
-	# append coustom dnsmasq settings
-	custom_dnsmasq=$(echo $ss_game_dnsmasq | sed "s/,/\n/g")
-	if [ ! -z $ss_game_dnsmasq ];then
-		echo $(date): 生成自定义cdn加速域名到/tmp/sscdn.conf
-		echo "#for coustom dnsmasq settings" >> /jffs/configs/dnsmasq.conf.add
-		for line in $custom_dnsmasq
-		do 
-			echo "$line" >> /jffs/configs/dnsmasq.conf.add
-		done
+	if [ ! -z "$ss_game_dnsmasq" ];then
+		echo $(date): 添加自定义dnsmasq设置到/tmp/custom.conf
+		echo "$ss_game_dnsmasq" | base64_decode | sort -u >> /tmp/custom.conf
 	fi
 }
 
 ln_conf(){
-	rm -rf /jffs/configs/cdn.conf
+	rm -rf /jffs/configs/dnsmasq.d/cdn.conf
 	if [ -f /tmp/sscdn.conf ];then
 		echo $(date): 创建cdn加速列表软链接/jffs/configs/dnsmasq.d/cdn.conf
 		ln -sf /tmp/sscdn.conf /jffs/configs/dnsmasq.d/cdn.conf
+	fi
+	rm -rf /jffs/configs/dnsmasq.d/custom.conf
+	if [ -f /tmp/custom.conf ];then
+		echo $(date): 创建自定义dnsmasq配置软链接/jffs/configs/dnsmasq.d/custom.conf
+		ln -sf /tmp/custom.conf /jffs/configs/dnsmasq.d/custom.conf
 	fi
 }
 
@@ -197,7 +197,7 @@ start_dns(){
 			echo $(date): 开启ssr-tunnel...
 			rss-tunnel -b 0.0.0.0 -c /koolshare/ss/game/ss.json -l 1053 -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_use_rss" == "0" ];then
-			echo $(date): Starting sr-tunnel...
+			echo $(date): 开启ss-tunnel...
 			if [ "$ss_basic_onetime_auth" == "1" ];then
 				ss-tunnel -b 0.0.0.0 -c /koolshare/ss/game/ss.json -l 1053 -L "$gs" -u -A -f /var/run/sstunnel.pid
 			elif [ "$ss_basic_onetime_auth" == "0" ];then
@@ -475,8 +475,8 @@ main_portal(){
 
 detect_qos(){
 	echo $(date): 检测是否符合游戏模式启动条件...
-	QOSO=`iptables -t mangle -S | grep -o QOSO`
-	if [ ! -z "$QOSO" ];then
+	QOSO=`iptables -t mangle -S | grep -c QOSO`
+	if [ "$QOSO" -gt "1" ];then
 		echo $(date): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		echo $(date): !!!发现你开启了 Adaptive Qos - 传统带宽管理,该Qos模式和游戏模式冲突!!!
 		echo $(date): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -488,6 +488,15 @@ detect_qos(){
 		exit
 	else
 		echo $(date): 未检测到系统设置冲突，符合启动条件！
+	fi
+}
+
+custom_tcpmss(){
+	nu_mss=`iptables -nvL FORWARD --line-numbers | grep TCPMSS | grep -v ppp | awk '{print $1}'`
+	if [ ! -z "$nu_mss" ];then
+		echo $(date): 在游戏模式中设置最大MSS: Maxitum Segment Size为1320！
+		replace_rule=`iptables -S -t filter | grep TCPMSS |grep -v ppp| sed 's/-A FORWARD //g' | sed 's/--clamp-mss-to-pmtu/--set-mss 1320/g'`
+		iptables -t filter -R FORWARD $nu_mss $replace_rule
 	fi
 }
 
@@ -507,6 +516,7 @@ start_all)
 	start_dns
 	start_ss_redir
 	load_nat
+	custom_tcpmss
 	restart_dnsmasq
 	remove_status
 	nvram set ss_mode=3
@@ -519,6 +529,7 @@ restart_dns)
 	detect_qos
 	creat_dnsmasq_basic_conf
 	custom_dnsmasq
+	ln_conf
 	restart_dnsmasq
 	remove_status
 	echo $(date): ------------------------ 游戏模式-dns服务重启完毕 --------------------------

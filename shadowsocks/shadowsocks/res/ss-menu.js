@@ -76,7 +76,7 @@ function LoadingSSProgress(seconds){
 	document.getElementById("LoadingBar").style.visibility = "visible";
 	if (document.form.ss_basic_action.value == 9){
 		document.getElementById("loading_block3").innerHTML = "应用负载均衡设置 ..."
-		$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，正在清空shadowsocks配置...</font></li>");
+		$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，应用负载均衡设置 ...</font></li>");
 		return true;
 	}
 	if (document.form.ss_basic_enable.value == 0){
@@ -120,7 +120,7 @@ function LoadingSSProgress(seconds){
 			document.getElementById("loading_block3").innerHTML = "恢复shadowsocks配置 ..."
 			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，配置恢复后需要重新提交！</font></li><li><font color='#ffcc00'>恢复配置中...</font></li>");
 		} else if (document.form.ss_basic_action.value == 8){
-			document.getElementById("loading_block3").innerHTML = "恢复shadowsocks配置 ..."
+			document.getElementById("loading_block3").innerHTML = "清空shadowsocks配置 ..."
 			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，正在清空shadowsocks配置...</font></li>");
 		}
 	}
@@ -181,15 +181,18 @@ function LoadingLocalProgress(seconds){
 }
 
 function hideSSLoadingBar(){
+	x = -1;
 	document.getElementById("LoadingBar").style.visibility = "hidden";
 	checkss = 0;
-	if (document.form.ss_basic_action.value == 5 || document.form.ss_basic_action.value == 6 ||document.form.ss_basic_action.value == 7 ||document.form.ss_basic_action.value == 8 || document.form.ss_basic_action.value == 9){
+	var action = document.form.ss_basic_action.value;
+	if (action == 5 || action == 6 ||action == 7 ||action == 8 || action == 9){
 		refreshpage();
 	}else{
 		htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
 		htmlbodyforIE[0].style.overflow = "visible";	  //hidden the Y-scrollbar for preventing from user scroll it.
-		line_show();
+		decode_show();
 		checkss = 0;
+		$G("ss_basic_password").value = Base64.decode($G("ss_basic_password").value);
 		setTimeout("get_ss_status_data();",2000);
 	}
 

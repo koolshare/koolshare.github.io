@@ -3,6 +3,7 @@
 # Variable definitions
 eval `dbus export ss`
 source /koolshare/scripts/base.sh
+ss_basic_password=`echo $ss_basic_password|base64_decode`
 #--------------------------------------------------------------------------------------
 resolv_server_ip(){
 	IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
@@ -132,60 +133,64 @@ creat_dnsmasq_basic_conf(){
 user_cdn_site(){
 	# append user defined china site
 	if [ ! -z "$ss_redchn_isp_website_web" ];then
+		cdnsites=$(echo $ss_redchn_isp_website_web | base64_decode)
 		echo $(date): 生成自定义cdn加速域名到/tmp/sscdn.conf
 		echo "#for user defined china site CDN acclerate" >> /tmp/sscdn.conf
-		echo "$ss_redchn_isp_website_web" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" >> /tmp/sscdn.conf
+		for cdnsite in $cdnsites
+		do
+			echo "$cdnsite" | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" >> /tmp/sscdn.conf
+		done
 	fi
 }
 
 custom_dnsmasq(){
-	# append coustom dnsmasq settings
-	custom_dnsmasq=$(echo $ss_redchn_dnsmasq | sed "s/,/\n/g")
-	if [ ! -z $ss_redchn_dnsmasq ];then
-		echo $(date): 添加自定义dnsmasq设置到/jffs/configs/dnsmasq.conf.add
-		echo "#for coustom dnsmasq settings" >> /jffs/configs/dnsmasq.conf.add
-		for line in $custom_dnsmasq
-		do 
-			echo "$line" >> /jffs/configs/dnsmasq.conf.add
-		done
+	if [ ! -z "$ss_redchn_dnsmasq" ];then
+		echo $(date): 添加自定义dnsmasq设置到/tmp/custom.conf
+		echo "$ss_redchn_dnsmasq" | base64_decode | sort -u >> /tmp/custom.conf
 	fi
 }
 
 append_white_black_conf(){
 	rm -rf /jffs/configs/dnsmasq.d/custom.conf
-	rm -rf /tmp/custom.conf
+	rm -rf /tmp/wblist.conf
 	# append white domain list
-	wanwhitedomain=$(echo $ss_redchn_wan_white_domain | sed 's/,/\n/g')
+	wanwhitedomain=$(echo $ss_redchn_wan_white_domain | base64_decode)
 	if [ ! -z $ss_redchn_wan_white_domain ];then
-		echo $(date): 添加域名白名单到/tmp/custom.conf
-		echo "#for white_domain" >> /tmp/custom.conf
+		echo $(date): 添加域名白名单到/tmp/wblist.conf
+		echo "#for white_domain" >> //tmp/wblist.conf
 		for wan_white_domain in $wanwhitedomain
 		do 
-			echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /tmp/custom.conf
-			echo "$wan_white_domain" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_domain/g" >> /tmp/custom.conf
+			echo "$wan_white_domain" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /tmp/wblist.conf
+			echo "$wan_white_domain" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_domain/g" >> /tmp/wblist.conf
 		done
 	fi
 	
 	# append black domain list
-	wanblackdomain=$(echo $ss_redchn_wan_black_domain | sed "s/,/\n/g")
+	wanblackdomain=$(echo $ss_redchn_wan_black_domain | base64_decode)
 	if [ ! -z $ss_redchn_wan_black_domain ];then
-		echo $(date): 添加域名黑名单到/tmp/custom.conf
-		echo "#for black_domain" >> /tmp/custom.conf
+		echo $(date): 添加域名黑名单到/tmp/wblist.conf
+		echo "#for black_domain" >> /tmp/wblist.conf
 		for wan_black_domain in $wanblackdomain
 		do 
-			echo "$wan_black_domain" | sed "s/,/\n/g" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /tmp/custom.conf
-			echo "$wan_black_domain" | sed "s/,/\n/g" | sed "s/^/ipset=&\/./g" | sed "s/$/\/black_domain/g" >> /tmp/custom.conf
+			echo "$wan_black_domain" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#1053/g" >> /tmp/wblist.conf
+			echo "$wan_black_domain" | sed "s/^/ipset=&\/./g" | sed "s/$/\/black_domain/g" >> /tmp/wblist.conf
 		done
 	fi
 }
 
 
 ln_conf(){
+	rm -rf /jffs/configs/dnsmasq.d/custom.conf
 	if [ -f /tmp/custom.conf ];then
-		echo $(date): 创建域名黑/白名单软链接到/jffs/configs/dnsmasq.d/custom.conf
+		echo $(date): 创建域自定义dnsmasq配置文件软链接到/jffs/configs/dnsmasq.d/custom.conf
 		ln -sf /tmp/custom.conf /jffs/configs/dnsmasq.d/custom.conf
 	fi
-	rm -rf /jffs/configs/cdn.conf
+	rm -rf /jffs/configs/dnsmasq.d/wblist.conf
+	if [ -f /tmp/wblist.conf ];then
+		echo $(date): 创建域名黑/白名单软链接到/jffs/configs/dnsmasq.d/custom.conf
+		ln -sf /tmp/wblist.conf /jffs/configs/dnsmasq.d/wblist.conf
+	fi
+	rm -rf /jffs/configs/dnsmasq.d/cdn.conf
 		echo $(date): 创建cdn加速列表软链接/jffs/configs/dnsmasq.d/cdn.conf
 	if [ -f /tmp/sscdn.conf ];then
 		ln -sf /tmp/sscdn.conf /jffs/configs/dnsmasq.d/cdn.conf

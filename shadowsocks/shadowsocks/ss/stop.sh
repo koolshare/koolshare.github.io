@@ -222,7 +222,7 @@ kill_process(){
 	fi
 	
 	if [ ! -z "$haproxy" ];then 
-		echo $(date): 关闭kcp协议进程...
+		echo $(date): 关闭haproxy进程...
 		killall haproxy >/dev/null 2>&1
 	fi
 }
@@ -252,6 +252,15 @@ remove_conf_and_settings(){
 	dbus remove ss_basic_state_foreign
 }
 
+revert_tcpmss(){
+	nu_mss=`iptables -nvL FORWARD --line-numbers | grep TCPMSS | grep -v ppp | grep 1320 | awk '{print $1}'`
+	if [ ! -z "$nu_mss" ];then
+		echo $(date): 在游戏模式中设置最大MSS: Maxitum Segment Size为1320！
+		replace_rule=`iptables -S -t filter | grep TCPMSS |grep -v ppp| sed 's/-A FORWARD //g' | sed 's/--set-mss 1320/--clamp-mss-to-pmtu/g'`
+		iptables -t filter -R FORWARD $nu_mss $replace_rule
+	fi
+}
+
 case $1 in
 stop_all)
 	#KCP_basic_action=0 应用所有设置
@@ -263,6 +272,7 @@ stop_all)
 	bring_up_dnsmasq
 	restore_nat
 	destory_ipset
+	revert_tcpmss
 	restore_start_file
 	kill_process
 	kill_cron_job
@@ -274,6 +284,7 @@ stop_part)
 	echo $(date):
 	echo $(date): ----------------------------- 停止上个SS模式 -----------------------------
 	restore_conf
+	revert_tcpmss
 	remove_conf_and_settings
 	#bring_up_dnsmasq
 	restore_nat

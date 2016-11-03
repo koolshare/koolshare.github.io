@@ -55,8 +55,8 @@ creat_ipset(){
 
 add_black_wan_ip(){
 	if [ ! -z "$ss_ipset_black_ip" ];then
-		ip_format=`dbus get ss_ipset_black_ip|sed 's/,/\n/g'|grep -v "/"|sed '/\#/d'`
-		cidr_format=`dbus get ss_ipset_black_ip|sed 's/,/\n/g'|grep "/"|sed '/\#/d'`
+		ip_format=`dbus get ss_ipset_black_ip|base64_decode|grep -v "/"|sed '/\#/d'`
+		cidr_format=`dbus get ss_ipset_black_ip|base64_decode|grep "/"|sed '/\#/d'`
 		if [ ! -z "$ip_format" ];then
 			echo $(date): 添加你定义的黑名单IP地址到ipset：gfwlist中.
 			for ip in $ip_format
@@ -95,8 +95,8 @@ apply_nat_rules(){
 	[ ! -z "$ss_basic_server_ip" ] && iptables -t nat -A SHADOWSOCKS -d $ss_basic_server_ip -j RETURN
 	
 	# lan control
-	black=$(echo $ss_basic_black_lan | sed "s/,/ /g")
-	white=$(echo $ss_basic_white_lan | sed "s/,/ /g")
+	black=$(echo $ss_basic_black_lan | base64_decode | sed "s/,/ /g")
+	white=$(echo $ss_basic_white_lan | base64_decode | sed "s/,/ /g")
 	if [ "$ss_basic_lan_control" == "1" ];then
 		if [ ! -z $ss_basic_black_lan ];then
 			echo $(date): 添加局域网黑名单IP，这些IP地址将不会走ss.

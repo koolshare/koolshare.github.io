@@ -61,8 +61,8 @@ creat_ipset(){
 add_white_black_ip(){
 	# black ip/cidr
 	if [ ! -z "$ss_redchn_wan_black_ip" ];then
-		ip_format=`dbus get ss_redchn_wan_black_ip|sed 's/,/\n/g'|grep -v "/"`
-		cidr_format=`dbus get ss_redchn_wan_black_ip|sed 's/,/\n/g'|grep "/"`
+		ip_format=`dbus get ss_redchn_wan_black_ip|base64_decode|grep -v "/"`
+		cidr_format=`dbus get ss_redchn_wan_black_ip|base64_decode|grep "/"`
 		if [ ! -z "$ip_format" ];then
 			echo $(date): 添加你定义的黑名单IP地址到ipset：black_ip中.
 			for ip in $ip_format
@@ -81,8 +81,8 @@ add_white_black_ip(){
 	fi
 	# white ip/cidr
 	if [ ! -z "$ss_redchn_wan_white_ip" ];then
-		ip_format=`dbus get ss_redchn_wan_white_ip|sed 's/,/\n/g'|grep -v "/"`
-		cidr_format=`dbus get ss_redchn_wan_white_ip|sed 's/,/\n/g'|grep "/"`
+		ip_format=`dbus get ss_redchn_wan_white_ip|base64_decode|grep -v "/"`
+		cidr_format=`dbus get ss_redchn_wan_white_ip|base64_decode|grep "/"`
 		if [ ! -z "$ip_format" ];then
 			echo $(date): 添加你定义的白名单IP地址到ipset：white_ip中.
 			for ip in $ip_format
@@ -141,8 +141,8 @@ apply_nat_rules(){
 	iptables -t nat -A OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 3333
 	
 	# lan black_white list
-	black=$(echo $ss_basic_black_lan | sed "s/,/\n/g")
-	white=$(echo $ss_basic_white_lan | sed "s/,/\n/g")
+	black=$(echo $ss_basic_black_lan | base64_decode | sed "s/,/\n/g")
+	white=$(echo $ss_basic_white_lan | base64_decode | sed "s/,/\n/g")
 	
 	if [ "$ss_basic_lan_control" == "1" ];then
 		if [ ! -z $ss_basic_black_lan ];then

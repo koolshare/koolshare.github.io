@@ -1,5 +1,39 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.0.6  
+   - add	为了彻底解决界面内textaera内值的换行,自定义dnsmasq的兼容性,以及ss密码不支持特殊字符，
+   		此次版本引入了base64加密和解密！
+   		此次更新时，会对ss数据进行一次升级：安装的时候会自动对以下textaera内的值进行base64加密处理：
+   		"ss_basic_password"		当前使用节点的ss密码
+   		"ssconf_basic_password_"	当前节点列表里的ss密码
+   		"ss_basic_black_lan"		局域网控制黑名单
+   		"ss_basic_white_lan"		局域网控制白名单名单
+   		"ss_ipset_black_domain_web" 	gfwlist模式域名黑名单
+   		"ss_ipset_white_domain_web" 	gfwlist模式域名白名单
+   		"ss_ipset_dnsmasq"		gfwlist自定义dnsmasq设置
+   		"ss_ipset_black_ip"		gfwlsit的ip/cidr黑名单
+   		"ss_redchn_isp_website_web" 	大陆白名单模式cdn加速名单
+   		"ss_redchn_dnsmasq"		大陆白名单模式自定义dnsmasq设置
+   		"ss_redchn_wan_white_ip" 	大陆白名单模式ip/cidr白名单
+   		"ss_redchn_wan_white_domain"	大陆白名单模式域名白名单
+   		"ss_redchn_wan_black_ip" 	大陆白名单模式ip/cidr黑名单
+   		"ss_redchn_wan_black_domain"	大陆白名单模式域名黑名单
+   		"ss_game_dnsmasq"		游戏模式自定义dnsmasq设置
+   		"ss_gameV2_dnsmasq"		游戏模式V2自定义dnsmasq设置
+   		以上值均可以通过dbus list key的命令来查看，例如：dbus list ssconf_basic_password_
+   		此版本安装完毕后，会同时在jffs分区根目录生成一份旧配置的备份文件。
+   		情况：
+   		1 升级：	从小于3.0.6的ss		升级到	大于或等于3.0.6的ss	将会升级新配置，备份老配置，正常！
+   		2 升级：	从大于或等3.0.6的ss		升级到	大于或等于3.0.6的ss	不会升级配置（因为已经升级过了），不会备份老配置，正常！
+   		3 降级：	从大于或等3.0.6的ss		降级到	小于3.0.6的ss		将会嗝屁~因为不会降级配置！
+   		4 导入：	将小于3.0.6的ss备份数据	导入到	大于或等于3.0.6的ss	将会升级新配置，不备份老配置（因为你已经备份了喵），正常！
+		5 导入：	将大于或等3.0.6的ss备份数据	导入到	小于于3.0.6的ss	将会嗝屁~因为密码被加密了，值变了!
+		我知道这很绕，但是还是有必要说清楚，总之一直往新的升级是不会出问题的~
+   - update	更新shadowsocks-libev程序为最新2.5.6 release;
+   - update	更新kcptun程序为最新20161102;
+   - add	游戏模式下增加对MSS: Maxitum Segment Size 最大分段大小的调整（效果待观察）;
+   - fix	修复一些可能会造成误解的文字上的错误.
+
 3.0.5	
    - fix	修复全局模式dns选择udp转发方式时日志报错；
    - fix	修复stop.sh中关闭ssr-local进程报错；

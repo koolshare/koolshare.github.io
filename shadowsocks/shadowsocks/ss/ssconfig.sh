@@ -21,15 +21,15 @@ install_ss(){
 	chmod a+x /tmp/shadowsocks/install.sh
 	echo $(date): 开始安装更新文件...
 	/tmp/shadowsocks/install.sh
-	dbus set ss_basic_version_local=$ss_basic_version_web1
-	dbus set ss_basic_install_status="3"
-	sleep 2
-	echo $(date): 一点点清理工作...
-	rm -rf /tmp/shadowsocks* >/dev/null 2>&1
-	dbus set ss_basic_install_status="0"
-	echo $(date): 安装更新成功，你为什么这么屌？...
-	echo $(date): 请等待5秒，界面将自动重启...
-	exit
+	#dbus set ss_basic_version_local=$ss_basic_version_web1
+	#dbus set ss_basic_install_status="3"
+	#sleep 2
+	#echo $(date): 一点点清理工作...
+	#rm -rf /tmp/shadowsocks* >/dev/null 2>&1
+	#dbus set ss_basic_install_status="0"
+	#echo $(date): 安装更新成功，你为什么这么屌？...
+	#echo $(date): 请等待5秒，界面将自动重启...
+	#exit
 }
 
 

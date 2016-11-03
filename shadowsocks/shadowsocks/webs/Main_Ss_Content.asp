@@ -213,6 +213,12 @@ var isMenuopen = 0;
 var $G = function(id) {
     return document.getElementById(id);
 };
+var Base64;
+if(typeof btoa == "Function") {
+   Base64 = {encode:function(e){ return btoa(e); }, decode:function(e){ return atob(e);}};
+} else {
+   Base64 ={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/\r\n/g,"\n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
+}
 String.prototype.replaceAll = function(s1,s2){
 　　return this.replace(new RegExp(s1,"gm"),s2);
 }
@@ -235,7 +241,7 @@ function init() {
     } else {
         $G("logArea").innerHTML = "无法读取配置,jffs为空或配置文件不存在?";
     }
-	line_show();
+	decode_show();
     setTimeout("get_ss_status_data()", 500);
     var jffs2_scripts = '<% nvram_get("jffs2_scripts"); %>';
 	if(jffs2_scripts == "0"){
@@ -249,11 +255,11 @@ function init() {
 	document.form.ss_basic_action.value = 1;
 }
 
-function line_show(){
+function decode_show(){
 	var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_dnsmasq", "ss_redchn_wan_white_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_ip", "ss_redchn_wan_black_domain", "ss_basic_black_lan", "ss_basic_white_lan","ss_ipset_black_domain_web", "ss_ipset_white_domain_web", "ss_ipset_dnsmasq", "ss_ipset_black_ip", "ss_game_dnsmasq", "ss_gameV2_dnsmasq"];
 	for (var i = 0; i < temp_ss.length; i++) {
 		temp_str = $G(temp_ss[i]).value;
-			$G(temp_ss[i]).value = temp_str.replaceAll(",","\n");
+		$G(temp_ss[i]).value = Base64.decode(temp_str);
 	}
 }
 
@@ -354,31 +360,19 @@ function update_ss_ui(obj) {
 		}
 	}
 	$j("#ss_basic_method").val(obj.ss_basic_method);
+	$G("ss_basic_password").value = Base64.decode($G("ss_basic_password").value);
+	
 }
 
 function validForm() {
-	var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_dnsmasq", "ss_redchn_wan_white_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_ip", "ss_redchn_wan_black_domain", "ss_basic_black_lan", "ss_basic_white_lan","ss_ipset_black_domain_web", "ss_ipset_white_domain_web", "ss_ipset_dnsmasq", "ss_ipset_black_ip", "ss_game_dnsmasq", "ss_gameV2_dnsmasq"];
+	var temp_ss = ["ss_basic_password", "ss_redchn_isp_website_web", "ss_redchn_dnsmasq", "ss_redchn_wan_white_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_ip", "ss_redchn_wan_black_domain", "ss_basic_black_lan", "ss_basic_white_lan","ss_ipset_black_domain_web", "ss_ipset_white_domain_web", "ss_ipset_dnsmasq", "ss_ipset_black_ip", "ss_game_dnsmasq", "ss_gameV2_dnsmasq"];
 	for(var i = 0; i < temp_ss.length; i++) {
 		var temp_str = $G(temp_ss[i]).value;
 		if(temp_str == "") {
 			continue;
 		}
-		var lines = temp_str.split("\n");
-		var rlt = "";
-		for(var j = 0; j < lines.length; j++) {
-			var nstr = lines[j].trim();
-			if(nstr != "") {
-				rlt = rlt + nstr + ",";
-			}
-		}
-		if(rlt.length > 0) {
-			rlt = rlt.substring(0, rlt.length-1);
-		}
-		if(rlt.length > 10000) {
-			alert(temp_ss[i] + " 不能超过10000个字符");
-			return false;
-		}
-		$G(temp_ss[i]).value = rlt;
+		$G(temp_ss[i]).value = Base64.encode(temp_str);
+
 	}
 	return true;
 }
@@ -933,22 +927,25 @@ function add_ss_node_conf(flag){ //点击添加按钮动作
     var ns = {};
     var p = "ssconf_basic";
     node_global_max += 1;	
-	var params1 = ["name", "server", "mode",  "port", "password", "method", "onetime_auth"];//for ss
-	var params2 = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param"];//for ssr
-	var params3 = ["name", "server", "mode",  "port", "password", "method", "koolgame_udp"];//for ssr
+	var params1 = ["name", "server", "mode",  "port", "method", "onetime_auth"];//for ss
+	var params2 = ["name", "server", "mode",  "port", "method", "rss_protocol", "rss_obfs", "rss_obfs_param"];//for ssr
+	var params3 = ["name", "server", "mode",  "port", "method", "koolgame_udp"];//for ssr
 	if(flag == 'shadowsocks'){
     	for (var i = 0; i < params1.length; i++) {
     	    ns[p + "_" + params1[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params1[i]).val();
     	    ns[p + "_use_rss_" + node_global_max] = 0;
+    	    ns[p + "_password_" + node_global_max] = Base64.encode($j("#ss_node_table_password").val());
     	}
 	}else if(flag == 'shadowsocksR'){
     	for (var i = 0; i < params2.length; i++) {
     	    ns[p + "_" + params2[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params2[i]).val();
+    	    ns[p + "_password_" + node_global_max] = Base64.encode($j("#ss_node_table_password").val());
     	    ns[p + "_use_rss_" + node_global_max] = 1;
     	}
 	}else if(flag == 'gameV2'){
     	for (var i = 0; i < params3.length; i++) {
     	    ns[p + "_" + params3[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params3[i]).val();
+    	    ns[p + "_password_" + node_global_max] = Base64.encode($j("#ss_node_table_password").val());
     	    ns[p + "_use_rss_" + node_global_max] = 0;
     	}
 	}
@@ -1277,7 +1274,7 @@ function edit_conf_table(o){ //编辑节点功能，显示编辑面板
 	document.form.ss_node_table_name.value = c["name"];
 	document.form.ss_node_table_server.value = c["server"];
 	document.form.ss_node_table_port.value = c["port"];
-	document.form.ss_node_table_password.value = c["password"];
+	document.form.ss_node_table_password.value = Base64.decode(c["password"])
 	document.form.ss_node_table_method.value = c["method"];
 	document.form.ss_node_table_onetime_auth.value = c["onetime_auth"];
 	document.form.ss_node_table_rss_obfs_param.value = c["rss_obfs_param"];
@@ -1322,22 +1319,25 @@ var myid;
 function edit_ss_node_conf(flag){ //编辑节点功能，数据重写
     var ns = {};
     var p = "ssconf_basic";	
-	var params1 = ["name", "server", "mode",  "port", "password", "method", "onetime_auth"];//for ss
-	var params2 = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param"];//for ssr
-	var params3 = ["name", "server", "mode",  "port", "password", "method", "koolgame_udp"];//for ssr
+	var params1 = ["name", "server", "mode",  "port", "method", "onetime_auth"];//for ss
+	var params2 = ["name", "server", "mode",  "port", "method", "rss_protocol", "rss_obfs", "rss_obfs_param"];//for ssr
+	var params3 = ["name", "server", "mode",  "port", "method", "koolgame_udp"];//for ssr
 	if(flag == 'shadowsocks'){
     	for (var i = 0; i < params1.length; i++) {
     	    ns[p + "_" + params1[i] + "_" + myid] = $j('#ss_node_table' + "_" + params1[i]).val();
+    	    ns[p + "_password_" + myid] = Base64.encode($j("#ss_node_table_password").val());
     	    ns[p + "_use_rss_" + myid] = 0;
     	}
 	}else if(flag == 'shadowsocksR'){
     	for (var i = 0; i < params2.length; i++) {
     	    ns[p + "_" + params2[i] + "_" + myid] = $j('#ss_node_table' + "_" + params2[i]).val();
+    	    ns[p + "_password_" + myid] = Base64.encode($j("#ss_node_table_password").val());
     	    ns[p + "_use_rss_" + myid] = 1;
     	}
 	}else if(flag == 'gameV2'){
     	for (var i = 0; i < params3.length; i++) {
     	    ns[p + "_" + params3[i] + "_" + myid] = $j('#ss_node_table' + "_" + params3[i]).val();
+    	    ns[p + "_password_" + myid] = Base64.encode($j("#ss_node_table_password").val());
     	    ns[p + "_use_rss_" + myid] = 0;
     	}
 	}
@@ -1588,7 +1588,7 @@ function version_show(){
                     	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
                 	}else{
-	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.0.5</i></a>");
+	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.0.6</i></a>");
                 	}
 		        }
             }
@@ -3334,7 +3334,7 @@ taobao.com
 													<td>
 														<select id="ss_basic_sleep" name="ss_basic_sleep" class="ssconfig input_option" onchange="update_visibility_tab4();" >
 															<option value="0">0s</option>
-															<option value="5">5s</option>
+															<option value="5" selected>5s</option>
 															<option value="10">10s</option>
 															<option value="15">15s</option>
 															<option value="30">30s</option>
