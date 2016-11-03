@@ -21,6 +21,7 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    		"ss_game_dnsmasq"		游戏模式自定义dnsmasq设置
    		"ss_gameV2_dnsmasq"		游戏模式V2自定义dnsmasq设置
    		以上值均可以通过dbus list key的命令来查看，例如：dbus list ssconf_basic_password_
+		如果以上值出现乱码，可以用dbus remove key命令来删除，例如：dbus remove ss_redchn_dnsmasq
    		此版本安装完毕后，会同时在jffs分区根目录生成一份旧配置的备份文件。
    		情况：
    		1 升级：	从小于3.0.6的ss		升级到	大于或等于3.0.6的ss	将会升级新配置，备份老配置，正常！
