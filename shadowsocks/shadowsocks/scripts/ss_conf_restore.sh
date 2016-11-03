@@ -1,7 +1,7 @@
 #!/bin/sh
+source /koolshare/scripts/base.sh
 
 confs=`cat /tmp/ss_conf_backup.txt`
-
 format=`echo $confs|grep "{"`
 if [ -z "$format" ];then
 	echo $(date): 检测到ss备份文件...
