@@ -504,7 +504,6 @@ function update_visibility_tab2_redchn(){
 	showhide("ss_redchn_chinadns_china_user", (rcc == "4"));
 	showhide("ss_redchn_chinadns_foreign_user", (rcf == "4"));
 	showhide("ss_redchn_dns2socks_user", (rdf == "4"));
-	generate_options();
 }
 
 function update_visibility_tab2_ipset(){
@@ -530,7 +529,6 @@ function update_visibility_tab2_ipset(){
 	showhide("ss_ipset_pdnsd_udp_server_ss_tunnel_user", (ifd == "4" && sipm == "1" && document.form.ss_ipset_pdnsd_udp_server.value == 3 && document.form.ss_ipset_pdnsd_udp_server_ss_tunnel.value == 4));
 	showhide("ipset_pdnsd_cache", (ifd == "4"));
 	showhide("ipset_pdnsd_method", (ifd == "4"));
-	generate_options();
 }
 
 function update_visibility_tab2_game(){
@@ -558,7 +556,6 @@ function update_visibility_tab2_game(){
 	showhide("ss_game_pdnsd_udp_server_ss_tunnel_user", (gdf == "6" && grpm == "1" && document.form.ss_game_pdnsd_udp_server.value == 3 && document.form.ss_game_pdnsd_udp_server_ss_tunnel.value == 4));
 	showhide("game_pdnsd_cache", (gdf == "6"));
 	showhide("game_pdnsd_method", (gdf == "6"));
-	generate_options();
 }
 
 function update_visibility_tab2_gameV2(){
@@ -568,7 +565,6 @@ function update_visibility_tab2_gameV2(){
 	showhide("ss_gameV2_dns_china_user", (g2dc == "5"));
 	showhide("ss_gameV2_dns_china_user_txt1", (g2dc !== "5"));
 	showhide("ss_gameV2_dns_china_user_txt2", (g2dc == "5"));
-	generate_options();
 }
 
 function generate_options(){
