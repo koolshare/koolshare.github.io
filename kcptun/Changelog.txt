@@ -1,5 +1,7 @@
 Koolshare Asuswrt-Merlin kcptun Changelog
 ===========================================
+2.2.2
+   - Add	增加datashard和parityshard选项
 2.2.1
    - fix	修复版本显示问题
 2.2.0

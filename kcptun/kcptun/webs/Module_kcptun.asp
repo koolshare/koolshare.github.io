@@ -951,14 +951,28 @@ function hideKCPLoadingBar(){
                                             </tr>
 
 
-                                            <tr id="rcvwnd _tr">
+                                            <tr id="rcvwnd_tr">
                                                 <th width="35%">rndwnd</th>
                                                 <td>
                                                     <input type="text" name="KCP_basic_rndwnd" id="KCP_basic_rndwnd" class="input_KCP_table" maxlength="100" value="1024"></input>
                                                 </td>
                                             </tr>
 
-                                            <tr id="sdcp _tr">
+                                            <tr id="datashard_tr">
+                                                <th width="35%">datashard</th>
+                                                <td>
+                                                    <input type="text" name="KCP_basic_datashard" id="KCP_basic_datashard" class="input_KCP_table" maxlength="100" value="10"></input>
+                                                </td>
+                                            </tr>
+
+                                            <tr id="parityshard_tr">
+                                                <th width="35%">parityshard</th>
+                                                <td>
+                                                    <input type="text" name="KCP_basic_parityshard" id="KCP_basic_parityshard" class="input_KCP_table" maxlength="100" value="3"></input>
+                                                </td>
+                                            </tr>
+
+                                            <tr id="sdcp_tr">
                                                 <th width="35%">dscp</th>
                                                 <td>
                                                     <input type="text" name="KCP_basic_dscp" id="KCP_basic_dscp" class="input_KCP_table" maxlength="100" value="0"></input>

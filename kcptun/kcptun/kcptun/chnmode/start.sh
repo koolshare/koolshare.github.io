@@ -24,6 +24,8 @@ creat_kcptun_conf(){
 		    "sndwnd": $KCP_basic_sndwnd,
 		    "rcvwnd": $KCP_basic_rndwnd,
 		    "nocomp": $KCP_basic_nocomp,
+		    "datashard": $KCP_basic_datashard,
+		    "parityshard": $KCP_basic_parityshard,
 		    "dscp": $KCP_basic_dscp
 		}
 		EOF
