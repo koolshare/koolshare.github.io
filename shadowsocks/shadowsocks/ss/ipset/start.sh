@@ -364,8 +364,8 @@ start_dns(){
 			fi
 		elif [ "$ss_ipset_pdnsd_method" == "2" ];then
 			echo $(date): 创建pdnsd配置文件到/koolshare/ss/pdnsd/pdnsd.conf
+			echo $(date): 你选择了-仅tcp查询-，使用"$ss_ipset_pdnsd_server_ip":"$ss_ipset_pdnsd_server_port"进行tcp查询.
 			cat > /koolshare/ss/pdnsd/pdnsd.conf <<-EOF
-			echo $(date): 你选择了-仅tcp查询-，使用"$ss_redchn_pdnsd_server_ip":"$ss_redchn_pdnsd_server_port"进行tcp查询.
 				global {
 					perm_cache=2048;
 					cache_dir="/koolshare/ss/pdnsd/";
