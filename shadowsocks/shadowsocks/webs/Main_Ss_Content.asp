@@ -1687,6 +1687,11 @@ function buildswitch(){
 			$G("tablet_show").style.display = "";
 			$G("basic_show").style.display = "";
 			$G("apply_button").style.display = "";
+			$j('.show-btn1').addClass('active');
+			$j('.show-btn2').removeClass('active');
+			$j('.show-btn3').removeClass('active');
+			$j('.show-btn4').removeClass('active');
+			document.form.ss_basic_action.value = 1;
 			update_visibility_main();
 		}else{
 			document.form.ss_basic_enable.value = 0;
@@ -1702,14 +1707,29 @@ function buildswitch(){
 			$G("basic_show").style.display = "none";
 			$G("apply_button").style.display = "none";
 			$G("ss_node_list_table_th").style.display = "none";
+			$G("add_fun").style.display = "none";
+			$G("ipset_dns").style.display = "none";
+			$G("ipset_list").style.display = "none";
+			$G("redchn_dns").style.display = "none";
+			$G("redchn_list").style.display = "none";
+			$G("game_dns").style.display = "none";
+			$G("game_list").style.display = "none";
+			$G("gameV2_dns").style.display = "none";
+			$G("gameV2_list").style.display = "none";
+			$G("overall_dns").style.display = "none";
+			$G("overall_list").style.display = "none";
+			$G("ss_node_list_table_th").style.display = "none";
+			$G("ss_node_list_table_td").style.display = "none";
+			$G("ss_node_list_table_btn").style.display = "none";
+			$G("log_content").style.display = "none";
+			$G("log_return_button").style.display = "none";
 			noChange2 = 0;
 			showSSLoadingBar(5);
 			setTimeout("checkCmdRet2();", 500);
-			
-			
 		}
 	});
 }
+
 
 function toggle_switch(){
 	if (db_ss['ss_basic_enable'] == "1"){
