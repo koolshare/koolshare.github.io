@@ -4,11 +4,11 @@ eval `dbus export koolproxy`
 # stop first
 if [ "$koolproxy_enable" == "1" ];then
 	/koolshare/koolproxy/koolproxy.sh stop
+fi
 	sh /koolshare/perp/perp.sh stop >/dev/null 2>&1
 	killall koolproxy >/dev/null 2>&1
 	rm -rf /koolshare/perp/koolproxy >/dev/null 2>&1
 	sh /koolshare/perp/perp.sh start >/dev/null 2>&1
-fi
 # remove old files
 rm -rf /koolshare/koolproxy/rule*
 
