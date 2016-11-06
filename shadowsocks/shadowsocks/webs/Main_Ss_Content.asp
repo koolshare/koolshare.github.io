@@ -204,6 +204,26 @@ input[type=button]:focus {
 	background: linear-gradient(to bottom, #92A0A5  0%, #66757C 100%); /* W3C */
 }
 #log_content3,#loading_block2 {line-height:1.5}
+.input_option{
+	height:25px;
+	background-color:#576D73;
+	border-top-width:1px; 
+	border-bottom-width:1px; 
+	border-color:#888;	
+	color:#FFFFFF;
+	font-family:'Courier New', Courier, mono;
+	font-size:13px;
+}
+#ss_basic_kcp_parameter{
+    display: block;
+    margin:0 auto;
+    overflow: hidden;
+    width: 99%;
+    font-size: 13px;
+    height: 25px;
+    line-height: 1.5;
+    padding:0px;
+}
 </style>
 <script>
 var socks5 = 0
@@ -2563,7 +2583,7 @@ function setIframeSrc() {
 												<tr id="ss_basic_kcp_parameter_tr" style="display: none;">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(11)">KCP参数</a></th>
 													<td>
-														<input type="text" name="ss_basic_kcp_parameter" id="ss_basic_kcp_parameter"  class="ssconfig input_ss_table" style="width:450px" maxlength="200" value="--crypt none --mode fast2 --mtu 1350 --nocomp --dscp 46"></input>
+														<textarea rows=2 style="width:99%;overflow-y:visible; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_basic_kcp_parameter" name="ss_basic_kcp_parameter" autocomplete="off" autocorrect="off" autocapitalize="off" title=""></textarea>
 													</td>
 												</tr>
 											</table>
