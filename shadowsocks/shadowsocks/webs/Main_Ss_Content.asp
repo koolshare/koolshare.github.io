@@ -2585,7 +2585,7 @@ function setIframeSrc() {
 												<tr id="ss_basic_kcp_parameter_tr" style="display: none;">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(11)">KCP参数</a></th>
 													<td>
-														<textarea rows=2 style="width:99%;overflow-y:visible; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="277arameter" name="ss_basic_kcp_parameter" autocomplete="off" autocorrect="off" autocapitalize="off" title=""></textarea>
+														<textarea rows=2 style="width:99%;overflow-y:visible; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_basic_kcp_parameter" name="ss_basic_kcp_parameter" autocomplete="off" autocorrect="off" autocapitalize="off" title=""></textarea>
 													</td>
 												</tr>
 											</table>
