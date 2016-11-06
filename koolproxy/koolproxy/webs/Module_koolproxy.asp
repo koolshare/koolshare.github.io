@@ -34,7 +34,7 @@
 <script>
 function init(menu_hook) {
 	show_menu();
-    //get_uptime();
+	get_status();
 	buildswitch();
 	conf2obj();
 	update_visibility();
@@ -47,10 +47,10 @@ function init(menu_hook) {
     }
     notice_show();
 }
-/*
-function get_uptime() {
+
+function get_status() {
     $j.ajax({
-        url: 'apply.cgi?current_page=Module_koolproxy.asp&next_page=Module_koolproxy.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=koolproxy_uptime.sh&firmver=3.0.0.4',
+        url: 'apply.cgi?current_page=Module_koolproxy.asp&next_page=Module_koolproxy.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=koolproxy_status.sh&firmver=3.0.0.4',
         dataType: 'html',
         error: function(xhr) {
 	        alert("error");
@@ -63,7 +63,7 @@ function get_uptime() {
 
 function checkCmdRet2(){
 	$j.ajax({
-		url: '/cmdRet_check.htm',
+		url: '/res/koolproxy_check.htm',
 		dataType: 'html',
 		
 		error: function(xhr){
@@ -72,8 +72,8 @@ function checkCmdRet2(){
 		success: function(response){
 			var _cmdBtn = document.getElementById("cmdBtn");
 			if(response.search("XU6J03M6") != -1){
-				uptime = eval(response.replace("XU6J03M6", " ")) + 1;
-   				showbootTime();
+				kp_status = response.replace("XU6J03M6", " ");
+				document.getElementById("status").innerHTML = kp_status;
 				return true;
 			}
 			
@@ -87,7 +87,7 @@ function checkCmdRet2(){
 				noChange = 0;
 				refreshpage();
 			}else{
-				setTimeout("checkCmdRet2();", 1000);
+				setTimeout("checkCmdRet2();", 400);
 			}
 			_responseLen = response.length;
 		}
@@ -98,19 +98,7 @@ function done_validating(action) {
 	return ok;
 }
 
-function showbootTime(){
-	Days = Math.floor((uptime) / (60*60*24));	
-	Hours = Math.floor((uptime / 3600) % 24);
-	Minutes = Math.floor(uptime % 3600 / 60);
-	Seconds = Math.floor(uptime % 60);
-	document.getElementById("boot_days").innerHTML = Days;
-	document.getElementById("boot_hours").innerHTML = Hours;
-	document.getElementById("boot_minutes").innerHTML = Minutes;
-	document.getElementById("boot_seconds").innerHTML = Seconds;
-	uptime += 1;
-	setTimeout("showbootTime()", 1000);
-}
-*/
+
 var enable_ss = "<% nvram_get("enable_ss"); %>";
 var enable_soft = "<% nvram_get("enable_soft"); %>";
 function menu_hook(title, tab) {
@@ -130,21 +118,20 @@ function buildswitch(){
 			document.form.koolproxy_enable.value = 1;
 			document.getElementById("debug_tr").style.display = "";
 			document.getElementById("policy_tr").style.display = "";
+			document.getElementById("kp_status").style.display = "";
 			document.getElementById("rule_update_switch").style.display = "";
-			document.getElementById("update_rules").style.display = "";
 			document.getElementById("lan_control").style.display = "";
 			document.getElementById("log_content").style.display = "none";
-			//document.getElementById("kp_uptime").style.display = "";
+			
 			
 		}else{
 			document.form.koolproxy_enable.value = 0;
 			document.getElementById("debug_tr").style.display = "none";
 			document.getElementById("policy_tr").style.display = "none";
+			document.getElementById("kp_status").style.display = "none";
 			document.getElementById("rule_update_switch").style.display = "none";
-			document.getElementById("update_rules").style.display = "none";
 			document.getElementById("lan_control").style.display = "none";
 			document.getElementById("log_content").style.display = "none";
-			//document.getElementById("kp_uptime").style.display = "none";
 		}
 	});
 }
@@ -152,9 +139,14 @@ function buildswitch(){
 function onSubmitCtrl(o, s) {
 		document.form.action_mode.value = s;
 		document.form.SystemCmd.value = "koolproxy_config.sh";
-		showLoading(5);
+		if(document.form.koolproxy_enable.value == 1){
+			showLoading(10);
+			refreshpage(10);
+		}else{
+			showLoading(4);
+			refreshpage(4);
+		}
 		document.form.submit();
-		refreshpage(5);
 }
 
 function conf2obj(){
@@ -173,6 +165,9 @@ function update_visibility1(){
 	showhide("koolproxy_black_lan", (document.form.koolproxy_lan_control.value == 1));
 	showhide("koolproxy_white_lan", (document.form.koolproxy_lan_control.value == 2));
 	showhide("koolproxy_debug1", (document.form.koolproxy_debug.value == 1));
+	showhide("koolproxy_update_hour_span", (document.form.koolproxy_update.value == 1));
+
+	
 }
 
 function update_visibility(){
@@ -180,18 +175,16 @@ function update_visibility(){
 		document.getElementById("debug_tr").style.display = "";
 		document.getElementById("policy_tr").style.display = "";
 		document.getElementById("rule_update_switch").style.display = "";
-		document.getElementById("update_rules").style.display = "";
+		document.getElementById("kp_status").style.display = "";
 		document.getElementById("lan_control").style.display = "";
 		document.getElementById("log_content").style.display = "none";
-		//document.getElementById("kp_uptime").style.display = "";
 	}else{
 		document.getElementById("debug_tr").style.display = "none";
 		document.getElementById("policy_tr").style.display = "none";
 		document.getElementById("rule_update_switch").style.display = "none";
-		document.getElementById("update_rules").style.display = "none";
+		document.getElementById("kp_status").style.display = "none";
 		document.getElementById("lan_control").style.display = "none";
 		document.getElementById("log_content").style.display = "none";
-		//document.getElementById("kp_uptime").style.display = "none";
 	}
 }
 
@@ -364,22 +357,11 @@ function notice_show(){
 													<div id="koolproxy_install_show" style="padding-top:5px;margin-left:80px;margin-top:-30px;float: left;"></div>	
 												</td>
 											</tr>
-											<!--
-											<tr id="kp_uptime">
-												<th>koolproxy主程序运行时间</th>
-												<td><span id="boot_days"></span> 天 <span id="boot_hours"></span> 时 <span id="boot_minutes"></span> 分 <span id="boot_seconds"></span> 秒</td>
+											<tr id="kp_status">
+												<th>koolproxy运行状态</th>
+												<td><span id="status"></span></td>
 											</tr>
-											-->
-											<tr id="debug_tr">
-												<th>日志显示</th>
-												<td>
-													<select name="koolproxy_debug" id="koolproxy_debug" class="input_option" onchange="update_visibility1();" style="width:auto;margin:0px 0px 0px 2px;">
-														<option value="0" selected>不启用</option>
-														<option value="1">启用</option>
-													</select>
-														<span id="koolproxy_debug1" style="display: none;">开启日志显示后，在<a style="margin-left: 3px;margin-right: 3px" href="Main_LogStatus_Content.asp" target="_blank"><font color="#66FFCC"><u>系统日志</u></font></i></a>就能看到规则命中日志。</span>
-												</td>
-											</tr>		
+		
 											<tr id="policy_tr">
 												<th>选择过滤模式</th>
 												<td>
@@ -392,45 +374,76 @@ function notice_show(){
 												</td>
 											</tr>
 											<tr id="rule_update_switch">
-												<th>规则更新开关</th>
+												<th>规则自动更新</th>
 												<td>
 													<select name="koolproxy_update" id="koolproxy_update" class="input_option" style="width:auto;margin:0px 0px 0px 2px;" onchange="update_visibility1();">
 														<option value="1" selected>开启</option>
 														<option value="0">关闭</option>
 													</select>
-												</td>
-											</tr>
-
-											<tr id="update_rules">
-												<th width="35%">koolproxy规则更新间隔</a></th>
-												<td>
-													<select id="koolproxy_update_time" name="koolproxy_update_time" class="ssconfig input_option" title="选择规则列表自动更新时间，更新后将自动重启koolproxy"  >
-														<option value="1">1小时</option>
-														<option value="2">2小时</option>
-														<option value="4">4小时</option>
-														<option value="6">6小时</option>
-														<option value="12">12小时</option>
-														<option value="24">24小时</option>
-													</select>
-														<input id="update_now" onclick="start_update()" style="font-family:'Courier New'; Courier, mono; font-size:11px;" type="submit" value="立即更新" />
-														<span>
-															<a style="margin-left: 20px;" href="https://github.com/koolproxy/koolproxy_rules" target="_blank"><i><u>规则反馈</u></i></a>
-														</span>
-												</td>
-											</tr>
-
-												<tr id="lan_control">
-													<th width="35%"><a>局域网客户端控制</a>&nbsp;&nbsp;&nbsp;&nbsp;<select id="koolproxy_lan_control" name="koolproxy_lan_control" class="input_ss_table" style="width:auto;height:25px;margin-left: 0px;" onchange="update_visibility1();">
-															<option value="0">禁用</option>
-															<option value="1">黑名单模式</option>
-															<option value="2">白名单模式</option>
+													<span id="koolproxy_update_hour_span">
+														&nbsp;&nbsp;&nbsp;&nbsp;
+														每天
+														<select id="koolproxy_update_hour" name="koolproxy_update_hour" class="ssconfig input_option" >
+															<option value="0">00:00点</option>
+															<option value="1">01:00点</option>
+															<option value="2" selected>02:00点</option>
+															<option value="3">03:00点</option>
+															<option value="4">04:00点</option>
+															<option value="5">05:00点</option>
+															<option value="6">06:00点</option>
+															<option value="7">07:00点</option>
+															<option value="8">08:00点</option>
+															<option value="9">09:00点</option>
+															<option value="10">10:00点</option>
+															<option value="11">11:00点</option>
+															<option value="12">12:00点</option>
+															<option value="13">13:00点</option>
+															<option value="14">14:00点</option>
+															<option value="15">15:00点</option>
+															<option value="16">16:00点</option>
+															<option value="17">17:00点</option>
+															<option value="18">18:00点</option>
+															<option value="19">19:00点</option>
+															<option value="20">20:00点</option>
+															<option value="21">21:00点</option>
+															<option value="22">22:00点</option>
+															<option value="23">23:00点</option>
 														</select>
-													</th>
-													<td>
-														<textarea placeholder="填入需要走koolproxy的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=2 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;display:none" id="koolproxy_black_lan" name="koolproxy_black_lan" title=""></textarea>
-														<textarea placeholder="填入不需要走koolproxy的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=2 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;display:none" id="koolproxy_white_lan" name="koolproxy_white_lan" title=""></textarea>
-													</td>
-												</tr>
+														更新
+														&nbsp;&nbsp;&nbsp;&nbsp;
+													</span>
+													
+													<input id="update_now" onclick="start_update()" style="font-family:'Courier New'; Courier, mono; font-size:11px;" type="submit" value="手动更新" />
+													<span>
+														<a style="margin-left: 20px;" href="https://github.com/koolproxy/koolproxy_rules" target="_blank"><i><u>规则反馈</u></i></a>
+													</span>
+												</td>
+											</tr>
+											<tr id="debug_tr">
+												<th>日志显示</th>
+												<td>
+													<select name="koolproxy_debug" id="koolproxy_debug" class="input_option" onchange="update_visibility1();" style="width:auto;margin:0px 0px 0px 2px;">
+														<option value="0" selected>不启用</option>
+														<option value="1">启用</option>
+													</select>
+														<span id="koolproxy_debug1" style="display: none;">开启日志显示后，在<a style="margin-left: 3px;margin-right: 3px" href="Main_LogStatus_Content.asp" target="_blank"><font color="#66FFCC"><u>系统日志</u></font></i></a>就能看到规则命中日志。</span>
+												</td>
+											</tr>
+											<tr id="lan_control">
+												<th width="35%">
+													<a>局域网客户端控制</a>
+													&nbsp;&nbsp;&nbsp;&nbsp;
+													<select id="koolproxy_lan_control" name="koolproxy_lan_control" class="input_ss_table" style="width:auto;height:25px;margin-left: 0px;background-color:#1F2D35;" onchange="update_visibility1();">
+														<option value="0">禁用</option>
+														<option value="1">黑名单模式</option>
+														<option value="2">白名单模式</option>
+													</select>
+												</th>
+												<td>
+													<textarea placeholder="填入需要走koolproxy的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=2 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;display:none" id="koolproxy_black_lan" name="koolproxy_black_lan" title=""></textarea>
+													<textarea placeholder="填入不需要走koolproxy的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=2 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;display:none" id="koolproxy_white_lan" name="koolproxy_white_lan" title=""></textarea>
+												</td>
+											</tr>
                                     	</table>
                                     	<div id="log_content" style="margin-top:10px;display: none;">
 											<textarea cols="63" rows="21" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;">

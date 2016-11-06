@@ -1,5 +1,5 @@
-!x  -----update[rules]:  2016-10-30 11:56 --- by houzi /zt
-!x  -----update[video]:  2016-10-30 13:16 --- by houzi /zt
+!x  -----update[rules]:  2016-11-2 18:00 --- by houzi /zt
+!x  -----update[video]:  2016-11-2 19:27 --- by houzi /zt
 !x  -----base: adblock <koolproxy dedicated>
 !x  -----thanks: xwhyc CJX yiclear adsafe
 !x  -------------------------------------- white rules ---------------------------------------------
@@ -9,6 +9,8 @@
 @@|http://$domain=taobao.com|taobao.org|alipay.com|suning.com|51buy.com|ct10000.com|etao.com|hitao.com|paipai.com|189.cn
 @@|http://$domain=banggo.com|pili.com.tw|yunhou.com|voicecloud.cn|xunfei.cn
 @@||data.video.qiyi.com
+@@||v.17173.com/advideo/*.mp4
+@@||v.17173.com/advideo/20*.flv
 @@||wrating.com/a1.js$domain=tudou.com|ynet.com
 @@|http://de.as.pptv.com/crossdomain.xml
 @@||a.ads.cn.miaozhen.com^$domain=youku.com
@@ -929,7 +931,7 @@
 |http://adimgs.
 |http://adp.cnool.net/
 |http://adpic.
-|http://ads.
+|http://ads.$domain=~ads.aplusapi.pptv.com
 |http://adsame.
 |http://adscdn.baidu.com/baichuan/adp/image/
 |http://adscdn.baidu.com/baichuan/adp_
@@ -2758,7 +2760,7 @@
 ||jp88.cc
 ||jq159.com$third-party
 ||jrj.com/static/js/cms_ad/
-!||js.17173.com/ping.js
+||js.17173.com/ping.js
 ||js.45bubu.com
 ||js.bju888.com
 ||js.bxwns.com
@@ -3630,6 +3632,10 @@
 |http://cdn.caipiao.163.com/caipiao/js2/popularize/hello.js^
 |http://g.163.com
 ||ku6.com/ku6.gif?
+|http://www.17173.com/if/$script,domain=17173.com
+|http://www.17173.com/if/$script,domain=17173.com
+||www.duowan.com/public/s/market_count.js$script
+|http://dup.baidustatic.com/js/os.js$domain=~coladrive.com
 !x  -------------------------------------- replace rules ---------------------------------------------
 ||firefox.news.cn$s@height="305" frameborder="0"@height="200" frameborder="0"@
 ||firefox.163.com$s@height="305" frameborder="0"@height="200" frameborder="0"@
@@ -3827,6 +3833,11 @@
 |http://club.m.autohome.com.cn/$s@display: block!important;@display: none!important;@
 |http://www.dy2018.com/$s@<script type="text/javascript">if(goPAGE()=="*)}</script>@@
 |http://bbs.feng.com/$s@<div><script type="text/javascript">*<!-- header start -->@<!-- header start -->@
+||17173im.allyes.com/main/s?user=$s@"w":1,"h":1,"at":"17173-video-ads*","custom":@"w":1,"h":1,"at":"","custom":@
+|http://17173.tv.sohu.com/v*.html$s@<script type="text/javascript" ads-src="http://17173im.allyes.com/main/*</script>@@
+|http://17173.tv.sohu.com/v*.html$s@<div style="display:none;" utag="live-recommend">*</div>@@
+|http://17173im.qtmojo.com/main/s?user=||17173_video&db=$s@"w":1,"h":1,"at":"17173-video-ads*","custom":{*}@"w":1,"h":1,"at":"","custom":{}@
+|http://v.17173.com/v_$s@intervalid = setInterval("fun()", 1000);@intervalid = setInterval("fun()", 0);@
 !x  -------------------------------------- replace rules ---------------------------------------------
 !x  -------------------------------------- css rules ---------------------------------------------
 !x  -------------------------------------- css rules ---------------------------------------------

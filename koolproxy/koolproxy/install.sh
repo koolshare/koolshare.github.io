@@ -3,7 +3,11 @@ eval `dbus export koolproxy`
 
 # stop first
 if [ "$koolproxy_enable" == "1" ];then
-	/koolshare/koolproxy/koolproxy.sh stop.sh
+	/koolshare/koolproxy/koolproxy.sh stop
+	sh /koolshare/perp/perp.sh stop >/dev/null 2>&1
+	killall koolproxy >/dev/null 2>&1
+	rm -rf /koolshare/perp/koolproxy >/dev/null 2>&1
+	sh /koolshare/perp/perp.sh start >/dev/null 2>&1
 fi
 # remove old files
 rm -rf /koolshare/koolproxy/rule*
@@ -35,6 +39,7 @@ chmod 755 /koolshare/scripts/*
 chmod 755 /koolshare/perp//koolproxy/*
 rm -rf /koolshare/scripts/koolproxy_uptime.sh
 
+
 dbus set koolproxy_debug=0
 
 if [ -z "$koolproxy_policy" ];then
@@ -43,6 +48,10 @@ fi
 
 if [ -z "$koolproxy_lan_control" ];then
 	dbus set koolproxy_lan_control=0
+fi
+
+if [ -z "$koolproxy_update_hour" ];then
+	dbus set koolproxy_update_hour=2
 fi
 
 dbus set koolproxy_rule_info=`cat /koolshare/koolproxy/data/version | awk 'NR==2{print}'`

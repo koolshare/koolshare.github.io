@@ -14,11 +14,16 @@ start_koolproxy(){
 		sh /koolshare/perp/perp.sh start
 	fi
 	echo $(date): 开启koolproxy主进程！
-	perpctl A koolproxy >/dev/null 2>&1
-	
+	cd /koolshare/koolproxy
+  	if [ "$koolproxy_enable" == "1" ];then
+  		if [ "$koolproxy_debug" == "1" ];then
+			koolproxy -l 260
+		else
+			koolproxy
+		fi
+  	fi
 	rules_date_local=`cat /koolshare/koolproxy/data/version|awk 'NR==2{print}'`
 	rules_nu_local=`grep -v !x /koolshare/koolproxy/data/koolproxy.txt | wc -l`
-	#rules_nu_local=`cat /koolshare/koolproxy/data/koolproxy.txt | grep -v ! | wc -l`
 	video_date_local=`cat /koolshare/koolproxy/data/version|awk 'NR==4{print}'`
 	
 	echo $(date): 加载静态规则日期：$rules_date_local
@@ -30,8 +35,7 @@ start_koolproxy(){
 
 stop_koolproxy(){
 	echo $(date): 关闭koolproxy主进程和守护进程...
-	perpctl X koolproxy >/dev/null 2>&1
-	killall koolproxy > /dev/null 2>&1
+	killall koolproxy
 }
 
 load_nat(){
@@ -162,8 +166,8 @@ remove_ipset_conf(){
 write_cron_job(){
 	# start setvice
 	if [ "1" == "$koolproxy_update" ]; then
-		echo $(date): 开启规则定时更新，每"$koolproxy_update_time"个小时检查在线规则更新...
-		cru a koolproxy_update "0 */"$koolproxy_update_time" * * * /bin/sh /koolshare/scripts/koolproxy_rule_update.sh"
+		echo $(date): 开启规则定时更新，每天"$koolproxy_update_hour"时00分，检查在线规则更新...
+		cru a koolproxy_update "0 $koolproxy_update_hour * * * /bin/sh /koolshare/scripts/koolproxy_rule_update.sh"
 	else
 		echo $(date): 规则自动更新关闭状态，不启用自动更新...
 	fi
