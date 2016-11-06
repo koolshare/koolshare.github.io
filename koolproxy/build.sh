@@ -2,7 +2,7 @@
 
 
 MODULE=koolproxy
-VERSION=2.0.8
+VERSION=2.0.9
 TITLE=koolproxy
 DESCRIPTION=koolproxy，支持正则的网络代理~
 HOME_URL=Module_koolproxy.asp
