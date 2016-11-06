@@ -2468,7 +2468,7 @@ function setIframeSrc() {
 												<tr id="pass_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(4)">密码</a></th>
 													<td>
-														<input type="password" name="ss_basic_password" id="ss_basic_password" class="ssconfig input_ss_table" maxlength="100" value=""></input>
+														<input type="password" name="ss_basic_password" id="ss_basic_password" class="ssconfig input_ss_table" autocomplete="new-password" autocorrect="off" autocapitalize="off" maxlength="100" value=""></input>
 														<div style="margin-left:170px;margin-top:-20px;margin-bottom:0px"><input type="checkbox" name="show_pass" onclick="pass_checked(document.form.ss_basic_password);">
 															<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(14)">显示密码</a>
 														</div>
