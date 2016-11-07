@@ -23,6 +23,20 @@ if [ -z "$format" ];then
 			dbus set ssconf_basic_password_$node=`dbus get ssconf_basic_password_$node|base64_encode`
 		done
 		dbus set ss_basic_password=`dbus get ss_basic_password|base64_encode`
+		dbus set ss_basic_black_lan=`dbus get ss_basic_black_lan | base64_encode`
+		dbus set ss_basic_white_lan=`dbus get ss_basic_white_lan | base64_encode`
+		dbus set ss_ipset_black_domain_web=`dbus get ss_ipset_black_domain_web | base64_encode`
+		dbus set ss_ipset_white_domain_web=`dbus get ss_ipset_white_domain_web | base64_encode`
+		dbus set ss_ipset_dnsmasq=`dbus get ss_ipset_dnsmasq | base64_encode`
+		dbus set ss_ipset_black_ip=`dbus get ss_ipset_black_ip | base64_encode`
+		dbus set ss_redchn_isp_website_web=`dbus get ss_redchn_isp_website_web | base64_encode`
+		dbus set ss_redchn_dnsmasq=`dbus get ss_redchn_dnsmasq | base64_encode`
+		dbus set ss_redchn_wan_white_ip=`dbus get ss_redchn_wan_white_ip | base64_encode`
+		dbus set ss_redchn_wan_white_domain=`dbus get ss_redchn_wan_white_domain | base64_encode`
+		dbus set ss_redchn_wan_black_ip=`dbus get ss_redchn_wan_black_ip | base64_encode`
+		dbus set ss_redchn_wan_black_domain=`dbus get ss_redchn_wan_black_domain | base64_encode`
+		dbus set ss_game_dnsmasq=`dbus get ss_game_dnsmasq | base64_encode`
+		dbus set ss_gameV2_dnsmasq=`dbus get ss_gameV2_dnsmasq | base64_encode`
 	fi
 
 	dbus set ss_basic_enable="0"
@@ -88,7 +102,15 @@ else
 		dbus set ssconf_basic_name_"$k"="$remark"
 	    min=`expr $min + 1`
 	    k=`expr $k + 1`
-	done  
+	done
+
+	echo $(date): 检测到你使用了json文件，开始对部分数据进行base64转换，以适应新版本！
+	node_pass=`dbus list ssconf_basic_password |cut -d "=" -f 1|cut -d "_" -f4|sort -n`
+	for node in $node_pass
+	do
+		dbus set ssconf_basic_password_$node=`dbus get ssconf_basic_password_$node|base64_encode`
+	done
+	dbus set ss_basic_password=`dbus get ss_basic_password|base64_encode`
 	echo $(date): 导入配置成功！
 fi
 	echo $(date): 一点点清理工作...
