@@ -55,7 +55,7 @@ write_haproxy_cfg(){
 	EOF
 if [ "$ss_lb_heartbeat" == "1" ];then
 	echo $(date): 启用故障转移心跳...
-	lb_node=`dbus list ssconf_basic_use_lb_|sed 's/ssconf_basic_use_lb_//g' |cut -d "=" -f 1 | sort -n`
+	lb_node=`dbus list ssconf_basic_use_lb_|sed 's/ssconf_basic_use_lb_//g'|cut -d "=" -f 1|sort -n|sed '/^$/d'`
 	for node in $lb_node
 	do
 		nick_name=`dbus get ssconf_basic_name_$node`
@@ -119,7 +119,7 @@ if [ "$ss_lb_heartbeat" == "1" ];then
 
 else
 	echo $(date): 不启用故障转移心跳...
-	lb_node=`dbus list ssconf_basic_use_lb_|sed 's/ssconf_basic_use_lb_//g' |cut -d "=" -f 1 | sort -n`
+	lb_node=`dbus list ssconf_basic_use_lb_|sed 's/ssconf_basic_use_lb_//g'|cut -d "=" -f 1|sort -n|sed '/^$/d'`
 	for node in $lb_node
 	do
 		nick_name=`dbus get ssconf_basic_name_$node`
