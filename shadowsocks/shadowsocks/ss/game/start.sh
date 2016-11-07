@@ -527,6 +527,8 @@ restart_dns)
 	#ss_basic_action=2 应用DNS设置
 	echo $(date): ------------------------- 游戏模式-重启dns服务 ----------------------------
 	detect_qos
+	stop_dns
+	start_dns
 	creat_dnsmasq_basic_conf
 	custom_dnsmasq
 	ln_conf
