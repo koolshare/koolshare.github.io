@@ -1659,6 +1659,7 @@ function get_ss_status_data(){
 	}
 }
 
+/*
 var checkNu = 0;
 function get_ss_install_status(){
 	if (checkNu < 1000){
@@ -1683,10 +1684,11 @@ function get_ss_install_status(){
 		});
 	}
 }
+*/
 
 function update_ss(){
-	checkNu = 0;
-	get_ss_install_status();
+	//checkNu = 0;
+	//get_ss_install_status();
 	$G('update_button').style.display = "none";
 	document.form.action_mode.value = ' Refresh ';
     document.form.SystemCmd.value = "ss_update.sh";
@@ -2023,7 +2025,7 @@ function return_basic(){
 		$G("cmdBtn").value = "提交";
 		document.form.ss_basic_action.value = 1;
 		update_visibility_main();
-		checkNu = 1001;
+		//checkNu = 1001;
 }
 
 
