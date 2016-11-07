@@ -58,58 +58,62 @@ if [ "$ss_lb_heartbeat" == "1" ];then
 	lb_node=`dbus list ssconf_basic_use_lb_|sed 's/ssconf_basic_use_lb_//g' |cut -d "=" -f 1 | sort -n`
 	for node in $lb_node
 	do
-		#server_ip=`nslookup "$server" 119.29.29.29 | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
 		nick_name=`dbus get ssconf_basic_name_$node`
-		kcp=`dbus get ssconf_basic_use_kcp_$node`
-		if [ "$kcp" == 1 ];then
-			port="1091"
-			name=`dbus get ssconf_basic_server_$node`:kcp
-			server="127.0.0.1"
-		else
-			port=`dbus get ssconf_basic_port_$node`
-			name=`dbus get ssconf_basic_server_$node`
-			server=`dbus get ssconf_basic_server_$node`
-			IFIP=`echo $server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
-			if [ -z "$IFIP" ];then
-				echo $(date): 检测到【"$nick_name"】节点域名格式，将尝试进行解析...
-				if [ "$ss_basic_dnslookup" == "1" ];then
-					echo $(date): 使用nslookup方式解析SS服务器的ip地址，解析dns：$ss_basic_dnslookup_server
-					server=`nslookup "$server" $ss_basic_dnslookup_server | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
-				else
-					echo $(date): 使用resolveip方式解析SS服务器的ip地址.
-					server=`resolveip -4 -t 2 $server|awk 'NR==1{print}'`
-				fi
-
-				if [ ! -z "$server" ];then
-					echo $(date): 【"$nick_name"】节点ip地址解析成功：$server
-				else
-					echo $(date):【警告】：【"$nick_name"】节点ip解析失败，将由haproxy自己尝试解析.
-					server=`dbus get ssconf_basic_server_$node`
-				fi
+		if [ ! -z "$nick_name" ];then
+			kcp=`dbus get ssconf_basic_use_kcp_$node`
+			if [ "$kcp" == "1" ];then
+				port="1091"
+				name=`dbus get ssconf_basic_server_$node`:kcp
+				server="127.0.0.1"
 			else
-				echo $(date): 检测到【"$nick_name"】节点已经是IP格式，跳过解析... 
+				port=`dbus get ssconf_basic_port_$node`
+				name=`dbus get ssconf_basic_server_$node`:$port
+				server=`dbus get ssconf_basic_server_$node`
+				IFIP=`echo $server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
+				if [ -z "$IFIP" ];then
+					echo $(date): 检测到【"$nick_name"】节点域名格式，将尝试进行解析...
+					if [ "$ss_basic_dnslookup" == "1" ];then
+						echo $(date): 使用nslookup方式解析SS服务器的ip地址，解析dns：$ss_basic_dnslookup_server
+						server=`nslookup "$server" $ss_basic_dnslookup_server | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
+					else
+						echo $(date): 使用resolveip方式解析SS服务器的ip地址.
+						server=`resolveip -4 -t 2 $server|awk 'NR==1{print}'`
+					fi
+
+					if [ ! -z "$server" ];then
+						echo $(date): 【"$nick_name"】节点ip地址解析成功：$server
+					else
+						echo $(date):【警告】：【"$nick_name"】节点ip解析失败，将由haproxy自己尝试解析.
+						server=`dbus get ssconf_basic_server_$node`
+					fi
+				else
+					echo $(date): 检测到【"$nick_name"】节点已经是IP格式，跳过解析... 
+				fi
 			fi
-		fi
-		weight=`dbus get ssconf_basic_weight_$node`
-		up=`dbus get ss_lb_up`
-		down=`dbus get ss_lb_down`
-		interval=`dbus get ss_lb_interval`
-		mode=`dbus get ssconf_basic_lbmode_$node`
-		if [ "$mode" == "3" ];then
-			echo $(date): 载入【"$nick_name"】作为备用节点...
-			cat >> /koolshare/configs/haproxy.cfg <<-EOF
-			    server $name $server:$port weight $weight rise $up fall $down check inter $interval resolvers mydns backup
-			EOF
-		elif [ "$mode" == "2" ];then
-			echo $(date): 载入【"$nick_name"】作为主用节点...
-			cat >> /koolshare/configs/haproxy.cfg <<-EOF
-			    server $name $server:$port weight $weight rise $up fall $down check inter $interval resolvers mydns
-			EOF
+			weight=`dbus get ssconf_basic_weight_$node`
+			up=`dbus get ss_lb_up`
+			down=`dbus get ss_lb_down`
+			interval=`dbus get ss_lb_interval`
+			mode=`dbus get ssconf_basic_lbmode_$node`
+			if [ "$mode" == "3" ];then
+				echo $(date): 载入【"$nick_name"】作为备用节点...
+				cat >> /koolshare/configs/haproxy.cfg <<-EOF
+				    server $name $server:$port weight $weight rise $up fall $down check inter $interval resolvers mydns backup
+				EOF
+			elif [ "$mode" == "2" ];then
+				echo $(date): 载入【"$nick_name"】作为主用节点...
+				cat >> /koolshare/configs/haproxy.cfg <<-EOF
+				    server $name $server:$port weight $weight rise $up fall $down check inter $interval resolvers mydns
+				EOF
+			else
+				echo $(date): 载入【"$nick_name"】作为负载均衡节点...
+				cat >> /koolshare/configs/haproxy.cfg <<-EOF
+				    server $name $server:$port weight $weight rise $up fall $down check inter $interval resolvers mydns
+				EOF
+			fi
 		else
-			echo $(date): 载入【"$nick_name"】作为负载均衡节点...
-			cat >> /koolshare/configs/haproxy.cfg <<-EOF
-			    server $name $server:$port weight $weight rise $up fall $down check inter $interval resolvers mydns
-			EOF
+			#检测到这个节点是空的，可能是某一次的残留，用这个方式处理一下
+			dbus remove ssconf_basic_use_lb_$node
 		fi
 	done
 
@@ -118,55 +122,60 @@ else
 	lb_node=`dbus list ssconf_basic_use_lb_|sed 's/ssconf_basic_use_lb_//g' |cut -d "=" -f 1 | sort -n`
 	for node in $lb_node
 	do
-		kcp=`dbus get ssconf_basic_use_kcp_$node`
-		if [ "$kcp" == 1 ];then
-			port="1091"
-			name=`dbus get ssconf_basic_server_$node`:kcp
-			server="127.0.0.1"
-		else
-			port=`dbus get ssconf_basic_port_$node`
-			name=`dbus get ssconf_basic_server_$node`
-			server=`dbus get ssconf_basic_server_$node`
-			IFIP=`echo $server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
-			if [ -z "$IFIP" ];then
-				echo $(date): 检测到【"$nick_name"】节点域名格式，将尝试进行解析...
-				if [ "$ss_basic_dnslookup" == "1" ];then
-					echo $(date): 使用nslookup方式解析SS服务器的ip地址，解析dns：$ss_basic_dnslookup_server
-					server=`nslookup "$server" $ss_basic_dnslookup_server | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
-				else
-					echo $(date): 使用resolveip方式解析SS服务器的ip地址.
-					server=`resolveip -4 -t 2 $server|awk 'NR==1{print}'`
-				fi
-
-				if [ ! -z "$server" ];then
-					echo $(date): 【"$nick_name"】节点ip地址解析成功：$server
-				else
-					echo $(date): 【"$nick_name"】节点ip解析失败，将由haproxy自己尝试解析...
-					server=`dbus get ssconf_basic_server_$node`
-				fi
-			else
-				echo $(date): 检测到【"$nick_name"】节点已经是IP格式，跳过解析... 
-			fi
-		fi
-		port=`dbus get ssconf_basic_port_$node`
-		weight=`dbus get ssconf_basic_weight_$node`
-		mode=`dbus get ssconf_basic_lbmode_$node`
 		nick_name=`dbus get ssconf_basic_name_$node`
-		if [ "$mode" == "3" ];then
-			echo $(date): 载入节点："$nick_name"，作为备用节点...
-			cat >> /koolshare/configs/haproxy.cfg <<-EOF
-			    server $name $server_ip:$port weight $weight resolvers mydns backup
-			EOF
-		elif [ "$mode" == "2" ];then
-			echo $(date): 载入节点："$nick_name"，作为主节点...
-			cat >> /koolshare/configs/haproxy.cfg <<-EOF
-			    server $name $server_ip:$port weight $weight resolvers mydns
-			EOF
+		if [ ! -z "$nick_name" ];then
+			kcp=`dbus get ssconf_basic_use_kcp_$node`
+			if [ "$kcp" == 1 ];then
+				port="1091"
+				name=`dbus get ssconf_basic_server_$node`:kcp
+				server="127.0.0.1"
+			else
+				port=`dbus get ssconf_basic_port_$node`
+				name=`dbus get ssconf_basic_server_$node`:$port
+				server=`dbus get ssconf_basic_server_$node`
+				IFIP=`echo $server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
+				if [ -z "$IFIP" ];then
+					echo $(date): 检测到【"$nick_name"】节点域名格式，将尝试进行解析...
+					if [ "$ss_basic_dnslookup" == "1" ];then
+						echo $(date): 使用nslookup方式解析SS服务器的ip地址，解析dns：$ss_basic_dnslookup_server
+						server=`nslookup "$server" $ss_basic_dnslookup_server | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
+					else
+						echo $(date): 使用resolveip方式解析SS服务器的ip地址.
+						server=`resolveip -4 -t 2 $server|awk 'NR==1{print}'`
+					fi
+
+					if [ ! -z "$server" ];then
+						echo $(date): 【"$nick_name"】节点ip地址解析成功：$server
+					else
+						echo $(date): 【"$nick_name"】节点ip解析失败，将由haproxy自己尝试解析...
+						server=`dbus get ssconf_basic_server_$node`
+					fi
+				else
+					echo $(date): 检测到【"$nick_name"】节点已经是IP格式，跳过解析... 
+				fi
+			fi
+			port=`dbus get ssconf_basic_port_$node`
+			weight=`dbus get ssconf_basic_weight_$node`
+			mode=`dbus get ssconf_basic_lbmode_$node`
+			if [ "$mode" == "3" ];then
+				echo $(date): 载入节点："$nick_name"，作为备用节点...
+				cat >> /koolshare/configs/haproxy.cfg <<-EOF
+				    server $name $server_ip:$port weight $weight resolvers mydns backup
+				EOF
+			elif [ "$mode" == "2" ];then
+				echo $(date): 载入节点："$nick_name"，作为主节点...
+				cat >> /koolshare/configs/haproxy.cfg <<-EOF
+				    server $name $server_ip:$port weight $weight resolvers mydns
+				EOF
+			else
+				echo $(date): 载入节点："$nick_name"，作为负载均衡节点...
+				cat >> /koolshare/configs/haproxy.cfg <<-EOF
+				    server $name $server_ip:$port weight $weight resolvers mydns
+				EOF
+			fi
 		else
-			echo $(date): 载入节点："$nick_name"，作为负载均衡节点...
-			cat >> /koolshare/configs/haproxy.cfg <<-EOF
-			    server $name $server_ip:$port weight $weight resolvers mydns
-			EOF
+			#检测到这个节点是空的，可能是某一次的残留，用这个方式处理一下
+			dbus remove ssconf_basic_use_lb_$node
 		fi
 	done
 fi
@@ -188,6 +197,7 @@ if [ "$ss_lb_enable" == "1" ];then
 	killall haproxy >/dev/null 2>&1
 	write_haproxy_cfg
 	start_haproxy
+	echo $(date): 成功！
 else
 	killall haproxy >/dev/null 2>&1
 fi
