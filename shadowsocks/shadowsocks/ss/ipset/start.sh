@@ -253,8 +253,8 @@ kill_cron_job(){
 start_dns(){
 	# Start dnscrypt-proxy
 	if [ "$ss_ipset_foreign_dns" == "0" ]; then
-		echo $(date): 开启 dnscrypt-proxy，你选择了"$ss_redchn_opendns"节点.
-		dnscrypt-proxy --local-address=127.0.0.1:7913 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_ipset_opendns"
+		echo $(date): 开启 dnscrypt-proxy，你选择了"$ss_ipset_opendns"节点.
+		dnscrypt-proxy --local-address=127.0.0.1:7913 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R $ss_ipset_opendns
 	fi
 	[ "$ss_ipset_tunnel" == "1" ] && it="208.67.220.220:53"
 	[ "$ss_ipset_tunnel" == "2" ] && it="8.8.8.8:53"
