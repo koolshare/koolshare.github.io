@@ -117,11 +117,12 @@ creat_dnsmasq_basic_conf(){
 	cat /koolshare/ss/redchn/output.conf >> /jffs/configs/dnsmasq.conf.add
 
 	# append china site
-	echo $(date): 生成cdn加速列表到/tmp/sscdn.conf，加速用的dns：$CDN
+	if [ "$ss_redchn_dns_foreign" != "3" ];then
+		echo $(date): 生成cdn加速列表到/tmp/sscdn.conf，加速用的dns：$CDN
 		rm -rf /tmp/sscdn.conf
 		echo "#for china site CDN acclerate" > /tmp/sscdn.conf
 		cat /koolshare/ss/redchn/cdn.txt | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" | sort | awk '{if ($0!=line) print;line=$0}' >/tmp/sscdn.conf
-
+	fi
 	# create dnsmasq postconf
 	echo $(date): 创建dnsmasq.postconf软连接到/jffs/scripts/文件夹.
 		#cp /koolshare/ss/redchn/dnsmasq.postconf /jffs/scripts/dnsmasq.postconf
@@ -132,14 +133,16 @@ creat_dnsmasq_basic_conf(){
 
 user_cdn_site(){
 	# append user defined china site
-	if [ ! -z "$ss_redchn_isp_website_web" ];then
-		cdnsites=$(echo $ss_redchn_isp_website_web | base64_decode)
-		echo $(date): 生成自定义cdn加速域名到/tmp/sscdn.conf
-		echo "#for user defined china site CDN acclerate" >> /tmp/sscdn.conf
-		for cdnsite in $cdnsites
-		do
-			echo "$cdnsite" | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" >> /tmp/sscdn.conf
-		done
+	if [ "$ss_redchn_dns_foreign" != "3" ];then
+		if [ ! -z "$ss_redchn_isp_website_web" ];then
+			cdnsites=$(echo $ss_redchn_isp_website_web | base64_decode)
+			echo $(date): 生成自定义cdn加速域名到/tmp/sscdn.conf
+			echo "#for user defined china site CDN acclerate" >> /tmp/sscdn.conf
+			for cdnsite in $cdnsites
+			do
+				echo "$cdnsite" | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" >> /tmp/sscdn.conf
+			done
+		fi
 	fi
 }
 
@@ -191,9 +194,11 @@ ln_conf(){
 		ln -sf /tmp/wblist.conf /jffs/configs/dnsmasq.d/wblist.conf
 	fi
 	rm -rf /jffs/configs/dnsmasq.d/cdn.conf
+	if [ "$ss_redchn_dns_foreign" != "3" ];then
+		if [ -f /tmp/sscdn.conf ];then
 		echo $(date): 创建cdn加速列表软链接/jffs/configs/dnsmasq.d/cdn.conf
-	if [ -f /tmp/sscdn.conf ];then
-		ln -sf /tmp/sscdn.conf /jffs/configs/dnsmasq.d/cdn.conf
+			ln -sf /tmp/sscdn.conf /jffs/configs/dnsmasq.d/cdn.conf
+		fi
 	fi
 }
 
@@ -310,30 +315,62 @@ start_dns(){
 	fi
 	
 	# Start chinadns
-	[ "$ss_redchn_chinadns_china" == "1" ] && rcc="223.5.5.5"
-	[ "$ss_redchn_chinadns_china" == "2" ] && rcc="223.6.6.6"
-	[ "$ss_redchn_chinadns_china" == "3" ] && rcc="114.114.114.114"
-	[ "$ss_redchn_chinadns_china" == "4" ] && rcc="$ss_redchn_chinadns_china_user"
-	[ "$ss_redchn_chinadns_china" == "5" ] && rcc="180.76.76.76"
-	[ "$ss_redchn_chinadns_china" == "6" ] && rcc="1.2.4.8"
-	[ "$ss_redchn_chinadns_china" == "7" ] && rcc="119.29.29.29"
-	[ "$ss_redchn_chinadns_foreign" == "1" ] && rdf="208.67.220.220:53"
-	[ "$ss_redchn_chinadns_foreign" == "2" ] && rdf="8.8.8.8:53"
-	[ "$ss_redchn_chinadns_foreign" == "3" ] && rdf="8.8.4.4:53"
-	[ "$ss_redchn_chinadns_foreign" == "4" ] && rdf="$ss_redchn_chinadns_foreign_user"
 	if [ "3" == "$ss_redchn_dns_foreign" ];then
-		if [ "$ss_basic_use_rss" == "1" ];then
-			echo $(date): 开启chinadns，上游国内dns："$rcc"，国外dns：ssr-tunnel...
-			rss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rdf" -u -f /var/run/sstunnel.pid
-		elif  [ "$ss_basic_use_rss" == "0" ];then
-			echo $(date): 开启chinadns，上游国内dns："$rcc"，国外dns：ss-tunnel...
-			if [ "$ss_basic_onetime_auth" == "1" ];then
-				ss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rdf" -u -A -f /var/run/sstunnel.pid
-			elif [ "$ss_basic_onetime_auth" == "0" ];then
-				ss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rdf" -u -f /var/run/sstunnel.pid
+		echo $(date): ┏你选择了chinaDNS作为解析方案！
+		[ "$ss_redchn_chinadns_china" == "1" ] && rcc="223.5.5.5"
+		[ "$ss_redchn_chinadns_china" == "2" ] && rcc="223.6.6.6"
+		[ "$ss_redchn_chinadns_china" == "3" ] && rcc="114.114.114.114"
+		[ "$ss_redchn_chinadns_china" == "4" ] && rcc="$ss_redchn_chinadns_china_user"
+		[ "$ss_redchn_chinadns_china" == "5" ] && rcc="180.76.76.76"
+		[ "$ss_redchn_chinadns_china" == "6" ] && rcc="1.2.4.8"
+		[ "$ss_redchn_chinadns_china" == "7" ] && rcc="119.29.29.29"
+		if [ "$ss_redchn_chinadns_foreign_method" == "1" ];then
+			[ "$ss_redchn_chinadns_foreign_dns2socks" == "1" ] && rcfd="208.67.220.220:53"
+			[ "$ss_redchn_chinadns_foreign_dns2socks" == "2" ] && rcfd="8.8.8.8:53"
+			[ "$ss_redchn_chinadns_foreign_dns2socks" == "3" ] && rcfd="8.8.4.4:53"
+			[ "$ss_redchn_chinadns_foreign_dns2socks" == "4" ] && rcfd="$ss_redchn_chinadns_foreign_dns2socks_user"
+				echo $(date): ┣开启ss-local,为dns2socks提供socks5端口：23456
+				if [ "$ss_basic_use_rss" == "1" ];then
+					rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+				elif  [ "$ss_basic_use_rss" == "0" ];then
+					if [ "$ss_basic_onetime_auth" == "1" ];then
+						ss-local -b 0.0.0.0 -l 23456 -A -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid
+					elif [ "$ss_basic_onetime_auth" == "0" ];then
+						ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid
+					fi
+				fi
+			echo $(date): ┣开启dns2socks，作为chinaDNS上游国外dns，转发dns：$rcfd
+			dns2socks 127.0.0.1:23456 "$rcfd" 127.0.0.1:1055 > /dev/null 2>&1 &
+			echo $(date): ┗开启chinadns进程！
+			chinadns -p 1053 -s "$rcc",127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
+		elif [ "$ss_redchn_chinadns_foreign_method" == "2" ];then
+			echo $(date): ┣开启 dnscrypt-proxy，作为chinaDNS上游国外dns，你选择了"$ss_redchn_opendns"节点.
+			dnscrypt-proxy --local-address=127.0.0.1:1055 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R $ss_redchn_chinadns_foreign_dnscrypt
+			echo $(date): ┗开启chinadns进程！
+			chinadns -p 1053 -s "$rcc",127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
+		elif [ "$ss_redchn_chinadns_foreign_method" == "3" ];then
+			[ "$ss_redchn_chinadns_foreign_sstunnel" == "1" ] && rcfs="208.67.220.220:53"
+			[ "$ss_redchn_chinadns_foreign_sstunnel" == "2" ] && rcfs="8.8.8.8:53"
+			[ "$ss_redchn_chinadns_foreign_sstunnel" == "3" ] && rcfs="8.8.4.4:53"
+			[ "$ss_redchn_chinadns_foreign_sstunnel" == "4" ] && rcfs="$ss_redchn_chinadns_foreign_sstunnel_user"
+			if [ "$ss_basic_use_rss" == "1" ];then
+				echo $(date): ┣开启ssr-tunnel，作为chinaDNS上游国外dns，转发dns：$rcfs
+				rss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid
+			elif  [ "$ss_basic_use_rss" == "0" ];then
+				echo $(date): ┣开启ss-tunnel，作为chinaDNS上游国外dns，转发dns：$rcfs
+				if [ "$ss_basic_onetime_auth" == "1" ];then
+					ss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rcfs" -u -A -f /var/run/sstunnel.pid
+				elif [ "$ss_basic_onetime_auth" == "0" ];then
+					ss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid
+				fi
 			fi
+			echo $(date): ┗开启chinadns进程！
+			chinadns -p 1053 -s "$rcc",127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
+		elif [ "$ss_redchn_chinadns_foreign_method" == "4" ];then
+			echo $(date): ┣你选择了自定义chinadns国外dns！dns：$ss_redchn_chinadns_foreign_method_user
+			echo $(date): ┗开启chinadns进程！
+			chinadns -p 1053 -s "$rcc","$ss_redchn_chinadns_foreign_method_user" -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
 		fi
-		chinadns -p 1053 -s "$rcc",127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
 	fi
 	
 	# Start DNS2SOCKS

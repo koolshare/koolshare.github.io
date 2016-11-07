@@ -220,10 +220,12 @@ input[type=button]:focus {
     overflow: hidden;
     width: 99%;
     font-size: 13px;
+	font-family:'Courier New', Courier, mono;
     height: 25px;
     line-height: 1.5;
     padding:0px;
 }
+
 </style>
 <script>
 var socks5 = 0
@@ -506,7 +508,7 @@ function update_visibility_tab2_redchn(){
 	rdf = document.form.ss_redchn_dns_foreign.value;
 	rs = document.form.ss_redchn_sstunnel.value
 	rcc = document.form.ss_redchn_chinadns_china.value
-	rcf = document.form.ss_redchn_chinadns_foreign.value
+	rcfm = document.form.ss_redchn_chinadns_foreign_method.value
 	srpm= document.form.ss_redchn_pdnsd_method.value
 	showhide("redchn_show_isp_dns", (rdc == "1"));
 	showhide("ss_redchn_dns_china_user", (rdc == "5"));
@@ -523,9 +525,31 @@ function update_visibility_tab2_redchn(){
 	showhide("redchn_pdnsd_cache", (rdf == "6"));
 	showhide("redchn_pdnsd_method", (rdf == "6"));
 	showhide("ss_redchn_sstunnel_user", ((rdf == "2") && (rs == "4")));
-	showhide("ss_redchn_chinadns_china_user", (rcc == "4"));
-	showhide("ss_redchn_chinadns_foreign_user", (rcf == "4"));
 	showhide("ss_redchn_dns2socks_user", (rdf == "4"));
+	showhide("ss_redchn_chinadns_china_user", (rcc == "4"));
+	showhide("ss_redchn_chinadns_foreign_dns2socks", (rcfm == "1"));
+	showhide("ss_redchn_chinadns_foreign_dnscrypt", (rcfm == "2"));
+	showhide("ss_redchn_chinadns_foreign_sstunnel", (rcfm == "3"));
+	showhide("ss_redchn_chinadns_foreign_dns2socks_user", (rcfm == "1" && document.form.ss_redchn_chinadns_foreign_dns2socks.value == 4));
+	showhide("ss_redchn_chinadns_foreign_sstunnel_user", (rcfm == "3" && document.form.ss_redchn_chinadns_foreign_sstunnel.value == 4));
+	showhide("ss_redchn_chinadns_foreign_method_user", (rcfm == "4"));
+	showhide("ss_redchn_chinadns_foreign_method_user_txt", (rcfm == "4"));
+
+	if (rdf == "3"){
+		document.getElementById("ss_redchn_dns_china").style.display = "none";
+		document.getElementById("ss_redchn_dns_china_user").style.display = "none";
+		document.getElementById("ss_redchn_isp_website_web").style.display = "none";
+		document.getElementById("redchn_show_isp_dns").style.display = "";
+		$j("#redchn_show_isp_dns").html("ChinaDNS方案自带cdn加速，无需定义国内DNS");
+		$j("#redchn_user_cdn_span").html("ChinaDNS方案自带cdn加速，无需定义cdn加速名单");
+	}else{
+		document.getElementById("ss_redchn_dns_china").style.display = "";
+		showhide("ss_redchn_dns_china_user", (rdc == "5"));
+		showhide("redchn_show_isp_dns", (rdc == "1"));
+		document.getElementById("ss_redchn_isp_website_web").style.display = "";
+		$j("#redchn_show_isp_dns").html("");
+		$j("#redchn_user_cdn_span").html("");
+	}
 }
 
 function update_visibility_tab2_ipset(){
@@ -600,6 +624,7 @@ var confs = [
 		$j("#ss_ipset_pdnsd_udp_server_dnscrypt").append("<option value='"  + confs[i][0] + "'>" + confs[i][1] + "</option>");
 		$j("#ss_game_opendns").append("<option value='"  + confs[i][0] + "'>" + confs[i][1] + "</option>");
 		$j("#ss_game_pdnsd_udp_server_dnscrypt").append("<option value='"  + confs[i][0] + "'>" + confs[i][1] + "</option>");
+		$j("#ss_redchn_chinadns_foreign_dnscrypt").append("<option value='"  + confs[i][0] + "'>" + confs[i][1] + "</option>");
 	}
 }
 
@@ -1749,11 +1774,10 @@ function buildswitch(){
 			$G("log_return_button").style.display = "none";
 			noChange2 = 0;
 			showSSLoadingBar(5);
-			setTimeout("checkCmdRet2();", 500);
+			setTimeout("checkCmdRet2();", 500);			
 		}
 	});
 }
-
 
 function toggle_switch(){
 	if (db_ss['ss_basic_enable'] == "1"){
@@ -2587,7 +2611,7 @@ function setIframeSrc() {
 												<tr id="ss_basic_kcp_parameter_tr" style="display: none;">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(11)">KCP参数</a></th>
 													<td>
-														<textarea rows=2 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#576D73;color:#FFFFFF;border:1px solid gray;" id="ss_basic_kcp_parameter" name="ss_basic_kcp_parameter" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" title=""></textarea>
+														<textarea style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#576D73;color:#FFFFFF;border:1px solid gray;" id="ss_basic_kcp_parameter" name="ss_basic_kcp_parameter" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" title=""></textarea>
 													</td>
 												</tr>
 											</table>
@@ -2796,7 +2820,7 @@ bogus-nxdomain=220.250.64.18
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr id="redchn_dns_plan_china">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(25)">选择国内DNS</a></th>
-													<td>
+													<td id="redchn_dns_plan_china_td">
 														<select id="ss_redchn_dns_china" name="ss_redchn_dns_china" class="input_option" onclick="update_visibility_tab2_redchn();" >
 															<option value="1" selected>运营商DNS【自动获取】</option>
 															<option value="2">阿里DNS1【223.5.5.5】</option>
@@ -2824,13 +2848,13 @@ bogus-nxdomain=220.250.64.18
 														</select>
 														<select id="ss_redchn_opendns" name="ss_redchn_opendns" class="input_option" style="width:320px"></select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_dns2socks_user" name="ss_redchn_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
-														<select id="ss_redchn_sstunnel" name="ss_redchn_sstunnel" class="input_option" onclick="update_visibility_tab2_redchn();" >
-															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2" selected>google DNS1 [8.8.8.8]</option>
-															<option value="3">google DNS2 [8.8.4.4]</option>
+														<select id="ss_redchn_sstunnel" name="ss_redchn_sstunnel" class="input_option" style="width:200px" onclick="update_visibility_tab2_redchn();" >
+															<option value="2" selected>google dns[8.8.8.8]</option>
+															<option value="3">google dns[8.8.4.4]</option>
+															<option value="1">OpenDNS[208.67.220.220]</option>
 															<option value="4">自定义</option>
 														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_sstunnel_user" name="ss_redchn_sstunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
+														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_sstunnel_user" name="ss_redchn_sstunnel_user" style="width:150px" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
 													</td>
 												</tr>
 												<tr id="redchn_chinadns_china">
@@ -2851,14 +2875,33 @@ bogus-nxdomain=220.250.64.18
 												<tr id="redchn_chinadns_foreign">
 													<th width="20%"><font color="#66FF66"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(28)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*ChinaDNS国外DNS</font></a></th>
 													<td>
-														<select id="ss_redchn_chinadns_foreign" name="ss_redchn_chinadns_foreign" class="input_option" onclick="update_visibility_tab2_redchn();" >
-															<option value="2" selected>Google DNS1 [8.8.8.8]</option>
-															<option value="3">Google DNS2 [8.8.4.4]</option>
+														<select id="ss_redchn_chinadns_foreign_method" name="ss_redchn_chinadns_foreign_method" class="input_option" style="width:100px" onclick="update_visibility_tab2_redchn();" >
+															<option value="1" selected>DNS2SOCKS</option>
+															<option value="2">dnscrypt-proxy</option>
+															<option value="3">ss-tunnel</option>
+															<option value="4">自定义</option>
+														</select>
+														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_chinadns_foreign_method_user" name="ss_redchn_chinadns_foreign_method_user" style="width:150px" maxlength="100" value="">
+														<span id="ss_redchn_chinadns_foreign_method_user_txt">自定义直连的chinaDNS国外dns。</span>
+
+														<select id="ss_redchn_chinadns_foreign_dns2socks" name="ss_redchn_chinadns_foreign_dns2socks" class="input_option" style="width:200px" onclick="update_visibility_tab2_redchn();" >
+															<option value="2" selected>Google dns [8.8.8.8]</option>
+															<option value="3">Google dns [8.8.4.4]</option>
 															<option value="1">OpenDNS [208.67.220.220]</option>
 															<option value="4">自定义</option>
 														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_chinadns_foreign_user" name="ss_redchn_chinadns_foreign_user" maxlength="100" value="">
-														<span>此处DNS通过ss-tunnel转发给SS服务器解析</span> <br/>
+														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_chinadns_foreign_dns2socks_user" name="ss_redchn_chinadns_foreign_dns2socks_user" style="width:150px" maxlength="100" value="">
+
+														<select id="ss_redchn_chinadns_foreign_dnscrypt" name="ss_redchn_chinadns_foreign_dnscrypt" class="input_option" style="width:320px"></select>
+
+														
+														<select id="ss_redchn_chinadns_foreign_sstunnel" name="ss_redchn_chinadns_foreign_sstunnel" class="input_option" style="width:200px" onclick="update_visibility_tab2_redchn();" >
+															<option value="2" selected>Google dns [8.8.8.8]</option>
+															<option value="3">Google dns [8.8.4.4]</option>
+															<option value="1">OpenDNS [208.67.220.220]</option>
+															<option value="4">自定义</option>
+														</select>
+														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_chinadns_foreign_sstunnel_user" name="ss_redchn_chinadns_foreign_sstunnel_user" style="width:150px" maxlength="100" value="">
 													</td>
 												</tr>
 												<tr id="redchn_pdnsd_method">
@@ -2909,14 +2952,16 @@ bogus-nxdomain=220.250.64.18
 														<span id="redchn_pdnsd1">填写最小TTL时间与最长TTL时间</span>
 													</td>
 												</tr>
-												<tr>
+												<tr id="redchn_user_cdn_tr">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(33)">自定义需要CDN加速名单</a></th>
 													<td>
 														<textarea placeholder="# 填入需要强制用国内DNS解析的域名，一行一个，格式如下：
 koolshare.cn
 baidu.com
 # 默认已经添加了1万多条国内域名，请勿重复添加！
-# 注意：不支持通配符！" cols="50" rows="7" id="ss_redchn_isp_website_web" name="ss_redchn_isp_website_web" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
+# 注意：不支持通配符！" cols="50" rows="7" id="ss_redchn_isp_website_web" name="ss_redchn_isp_website_web" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;">
+														</textarea>
+														<span id="redchn_user_cdn_span"></span>
 													</td>
 												</tr>
 												<tr>
