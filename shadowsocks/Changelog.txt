@@ -1,5 +1,26 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+
+3.0.7
+   - fix	界面：修复dnscrypt-proxy列表重复的bug;
+   - fix	界面：修复dnscrypt-proxy在pdnsd中显示节点列表名字和其它地方显示名字不一样的问题;
+   - fix	界面：修复在dns界面，ss节点列表界面关闭ss后，面板不会隐藏的问题;
+   - update	程序：更新kcptun程序最新20161105;
+   - update	界面：禁用密码输入框的表单自动填写;
+   - update 	界面：kcp协议参数输入框自动换行，关闭内容拼写检查;
+   - fix	脚本：修复恢复ss配置导致黑白名单数据乱码，修复json导入导致密码乱码;
+   - fix	脚本：修复负载均衡脚本可能导致生成错误的haproxy配置文件的bug;
+   - update 	界面：移除更新ss后界面自动重启，现在由更新脚本一并重启;
+   - fix	脚本：修复游戏模式下更改dns解析方案后，上游dns不更换的bug;
+   - fix	日志：修复gfwlist模式、游戏模式下pdnsd的日志错误问题;
+   - add	功能：大陆白名单模式的ChinaDNS解析现在可以自己定义国外上游dns了，可以自由选择使用ss-tunnel,
+			dnscrypt-proxy,dns2socks,或者是自己填写直连的国外dns服务器;
+			因为一些值的改变，如果在更新前正在使用chinadns，那么更新自动重启可能会导致chinadns启动失败
+   			需要重新设定ChinaDNS的参数。
+   - update 	功能：考虑到路由器性能，大陆白名单模式下原先全部dns解析方案都做了国内cdn加速，但是这样会对dnsmasq查询造成很大的压力,
+   			而ChinaDNS本身是具有cdn能力的，所以此次更新后，如果选择ChinaDNS作为国外dns，那么将不会使用国内dns去生成cdn列表.
+   
+
 3.0.6  
    - add	为了彻底解决界面内textaera内值的换行,自定义dnsmasq的兼容性,以及ss密码不支持特殊字符，
    		此次版本引入了base64加密和解密！

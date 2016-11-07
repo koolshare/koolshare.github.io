@@ -70,7 +70,9 @@ cp -rf /tmp/shadowsocks/init.d/* /koolshare/init.d/
 echo $(date): 移除安装包！
 rm -rf /tmp/shadowsocks* >/dev/null 2>&1
 
-
+if [ -z "$ss_redchn_chinadns_foreign_method" ];then
+	dbus set ss_redchn_chinadns_foreign_method=2
+fi
 
 # no use since version 1.0.0
 rm -rf /koolshare/ss/ssconfig
