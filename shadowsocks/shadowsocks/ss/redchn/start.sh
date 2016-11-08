@@ -292,7 +292,7 @@ start_dns(){
 	# Start dnscrypt-proxy
 	if [ "1" == "$ss_redchn_dns_foreign" ];then
 		echo $(date): 开启 dnscrypt-proxy，你选择了"$ss_redchn_opendns"节点.
-		dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R $ss_redchn_opendns
+		dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R $ss_redchn_opendns >/dev/null 2>&1
 	fi
 	
 	# Start ss-tunnel
@@ -344,8 +344,8 @@ start_dns(){
 			echo $(date): ┗开启chinadns进程！
 			chinadns -p 1053 -s "$rcc",127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
 		elif [ "$ss_redchn_chinadns_foreign_method" == "2" ];then
-			echo $(date): ┣开启 dnscrypt-proxy，作为chinaDNS上游国外dns，你选择了"$ss_redchn_opendns"节点.
-			dnscrypt-proxy --local-address=127.0.0.1:1055 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R $ss_redchn_chinadns_foreign_dnscrypt
+			echo $(date): ┣开启 dnscrypt-proxy，作为chinaDNS上游国外dns，你选择了"$ss_redchn_chinadns_foreign_dnscrypt"节点.
+			dnscrypt-proxy --local-address=127.0.0.1:1055 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R $ss_redchn_chinadns_foreign_dnscrypt >/dev/null 2>&1
 			echo $(date): ┗开启chinadns进程！
 			chinadns -p 1053 -s "$rcc",127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
 		elif [ "$ss_redchn_chinadns_foreign_method" == "3" ];then

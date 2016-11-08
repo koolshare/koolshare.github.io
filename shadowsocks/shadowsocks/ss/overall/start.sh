@@ -176,8 +176,8 @@ kill_cron_job(){
 start_dns(){
 	# Start dnscrypt-proxy
 	if [ "$ss_overall_dns" == "0" ]; then
-		echo $(date): 开启 dnscrypt-proxy，你选择了"$ss_redchn_opendns"节点.
-		dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "cisco(opendns)"
+		echo $(date): 开启 dnscrypt-proxy，选择cisco节点.
+		dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R cisco  >/dev/null 2>&1
 	fi
 	
 	if [ "$ss_overall_dns" == "1" ]; then
@@ -195,8 +195,8 @@ start_dns(){
 	fi
 	
 	if [ "$ss_overall_dns" == "2" ]; then
-		echo $(date): 开启 dnscrypt-proxy，你选择了"$ss_redchn_opendns"节点.
-		dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "cisco(opendns)"
+		echo $(date): 开启 dnscrypt-proxy，选择cisco节点.
+		dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R cisco  >/dev/null 2>&1
 		if [ "$ss_basic_use_rss" == "1" ];then
 			echo $(date): 开启ssr-tunnel...
 			rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/overall/ss.json -l 1054 -L 8.8.8.8:53 -u -f /var/run/sstunnel.pid >/dev/null 2>&1

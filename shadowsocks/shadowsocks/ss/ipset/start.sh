@@ -251,10 +251,10 @@ kill_cron_job(){
 }
 
 start_dns(){
-	# Start dnscrypt-proxy
+	# Start eoxy
 	if [ "$ss_ipset_foreign_dns" == "0" ]; then
 		echo $(date): 开启 dnscrypt-proxy，你选择了"$ss_ipset_opendns"节点.
-		dnscrypt-proxy --local-address=127.0.0.1:7913 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R $ss_ipset_opendns
+		dnscrypt-proxy --local-address=127.0.0.1:7913 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R $ss_ipset_opendns  >/dev/null 2>&1
 	fi
 	[ "$ss_ipset_tunnel" == "1" ] && it="208.67.220.220:53"
 	[ "$ss_ipset_tunnel" == "2" ] && it="8.8.8.8:53"
@@ -342,8 +342,8 @@ start_dns(){
 				fi
 				dns2socks 127.0.0.1:23456 "$ss_ipset_pdnsd_udp_server_dns2socks" 127.0.0.1:1099 > /dev/null 2>&1 &
 			elif [ "$ss_ipset_pdnsd_udp_server" == "2" ];then
-				echo $(date): 开启dnscrypt-proxy作为pdnsd的上游服务器.
-				dnscrypt-proxy --local-address=127.0.0.1:1099 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_ipset_pdnsd_udp_server_dnscrypt"
+				echo $(date): 开启dnscrypt-proxy作为pdnsd的上游服务器,你选择了"$ss_ipset_pdnsd_udp_server_dnscrypt"节点.
+				dnscrypt-proxy --local-address=127.0.0.1:1099 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R $ss_ipset_pdnsd_udp_server_dnscrypt  >/dev/null 2>&1
 			elif [ "$ss_ipset_pdnsd_udp_server" == "3" ];then
 				[ "$ss_ipset_pdnsd_udp_server_ss_tunnel" == "1" ] && dns1="208.67.220.220:53"
 				[ "$ss_ipset_pdnsd_udp_server_ss_tunnel" == "2" ] && dns1="8.8.8.8:53"

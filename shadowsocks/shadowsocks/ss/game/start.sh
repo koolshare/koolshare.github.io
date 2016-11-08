@@ -183,7 +183,7 @@ start_dns(){
 	# Start dnscrypt-proxy
 	if [ "1" == "$ss_game_dns_foreign" ];then
 		echo $(date): 开启 dnscrypt-proxy，你选择了"$ss_game_opendns"节点.
-		dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_game_opendns"
+		dnscrypt-proxy --local-address=127.0.0.1:1053 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R $ss_game_opendns  >/dev/null 2>&1
 	fi
 	
 	# Start ss-tunnel
@@ -300,7 +300,7 @@ start_dns(){
 				dns2socks 127.0.0.1:23456 "$ss_game_pdnsd_udp_server_dns2socks" 127.0.0.1:1099 > /dev/null 2>&1 &
 			elif [ "$ss_game_pdnsd_udp_server" == "2" ];then
 				echo $(date): 开启dnscrypt-proxy作为pdnsd的上游服务器.
-				dnscrypt-proxy --local-address=127.0.0.1:1099 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R "$ss_game_pdnsd_udp_server_dnscrypt"
+				dnscrypt-proxy --local-address=127.0.0.1:1099 --daemonize -L /koolshare/ss/dnscrypt-resolvers.csv -R $ss_game_pdnsd_udp_server_dnscrypt  >/dev/null 2>&1
 			elif [ "$ss_game_pdnsd_udp_server" == "3" ];then
 				[ "$ss_game_pdnsd_udp_server_ss_tunnel" == "1" ] && dns1="208.67.220.220:53"
 				[ "$ss_game_pdnsd_udp_server_ss_tunnel" == "2" ] && dns1="8.8.8.8:53"
