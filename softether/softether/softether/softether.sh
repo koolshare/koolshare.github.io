@@ -126,7 +126,7 @@ restart)
 stop)
 	/koolshare/softether/vpnserver stop
 	close_port
-	rm -rf softether.conf
+	rm -rf /jffs/configs/dnsmasq.d/softether.conf
 	service restart_dnsmasq
 	rm -rf /koolshare/init.d/S82SoftEther.sh
 	;;

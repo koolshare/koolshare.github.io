@@ -2,7 +2,7 @@
 
 
 MODULE=softether
-VERSION=1.1
+VERSION=1.2
 TITLE=SoftEther_VPN_Server
 DESCRIPTION=SoftEther VPN，开源的VPN服务器端
 HOME_URL=Module_softether.asp
