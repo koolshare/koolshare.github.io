@@ -248,6 +248,15 @@ custom_tcpmss(){
 
 	fi
 }
+
+load_module(){
+	xt=`lsmod | grep xt_set`
+	OS=$(uname -r)
+	if [ -f /lib/modules/${OS}/kernel/net/netfilter/xt_set.ko ] && [ -z "$xt" ];then
+		echo $(date): "加载xt_set.ko内核模块！"
+		insmod /lib/modules/${OS}/kernel/net/netfilter/xt_set.ko
+	fi
+}
 	
 case $1 in
 start_all)
@@ -266,6 +275,7 @@ start_all)
 	wan_auto_start
 	write_cron_job
 	start_koolgame
+	load_module
 	load_nat
 	custom_tcpmss
 	restart_dnsmasq

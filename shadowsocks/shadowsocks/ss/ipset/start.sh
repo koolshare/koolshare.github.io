@@ -522,6 +522,15 @@ main_portal(){
 		nvram commit
 	fi
 }
+
+load_module(){
+	xt=`lsmod | grep xt_set`
+	OS=$(uname -r)
+	if [ -f /lib/modules/${OS}/kernel/net/netfilter/xt_set.ko ] && [ -z "$xt" ];then
+		echo $(date): "加载xt_set.ko内核模块！"
+		insmod /lib/modules/${OS}/kernel/net/netfilter/xt_set.ko
+	fi
+}
 	
 case $1 in
 start_all)
@@ -541,6 +550,7 @@ start_all)
 	start_dns
 	start_ss_redir
 	start_kcp
+	load_module
 	load_nat
 	restart_dnsmasq
 	remove_status
