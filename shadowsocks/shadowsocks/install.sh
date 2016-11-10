@@ -24,7 +24,7 @@ fi
 if [ -f /koolshare/ss/version ];then
 	curr_version=`cat /koolshare/ss/version`
 	comp=`versioncmp $curr_version 3.0.6`
-	if [ "$comp" == 1 ];then
+	if [ "$comp" == "1" ];then
 		echo $(date): 从ss3.0.6版本开始，将对界面内textarea内的值和ss的密码进行base64加密，方便储存！
 		echo $(date): 生成当前SS版本：$curr_version的配置文件到/jffs根目录！
 		dbus list ss > /jffs/ss_conf_backup_$curr_version.txt

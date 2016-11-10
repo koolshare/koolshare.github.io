@@ -529,7 +529,7 @@ function openssHint(itemNum){
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;官方介绍：Pcap_DNSProxy 是一个基于 WinPcap/LibPcap 用于过滤 DNS 投毒污染的工具，提供支持正则表达式的 Hosts 提供更便捷和强大的修改 Hosts 的方法，以及对 DNSCurve/DNSCrypt 协议、并行和 TCP 协议请求的支持。多服务器并行请求功能，更可提高在恶劣网络环境下域名解析的可靠性。";
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;简单的说，Pcap_DNSProxy用底层抓包的方法来进行过滤DNS 投毒污染，其功能强大到令其它几种工具都汗颜，不过我们在集成该工具时考虑到其复杂性，因此都是预先为大家定义好了Pcap_DNSProxy的配置文件，如果你需要修改，可以进入路由器内的/koolshare/ss/dns文件夹去修改配置，Pcap_DNSProxy因为各种依赖，导致在merlin下用自带的工具链编译无法通过，使用了新的交叉编译工具链才顺利编译，其在merlin固件下运行的稳定性已经逐渐提高，但是其在解析DNS时发出大量的并发包，还是为路由器带来的不小的挑战，因此该解析软件对系统cpu和内存的暂用都要比其它几个稍高一些；"
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;Pcap_DNSProxy也是具备国内CDN解析效果的,不过在前面ChinaDNS部分提到过，已经由国内DNS解析国内cdn名单，Pcap_DNSProxy解析国内域名也是进行扫尾工作：对于一些没有定义在国内cdn名单内的域名，能发挥作用；而对于国外的解析，由于是通过路由器直接请求国外DNS服务器，并没有经过SS服务器，解析到的ip地址和ss服务器的距离比较随机，所以国外cdn效果是相对比较弱的。";
-		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;Pcap_DNSProxy也是具备国内CDN解析效果的,所以没必要再使用<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>,因为使用这个名单会对dnsmasq造成很大的负担！"";
+		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;Pcap_DNSProxy也是具备国内CDN解析效果的,所以没必要再使用<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>,因为使用这个名单会对dnsmasq造成很大的负担！";
 		//pdnsd
 		statusmenu +="</br><font color='#CC0066'>5:pdnsd：</font>"
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;pdnsd是一个老牌的dns解析软件了它不仅可以用来做解析软件，还能用来自己搭建dns缓存服务器；早期pdnsd的流行，主要是其支持TCP解析，然而随着gfw对投毒范围的越来越广泛，tcp解析已经不能保证无毒了，但是其强大的dns缓存机制，让我仍然不肯放弃它；";
