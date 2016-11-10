@@ -2,7 +2,7 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 3.0.8
    - fix	脚本：修复dncrypt-proxy在gfwlist模式和全局模式中不工作;
-   - updare	脚本：更新脚本，以适应380.63_X7.2固件;
+   - update	脚本：更新脚本，提前适配380.63_X7.2固件;
    - update	程序：更新dnscrypt-proxy 为最新 1.7.0;
    - update	程序：更新Pcap_DNSProxy 到最新的 0.4.7.8;
    - update	程序：更新kcptun程序最新20161110;
