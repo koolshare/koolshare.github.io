@@ -275,8 +275,7 @@ function init() {
 	var retArea = $G('log_content');
 	update_visibility_main();
 	document.form.ss_basic_action.value = 1;
-	var text = document.getElementById("ss_basic_kcp_parameter");
-	autoTextarea(text);
+
 }
 
 function decode_show(){
@@ -484,6 +483,8 @@ function update_visibility_main() {
 	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode!== "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple"));
 	showhide("ss_basic_kcp_port_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
 	showhide("ss_basic_kcp_parameter_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
+	var text = document.getElementById("ss_basic_kcp_parameter");
+	autoTextarea(text);
 }
 
 function update_visibility_tab4(){
@@ -542,6 +543,13 @@ function update_visibility_tab2_redchn(){
 		document.getElementById("redchn_show_isp_dns").style.display = "";
 		$j("#redchn_show_isp_dns").html("ChinaDNS方案自带cdn加速，无需定义国内DNS");
 		$j("#redchn_user_cdn_span").html("ChinaDNS方案自带cdn加速，无需定义cdn加速名单");
+	}else if(rdf == "5"){
+		document.getElementById("ss_redchn_dns_china").style.display = "none";
+		document.getElementById("ss_redchn_dns_china_user").style.display = "none";
+		document.getElementById("ss_redchn_isp_website_web").style.display = "none";
+		document.getElementById("redchn_show_isp_dns").style.display = "";
+		$j("#redchn_show_isp_dns").html("Pcap_DNSProxy方案自带cdn加速，无需定义国内DNS");
+		$j("#redchn_user_cdn_span").html("Pcap_DNSProxy方案自带cdn加速，无需定义cdn加速名单");
 	}else{
 		document.getElementById("ss_redchn_dns_china").style.display = "";
 		showhide("ss_redchn_dns_china_user", (rdc == "5"));
@@ -2169,25 +2177,6 @@ function count_down_close(){
 function reload_Soft_Center(){
 	location.href = "/Main_Soft_center.asp";
 }
-/*
-function setIframeSrc() {
-    var s1 = "http://1212.ip138.com/ic.asp";
-    var s2 = "http://x302.rashost.com/ip.php";
-    var s3 = "http://ip111cn.appspot.com/";
-    var iframe1 = document.getElementById('iframe1');
-    var iframe2 = document.getElementById('iframe2');
-    var iframe3 = document.getElementById('iframe3');
-    if ( - 1 == navigator.userAgent.indexOf("MSIE")) {
-        iframe1.src = s1;
-        iframe2.src = s2;
-        iframe3.src = s3;
-    } else {
-        iframe1.location = s1;
-        iframe2.location = s2;
-        iframe3.location = s3;
-    }
-}
-*/
 </script>
 </head>
 <body onload="init();">
@@ -3460,32 +3449,6 @@ taobao.com
 										<div class="apply_gen" id="loading_icon">
 											<img id="loadingIcon" style="display:none;" src="/images/InternetScan.gif">
 										</div>
-											<!-- not for this version
-											<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="Routing_rules_table1">
-												<thead>
-												<tr>
-													<td colspan="2">双线双拨策略路由状态</td>
-												</tr>
-												</thead>
-												<tr>
-													<th>国内连接</th>
-													<td>
-														<iframe id="iframe1" src="" width="100%" height="22" scrolling="no" frameborder="0" marginheight="3" marginwidth="0"></iframe>
-													</td>
-												<tr>
-													<th>国外连接</th>
-													<td >
-														<iframe id="iframe2" src="" width="100%" height="22" scrolling="no" frameborder="0" marginheight="3" marginwidth="0"></iframe>
-													</td>
-												<tr>
-													<th>谷歌网站</th>
-													<td>
-														<iframe id="iframe3" src="" width="100%" height="22" scrolling="no" frameborder="0" marginheight="3" marginwidth="0"></iframe>
-													</td>
-												</tr>
-											</table>
-										</div>
-										-->
 										<div id="apply_button" class="apply_gen">
 											<input id="cmdBtn" class="button_gen" type="button" onclick="onSubmitCtrl()" value="提交">
 										</div>
