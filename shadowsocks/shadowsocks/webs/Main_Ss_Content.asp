@@ -541,15 +541,15 @@ function update_visibility_tab2_redchn(){
 		document.getElementById("ss_redchn_dns_china_user").style.display = "none";
 		document.getElementById("ss_redchn_isp_website_web").style.display = "none";
 		document.getElementById("redchn_show_isp_dns").style.display = "";
-		$j("#redchn_show_isp_dns").html("ChinaDNS方案自带cdn加速，无需定义国内DNS");
-		$j("#redchn_user_cdn_span").html("ChinaDNS方案自带cdn加速，无需定义cdn加速名单");
+		$j("#redchn_show_isp_dns").html("ChinaDNS方案自带国内cdn加速，无需定义国内DNS");
+		$j("#redchn_user_cdn_span").html("ChinaDNS方案自带国内cdn加速，无需定义cdn加速名单");
 	}else if(rdf == "5"){
 		document.getElementById("ss_redchn_dns_china").style.display = "none";
 		document.getElementById("ss_redchn_dns_china_user").style.display = "none";
 		document.getElementById("ss_redchn_isp_website_web").style.display = "none";
 		document.getElementById("redchn_show_isp_dns").style.display = "";
-		$j("#redchn_show_isp_dns").html("Pcap_DNSProxy方案自带cdn加速，无需定义国内DNS");
-		$j("#redchn_user_cdn_span").html("Pcap_DNSProxy方案自带cdn加速，无需定义cdn加速名单");
+		$j("#redchn_show_isp_dns").html("Pcap_DNSProxy方案自带国内cdn加速，无需定义国内DNS");
+		$j("#redchn_user_cdn_span").html("Pcap_DNSProxy方案自带国内cdn加速，无需定义cdn加速名单");
 	}else{
 		document.getElementById("ss_redchn_dns_china").style.display = "";
 		showhide("ss_redchn_dns_china_user", (rdc == "5"));
@@ -1638,7 +1638,7 @@ function version_show(){
                     	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
                 	}else{
-	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.0.6</i></a>");
+	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.0.8</i></a>");
                 	}
 		        }
             }
