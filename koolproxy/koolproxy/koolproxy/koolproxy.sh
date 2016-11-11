@@ -194,12 +194,22 @@ remove_ss_event(){
 	dbus remove __event__onssstart_koolproxy
 }
 
+load_module(){
+	xt=`lsmod | grep xt_set`
+	OS=$(uname -r)
+	if [ -f /lib/modules/${OS}/kernel/net/netfilter/xt_set.ko ] && [ -z "$xt" ];then
+		echo $(date): "加载xt_set.ko内核模块！"
+		insmod /lib/modules/${OS}/kernel/net/netfilter/xt_set.ko
+	fi
+}
+
 case $ACTION in
 start)
 	start_koolproxy
 	nvram set koolproxy_uptime=1
 	add_ipset_conf
 	service restart_dnsmasq > /dev/null 2>&1
+	load_module
 	load_nat
 	dns_takeover
 	creat_start_up
@@ -220,6 +230,7 @@ restart)
 	add_ipset_conf
 	echo $(date): 重启dnsmasq进程...
 	service restart_dnsmasq > /dev/null 2>&1
+	load_module
 	load_nat
 	dns_takeover
 	creat_start_up
