@@ -816,13 +816,13 @@ function hideKCPLoadingBar(){
                                                             </div>
                                                         </label>
                                                     </div>
+                                                    <div id="KCP_changelog_show" style="padding-top:5px;margin-left:200px;margin-top:0px;float: left;"><a href="https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/kcptun/Changelog.txt" target="_blank"><em><u>[ 更新日志 ]</u></em></a></div>
                                                 </td>
                                                 <tr id ="version">
                                                     <th width="35%">版本</th>
                                                     <td>
                                                         <div id="KCP_version_show" style="padding-top:5px;margin-left:0px;margin-top:0px;float: left;"><i>插件版本：<% dbus_get_def("KCP_basic_version", "未知"); %></i></div>
                                                         <div id="KCP_client_version_show" style="padding-top:5px;margin-left:50px;margin-top:0px;float: left;"><i>kcptun版本：<% dbus_get_def("KCP_client_version", "未知"); %></i></div>
-                                                        <div id="KCP_changelog_show" style="padding-top:5px;margin-left:50px;margin-top:0px;float: left;"><a href="https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/kcptun/Changelog.txt" target="_blank"><em><u>[ 更新日志 ]</u></em></a></div>
                                                     </td>
                                                 </tr>
                                                 <tr id ="policy">
