@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=kcptun
-VERSION="2.2.4"
+VERSION="2.2.5"
 TITLE=kcptun
 DESCRIPTION=基于kcp协议的udp网络加速
 HOME_URL=Module_kcptun.asp
