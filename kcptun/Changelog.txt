@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin kcptun Changelog
 ===========================================
+2.2.4
+   - update	adapt to X7.2 firmware
+
 2.2.3
    - update	update kcptun binary to latest
 2.2.2
