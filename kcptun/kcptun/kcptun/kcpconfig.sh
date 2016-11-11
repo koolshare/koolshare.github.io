@@ -96,13 +96,23 @@ set_ulimit(){
 	ulimit -n 8192
 }
 
+load_module(){
+	xt=`lsmod | grep xt_set`
+	OS=$(uname -r)
+	if [ -f /lib/modules/${OS}/kernel/net/netfilter/xt_set.ko ] && [ -z "$xt" ];then
+		echo $(date): "加载xt_set.ko内核模块！"
+		insmod /lib/modules/${OS}/kernel/net/netfilter/xt_set.ko
+	fi
+}
+
 case $ACTION in
 start)
 	# start is for system startup
 	if [ "$KCP_basic_enable" == "1" ];then
 	creat_folder
 	set_ulimit
-    apply_KCP
+	load_module
+	apply_KCP
 	fi
 	;;
 stop | kill )
@@ -111,6 +121,7 @@ stop | kill )
 restart)
 	creat_folder
 	set_ulimit
+	load_module
 	apply_KCP
 	print_success_info
 	;;
