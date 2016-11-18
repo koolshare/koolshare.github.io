@@ -166,8 +166,7 @@ function update_visibility1(){
 	showhide("koolproxy_white_lan", (document.form.koolproxy_lan_control.value == 2));
 	showhide("koolproxy_debug1", (document.form.koolproxy_debug.value == 1));
 	showhide("koolproxy_update_hour_span", (document.form.koolproxy_update.value == 1));
-
-	
+	showhide("koolproxy_reboot_hour_span", (document.form.koolproxy_reboot.value == 1));
 }
 
 function update_visibility(){
@@ -419,6 +418,50 @@ function notice_show(){
 													</span>
 												</td>
 											</tr>
+
+											<tr id="auto_reboot_switch">
+												<th>插件自动重启</th>
+												<td>
+													<select name="koolproxy_reboot" id="koolproxy_reboot" class="input_option" style="width:auto;margin:0px 0px 0px 2px;" onchange="update_visibility1();">
+														<option value="1">开启</option>
+														<option value="0" selected>关闭</option>
+													</select>
+													<span id="koolproxy_reboot_hour_span">
+														&nbsp;&nbsp;&nbsp;&nbsp;
+														每天
+														<select id="koolproxy_reboot_hour" name="koolproxy_reboot_hour" class="ssconfig input_option" >
+															<option value="0">00:00点</option>
+															<option value="1">01:00点</option>
+															<option value="2" selected>02:00点</option>
+															<option value="3">03:00点</option>
+															<option value="4">04:00点</option>
+															<option value="5">05:00点</option>
+															<option value="6">06:00点</option>
+															<option value="7">07:00点</option>
+															<option value="8">08:00点</option>
+															<option value="9">09:00点</option>
+															<option value="10">10:00点</option>
+															<option value="11">11:00点</option>
+															<option value="12">12:00点</option>
+															<option value="13">13:00点</option>
+															<option value="14">14:00点</option>
+															<option value="15">15:00点</option>
+															<option value="16">16:00点</option>
+															<option value="17">17:00点</option>
+															<option value="18">18:00点</option>
+															<option value="19">19:00点</option>
+															<option value="20">20:00点</option>
+															<option value="21">21:00点</option>
+															<option value="22">22:00点</option>
+															<option value="23">23:00点</option>
+														</select>
+														重启
+														&nbsp;&nbsp;&nbsp;&nbsp;
+													</span>
+												</td>
+											</tr>
+
+											
 											<tr id="debug_tr">
 												<th>日志显示</th>
 												<td>

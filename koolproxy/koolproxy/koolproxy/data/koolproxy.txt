@@ -1,5 +1,5 @@
-!x  -----update[rules]:  2016-11-11 19:58 --- by <houzi> <today2004>
-!x  -----update[video]:  2016-11-10 19:40 --- by <houzi> <today2004>
+!x  -----update[rules]:  2016-11-15 21:52 --- by <houzi> <today2004>
+!x  -----update[video]:  2016-11-17 21:03 --- by <houzi> <today2004>
 !x  -----base: adblock <koolproxy dedicated>
 !x  -----thanks: xwhyc CJX yiclear adsafe
 !x  -------------------------------------- white rules ---------------------------------------------
@@ -28,7 +28,7 @@
 !@@||atm.youku.com/v*?vip=
 @@|http://17173im.qtmojo.com/main/s?user=||17173_video&
 @@|http://hc.yinyuetai.com/partner/yyt/
-@@|http://v.aty.sohu.com/v$object-subrequest
+@@|http://images.sohu.com/bill/default/wei/wei_v1.4.js$script
 @@|http://js.gomein.net.cn/
 @@|http://css.gomein.net.cn/
 @@|http://http://pan.baidu.com/share/init?*
@@ -324,7 +324,7 @@
 |http://*.com/?q=$domain=torrentkitty.la|diggbt.net|btkitty.biz|btkitty.uno|cishuge.com
 |http://*.com/?q=*|*$third-party
 |http://*.com/?ss=*_*_
-|http://*.com/?uid=*|*|*
+|http://*.com/?uid=*|*|*$domain=~maxthon.com
 |http://*.com/ad-
 |http://*.com/ad.html|
 |http://*.com/ad/$domain=~www.s1979.com|~www.tradelink-ebiz.com|~www.cmbchina.com|~pingan.com|~catalinahub.com|~kaixin001.com|~zyue.com|~www.noahedu.com|~chinahr.com
@@ -1307,8 +1307,6 @@
 |http://liulanmi.com/labs/x/468x60.jpg$image
 |http://liulanmi.com/labs/x/liulanmi2345.jpg$image
 |http://live.win007.com/live.htm
-|http://lives.l.aiseet.atianqi.com/livemsg?
-|http://lives.l.cp81.ott.cibntv.net/livemsg?clip=1&coverid=
 |http://love.chushoushijian.cn$third-party
 |http://luck.v1.cn/adxml.php?zoneid=
 |http://m.*.cc/com.php?*==|$third-party
@@ -3480,9 +3478,6 @@
 |http://dp.gtimg.cn/discuzpic/0/discuz_qqgame_gamebbs_qq_com_forum_
 |http://l.qq.com/lview?c=www&loc=AllInOne_15_UpRight
 |http://l.qq.com/lview?c=www&loc=hb_xW_Full
-!|http://livec.l.qq.com/livemsg?
-!|http://livew.l.qq.com/livemsg?ty=web&ad_type=LD|KB&pf=in&pt=0
-!|http://livew.l.qq.com/livemsg?ty=web&ad_type=ZT&pf=in&pt=0
 |http://music.qq.com/miniframe/static/qmgg/
 |http://ossweb-img.qq.com/images/lol/web201310/lolad0908.jpg$image
 |http://qzs.qq.com/qzone/biz/res/tmpl/vehicle.html
@@ -3632,9 +3627,7 @@
 ||iqiyi.com/common/flashplayer/20160824/pageer.swf?147842*$domain=iqiyi.com
 ||r1.ykimg.com/material/0A03/201611/1104/125100/1300470-2.swf?jsStart=&jsEnd=execHtmlEndCMDfortaobao&url=http://val.atm.youku.com/c?id=9902$domain=youku.com
 ||r1.ykimg.com/material/0A03/*/1300-100.jpg$domain=youku.com
-||images.sohu.com/ytv/BJ/QD-Haier/10001002016*.jpg$domain=tv.sohu.com
 ||i1.itc.cn/20160906/372f_47e10153_3914_3086_b990_16e7db9a0347_1.jpg$domain=tv.sohu.com
-||images.sohu.com/ytv/BJ/BJSC/10001002016*.jpg$domain=tv.sohu.com
 ||i2.itc.cn/20150722/3425_f14b5846_aedf_3cee_9fc4_aeb02e47a141_1.jpg$domain=tv.sohu.com
 ||i2.itc.cn/20160906/3624_9a3639cc_be68_9e83_5f93_c4c60f14c384_1.jpg$domain=tv.sohu.com
 ||p.zol.com.cn^$script
@@ -3642,6 +3635,25 @@
 ||sinaimg.cn/mw1024/$image
 |http://common.jb51.net/js/jbLoader.js
 ||chinacme.net/okimages/yzcx.swf
+||images.sohu.com/cs/
+|http://api.my.tv.sohu.com/wm/getads.do?
+|http://count.vrs.sohu.com/crossdomain.xml
+|http://f.aty.sohu.com/p?cat=
+|http://images.sohu.com/ytv/*.mp4
+|http://images.sohu.com/ytv/*.swf
+|http://mfiles.sohu.com/tv/csad/
+|http://newflv.sohu.ccgslb.net/113/*&prod=rtb
+|http://p.aty.sohu.com/p?cat=
+||adnet.sohu.com
+||images.sohu.com/ytv/*.jpg|$image
+||tv.sohu.com/interaction/get/getListByVid.do
+||tv.sohu.com/upload/Trace/$script
+||tv.sohu.com/upload/advert/sohuhd.ad.js
+||tv.sohu.com/upload/static/global/hdpv.js
+||info.lm.tv.sohu.com^$domain=gezila.com
+||pinglun.sohu.com/sogouad.html
+||sohu.com.cn/ppp/bms/bms.popup.
+||sohu.com/adgtr/
 !x  -------------------------------------- replace rules ---------------------------------------------
 ||firefox.news.cn$s@height="305" frameborder="0"@height="200" frameborder="0"@
 ||firefox.163.com$s@height="305" frameborder="0"@height="200" frameborder="0"@

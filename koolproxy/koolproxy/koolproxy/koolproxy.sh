@@ -194,6 +194,24 @@ remove_ss_event(){
 	dbus remove __event__onssstart_koolproxy
 }
 
+write_reboot_job(){
+	# start setvice
+	if [ "1" == "$koolproxy_reboot" ]; then
+		echo $(date): 开启插件定时重启，每天"$koolproxy_reboot_hour"时00分，自动重启插件...
+		cru a koolproxy_reboot "0 $koolproxy_reboot_hour * * * /bin/sh /koolshare/scripts/koolproxy.sh restart"
+		cru a koolproxy_reboot "15 20 * * * /bin/sh /koolshare/koolproxy/koolproxy.sh restart"
+	fi
+}
+
+remove_reboot_job(){
+	jobexist=`cru l|grep koolproxy_reboot`
+	# kill crontab job
+	if [ ! -z "$jobexist" ];then
+		echo $(date): 关闭插件定时重启...
+		sed -i '/koolproxy_reboot/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
+	fi
+}
+
 load_module(){
 	xt=`lsmod | grep xt_set`
 	OS=$(uname -r)
@@ -215,10 +233,12 @@ start)
 	creat_start_up
 	write_nat_start
 	write_cron_job
+	write_reboot_job
 	add_ss_event
 	;;
 restart)
 	remove_ss_event
+	remove_reboot_job
 	remove_ipset_conf
 	remove_nat_start
 	flush_nat
@@ -236,6 +256,7 @@ restart)
 	creat_start_up
 	write_nat_start
 	write_cron_job
+	write_reboot_job
 	add_ss_event
 	echo $(date): koolproxy启用成功，请等待日志窗口自动关闭，页面会自动刷新...
 	;;
@@ -248,6 +269,7 @@ restart_nat)
 	;;
 stop)
 	remove_ss_event
+	remove_reboot_job
 	remove_ipset_conf
 	service restart_dnsmasq > /dev/null 2>&1
 	remove_nat_start
