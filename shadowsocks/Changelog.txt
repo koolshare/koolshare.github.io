@@ -2,6 +2,7 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 3.0.9
    - update	binary: update kcptun client to 20161118;
+   - update	binary: update haproxy to 1.7-dev6-d5d890b, released 2016/11/09
    - update	binaru: update shadowsocks-libev and shadowsocksr-libev to latest;
    - update	binary: now shadowsocks-libev and shadowsocksr-libev using mbedtls crypto libary, not openssl;
    - update	delete encyypt method cast5-cfb des-cfb idea-cfb rc2-cfb and seed-cfb for they are not supported in mbedtls
