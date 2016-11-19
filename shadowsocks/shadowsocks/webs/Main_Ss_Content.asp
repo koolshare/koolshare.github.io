@@ -2367,15 +2367,13 @@ function reload_Soft_Center(){
 																		<option value="aes-128-cfb">aes-128-cfb</option>
 																		<option value="aes-192-cfb">aes-192-cfb</option>
 																		<option value="aes-256-cfb" selected>aes-256-cfb</option>
+																		<option value="aes-128-ctr">aes-128-cfb</option>
+																		<option value="aes-192-ctr">aes-192-cfb</option>
+																		<option value="aes-256-ctr" selected>aes-256-cfb</option>
 																		<option value="bf-cfb">bf-cfb</option>
 																		<option value="camellia-128-cfb">camellia-128-cfb</option>
 																		<option value="camellia-192-cfb">camellia-192-cfb</option>
 																		<option value="camellia-256-cfb">camellia-256-cfb</option>
-																		<option value="cast5-cfb">cast5-cfb</option>
-																		<option value="des-cfb">des-cfb</option>
-																		<option value="idea-cfb">idea-cfb</option>
-																		<option value="rc2-cfb">rc2-cfb</option>
-																		<option value="seed-cfb">seed-cfb</option>
 																		<option value="salsa20">salsa20</option>
 																		<option value="chacha20">chacha20</option>
 																		<option value="chacha20-ietf">chacha20-ietf</option>
@@ -2515,24 +2513,22 @@ function reload_Soft_Center(){
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(5)">加密方式</a></th>
 													<td>
 														<select id="ss_basic_method" name="ss_basic_method" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
-															<option class="content_input_fd" value="table">table</option>
-															<option class="content_input_fd" value="rc4">rc4</option>
-															<option class="content_input_fd" value="rc4-md5">rc4-md5</option>
-															<option class="content_input_fd" value="aes-128-cfb">aes-128-cfb</option>
-															<option class="content_input_fd" value="aes-192-cfb">aes-192-cfb</option>
-															<option class="content_input_fd" value="aes-256-cfb" selected="">aes-256-cfb</option>
-															<option class="content_input_fd" value="bf-cfb">bf-cfb</option>
-															<option class="content_input_fd" value="camellia-128-cfb">camellia-128-cfb</option>
-															<option class="content_input_fd" value="camellia-192-cfb">camellia-192-cfb</option>
-															<option class="content_input_fd" value="camellia-256-cfb">camellia-256-cfb</option>
-															<option class="content_input_fd" value="cast5-cfb">cast5-cfb</option>
-															<option class="content_input_fd" value="des-cfb">des-cfb</option>
-															<option class="content_input_fd" value="idea-cfb">idea-cfb</option>
-															<option class="content_input_fd" value="rc2-cfb">rc2-cfb</option>
-															<option class="content_input_fd" value="seed-cfb">seed-cfb</option>
-															<option class="content_input_fd" value="salsa20">salsa20</option>
-															<option class="content_input_fd" value="chacha20">chacha20</option>
-															<option class="content_input_fd" value="chacha20-ietf">chacha20-ietf</option>
+															<option value="table">table</option>
+															<option value="rc4">rc4</option>
+															<option value="rc4-md5">rc4-md5</option>
+															<option value="aes-128-cfb">aes-128-cfb</option>
+															<option value="aes-192-cfb">aes-192-cfb</option>
+															<option value="aes-256-cfb" selected>aes-256-cfb</option>
+															<option value="aes-128-ctr">aes-128-cfb</option>
+															<option value="aes-192-ctr">aes-192-cfb</option>
+															<option value="aes-256-ctr" selected>aes-256-cfb</option>
+															<option value="bf-cfb">bf-cfb</option>
+															<option value="camellia-128-cfb">camellia-128-cfb</option>
+															<option value="camellia-192-cfb">camellia-192-cfb</option>
+															<option value="camellia-256-cfb">camellia-256-cfb</option>
+															<option value="salsa20">salsa20</option>
+															<option value="chacha20">chacha20</option>
+															<option value="chacha20-ietf">chacha20-ietf</option>
 														</select>
 													</td>
 												</tr>
