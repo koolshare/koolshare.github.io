@@ -5,8 +5,8 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    - update	binary: update haproxy to 1.7-dev6-d5d890b, released 2016/11/09
    - update	binaru: update shadowsocks-libev and shadowsocksr-libev to latest;
    - update	binary: now shadowsocks-libev and shadowsocksr-libev using mbedtls crypto libary, not openssl;
-   - update	delete encyypt method cast5-cfb des-cfb idea-cfb rc2-cfb and seed-cfb for they are not supported in mbedtls
-		add support for aes-128-ctr aes-192-ctr aes-256-ctr encyypt method.
+   - update	delete encrypt method cast5-cfb des-cfb idea-cfb rc2-cfb and seed-cfb for they are not supported in mbedtls
+		add support for aes-128-ctr aes-192-ctr aes-256-ctr encrypt method.
 
 3.0.8
    - fix	脚本：修复dncrypt-proxy在gfwlist模式和全局模式中不工作;
