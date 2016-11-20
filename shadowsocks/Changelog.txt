@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.1.0
+   - fix	web: fix type error of the encrypt method aes-128-ctr aes-192-ctr aes-256-ctr
+   - fix	web: fix the web width after shadowsocks submit finished.
+
 3.0.9
    - update	binary: update kcptun client to 20161118;
    - update	binary: update haproxy to 1.7-dev6-d5d890b, released 2016/11/09

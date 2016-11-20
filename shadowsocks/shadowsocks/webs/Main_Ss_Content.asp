@@ -2367,9 +2367,9 @@ function reload_Soft_Center(){
 																		<option value="aes-128-cfb">aes-128-cfb</option>
 																		<option value="aes-192-cfb">aes-192-cfb</option>
 																		<option value="aes-256-cfb" selected>aes-256-cfb</option>
-																		<option value="aes-128-ctr">aes-128-cfb</option>
-																		<option value="aes-192-ctr">aes-192-cfb</option>
-																		<option value="aes-256-ctr" selected>aes-256-cfb</option>
+																		<option value="aes-128-ctr">aes-128-ctr</option>
+																		<option value="aes-192-ctr">aes-192-ctr</option>
+																		<option value="aes-256-ctr" selected>aes-256-ctr</option>
 																		<option value="bf-cfb">bf-cfb</option>
 																		<option value="camellia-128-cfb">camellia-128-cfb</option>
 																		<option value="camellia-192-cfb">camellia-192-cfb</option>
@@ -2519,9 +2519,9 @@ function reload_Soft_Center(){
 															<option value="aes-128-cfb">aes-128-cfb</option>
 															<option value="aes-192-cfb">aes-192-cfb</option>
 															<option value="aes-256-cfb" selected>aes-256-cfb</option>
-															<option value="aes-128-ctr">aes-128-cfb</option>
-															<option value="aes-192-ctr">aes-192-cfb</option>
-															<option value="aes-256-ctr" selected>aes-256-cfb</option>
+															<option value="aes-128-ctr">aes-128-ctr</option>
+															<option value="aes-192-ctr">aes-192-ctr</option>
+															<option value="aes-256-ctr" selected>aes-256-ctr</option>
 															<option value="bf-cfb">bf-cfb</option>
 															<option value="camellia-128-cfb">camellia-128-cfb</option>
 															<option value="camellia-192-cfb">camellia-192-cfb</option>

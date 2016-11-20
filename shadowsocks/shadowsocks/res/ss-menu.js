@@ -189,7 +189,7 @@ function hideSSLoadingBar(){
 		refreshpage();
 	}else{
 		htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
-		htmlbodyforIE[0].style.overflow = "visible";	  //hidden the Y-scrollbar for preventing from user scroll it.
+		htmlbodyforIE[0].style.overflowY = "visible";
 		decode_show();
 		checkss = 0;
 		$G("ss_basic_password").value = Base64.decode($G("ss_basic_password").value);
