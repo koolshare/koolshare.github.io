@@ -154,8 +154,8 @@ function checkCmdRet(){
 				noChange = 0;
 			}
 			if(noChange > 100){
-				document.getElementById("log_content").style.display = "none";
-				noChange = 0;
+				//document.getElementById("log_content").style.display = "none";
+				//noChange = 0;
 				//refreshpage();
 				setTimeout("checkCmdRet();", 10000);
 			}else{

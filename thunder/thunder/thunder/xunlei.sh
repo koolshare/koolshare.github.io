@@ -18,7 +18,7 @@ LOG_FULL="${LOG_DIR}"/"${LOG_FILE}"
 cat /dev/null > "${LOG_FULL}"
 if [ -e "/jffs/.koolshare/thunder" ]; then																			#判断是否已安装 Koolshare 梅林软件中心的迅雷远程
 		echo -e "$(date +%Y年%m月%d日\ %X)： 已检测到 Koolshare 梅林固件软件中心的迅雷远程，将优先调用该软件……" > "${LOG_FULL}"
-		PROCESS_1=thunder																							#进程名称为安装路径中的关键词
+		PROCESS_1=koolshare/thunder																					#进程名称为安装路径中的关键词
 		INSTALL_DIR=/jffs/.koolshare/thunder																		#Koolshare 梅林软件中心的迅雷远程安装路径，不可以自定义
 else
 		echo -e "$(date +%Y年%m月%d日\ %X)： 开始检测自行安装的迅雷远程……" > "${LOG_FULL}"
