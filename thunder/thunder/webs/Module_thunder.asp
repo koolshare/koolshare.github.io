@@ -30,6 +30,7 @@ submitDatas["thunder_basic_request"] = "00";
 function init() {
 	show_menu();
 	submitData("00");
+	checkCmdRet();
 }
 function openWeb() {
 	window.open("http://yuancheng.xunlei.com/")
@@ -67,13 +68,13 @@ function getDataStatus() {
 				}
 			}
 			if (db_thunder_basic['thunder_basic_status'] == "020") {
-				showLoading(2);
+				//showLoading(2);
 				$("#thunder_info").html("插件关闭中……");
 				setTimeout("submitData('02')", 1000)
 			} else if (db_thunder_basic['thunder_basic_status'] == "02") {
 				$("#thunder_info").html("已关闭")
 			} else if (db_thunder_basic['thunder_basic_status'] == "010") {
-				showLoading(6);
+				//showLoading(6);
 				$("#thunder_info").html("启动中，请稍等……");
 				checkTime++;
 				if (checkTime < 25) {
@@ -129,6 +130,43 @@ function oncheckclick(obj) {
         document.getElementById("f_" + obj.id).value = "0";
     }
 }
+var _responseLen;
+var noChange = 0;
+function checkCmdRet(){
+	$.ajax({
+		url: '/res/thunder_check.htm',
+		dataType: 'html',
+		
+		error: function(xhr){
+			setTimeout("checkCmdRet();", 1000);
+		},
+		success: function(response){
+			var retArea = document.getElementById("log_content1");
+			var _cmdBtn = document.getElementById("cmdBtn");
+			if(response.search("XU6J03M6") != -1){
+				retArea.value = response.replace("XU6J03M6", " ");
+				setTimeout("refreshpage();", 3000);
+				return false;
+			}
+			if(_responseLen == response.length){
+				noChange++;
+			}else{
+				noChange = 0;
+			}
+			if(noChange > 100){
+				document.getElementById("log_content").style.display = "none";
+				noChange = 0;
+				//refreshpage();
+				setTimeout("checkCmdRet();", 10000);
+			}else{
+				setTimeout("checkCmdRet();", 1000);
+			}
+			retArea.value = response;
+			retArea.scrollTop = retArea.scrollHeight;
+			_responseLen = response.length;
+		}
+	});
+}
 
 </script>
 </head>
@@ -182,18 +220,13 @@ function oncheckclick(obj) {
 														<span id="thunder_info"></span>
 													</td>
 												</tr>
-												<!--
-												<tr>
-													<th width="20%">启用CPU占用限制</th>
-                            						<td>
-                            						  <input type="checkbox" id="thunder_cpulimit_enable" onclick="oncheckclick(this)" onchange="update_visibility();" />
-                            						  <input type="hidden" id="f_thunder_cpulimit_enable" name="thunder_cpulimit_enable" value="" />
-                            						  <input style="display: none;" type="text" class="input_ss_table" style="width:auto;" name="thunder_cpulimit_value" value="30" maxlength="40" size="40" id="thunder_cpulimit_value">
-                            						  <small>(范围: 1 - 100; 默认: 30)</small>
-                            						</td>
-												</tr>
-												-->
+
  											</table>
+                                    	<div id="log_content" style="margin-top:10px;">
+											<textarea cols="63" rows="28" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;">
+												<% nvram_dump("syscmd.log","syscmd.sh"); %>
+											</textarea>
+										</div>
 										<div class="apply_gen">
 											<button class="button_gen" onclick="window.open('http://yuancheng.xunlei.com/')">迅雷远程管理页面</button>
 										</div>

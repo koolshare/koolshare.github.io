@@ -16,10 +16,9 @@ if [ -L /koolshare/init.d/S70Thunder.sh ];then
 	rm -rf /koolshare/init.d/S70Thunder.sh
 fi
 
+rm -rf S91thunder.sh
 
 
 chmod 755 /koolshare/thunder/*
-chmod 755 /koolshare/bin/*
-chmod 755 /koolshare/init.d/*
 chmod 755 /koolshare/scripts/*
 
