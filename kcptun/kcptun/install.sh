@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # stop kcptun first
-VERSION="2.2.5"
+VERSION="2.2.6"
 sh /koolshare/kcptun/stop.sh
 dbus set KCP_basic_enable=0
 cd /tmp
