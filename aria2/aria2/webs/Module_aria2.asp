@@ -1091,7 +1091,7 @@ function toggle_func(){
               <th style="width:25%;">Aria2版本</th>
               <td>
                <div id="aria2_version_status" style="padding-top:5px;margin-left:0px;margin-top:0px;float: left;"><i>插件版本：<% dbus_get_def("aria2_version", "0"); %></i></div>
-               <div id="aria2_version1" style="padding-top:5px;margin-left:30px;margin-top:0px;float: left;"><i>aria2版本：1.26.1</i></div>
+               <div id="aria2_version1" style="padding-top:5px;margin-left:30px;margin-top:0px;float: left;"><i>aria2版本：1.29</i></div>
               </td>
              </tr>
                                 <tr id="glutton">
@@ -1165,8 +1165,8 @@ function toggle_func(){
                               <label>下载存储目录</label>
                             </td>
                             <td>
-                              <input type="text" class="input_ss_table" style="width:auto;" name="aria2_dir" value="downloads" maxlength="50" size="40" readonly="readonly" onclick="get_disk_tree();" id="aria2_dir">
-                              <small>如果没有自定义，将使用第一个USB的根目录.</small>
+                             <input type="text" class="input_ss_table" style="width:auto;" name="aria2_dir" value="downloads" maxlength="50" size="40" ondblClick="get_disk_tree();" id="aria2_dir">
+                             <small>双击选择路径，如果没有自定义，将使用第一个USB的根目录.</small>
 
                             </td>
                           </tr>
