@@ -1,6 +1,7 @@
 #!/bin/sh
 # load path environment in dbus databse
 eval `dbus export kms`
+
 start_kms(){
 	chmod 0755 /koolshare/bin/vlmcsd
 	/koolshare/bin/vlmcsd
@@ -26,7 +27,7 @@ EOF
 	   sed -i "1a sleep 15" /jffs/scripts/firewall-start
 	   sed -i '2a /koolshare/scripts/kms.sh' /jffs/scripts/firewall-start
 	   sed -i '3a /koolshare/bin/vlmcsd' /jffs/scripts/firewall-start
-	   sed -i '4a service restart_dnsmasq' /jffs/scripts/firewall-start
+	   sed -i '4a service restart_dnsmasq' /jffs/scripts/firewall-start		
 	   chmod +x /jffs/scripts/firewall-start
    fi
 	echo $(date): ------------------ Custom operators kms runs!------------------  >> /tmp/syslog.log
