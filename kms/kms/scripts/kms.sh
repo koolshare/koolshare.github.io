@@ -1,24 +1,14 @@
 #!/bin/sh
 # load path environment in dbus databse
 eval `dbus export kms`
-
 check_port(){
 i=0
-if [ "$kms_diyport" == "" ];then
-	k_port="1688"
-else
-	k_port=$kms_diyport
-fi
+k_port="1688"
 while [[ "$i" = 0 ]]
 do
 	iptables -D INPUT -p tcp --dport $k_port -j ACCEPT
 	i=$(iptables -C INPUT -p tcp --dport $k_port --jump ACCEPT|echo $?)
 done
-if [ "$kms_opennat" == "2" ];then
-	iptables -A INPUT -p tcp --dport $k_port -j ACCEPT
-else
-	iptables -D INPUT -p tcp --dport $k_port -j ACCEPT
-fi
 }
 
 start_kms(){
