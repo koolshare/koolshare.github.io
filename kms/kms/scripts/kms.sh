@@ -6,7 +6,7 @@ start_kms(){
 	/koolshare/bin/vlmcsd
 	touch /jffs/configs/dnsmasq.d/kms.conf
 	chmod 0755 /jffs/configs/dnsmasq.d/kms.conf
-	echo "srv-host=_vlmcs._tcp.lan,`uname -n`.lan,$k_port,0,100">>/jffs/configs/dnsmasq.d/kms.conf
+	echo "srv-host=_vlmcs._tcp.lan,`uname -n`.lan,1688,0,100">>/jffs/configs/dnsmasq.d/kms.conf
 	nvram set lan_domain=lan
    	nvram commit
 	service restart_dnsmasq
