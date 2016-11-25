@@ -27,7 +27,6 @@
 var $j = jQuery.noConflict();
 function init() {
 show_menu();
-conf2obj();
 buildswitch();
 version_show();
 var rrt = document.getElementById("switch");
@@ -56,11 +55,9 @@ document.form.action_mode.value = s;
 showLoading(3);
 document.form.submit();
 }
-
 function reload_Soft_Center(){
 location.href = "/Main_Soft_center.asp";
 }
-
 function version_show(){
 	$j("#kms_version_status").html("<i>当前版本：" + db_kms_['kms_version']);
     $j.ajax({
@@ -78,24 +75,6 @@ function version_show(){
             }
         }
     });
-}
-function conf2obj(){
-$j.ajax({
-type: "get",
-url: "dbconf?p=kms_",
-dataType: "script",
-success: function(xhr) {
-var p = "kms_";
-var params = ["diyport", "opennat"];
-for (var i = 0; i < params.length; i++) {
-        for (var i = 0; i < params.length; i++) {
-			if (typeof db_kms_[p + params[i]] !== "undefined") {
-				$j("#kms_"+params[i]).val(db_kms_[p + params[i]]);
-				}
-        }
-	}
-	}
-	});
 }
 </script>
 </head>
@@ -144,7 +123,7 @@ for (var i = 0; i < params.length; i++) {
 </tr>
 </thead>
 <tr>
-<th width="35%">开启“胃軟”系统工具</th>
+<th>开启“胃軟”系统工具</th>
 <td colspan="2">
 <div class="switch_field" style="display:table-cell;float: left;">
 <label for="switch">
@@ -168,24 +147,17 @@ for (var i = 0; i < params.length; i++) {
 </div>
 <div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 <div id="NoteBox">
-<h2>使用说明：最好使用VOL版本</h2>
-<h3>管理员身份运行CMD，红色字体代表变量不是固定的，请参照自己的计算机修改。</h3>
-<h3>【1】 <font color="red">自动</font> - 奥菲斯（无法自动激活输入该命令）</h3>
-<p> CD <font color="red">X</font>:\Program Files<font color="red">(X86)</font>\Microsoft Office\Office<font color="red">14</font></p>
-<p>cscript ospp.vbs /remhst</p>
-<p>cscript ospp.vbs /act</p>
-<p>cscript ospp.vbs /dstatus</p>
-<h3>【2】 <font color="red">手动</font> - 奥菲斯</h3>
+<h2>使用说明：</h2>
+<h3>以管理员身份运行CMD输入以下命令，红色字体代表变量不是固定的，请参照自己的计算机修改。</h3>
+<h3>【1】 奥菲斯鸡或</h3>
 <p> CD <font color="red">X</font>:\Program Files<font color="red">(X86)</font>\Microsoft Office\Office<font color="red">14</font></p>
 <p>cscript ospp.vbs /sethst:<font color="red">192.168.0.1</font></p>
 <p>cscript ospp.vbs /act</p>
 <p>cscript ospp.vbs /dstatus</p>
-<h3>【3】 <font color="red">手动</font> - 操作系统</h3>
+<h3>【2】 操作系统鸡或</h3>
 <p>slmgr /ipk <font color="red">MHF9N-XY6XB-WVXMC-BTDCT-MKKG7</font></p>
 <p>slmgr /skms <font color="red">192.168.0.1</font></p>
 <p>slmgr /ato </p>
-
-
 <h2>申明：本工具来自国外互联网 <a href="https://forums.mydigitallife.info/threads/50234-Emulated-KMS-Servers-on-non-Windows-platforms" target="_blank">点我跳转</a></h2>
 </div>
 <div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
