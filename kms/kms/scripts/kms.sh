@@ -1,16 +1,6 @@
 #!/bin/sh
 # load path environment in dbus databse
 eval `dbus export kms`
-check_port(){
-i=0
-k_port="1688"
-while [[ "$i" = 0 ]]
-do
-	iptables -D INPUT -p tcp --dport $k_port -j ACCEPT
-	i=$(iptables -C INPUT -p tcp --dport $k_port --jump ACCEPT|echo $?)
-done
-}
-
 start_kms(){
 	chmod 0755 /koolshare/bin/vlmcsd
 	/koolshare/bin/vlmcsd
@@ -56,7 +46,6 @@ stop_kms(){
 
 if [ "$kms_enable" == "1" ];then
 	stop_kms
-	check_port
    	start_kms
 else
   	stop_kms
