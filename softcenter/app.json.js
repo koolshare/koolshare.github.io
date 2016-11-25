@@ -31,14 +31,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2016-05-31_18:22:10", 
+            "build_date": "2016-11-25_21:35:24", 
             "description": "SVPN让游戏更畅快", 
             "home_url": "Module_shadowvpn.asp", 
-            "md5": "e609f3e50bb377a775f138e88faac5d6", 
+            "md5": "d0586cf72b79e90b5421decc8090997b", 
             "name": "shadowvpn", 
             "tar_url": "shadowvpn/shadowvpn.tar.gz", 
             "title": "Shadowvpn", 
-            "version": "2.7"
+            "version": "2.8"
         }, 
         {
             "build_date": "2016-10-10_20:11:43", 
@@ -121,14 +121,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2016-10-27_10:38:02", 
+            "build_date": "2016-11-25_21:35:44", 
             "description": "来自网络的胃軟系统工具", 
             "home_url": "Module_kms.asp", 
-            "md5": "69cfb5c4b38c62fd622a63785fb63b7b", 
+            "md5": "841d158bbd024b8d7dcbc2aff761e4df", 
             "name": "kms", 
             "tar_url": "kms/kms.tar.gz", 
             "title": "系统工具", 
-            "version": "0.9"
+            "version": "1.0"
         }, 
         {
             "build_date": "2016-11-18_20:20:24", 

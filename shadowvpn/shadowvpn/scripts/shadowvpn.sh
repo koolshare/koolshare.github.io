@@ -43,8 +43,8 @@ conf-dir=/jffs/configs/dnsmasq.d
 EOF
 if [ -z "$Pcap_DNSProxy" ]; then
 echo $(date): Start Pcap_DNSProxy..
-sed -i '/^Listen Port/c Listen Port = 7913' /jffs/ss/dns/Config.conf
-sed -i '/^Local Main/c Local Main = 1' /koolshare/ss/dns/Config.conf
+sed -i '/^Listen Port/c Listen Port = 7913' /jffs/ss/dns/Config.ini
+#sed -i '/^Local Main/c Local Main = 1' /koolshare/ss/dns/Config.conf
 /koolshare/ss/dns/dns.sh > /dev/null 2>&1 &
 fi
 echo $(date): restarting dnsmasq...
