@@ -33,13 +33,8 @@ version_show();
 var rrt = document.getElementById("switch");
 if (document.form.kms_enable.value != "1") {
 rrt.checked = false;
-document.getElementById("kms_opennat").disabled=true;
-document.getElementById("kms_diyport").disabled=true;
-kms_diyport
 } else {
 rrt.checked = true;
-document.getElementById("kms_opennat").disabled=false;
-document.getElementById("kms_diyport").disabled=false;
 }
 }
 function done_validating() {
@@ -51,13 +46,8 @@ $j("#switch").click(
 function(){
 if(document.getElementById('switch').checked){
 document.form.kms_enable.value = 1;
-document.getElementById("kms_opennat").disabled=false;
-document.getElementById("kms_diyport").disabled=false;
 }else{
 document.form.kms_enable.value = 0;
-document.form.kms_opennat.value = 1;
-document.getElementById("kms_opennat").disabled=true;
-document.getElementById("kms_diyport").disabled=true;
 }
 });
 }
@@ -170,28 +160,6 @@ for (var i = 0; i < params.length; i++) {
 <div id="kms_version_show" style="padding-top:5px;margin-left:230px;margin-top:0px;"><i>当前版本：<% dbus_get_def("kms_version", "未知"); %></i></div>
 <div id="kms_install_show" style="padding-top:5px;margin-left:330px;margin-top:-25px;"></div>
 <a style="margin-left: 318px;" href="https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/kms/Changelog.txt" target="_blank"><em>[<u> 更新日志 </u>]</em></a>
-</td>
-</tr>
-</table>
-<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="Routing_rules_table">
-<thead>
-<tr>
-<td colspan="2">系统工具详细设置</td>
-</tr>
-</thead>
-<tr>
-<th width="35%">端口配置</th>
-<td>
-<input style="width:43px;margin-left:-0.5px;" type="text" class="ssconfig input_ss_table" id="kms_diyport" name="kms_diyport" maxlength="5" placeholder="1688" value="" /> 手动指定端口后，无法自动激活需要手动激活。
-</td>
-</tr>
-<tr>
-<th width="35%">开放公网选项</th>
-<td>
-<select id="kms_opennat" name="kms_opennat" class="input_option">
-<option value="1">关闭</option>
-<option value="2">开启</option>
-</select>
 </td>
 </tr>
 </table>
