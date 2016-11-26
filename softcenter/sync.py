@@ -63,6 +63,7 @@ def sync_module(module, git_path):
     update = False
     if not rconf:
         return
+    print rconf
     if not lconf:
         update = True
     else:

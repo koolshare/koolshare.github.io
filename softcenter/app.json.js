@@ -193,11 +193,11 @@
         {
             "description": "穿透 DDNS, 服务器转发方式", 
             "home_url": "Module_tunnel.asp", 
-            "md5": "299d26ebb9681a513ebc48a76eae5712", 
+            "md5": "a871f7c2a7507c674e4d8de41700e13d", 
             "name": "tunnel", 
             "tar_url": "tunnel/tunnel.tar.gz", 
             "title": "穿透DDNS", 
-            "version": "0.2"
+            "version": "0.3"
         }, 
         {
             "build_date": "2016-11-24_20:56:46", 
