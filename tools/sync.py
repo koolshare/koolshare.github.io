@@ -9,11 +9,14 @@ import hashlib
 import codecs
 from shutil import copyfile
 import sys
+import traceback
+from distutils.version import LooseVersion
 
 #https://docs.python.org/2.4/lib/httplib-examples.html
 
 curr_path = os.path.dirname(os.path.realpath(__file__))
 parent_path = os.path.realpath(os.path.join(curr_path, ".."))
+git_bin = "git"
 
 def http_request(url, depth=0):
     if depth > 10:
@@ -46,15 +49,30 @@ def work_modules():
         if modules:
             for m in modules:
                 if "module" in m:
-                    sync_module(m["module"], m["git_source"])
+                    try:
+                        sync_module(m["module"], m["git_source"])
+                    except Exception, e:
+                        traceback.print_exc()
 
 def sync_module(module, git_path):
     module_path = os.path.join(parent_path, module)
-    conf_path = os.path.join(module_path, "config.json.js")
+    conf_path = os.path.join(module_path, ".lconfig.json.js")
     rconf = get_remote_js(git_path)
     lconf = get_local_js(conf_path)
-    print rconf
-    print lconf
+    update = False
+    if not rconf:
+        return
+    if not lconf:
+        update = True
+    else:
+        if LooseVersion(rconf["version"]) > LooseVersion(lconf["version"]):
+            update = True
+    if update:
+        print "updating", git_path
+        if os.path.isdir(module_path):
+            os.system("cd %s && %s pull" % (module_path, git_bin))
+        else:
+            os.system("%s clone %s %s" % (git_bin, git_path, module_path))
 
 def get_config_js(git_path):
     #https://github.com/koolshare/merlin_tunnel.git
@@ -78,7 +96,10 @@ def get_local_js(conf_path):
             return conf
     return None
 
-print http_request("https://raw.githubusercontent.com/koolshare/merlin_tunnel/master/config.json.js")
+def update_module(module, git_path):
+    ;
+
+#print http_request("https://raw.githubusercontent.com/koolshare/merlin_tunnel/master/config.json.js")
 #print get_config_js("https://github.com/koolshare/merlin_tunnel.git")
 #print get_config_js("git@github.com:koolshare/merlin_tunnel.git")
 #TODO git clone http://codereview.stackexchange.com/questions/75432/clone-github-repository-using-python
