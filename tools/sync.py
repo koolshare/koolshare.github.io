@@ -11,6 +11,7 @@ from shutil import copyfile
 import sys
 import traceback
 from distutils.version import LooseVersion
+from string import Template 
 
 #https://docs.python.org/2.4/lib/httplib-examples.html
 
@@ -56,7 +57,7 @@ def work_modules():
 
 def sync_module(module, git_path):
     module_path = os.path.join(parent_path, module)
-    conf_path = os.path.join(module_path, ".lconfig.json.js")
+    conf_path = os.path.join(module_path, "config.json.js")
     rconf = get_remote_js(git_path)
     lconf = get_local_js(conf_path)
     update = False
@@ -69,10 +70,19 @@ def sync_module(module, git_path):
             update = True
     if update:
         print "updating", git_path
+        cmd = ""
+        tar_path = os.path.join(module_path, "%s.tar.gz" % module);
         if os.path.isdir(module_path):
-            os.system("cd %s && %s pull" % (module_path, git_bin))
+            cmd = "cd $module_path && git reset --hard && $git_bin pull && rm -f $module.tar.gz && tar -zcf $module.tar.gz $module" 
         else:
-            os.system("%s clone %s %s" % (git_bin, git_path, module_path))
+            cmd = "cd $parent_path && $git_bin clone $git_path $module_path && cd $module_path && tar -zcf $module.tar.gz $module"
+        t = Template(cmd)
+        params = {"parent_path": parent_path, "git_path": git_path, "module_path": module_path, "module": module, "git_bin": git_bin}
+        s = t.substitute(params)
+        os.system(s)
+        rconf["md5"] = md5sum(tar_path)
+        with codecs.open(conf_path, "w", "utf-8") as fw:
+            json.dump(rconf, fw, sort_keys = True, indent = 4, ensure_ascii=False, encoding='utf8')
 
 def get_config_js(git_path):
     #https://github.com/koolshare/merlin_tunnel.git
@@ -96,12 +106,12 @@ def get_local_js(conf_path):
             return conf
     return None
 
-def update_module(module, git_path):
-    ;
+def make_tarfile(output_filename, source_dir):
+    with tarfile.open(output_filename, "w:gz") as tar:
+        tar.add(source_dir, arcname=os.path.basename(source_dir))
 
-#print http_request("https://raw.githubusercontent.com/koolshare/merlin_tunnel/master/config.json.js")
-#print get_config_js("https://github.com/koolshare/merlin_tunnel.git")
-#print get_config_js("git@github.com:koolshare/merlin_tunnel.git")
-#TODO git clone http://codereview.stackexchange.com/questions/75432/clone-github-repository-using-python
+def md5sum(full_path):
+    with open(full_path, 'rb') as rf:
+        return hashlib.md5(rf.read()).hexdigest()
 
 work_modules()
