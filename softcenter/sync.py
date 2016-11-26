@@ -114,4 +114,49 @@ def md5sum(full_path):
     with open(full_path, 'rb') as rf:
         return hashlib.md5(rf.read()).hexdigest()
 
+def work_parent():
+    ignore_paths = frozenset(["maintain_files", "softcenter", "v2ray"])
+    for fname in os.listdir(parent_path):
+        if fname[0] == "." or fname in ignore_paths:
+            continue
+        path = os.path.join(parent_path, fname)
+        if os.path.isdir(path):
+            yield fname, path
+
+def gen_modules(modules):
+    for module, path in work_parent():
+        conf = os.path.join(path, "config.json.js")
+        m = None
+        try:
+            with codecs.open(conf, "r", "utf-8") as fc:
+                m = json.loads(fc.read())
+                if m:
+                    m["name"] = module
+                    if "tar_url" not in m:
+                        m["tar_url"] = module + "/" + module + ".tar.gz"
+                    if "home_url" not in m:
+                        m["home_url"] = "Module_" + module + ".asp"
+        except:
+            traceback.print_exc()
+
+        if not m:
+            m = {"name":module, "title":module, "tar_url": module + "/" + module + ".tar.gz"}
+        modules.append(m)
+
+def refresh_gmodules():
+    gmodules = None
+    with codecs.open(os.path.join(curr_path, "app.template.json.js"), "r", "utf-8") as fg:
+        gmodules = json.loads(fg.read())
+        gmodules["apps"] = []
+    gen_modules(gmodules["apps"])
+
+    with codecs.open(os.path.join(curr_path, "config.json.js"), "r", "utf-8") as fc:
+        conf = json.loads(fc.read())
+        gmodules["version"] = conf["version"]
+        gmodules["md5"] = conf["md5"]
+
+        with codecs.open(os.path.join(curr_path, "app.json.js"), "w", "utf-8") as fw:
+            json.dump(gmodules, fw, sort_keys = True, indent = 4, ensure_ascii=False, encoding='utf8')
+
 work_modules()
+refresh_gmodules()
