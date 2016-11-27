@@ -57,6 +57,7 @@ def work_modules():
                             updated = up
                     except Exception, e:
                         traceback.print_exc()
+    return updated
 
 def sync_module(module, git_path):
     module_path = os.path.join(parent_path, module)
@@ -167,3 +168,4 @@ def refresh_gmodules():
 updated = work_modules()
 if updated:
     refresh_gmodules()
+    os.system("chown -R www:www %s/softcenter/app.json.js" % parent_path)
