@@ -17,7 +17,7 @@ from string import Template
 
 curr_path = os.path.dirname(os.path.realpath(__file__))
 parent_path = os.path.realpath(os.path.join(curr_path, ".."))
-git_bin = "git"
+git_bin = "proxychains4 git"
 
 def http_request(url, depth=0):
     if depth > 10:
@@ -45,13 +45,16 @@ def http_request(url, depth=0):
 
 def work_modules():
     module_path = os.path.join(curr_path, "modules.json")
+    updated = False
     with codecs.open(module_path, "r", "utf-8") as fc:
         modules = json.loads(fc.read())
         if modules:
             for m in modules:
                 if "module" in m:
                     try:
-                        sync_module(m["module"], m["git_source"])
+                        up = sync_module(m["module"], m["git_source"])
+                        if not updated:
+                            updated = up
                     except Exception, e:
                         traceback.print_exc()
 
@@ -84,6 +87,8 @@ def sync_module(module, git_path):
         rconf["md5"] = md5sum(tar_path)
         with codecs.open(conf_path, "w", "utf-8") as fw:
             json.dump(rconf, fw, sort_keys = True, indent = 4, ensure_ascii=False, encoding='utf8')
+        os.system("cd %s && chown -R www:www ." % module_path)
+    return update
 
 def get_config_js(git_path):
     #https://github.com/koolshare/merlin_tunnel.git
@@ -159,5 +164,6 @@ def refresh_gmodules():
         with codecs.open(os.path.join(curr_path, "app.json.js"), "w", "utf-8") as fw:
             json.dump(gmodules, fw, sort_keys = True, indent = 4, ensure_ascii=False, encoding='utf8')
 
-work_modules()
-refresh_gmodules()
+updated = work_modules()
+if updated:
+    refresh_gmodules()
