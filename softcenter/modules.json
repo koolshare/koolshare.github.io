@@ -1,4 +1,4 @@
 [
-{"module": "tunnel", "git_source": "git@github.com:koolshare/merlin_tunnel.git"},
+{"module": "tunnel", "git_source": "https://github.com/koolshare/merlin_tunnel.git"},
 {}
 ]
