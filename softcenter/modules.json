@@ -2,7 +2,7 @@
 {"module": "tunnel", "git_source": "https://github.com/koolshare/merlin_tunnel.git"},
 {"module": "thunder", "git_source": "https://github.com/koolshare/merlin_thunder.git"},
 {"module": "kms", "git_source": "https://github.com/Major-k/merlin-kms.git"},
-{"module": "aliddns", "git_source": "git@github.com:koolshare/merlin-aliddns.git"},
+{"module": "aliddns", "git_source": "https://github.com/koolshare/merlin-aliddns.git"},
 {}
 ]
 
