@@ -17,7 +17,7 @@ from string import Template
 
 curr_path = os.path.dirname(os.path.realpath(__file__))
 parent_path = os.path.realpath(os.path.join(curr_path, ".."))
-git_bin = "proxychains4 git"
+git_bin = "git"
 
 def http_request(url, depth=0):
     if depth > 10:
