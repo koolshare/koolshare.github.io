@@ -151,16 +151,6 @@
             "version": "1.7.5"
         }, 
         {
-            "build_date": "2016-09-27_18:43:33", 
-            "description": "阿里云解析自动更新IP", 
-            "home_url": "Module_aliddns.asp", 
-            "md5": "f198c92183aefab2da0891b8476e7e1c", 
-            "name": "aliddns", 
-            "tar_url": "aliddns/aliddns.tar.gz", 
-            "title": "aliddns", 
-            "version": "0.2"
-        }, 
-        {
             "build_date": "2016-10-12_19:23:29", 
             "description": "内网穿透利器，谁用谁知道。", 
             "home_url": "Module_frpc.asp", 
@@ -202,7 +192,7 @@
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "829fefb054db50e7a48f8ecd2fb279a2", 
+    "md5": "fb7a066a74fa9b1387ec271c4c2d27fa", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.2.5"
 }
