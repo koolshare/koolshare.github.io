@@ -199,20 +199,10 @@
             "tar_url": "koolnet/koolnet.tar.gz", 
             "title": "P2P 穿透", 
             "version": "0.2"
-        }, 
-        {
-            "build_date": "2016-11-25_21:35:44", 
-            "description": "来自网络的胃軟系统工具", 
-            "home_url": "Module_kms.asp", 
-            "md5": "841d158bbd024b8d7dcbc2aff761e4df", 
-            "name": "kms", 
-            "tar_url": "kms/kms.tar.gz", 
-            "title": "系统工具", 
-            "version": "1.0"
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "3b8b45594e328fa68e249e31cc869c4c", 
+    "md5": "829fefb054db50e7a48f8ecd2fb279a2", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.2.5"
 }
