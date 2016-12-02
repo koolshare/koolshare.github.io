@@ -254,7 +254,7 @@ start_dns(){
 			echo_date 开启Pcap_DNSProxy..
 			sed -i '/^Listen Port/c Listen Port = 1053' /koolshare/ss/dns/Config.ini
 	      		#sed -i '/^Local Main/c Local Main = 0' /koolshare/ss/dns/Config.conf
-			/koolshare/ss/dns/dns.sh > /dev/null 2>&1 &
+			sh /koolshare/ss/dns/dns.sh > /dev/null 2>&1 &
 	fi
 
 	# Start pdnsd
