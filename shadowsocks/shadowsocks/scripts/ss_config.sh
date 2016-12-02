@@ -1,7 +1,7 @@
 #!/bin/sh
 
 eval `dbus export ss`
-killall sh
+
 if [ "$ss_basic_enable" == "1" ];then
 	sh /koolshare/ss/ssconfig.sh restart
 else
