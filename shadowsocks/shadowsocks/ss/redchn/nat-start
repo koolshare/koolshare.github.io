@@ -24,7 +24,7 @@ flush_nat(){
 }
 
 flush_ipset(){
-	echo $(date): 先清空已存在的ipset名单，防止重复添加
+	echo_date 先清空已存在的ipset名单，防止重复添加
 	#ipset -F router >/dev/null 2>&1
 	#ipset -F chnroute >/dev/null 2>&1
 	ipset -F white_domain >/dev/null 2>&1
@@ -35,7 +35,7 @@ flush_ipset(){
 }
 
 destory_ipset(){
-	echo $(date): 摧毁ipset名单
+	echo_date 摧毁ipset名单
 	ipset -X router >/dev/null 2>&1
 	ipset -X chnroute >/dev/null 2>&1
 	ipset -X white_domain >/dev/null 2>&1
@@ -64,7 +64,7 @@ add_white_black_ip(){
 		ip_format=`dbus get ss_redchn_wan_black_ip|base64_decode|grep -v "/"`
 		cidr_format=`dbus get ss_redchn_wan_black_ip|base64_decode|grep "/"`
 		if [ ! -z "$ip_format" ];then
-			echo $(date): 添加你定义的黑名单IP地址到ipset：black_ip中.
+			echo_date 添加你定义的黑名单IP地址到ipset：black_ip中.
 			for ip in $ip_format
 			do
 				ipset -A black_ip $ip >/dev/null 2>&1
@@ -92,7 +92,7 @@ add_white_black_ip(){
 		fi
 		
 		if [ ! -z "$cidr_format" ];then
-			echo $(date): 添加你定义的白名单CIDR地址到ipset：white_cidr中.
+			echo_date 添加你定义的白名单CIDR地址到ipset：white_cidr中.
 			for cidr in $cidr_format
 			do
 				ipset -A white_cidr $cidr >/dev/null 2>&1
