@@ -1,9 +1,11 @@
 #!/bin/sh
-echo $(date): ----------------------- shadowsocks 启动前触发脚本 -----------------------
+alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
+
+echo_date ----------------------- shadowsocks 启动前触发脚本 -----------------------
 lb_enable=`dbus get ss_lb_enable`
 if [ "$lb_enable" == "1" ];then
 	if [ `dbus get ss_basic_server | grep -o "127.0.0.1"` ] && [ `dbus get ss_basic_port` == `dbus get ss_lb_port` ];then
-	echo $(date): ss启动前触发:触发启动负载均衡功能！
+	echo_date ss启动前触发:触发启动负载均衡功能！
 		#start haproxy
 		sh /koolshare/scripts/ss_lb_config.sh
 		#start kcptun
@@ -23,12 +25,12 @@ if [ "$lb_enable" == "1" ];then
 			fi
 		done
 	else
-		echo $(date): ss启动前触发:未选择负载均衡节点，不触发负载均衡启动！
+		echo_date ss启动前触发:未选择负载均衡节点，不触发负载均衡启动！
 	fi
 else
 	if [ `dbus get ss_basic_server | grep -o "127.0.0.1"` ] && [ `dbus get ss_basic_port` == `dbus get ss_lb_port` ];then
-		echo $(date): ss启动前触发【警告】：你选择了负载均衡节点，但是负载均衡开关未启用！！
+		echo_date ss启动前触发【警告】：你选择了负载均衡节点，但是负载均衡开关未启用！！
 	else
-		echo $(date): ss启动前触发：你选择了普通节点，不触发负载均衡启动！.
+		echo_date ss启动前触发：你选择了普通节点，不触发负载均衡启动！.
 	fi
 fi

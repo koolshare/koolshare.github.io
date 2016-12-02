@@ -1,6 +1,7 @@
 #!/bin/sh
 eval `dbus export shadowsocks`
 eval `dbus export ss`
+alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
 lan_ipaddr=$(nvram get lan_ipaddr)
 
 # Different routers got different iptables syntax
@@ -15,7 +16,7 @@ esac
 
 
 flush_nat(){
-	echo $(date): 尝试先清除已存在的iptables规则，防止重复添加
+	echo_date 尝试先清除已存在的iptables规则，防止重复添加
 	# flush and destory ipset if any
 	#iptables -t nat -F SHADOWSOCKS > /dev/null 2>&1
 	#iptables -t nat -D PREROUTING -p tcp -j SHADOWSOCKS >/dev/null 2>&1
@@ -29,7 +30,7 @@ flush_nat(){
 }
 
 flush_ipset(){
-	echo $(date): 先清空已存在的ipset名单，防止重复添加
+	echo_date 先清空已存在的ipset名单，防止重复添加
 	ipset -F router >/dev/null 2>&1
 	ipset -F gfwlist >/dev/null 2>&1
 	ipset -F white_domain >/dev/null 2>&1
@@ -37,7 +38,7 @@ flush_ipset(){
 }
 
 destory_ipset(){
-	echo $(date): 摧毁ipset名单
+	echo_date 摧毁ipset名单
 	ipset -X router >/dev/null 2>&1
 	ipset -X gfwlist >/dev/null 2>&1
 	ipset -X white_domain >/dev/null 2>&1
@@ -46,7 +47,7 @@ destory_ipset(){
 
 creat_ipset(){
 	# Create new set
-	echo $(date): 创建ipset名单：router，gfwlist，white_domain，black_cidr
+	echo_date 创建ipset名单：router，gfwlist，white_domain，black_cidr
 	ipset -N router iphash
 	ipset -N gfwlist iphash
 	ipset -N white_domain iphash
@@ -58,7 +59,7 @@ add_black_wan_ip(){
 		ip_format=`dbus get ss_ipset_black_ip|base64_decode|grep -v "/"|sed '/\#/d'`
 		cidr_format=`dbus get ss_ipset_black_ip|base64_decode|grep "/"|sed '/\#/d'`
 		if [ ! -z "$ip_format" ];then
-			echo $(date): 添加你定义的黑名单IP地址到ipset：gfwlist中.
+			echo_date 添加你定义的黑名单IP地址到ipset：gfwlist中.
 			for ip in $ip_format
 			do
 				ipset -A gfwlist $ip >/dev/null 2>&1
@@ -66,7 +67,7 @@ add_black_wan_ip(){
 		fi
 		
 		if [ ! -z "$cidr_format" ];then
-			echo $(date): 添加你定义的黑名单CIDR地址到ipset：black_cidr中.
+			echo_date 添加你定义的黑名单CIDR地址到ipset：black_cidr中.
 			for cidr in $cidr_format
 			do
 				ipset -A black_cidr $cidr >/dev/null 2>&1
@@ -76,7 +77,7 @@ add_black_wan_ip(){
 }
 
 apply_nat_rules(){
-	echo $(date): 写入iptables规则到nat表中...
+	echo_date 写入iptables规则到nat表中...
 	ip1=$(nvram get wan0_ipaddr | cut -d"." -f1,2)
 	# Create new chain
 	iptables -t nat -N SHADOWSOCKS
@@ -99,7 +100,7 @@ apply_nat_rules(){
 	white=$(echo $ss_basic_white_lan | base64_decode | sed "s/,/ /g")
 	if [ "$ss_basic_lan_control" == "1" ];then
 		if [ ! -z $ss_basic_black_lan ];then
-			echo $(date): 添加局域网黑名单IP，这些IP地址将不会走ss.
+			echo_date 添加局域网黑名单IP，这些IP地址将不会走ss.
 			for balck_ip in $black
 			do
 				iptables -t nat -A SHADOWSOCKS -p tcp -s $balck_ip -j RETURN
@@ -108,26 +109,26 @@ apply_nat_rules(){
 			iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET black_cidr dst -j REDIRECT --to-ports 3333
 			iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-ports 3333
 		else
-			echo $(date): 你开启了局域网黑名单，但是未填写任何内容，跳过！
+			echo_date 你开启了局域网黑名单，但是未填写任何内容，跳过！
 			iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET white_domain dst -j RETURN 
 			iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET black_cidr dst -j REDIRECT --to-ports 3333
 			iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-ports 3333
 		fi
 	elif [ "$ss_basic_lan_control" == "2" ];then
 		if [ ! -z $ss_basic_white_lan ];then
-			echo $(date): 添加局域网白名单IP，这些IP地址将会走ss.
+			echo_date 添加局域网白名单IP，这些IP地址将会走ss.
 			for white_ip in $white
 			do	iptables -t nat -A SHADOWSOCKS -p tcp -s $white_ip -m set $MATCH_SET black_cidr dst -j REDIRECT --to-ports 3333
 				iptables -t nat -A SHADOWSOCKS -p tcp -s $white_ip -m set $MATCH_SET gfwlist dst -j REDIRECT --to-ports 3333
 			done
 		else
-			echo $(date): 你开启了局域网白名单，但是未填写任何内容，跳过！
+			echo_date 你开启了局域网白名单，但是未填写任何内容，跳过！
 			iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET white_domain dst -j RETURN 
 			iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET black_cidr dst -j REDIRECT --to-ports 3333
 			iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-ports 3333
 		fi
 	else
-		echo $(date): 局域网控制功能未启用！
+		echo_date 局域网控制功能未启用！
 		iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET white_domain dst -j RETURN 
 		iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET black_cidr dst -j REDIRECT --to-ports 3333
 		iptables -t nat -A SHADOWSOCKS -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-ports 3333
@@ -141,10 +142,10 @@ apply_nat_rules(){
 	
 chromecast(){
 	if [ "$ss_basic_chromecast" == "1" ]; then
-		echo $(date): 开启chromecast功能（DNS劫持功能）
+		echo_date 开启chromecast功能（DNS劫持功能）
 		iptables -t nat -A PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 	else
-		echo $(date): chromecast功能未开启，建议开启哦~
+		echo_date chromecast功能未开启，建议开启哦~
 		iptables -t nat -D PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 	fi
 }

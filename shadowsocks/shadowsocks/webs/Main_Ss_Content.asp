@@ -1692,33 +1692,6 @@ function get_ss_status_data(){
 	}
 }
 
-/*
-var checkNu = 0;
-function get_ss_install_status(){
-	if (checkNu < 1000){
-		checkNu++;
-		$j.ajax({
-			type: "get",
-			url: "dbconf?p=ss_basic_install_status",
-			dataType: "script",
-			success: function() {
-				if (db_ss_basic_install_status['ss_basic_install_status'] == "3"){
-					$G('update_button').style.display = "none";
-					document.form.ss_basic_action.value = 1;
-					checkNu = 1001;
-					setTimeout("onSubmitCtrl();", 2000);
-				} else if (db_ss_basic_install_status['ss_basic_install_status'] == "5"){
-					$G('update_button').style.display = "";
-				} else if (db_ss_basic_install_status['ss_basic_install_status'] == "0"){
-					$G('update_button').style.display = "";
-				}
-				setTimeout("get_ss_install_status();", 1000);
-			}
-		});
-	}
-}
-*/
-
 function update_ss(){
 	//checkNu = 0;
 	//get_ss_install_status();
@@ -2226,9 +2199,7 @@ function reload_Soft_Center(){
 		</td>
 		<td valign="top">
 			<div id="tabMenu" class="submenuBlock" style="width:768px;"></div>
-			
 			<!--=====Beginning of Main Content=====-->
-			
 			<table width="98%" border="0" align="left" cellpadding="0" cellspacing="0" id="table_for_all" style="display: block;">
 				<tr>
 					<td align="left" valign="top">

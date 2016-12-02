@@ -4,6 +4,7 @@
 # source /koolshare/configs/ss.sh
 eval `dbus export shadowsocks`
 eval `dbus export ss`
+alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
 redsocks2=$(ps | grep "redsocks2" | grep -v "grep")
 dnscrypt=$(ps | grep "dnscrypt-proxy" | grep -v "grep")
 sokcs5=$(ps|grep ss-local|grep -vw rss-local|grep -v 23456|cut -d " " -f 1)
@@ -39,32 +40,32 @@ esac
 restore_conf(){
 	# restore dnsmasq conf file
 	if [ -f /jffs/configs/dnsmasq.conf.add ]; then
-		echo $(date): 恢复dnsmasq配置文件.
+		echo_date 恢复dnsmasq配置文件.
 		rm -f /jffs/configs/dnsmasq.conf.add
 	fi
 	#--------------------------------------------------------------------------
 	# delete dnsmasq postconf file
 	if [ -f /jffs/scripts/dnsmasq.postconf ]; then
-		echo $(date): 删除/jffs/scripts/dnsmasq.postconf
+		echo_date 删除/jffs/scripts/dnsmasq.postconf
 		rm -f /jffs/scripts/dnsmasq.postconf
 	fi
 	#--------------------------------------------------------------------------
 	# delete custom.conf
 	if [ -f /jffs/configs/dnsmasq.d/custom.conf ];then
-		echo $(date): 删除 /jffs/configs/dnsmasq.d/custom.conf
+		echo_date 删除 /jffs/configs/dnsmasq.d/custom.conf
 		rm -rf /jffs/configs/dnsmasq.d/custom.conf
 	fi	
 }
 
 bring_up_dnsmasq(){
 	# Bring up dnsmasq
-	echo $(date): 重启dnsmasq服务...
+	echo_date 重启dnsmasq服务...
 	service restart_dnsmasq >/dev/null 2>&1
 }
 
 restore_nat(){
 	# flush iptables and destory SHADOWSOCKS chain
-	echo $(date): 删除SS相关的iptables设置，保证nat表干净...
+	echo_date 删除SS相关的iptables设置，保证nat表干净...
 	iptables -t nat -D PREROUTING -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p udp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j SHADOWSOCKS >/dev/null 2>&1
@@ -93,7 +94,7 @@ restore_nat(){
 
 destory_ipset(){
 	# flush and destory ipset
-	echo $(date): 清除所有SS相关ipset名单...
+	echo_date 清除所有SS相关ipset名单...
 	ipset -F gfwlist >/dev/null 2>&1
 	ipset -F router >/dev/null 2>&1
 	ipset -F chnroute >/dev/null 2>&1
@@ -117,7 +118,7 @@ destory_ipset(){
 }
 
 restore_start_file(){
-	echo $(date): 清除nat-start, wan-start中相关的SS启动命令...
+	echo_date 清除nat-start, wan-start中相关的SS启动命令...
 	
 	# restore nat-start file if any
 	sed -i '/source/,/warning/d' /jffs/scripts/nat-start >/dev/null 2>&1
@@ -137,105 +138,105 @@ kill_process(){
 	#--------------------------------------------------------------------------
 	# kill dnscrypt-proxy
 	if [ ! -z "$dnscrypt" ]; then 
-		echo $(date): 关闭dnscrypt-proxy进程...
+		echo_date 关闭dnscrypt-proxy进程...
 		killall dnscrypt-proxy
 	fi
 	#--------------------------------------------------------------------------
 	# kill redsocks2
 	if [ ! -z "$redsocks2" ]; then 
-		echo $(date): 关闭redsocks2进程...
+		echo_date 关闭redsocks2进程...
 		killall redsocks2
 	fi
 	#--------------------------------------------------------------------------
 	# kill ss-redir
 	if [ ! -z "$ssredir" ];then 
-		echo $(date): 关闭ss-redir进程...
+		echo_date 关闭ss-redir进程...
 		killall ss-redir
 	fi
 
 
 	if [ ! -z "$rssredir" ];then 
-		echo $(date): 关闭ssr-redir进程...
+		echo_date 关闭ssr-redir进程...
 		killall rss-redir
 	fi
 	#--------------------------------------------------------------------------
 	# kill ss-local
 	sslocal=`ps | grep ss-local | grep -v "grep" | grep -w "23456" | awk '{print $1}'`
 	if [ ! -z "$sslocal" ];then 
-		echo $(date): 关闭ss-local进程:23456端口...
+		echo_date 关闭ss-local进程:23456端口...
 		kill $sslocal
 	fi
 
 
 	ssrlocal=`ps | grep rss-local | grep -v "grep" | grep -w "23456" | awk '{print $1}'`
 	if [ ! -z "$ssrlocal" ];then 
-		echo $(date): 关闭ssr-local进程:23456端口...
+		echo_date 关闭ssr-local进程:23456端口...
 		kill $ssrlocal
 	fi
 
 	#--------------------------------------------------------------------------
 	# kill ss-tunnel
 	if [ ! -z "$sstunnel" ];then 
-		echo $(date): 关闭ss-tunnel进程...
+		echo_date 关闭ss-tunnel进程...
 		killall ss-tunnel
 	fi
 	
 	if [ ! -z "$rsstunnel" ];then 
-		echo $(date): 关闭rss-tunnel进程...
+		echo_date 关闭rss-tunnel进程...
 		killall rss-tunnel
 	fi
 	
 	#--------------------------------------------------------------------------
 	# kill pdnsd
 	if [ ! -z "$pdnsd" ];then 
-	echo $(date): 关闭pdnsd进程...
+	echo_date 关闭pdnsd进程...
 	killall pdnsd
 	fi
 	#--------------------------------------------------------------------------
 	# kill Pcap_DNSProxy
 	if [ ! -z "$Pcap_DNSProxy" ];then 
-	echo $(date): 关闭Pcap_DNSProxy进程...
+	echo_date 关闭Pcap_DNSProxy进程...
 	killall dns.sh >/dev/null 2>&1
 	killall Pcap_DNSProxy >/dev/null 2>&1
 	fi
 	#--------------------------------------------------------------------------
 	# kill chinadns
 	if [ ! -z "$chinadns" ];then 
-		echo $(date): 关闭chinadns进程...
+		echo_date 关闭chinadns进程...
 		killall chinadns
 	fi
 	#--------------------------------------------------------------------------
 	# kill dns2socks
 	if [ ! -z "$DNS2SOCK" ];then 
-		echo $(date): 关闭dns2socks进程...
+		echo_date 关闭dns2socks进程...
 		killall dns2socks
 	fi
 	# kill all koolgame
 	if [ ! -z "$koolgame" ];then 
-		echo $(date): 关闭koolgame进程...
+		echo_date 关闭koolgame进程...
 		killall koolgame >/dev/null 2>&1
 	fi
 	
 	if [ ! -z "$client_linux_arm5" ];then 
-		echo $(date): 关闭kcp协议进程...
+		echo_date 关闭kcp协议进程...
 		killall client_linux_arm5 >/dev/null 2>&1
 	fi
 	
 	if [ ! -z "$haproxy" ];then 
-		echo $(date): 关闭haproxy进程...
+		echo_date 关闭haproxy进程...
 		killall haproxy >/dev/null 2>&1
 	fi
 }
 
 kill_cron_job(){
 	# kill crontab job
-	echo $(date): 删除ss规则更新计划任务.
+	echo_date 删除ss规则更新计划任务.
 	sed -i '/ssupdate/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
 }
 
 
 remove_conf_and_settings(){
-	echo $(date): 删除ss相关的名单配置文件.
+	echo_date 删除ss相关的名单配置文件.
 	# remove conf under /jffs/configs/dnsmasq.d
 	rm -rf /jffs/configs/dnsmasq.d/gfwlist.conf
 	rm -rf /jffs/configs/dnsmasq.d/cdn.conf
@@ -252,39 +253,28 @@ remove_conf_and_settings(){
 	dbus remove ss_basic_state_foreign
 }
 
-revert_tcpmss(){
-	nu_mss=`iptables -nvL FORWARD --line-numbers | grep TCPMSS | grep -v ppp | grep 1320 | awk '{print $1}'`
-	if [ ! -z "$nu_mss" ];then
-		echo $(date): 在游戏模式中设置最大MSS: Maxitum Segment Size为1320！
-		replace_rule=`iptables -S -t filter | grep TCPMSS |grep -v ppp| sed 's/-A FORWARD //g' | sed 's/--set-mss 1320/--clamp-mss-to-pmtu/g'`
-		iptables -t filter -R FORWARD $nu_mss $replace_rule
-	fi
-}
-
 case $1 in
 stop_all)
 	#KCP_basic_action=0 应用所有设置
-	echo $(date): =============== 梅林固件 - shadowsocks by sadoneli\&Xiaobao ===============
-	echo $(date):
-	echo $(date): -------------------------- 关闭Shadowsocks ------------------------------
+	echo_date =============== 梅林固件 - shadowsocks by sadoneli\&Xiaobao ===============
+	echo_date
+	echo_date -------------------------- 关闭Shadowsocks ------------------------------
 	restore_conf
 	remove_conf_and_settings
 	bring_up_dnsmasq
 	restore_nat
 	destory_ipset
-	revert_tcpmss
 	restore_start_file
 	kill_process
 	kill_cron_job
-	echo $(date): -------------------------- Shadowsocks已关闭 -----------------------------
+	echo_date -------------------------- Shadowsocks已关闭 -----------------------------
 	;;
 stop_part)
 	#KCP_basic_action=1 应用DNS设置
-	echo $(date): ================ 梅林固件 - shadowsocks by sadoneli\&Xiaobao ==============
-	echo $(date):
-	echo $(date): ----------------------------- 停止上个SS模式 -----------------------------
+	echo_date ================ 梅林固件 - shadowsocks by sadoneli\&Xiaobao ==============
+	echo_date
+	echo_date ----------------------------- 停止上个SS模式 -----------------------------
 	restore_conf
-	revert_tcpmss
 	remove_conf_and_settings
 	#bring_up_dnsmasq
 	restore_nat

@@ -1,5 +1,13 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.1.1
+   - update	日志：日志时间打印为中文（来自泽泽酷儿脚本）.
+   - fix	脚本：修复can't fork错误（thanks to泽泽酷儿）.
+   - update	程序：更新Pcap_DNSProxy 到最新的 0.4.8.1,with LibSodium version 1.0.11, libpcap version 1.8.1, OpenSSL 1.0.2h.
+   - update	程序：更新kcptun程序最新201611202.
+   - update 	程序：更新haproxy程序为正式版1.7.0-e59fcdd, released 2016/11/25.
+   - update 	脚本：更新大陆白名单模式的iptables策略，为完全的客户端控制做准备.
+
 3.1.0
    - fix	web: fix type error of the encrypt method aes-128-ctr aes-192-ctr aes-256-ctr
    - fix	web: fix the web page width after shadowsocks submit finished.
