@@ -13,18 +13,17 @@ softcenter_install() {
 		chmod 755 /koolshare/perp/*
 		chmod 755 /koolshare/perp/.boot/*
 		chmod 755 /koolshare/perp/.control/*
-		chmod 755 /koolshare/perp/adm/*
 		chmod 755 /koolshare/scripts/*
 		rm -rf /tmp/softcenter
-		if [ ! -f "/koolshare/init.d/S10Softcenter.sh" ]; then
-			ln -sf /koolshare/scripts/app_install.sh /koolshare/init.d/S10Softcenter.sh
+		rm -rf /koolshare/init.d/S10Softcenter.sh
+		if [ ! -L "/koolshare/init.d/S10Softcenter.sh" ]; then
+			ln -sf /koolshare/scripts/ks_app_install.sh /koolshare/init.d/S10softcenter.sh
 		fi
 		rm -rf /koolshare/res/icon-koolsocks.png
 		dbus remove softcenter_module_koolsocks_install
 		dbus remove softcenter_module_koolsocks_version
 		if [ -f "/koolshare/ss/ssconfig.sh" ]; then
-		dbus set softcenter_module_shadowsocks_install=4
-		dbus set softcenter_module_shadowsocks_version=1.3
+			dbus set softcenter_module_shadowsocks_install=4
 		fi
 	fi
 }

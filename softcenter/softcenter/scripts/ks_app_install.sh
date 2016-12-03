@@ -234,9 +234,10 @@ uninstall_module() {
 	curl -s https://koolshare.ngrok.wang/"$softcenter_installing_module"/"$softcenter_installing_module"/install.sh >/dev/null 2>&1
 }
 
-LOGGER $BIN_NAME
+#LOGGER $BIN_NAME
 case $BIN_NAME in
 start)
+	sh /koolshare/perp/perp.sh stop
 	sh /koolshare/perp/perp.sh start
 	;;
 update)

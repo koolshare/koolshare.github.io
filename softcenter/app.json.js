@@ -1,16 +1,6 @@
 {
     "apps": [
         {
-            "build_date": "2016-05-14_21:11:08", 
-            "description": "去广告，看疗效~", 
-            "home_url": "Module_adm.asp", 
-            "md5": "77c6c55a6480df8b542f2acef981ac0a", 
-            "name": "adm", 
-            "tar_url": "adm/adm.tar.gz", 
-            "title": "阿呆猫", 
-            "version": "1.5"
-        }, 
-        {
             "build_date": "2016-05-19_22:37:04", 
             "description": "中文SSID，装逼利器！", 
             "home_url": "Module_ssid.asp", 
@@ -111,16 +101,6 @@
             "version": "2.2"
         }, 
         {
-            "build_date": "2016-10-10_20:11:43", 
-            "description": "ss-server", 
-            "home_url": "Module_ssserver.asp", 
-            "md5": "d42ddf37c462bce4e95b3156b99c57f0", 
-            "name": "ssserver", 
-            "tar_url": "ssserver/ssserver.tar.gz", 
-            "title": "ss-server", 
-            "version": "1.5"
-        }, 
-        {
             "build_date": "2016-11-22_21:53:42", 
             "description": "基于kcp协议的udp网络加速", 
             "home_url": "Module_kcptun.asp", 
@@ -139,16 +119,6 @@
             "tar_url": "kuainiao/kuainiao.tar.gz", 
             "title": "讯雷快鸟", 
             "version": "0.3.6"
-        }, 
-        {
-            "build_date": "2016-11-23_16:12:15", 
-            "description": "linux下载利器", 
-            "home_url": "Module_aria2.asp", 
-            "md5": "bdb818d74c1800ff90309d0282410ad3", 
-            "name": "aria2", 
-            "tar_url": "aria2/aria2.tar.gz", 
-            "title": "Aria2", 
-            "version": "1.7.5"
         }, 
         {
             "build_date": "2016-10-12_19:23:29", 
@@ -192,7 +162,7 @@
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "13cfc98820b8fe9c765230d88c5aa159", 
+    "md5": "182d28d6f6a54c4006a7be8de9f422d9", 
     "tar_url": "softcenter/softcenter.tar.gz", 
-    "version": "1.2.6"
+    "version": "1.2.7"
 }

@@ -1,1 +1,0 @@
-/koolshare/ssserver/ssserver.sh
