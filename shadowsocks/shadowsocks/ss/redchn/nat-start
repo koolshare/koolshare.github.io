@@ -154,7 +154,7 @@ apply_nat_rules(){
 			iptables -t nat -A SHADOWSOCKS -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
 		else
 			echo_date 你开启了局域网黑名单，但是未填写任何内容，跳过！
-			iptables -t nat -A SHADOWSOCKS -p tcp -j SHADOWSOCKS2
+			iptables -t nat -A SHADOWSOCKS -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
 		fi
 	elif [ "$ss_basic_lan_control" == "2" ];then
 		if [ ! -z $ss_basic_white_lan ];then
@@ -165,11 +165,11 @@ apply_nat_rules(){
 			done
 		else
 			echo_date 你开启了局域网白名单，但是未填写任何内容，跳过！
-			iptables -t nat -A SHADOWSOCKS -p tcp -j SHADOWSOCKS2
+			iptables -t nat -A SHADOWSOCKS -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
 		fi
 	else
 		echo_date 局域网控制功能未启用！
-		iptables -t nat -A SHADOWSOCKS -p tcp -j SHADOWSOCKS2
+		iptables -t nat -A SHADOWSOCKS -p tcp -m set ! $MATCH_SET chnroute dst -j REDIRECT --to-ports 3333
 	fi
 }
 
@@ -211,3 +211,4 @@ start_part_for_addon)
 	exit 1
 	;;
 esac
+

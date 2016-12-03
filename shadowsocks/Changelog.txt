@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.1.2
+   - fix	scripts：fix chnmode won't work because of a wrong merge from 3.1.1.
+
 3.1.1
    - update	日志：日志时间打印为中文（来自泽泽酷儿脚本）.
    - fix	脚本：修复can't fork错误（thanks to泽泽酷儿）.
