@@ -91,7 +91,12 @@ stop() {
 
 case $ACTION in
 start)
-	onstart
+	if [ "$en" == "1" ]; then
+		logger "[软件中心]: 启动frpc！"
+		onstart
+	else
+		logger "[软件中心]: frpc未设置开机启动，跳过！"
+	fi
 	;;
 stop)
 	stop
@@ -99,4 +104,4 @@ stop)
 *)
 	onstart
 	;;
-esac  
+esac
