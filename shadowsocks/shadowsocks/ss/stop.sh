@@ -164,14 +164,14 @@ kill_process(){
 	sslocal=`ps | grep ss-local | grep -v "grep" | grep -w "23456" | awk '{print $1}'`
 	if [ ! -z "$sslocal" ];then 
 		echo_date 关闭ss-local进程:23456端口...
-		kill $sslocal
+		kill $sslocal  >/dev/null 2>&1
 	fi
 
 
 	ssrlocal=`ps | grep rss-local | grep -v "grep" | grep -w "23456" | awk '{print $1}'`
 	if [ ! -z "$ssrlocal" ];then 
 		echo_date 关闭ssr-local进程:23456端口...
-		kill $ssrlocal
+		kill $ssrlocal  >/dev/null 2>&1
 	fi
 
 	#--------------------------------------------------------------------------

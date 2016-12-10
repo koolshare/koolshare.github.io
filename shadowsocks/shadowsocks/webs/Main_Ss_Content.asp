@@ -1638,7 +1638,7 @@ function version_show(){
                     	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
                 	}else{
-	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.0.8</i></a>");
+	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.1.3</i></a>");
                 	}
 		        }
             }
@@ -2162,7 +2162,7 @@ function reload_Soft_Center(){
 		<div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
 		<div id="loading_block2" style="margin:10px auto;width:95%;"></div>
 		<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;overflow:hidden">
-			<textarea cols="63" rows="25" wrap="on" readonly="readonly" id="log_content3" style="border:1px solid #000;width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
+			<textarea cols="63" rows="21" wrap="on" readonly="readonly" id="log_content3" style="border:1px solid #000;width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
 		</div>
 		<div id="ok_button" class="apply_gen" style="background: #000;display: none;">
 			<input id="ok_button1" class="button_gen" type="button" onclick="hideSSLoadingBar()" value="确定">

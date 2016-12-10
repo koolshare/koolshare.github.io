@@ -1,5 +1,13 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.1.3
+   - update	规则：更新gfwlist规则为最新，优化大量规则，清除一些不必要的规则;
+   - update	规则：更新chnroute规则为最新;
+   - update	功能：socks5页面增加OTA(一次性验证支持);
+   - fix	界面：微调日志进度界面，适应小屏幕;
+   - update	程序：更新shadowsocks-libev为2.5.6最新代码（mbedtls版）;
+   - update 	程序：更新kcptun程序为20161207版本.
+
 3.1.2
    - fix	scripts：fix chnmode won't work because of a wrong merge from 3.1.1.
 
