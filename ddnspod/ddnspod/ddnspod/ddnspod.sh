@@ -126,7 +126,7 @@ add_ddnspod_cru(){
 	if [ -f /koolshare/ddnspod/ddnspod.sh ]; then
 		#确保有执行权限
 		chmod +x /koolshare/ddnspod/ddnspod.sh
-		cru a ddnspod "* */$ddnspod_refresh_time * * * /koolshare/ddnspod/ddnspod.sh restart"
+		cru a ddnspod "0 */$ddnspod_refresh_time * * * /koolshare/ddnspod/ddnspod.sh restart"
 	fi
 }
 
