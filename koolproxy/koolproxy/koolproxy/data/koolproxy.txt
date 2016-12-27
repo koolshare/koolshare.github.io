@@ -1,5 +1,5 @@
-!x  -----update[rules]:  2016-11-15 21:52 --- by <houzi> <today2004>
-!x  -----update[video]:  2016-11-17 21:03 --- by <houzi> <today2004>
+!x  -----update[rules]:  2016-12-24 23:58 --- by <houzi> <today2004>
+!x  -----update[video]:  2016-12-25 18:23 --- by <houzi> <today2004>
 !x  -----base: adblock <koolproxy dedicated>
 !x  -----thanks: xwhyc CJX yiclear adsafe
 !x  -------------------------------------- white rules ---------------------------------------------
@@ -8,6 +8,8 @@
 @@|http://$domain=meishichina.com|vip.xunlei.com|lixian.xunlei.com|www.vmall.com|www.1688.com|www.mm111.net|jifen.qq.com
 @@|http://$domain=taobao.com|taobao.org|alipay.com|suning.com|51buy.com|ct10000.com|etao.com|hitao.com|paipai.com|189.cn
 @@|http://$domain=banggo.com|pili.com.tw|yunhou.com|voicecloud.cn|xunfei.cn
+@@||a.v.duowan.com/crossdomain.xml$domain=v.huya.com,third-party
+@@||game.qq.com^
 @@||v.17173.com/advideo/*.mp4
 @@||v.17173.com/advideo/20*.flv
 @@||wrating.com/a1.js$domain=tudou.com|ynet.com
@@ -1337,7 +1339,6 @@
 |http://m.zchot.com/images/4493.jpg
 |http://m0.ifengimg.com/34c4a1d78882290c/2013/0219/aplayer.xml
 |http://mail.tom.com/info/ad/
-|http://market.duowan.com/fodder/
 |http://mat.zdface.com/Controls/ChannelHot/ChannelHotTypeID8ClassID
 |http://mat1.gtimg.com/hb/zxb/tm1.gif$image
 |http://mat1.gtimg.com/news/news/2014ad/
@@ -1355,7 +1356,7 @@
 |http://mimg.127.net/p/js6/6.0b1601181144/js/p1.js
 |http://misc.yinfu.cc/sid/*.js?ver=
 |http://mixer.cupid.ptqy.gitv.tv/mixer?a=*=qc_100001_100
-|http://mmbiz.qpic.cn/mmbiz/*/640
+!|http://mmbiz.qpic.cn/mmbiz/*/640
 |http://mvads.kugou.com/
 |http://mvip.zhuba8.com/js/mob/bottom.js
 |http://n.gemini.yahoo.com
@@ -1409,7 +1410,6 @@
 |http://pro.iweihai.cn/2014/dongfeng/96070.gif
 |http://pro.iweihai.cn/file/club.php?id=
 |http://proxy.90ys.cc/gg.php
-|http://public.duowan.com/s/yuanbao-entrance.js
 |http://push.zhanzhang.baidu.com/push.js
 |http://q.ptbus.com/newdata.ashx?
 |http://qaz.afjlb.com/?q=
@@ -2860,7 +2860,7 @@
 ||mianbao99.com/bd/
 ||mingxianshanghang.cn
 ||mm.tiansin.com
-||mmstat.com$third-party,domain=~tmall.com
+||mmstat.com$third-party,domain=~tmall.com|~flyertea.com
 ||mnwan.com
 ||moe.la/images/banner/$image
 ||mosa86.com
@@ -3193,7 +3193,6 @@
 ||vs9158.com
 ||vsnoon.com
 ||vtale.org$third-party
-||vupload.duowan.com
 ||wa.gtimg.com^
 ||wan789.net
 ||wangzhan5.com
@@ -3356,7 +3355,6 @@
 ||yxcpm.com
 ||yxdown.com/open/down_ad_
 ||yy.com/policy/
-||yy.duowan.com/component/
 ||yy32.com
 ||yy58ju.com
 ||yygglm.com$third-party
@@ -3622,7 +3620,6 @@
 ||ku6.com/ku6.gif?
 |http://www.17173.com/if/$script,domain=17173.com
 |http://www.17173.com/if/$script,domain=17173.com
-||www.duowan.com/public/s/market_count.js$script
 |http://dup.baidustatic.com/js/os.js$domain=~coladrive.com
 ||iqiyi.com/common/flashplayer/20160824/pageer.swf?147842*$domain=iqiyi.com
 ||r1.ykimg.com/material/0A03/201611/1104/125100/1300470-2.swf?jsStart=&jsEnd=execHtmlEndCMDfortaobao&url=http://val.atm.youku.com/c?id=9902$domain=youku.com
@@ -3654,6 +3651,10 @@
 ||pinglun.sohu.com/sogouad.html
 ||sohu.com.cn/ppp/bms/bms.popup.
 ||sohu.com/adgtr/
+||dnvod.eu/Ustyle/
+||dnvod.eu^*.gif$object-subrequest
+||dnvod.eu^*.jpg$object-subrequest
+||dnvod.eu^*/201$object-subrequest
 !x  -------------------------------------- replace rules ---------------------------------------------
 ||firefox.news.cn$s@height="305" frameborder="0"@height="200" frameborder="0"@
 ||firefox.163.com$s@height="305" frameborder="0"@height="200" frameborder="0"@
@@ -3664,7 +3665,6 @@
 ||576tv.com/Api/VideoPlayer/GetXml$s@<ads>/Content/swfs/*.swf|@<ads>@
 ||www.dm456.com/install/loading.html$s@var showTime = 8@var showTime = 0@
 ||www.woxiu.com/xapi/get_pre_config.php$s@[2,1,1,1]@[0,0,0,0]@
-||duowan.com$s@[{"adid":*}]@[]@
 |http://flvserver.duapp.com/player/ckp61/player.xml$s@<flashvars>*</flashvars>@<flashvars>{l->http://flvserver.duapp.com/player/ckp61/vb.png}{d->http://flvserver.duapp.com/player/ckp61/vb.png}{t->0}</flashvars>@
 |http://js.tv.itc.cn/base/plugin/login_$s@i.cookie("fee_status",null,@i.cookie("fee_status",1,@
 |http://upan.so$s@<script src="http://360.safe.go.366safego.com:88/code/400.do" charset="gb2312"></script>@@
@@ -3834,14 +3834,14 @@
 ||mydigit.cn$s@<div class="tac mb5">@<div style="display:none">@
 ||zdfans.com$s@style="display:inline-block;width:970px;height:90px"@style="display:none
 ||lanseshuba.com$s@<script type="text/javascript" src="http://tu.jstztk.com:8081/*/*></script>@
-||sohu.com$s@<div class="TurnAD10">@<div style="display:none">@
-||sohu.com$s@<div class="TurnAD11">@<div style="display:none">@
-||sohu.com$s@<div id="ad_B">@<div style="display:none">@
-||sohu.com$s@<div id="ad_M">@<div style="display:none">@
-||sohu.com$s@<div id="ad_H">@<div style="display:none">@
-||sohu.com$s@<div id="ad_O">@<div style="display:none">@
-||sohu.com$s@<div id="ad_G">@<div style="display:none">@
-||sohu.com$s@<div class="m_ad m_ad_full">@<div style="display:none">@
+!||sohu.com$s@<div class="TurnAD10">@<div style="display:none">@
+!||sohu.com$s@<div class="TurnAD11">@<div style="display:none">@
+!||sohu.com$s@<div id="ad_B">@<div style="display:none">@
+!||sohu.com$s@<div id="ad_M">@<div style="display:none">@
+!||sohu.com$s@<div id="ad_H">@<div style="display:none">@
+!||sohu.com$s@<div id="ad_O">@<div style="display:none">@
+!||sohu.com$s@<div id="ad_G">@<div style="display:none">@
+!||sohu.com$s@<div class="m_ad m_ad_full">@<div style="display:none">@
 |http://club.m.autohome.com.cn/$s@display: block!important;@display: none!important;@
 |http://www.dy2018.com/$s@<script type="text/javascript">if(goPAGE()=="*)}</script>@@
 |http://bbs.feng.com/$s@<div><script type="text/javascript">*<!-- header start -->@<!-- header start -->@

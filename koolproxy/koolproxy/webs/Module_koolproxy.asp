@@ -36,6 +36,7 @@ function init(menu_hook) {
 	show_menu();
 	get_status();
 	buildswitch();
+	generate_options();
 	conf2obj();
 	update_visibility();
 	update_visibility1();
@@ -46,6 +47,31 @@ function init(menu_hook) {
         rrt.checked = true;
     }
     notice_show();
+}
+
+function generate_options(){
+	for(var i = 0; i < 24; i++) {
+		$j("#koolproxy_update_hour").append("<option value='"  + i + "'>" + i + "点</option>");
+		$j("#koolproxy_reboot_hour").append("<option value='"  + i + "'>" + i + "点</option>");
+		$j("#koolproxy_update_hour").val(3);
+		$j("#koolproxy_reboot_hour").val(3);
+	}
+	for(var i = 1; i < 73; i++) {
+		$j("#koolproxy_reboot_inter_hour").append("<option value='"  + i + "'>" + i + "时</option>");
+		$j("#koolproxy_update_inter_hour").append("<option value='"  + i + "'>" + i + "时</option>");
+		$j("#koolproxy_reboot_inter_hour").val(72);
+		$j("#koolproxy_update_inter_hour").val(24);
+	}
+	for(var i = 0; i < 60; i++) {
+		$j("#koolproxy_update_min").append("<option value='"  + i + "'>" + i + "分</option>");
+		$j("#koolproxy_update_inter_min").append("<option value='"  + i + "'>" + i + "分</option>");
+		$j("#koolproxy_reboot_min").append("<option value='"  + i + "'>" + i + "分</option>");
+		$j("#koolproxy_reboot_inter_min").append("<option value='"  + i + "'>" + i + "分</option>");
+		$j("#koolproxy_update_min").val(30);
+		$j("#koolproxy_update_inter_min").val(0);
+		$j("#koolproxy_reboot_min").val(30);
+		$j("#koolproxy_reboot_inter_min").val(0);
+	}
 }
 
 function get_status() {
@@ -122,6 +148,8 @@ function buildswitch(){
 			document.getElementById("rule_update_switch").style.display = "";
 			document.getElementById("lan_control").style.display = "";
 			document.getElementById("log_content").style.display = "none";
+			document.getElementById("auto_reboot_switch").style.display = "";
+			
 			
 			
 		}else{
@@ -132,6 +160,7 @@ function buildswitch(){
 			document.getElementById("rule_update_switch").style.display = "none";
 			document.getElementById("lan_control").style.display = "none";
 			document.getElementById("log_content").style.display = "none";
+			document.getElementById("auto_reboot_switch").style.display = "none";
 		}
 	});
 }
@@ -166,7 +195,9 @@ function update_visibility1(){
 	showhide("koolproxy_white_lan", (document.form.koolproxy_lan_control.value == 2));
 	showhide("koolproxy_debug1", (document.form.koolproxy_debug.value == 1));
 	showhide("koolproxy_update_hour_span", (document.form.koolproxy_update.value == 1));
+	showhide("koolproxy_update_interval_span", (document.form.koolproxy_update.value == 2));
 	showhide("koolproxy_reboot_hour_span", (document.form.koolproxy_reboot.value == 1));
+	showhide("koolproxy_reboot_interval_span", (document.form.koolproxy_reboot.value == 2));
 }
 
 function update_visibility(){
@@ -177,6 +208,7 @@ function update_visibility(){
 		document.getElementById("kp_status").style.display = "";
 		document.getElementById("lan_control").style.display = "";
 		document.getElementById("log_content").style.display = "none";
+		document.getElementById("auto_reboot_switch").style.display = "";
 	}else{
 		document.getElementById("debug_tr").style.display = "none";
 		document.getElementById("policy_tr").style.display = "none";
@@ -184,6 +216,7 @@ function update_visibility(){
 		document.getElementById("kp_status").style.display = "none";
 		document.getElementById("lan_control").style.display = "none";
 		document.getElementById("log_content").style.display = "none";
+		document.getElementById("auto_reboot_switch").style.display = "none";
 	}
 }
 
@@ -298,7 +331,7 @@ function notice_show(){
                                                                             <div style="float:auto; width:15px; height:25px;margin-top:-40px;margin-left:680px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
                                                                         </li>
                                                                         <li style="margin-top:-5px;">
-                                                                            <h3 id="push_content1" >koolproxy是能识别adblock规则的代理软件，目前正在完善中。
+                                                                            <h3 id="push_content1" >koolproxy是能识别adblock规则的代理软件，可以用于去除网页静广告和视频广告，目前暂时不支持https。
                                                                             </h3>
                                                                         </li>
                                                                         <li  style="margin-top:-5px;">
@@ -376,37 +409,27 @@ function notice_show(){
 												<th>规则自动更新</th>
 												<td>
 													<select name="koolproxy_update" id="koolproxy_update" class="input_option" style="width:auto;margin:0px 0px 0px 2px;" onchange="update_visibility1();">
-														<option value="1" selected>开启</option>
+														<option value="1" selected>定时</option>
+														<option value="2">间隔</option>
 														<option value="0">关闭</option>
 													</select>
 													<span id="koolproxy_update_hour_span">
 														&nbsp;&nbsp;&nbsp;&nbsp;
 														每天
 														<select id="koolproxy_update_hour" name="koolproxy_update_hour" class="ssconfig input_option" >
-															<option value="0">00:00点</option>
-															<option value="1">01:00点</option>
-															<option value="2" selected>02:00点</option>
-															<option value="3">03:00点</option>
-															<option value="4">04:00点</option>
-															<option value="5">05:00点</option>
-															<option value="6">06:00点</option>
-															<option value="7">07:00点</option>
-															<option value="8">08:00点</option>
-															<option value="9">09:00点</option>
-															<option value="10">10:00点</option>
-															<option value="11">11:00点</option>
-															<option value="12">12:00点</option>
-															<option value="13">13:00点</option>
-															<option value="14">14:00点</option>
-															<option value="15">15:00点</option>
-															<option value="16">16:00点</option>
-															<option value="17">17:00点</option>
-															<option value="18">18:00点</option>
-															<option value="19">19:00点</option>
-															<option value="20">20:00点</option>
-															<option value="21">21:00点</option>
-															<option value="22">22:00点</option>
-															<option value="23">23:00点</option>
+														</select>
+														<select id="koolproxy_update_min" name="koolproxy_update_min" class="ssconfig input_option" >
+														</select>
+														更新
+														&nbsp;&nbsp;&nbsp;&nbsp;
+													</span>
+
+													<span id="koolproxy_update_interval_span">
+														&nbsp;&nbsp;&nbsp;&nbsp;
+														每隔
+														<select id="koolproxy_update_inter_hour" name="koolproxy_update_inter_hour" class="ssconfig input_option" >
+														</select>
+														<select id="koolproxy_update_inter_min" name="koolproxy_update_inter_min" class="ssconfig input_option" >
 														</select>
 														更新
 														&nbsp;&nbsp;&nbsp;&nbsp;
@@ -423,39 +446,29 @@ function notice_show(){
 												<th>插件自动重启</th>
 												<td>
 													<select name="koolproxy_reboot" id="koolproxy_reboot" class="input_option" style="width:auto;margin:0px 0px 0px 2px;" onchange="update_visibility1();">
-														<option value="1">开启</option>
+														<option value="1">定时</option>
+														<option value="2">间隔</option>
 														<option value="0" selected>关闭</option>
 													</select>
 													<span id="koolproxy_reboot_hour_span">
 														&nbsp;&nbsp;&nbsp;&nbsp;
 														每天
 														<select id="koolproxy_reboot_hour" name="koolproxy_reboot_hour" class="ssconfig input_option" >
-															<option value="0">00:00点</option>
-															<option value="1">01:00点</option>
-															<option value="2" selected>02:00点</option>
-															<option value="3">03:00点</option>
-															<option value="4">04:00点</option>
-															<option value="5">05:00点</option>
-															<option value="6">06:00点</option>
-															<option value="7">07:00点</option>
-															<option value="8">08:00点</option>
-															<option value="9">09:00点</option>
-															<option value="10">10:00点</option>
-															<option value="11">11:00点</option>
-															<option value="12">12:00点</option>
-															<option value="13">13:00点</option>
-															<option value="14">14:00点</option>
-															<option value="15">15:00点</option>
-															<option value="16">16:00点</option>
-															<option value="17">17:00点</option>
-															<option value="18">18:00点</option>
-															<option value="19">19:00点</option>
-															<option value="20">20:00点</option>
-															<option value="21">21:00点</option>
-															<option value="22">22:00点</option>
-															<option value="23">23:00点</option>
+														</select>
+														<select id="koolproxy_reboot_min" name="koolproxy_reboot_min" class="ssconfig input_option" >
 														</select>
 														重启
+														&nbsp;&nbsp;&nbsp;&nbsp;
+													</span>
+													
+													<span id="koolproxy_reboot_interval_span">
+														&nbsp;&nbsp;&nbsp;&nbsp;
+														每隔
+														<select id="koolproxy_reboot_inter_hour" name="koolproxy_reboot_inter_hour" class="ssconfig input_option" >
+														</select>
+														<select id="koolproxy_reboot_inter_min" name="koolproxy_reboot_inter_min" class="ssconfig input_option" >
+														</select>
+														重启koolproxy
 														&nbsp;&nbsp;&nbsp;&nbsp;
 													</span>
 												</td>

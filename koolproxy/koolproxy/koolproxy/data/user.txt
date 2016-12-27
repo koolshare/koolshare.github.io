@@ -14,3 +14,7 @@
 !  支持通配符*和？
 !  支持正则匹配 例如:/http:\/\/static\.youku\.com/
 !  -------------------------------------------------------------------------------------------
+||qiushibaike.com/$s@<div id="sidebar" class="sidebar">@<div style="display:none">@
+||muchong.com/bbs/$s@<div class="wrapper header_table">@<div style="display:none">@
+||muchong.com/bbs/$s@<a href="adlog.php?adid=*" class="" target="_blank">@<div style="display:none">@
+||muchong.com/bbs/$s@<a href="http://muchong.com/bbs/taotie.php?action=view&amp;ttid=*" class="" target="_blank">@<div style="display:none">@

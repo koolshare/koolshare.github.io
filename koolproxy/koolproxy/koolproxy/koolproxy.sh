@@ -17,9 +17,9 @@ start_koolproxy(){
 	cd /koolshare/koolproxy
   	if [ "$koolproxy_enable" == "1" ];then
   		if [ "$koolproxy_debug" == "1" ];then
-			koolproxy -l 260
+			koolproxy -d -l 2 >/dev/null 2>&1 &
 		else
-			koolproxy
+			koolproxy -d >/dev/null 2>&1 &
 		fi
   	fi
 	rules_date_local=`cat /koolshare/koolproxy/data/version|awk 'NR==2{print}'`
@@ -35,7 +35,8 @@ start_koolproxy(){
 
 stop_koolproxy(){
 	echo $(date): 关闭koolproxy主进程和守护进程...
-	killall koolproxy
+	#killall koolproxy
+	kill -9 `pidof koolproxy`
 }
 
 load_nat(){
@@ -166,8 +167,11 @@ remove_ipset_conf(){
 write_cron_job(){
 	# start setvice
 	if [ "1" == "$koolproxy_update" ]; then
-		echo $(date): 开启规则定时更新，每天"$koolproxy_update_hour"时00分，检查在线规则更新...
-		cru a koolproxy_update "0 $koolproxy_update_hour * * * /bin/sh /koolshare/scripts/koolproxy_rule_update.sh"
+		echo $(date): 开启规则定时更新，每天"$koolproxy_update_hour"时"$koolproxy_update_min"分，检查在线规则更新...
+		cru a koolproxy_update "$koolproxy_update_min $koolproxy_update_hour * * * /bin/sh /koolshare/scripts/koolproxy_rule_update.sh"
+	elif [ "2" == "$koolproxy_update" ]; then
+		echo $(date): 开启规则定时更新，每隔"$koolproxy_update_inter_hour"时"$koolproxy_update_inter_min"分，检查在线规则更新...
+		cru a koolproxy_update "*/$koolproxy_update_inter_min */$koolproxy_update_inter_hour * * * /bin/sh /koolshare/scripts/koolproxy_rule_update.sh"
 	else
 		echo $(date): 规则自动更新关闭状态，不启用自动更新...
 	fi
@@ -197,9 +201,11 @@ remove_ss_event(){
 write_reboot_job(){
 	# start setvice
 	if [ "1" == "$koolproxy_reboot" ]; then
-		echo $(date): 开启插件定时重启，每天"$koolproxy_reboot_hour"时00分，自动重启插件...
-		cru a koolproxy_reboot "0 $koolproxy_reboot_hour * * * /bin/sh /koolshare/scripts/koolproxy.sh restart"
-		cru a koolproxy_reboot "15 20 * * * /bin/sh /koolshare/koolproxy/koolproxy.sh restart"
+		echo $(date): 开启插件定时重启，每天"$koolproxy_reboot_hour"时"$koolproxy_reboot_min"分，自动重启插件...
+		cru a koolproxy_reboot "$koolproxy_reboot_min $koolproxy_reboot_hour * * * /bin/sh /koolshare/koolproxy/koolproxy.sh restart"
+	elif [ "2" == "$koolproxy_reboot" ]; then
+		cru a koolproxy_reboot "*/$koolproxy_reboot_inter_min */$koolproxy_reboot_inter_hour * * * /bin/sh /koolshare/koolproxy/koolproxy.sh restart"
+		echo $(date): 开启插件间隔重启，每隔"$koolproxy_reboot_inter_hour"时"$koolproxy_reboot_inter_min"分，自动重启插件...
 	fi
 }
 
