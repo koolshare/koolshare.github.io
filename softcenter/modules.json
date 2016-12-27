@@ -8,6 +8,7 @@
 {"module": "adm", "git_source": "https://github.com/koolshare/merlin-adm.git"},
 {"module": "webshell", "git_source": "https://github.com/koolshare/merlin-webshell.git"},
 {"module": "frpc", "git_source": "https://github.com/koolshare/merlin_frpc.git"},
+{"module": "koolproxy", "git_source": "https://github.com/koolproxy/merlin-koolproxy.git"},
 {}
 ]
 
