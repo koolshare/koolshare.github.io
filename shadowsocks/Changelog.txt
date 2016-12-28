@@ -1,15 +1,15 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 3.1.4
-   - update 程序：更新shadowsocks-libev到2.6.0最新版本，支持混淆;
-   - update 程序：更新shadowsocksr-libev为最新版本;
-   - update 程序：更新haproxy为1.7.1正式版本;
-   - update 程序：更新kcptun程序最新20161222;
-   - update 功能：配合shadowsocks-libev 2.6.0，添加ss-libev功能的混淆功能（需要服务器端支持）;
-   - update 功能：socks5支持acl;
-   - update 规则：同步最新规则，包含gfwlist和chntoute和cdn列表;
-   - update 功能：根据破娃酱建议，ssr-libev去除auth_simple, auth_sha1两个协议插件;
-   - update 功能：去除ssr-libev不支持的random_head混淆协议，添加http_post混淆协议;
+   - update	程序：更新shadowsocks-libev到2.6.0最新版本，支持混淆;
+   - update	程序：更新shadowsocksr-libev为最新版本;
+   - update	程序：更新haproxy为1.7.1正式版本;
+   - update	程序：更新kcptun程序最新20161222;
+   - update	功能：配合shadowsocks-libev 2.6.0，添加ss-libev功能的混淆功能（需要服务器端支持）;
+   - update	功能：socks5支持acl;
+   - update	规则：同步最新规则，包含gfwlist和chntoute和cdn列表;
+   - update	功能：根据破娃酱建议，ssr-libev去除auth_simple, auth_sha1两个协议插件;
+   - update	功能：去除ssr-libev不支持的random_head混淆协议，添加http_post混淆协议;
 
 3.1.3
    - update	规则：更新gfwlist规则为最新，优化大量规则，清除一些不必要的规则;
