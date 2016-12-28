@@ -2181,6 +2181,7 @@
 360qws.com
 360safe.com
 360shouji.com
+360shoujizhushoudl.com
 360shuoshuo.com
 360top.com
 360totalsecurity.com
@@ -5806,6 +5807,7 @@ aimidian.com
 aimituan.com
 aimks.com
 aimodou.net
+aimoge.com
 aimuju.com
 aipai.com
 aipenglai.com
@@ -5865,6 +5867,7 @@ aiwan91.com
 aiweibang.com
 aiweibk.com
 aiweipet.com
+aiwen.cc
 aiwenguan.com
 aiwenwo.net
 aiwenyi.com
@@ -10929,6 +10932,7 @@ ctiforum.com
 ctime.com
 ctisd.com
 ctjin.com
+ctmcdn.net
 ctn1986.com
 ctocio.com
 ctop.cc
@@ -15616,6 +15620,7 @@ haiboyi.com
 haicent.com
 haidaibao.com
 haidaozhu.com
+haidii.com
 haidilao.com
 haidilao.net
 haidilao.us
@@ -18386,6 +18391,7 @@ ixiumei.com
 ixniang.com
 ixpub.net
 ixtgame.com
+ixueshu.com
 ixueyi.com
 ixwebhosting.bz
 ixxm.com
@@ -24096,6 +24102,7 @@ opcns.net
 opd2c.com
 opda.com
 opdown.com
+openasic.org
 openbra.in
 opencas.org
 open-china.net
@@ -24260,6 +24267,7 @@ p2p265.com
 p2p28.com
 p2pbbs.net
 p2pchina.com
+p2p.com
 p2pcq.com
 p2peye.com
 p2pfxb.com
@@ -24444,6 +24452,7 @@ pcwenda.com
 pcyule.com
 pd120.com
 pd521.com
+pdf1122.com
 pdfbianji.com
 pdfcword.com
 pdfdo.com
@@ -25187,6 +25196,7 @@ qianduan.com
 qianduanfan.com
 qianduanmei.com
 qianduan.net
+qiandu.com
 qiandw.com
 qianfan365.com
 qiangchezu.com
@@ -25567,6 +25577,7 @@ qqcyl.net
 qqdcw.com
 qqddc.com
 qqdiannao.com
+qqdiannaoguanjiadl.com
 qqdna.com
 qqershou.com
 qq-ex.com
@@ -25992,6 +26003,7 @@ redcross-sha.org
 redfunding.com
 redian5.net
 redianmao.com
+redianyuedu.com
 redidai.com
 redisbook.com
 redisdoc.com
@@ -26297,6 +26309,7 @@ runidc.com
 runker.net
 runmang.com
 runningcheese.com
+runningls.com
 runoob.com
 runpho.com
 runsky.com
@@ -33601,6 +33614,7 @@ yini.org
 yinjiaji.com
 yinke.com
 yinker.com
+yinliuliang.com
 yinliyingxiao.com
 yinmj.com
 yinpiao.com
@@ -34470,6 +34484,7 @@ yx-s.net
 yxss.com
 yxszw.net
 yxt-tattoo.com
+yxw99.com
 yx-w.com
 yxyjq.com
 yxyun.com
