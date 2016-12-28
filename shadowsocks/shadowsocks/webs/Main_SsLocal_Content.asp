@@ -10,6 +10,7 @@
 <title>Shadowsocks - Socks5代理设置</title>
 <link rel="stylesheet" type="text/css" href="index_style.css">
 <link rel="stylesheet" type="text/css" href="form_style.css">
+<link rel="stylesheet" type="text/css" href="css/element.css">
 <script language="JavaScript" type="text/javascript" src="/state.js"></script>
 <script language="JavaScript" type="text/javascript" src="/help.js"></script>
 <script language="JavaScript" type="text/javascript" src="/general.js"></script>
@@ -88,6 +89,29 @@ return document.getElementById(id);
 function init(){
 	show_menu(menu_hook);
 	conf_to_obj();
+    buildswitch();
+    toggle_switch();
+}
+
+function toggle_switch(){
+    var rrt = document.getElementById("switch");
+    if (document.form.ss_local_enable.value != "1") {
+        rrt.checked = false;
+    } else {
+        rrt.checked = true;
+    }
+}
+
+function buildswitch(){
+    $j("#switch").click(
+    function(){
+        if(document.getElementById('switch').checked){
+            document.form.ss_local_enable.value = 1;
+            
+        }else{
+            document.form.ss_local_enable.value = 0;
+        }
+    });
 }
 
 function conf_to_obj(){
@@ -165,7 +189,7 @@ function pass_checked(obj){
 	<input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>">
 	<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="">
 	<input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>">
-	<input type="hidden" id="dns2socks" name="dns2socks" value='<% dbus_get_def("dns2socks", ""); %>'/>
+	<input type="hidden" id="ss_local_enable" name="ss_local_enable" value='<% dbus_get_def("ss_local_enable", "0"); %>'/>
 	<table class="content" align="center" cellpadding="0" cellspacing="0">
 		<tr>
 			<td width="17">&nbsp;</td>
@@ -193,15 +217,24 @@ function pass_checked(obj){
 													<td colspan="2">Shadowsocks - ss-local - 高级设置</td>
 												</tr>
 											</thead>
-											<tr>
-												<th width="20%">开关</th>
-												<td>
-													<select id="ss_local_enable" name="ss_local_enable" style="width:165px;margin:0px 0px 0px 2px;" class="ssconfig input_option">
-														<option value="0">不开启</option>
-														<option value="1">开启</option>
-													</select>
-												</td>
-											</tr>
+                                        	<tr id="switch_tr">
+                                        	    <th>
+                                        	        <label>开关</label>
+                                        	    </th>
+                                        	    <td colspan="2">
+                                        	        <div class="switch_field" style="display:table-cell;float: left;">
+                                        	            <label for="switch">
+                                        	                <input id="switch" class="switch" type="checkbox" style="display: none;">
+                                        	                <div class="switch_container" >
+                                        	                    <div class="switch_bar"></div>
+                                        	                    <div class="switch_circle transition_style">
+                                        	                        <div></div>
+                                        	                    </div>
+                                        	                </div>
+                                        	            </label>
+                                        	        </div>
+                                        	    </td>
+                                        	</tr>
 											<tr>
 												<th width="20%">服务器(建议填写IP地址)</th>
 												<td>
@@ -266,6 +299,16 @@ function pass_checked(obj){
 													<select name="ss_local_ota" id="ss_local_ota" class="input_option" style="width:165px;margin:0px 0px 0px 2px;">
 														<option value="0" selected>否</option>
 														<option value="1">是</option>
+													</select>
+												</td>
+											</tr>
+											<tr id="acl_support">
+												<th>ACL控制</th>
+												<td>
+													<select name="ss_local_acl" id="ss_local_acl" class="input_option" style="width:165px;margin:0px 0px 0px 2px;">
+														<option value="0" selected>不使用</option>
+														<option value="1">gfwlist.pac</option>
+														<option value="2">chn.pac</option>
 													</select>
 												</td>
 											</tr>

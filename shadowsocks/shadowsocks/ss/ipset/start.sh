@@ -5,6 +5,7 @@ eval `dbus export ss`
 source /koolshare/scripts/base.sh
 ss_basic_password=`echo $ss_basic_password|base64_decode`
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
+CONFIG_FILE=/koolshare/ss/ipset/ss.json
 #--------------------------------------------------------------------------------------
 resolv_server_ip(){
 	IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
@@ -33,10 +34,28 @@ resolv_server_ip(){
 }
 # create shadowsocks config file...
 creat_ss_json(){
-	echo_date 创建SS配置文件到/koolshare/ss/ipset/ss.json
+	[ $ss_basic_onetime_auth -ne 1 ] && ARG_OTA="" || ARG_OTA="-A";
+	if [ "$ss_basic_ss_obfs_host" != "" ];then
+		if [ "$ss_basic_ss_obfs" == "http" ];then
+			ARG_OBFS="--obfs http --obfs-host $ss_basic_ss_obfs_host"
+		elif [ "$ss_basic_ss_obfs" == "tls" ];then
+			ARG_OBFS="--obfs tls --obfs-host $ss_basic_ss_obfs_host"
+		else
+			ARG_OBFS=""
+		fi
+	else
+		if [ "$ss_basic_ss_obfs" == "http" ];then
+			ARG_OBFS="--obfs http"
+		elif [ "$ss_basic_ss_obfs" == "tls" ];then
+			ARG_OBFS="--obfs tls"
+		else
+			ARG_OBFS=""
+		fi
+	fi
+	echo_date 创建SS配置文件到$CONFIG_FILE
 	if [ "$ss_basic_use_kcp" == "1" ];then
 		if [ "$ss_basic_use_rss" == "0" ];then
-			cat > /koolshare/ss/ipset/ss.json <<-EOF
+			cat > $CONFIG_FILE <<-EOF
 				{
 				    "server":"127.0.0.1",
 				    "server_port":1091,
@@ -47,7 +66,7 @@ creat_ss_json(){
 				}
 			EOF
 		elif [ "$ss_basic_use_rss" == "1" ];then
-			cat > /koolshare/ss/ipset/ss.json <<-EOF
+			cat > $CONFIG_FILE <<-EOF
 				{
 				    "server":"127.0.0.1",
 				    "server_port":1091,
@@ -63,7 +82,7 @@ creat_ss_json(){
 		fi
 	else
 		if [ "$ss_basic_use_rss" == "0" ];then
-			cat > /koolshare/ss/ipset/ss.json <<-EOF
+			cat > $CONFIG_FILE <<-EOF
 				{
 				    "server":"$ss_basic_server",
 				    "server_port":$ss_basic_port,
@@ -74,7 +93,7 @@ creat_ss_json(){
 				}
 			EOF
 		elif [ "$ss_basic_use_rss" == "1" ];then
-			cat > /koolshare/ss/ipset/ss.json <<-EOF
+			cat > $CONFIG_FILE <<-EOF
 				{
 				    "server":"$ss_basic_server",
 				    "server_port":$ss_basic_port,
@@ -265,14 +284,10 @@ start_dns(){
 	if [ "$ss_ipset_foreign_dns" == "1" ]; then
 		if [ "$ss_basic_use_rss" == "1" ];then
 			echo_date 开启ssr-tunnel...
-			rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+			rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 7913 -L "$it" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_use_rss" == "0" ];then
 			echo_date 开启ss-tunnel...
-			if [ "$ss_basic_onetime_auth" == "1" ];then
-				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -A -f /var/run/sstunnel.pid
-			elif [ "$ss_basic_onetime_auth" == "0" ];then
-				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 7913 -L "$it" -u -f /var/run/sstunnel.pid
-			fi
+			ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 7913 -L "$it" $ARG_OTA $ARG_OBFS -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 		fi
 	fi
 
@@ -280,16 +295,12 @@ start_dns(){
 	if [ "$ss_ipset_foreign_dns" == "2" ]; then
 		echo_date 开启ss-local，提供socks5端口：23456
 		if [ "$ss_basic_use_rss" == "1" ];then
-			rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+			rss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_use_rss" == "0" ];then
-			if [ "$ss_basic_onetime_auth" == "1" ];then
-				ss-local -b 0.0.0.0 -l 23456 -A -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid
-			elif [ "$ss_basic_onetime_auth" == "0" ];then
-				ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid
-			fi
+			ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE $ARG_OTA $ARG_OBFS -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 		fi
-			echo_date 开启dns2socks，监听端口：23456
-			dns2socks 127.0.0.1:23456 "$ss_ipset_dns2socks_user" 127.0.0.1:7913 > /dev/null 2>&1 &
+		echo_date 开启dns2socks，监听端口：23456
+		dns2socks 127.0.0.1:23456 "$ss_ipset_dns2socks_user" 127.0.0.1:7913 > /dev/null 2>&1 &
 	fi
 
 	# Start Pcap_DNSProxy
@@ -333,13 +344,9 @@ start_dns(){
 			if [ "$ss_ipset_pdnsd_udp_server" == "1" ];then
 				echo_date 开启dns2socks作为pdnsd的上游服务器.
 				if [ "$ss_basic_use_rss" == "1" ];then
-					rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+					rss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 				elif  [ "$ss_basic_use_rss" == "0" ];then
-					if [ "$ss_basic_onetime_auth" == "1" ];then
-						ss-local -b 0.0.0.0 -l 23456 -A -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid > /dev/null 2>&1 &
-					elif [ "$ss_basic_onetime_auth" == "0" ];then
-						ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/ipset/ss.json -u -f /var/run/sslocal1.pid > /dev/null 2>&1 &
-					fi
+					ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE $ARG_OTA $ARG_OBFS -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 				fi
 				dns2socks 127.0.0.1:23456 "$ss_ipset_pdnsd_udp_server_dns2socks" 127.0.0.1:1099 > /dev/null 2>&1 &
 			elif [ "$ss_ipset_pdnsd_udp_server" == "2" ];then
@@ -352,14 +359,10 @@ start_dns(){
 				[ "$ss_ipset_pdnsd_udp_server_ss_tunnel" == "4" ] && dns1="$ss_ipset_pdnsd_udp_server_ss_tunnel_user"
 				if [ "$ss_basic_use_rss" == "1" ];then
 					echo_date 开启ssr-tunnel作为pdnsd的上游服务器.
-					rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid > /dev/null 2>&1 &
+					rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid > /dev/null 2>&1 &
 				elif  [ "$ss_basic_use_rss" == "0" ];then
 					echo_date 开启ss-tunnel作为pdnsd的上游服务器.
-					if [ "$ss_basic_onetime_auth" == "1" ];then
-						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -A -f /var/run/sstunnel.pid > /dev/null 2>&1 &
-					elif [ "$ss_basic_onetime_auth" == "0" ];then
-						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/ipset/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid > /dev/null 2>&1 &
-					fi
+					ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 1099 -L "$dns1" $ARG_OTA $ARG_OBFS -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 				fi
 				sleep 1
 			fi
@@ -472,15 +475,10 @@ start_ss_redir(){
 	# Start ss-redir
 	if [ "$ss_basic_use_rss" == "1" ];then
 		echo_date 开启ssr-redir进程，用于透明代理.
-		rss-redir -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -f /var/run/shadowsocks.pid >/dev/null 2>&1
+		rss-redir -b 0.0.0.0 -c $CONFIG_FILE -f /var/run/shadowsocks.pid >/dev/null 2>&1
 	elif  [ "$ss_basic_use_rss" == "0" ];then
 		echo_date 开启ss-redir进程，用于透明代理.
-		if [ "$ss_basic_onetime_auth" == "1" ];then
-			echo_date 你开启了ss-redir的一次性验证，请确保你的ss服务器是否支持.
-			ss-redir -b 0.0.0.0 -A -c /koolshare/ss/ipset/ss.json -f /var/run/shadowsocks.pid
-		elif [ "$ss_basic_onetime_auth" == "0" ];then
-			ss-redir -b 0.0.0.0 -c /koolshare/ss/ipset/ss.json -f /var/run/shadowsocks.pid
-		fi
+		ss-redir -b 0.0.0.0 -c $CONFIG_FILE $ARG_OTA $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
 	fi
 }
 
@@ -562,6 +560,7 @@ start_all)
 restart_dns)
 	#ss_basic_action=2 应用DNS设置
 	echo_date ------------------------ gflist模式-重启dns服务 --------------------------
+	creat_ss_json
 	resolv_server_ip
 	stop_dns
 	rm -rf /tmp/custom.conf

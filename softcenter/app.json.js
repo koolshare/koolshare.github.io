@@ -11,16 +11,6 @@
             "version": "1.3"
         }, 
         {
-            "build_date": "2016-12-27_09:15:58", 
-            "description": "3.0.0版本代码重构,性能更强,拒绝bug~", 
-            "home_url": "Module_koolproxy.asp", 
-            "md5": "464f960699e8a54c78ecfb85e447419c", 
-            "name": "koolproxy", 
-            "tar_url": "koolproxy/koolproxy.tar.gz", 
-            "title": "koolproxy", 
-            "version": "3.0.0"
-        }, 
-        {
             "build_date": "2016-10-23_11:00:50", 
             "description": "让分流更简单", 
             "home_url": "Module_policy_route.asp", 
@@ -121,16 +111,6 @@
             "version": "0.3.6"
         }, 
         {
-            "build_date": "2016-12-03_17:59:45", 
-            "description": "内网穿透利器，谁用谁知道。", 
-            "home_url": "Module_frpc.asp", 
-            "md5": "baca9f9b933ceb3e9f8546507e3d7b15", 
-            "name": "frpc", 
-            "tar_url": "frpc/frpc.tar.gz", 
-            "title": "frpc穿透", 
-            "version": "1.9.2"
-        }, 
-        {
             "build_date": "2016-06-29_11:33:47", 
             "description": "让局域网控制能简单", 
             "home_url": "", 
@@ -141,14 +121,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2016-12-10_18:23:31", 
+            "build_date": "2016-12-28_22:01:43", 
             "description": "科学上网", 
             "home_url": "Main_Ss_Content.asp", 
-            "md5": "d9631e1cbf9324cd04b1188e9bbcb822", 
+            "md5": "9241a6758181d2b7056918782a36fe6e", 
             "name": "shadowsocks", 
             "tar_url": "shadowsocks/shadowsocks.tar.gz", 
             "title": "shadowsocks", 
-            "version": "3.1.3"
+            "version": "3.1.4"
         }, 
         {
             "build_date": "2016-05-07_01:41:30", 

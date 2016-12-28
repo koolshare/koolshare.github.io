@@ -76,7 +76,7 @@ input[type=button]:focus {
 	z-index: 200;
 	background-color:#2B373B;
 	margin-left: 50px;
-	top: 290px;
+	top: 240px;
 	width:650px;
 	return height:auto;
 	box-shadow: 3px 3px 10px #000;
@@ -347,15 +347,29 @@ function update_ss_ui(obj) {
 				$j("#ss_basic_onetime_auth").val("1");
 			}
 			continue;
+		} else if (field == "ss_basic_ss_obfs") {
+			if (obj[field] != "http" && obj[field] != "tls" &&  obj[field] != "0") {
+				$j("#ss_basic_ss_obfs").val("0");
+			} else {
+				$j("#ss_basic_ss_obfs").val(obj.ss_basic_ss_obfs);
+			}
+			continue;
+		} else if (field == "ss_basic_ss_obfs_host") {
+			if (obj[field] == "undefied") {
+				$j("#ss_basic_ss_obfs_host").val("");
+			} else {
+				$j("#ss_basic_ss_obfs_host").val(obj.ss_basic_ss_obfs_host);
+			}
+			continue;
 		} else if (field == "ss_basic_rss_protocol") {
-			if (obj[field] != "origin" && obj[field] != "verify_simple" &&  obj[field] != "auth_simple" && obj[field] != "auth_sha1" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" && obj[field] != "auth_aes128_md5" && obj[field] != "auth_aes128_sha1" ) {
+			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" && obj[field] != "auth_aes128_md5" && obj[field] != "auth_aes128_sha1" ) {
 				$j("#ss_basic_rss_protocol").val("origin");
 			} else {
 				$j("#ss_basic_rss_protocol").val(obj.ss_basic_rss_protocol);
 			}
 			continue;
 		} else if (field == "ss_basic_rss_obfs") {
-			if (obj[field] != "plain" && obj[field] != "http_simple" &&  obj[field] != "random_head"  && obj[field] != "tls1.2_ticket_auth" ) {
+			if (obj[field] != "plain" && obj[field] != "http_simple" &&  obj[field] != "http_post"  && obj[field] != "tls1.2_ticket_auth" ) {
 				$j("#ss_basic_rss_obfs").val("plain");
 			} else {
 				$j("#ss_basic_rss_obfs").val(obj.ss_basic_rss_obfs);
@@ -419,10 +433,6 @@ function update_visibility_main() {
 		$j("#ss_basic_rss_protocol_alert").html("带压缩的协议");
 	} else if (srp == "verify_sha1"){
 		$j("#ss_basic_rss_protocol_alert").html("带验证抗CCA攻击的协议可兼容libev的OTA");
-	} else if (srp == "auth_simple"){
-		$j("#ss_basic_rss_protocol_alert").html("带验证抗重放攻击的协议");
-	} else if (srp == "auth_sha1"){
-		$j("#ss_basic_rss_protocol_alert").html("抗重放、CCA攻击协议");
 	} else if (srp == "auth_sha1_v2"){
 		$j("#ss_basic_rss_protocol_alert").html("抗重放、CCA攻击升级版协议");
 	} else if (srp == "auth_sha1_v4"){
@@ -433,8 +443,8 @@ function update_visibility_main() {
 		$j("#ss_basic_rss_obfs_alert").html("不混淆");
 	} else if (sro == "http_simple"){
 		$j("#ss_basic_rss_obfs_alert").html("伪装为http协议");
-	} else if (sro == "random_head"){
-		$j("#ss_basic_rss_obfs_alert").html("发送一个随机包再通讯的协议");
+	} else if (sro == "http_post"){
+		$j("#ss_basic_rss_obfs_alert").html("");
 	} else if (sro == "tls1.2_ticket_auth"){
 		$j("#ss_basic_rss_obfs_alert").html("模拟TLS1.2，强烈推荐");
 	}
@@ -475,14 +485,18 @@ function update_visibility_main() {
 	showhide("ss_state2", (ssmode !== "0"));
 	showhide("ss_state3", (ssmode !== "0"));
 	showhide("ss_koolgame_udp_tr", (ssmode == "4"));
-	showhide("onetime_auth", (sur !== "1" && ssmode!== "4"));
+	showhide("onetime_auth", (sur !== "1" && ssmode !== "4"));
+	showhide("ss_obfs", (sur !== "1" && ssmode!== "4"));
+	showhide("ss_obfs_host", (sur !== "1" && ssmode !== "4"));
 	showhide("SSR_name", (ssmode!== "4"));
 	showhide("KCP_name", (ssmode!== "4"));
-	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode!== "4"));
-	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode!== "4"));
-	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode!== "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple"));
+	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode !== "4"));
+	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode !== "4"));
+	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode !== "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple"));
 	showhide("ss_basic_kcp_port_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
 	showhide("ss_basic_kcp_parameter_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
+
+	showhide("ss_obfs_host", (document.form.ss_basic_ss_obfs.value !== "0" ));
 	var text = document.getElementById("ss_basic_kcp_parameter");
 	autoTextarea(text);
 }
@@ -658,12 +672,14 @@ function ssconf_node2obj(node_sel) {
             "ss_basic_use_kcp": "",
             "ss_basic_rss_obfs_param": "",
             "ss_basic_onetime_auth": "",
+            "ss_basic_ss_obfs": "",
+            "ss_basic_ss_obfs_host": "",
             "ss_basic_koolgame_udp": ""
         };
         return obj;
     } else {
         var obj = {};
-        var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "koolgame_udp"];
+        var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "ss_obfs", "ss_obfs_host", "koolgame_udp"];
         for (var i = 0; i < params.length; i++) {
             obj["ss_basic_" + params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel];
         }
@@ -681,7 +697,7 @@ function ss_node_sel() {
 function ss_node_object(node_sel, obj, isSubmit, end) {
     var ns = {};
     var p = "ssconf_basic";
-    var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "koolgame_udp"];
+    var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "ss_obfs", "ss_obfs_host", "koolgame_udp"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
         db_ss[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
@@ -717,6 +733,8 @@ function ssform2obj() {
     obj["use_rss"] = $G("hd_ss_basic_use_rss").value;
     obj["use_kcp"] = $G("hd_ss_basic_use_kcp").value;
     obj["onetime_auth"] = $G("ss_basic_onetime_auth").value;
+    obj["ss_obfs"] = $G("ss_basic_ss_obfs").value;
+    obj["ss_obfs_host"] = $G("ss_basic_ss_obfs_host").value;
     obj["koolgame_udp"] = $G("ss_basic_koolgame_udp").value;
     return obj;
 }
@@ -767,7 +785,17 @@ function getAllConfigs() {
 		}else {
             obj["onetime_auth"] = db_ss[p + "_onetime_auth_" + field];
         }
-        
+
+        if (typeof db_ss[p + "_ss_obfs_" + field] == "undefined"){
+			obj["ss_obfs"] = '';
+		}else {
+            obj["ss_obfs"] = db_ss[p + "_ss_obfs_" + field];
+        }
+        if (typeof db_ss[p + "_ss_obfs_host_" + field] == "undefined"){
+			obj["ss_obfs_host"] = '';
+		}else {
+            obj["ss_obfs_host"] = db_ss[p + "_ss_obfs_host_" + field];
+        }
         if (typeof db_ss[p + "_koolgame_udp_" + field] == "undefined"){
 			obj["koolgame_udp"] = '';
 		}else {
@@ -899,6 +927,8 @@ function Add_profile(){ //点击节点页面内添加节点动作
 	document.form.ss_node_table_method.value = "aes-256-cfb";
 	document.form.ss_node_table_mode.value = "1";
 	document.form.ss_node_table_onetime_auth.value = "0";
+	document.form.ss_node_table_ss_obfs.value = "0";
+	document.form.ss_node_table_ss_obfs_host.value = "";
 	document.form.ss_node_table_rss_protocol.value = "origin";;
 	document.form.ss_node_table_rss_obfs.value = "plain";
 	document.form.ss_node_table_koolgame_udp.value = "0";
@@ -928,6 +958,8 @@ function tabclickhandler(_type){
 		document.form.vpnc_type.value = "shadowsocks";
 		$G('ssTitle').className = "vpnClientTitle_td_click";
 		$G('ota_support').style.display = "";
+		$G('ss_obfs_support').style.display = "";
+		$G('ss_obfs_host_support').style.display = "";
 		$G('ssr_protocol_tr').style.display = "none";
 		$G('ssr_obfs_tr').style.display = "none";
 		$G('ssr_obfs_param_tr').style.display = "none";
@@ -938,6 +970,8 @@ function tabclickhandler(_type){
 		document.form.vpnc_type.value = "shadowsocksR";
 		$G('ssrTitle').className = "vpnClientTitle_td_click";
 		$G('ota_support').style.display = "none";
+		$G('ss_obfs_support').style.display = "none";
+		$G('ss_obfs_host_support').style.display = "none";
 		$G('ssr_protocol_tr').style.display = "";
 		$G('ssr_obfs_tr').style.display = "";
 		$G('ssr_obfs_param_tr').style.display = "";
@@ -948,6 +982,8 @@ function tabclickhandler(_type){
 		document.form.vpnc_type.value = "gameV2";
 		$G('gamev2Title').className = "vpnClientTitle_td_click";
 		$G('ota_support').style.display = "none";
+		$G('ss_obfs_support').style.display = "none";
+		$G('ss_obfs_host_support').style.display = "none";
 		$G('ssr_protocol_tr').style.display = "none";
 		$G('ssr_obfs_tr').style.display = "none";
 		$G('ssr_obfs_param_tr').style.display = "none";
@@ -977,7 +1013,7 @@ function add_ss_node_conf(flag){ //点击添加按钮动作
     var ns = {};
     var p = "ssconf_basic";
     node_global_max += 1;	
-	var params1 = ["name", "server", "mode",  "port", "method", "onetime_auth"];//for ss
+	var params1 = ["name", "server", "mode",  "port", "method", "onetime_auth", "ss_obfs", "ss_obfs_host"];//for ss
 	var params2 = ["name", "server", "mode",  "port", "method", "rss_protocol", "rss_obfs", "rss_obfs_param"];//for ssr
 	var params3 = ["name", "server", "mode",  "port", "method", "koolgame_udp"];//for ssr
 	if(flag == 'shadowsocks'){
@@ -1021,6 +1057,8 @@ function add_ss_node_conf(flag){ //点击添加按钮动作
 				document.form.ss_node_table_method.value = "aes-256-cfb";
 				document.form.ss_node_table_mode.value = "1";
 				document.form.ss_node_table_onetime_auth.value = "0";
+				document.form.ss_node_table_ss_obfs.value = "0";
+				document.form.ss_node_table_ss_obfs_host.value = "";
 				document.form.ss_node_table_rss_protocol.value = "origin";
 				document.form.ss_node_table_rss_obfs.value = "plain";
 				document.form.ss_node_table_koolgame_udp.value = "0";
@@ -1294,7 +1332,7 @@ function remove_conf_table(o) { //删除节点功能
     var p = "ssconf_basic";
     id = ids[ids.length - 1];
     var ns = {};
-    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "koolgame_udp", "ping", "web_test"];
+    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "ss_obfs", "ss_obfs_host", "koolgame_udp", "ping", "web_test"];
     for (var i = 0; i < params.length; i++) {
         ns[p + "_" + params[i] + "_" + id] = "";
     }
@@ -1327,6 +1365,12 @@ function edit_conf_table(o){ //编辑节点功能，显示编辑面板
 	document.form.ss_node_table_password.value = Base64.decode(c["password"])
 	document.form.ss_node_table_method.value = c["method"];
 	document.form.ss_node_table_onetime_auth.value = c["onetime_auth"];
+	if ( c["ss_obfs"] == ""){
+		document.form.ss_node_table_ss_obfs.value = "0";
+	}else{
+		document.form.ss_node_table_ss_obfs.value = c["ss_obfs"];
+	}
+	document.form.ss_node_table_ss_obfs_host.value = c["ss_obfs_host"];
 	document.form.ss_node_table_rss_obfs_param.value = c["rss_obfs_param"];
 	document.form.ss_node_table_rss_protocol.value = c["rss_protocol"];
 	document.form.ss_node_table_rss_obfs.value = c["rss_obfs"];
@@ -1369,7 +1413,7 @@ var myid;
 function edit_ss_node_conf(flag){ //编辑节点功能，数据重写
     var ns = {};
     var p = "ssconf_basic";	
-	var params1 = ["name", "server", "mode",  "port", "method", "onetime_auth"];//for ss
+	var params1 = ["name", "server", "mode",  "port", "method", "onetime_auth", "ss_obfs", "ss_obfs_host"];//for ss
 	var params2 = ["name", "server", "mode",  "port", "method", "rss_protocol", "rss_obfs", "rss_obfs_param"];//for ssr
 	var params3 = ["name", "server", "mode",  "port", "method", "koolgame_udp"];//for ssr
 	if(flag == 'shadowsocks'){
@@ -1409,6 +1453,8 @@ function edit_ss_node_conf(flag){ //编辑节点功能，数据重写
 			document.form.ss_node_table_method.value = "aes-256-cfb";
 			document.form.ss_node_table_mode.value = "1";
 			document.form.ss_node_table_onetime_auth.value = "0";
+			document.form.ss_node_table_ss_obfs.value = "0";
+			document.form.ss_node_table_ss_obfs_host.value = "";
 			document.form.ss_node_table_rss_protocol.value = "origin";
 			document.form.ss_node_table_rss_obfs.value = "plain";
 			document.form.ss_node_table_koolgame_udp.value = "0";
@@ -1651,7 +1697,7 @@ function get_ss_status_data(){
 		checkss++;
 		$j.ajax({
 			type: "get",
-			url: "dbconf?p=ss_basic_enable,ss_basic_dns_success",
+			url: "/dbconf?p=ss_basic_enable,ss_basic_dns_success",
 			dataType: "script",
 			success: function() {
 				if(refreshRate !== 0){
@@ -1813,7 +1859,6 @@ function toggle_func(){
 		$G("gameV2_list").style.display = "none";
 		$G("overall_dns").style.display = "none";
 		$G("overall_list").style.display = "none";
-		document.form.action = "/applydb.cgi?p=ss_basic";
 		$G("cmdBtn").value = "提交";
 		document.form.ss_basic_action.value = 1;
 		update_visibility_main();
@@ -1839,7 +1884,6 @@ function toggle_func(){
 			$G("gameV2_list").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
-			document.form.action = "/applydb.cgi?p=ss_ipset,ss_basic_action";
 			update_visibility_tab2_ipset();
 		}else if(ssmode == "2"){
 			$G("ipset_dns").style.display = "none";
@@ -1852,7 +1896,6 @@ function toggle_func(){
 			$G("gameV2_list").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
-			document.form.action = "/applydb.cgi?p=ss_redchn,ss_basic_action";
 			update_visibility_tab2_redchn();
 		}else if(ssmode == "3"){
 			$G("ipset_dns").style.display = "none";
@@ -1865,7 +1908,6 @@ function toggle_func(){
 			$G("gameV2_list").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
-			document.form.action = "/applydb.cgi?p=ss_game,ss_basic_action";
 			update_visibility_tab2_game();
 		}else if(ssmode == "4"){
 			$G("ipset_dns").style.display = "none";
@@ -1878,7 +1920,6 @@ function toggle_func(){
 			$G("gameV2_list").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
-			document.form.action = "/applydb.cgi?p=ss_gameV2,ss_basic_action";
 		}else if(ssmode == "5"){
 			$G("ipset_dns").style.display = "none";
 			$G("ipset_list").style.display = "none";
@@ -1890,7 +1931,6 @@ function toggle_func(){
 			$G("gameV2_list").style.display = "none";
 			$G("overall_dns").style.display = "";
 			$G("overall_list").style.display = "none";
-			document.form.action = "/applydb.cgi?p=ss_overall,ss_basic_action";
 			update_visibility_tab2_gameV2();
 		}
 	});
@@ -1915,7 +1955,6 @@ function toggle_func(){
 			$G("gameV2_dns").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
-			document.form.action = "/applydb.cgi?p=ss_ipset,ss_basic_action";
 		}else if(ssmode == "2"){
 			$G("ipset_dns").style.display = "none";
 			$G("ipset_list").style.display = "none";
@@ -1927,7 +1966,6 @@ function toggle_func(){
 			$G("gameV2_dns").style.display = "none";
 			$G("overall_dns").style.display = "none";
 			$G("overall_list").style.display = "none";
-			document.form.action = "/applydb.cgi?p=ss_redchn,ss_basic_action";
 		}else if(ssmode == "3"){
 			$G("ipset_dns").style.display = "none";
 			$G("ipset_list").style.display = "none";
@@ -1983,7 +2021,6 @@ function toggle_func(){
 		$G("overall_list").style.display = "none";
 		$G("cmdBtn").value = "应用附加功能";
 		document.form.ss_basic_action.value = 4;
-		document.form.action = "/applydb.cgi?p=ss_basic,ss_main_portal";
 		update_visibility_tab4();
 	});
 	$j("#log_content2").click(
@@ -2172,7 +2209,7 @@ function reload_Soft_Center(){
 </table>
 </div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
-<form method="post" name="form" action="/applydb.cgi?p=ss_basic" target="hidden_frame">
+<form method="post" name="form" action="/applydb.cgi?p=ss" target="hidden_frame">
 <input type="hidden" name="current_page" value="Main_Ss_Content.asp"/>
 <input type="hidden" name="next_page" value="Main_Ss_Content.asp"/>
 <input type="hidden" name="group_id" value=""/>
@@ -2360,6 +2397,22 @@ function reload_Soft_Center(){
 																	</select>
 																</td>
 															</tr>
+															<tr id="ss_obfs_support">
+																<th>混淆 (obfs)</th>
+																<td>
+																	<select name="ss_node_table_ss_obfs" id="ss_node_table_ss_obfs" class="input_option" style="width:350px;margin:0px 0px 0px 2px;">
+																		<option value="0" selected>否</option>
+																		<option value="http">http</option>
+																		<option value="tls">tls</option>
+																	</select>
+																</td>
+															</tr>
+															<tr id="ss_obfs_host_support">
+																<th>混淆主机名 (obfs-host)</th>
+																<td>
+																	<input type="text" name="ss_node_table_ss_obfs_host" id="ss_node_table_ss_obfs_host" placeholder="bing.com"  class="input_ss_table" style="width:342px;" maxlength="100" value=""></input>
+																</td>
+															</tr>
 															<tr id="ssr_protocol_tr">
 																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>协议 (protocol)</u></a></th>
 																<td>
@@ -2367,8 +2420,6 @@ function reload_Soft_Center(){
 																		<option value="origin" selected>origin</option>
 																		<option value="verify_simple">verify_simple</option>
 																		<option value="verify_sha1">verify_sha1</option>
-																		<option value="auth_simple">auth_simple</option>
-																		<option value="auth_sha1">auth_sha1</option>
 																		<option value="auth_sha1_v2">auth_sha1_v2</option>
 																		<option value="auth_sha1_v4">auth_sha1_v4</option>
 																		<option value="auth_aes128_md5">auth_aes128_md5</option>
@@ -2384,7 +2435,7 @@ function reload_Soft_Center(){
 																	<select id="ss_node_table_rss_obfs" name="ss_node_table_rss_obfs" style="width:350px;margin:0px 0px 0px 2px;" class="input_option">
 																		<option value="plain">plain</option>
 																		<option value="http_simple">http_simple</option>
-																		<option value="random_head">random_head</option>
+																		<option value="http_post">http_post</option>
 																		<option value="tls1.2_ticket_auth">tls1.2_ticket_auth</option>
 																	</select>
 																</td>
@@ -2522,15 +2573,30 @@ function reload_Soft_Center(){
 														<span id="ss_basic_onetime_auth_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
 												</tr>
+												<tr id="ss_obfs">
+													<th width="35%">混淆 (obfs)</th>
+													<td>
+														<select id="ss_basic_ss_obfs" name="ss_basic_ss_obfs" style="width:164px;margin:0px 0px 0px 2px;" class="input_option"  onchange="update_visibility_main();" >
+															<option class="content_input_fd" value="0">关闭</option>
+															<option class="content_input_fd" value="tls">tls</option>
+															<option class="content_input_fd" value="http">http</option>
+														</select>
+													</td>
+												</tr>
+												<tr id="ss_obfs_host">
+													<th width="35%">混淆主机名 (obfs_host)</th>
+													<td>
+														<input type="text" name="ss_basic_ss_obfs_host" id="ss_basic_ss_obfs_host" placeholder="bing.com"  class="ssconfig input_ss_table" maxlength="100" value=""></input>
+													</td>
+												</tr>
+												
 												<tr id="ss_basic_rss_protocol_tr">
-													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(8)">协议插件（protocol）</a></th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(8)">协议插件 (protocol)</a></th>
 													<td>
 														<select id="ss_basic_rss_protocol" name="ss_basic_rss_protocol" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" onchange="update_visibility_main();" >
 															<option class="content_input_fd" value="origin">origin</option>
 															<option class="content_input_fd" value="verify_simple">verify_simple</option>
 															<option class="content_input_fd" value="verify_sha1">verify_sha1</option>
-															<option class="content_input_fd" value="auth_simple">auth_simple</option>
-															<option class="content_input_fd" value="auth_sha1">auth_sha1</option>
 															<option class="content_input_fd" value="auth_sha1_v2">auth_sha1_v2</option>
 															<option class="content_input_fd" value="auth_sha1_v4">auth_sha1_v4</option>
 															<option value="auth_aes128_md5">auth_aes128_md5</option>
@@ -2545,7 +2611,7 @@ function reload_Soft_Center(){
 														<select id="ss_basic_rss_obfs" name="ss_basic_rss_obfs" style="width:164px;margin:0px 0px 0px 2px;" class="input_option"  onchange="update_visibility_main();" >
 															<option class="content_input_fd" value="plain">plain</option>
 															<option class="content_input_fd" value="http_simple">http_simple</option>
-															<option class="content_input_fd" value="random_head">random_head</option>
+															<option class="content_input_fd" value="http_post">http_post</option>
 															<option class="content_input_fd" value="tls1.2_ticket_auth">tls1.2_ticket_auth</option>
 														</select>
 														<span id="ss_basic_rss_obfs_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>

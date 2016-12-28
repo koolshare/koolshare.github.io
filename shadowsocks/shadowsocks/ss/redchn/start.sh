@@ -5,6 +5,7 @@ eval `dbus export ss`
 source /koolshare/scripts/base.sh
 ss_basic_password=`echo $ss_basic_password|base64_decode`
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
+CONFIG_FILE=/koolshare/ss/redchn/ss.json
 #--------------------------------------------------------------------------------------
 resolv_server_ip(){
 	IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
@@ -33,10 +34,28 @@ resolv_server_ip(){
 }
 # create shadowsocks config file...
 creat_ss_json(){
-	echo_date 创建SS配置文件到/koolshare/ss/redchn/ss.json
+	[ $ss_basic_onetime_auth -ne 1 ] && ARG_OTA="" || ARG_OTA="-A";
+	if [ "$ss_basic_ss_obfs_host" != "" ];then
+		if [ "$ss_basic_ss_obfs" == "http" ];then
+			ARG_OBFS="--obfs http --obfs-host $ss_basic_ss_obfs_host"
+		elif [ "$ss_basic_ss_obfs" == "tls" ];then
+			ARG_OBFS="--obfs tls --obfs-host $ss_basic_ss_obfs_host"
+		else
+			ARG_OBFS=""
+		fi
+	else
+		if [ "$ss_basic_ss_obfs" == "http" ];then
+			ARG_OBFS="--obfs http"
+		elif [ "$ss_basic_ss_obfs" == "tls" ];then
+			ARG_OBFS="--obfs tls"
+		else
+			ARG_OBFS=""
+		fi
+	fi
+	echo_date 创建SS配置文件到$CONFIG_FILE
 	if [ "$ss_basic_use_kcp" == "1" ];then
 		if [ "$ss_basic_use_rss" == "0" ];then
-			cat > /koolshare/ss/redchn/ss.json <<-EOF
+			cat > $CONFIG_FILE <<-EOF
 				{
 				    "server":"127.0.0.1",
 				    "server_port":1091,
@@ -47,7 +66,7 @@ creat_ss_json(){
 				}
 			EOF
 		elif [ "$ss_basic_use_rss" == "1" ];then
-			cat > /koolshare/ss/redchn/ss.json <<-EOF
+			cat > $CONFIG_FILE <<-EOF
 				{
 				    "server":"127.0.0.1",
 				    "server_port":1091,
@@ -63,7 +82,7 @@ creat_ss_json(){
 		fi
 	else
 		if [ "$ss_basic_use_rss" == "0" ];then
-			cat > /koolshare/ss/redchn/ss.json <<-EOF
+			cat > $CONFIG_FILE <<-EOF
 				{
 				    "server":"$ss_basic_server",
 				    "server_port":$ss_basic_port,
@@ -74,7 +93,7 @@ creat_ss_json(){
 				}
 			EOF
 		elif [ "$ss_basic_use_rss" == "1" ];then
-			cat > /koolshare/ss/redchn/ss.json <<-EOF
+			cat > $CONFIG_FILE <<-EOF
 				{
 				    "server":"$ss_basic_server",
 				    "server_port":$ss_basic_port,
@@ -246,7 +265,7 @@ wan_auto_start(){
 #=======================================================================================
 
 start_kcp(){
-	# Start ss-redir
+	# Start kcp
 	if [ "$ss_basic_use_kcp" == "1" ];then
 		echo_date 启动KCP协议进程，为了更好的体验，建议在路由器上创建虚拟内存.
 		export GOGC=40
@@ -258,15 +277,10 @@ start_ss_redir(){
 	# Start ss-redir
 	if [ "$ss_basic_use_rss" == "1" ];then
 		echo_date 开启ssr-redir进程，用于透明代理.
-		rss-redir -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -f /var/run/shadowsocks.pid >/dev/null 2>&1
+		rss-redir -b 0.0.0.0 -c $CONFIG_FILE -f /var/run/shadowsocks.pid >/dev/null 2>&1
 	elif  [ "$ss_basic_use_rss" == "0" ];then
 		echo_date 开启ss-redir进程，用于透明代理.
-		if [ "$ss_basic_onetime_auth" == "1" ];then
-			echo_date 你开启了ss-redir的一次性验证，请确保你的ss服务器是否支持.
-			ss-redir -b 0.0.0.0 -A -c /koolshare/ss/redchn/ss.json -f /var/run/shadowsocks.pid
-		elif [ "$ss_basic_onetime_auth" == "0" ];then
-			ss-redir -b 0.0.0.0 -c /koolshare/ss/redchn/ss.json -f /var/run/shadowsocks.pid
-		fi
+		ss-redir -b 0.0.0.0 -c $CONFIG_FILE $ARG_OTA $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
 	fi
 }
 
@@ -304,14 +318,10 @@ start_dns(){
 	if [ "2" == "$ss_redchn_dns_foreign" ];then
 		if [ "$ss_basic_use_rss" == "1" ];then
 			echo_date 开启ssr-tunnel...
-			rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1053 -L "$gs" -u -f /var/run/sstunnel.pid
+			rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 1053 -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_use_rss" == "0" ];then
 			echo_date 开启ss-tunnel...
-			if [ "$ss_basic_onetime_auth" == "1" ];then
-				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1053 -L "$gs" -u -A -f /var/run/sstunnel.pid
-			elif [ "$ss_basic_onetime_auth" == "0" ];then
-				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1053 -L "$gs" -u -f /var/run/sstunnel.pid
-			fi
+			ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 1053 -L "$gs" $ARG_OTA $ARG_OBFS -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 		fi
 	fi
 	
@@ -332,13 +342,9 @@ start_dns(){
 			[ "$ss_redchn_chinadns_foreign_dns2socks" == "4" ] && rcfd="$ss_redchn_chinadns_foreign_dns2socks_user"
 				echo_date ┣开启ss-local,为dns2socks提供socks5端口：23456
 				if [ "$ss_basic_use_rss" == "1" ];then
-					rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+					rss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 				elif  [ "$ss_basic_use_rss" == "0" ];then
-					if [ "$ss_basic_onetime_auth" == "1" ];then
-						ss-local -b 0.0.0.0 -l 23456 -A -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid
-					elif [ "$ss_basic_onetime_auth" == "0" ];then
-						ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid
-					fi
+					ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE $ARG_OTA $ARG_OBFS -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 				fi
 			echo_date ┣开启dns2socks，作为chinaDNS上游国外dns，转发dns：$rcfd
 			dns2socks 127.0.0.1:23456 "$rcfd" 127.0.0.1:1055 > /dev/null 2>&1 &
@@ -356,14 +362,10 @@ start_dns(){
 			[ "$ss_redchn_chinadns_foreign_sstunnel" == "4" ] && rcfs="$ss_redchn_chinadns_foreign_sstunnel_user"
 			if [ "$ss_basic_use_rss" == "1" ];then
 				echo_date ┣开启ssr-tunnel，作为chinaDNS上游国外dns，转发dns：$rcfs
-				rss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid
+				rss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 			elif  [ "$ss_basic_use_rss" == "0" ];then
 				echo_date ┣开启ss-tunnel，作为chinaDNS上游国外dns，转发dns：$rcfs
-				if [ "$ss_basic_onetime_auth" == "1" ];then
-					ss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rcfs" -u -A -f /var/run/sstunnel.pid
-				elif [ "$ss_basic_onetime_auth" == "0" ];then
-					ss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid
-				fi
+				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 1055 -L "$rcfs" $ARG_OTA $ARG_OBFS -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 			fi
 			echo_date ┗开启chinadns进程！
 			chinadns -p 1053 -s "$rcc",127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
@@ -379,13 +381,9 @@ start_dns(){
 		# start ss-local on port 23456
 		echo_date 开启ss-local，提供socks5端口：23456
 		if [ "$ss_basic_use_rss" == "1" ];then
-			rss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+			rss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_use_rss" == "0" ];then
-			if [ "$ss_basic_onetime_auth" == "1" ];then
-				ss-local -b 0.0.0.0 -l 23456 -A -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid
-			elif [ "$ss_basic_onetime_auth" == "0" ];then
-				ss-local -b 0.0.0.0 -l 23456 -c /koolshare/ss/redchn/ss.json -u -f /var/run/sslocal1.pid
-			fi
+			ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE $ARG_OTA $ARG_OBFS -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 		fi
 
 		echo_date 开启dns2socks，监听端口：23456
@@ -442,14 +440,10 @@ start_dns(){
 				[ "$ss_redchn_pdnsd_udp_server_ss_tunnel" == "4" ] && dns1="$ss_redchn_pdnsd_udp_server_ss_tunnel_user"
 				if [ "$ss_basic_use_rss" == "1" ];then
 					echo_date 开启ssr-tunnel作为pdnsd的上游服务器.
-					rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid
+					rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 				elif  [ "$ss_basic_use_rss" == "0" ];then
 					echo_date 开启ss-tunnel作为pdnsd的上游服务器.
-					if [ "$ss_basic_onetime_auth" == "1" ];then
-						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1099 -L "$dns1" -u -A -f /var/run/sstunnel.pid
-					elif [ "$ss_basic_onetime_auth" == "0" ];then
-						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c /koolshare/ss/redchn/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid
-					fi
+					ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 1099 -L "$dns1" $ARG_OTA $ARG_OBFS -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 				fi
 			fi
 		elif [ "$ss_redchn_pdnsd_method" == "2" ];then
@@ -632,6 +626,7 @@ start_all)
 restart_dns)
 	#ss_basic_action=2
 	echo_date ----------------------- 大陆白名单模式-重启dns服务 ------------------------
+	creat_ss_json
 	resolv_server_ip
 	stop_dns
 	creat_dnsmasq_basic_conf
