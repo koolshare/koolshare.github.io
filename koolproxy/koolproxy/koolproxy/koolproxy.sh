@@ -1,25 +1,19 @@
-#! /bin/sh
-# 导入skipd数据
+#!/bin/sh
 eval `dbus export koolproxy`
 
 # 引用环境变量等
 source /koolshare/scripts/base.sh
-export PERP_BASE=/koolshare/perp
 
 
 start_koolproxy(){
 	perp=`ps | grep perpd |grep -v grep`
-	if [ -z "$perp" ];then
-		sh /koolshare/perp/perp.sh stop
-		sh /koolshare/perp/perp.sh start
-	fi
 	echo $(date): 开启koolproxy主进程！
 	cd /koolshare/koolproxy
   	if [ "$koolproxy_enable" == "1" ];then
   		if [ "$koolproxy_debug" == "1" ];then
-			koolproxy -d -l 2 >/dev/null 2>&1 &
+			/koolshare/bin/koolproxy -d -b /koolshare/koolproxy/data -d -l 2 >/dev/null 2>&1 &
 		else
-			koolproxy -d >/dev/null 2>&1 &
+			/koolshare/bin/koolproxy -d -b /koolshare/koolproxy/data >/dev/null 2>&1 &
 		fi
   	fi
 	rules_date_local=`cat /koolshare/koolproxy/data/version|awk 'NR==2{print}'`
@@ -35,8 +29,8 @@ start_koolproxy(){
 
 stop_koolproxy(){
 	echo $(date): 关闭koolproxy主进程和守护进程...
-	#killall koolproxy
-	kill -9 `pidof koolproxy`
+	killall koolproxy
+	#kill -9 `pidof koolproxy` >/dev/null 2>&1
 }
 
 load_nat(){
@@ -56,7 +50,7 @@ load_nat(){
 	echo $(date): 加载nat规则！
 	[ "$koolproxy_policy" == "2" ] && ipset -N black_koolproxy iphash
 	iptables -t nat -N koolproxy
-	[ "$koolproxy_policy" == "2" ] && iptables -t nat -A PREROUTING -p tcp --dport 80 -m set --match-set black_koolproxy dst -j koolproxy
+	[ "$koolproxy_policy" == "2" ] && iptables -t nat -A PREROUTING -p tcp --dport 80 -m set --set black_koolproxy dst -j koolproxy
 	[ "$koolproxy_policy" == "1" ] && iptables -t nat -A PREROUTING -p tcp --dport 80 -j koolproxy
 	iptables -t nat -A koolproxy -d 0.0.0.0/8 -j RETURN
 	iptables -t nat -A koolproxy -d 10.0.0.0/8 -j RETURN
@@ -123,12 +117,10 @@ dns_takeover(){
 
 flush_nat(){
 	echo $(date): 移除nat规则...
-
-	cd /tmp
-	iptables -t nat -S | grep koolproxy | sed 's/-A/iptables -t nat -D/g'|sed 1d > clean.sh && chmod 700 clean.sh && ./clean.sh && rm clean.sh
+	iptables -t nat -F koolproxy > /dev/null 2>&1
+	iptables -t nat -D PREROUTING -p tcp --dport 80 -m set --set black_koolproxy dst -j koolproxy > /dev/null 2>&1
+	iptables -t nat -D PREROUTING -p tcp --dport 80 -j koolproxy > /dev/null 2>&1
 	iptables -t nat -X koolproxy > /dev/null 2>&1
-	iptables -t nat -X PREROUTING -p tcp --dport 80 -m --match-set black_koolproxy dst -j koolproxy > /dev/null 2>&1
-
 	ipset -F black_koolproxy > /dev/null 2>&1
 	ipset -X black_koolproxy > /dev/null 2>&1
 }

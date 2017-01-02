@@ -1,26 +1,6 @@
 {
     "apps": [
         {
-            "build_date": "2016-09-01_17:20:58", 
-            "description": "让测速更简单", 
-            "home_url": "Module_speedtest.asp", 
-            "md5": "7adab161925485c41ff8b54a7ffc75f2", 
-            "name": "speedtest", 
-            "tar_url": "speedtest/speedtest.tar.gz", 
-            "title": "网络测速", 
-            "version": "0.2.2"
-        }, 
-        {
-            "build_date": "2016-09-01_17:21:04", 
-            "description": "老板，来一斤虚拟内存~", 
-            "home_url": "Module_swap.asp", 
-            "md5": "852a398f732af3508c83a6d3ca91f25d", 
-            "name": "swap", 
-            "tar_url": "swap/swap.tar.gz", 
-            "title": "虚拟内存", 
-            "version": "1.8"
-        }, 
-        {
             "build_date": "2016-09-16_10:11:21", 
             "description": "广告屏蔽大师", 
             "home_url": "Module_adbyby.asp", 
@@ -31,14 +11,34 @@
             "version": "1.1"
         }, 
         {
-            "build_date": "2016-09-01_17:20:52", 
-            "description": "迅雷快鸟，为上网加速而生~", 
-            "home_url": "Module_kuainiao.asp", 
-            "md5": "e767c621332ec5cb4227d4358c9a283b", 
-            "name": "kuainiao", 
-            "tar_url": "kuainiao/kuainiao.tar.gz", 
-            "title": "讯雷快鸟", 
-            "version": "0.3.6"
+            "build_date": "2017-01-02_22:52:57", 
+            "description": "koolproxy", 
+            "home_url": "Module_koolproxy.asp", 
+            "md5": "26ef8e7091e29e825fc564303035bd77", 
+            "name": "koolproxy", 
+            "tar_url": "koolproxy/koolproxy.tar.gz", 
+            "title": "koolproxy", 
+            "version": "3.0.1"
+        }, 
+        {
+            "build_date": "2016-09-01_17:20:46", 
+            "description": "让分流更简单", 
+            "home_url": "Module_policy_route.asp", 
+            "md5": "3112c34fa479156b5872ae700b7015b3", 
+            "name": "dualwan", 
+            "tar_url": "dualwan/dualwan.tar.gz", 
+            "title": "策略路由", 
+            "version": "0.6"
+        }, 
+        {
+            "build_date": "2016-09-01_17:20:58", 
+            "description": "让测速更简单", 
+            "home_url": "Module_speedtest.asp", 
+            "md5": "7adab161925485c41ff8b54a7ffc75f2", 
+            "name": "speedtest", 
+            "tar_url": "speedtest/speedtest.tar.gz", 
+            "title": "网络测速", 
+            "version": "0.2.2"
         }, 
         {
             "build_date": "2016-09-01_17:20:40", 
@@ -51,14 +51,24 @@
             "version": "0.1.3"
         }, 
         {
-            "build_date": "2016-09-01_17:20:46", 
-            "description": "让分流更简单", 
-            "home_url": "Module_policy_route.asp", 
-            "md5": "3112c34fa479156b5872ae700b7015b3", 
-            "name": "dualwan", 
-            "tar_url": "dualwan/dualwan.tar.gz", 
-            "title": "策略路由", 
-            "version": "0.6"
+            "build_date": "2016-09-01_17:21:04", 
+            "description": "老板，来一斤虚拟内存~", 
+            "home_url": "Module_swap.asp", 
+            "md5": "852a398f732af3508c83a6d3ca91f25d", 
+            "name": "swap", 
+            "tar_url": "swap/swap.tar.gz", 
+            "title": "虚拟内存", 
+            "version": "1.8"
+        }, 
+        {
+            "build_date": "2016-09-01_17:20:52", 
+            "description": "迅雷快鸟，为上网加速而生~", 
+            "home_url": "Module_kuainiao.asp", 
+            "md5": "e767c621332ec5cb4227d4358c9a283b", 
+            "name": "kuainiao", 
+            "tar_url": "kuainiao/kuainiao.tar.gz", 
+            "title": "讯雷快鸟", 
+            "version": "0.3.6"
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
