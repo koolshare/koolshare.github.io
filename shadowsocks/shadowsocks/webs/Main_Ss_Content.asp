@@ -492,7 +492,7 @@ function update_visibility_main() {
 	showhide("KCP_name", (ssmode!== "4"));
 	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode !== "4"));
 	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode !== "4"));
-	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode !== "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple"));
+	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode !== "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple" || document.form.ss_basic_rss_obfs.value == "http_post" ));
 	showhide("ss_basic_kcp_port_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
 	showhide("ss_basic_kcp_parameter_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
 
@@ -854,10 +854,30 @@ function getAllConfigs() {
 
 function loadBasicOptions(confs) {
     var option = $j("#ssconf_basic_node");
+    var option1 = $j("#ssconf_basic_Ping_node");
+    var option2 = $j("#ssconf_basic_test_node");
     option.find('option').remove().end();
+    option1.find('option').remove().end();
+    option2.find('option').remove().end();
+        option1.append($j("<option>", {
+            value: 0,
+            text: "全部节点"
+        }));
+        option2.append($j("<option>", {
+            value: 0,
+            text: "全部节点"
+        }));
     for (var field in confs) {
         var c = confs[field];
         option.append($j("<option>", {
+            value: field,
+            text: c.name
+        }));
+        option1.append($j("<option>", {
+            value: field,
+            text: c.name
+        }));
+        option2.append($j("<option>", {
             value: field,
             text: c.name
         }));
@@ -887,6 +907,7 @@ function show_ss_node_info(){ //进入节点显示，编辑页面
 		$G("ss_node_list_table_btn").style.display = "";
 		$G("KoolshareBottom_div").style.display = "none";
 		refresh_table();
+		update_ping_method();
 }
 function ss_node_info_return(){ //退出节点页面，进入主面板
 		cancel_add_rule(); //隐藏节点编辑面板
@@ -1532,44 +1553,42 @@ function ping_test(){
 	checkTime = 2001;  //停止可能在进行的刷新
     document.form.SystemCmd.value = "ss_ping.sh";
 	document.form.action_mode.value = ' Refresh ';
-	document.form.action = "/applydb.cgi?p=ssconf_basic_Ping_Method";
+	document.form.action = "/applydb.cgi?p=ssconf_basic_Ping";
 	document.form.submit();
 	checkTime = 0;
 	refresh_ss_node_list_ping();
+	alert("请等待片刻，测试结果将自动显示在对应节点列表!");
 }
-/*
+
 function remove_ping(){
 	checkTime = 2001;  //停止可能在进行的刷新
     document.form.SystemCmd.value = "ss_ping_remove.sh";
 	document.form.action_mode.value = ' Refresh ';
-	if (validForm()){
-		document.form.submit();
-	}
-	setTimeout(refresh_table(), 3000);
+	document.form.submit();
+	setTimeout("refresh_table()", 3000);
+	alert("请等待片刻，如果结果未清空，请手动刷新页面!");
 }
-*/
+
 function web_test(){
 	checkTime = 2001; //停止可能在进行的刷新
-	//updateSs_node_listView();
 	document.form.SystemCmd.value = "ss_webtest.sh";
 	document.form.action_mode.value = ' Refresh ';
-	document.form.action = "/applydb.cgi?p=ssconf_basic_test_domain";
+	document.form.action = "/applydb.cgi?p=ssconf_basic_test";
 	document.form.submit();
 	checkTime = 0;
 	refresh_ss_node_list_webtest();
+	alert("请等待片刻，测试结果将自动显示在对应节点列表!");
 }
-/*
-function remove_web_test(){
+
+function remove_test(){
 	checkTime = 2001; //停止可能在进行的刷新
-	//updateSs_node_listView();
 	document.form.SystemCmd.value = "ss_webtest_remove.sh";
 	document.form.action_mode.value = ' Refresh ';
-	if (validForm()){
-		document.form.submit();
-	}
-	setTimeout(refresh_table(), 3000);
+	document.form.submit();
+	setTimeout("refresh_table()", 3000);
+	alert("请等待片刻，如果结果未清空，请手动刷新页面!");
 }
-*/
+
 var ping_flag;
 var checkTime = 0;
 function refresh_ss_node_list_ping(){
@@ -1588,8 +1607,14 @@ function refresh_ss_node_list_ping(){
 					ping_flag++;
 				}
 			}
-		if (ping_flag == eval(n)){ //当ping被填满时，停止刷新
-			checkTime = 2001;
+		if(document.form.ssconf_basic_Ping_node.value == "0"){
+			if (ping_flag == eval(n)){ //当ping被填满时，停止刷新
+				checkTime = 2001;
+			}
+		}else{
+			if (ping_flag == "1"){ //当ping被填满时，停止刷新
+				checkTime = 2001;
+			}
 		}
 	}
 }
@@ -1616,9 +1641,6 @@ function refresh_ss_node_list_webtest(){
 		}
 	}
 }
-
-
-
 
 function updatelist(){
 	document.form.action = "/applydb.cgi?p=ss_basic";
@@ -1684,7 +1706,7 @@ function version_show(){
                     	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
                 	}else{
-	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.1.3</i></a>");
+	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.1.5</i></a>");
                 	}
 		        }
             }
@@ -2184,6 +2206,20 @@ function count_down_close(){
 	setTimeout("count_down_close();",1000);
 }
 
+function update_ping_method(){
+	$j("#ssconf_basic_Ping_Method").find('option').remove().end();
+	if(document.form.ssconf_basic_Ping_node.value == "0"){
+		$j("#ssconf_basic_Ping_Method").append("<option value='1'>单线ping(10次/节点)</option>");
+		$j("#ssconf_basic_Ping_Method").append("<option value='2'>并发ping(10次/节点)</option>");
+		$j("#ssconf_basic_Ping_Method").append("<option value='3'>并发ping(20次/节点)</option>");
+		$j("#ssconf_basic_Ping_Method").append("<option value='4'>并发ping(50次/节点)</option>");
+	}else{
+		$j("#ssconf_basic_Ping_Method").append("<option value='5'>ping(10次)</option>");
+		$j("#ssconf_basic_Ping_Method").append("<option value='6'>ping(20次)</option>");
+		$j("#ssconf_basic_Ping_Method").append("<option value='7'>ping(50次)</option>");
+	}
+}
+
 function reload_Soft_Center(){
 	location.href = "/Main_Soft_center.asp";
 }
@@ -2470,8 +2506,6 @@ function reload_Soft_Center(){
 											</div>	
 										      <!--===================================Ending of vpnc setting Content===========================================-->			
 										</div>
-
-
 										
 										<!--=====bacic show =====-->
 										<div id="basic_show">
@@ -2513,7 +2547,7 @@ function reload_Soft_Center(){
 												<tr id="server_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(2)">服务器</a></th>
 													<td>
-														<input type="text" class="ssconfig input_ss_table" id="ss_basic_server" name="ss_basic_server" maxlength="100" value=""/>
+														<input type="text" class="ssconfig input_ss_table" id="ss_basic_server" name="ss_basic_server" maxlength="100" value="" />
 													</td>
 												</tr>
 												<tr id="port_tr">
@@ -2525,10 +2559,7 @@ function reload_Soft_Center(){
 												<tr id="pass_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(4)">密码</a></th>
 													<td>
-														<input type="password" name="ss_basic_password" id="ss_basic_password" class="ssconfig input_ss_table" autocomplete="new-password" autocorrect="off" autocapitalize="off" maxlength="100" value=""></input>
-														<div style="margin-left:170px;margin-top:-20px;margin-bottom:0px"><input type="checkbox" name="show_pass" onclick="pass_checked(document.form.ss_basic_password);">
-															<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(14)">显示密码</a>
-														</div>
+														<input type="password" name="ss_basic_password" id="ss_basic_password" class="ssconfig input_ss_table" autocomplete="new-password" autocorrect="off" autocapitalize="off" maxlength="100" value="" onBlur="switchType(this, false);" onFocus="switchType(this, true);"/>
 													</td>
 												</tr>												
 												<tr id="method_tr">
@@ -2689,25 +2720,23 @@ function reload_Soft_Center(){
 												<tr>
 													<th style="width:20%;">ping测试</th>
 													<td>
-														<!--<input class="button_gen" onClick="remove_ping()" type="button" value="移除ping"/>-->
 														<input class="button_gen" onClick="ping_test()" type="button" value="ping测试"/>
-														<select id="ssconf_basic_Ping_Method" name="ssconf_basic_Ping_Method" style="width:300px;margin:0px 0px 0px 2px;" class="input_option">
-															<option class="content_input_fd" value="1">单线ping(10次/节点)</option>
-															<option class="content_input_fd" value="2">并发ping(10次/节点)</option>
-															<option class="content_input_fd" value="3">并发ping(20次/节点)</option>
-															<option class="content_input_fd" value="4">并发ping(50次/节点)</option>
-														</select>
+														<select id="ssconf_basic_Ping_node" name="ssconf_basic_Ping_node" style="width:124px;margin:0px 0px 0px 2px;" class="input_option" onchange="update_ping_method();"></select>
+														<select id="ssconf_basic_Ping_Method" name="ssconf_basic_Ping_Method" style="width:160px;margin:0px 0px 0px 2px;" class="input_option"></select>
+														<input class="button_gen" onClick="remove_ping()" type="button" value="清空结果"/>
 													</td>
 												</tr>
 												<tr>
 													<th style="width:20%;">web测试</th>
 													<td>
-														<!--<input class="button_gen" onClick="remove_test()" type="button" value="移除web测试"/>-->
 														<input class="button_gen" onClick="web_test()" type="button" value="web测试"/>
-														<select id="ssconf_basic_test_domain" name="ssconf_basic_test_domain" style="width:300px;margin:0px 0px 0px 2px;" class="input_option">
+															<select id="ssconf_basic_test_node" name="ssconf_basic_test_node" style="width:124px;margin:0px 0px 0px 2px;" class="input_option">
+															</select>
+														<select id="ssconf_basic_test_domain" name="ssconf_basic_test_domain" style="width:160px;margin:0px 0px 0px 2px;" class="input_option">
 															<option class="content_input_fd" value="https://www.google.com/">google.com</option>
 															<option class="content_input_fd" value="https://www.youtube.com/">youtube.com</option>
 														</select>
+														<input class="button_gen" onClick="remove_test()" type="button" value="清空结果"/>
 													</td>
 												</tr>
 											</table>

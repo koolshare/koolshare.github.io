@@ -1,5 +1,16 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.1.5
+   - add	功能：现在ping测试和webtest测试支持对单个ss节点进行测试;
+   - add	功能：添加移除ping测试和webtest测试结果按钮;
+   - add	功能：ss-local（socks5）添加混淆支持;
+   - update	程序：更新shadowsocks-libev到2.6.0最新代码;
+   - update	界面：移除ss和socks5的显示密码勾选框，现在鼠点击即可显示;
+   - update 	规则：更新最新的gfwlist.acl和chnroute.acl名单；
+   - fix	界面：修复webtest测试不支持带混淆的ss-libev节点的问题;;
+   - fix	脚本：修复socks5修复错误加载acl命令;
+   - fix	界面：修复http_post不支持obfs_param的问题。
+
 3.1.4
    - update	程序：更新shadowsocks-libev到2.6.0最新版本，支持混淆;
    - update	程序：更新shadowsocksr-libev为最新版本;

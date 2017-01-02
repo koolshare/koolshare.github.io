@@ -91,6 +91,7 @@ function init(){
 	conf_to_obj();
     buildswitch();
     toggle_switch();
+    update_visibility();
 }
 
 function toggle_switch(){
@@ -153,8 +154,8 @@ function validForm(){
 	return is_ok;
 }
 
-function pass_checked(obj){
-	switchType(obj, document.form.show_pass.checked, true);
+function update_visibility(){
+	showhide("ss_obfs_host", (document.form.ss_local_obfs.value !== "0" ));
 }
 
 </script>
@@ -250,10 +251,7 @@ function pass_checked(obj){
 											<tr>
 												<th width="20%">密码</th>
 													<td>
-														<input type="password" class="ssconfig input_ss_table" id="ss_local_password" name="ss_local_password" maxlength="100" value="">
-													<div style="margin-left:170px;margin-top:-20px;margin-bottom:0px">
-														<input type="checkbox" name="show_pass" onclick="pass_checked(document.form.ss_local_password);">显示密码
-													</div>
+														<input type="password" class="ssconfig input_ss_table" id="ss_local_password" name="ss_local_password" maxlength="100" value="" onBlur="switchType(this, false);" onFocus="switchType(this, true);">
 												</td>
 											</tr>
 											<tr>
@@ -300,6 +298,22 @@ function pass_checked(obj){
 														<option value="0" selected>否</option>
 														<option value="1">是</option>
 													</select>
+												</td>
+											</tr>
+											<tr id="ss_obfs">
+												<th width="35%">混淆 (obfs)</th>
+												<td>
+													<select id="ss_local_obfs" name="ss_local_obfs" style="width:164px;margin:0px 0px 0px 2px;" class="input_option"  onchange="update_visibility();" >
+														<option class="content_input_fd" value="0">关闭</option>
+														<option class="content_input_fd" value="tls">tls</option>
+														<option class="content_input_fd" value="http">http</option>
+													</select>
+												</td>
+											</tr>
+											<tr id="ss_obfs_host">
+												<th width="35%">混淆主机名 (obfs_host)</th>
+												<td>
+													<input type="text" name="ss_local_obfs_host" id="ss_local_obfs_host" placeholder="bing.com"  class="ssconfig input_ss_table" maxlength="100" value=""></input>
 												</td>
 											</tr>
 											<tr id="acl_support">

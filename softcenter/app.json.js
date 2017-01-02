@@ -61,16 +61,6 @@
             "version": "1.2"
         }, 
         {
-            "build_date": "2016-05-13_16:14:27", 
-            "description": "加速apple服务", 
-            "home_url": "Module_appledns.asp", 
-            "md5": "b36145d26b9a896a329c8facd9020466", 
-            "name": "appledns", 
-            "tar_url": "appledns/appledns.tar.gz", 
-            "title": "AppleDNS", 
-            "version": "0.2"
-        }, 
-        {
             "build_date": "2016-10-05_16:51:29", 
             "description": "超强的SSH网页客户端，webshell替代品~", 
             "home_url": "Module_shellinabox.asp", 
@@ -121,14 +111,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2016-12-28_22:01:43", 
+            "build_date": "2017-01-02_19:29:33", 
             "description": "科学上网", 
             "home_url": "Main_Ss_Content.asp", 
-            "md5": "9241a6758181d2b7056918782a36fe6e", 
+            "md5": "f6cf383f1443377d14f2d9621f7dec2e", 
             "name": "shadowsocks", 
             "tar_url": "shadowsocks/shadowsocks.tar.gz", 
             "title": "shadowsocks", 
-            "version": "3.1.4"
+            "version": "3.1.5"
         }, 
         {
             "build_date": "2016-05-07_01:41:30", 
