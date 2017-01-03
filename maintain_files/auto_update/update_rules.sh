@@ -68,6 +68,7 @@ if [ "$md5sum5"x = "$md5sum6"x ];then
 	rm cdn1.txt accelerated-domains.china.conf cdn_download.txt
 else
 	echo update cdn!
+	rm accelerated-domains.china.conf cdn_download.txt
 	mv -f cdn1.txt ../cdn.txt
 	sed -i "4c `date +%Y-%m-%d` # $md5sum5 cdn" ../version1
 fi
