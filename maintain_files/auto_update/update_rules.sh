@@ -47,7 +47,7 @@ if [ "$md5sum3"x = "$md5sum4"x ];then
 	rm chnroute1.txt
 else
 	echo update chnroute!
-	mv -f chnroute1.txt chnroute.txt
+	mv -f chnroute1.txt ../chnroute.txt
 	sed -i "2c `date +%Y-%m-%d` # $md5sum3 chnroute" ../version1
 fi
 echo =================
