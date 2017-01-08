@@ -22,7 +22,6 @@
 <script type="text/javascript" src="/general.js"></script>
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
 <script type="text/javascript" src="/dbconf?p=koolproxy_&v=<% uptime(); %>"></script>
-<script type="text/javascript" src="/res/softcenter.js"></script>
 <script language="JavaScript" type="text/javascript" src="/client_function.js"></script>
 <style>
     .cloud_main_radius h2 { border-bottom:1px #AAA dashed;}
@@ -32,6 +31,7 @@
 </style>
 
 <script>
+var $j = jQuery.noConflict();
 function init(menu_hook) {
 	show_menu();
 	get_status();
