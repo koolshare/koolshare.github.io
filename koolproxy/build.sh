@@ -2,7 +2,7 @@
 
 
 MODULE=koolproxy
-VERSION=3.0.2
+VERSION=3.0.4
 TITLE=koolproxy
 DESCRIPTION=koolproxy
 HOME_URL=Module_koolproxy.asp
