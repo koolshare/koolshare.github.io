@@ -1,8 +1,9 @@
 #! /bin/sh
 
-
 eval `dbus export ss`
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
+
+nvram get extendno |grep X7.3|cut -d "X" -f2
 
 mkdir -p /koolshare/ss
 if [ "$ss_basic_enable" == "1" ];then

@@ -1,7 +1,0 @@
-Koolshare Asuswrt-Merlin adm Changelog
-===========================================
-1.1
-   - update	stop SoftEther VPN Server before update files
-
-1.0
-   - add	add SoftEther VPN Server
