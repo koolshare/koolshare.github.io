@@ -122,8 +122,7 @@ parseDomain() {
 }
 
 #将执行脚本写入crontab定时运行
-add_ddnspod_
-(){
+add_ddnspod_cru(){
 	if [ -f /koolshare/ddnspod/ddnspod.sh ]; then
 		#确保有执行权限
 		chmod +x /koolshare/ddnspod/ddnspod.sh
