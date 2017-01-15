@@ -13,7 +13,7 @@
 
 # ====================================变量定义====================================
 # 版本号定义
-version="0.1.4"
+version="0.1.5"
 
 # 导入skipd数据
 eval `dbus export ddnspod`
@@ -51,7 +51,7 @@ arIpAdress() {
 # 查询域名地址
 # 参数: 待查询域名
 arNslookup() {
-    local inter="http://tool.ihacklog.com/net/ip.php?domain="
+    local inter="http://119.29.29.29/d?dn="
     wget --quiet --output-document=- $inter$1
 }
 
@@ -126,7 +126,7 @@ add_ddnspod_cru(){
 	if [ -f /koolshare/ddnspod/ddnspod.sh ]; then
 		#确保有执行权限
 		chmod +x /koolshare/ddnspod/ddnspod.sh
-		cru a ddnspod "* */$ddnspod_refresh_time * * * /koolshare/ddnspod/ddnspod.sh restart"
+		cru a ddnspod "0 */$ddnspod_refresh_time * * * /koolshare/ddnspod/ddnspod.sh restart"
 	fi
 }
 
