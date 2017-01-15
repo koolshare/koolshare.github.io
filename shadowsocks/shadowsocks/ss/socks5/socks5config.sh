@@ -13,21 +13,24 @@ start_socks5(){
 	[ $ss_local_ota -ne 1 ] && ARG_OTA="" || ARG_OTA="-A";
 	if [ "$ss_local_obfs_host" != "" ];then
 		if [ "$ss_local_obfs" == "http" ];then
-			ARG_OBFS="--obfs http --obfs-host $ss_local_obfs_host"
+			ARG_OBFS="obfs=http;obfs-host=$ss_basic_ss_obfs_host"
 		elif [ "$ss_local_obfs" == "tls" ];then
-			ARG_OBFS="--obfs tls --obfs-host $ss_local_obfs_host"
+			ARG_OBFS="obfs=tls;obfs-host=$ss_basic_ss_obfs_host"
 		else
 			ARG_OBFS=""
 		fi
 	else
 		if [ "$ss_local_obfs" == "http" ];then
-			ARG_OBFS="--obfs http"
+			ARG_OBFS="obfs=http"
 		elif [ "$ss_local_obfs" == "tls" ];then
-			ARG_OBFS="--obfs tls"
+			ARG_OBFS="obfs=tls"
 		else
 			ARG_OBFS=""
 		fi
 	fi
+
+
+	
 	if [ "$ss_local_acl" == "0" ];then
 		ARG_ACL=""
 	elif [ "$ss_local_acl" == "1" ];then
@@ -35,18 +38,13 @@ start_socks5(){
 	elif [ "$ss_local_acl" == "2" ];then
 		ARG_ACL="--acl /koolshare/ss/socks5/chn.acl"
 	fi
-	
+
 	echo_date enable ss_local...
-	ss-local \
-	-b 0.0.0.0 \
-	-s "$ss_local_server" \
-	-p "$ss_local_port" -l \
-	"$ss_local_proxyport" \
-	-k "$ss_local_password" \
-	-m "$ss_local_method" \
-	-u \
-	$ARG_OTA $ARG_OBFS $ARG_ACL \
-	-f /var/run/ss_local.pid
+	if [ "$ss_local_obfs" == "0" ];then
+		ss-local -b 0.0.0.0 -s "$ss_local_server" -p "$ss_local_port" -l "$ss_local_proxyport" -k "$ss_local_password" -m "$ss_local_method" -u $ARG_OTA $ARG_ACL -f /var/run/ss_local.pid
+	else
+		ss-local -b 0.0.0.0 -s "$ss_local_server" -p "$ss_local_port" -l "$ss_local_proxyport" -k "$ss_local_password" -m "$ss_local_method" -u $ARG_OTA $ARG_ACL --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/ss_local.pid
+	fi
 }
 
 case $ACTION in

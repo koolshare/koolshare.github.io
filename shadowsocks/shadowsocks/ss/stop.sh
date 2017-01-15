@@ -20,7 +20,7 @@ client_linux_arm5=$(ps | grep "client_linux_arm5" | grep -v "grep")
 Pcap_DNSProxy=$(ps | grep "Pcap_DNSProxy" | grep -v "grep")
 haproxy=$(ps | grep "haproxy" | grep -v "grep")
 lan_ipaddr=$(nvram get lan_ipaddr)
-ip_rule_exist=`ip rule show | grep "fwmark 0x1/0x1 lookup 300" | grep -c 300`
+ip_rule_exist=`/usr/sbin/ip rule show | grep "fwmark 0x1/0x1 lookup 310" | grep -c 310`
 nvram set ss_mode=0
 dbus set dns2socks=0
 nvram commit
@@ -65,27 +65,29 @@ bring_up_dnsmasq(){
 
 restore_nat(){
 	# flush iptables and destory SHADOWSOCKS chain
-	echo_date 删除SS相关的iptables设置，保证nat表干净...
-	iptables -t nat -D PREROUTING -p tcp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
-	iptables -t nat -D PREROUTING -p udp -m set $MATCH_SET gfwlist dst -j REDIRECT --to-port 3333 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p tcp -j SHADOWSOCKS >/dev/null 2>&1
-	iptables -t nat -D PREROUTING -j SHADOWSOCKS >/dev/null 2>&1
-	iptables -t nat -D OUTPUT -p tcp -m set $MATCH_SET router dst -j REDIRECT --to-ports 3333 >/dev/null 2>&1
-	iptables -t nat -F OUTPUT  >/dev/null 2>&1
-	iptables -t nat -D PREROUTING -s $lan_ipaddr/24 -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
+	iptables -t nat -F SHADOWSOCKS > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS > /dev/null 2>&1
+	iptables -t nat -F SHADOWSOCKS_GFW > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS_GFW > /dev/null 2>&1
+	iptables -t nat -F SHADOWSOCKS_CHN > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS_CHN > /dev/null 2>&1
+	iptables -t nat -F SHADOWSOCKS_GAM > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS_GAM > /dev/null 2>&1
+	iptables -t nat -F SHADOWSOCKS_GLO > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS_GLO > /dev/null 2>&1
+	iptables -t mangle -D PREROUTING -p udp -j SHADOWSOCKS >/dev/null 2>&1
+	iptables -t mangle -F SHADOWSOCKS >/dev/null 2>&1 && iptables -t mangle -X SHADOWSOCKS >/dev/null 2>&1
+	iptables -t mangle -F SHADOWSOCKS_GAM > /dev/null 2>&1 && iptables -t mangle -X SHADOWSOCKS_GAM > /dev/null 2>&1
+	iptables -t nat -D OUTPUT -p tcp -m set --match-set gfwlist dst -j REDIRECT --to-ports 3333 >/dev/null 2>&1
 	iptables -t nat -D PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
-	iptables -t nat -F SHADOWSOCKS >/dev/null 2>&1
-	iptables -t nat -X SHADOWSOCKS >/dev/null 2>&1
-	ip route del local 0.0.0.0/0 dev lo table 300  >/dev/null 2>&1
-	iptables -t mangle -D PREROUTING -j SHADOWSOCKS2 >/dev/null 2>&1
-	iptables -t mangle -D PREROUTING -p udp -j SHADOWSOCKS2 >/dev/null 2>&1
-	iptables -t mangle -F SHADOWSOCKS2 >/dev/null 2>&1
-	iptables -t mangle -X SHADOWSOCKS2 >/dev/null 2>&1
+	
+	
+	#ip route del local 0.0.0.0/0 dev lo table 300  >/dev/null 2>&1
+	/usr/sbin/ip route del local 0.0.0.0/0 dev lo table 310 >/dev/null 2>&1
+	
+	
 	
 	if [ ! -z "ip_rule_exist" ];then
 		until [ "$ip_rule_exist" = 0 ]
 		do 
-			ip rule del fwmark 0x01/0x01 table 300
+			#ip rule del fwmark 0x01/0x01 table 310
+			/usr/sbin/ip rule del fwmark 0x01/0x01 table 310 pref 789
 			ip_rule_exist=`expr $ip_rule_exist - 1`
 		done
 	fi
@@ -94,27 +96,14 @@ restore_nat(){
 
 destory_ipset(){
 	# flush and destory ipset
-	echo_date 清除所有SS相关ipset名单...
-	ipset -F gfwlist >/dev/null 2>&1
-	ipset -F router >/dev/null 2>&1
 	ipset -F chnroute >/dev/null 2>&1
-	ipset -X gfwlist >/dev/null 2>&1
-	ipset -X router >/dev/null 2>&1
+	ipset -F white_list >/dev/null 2>&1
+	ipset -F black_list >/dev/null 2>&1
+	ipset -F gfwlist >/dev/null 2>&1
 	ipset -X chnroute >/dev/null 2>&1
-	ipset -F white_domain >/dev/null 2>&1
-	ipset -F black_domain >/dev/null 2>&1
-	ipset -X white_domain >/dev/null 2>&1
-	ipset -X black_domain >/dev/null 2>&1
-	ipset -F white_ip >/dev/null 2>&1
-	ipset -F black_ip >/dev/null 2>&1
-	ipset -X white_ip >/dev/null 2>&1
-	ipset -X black_ip >/dev/null 2>&1
-	#flush and destory white_cidr in chnmode mode
-	ipset -F white_cidr >/dev/null 2>&1
-	ipset -X white_cidr >/dev/null 2>&1
-	#flush and destory black_cidr in gfwlist mode
-	ipset -F black_cidr >/dev/null 2>&1
-	ipset -X black_cidr >/dev/null 2>&1
+	ipset -X white_list >/dev/null 2>&1
+	ipset -X black_list >/dev/null 2>&1
+	ipset -X gfwlist >/dev/null 2>&1
 }
 
 restore_start_file(){

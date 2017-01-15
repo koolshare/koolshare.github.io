@@ -1,0 +1,14 @@
+{
+    "server":"47.90.86.178",
+    "server_port":23333,
+    "local_port":3333,
+    "sock5_port":23456,
+    "dns2ss":7913,
+    "adblock_addr":"",
+    "adblock_path":"/koolshare/ss/koolgame/xwhycadblock.txt",
+    "dns_server":"",
+    "password":"mjy211",
+    "timeout":600,
+    "method":"chacha20-ietf",
+    "use_tcp":0
+}

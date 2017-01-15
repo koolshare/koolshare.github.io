@@ -51,16 +51,6 @@
             "version": "0.1.4"
         }, 
         {
-            "build_date": "2016-11-08_08:10:02", 
-            "description": "", 
-            "home_url": "Module_softether.asp", 
-            "md5": "5a23c07cee7bea8bcb617e2fae1e9836", 
-            "name": "softether", 
-            "tar_url": "softether/softether.tar.gz", 
-            "title": "SoftEther_VPN_Server", 
-            "version": "1.2"
-        }, 
-        {
             "build_date": "2016-10-05_16:51:29", 
             "description": "超强的SSH网页客户端，webshell替代品~", 
             "home_url": "Module_shellinabox.asp", 
@@ -111,14 +101,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2017-01-02_19:29:33", 
+            "build_date": "2017-01-15_17:53:23", 
             "description": "科学上网", 
             "home_url": "Main_Ss_Content.asp", 
-            "md5": "f6cf383f1443377d14f2d9621f7dec2e", 
+            "md5": "7514d67f042c4eb95ddff8391d83bac6", 
             "name": "shadowsocks", 
             "tar_url": "shadowsocks/shadowsocks.tar.gz", 
             "title": "shadowsocks", 
-            "version": "3.1.5"
+            "version": "3.1.6"
         }, 
         {
             "build_date": "2016-05-07_01:41:30", 

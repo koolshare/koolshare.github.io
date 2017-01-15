@@ -4,6 +4,16 @@
 	tablink[16] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
 }
 
+var Base64;
+if(typeof btoa == "Function") {
+   Base64 = {encode:function(e){ return btoa(e); }, decode:function(e){ return atob(e);}};
+} else {
+   Base64 ={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/\r\n/g,"\n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
+}
+String.prototype.replaceAll = function(s1,s2){
+　　return this.replace(new RegExp(s1,"gm"),s2);
+}
+
 function showSSLoadingBar(seconds){
 	if(window.scrollTo)
 		window.scrollTo(0,0);
@@ -394,30 +404,12 @@ function openssHint(itemNum){
 		_caption = "一次性验证(OTA)";
 	}
 	else if(itemNum == 8){
-		width="700px";
-		statusmenu ="<b><font color='#669900'>plain：</font></b>plain：表示不混淆，使用原协议"
-		statusmenu +="</br></br><b><font color='#669900'>verify_simple（不建议使用）：</font></b>对每一个包都进行CRC32验证和长度混淆，数据格式为：包长度(2字节)|随机数据长度+1(1字节)|随机数据|原数据包|CRC32。此插件与原协议握手延迟相同，整个通讯过程中存在验证及混淆用的冗余数据包，下载的情况下冗余数据平均占比1%，普通浏览时占比略高一些，但平均也不会超过5%。"
-		statusmenu +="</br></br><b><font color='#669900'>verify_sha1：</font></b>对每一个包都进行SHA-1校验，具体协议描述参阅<a href='https://shadowsocks.org/en/spec/one-time-auth.html' target='_blank'><u><font color='#00F'>One Time Auth</font></u></a>，握手数据包增加10字节，其它数据包增加12字节。此插件能兼容原协议（需要在服务端配置为verify_sha1_compatible)。"
-		statusmenu +="</br></br><b><font color='#669900'>auth_simple（不建议使用）：</font></b>首个客户端数据包会发送由客户端生成的随机客户端id(4byte)、连接id(4byte)、unix时间戳(4byte)以及CRC32，服务端通过验证后，之后的通讯与verify_simple相同。此插件提供了最基本的认证，能抵抗一般的重放攻击，默认同一端口最多支持16个客户端同时使用，可通过修改此值限制客户端数量，缺点是使用此插件的服务器与客户机的UTC时间差不能超过5分钟，通常只需要客户机校对本地时间并正确设置时区就可以了。此插件与原协议握手延迟相同，支持服务端自定义参数，参数为10进制整数，表示最大客户端同时使用数。"
-		statusmenu +="</br></br><b><font color='#669900'>auth_sha1：</font></b>对首个包进行SHA-1校验，同时会发送由客户端生成的随机客户端id(4byte)、连接id(4byte)、unix时间戳(4byte)，之后的通讯使用Adler-32作为效验码。此插件提供了能抵抗CCA的认证，也能抵抗一般的重放攻击，默认同一端口最多支持64个客户端同时使用，可通过修改此值限制客户端数量，使用此插件的服务器与客户机的UTC时间差不能超过1小时，通常只需要客户机校对本地时间并正确设置时区就可以了。此插件与原协议握手延迟相同，能兼容原协议（需要在服务端配置为auth_sha1_compatible)，支持服务端自定义参数，参数为10进制整数，表示最大客户端同时使用数。"
-		statusmenu +="</br></br><b><font color='#669900'>auth_sha1_v2：</font></b>与auth_sha1相似，去除时间验证，以避免部分设备由于时间导致无法连接的问题，增长客户端ID为8字节，使用更大的长度混淆。能兼容原协议（需要在服务端配置为auth_sha1_v2_compatible)，支持服务端自定义参数，参数为10进制整数，表示最大客户端同时使用数。"
-		statusmenu +="</br></br>更多信息，请参考<a href='https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
+		statusmenu ="更多信息，请参考<a href='https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
 		_caption = "协议插件（protocol）";
-		return overlib(statusmenu, OFFSETX, -860, OFFSETY, -290, LEFT, STICKY, WIDTH, 'width', CAPTION, _caption, CLOSETITLE, '');
 	}
 	else if(itemNum == 9){
-		width="700px";
-		statusmenu ="<b><font color='#669900'>origin：</font></b>plain：表示不混淆，使用原协议"
-		statusmenu +="</br></br><b><font color='#669900'>http_simple：</font></b>并非完全按照http1.1标准实现，仅仅做了一个头部的GET请求和一个简单的回应，之后依然为原协议流。使用这个混淆后，已在部分地区观察到似乎欺骗了QoS的结果。对于这种混淆，它并非为了减少特征，相反的是提供一种强特征，试图欺骗GFW的协议检测。要注意的是应用范围变大以后因特征明显有可能会被封锁。此插件可以兼容原协议(需要在服务端配置为http_simple_compatible)，延迟与原协议几乎无异（在存在QoS的地区甚至可能更快），除了头部数据包外没有冗余数据包，支持自定义参数，参数为http请求的host，例如设置为cloudfront.com伪装为云服务器请求，可以使用逗号分割多个host如a.com,b.net,c.org（仅C#版支持），这时会随机使用。注意，错误设置此参数可能导致连接被断开甚至IP被封锁，如不清楚如何设置那么请留空。"
-		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;本插件的高级设置（C#版、python版及ssr-libev版支持）：本插件可以自定义几乎完整的http header，其中前两行的GET和host不能修改，可自定义从第三行开始的内容。例子：baidu.com#User-Agent: abc\nAccept: text/html\nConnection: keep-alive&nbsp;&nbsp;&nbsp;&nbsp;这是填于混淆参数的内容，在#号前面的是上文所说的host，后面即为自定义header，所有的换行使用\n表示（写于配置文件时也可直接使用\n而不必写成\n，换行符亦会转换），如遇到需要使用单独的\号，可写为\\，最末尾不需要写\n，程序会自动加入连续的两个换行。"
-		statusmenu +="</br></br><b><font color='#669900'>http_post：</font></b>与http_simple绝大部分相同，区别是使用POST方式发送数据，符合http规范，欺骗性更好，但只有POST请求这种行为容易被统计分析出异常。此插件可以兼容http_simple，同时也可兼容原协议(需要在服务端配置为http_post_compatible)，参数设置等内容参见http_simple，密切注意如果使用自定义http header，请务必填写boundary。"
-		statusmenu +="</br></br><b><font color='#669900'>random_head：</font></b>开始通讯前发送一个几乎为随机的数据包（目前末尾4字节为CRC32，会成为特征，以后会有改进版本），之后为原协议流。目标是让首个数据包根本不存在任何有效信息，让统计学习机制见鬼去吧。此插件可以兼容原协议(需要在服务端配置为random_head_compatible)，比原协议多一次握手导致连接时间会长一些，除了握手过程之后没有冗余数据包，不支持自定义参数。"
-		statusmenu +="</br></br><b><font color='#669900'>tls_simple（不建议使用）：</font></b>模拟https/TLS1.2的握手过程，但server hello的应答数据不完整，但亦可使用。对于防火墙针对TLS握手协议篡改会无视，但结果是会导致此连接超时断开，浏览器响应缓慢。此插件可以兼容原协议(需要在服务端配置为tls_simple_compatible)，比原协议多一次握手导致连接时间会长一些，除了握手过程之后没有冗余数据包，不支持自定义参数。"
-		statusmenu +="</br></br><b><font color='#669900'>tls1.0_session_auth（不建议使用）:</font></b>:模拟TLS1.0在客户端有session ID的情况下的握手连接。但实现有错误，已观察到有可能是防火墙的封锁。此插件可以兼容原协议(需要在服务端配置为tls1.0_session_auth_compatible)，比原协议多一次握手导致连接时间会长一些，除了握手过程之后没有冗余数据包，不支持自定义参数。"
-		statusmenu +="</br></br><b><font color='#669900'>tls1.2_ticket_auth（强烈推荐）:</font></b>:模拟TLS1.2在客户端有session ticket的情况下的握手连接。目前为完整模拟实现，经抓包软件测试完美伪装为TLS1.2。因为有ticket所以没有发送证书等复杂步骤，因而防火墙无法根据证书做判断。同时自带一定的抗重放攻击的能力。如遇到重放攻击则会在服务端log里搜索到，可以通过grep 'replay attack'搜索，可以用此插件发现你所在地区线路有没有针对TLS的干扰。防火墙对TLS比较无能为力，抗封锁能力应该会较其它插件强，但遇到的干扰也可能不少，不过协议本身会检查出任何干扰，遇到干扰便断开连接，避免长时间等待，让客户端或浏览器自行重连。此插件可以兼容原协议(需要在服务端配置为tls1.2_ticket_auth_compatible)，比原协议多一次握手导致连接时间会长一些，使用C#客户端开启自动重连时比其它插件表现更好。支持自定义参数，参数为SNI，即发送host名称的字段，此功能与TOR的meet插件十分相似，例如设置为cloudfront.net伪装为云服务器请求，可以使用逗号分割多个host如a.com,b.net,c.org（仅C#版支持），这时会随机使用。注意，错误设置此参数可能导致连接被断开甚至IP被封锁，如不清楚如何设置那么请留空。推荐自定义参数设置为cloudflare.com或cloudfront.net。"
-		statusmenu +="</br></br>更多信息，请参考<a href='https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
+		statusmenu ="更多信息，请参考<a href='https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
 		_caption = "混淆插件 (obfs)";
-		return overlib(statusmenu, OFFSETX, -860, OFFSETY, -290, LEFT, STICKY, WIDTH, 'width', CAPTION, _caption, CLOSETITLE, '');
 		
 	}
 	else if(itemNum == 11){
@@ -445,10 +437,6 @@ function openssHint(itemNum){
 		statusmenu ="&nbsp;&nbsp;&nbsp;&nbsp;SSR表示shadowwocksR-libev，相比较原版shadowwocksR-libev，其提供了强大的协议混淆插件，让你避开gfw的侦测。"
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;虽然你在节点编辑界面能够指定使用SS的类型，不过这里还是提供了勾选使用SSR的选项，是为了方便一些服务器端是兼容原版协议的用户，快速切换SS账号类型而设定。";
 		_caption = "使用SSR";
-	}
-	else if(itemNum == 14){
-		statusmenu ="&nbsp;&nbsp;&nbsp;&nbsp;建议清楚chrome等浏览器禁用在该页的自动保存密码，不然可能导致表单自动填写，将本页的密码替换掉！"
-		_caption = "显示密码";
 	}
 	else if(itemNum == 15){
 		statusmenu ="&nbsp;&nbsp;&nbsp;&nbsp;点击右侧的铅笔图标，进入节点界面，在节点界面，你可以进行节点的添加，修改，删除，应用，检查节点ping，和web访问性等操作。"
@@ -536,10 +524,6 @@ function openssHint(itemNum){
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;pdnsd域名解析具备强大的dns缓存机制，通过修改最小ttl时间，可以让缓存进入电脑后很长时间才会失效，优点就是每次解析国外网站，仅需1ms的时间；";
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;设置pdnsd的上有服务器，建议使用UDP方式，因为TCP方式，除非自己搭建支持TCP查询的DNS服务器，很难避免污染的情况，而UDP方式也是提供了（dns2socks，dnscrypt-proxy，ss-tunnel）三种上游软件，这里就不再赘述；";
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;在gfwlist模式下，pdnsd用于针对性的解析gfwlist内的域名名单，因此pdnsd的DNS缓存也只针对这部分域名；在使用chnroute的模式（大陆白名单模式，游戏模式，游戏模式V2）dnscrypt-proxy用于解析<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>以外的所有域名，pdnsd的DNS缓存也针对这部分域名（但是范围比使用gfwlist要大得多了），所以一些没有包含在这份名单内的网站，而正好这个网站有部署国外地址的话，那么这个网站就会被解析为国外ip，然后由ipset判断流量走ss，当然这种情况是比较少的，因为一般常用的国内网站都包含在这份cdn名单内了。";
-		//end
-		statusmenu +="</br></br>&nbsp;&nbsp;&nbsp;&nbsp;问：那么你说了上面那么多，那么DNS解析方案到底哪家强？";
-		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#00F'>1:</font>&nbsp;&nbsp;在gfwlist模式下，因为只有gfwlist模式内的域名会用国外DNS解析，所以是不用担心国内DNS解析的，那么如果要获得良好的国外CDN效果，这里<b>推荐大家用万金油dns2socks，还有ss-tunnel</b>,前者的解析和电脑上用socks5的远端解析式一样样的，后者ss-tunnel虽然走了不同的路（udp）去解析，但是最终殊途同归，解析效果应该和dns2socks是一样的；那么一定要分出个优劣的话，就看你的网络是udp给力还是tcp给力了；如果你像解析效果还还能缓存，那就<b>推荐pdnsd+dns2socks/ss-tunnel组合</b>";
-		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#00F'>2:</font>&nbsp;&nbsp;在使用chnroute的模式下（大陆白名单模式，游戏模式，游戏模式V2），要获得良好的国内cdn效果，<b>推荐使用Pcap_DNSProxy或者ChinaDNS；如果要同时获得良好的国内cdn效果和国外cdn效果，<b>推荐使用ChinaDNS + dns2socks/ss-tunnel</b>的组合；如果你想要给力的DNS缓存效果，那就牺牲点国内cdn好了，推荐<b>推荐pdnsd+dns2socks/ss-tunnel组合</b>"
 		_caption = "国外DNS";
 		return overlib(statusmenu, OFFSETX, -860, OFFSETY, -290, LEFT, STICKY, WIDTH, 'width', CAPTION, _caption, CLOSETITLE, '');
 		
@@ -575,7 +559,7 @@ function openssHint(itemNum){
 		statusmenu +="</br></br>koolshare.cn"
 		statusmenu +="</br>baidu.com"
 		statusmenu +="</br></br>需要注意的是，这里要填写的一定是网站的一级域名，比如taobao.com才是正确的，www.taobao.com，http://www.taobao.com/这些格式都是错误的！"
-		statusmenu +="</br>默认已经添加了2万多条<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>，请勿重复添加"
+		statusmenu +="</br>默认已经添加了3万多条<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>，请勿重复添加"
 		_caption = "自定义需要CDN加速网站";
 	}
 	else if(itemNum == 34){
@@ -590,48 +574,17 @@ function openssHint(itemNum){
 		statusmenu +="</br></br>如果填入的信息里带有英文逗号的，也会导致dnsmasq启动失败！"
 		_caption = "自定义dnsamsq";
 	}
-	else if(itemNum == 35){
-		statusmenu ="此处填入不需要走ss的域名，一行一个，格式如下：。"
-		statusmenu +="</br></br>google.com.sg"
-		statusmenu +="</br>youtube.com"
-		statusmenu +="</br></br>默认<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf' target='_blank'><font color='#00F'>gfwlist</font></a>以外的域名都不会走ss，故添加<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf' target='_blank'><font color='#00F'>gfwlist</font></a>内的域名才有意义!"
-		statusmenu +="</br></br>屏蔽一个域名可能导致其他网址被屏蔽，例如解析结果一致的youtube.com和google.com."
-		statusmenu +="</br></br>只有域名污染，没有IP未阻断的网站，不能被屏蔽，例如twitter.com."
-		statusmenu +="</br></br>需要注意的是，这里要填写的一定是网站的一级域名，比如youtbe.com才是正确的，www.youtbe.com，https://www.youtbe.com/这些格式都是错误的！"
-		_caption = "域名白名单（新增）";
-	}
-	else if(itemNum == 36){
-		statusmenu ="此处填入需要强制走ss的域名，一行一个，格式如下：。"
-		statusmenu +="</br></br>koolshare.cn"
-		statusmenu +="</br>baidu.com"
-		statusmenu +="</br></br>默认已经由<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf' target='_blank'><font color='#00F'>gfwlist</font></a>提供了上千条被墙域名，请勿重复添加！"
-		statusmenu +="</br></br>需要注意的是，这里要填写的一定是网站的一级域名，比如baidu.com才是正确的，www.baidu.com，http://www.baidu.com/这些格式都是错误的！"
-		_caption = "域名黑名单";
-	}
-	else if(itemNum == 37){
-		statusmenu ="此处填入需要强制走ss的IP或IP段（CIDR格式），一行一个，格式如下：。"
-		statusmenu +="</br></br>#telegram rule"
-		statusmenu +="</br>149.154.0.0/16"
-		statusmenu +="</br>91.108.4.0/22"
-		statusmenu +="</br>91.108.56.0/24"
-		statusmenu +="</br>109.239.140.0/24"
-		statusmenu +="</br>67.198.55.0/24"
-		statusmenu +="</br></br>对于某些没有域名但是被墙的服务很有用处，比如telegram等！"
-		_caption = "IP/CIDR黑名单";
-	}
 	else if(itemNum == 38){
 		statusmenu ="填入不需要走代理的外网ip/cidr地址，一行一个，格式如下：。"
 		statusmenu +="</br></br>2.2.2.2"
 		statusmenu +="</br>3.3.3.3"
 		statusmenu +="</br>4.4.4.4/24"
-		statusmenu +="</br></br>因为默认大陆的ip都不会走SS，所以此处填入国外IP/CIDR更有意义！"
 		_caption = "IP/CIDR白名单";
 	}
 	else if(itemNum == 39){
 		statusmenu ="填入不需要走代理的域名，一行一个，格式如下：。"
 		statusmenu +="</br></br>google.com"
 		statusmenu +="</br>facebook.com"
-		statusmenu +="</br></br>因为默认大陆的ip都不会走SS，所以此处填入国外域名更有意义！"
 		statusmenu +="</br></br>需要注意的是，这里要填写的一定是网站的一级域名，比如google.com才是正确的，www.google.com，https://www.google.com/这些格式都是错误的！"
 		statusmenu +="</br></br>需要清空电脑DNS缓存，才能立即看到效果"
 		_caption = "域名白名单";
@@ -641,14 +594,12 @@ function openssHint(itemNum){
 		statusmenu +="</br></br>5.5.5.5"
 		statusmenu +="</br>6.6.6.6"
 		statusmenu +="</br>7.7.7.7/8"
-		statusmenu +="</br></br>因为默认大陆以外ip都会走SS，所以此处填入国内IP/CIDR更有意义"
 		_caption = "IP/CIDR黑名单";
 	}
 	else if(itemNum == 41){
 		statusmenu ="填入需要强制走代理的域名，，一行一个，格式如下：。"
 		statusmenu +="</br></br>baidu.com"
 		statusmenu +="</br>taobao.com"
-		statusmenu +="</br></br>因为默认大陆以外的ip都会走SS，所以此处填入国内域名更有意义！"
 		statusmenu +="</br></br>需要注意的是，这里要填写的一定是网站的一级域名，比如google.com才是正确的，www.baidu.com，http://www.baidu.com/这些格式都是错误的！"
 		statusmenu +="</br></br>需要清空电脑DNS缓存，才能立即看到效果。"
 		_caption = "IP/CIDR黑名单";
@@ -676,21 +627,6 @@ function openssHint(itemNum){
 		statusmenu ="一些用户的网络拨号可能比较滞后，为了保证SS在路由器开机后能正常启动，可以通过此功能，为ss的启动增加开机延迟。"
 		_caption = "开机启动延迟";
 	}
-	else if(itemNum == 47){
-		statusmenu ="游戏内模式V2模式使用了koolgame程序内置的dns2ss。"
-		_caption = "选择国外dns";
-	}
-	else if(itemNum == 48){
-		statusmenu ="选择全局全局HTTP(s)，将80和443端口的流量导向ss。"
-		statusmenu +="</br>选择全局全局TCP，将所有TCP端口的流量导向ss。"
-		_caption = "全局模式";
-	}
-	else if(itemNum == 49){
-		statusmenu ="选择全局OpenDNS方式，使用dnscrypt-proxy解析dns。"
-		statusmenu +="</br>选择全局UDP转发方式，将使用ss-tunnel解析dns。"
-		statusmenu +="</br>选择全局OpenDNS方式 + UDP转发方式，将使用dnscrypt-proxy 和 ss-tunnel并发解析dns。"
-		_caption = "全局模式";
-	}
 	else if(itemNum == 50){
 		statusmenu ="通过此开关，你可以开启或者关闭侧边栏面板上的shadowsocks入口;"
 		statusmenu +="</br>该开关在固件版本6.6.1（不包括6.6.1）以上起作用。"
@@ -707,6 +643,10 @@ function openssHint(itemNum){
 		statusmenu +="</br></br>resolveip解析方式不会卡住脚本，如果4秒内不能解析成功，将不再尝试，然后把域名交给ss-redir自己取解析，并且不添加vps ip的RETURN条目。"
 		statusmenu +="</br></br>如果你使用IP地址作为服务器地址，那么选择两者没有区别，如果你使用域名，建议优先使用resolveip方式，如果还是不行再使用nslookup方式，再不行，就更换nslookup方式的解析服务器"
 		_caption = "SS服务器解析";
+	}else if(itemNum == 52){
+		statusmenu ="KCP协议，ss-libev混淆，负载均衡下均不支持UDP！"
+		statusmenu +="</br>请检查你是否启用了其中之一。"
+		_caption = "侧边栏开关";
 	}
 		//return overlib(statusmenu, OFFSETX, -160, LEFT, DELAY, 200);
 		//return overlib(statusmenu, OFFSETX, -160, LEFT, STICKY, WIDTH, 'width', CAPTION, " ", FGCOLOR, "#4D595D", CAPCOLOR, "#000000", CLOSECOLOR, "#000000", MOUSEOFF, "1",TEXTCOLOR, "#FFF", CLOSETITLE, '');

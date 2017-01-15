@@ -23,7 +23,6 @@ install_ss(){
 	sh /tmp/shadowsocks/install.sh
 }
 
-
 # update ss
 update_ss(){
 	# ss_basic_install_status=	#
@@ -141,91 +140,19 @@ update_ss2(){
 	fi
 }
 
-
-# Decteting if jffs partion is enabled
-enable_jffs2(){
-	if [ ! -d /jffs/scripts ]
-	then
-	  nvram set jffs2_on=1
-	  nvram set jffs2_format=1
-	  nvram set jffs2_scripts=1
-	  nvram commit
-	  echo You have to reboot the router and try again. Exiting...
-	  exit 1
-	fi
-
-	jffs2_script=`nvram get jffs2_scripts`
-	if [ "$jffs2_script" != "1" ]
-	then
-	  nvram set jffs2_on=1
-	  nvram set jffs2_scripts=1
-	  nvram commit
-	  echo "auto enable jffs2 scripts"
-	fi
-}
-
 # Enable service by user choose
 apply_ss(){
-	if [ "1" == "$ss_basic_mode" ]; then
-		if [ "1" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/stop.sh stop_part
-			sh /koolshare/scripts/ss_prestart.sh
-			sh /koolshare/ss/ipset/start.sh start_all
-		elif [ "2" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/ipset/start.sh restart_dns
-		elif [ "3" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/ipset/start.sh restart_wb_list
-		elif [ "4" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/ipset/start.sh restart_addon
-		fi
-	elif [ "2" == "$ss_basic_mode" ]; then
-		if [ "1" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/stop.sh stop_part
-			sh /koolshare/scripts/ss_prestart.sh
-			sh /koolshare/ss/redchn/start.sh start_all
-		elif [ "2" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/redchn/start.sh restart_dns
-		elif [ "3" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/redchn/start.sh restart_wb_list
-		elif [ "4" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/redchn/start.sh restart_addon
-		fi
-	elif [ "3" == "$ss_basic_mode" ]; then
-		if [ "1" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/stop.sh stop_all
-			sh /koolshare/scripts/ss_prestart.sh
-			sh /koolshare/ss/game/start.sh start_all
-		elif [ "2" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/game/start.sh restart_dns
-		elif [ "3" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/game/start.sh restart_wb_list
-		elif [ "4" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/game/start.sh restart_addon
-		fi
-	elif [ "4" == "$ss_basic_mode" ]; then
-		if [ "1" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/stop.sh stop_all
-			sh /koolshare/scripts/ss_prestart.sh
-			sh /koolshare/ss/koolgame/start.sh start_all
-		elif [ "2" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/koolgame/start.sh restart_dns
-		elif [ "3" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/koolgame/start.sh restart_wb_list
-		elif [ "4" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/koolgame/start.sh restart_addon
-		fi
-	elif [ "5" == "$ss_basic_mode" ]; then
-		if [ "1" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/stop.sh stop_part
-			sh /koolshare/scripts/ss_prestart.sh
-			sh /koolshare/ss/overall/start.sh start_all
-		elif [ "2" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/overall/start.sh restart_dns
-		elif [ "3" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/overall/start.sh restart_wb_list
-		elif [ "4" == "$ss_basic_action" ]; then
-			sh /koolshare/ss/overall/start.sh restart_addon
-		fi
+	
+	if [ "1" == "$ss_basic_action" ]; then
+		sh /koolshare/ss/stop.sh stop_part
+		sh /koolshare/scripts/ss_prestart.sh
+		sh /koolshare/ss/start.sh start_all
+	elif [ "2" == "$ss_basic_action" ]; then
+		sh /koolshare/ss/start.sh restart_dns
+	elif [ "3" == "$ss_basic_action" ]; then
+		sh /koolshare/ss/start.sh restart_wb_list
+	elif [ "4" == "$ss_basic_action" ]; then
+		sh /koolshare/ss/start.sh restart_addon
 	fi
 	dbus set ss_basic_action="1"
 }
@@ -238,38 +165,17 @@ disable_ss(){
 
 # write number into nvram with no commit
 write_numbers(){
-	nvram set update_ipset="$(cat /koolshare/ss/cru/version | sed -n 1p | sed 's/#/\n/g'| sed -n 1p)"
-	nvram set update_chnroute="$(cat /koolshare/ss/cru/version | sed -n 2p | sed 's/#/\n/g'| sed -n 1p)"
-	nvram set update_cdn="$(cat /koolshare/ss/cru/version | sed -n 4p | sed 's/#/\n/g'| sed -n 1p)"
-	nvram set ipset_numbers=$(cat /koolshare/ss/ipset/gfwlist.conf | grep -c ipset)
-	nvram set chnroute_numbers=$(cat /koolshare/ss/redchn/chnroute.txt | grep -c .)
-	nvram set cdn_numbers=$(cat /koolshare/ss/redchn/cdn.txt | grep -c .)
+	nvram set update_ipset="$(cat /koolshare/ss/rules/version | sed -n 1p | sed 's/#/\n/g'| sed -n 1p)"
+	nvram set update_chnroute="$(cat /koolshare/ss/rules/version | sed -n 2p | sed 's/#/\n/g'| sed -n 1p)"
+	nvram set update_cdn="$(cat /koolshare/ss/rules/version | sed -n 4p | sed 's/#/\n/g'| sed -n 1p)"
+	nvram set ipset_numbers=$(cat /koolshare/ss/rules/gfwlist.conf | grep -c ipset)
+	nvram set chnroute_numbers=$(cat /koolshare/ss/rules/chnroute.txt | grep -c .)
+	nvram set cdn_numbers=$(cat /koolshare/ss/rules/cdn.txt | grep -c .)
 }
-
-fire_ss_depend_scripts(){
-	#sh /koolshare/scripts/onssstart.sh
-	dbus fire onssstart
-}
-
-
-# detect ss version after ss service applied.
-detect_ss_version(){
-	ss_basic_version_web1=`curl -s http://koolshare.ngrok.wang:5000/shadowsocks/version | sed -n 1p`
-	if [ ! -z $ss_basic_version_web1 ];then
-		dbus set ss_basic_version_web=$ss_basic_version_web1
-	else
-		ss_basic_version_web2=`curl -s https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks/version | sed -n 1p`
-		if [ ! -z $ss_basic_version_web2 ];then
-			dbus set ss_basic_version_web=$ss_basic_version_web2
-		fi
-	fi
-}
-
 
 set_ulimit(){
-	ulimit -n 8192
+	ulimit -n 16384
 }
-
 
 case $ACTION in
 start)
@@ -300,17 +206,14 @@ restart)
 	echo_date Enjoy surfing internet without "Great Fire Wall"!
 	echo_date
 	echo_date =============== 梅林固件 - shadowsocks by sadoneli\&Xiaobao ===============
-	fire_ss_depend_scripts
+	dbus fire onssstart
 	dbus set ss_basic_install_status="0"
-	;;
-check)
-	detect_ss_version
 	;;
 update)
 	update_ss
 	;;
 *)
-	echo "Usage: $0 (start|stop|restart|check|kill|reconfigure)"
+	echo "Usage: $0 (start|stop|restart|kill|reconfigure)"
 	exit 1
 	;;
 esac

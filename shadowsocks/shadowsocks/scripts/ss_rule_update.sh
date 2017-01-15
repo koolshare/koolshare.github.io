@@ -5,9 +5,9 @@ LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
 
 # version dectet
-version_gfwlist1=$(cat /koolshare/ss/cru/version | sed -n 1p | sed 's/ /\n/g'| sed -n 1p)
-version_chnroute1=$(cat /koolshare/ss/cru/version | sed -n 2p | sed 's/ /\n/g'| sed -n 1p)
-version_cdn1=$(cat /koolshare/ss/cru/version | sed -n 4p | sed 's/ /\n/g'| sed -n 1p)
+version_gfwlist1=$(cat /koolshare/ss/rules/version | sed -n 1p | sed 's/ /\n/g'| sed -n 1p)
+version_chnroute1=$(cat /koolshare/ss/rules/version | sed -n 2p | sed 's/ /\n/g'| sed -n 1p)
+version_cdn1=$(cat /koolshare/ss/rules/version | sed -n 4p | sed 's/ /\n/g'| sed -n 1p)
 
 echo =======================================================================================================
 echo_date 开始更新shadowsocks规则，请等待...
@@ -49,8 +49,8 @@ if [ "$ss_basic_gfwlist_update" == "1" ];then
 			md5sum_gfwlist1=$(md5sum /tmp/gfwlist.conf | sed 's/ /\n/g'| sed -n 1p)
 			if [ "$md5sum_gfwlist1"x = "$md5sum_gfwlist2"x ];then
 				echo_date 下载完成，校验通过，将临时文件覆盖到原始gfwlist文件
-				mv /tmp/gfwlist.conf /koolshare/ss/ipset/gfwlist.conf
-				sed -i "1s/.*/$git_line1/" /koolshare/ss/cru/version
+				mv /tmp/gfwlist.conf /koolshare/ss/rules/gfwlist.conf
+				sed -i "1s/.*/$git_line1/" /koolshare/ss/rules/version
 				reboot="1"
 				echo_date 你的gfwlist已经更新到最新了哦~
 			else
@@ -77,8 +77,8 @@ if [ "$ss_basic_chnroute_update" == "1" ];then
 			md5sum_chnroute1=$(md5sum /tmp/chnroute.txt | sed 's/ /\n/g'| sed -n 1p)
 			if [ "$md5sum_chnroute1"x = "$md5sum_chnroute2"x ];then
 				echo_date 下载完成，校验通过，将临时文件覆盖到原始chnroute文件
-				mv /tmp/chnroute.txt /koolshare/ss/redchn/chnroute.txt
-				sed -i "2s/.*/$git_line2/" /koolshare/ss/cru/version
+				mv /tmp/chnroute.txt /koolshare/ss/rules/chnroute.txt
+				sed -i "2s/.*/$git_line2/" /koolshare/ss/rules/version
 				reboot="1"
 				echo_date 你的chnroute已经更新到最新了哦~
 			else
@@ -105,8 +105,8 @@ if [ "$ss_basic_cdn_update" == "1" ];then
 			md5sum_cdn1=$(md5sum /tmp/cdn.txt | sed 's/ /\n/g'| sed -n 1p)
 			if [ "$md5sum_cdn1"x = "$md5sum_cdn2"x ];then
 				echo_date 下载完成，校验通过，将临时文件覆盖到原始cdn名单文件
-				mv /tmp/cdn.txt /koolshare/ss/redchn/cdn.txt
-				sed -i "4s/.*/$git_line4/" /koolshare/ss/cru/version
+				mv /tmp/cdn.txt /koolshare/ss/rules/cdn.txt
+				sed -i "4s/.*/$git_line4/" /koolshare/ss/rules/version
 				reboot="1"
 				echo_date 你的cdn名单已经更新到最新了哦~
 			else
@@ -129,12 +129,12 @@ rm -rf /tmp/version1
 
 echo_date Shadowsocks更新进程运行完毕！
 # write number
-nvram set update_ipset="$(cat /koolshare/ss/cru/version | sed -n 1p | sed 's/#/\n/g'| sed -n 1p)"
-nvram set update_chnroute="$(cat /koolshare/ss/cru/version | sed -n 2p | sed 's/#/\n/g'| sed -n 1p)"
-nvram set update_cdn="$(cat /koolshare/ss/cru/version | sed -n 4p | sed 's/#/\n/g'| sed -n 1p)"
-nvram set ipset_numbers=$(cat /koolshare/ss/ipset/gfwlist.conf | grep -c ipset)
-nvram set chnroute_numbers=$(cat /koolshare/ss/redchn/chnroute.txt | grep -c .)
-nvram set cdn_numbers=$(cat /koolshare/ss/redchn/cdn.txt | grep -c .)
+nvram set update_ipset="$(cat /koolshare/ss/rules/version | sed -n 1p | sed 's/#/\n/g'| sed -n 1p)"
+nvram set update_chnroute="$(cat /koolshare/ss/rules/version | sed -n 2p | sed 's/#/\n/g'| sed -n 1p)"
+nvram set update_cdn="$(cat /koolshare/ss/rules/version | sed -n 4p | sed 's/#/\n/g'| sed -n 1p)"
+nvram set ipset_numbers=$(cat /koolshare/ss/rules/gfwlist.conf | grep -c ipset)
+nvram set chnroute_numbers=$(cat /koolshare/ss/rules/chnroute.txt | grep -c .)
+nvram set cdn_numbers=$(cat /koolshare/ss/rules/cdn.txt | grep -c .)
 
 # reboot ss
 if [ "$reboot" == "1" ];then

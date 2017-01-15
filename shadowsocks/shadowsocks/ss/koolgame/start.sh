@@ -34,7 +34,7 @@ resolv_server_ip(){
 	fi
 }
 
-creat_ss_json(){
+creat_game2_json(){
 # create shadowsocks config file...
 	echo_date 创建SS配置文件到/koolshare/ss/koolgame/ss.json
 	cat > /koolshare/ss/koolgame/ss.json <<-EOF
@@ -43,10 +43,10 @@ creat_ss_json(){
 		    "server_port":$ss_basic_port,
 		    "local_port":3333,
 		    "sock5_port":23456,
-		    "dns2ss":1053,
+		    "dns2ss":7913,
 		    "adblock_addr":"",
 		    "adblock_path":"/koolshare/ss/koolgame/xwhycadblock.txt",
-		    "dns_server":"$ss_gameV2_dns2ss_user",
+		    "dns_server":"$ss_dns2ss_user",
 		    "password":"$ss_basic_password",
 		    "timeout":600,
 		    "method":"$ss_basic_method",
@@ -75,12 +75,8 @@ creat_dnsmasq_basic_conf(){
 	echo_date 创建dnsmasq基础配置到/jffs/configs/dnsmasq.conf.add
 	cat > /jffs/configs/dnsmasq.conf.add <<-EOF
 		no-resolv
-		server=127.0.0.1#1053
+		server=127.0.0.1#7913
 		EOF
-
-	# append router output chain rules
-	echo_date 创建路由内部走代理的规则，用于SS状态检测.
-	cat /koolshare/ss/redchn/output.conf >> /jffs/configs/dnsmasq.conf.add
 
 	# append china site
 	echo_date 生成cdn加速列表到/tmp/sscdn.conf，加速用的dns：$CDN
@@ -90,15 +86,14 @@ creat_dnsmasq_basic_conf(){
 
 	# create dnsmasq postconf
 	echo_date 创建dnsmasq.postconf软连接到/jffs/scripts/文件夹.
-		#cp /koolshare/ss/redchn/dnsmasq.postconf /jffs/scripts/dnsmasq.postconf
-		ln -sf /koolshare/ss/redchn/dnsmasq.postconf /jffs/scripts/dnsmasq.postconf
-		chmod +x /jffs/scripts/dnsmasq.postconf
+	ln -sf /koolshare/ss/redchn/dnsmasq.postconf /jffs/scripts/dnsmasq.postconf
+	chmod +x /jffs/scripts/dnsmasq.postconf
 }
 
 custom_dnsmasq(){
-	if [ ! -z "$ss_gameV2_dnsmasq" ];then
+	if [ ! -z "$ss_dnsmasq" ];then
 		echo_date 添加自定义dnsmasq设置到/tmp/custom.conf
-		echo "$ss_gameV2_dnsmasq" | base64_decode | sort -u >> /tmp/custom.conf
+		echo "$ss_dnsmasq" | base64_decode | sort -u >> /tmp/custom.conf
 	fi
 }
 
@@ -255,11 +250,8 @@ start_all)
 	detect_qos
 	resolv_server_ip
 	creat_ss_json
-	#creat_redsocks2_conf
 	creat_dnsmasq_basic_conf
-	#user_cdn_site
 	custom_dnsmasq
-	#append_white_black_conf
 	ln_conf
 	nat_auto_start
 	wan_auto_start
