@@ -13,7 +13,7 @@
 
 # ====================================变量定义====================================
 # 版本号定义
-version="0.1.5"
+version="0.1.6"
 
 # 导入skipd数据
 eval `dbus export ddnspod`
@@ -141,7 +141,7 @@ stop_ddnspod(){
 
 # 写入版本号
 write_ddnspod_version(){
-	dbus set ddnspod_version="0.1.5"
+	dbus set ddnspod_version="$version"
 }
 
 # ====================================主逻辑====================================
