@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.1.8
+   - fix	脚本：修复负载均衡不启用Haproxy故障检测心跳时，haproxy配置文件生成错误的问题;
+
 3.1.7
    - fix	由于3.1.6提交时笔误，导致黑白名单应用失效，此次更新主要修复这个
    - update	为了以后更新SS插件方便，添加和以前一样，默认添加github.com走SS
