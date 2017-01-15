@@ -2,6 +2,8 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 3.1.7
    - fix	由于3.1.6提交时笔误，导致黑白名单应用失效，此次更新主要修复这个
+   - update	为了以后更新SS插件方便，添加和以前一样，默认添加github.com走SS
+   - fix	修复ss-local启动失败导致dns2socks不可用
 
 
 3.1.6

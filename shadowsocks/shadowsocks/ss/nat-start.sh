@@ -121,7 +121,7 @@ add_white_black_ip(){
 	done
 	
 	if [ ! -z $ss_wan_white_ip ];then
-		$ss_wan_white_ip=`echo $ss_wan_white_ip|base64_decode|sed '/\#/d'`
+		ss_wan_white_ip=`echo $ss_wan_white_ip|base64_decode|sed '/\#/d'`
 		echo_date 添加你定义的IP/CIDR白名单地址到ipset
 		for ip in $ss_wan_white_ip
 		do

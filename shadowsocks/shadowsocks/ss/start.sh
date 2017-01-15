@@ -136,10 +136,10 @@ creat_game2_json(){
 
 start_dns(){
 	# Start DNS2SOCKS
-	if [ "1" == "$ss_dns_foreign" ]; then
+	if [ "1" == "$ss_dns_foreign" ] || [ -z "$ss_dns_foreign" ]; then
 		# start ss-local on port 23456
+		if [ "$ss_basic_use_rss" == "1" ];then
 		echo_date 开启ss-local，提供socks5端口：23456
-			if [ "1" == "$ss_dns_foreign" ] || [ -z "$ss_dns_foreign" ]; then
 			rss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_use_rss" == "0" ];then
 			if [ "$ss_basic_ss_obfs" == "0" ];then
@@ -412,6 +412,10 @@ custom_dnsmasq(){
 append_white_black_conf(){
 	# append white domain list, bypass ss
 	rm -rf /tmp/wblist.conf
+	
+	echo "server=/.github.com/127.0.0.1#7913" >> /tmp/wblist.conf
+	echo "ipset=/.github.com/gflist" >> /tmp/wblist.conf
+	
 	wanwhitedomain=$(echo $ss_wan_white_domain | base64_decode)
 	if [ ! -z $ss_wan_white_domain ];then
 		echo_date 添加域名白名单到/tmp/wblist.conf
@@ -422,13 +426,13 @@ append_white_black_conf(){
 			echo "$wan_white_domain" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_list/g" >> /tmp/wblist.conf
 		done
 	fi
-	
+
 	# append black domain list,through ss
 	wanblackdomain=$(echo $ss_wan_black_domain | base64_decode)
 	if [ ! -z $ss_wan_black_domain ];then
 		echo_date 添加域名黑名单到/tmp/wblist.conf
 		echo "#for black_domain" >> /tmp/wblist.conf
-		for wan_black_domain in $wanblackdomain
+		for wan_black_domain in $wanblackdomain "github.com"
 		do 
 			echo "$wan_black_domain" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#7913/g" >> /tmp/wblist.conf
 			echo "$wan_black_domain" | sed "s/^/ipset=&\/./g" | sed "s/$/\/black_list/g" >> /tmp/wblist.conf
