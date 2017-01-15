@@ -141,7 +141,7 @@ stop_ddnspod(){
 
 # 写入版本号
 write_ddnspod_version(){
-	dbus set ddnspod_version="$version"
+	dbus set ddnspod_version="0.1.5"
 }
 
 # ====================================主逻辑====================================
