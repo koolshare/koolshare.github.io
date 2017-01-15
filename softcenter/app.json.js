@@ -51,11 +51,6 @@
             "version": "0.1.6"
         }, 
         {
-            "name": "history", 
-            "tar_url": "history/history.tar.gz", 
-            "title": "history"
-        }, 
-        {
             "build_date": "2016-10-05_16:51:29", 
             "description": "超强的SSH网页客户端，webshell替代品~", 
             "home_url": "Module_shellinabox.asp", 
@@ -106,10 +101,10 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2017-01-15_20:18:56", 
+            "build_date": "2017-01-15_20:47:48", 
             "description": "科学上网", 
             "home_url": "Main_Ss_Content.asp", 
-            "md5": "01a4c2602c11c65a759e9e50f8bbb35c", 
+            "md5": "7d62050ba233f46f71f52bd603cb5d24", 
             "name": "shadowsocks", 
             "tar_url": "shadowsocks/shadowsocks.tar.gz", 
             "title": "shadowsocks", 

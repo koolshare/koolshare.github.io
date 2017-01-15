@@ -414,7 +414,7 @@ append_white_black_conf(){
 	rm -rf /tmp/wblist.conf
 	
 	echo "server=/.github.com/127.0.0.1#7913" >> /tmp/wblist.conf
-	echo "ipset=/.github.com/gflist" >> /tmp/wblist.conf
+	echo "ipset=/.github.com/gfwlist" >> /tmp/wblist.conf
 	
 	wanwhitedomain=$(echo $ss_wan_white_domain | base64_decode)
 	if [ ! -z $ss_wan_white_domain ];then
