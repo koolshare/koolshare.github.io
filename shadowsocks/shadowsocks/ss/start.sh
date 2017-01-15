@@ -484,8 +484,8 @@ nat_auto_start(){
 		[ $ss_basic_sleep -ne 0 ] && \
 		sed -i "2a sleep $ss_basic_sleep" /jffs/scripts/nat-start
 		[ $ss_basic_sleep -ne 0 ] && \
-		sed -i '3a sh /koolshare/ss/nat-start start_all' /jffs/scripts/nat-start || \
-		sed -i '2a sh /koolshare/ss/nat-start start_all' /jffs/scripts/nat-start
+		sed -i '3a sh /koolshare/ss/nat-start.sh start_all' /jffs/scripts/nat-start || \
+		sed -i '2a sh /koolshare/ss/nat-start.sh start_all' /jffs/scripts/nat-start
 		chmod +x /jffs/scripts/nat-start
 	fi
 }
@@ -733,7 +733,7 @@ restart_wb_list)
 	ipset -F white_list >/dev/null 2>&1
 	ipset -F black_list >/dev/null 2>&1
 	append_white_black_conf && ln_conf
-	sh /koolshare/ss/nat-start add_new_ip
+	sh /koolshare/ss/nat-start.sh add_new_ip
 	restart_dnsmasq
 	remove_status
 	echo_date ------------------------- 黑白名单服务重启完毕 ---------------------------
@@ -760,7 +760,7 @@ restart_addon)
 	
 	# for chromecast surpport
 	# also for chromecast
-	sh /koolshare/ss/rules/nat-start start_part_for_addon
+	sh /koolshare/ss/nat-start.sh start_part_for_addon
 	
 	# for list update
 	kill_cron_job
