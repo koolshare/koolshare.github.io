@@ -1420,7 +1420,7 @@ function version_show() {
 						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version + "</i>");
 					} else {
-						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.1.5</i></a>");
+						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.1.8</i></a>");
 					}
 				}
 			}
@@ -2857,7 +2857,7 @@ function refresh_acl_html() {
 														<textarea placeholder="# 填入需要强制用国内DNS解析的域名，一行一个，格式如下：
 koolshare.cn
 baidu.com
-# 默认已经添加了3万多条国内域名，请勿重复添加！
+默认除了gfwlist名单外的域名都由国内DNS解析
 # 注意：不支持通配符！" cols="50" rows="7" id="ss_isp_website_web" name="ss_isp_website_web" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 														</textarea>
 														<span id="user_cdn_span"></span>
@@ -2951,17 +2951,6 @@ taobao.com
 													</p>
 												</td>
 												</tr>
-												<tr  id="cdn_number">
-													<th id="cdn_nu1" width="35%">国内域名数量（cdn名单）</th>
-													<td id="cdn_nu2">
-														<p>
-														<% nvram_get("cdn_numbers"); %>&nbsp;条，最后更新版本：
-															<a href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt" target="_blank">
-																<i><% nvram_get("update_cdn"); %></i>
-															</a>
-														</p>
-													</td>
-												</tr>
 												<tr id="update_rules">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(44)">shadowsocks规则自动更新</a></th>
 													<td>
@@ -2999,10 +2988,8 @@ taobao.com
 															<a id="update_choose">
 																<input type="checkbox" id="ss_basic_gfwlist_update" title="选择此项应用gfwlist自动更新" onclick="oncheckclick(this);">gfwlist
 																<input type="checkbox" id="ss_basic_chnroute_update" onclick="oncheckclick(this);">chnroute
-																<input type="checkbox" id="ss_basic_cdn_update" onclick="oncheckclick(this);">CDN
 																<input type="hidden" id="hd_ss_basic_gfwlist_update" name="ss_basic_gfwlist_update" value=""/>
 																<input type="hidden" id="hd_ss_basic_chnroute_update" name="ss_basic_chnroute_update" value=""/>
-																<input type="hidden" id="hd_ss_basic_cdn_update" name="ss_basic_cdn_update" value=""/>
 															</a>
                                     	                		<input id="update_now" onclick="updatelist()" style="cursor:pointer" type="button" value="立即更新"/>
 													</td>

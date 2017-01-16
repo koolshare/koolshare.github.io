@@ -3,6 +3,7 @@
 # Variable definitions
 eval `dbus export ss`
 source /koolshare/scripts/base.sh
+source helper.sh
 ss_basic_password=`echo $ss_basic_password|base64_decode`
 CONFIG_FILE=/koolshare/ss/ss.json
 DNS_PORT=7913
@@ -354,22 +355,23 @@ start_dns(){
 	fi
 }
 #--------------------------------------------------------------------------------------
-creat_dnsmasq_basic_conf(){
-	# make directory if not exist
-	mkdir -p /jffs/configs/dnsmasq.d
-	
-	# append dnsmasq basic conf
-	echo_date 创建dnsmasq基础配置到/jffs/configs/dnsmasq.conf.add
-	cat > /jffs/configs/dnsmasq.conf.add <<-EOF
-		no-resolv
-		server=127.0.0.1#7913
-	EOF
-}
+#creat_dnsmasq_basic_conf(){
+#	# make directory if not exist
+#	mkdir -p /jffs/configs/dnsmasq.d
+#	append dnsmasq basic conf
+#	echo_date 创建dnsmasq基础配置到/jffs/configs/dnsmasq.conf.add
+#	cat > /jffs/configs/dnsmasq.conf.add <<-EOF
+#		no-resolv
+#		all-servers
+#		server=$CDN#53
+#		server=127.0.0.1#7913
+#	EOF
+#}
+
 
 load_cdn_site(){
 	# append china site
 	rm -rf /tmp/sscdn.conf
-	
 	ISP_DNS=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
 	[ "$ss_dns_china" == "1" ] && [ ! -z "$ISP_DNS" ] && CDN="$ISP_DNS"
 	[ "$ss_dns_china" == "1" ] && [ -z "$ISP_DNS" ] && CDN="114.114.114.114"
@@ -386,8 +388,8 @@ load_cdn_site(){
 	[ "$ss_dns_china" == "12" ] && CDN="$ss_dns_china_user"
 	echo_date 生成cdn加速列表到/tmp/sscdn.conf，加速用的dns：$CDN
 	
-	echo "#for china site CDN acclerate" >> /tmp/sscdn.conf
-	cat /koolshare/ss/rules/cdn.txt | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" | sort | awk '{if ($0!=line) print;line=$0}' >>/tmp/sscdn.conf
+	#echo "#for china site CDN acclerate" >> /tmp/sscdn.conf
+	#cat /koolshare/ss/rules/cdn.txt | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" | sort | awk '{if ($0!=line) print;line=$0}' >>/tmp/sscdn.conf
 
 	# append user defined china site
 	if [ ! -z "$ss_isp_website_web" ];then
@@ -412,10 +414,10 @@ custom_dnsmasq(){
 append_white_black_conf(){
 	# append white domain list, bypass ss
 	rm -rf /tmp/wblist.conf
-	
+	# github need to go ss
 	echo "server=/.github.com/127.0.0.1#7913" >> /tmp/wblist.conf
 	echo "ipset=/.github.com/gfwlist" >> /tmp/wblist.conf
-	
+	#  append white domain list,not through ss
 	wanwhitedomain=$(echo $ss_wan_white_domain | base64_decode)
 	if [ ! -z $ss_wan_white_domain ];then
 		echo_date 添加域名白名单到/tmp/wblist.conf
@@ -426,13 +428,18 @@ append_white_black_conf(){
 			echo "$wan_white_domain" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_list/g" >> /tmp/wblist.conf
 		done
 	fi
-
+	# apple 和microsoft不能走ss
+	for wan_white_domain2 in "apple.com" "microsoft.com"
+	do 
+		echo "$wan_white_domain2" | sed "s/^/server=&\/./g" | sed "s/$/\/$CDN#53/g" >> /tmp/wblist.conf
+		echo "$wan_white_domain2" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_list/g" >> /tmp/wblist.conf
+	done
 	# append black domain list,through ss
 	wanblackdomain=$(echo $ss_wan_black_domain | base64_decode)
 	if [ ! -z $ss_wan_black_domain ];then
 		echo_date 添加域名黑名单到/tmp/wblist.conf
 		echo "#for black_domain" >> /tmp/wblist.conf
-		for wan_black_domain in $wanblackdomain "github.com"
+		for wan_black_domain in $wanblackdomain
 		do 
 			echo "$wan_black_domain" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#7913/g" >> /tmp/wblist.conf
 			echo "$wan_black_domain" | sed "s/^/ipset=&\/./g" | sed "s/$/\/black_list/g" >> /tmp/wblist.conf
@@ -697,7 +704,7 @@ start_all)
 	[ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && detect_qos
 	resolv_server_ip
 	[ "$ss_basic_mode" != "4" ] && creat_ss_json || creat_game2_json
-	creat_dnsmasq_basic_conf
+	#creat_dnsmasq_basic_conf
 	load_cdn_site
 	custom_dnsmasq
 	append_white_black_conf && ln_conf
@@ -721,7 +728,7 @@ restart_dns)
 	creat_ss_json
 	resolv_server_ip
 	[ "$ss_basic_mode" != "4" ] && stop_dns || killall koolgame
-	creat_dnsmasq_basic_conf
+	#creat_dnsmasq_basic_conf
 	load_cdn_site
 	custom_dnsmasq
 	ln_conf

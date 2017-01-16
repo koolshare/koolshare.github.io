@@ -559,7 +559,6 @@ function openssHint(itemNum){
 		statusmenu +="</br></br>koolshare.cn"
 		statusmenu +="</br>baidu.com"
 		statusmenu +="</br></br>需要注意的是，这里要填写的一定是网站的一级域名，比如taobao.com才是正确的，www.taobao.com，http://www.taobao.com/这些格式都是错误的！"
-		statusmenu +="</br>默认已经添加了3万多条<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>，请勿重复添加"
 		_caption = "自定义需要CDN加速网站";
 	}
 	else if(itemNum == 34){

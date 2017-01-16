@@ -1,5 +1,13 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.1.8
+   - update	由于cdn名单越来越巨大，在大陆白名单模式下给dnsmasq造成了很大的负担，开国内网站都会造成dnsmasq很高的cpu占用率
+   			因此此版本更改了域名解析策略，去掉了cdn名单，能大幅度降低cpu占用！
+   			原策略：默认cdn名单内的国内域名用国内dns解析，剩下的域名用国外dns解析。
+   			现策略：默认gfwlist名单内的国外域名用国外dns解析，剩下的域名用国内dns解析。
+   - fix	脚本：修复负载均衡不启用Haproxy故障检测心跳时，haproxy配置文件生成错误的问题，thanks to snachx；
+   - update 规则：同步最新规则。
+
 3.1.7
    - fix	由于3.1.6提交时笔误，导致黑白名单应用失效，此次更新主要修复这个
    - update	为了以后更新SS插件方便，添加和以前一样，默认添加github.com走SS
