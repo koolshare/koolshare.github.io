@@ -6,7 +6,7 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    		原策略：默认cdn名单内的国内域名用国内dns解析，剩下的域名用国外dns解析。
    		现策略：默认gfwlist名单内的国外域名用国外dns解析，剩下的域名用国内dns解析。
    - fix	脚本：修复负载均衡不启用Haproxy故障检测心跳时，haproxy配置文件生成错误的问题，thanks to snachx；
-   - update 规则：同步最新规则。
+   - update 	规则：同步最新规则。
 
 3.1.7
    - fix	由于3.1.6提交时笔误，导致黑白名单应用失效，此次更新主要修复这个
