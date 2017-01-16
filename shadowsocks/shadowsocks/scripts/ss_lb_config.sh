@@ -161,17 +161,17 @@ else
 			if [ "$mode" == "3" ];then
 				echo_date 载入节点："$nick_name"，作为备用节点...
 				cat >> /koolshare/configs/haproxy.cfg <<-EOF
-				    server $name $server_ip:$port weight $weight resolvers mydns backup
+				    server $name $server:$port weight $weight resolvers mydns backup
 				EOF
 			elif [ "$mode" == "2" ];then
 				echo_date 载入节点："$nick_name"，作为主节点...
 				cat >> /koolshare/configs/haproxy.cfg <<-EOF
-				    server $name $server_ip:$port weight $weight resolvers mydns
+				    server $name $server:$port weight $weight resolvers mydns
 				EOF
 			else
 				echo_date 载入节点："$nick_name"，作为负载均衡节点...
 				cat >> /koolshare/configs/haproxy.cfg <<-EOF
-				    server $name $server_ip:$port weight $weight resolvers mydns
+				    server $name $server:$port weight $weight resolvers mydns
 				EOF
 			fi
 		else
