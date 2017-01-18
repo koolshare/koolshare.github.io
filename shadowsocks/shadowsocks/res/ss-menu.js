@@ -646,6 +646,15 @@ function openssHint(itemNum){
 		statusmenu ="KCP协议，ss-libev混淆，负载均衡下均不支持UDP！"
 		statusmenu +="</br>请检查你是否启用了其中之一。"
 		_caption = "侧边栏开关";
+	}else if(itemNum == 53){
+		statusmenu ="此处可以自定义你偏向使用的DNS解析方案"
+		statusmenu +="</br></br>国内优先：国外dns解析gfwlist名单内的国外域名，其余域名用国内dns解析，需要<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf' target='_blank'><u><font color='#00F'>gfwlist</font></u></a>，占用cpu较小，国内解析效果好。"
+		statusmenu +="</br></br>国外优先：国内dns解析cdn名单内的国内域名用，其余域名用国外dns解析，需要<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>，占用cpu较大，国外解析效果好。"
+		_caption = "侧边栏开关";
+	}
+	else if(itemNum == 54){
+		statusmenu ="更多信息，请参考<a href='https://breakwa11.blogspot.jp/2017/01/shadowsocksr-mu.html' target='_blank'><u><font color='#00F'>ShadowsocksR 协议参数文档</font></u></a>"
+		_caption = "协议参数（protocol）";
 	}
 		//return overlib(statusmenu, OFFSETX, -160, LEFT, DELAY, 200);
 		//return overlib(statusmenu, OFFSETX, -160, LEFT, STICKY, WIDTH, 'width', CAPTION, " ", FGCOLOR, "#4D595D", CAPCOLOR, "#000000", CLOSECOLOR, "#000000", MOUSEOFF, "1",TEXTCOLOR, "#FFF", CLOSETITLE, '');

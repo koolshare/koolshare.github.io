@@ -77,6 +77,7 @@ creat_ss_json(){
 				    "password":"$ss_basic_password",
 				    "timeout":600,
 				    "protocol":"$ss_basic_rss_protocol",
+				    "protocol_param":"$ss_basic_rss_protocol_para",
 				    "obfs":"$ss_basic_rss_obfs",
 				    "obfs_param":"$ss_basic_rss_obfs_param",
 				    "method":"$ss_basic_method"
@@ -104,6 +105,7 @@ creat_ss_json(){
 				    "password":"$ss_basic_password",
 				    "timeout":600,
 				    "protocol":"$ss_basic_rss_protocol",
+				    "protocol_param":"$ss_basic_rss_protocol_para",
 				    "obfs":"$ss_basic_rss_obfs",
 				    "obfs_param":"$ss_basic_rss_obfs_param",
 				    "method":"$ss_basic_method"
@@ -283,17 +285,17 @@ start_dns(){
 	# Start chinadns
 	if [ "5" == "$ss_dns_foreign" ];then
 		echo_date ┏你选择了chinaDNS作为解析方案！
-		[ "$ss_dns_china" == "1" ] && rcc="223.5.5.5"
-		[ "$ss_dns_china" == "2" ] && rcc="223.6.6.6"
-		[ "$ss_dns_china" == "3" ] && rcc="114.114.114.114"
-		[ "$ss_dns_china" == "4" ] && rcc="114.114.115.115"
-		[ "$ss_dns_china" == "5" ] && rcc="1.2.4.8"
-		[ "$ss_dns_china" == "6" ] && rcc="210.2.4.8"
-		[ "$ss_dns_china" == "7" ] && rcc="112.124.47.27"
-		[ "$ss_dns_china" == "8" ] && rcc="114.215.126.16"
-		[ "$ss_dns_china" == "9" ] && rcc="180.76.76.76"
-		[ "$ss_dns_china" == "10" ] && rcc="119.29.29.29"
-		[ "$ss_dns_china" == "11" ] && rcc="$ss_dns_china_user"
+		[ "$ss_chinadns_china" == "1" ] && rcc="223.5.5.5"
+		[ "$ss_chinadns_china" == "2" ] && rcc="223.6.6.6"
+		[ "$ss_chinadns_china" == "3" ] && rcc="114.114.114.114"
+		[ "$ss_chinadns_china" == "4" ] && rcc="114.114.115.115"
+		[ "$ss_chinadns_china" == "5" ] && rcc="1.2.4.8"
+		[ "$ss_chinadns_china" == "6" ] && rcc="210.2.4.8"
+		[ "$ss_chinadns_china" == "7" ] && rcc="112.124.47.27"
+		[ "$ss_chinadns_china" == "8" ] && rcc="114.215.126.16"
+		[ "$ss_chinadns_china" == "9" ] && rcc="180.76.76.76"
+		[ "$ss_chinadns_china" == "10" ] && rcc="119.29.29.29"
+		[ "$ss_chinadns_china" == "11" ] && rcc="$ss_chinadns_china_user"
 
 		if [ "$ss_chinadns_foreign_method" == "1" ];then
 			[ "$ss_chinadns_foreign_dns2socks" == "1" ] && rcfd="208.67.220.220:53"
@@ -312,13 +314,9 @@ start_dns(){
 				fi
 			echo_date ┣开启dns2socks，作为chinaDNS上游国外dns，转发dns：$rcfd
 			dns2socks 127.0.0.1:23456 "$rcfd" 127.0.0.1:1055 > /dev/null 2>&1 &
-			echo_date ┗开启chinadns进程！
-			chinadns -p $DNS_PORT -s "$rcc",127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
 		elif [ "$ss_chinadns_foreign_method" == "2" ];then
 			echo_date ┣开启 dnscrypt-proxy，作为chinaDNS上游国外dns，你选择了"$ss_chinadns_foreign_dnscrypt"节点.
 			dnscrypt-proxy --local-address=127.0.0.1:1055 --daemonize -L /koolshare/ss/rules/dnscrypt-resolvers.csv -R $ss_chinadns_foreign_dnscrypt >/dev/null 2>&1
-			echo_date ┗开启chinadns进程！
-			chinadns -p $DNS_PORT -s "$rcc",127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
 		elif [ "$ss_chinadns_foreign_method" == "3" ];then
 			[ "$ss_chinadns_foreign_sstunnel" == "1" ] && rcfs="208.67.220.220:53"
 			[ "$ss_chinadns_foreign_sstunnel" == "2" ] && rcfs="8.8.8.8:53"
@@ -335,15 +333,11 @@ start_dns(){
 					ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$rcfs" $ARG_OTA -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sstunnel.pid >/dev/null 2>&1
 				fi
 			fi
-			echo_date ┗开启chinadns进程！
-			chinadns -p $DNS_PORT -s "$rcc",127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
 		elif [ "$ss_chinadns_foreign_method" == "4" ];then
 			echo_date ┣你选择了自定义chinadns国外dns！dns：$ss_chinadns_foreign_method_user
-			echo_date ┗开启chinadns进程！
-			chinadns -p 1053 -s "$rcc","$ss_chinadns_foreign_method_user" -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
-			chinadns -p 1053 -s 114.114.114.114,127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
-			chinadns -p 1053 -s 192.168.1.1,127.0.0.1:1055 -m -d -c /koolshare/ss/redchn/chnroute.txt  >/dev/null 2>&1 &
 		fi
+		echo_date ┗开启chinadns进程！
+		chinadns -p $DNS_PORT -s "$rcc",127.0.0.1:1055 -m -d -c /koolshare/ss/rules/chnroute.txt  >/dev/null 2>&1 &
 	fi
 	
 	# Start Pcap_DNSProxy
@@ -386,10 +380,12 @@ load_cdn_site(){
 	[ "$ss_dns_china" == "10" ] && CDN="180.76.76.76"
 	[ "$ss_dns_china" == "11" ] && CDN="119.29.29.29"
 	[ "$ss_dns_china" == "12" ] && CDN="$ss_dns_china_user"
-	echo_date 生成cdn加速列表到/tmp/sscdn.conf，加速用的dns：$CDN
-	
-	#echo "#for china site CDN acclerate" >> /tmp/sscdn.conf
-	#cat /koolshare/ss/rules/cdn.txt | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" | sort | awk '{if ($0!=line) print;line=$0}' >>/tmp/sscdn.conf
+
+	if [ "$ss_dns_plan" == "2" ];then
+		echo_date 生成cdn加速列表到/tmp/sscdn.conf，加速用的dns：$CDN
+		echo "#for china site CDN acclerate" >> /tmp/sscdn.conf
+		cat /koolshare/ss/rules/cdn.txt | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" | sort | awk '{if ($0!=line) print;line=$0}' >>/tmp/sscdn.conf
+	fi
 
 	# append user defined china site
 	if [ ! -z "$ss_isp_website_web" ];then
@@ -678,16 +674,18 @@ load_module(){
 	fi
 }
 
-detect_qos(){
+qos_warning(){
 	echo_date 检测是否符合游戏模式启动条件...
 	QOSO=`iptables -t mangle -S | grep -o QOSO | wc -l`
 	if [ $QOSO -gt 1 ];then
-		echo_date !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		echo_date !!!发现你开启了 Adaptive Qos - 传统带宽管理,该Qos模式和游戏模式V2冲突!!!
-		echo_date !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		echo_date 如果你仍然希望在游戏模式下使用Qos，可以使用Adaptive QoS网络监控家模式，
-		echo_date 但是该模式下走ss的流量不会有Qos效果！
-		echo_date 退出应用游戏模式，关闭ss！请等待10秒！
+		printf "$(date +%Y年%m月%d日\ %X): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
+		printf "$(date +%Y年%m月%d日\ %X): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
+		printf "$(date +%Y年%m月%d日\ %X): !!! 发现你开启了 Adaptive Qos - 传统带宽管理,该Qos模式和游戏模式\(V2\)冲突！!!!\n"
+		printf "$(date +%Y年%m月%d日\ %X): !!! 即使主模式没有使用游戏模式\(V2\),访问控制内有主机使用的话，同样会出现冲突！!!!\n"
+		printf "$(date +%Y年%m月%d日\ %X): !!! 如果你仍然希望在游戏模式下使用Qos，可以使用Adaptive QoS网络监控家模式。  !!!\n"
+		printf "$(date +%Y年%m月%d日\ %X): !!! 但是该模式下走ss的流量不会有Qos效果！                                 !!!\n"
+		printf "$(date +%Y年%m月%d日\ %X): !!! 退出应用应用操作，关闭ss！请等待10秒！                                !!!\n"
+		printf "$(date +%Y年%m月%d日\ %X): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
 		dbus set ss_basic_enable=0
 		sleep 10
 		exit
@@ -696,12 +694,17 @@ detect_qos(){
 	fi
 }
 
+detect_qos(){
+	game_on=`dbus list ss_acl_mode|cut -d "=" -f 2 | grep 3`
+	[ -n "$game_on" ] || [ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && qos_warning
+}
+
 
 case $1 in
 start_all)
 	#ss_basic_action=1
 	echo_date ------------------------- 梅林固件 shadowsocks --------------------------
-	[ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && detect_qos
+	detect_qos
 	resolv_server_ip
 	[ "$ss_basic_mode" != "4" ] && creat_ss_json || creat_game2_json
 	#creat_dnsmasq_basic_conf

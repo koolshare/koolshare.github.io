@@ -312,16 +312,23 @@ apply_nat_rules(){
 	[ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && \
 	iptables -t mangle -A SHADOWSOCKS -p udp -j $(get_action_chain $ss_acl_default_mode) || \
 	iptables -t mangle -A SHADOWSOCKS -p udp -j RETURN
-	
 	# 重定所有流量到 SHADOWSOCKS
 	iptables -t nat -I PREROUTING 1 -p tcp -j SHADOWSOCKS
-	iptables -t mangle -I PREROUTING 1 -p udp -j SHADOWSOCKS
+	
+	game_on=`dbus list ss_acl_mode|cut -d "=" -f 2 | grep 3`
+	[ -n $game_on ] || [ $ss_basic_mode -eq 3 ]iptables -t mangle -I PREROUTING 1 -p udp -j SHADOWSOCKS
 }
 
 chromecast(){
 	LOG1=开启chromecast功能（DNS劫持功能）
 	LOG2=chromecast功能未开启，建议开启~
-	[ "$ss_basic_chromecast" == "1" ] && IPT_ACTION="-A" && echo_date $LOG1 || ARG_OTA="-D" && echo_date $LOG2;
+	if [ "$ss_basic_chromecast" == "1" ];then
+		IPT_ACTION="-A"
+		echo_date $LOG1
+	else
+		IPT_ACTION="-D"
+		echo_date $LOG2
+	fi
 	iptables -t nat $IPT_ACTION PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 }
 
