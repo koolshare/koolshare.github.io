@@ -99,15 +99,15 @@ add_white_black_ip(){
 	ip_tg="149.154.0.0/16 91.108.4.0/22 91.108.56.0/24 109.239.140.0/24 67.198.55.0/24"
 	for ip in $ip_tg
 	do
-		ipset -A black_list $ip >/dev/null 2>&1
+		ipset -! add black_list $ip >/dev/null 2>&1
 	done
 	
 	if [ ! -z $ss_wan_black_ip ];then
 		ss_wan_black_ip=`dbus get ss_wan_black_ip|base64_decode|sed '/\#/d'`
-		echo_date 添加你定义的IP/CIDR黑名单地址到ipset
+		echo_date 应用IP/CIDR黑名单
 		for ip in $ss_wan_black_ip
 		do
-			ipset -A black_list $ip >/dev/null 2>&1
+			ipset -! add black_list $ip >/dev/null 2>&1
 		done
 	fi
 	
@@ -119,15 +119,15 @@ add_white_black_ip(){
 	ip_lan="0.0.0.0/8 10.0.0.0/8 100.64.0.0/10 127.0.0.0/8 169.254.0.0/16 172.16.0.0/12 192.168.0.0/16 224.0.0.0/4 240.0.0.0/4 $ip1.0.0/16 $SERVER_IP 223.5.5.5 223.6.6.6 114.114.114.114 114.114.115.115 1.2.4.8 210.2.4.8 112.124.47.27 114.215.126.16 180.76.76.76 119.29.29.29 $ISP_DNS1 $ISP_DNS2"
 	for ip in $ip_lan
 	do
-		ipset -A white_list $ip >/dev/null 2>&1
+		ipset -! add white_list $ip >/dev/null 2>&1
 	done
 	
 	if [ ! -z $ss_wan_white_ip ];then
 		ss_wan_white_ip=`echo $ss_wan_white_ip|base64_decode|sed '/\#/d'`
-		echo_date 添加你定义的IP/CIDR白名单地址到ipset
+		echo_date 应用IP/CIDR白名单
 		for ip in $ss_wan_white_ip
 		do
-			ipset -A white_list $ip >/dev/null 2>&1
+			ipset -! add white_list $ip >/dev/null 2>&1
 		done
 	fi
 }
@@ -348,7 +348,6 @@ start_all)
 	chromecast
 	;;
 add_new_ip)
-	flush_ipset
 	add_white_black_ip
 	;;
 start_part_for_addon)

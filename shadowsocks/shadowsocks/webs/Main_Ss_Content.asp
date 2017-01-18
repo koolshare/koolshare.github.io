@@ -44,9 +44,9 @@ function init() {
 	setTimeout("get_ss_status_data()", 500);
 	detect_JFFS2();
 	update_visibility_main();
-	document.form.ss_basic_action.value = 1;
 	version_show();
 	conf_to_obj();
+	document.form.ss_basic_action.value = 1;
 }
 
 function conf_to_obj(){
@@ -156,6 +156,13 @@ function update_ss_ui(obj) {
 				$j("#ss_basic_rss_protocol").val("origin");
 			} else {
 				$j("#ss_basic_rss_protocol").val(obj.ss_basic_rss_protocol);
+			}
+			continue;
+		} else if (field == "ss_basic_rss_protocol_para") {
+			if (obj[field] == "undefined") {
+				$j("#ss_basic_rss_protocol_para").val("");
+			} else {
+				$j("#ss_basic_rss_protocol_para").val(obj.ss_basic_rss_protocol_para);
 			}
 			continue;
 		} else if (field == "ss_basic_rss_obfs") {
@@ -396,10 +403,11 @@ function ssconf_node2obj(node_sel) {
 			"ss_basic_password": "",
 			"ss_basic_method": "table",
 			"ss_basic_rss_protocol": "",
+			"ss_basic_rss_protocol_para": "",
 			"ss_basic_rss_obfs": "",
+			"ss_basic_rss_obfs_param": "",
 			"ss_basic_use_rss": "",
 			"ss_basic_use_kcp": "",
-			"ss_basic_rss_obfs_param": "",
 			"ss_basic_onetime_auth": "",
 			"ss_basic_ss_obfs": "",
 			"ss_basic_ss_obfs_host": "",
@@ -408,7 +416,7 @@ function ssconf_node2obj(node_sel) {
 		return obj;
 	} else {
 		var obj = {};
-		var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "ss_obfs", "ss_obfs_host", "koolgame_udp"];
+		var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "ss_obfs", "ss_obfs_host", "koolgame_udp"];
 		for (var i = 0; i < params.length; i++) {
 			obj["ss_basic_" + params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel];
 		}
@@ -426,7 +434,7 @@ function ss_node_sel() {
 function ss_node_object(node_sel, obj, isSubmit, end) {
 	var ns = {};
 	var p = "ssconf_basic";
-	var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "ss_obfs", "ss_obfs_host", "koolgame_udp"];
+	var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "ss_obfs", "ss_obfs_host", "koolgame_udp"];
 	for (var i = 0; i < params.length; i++) {
 		ns[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
 		db_ss[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
@@ -457,6 +465,7 @@ function ssform2obj() {
 	obj["password"] = $G("ss_basic_password").value;
 	obj["method"] = $G("ss_basic_method").value;
 	obj["rss_protocol"] = $G("ss_basic_rss_protocol").value;
+	obj["rss_protocol_para"] = $G("ss_basic_rss_protocol_para").value;
 	obj["rss_obfs"] = $G("ss_basic_rss_obfs").value;
 	obj["rss_obfs_param"] = $G("ss_basic_rss_obfs_param").value;
 	obj["use_rss"] = $G("hd_ss_basic_use_rss").value;
@@ -545,6 +554,11 @@ function getAllConfigs() {
 			obj["rss_protocol"] = '';
 		} else {
 			obj["rss_protocol"] = db_ss[p + "_rss_protocol_" + field];
+		}
+		if (typeof db_ss[p + "_rss_protocol_para_" + field] == "undefined") {
+			obj["rss_protocol_para"] = '';
+		} else {
+			obj["rss_protocol_para"] = db_ss[p + "_rss_protocol_para_" + field];
 		}
 
 		if (typeof db_ss[p + "_rss_obfs_" + field] == "undefined") {
@@ -650,6 +664,7 @@ function Add_profile(){ //点击节点页面内添加节点动作
 	document.form.ss_node_table_ss_obfs.value = "0";
 	document.form.ss_node_table_ss_obfs_host.value = "";
 	document.form.ss_node_table_rss_protocol.value = "origin";;
+	document.form.ss_node_table_rss_protocol_para.value = "";;
 	document.form.ss_node_table_rss_obfs.value = "plain";
 	document.form.ss_node_table_koolgame_udp.value = "0";
 	$G("cancelBtn").style.display = "";
@@ -739,7 +754,7 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 	var p = "ssconf_basic";
 	node_global_max += 1;
 	var params1 = ["name", "server", "mode", "port", "method", "onetime_auth", "ss_obfs", "ss_obfs_host"]; //for ss
-	var params2 = ["name", "server", "mode", "port", "method", "rss_protocol", "rss_obfs", "rss_obfs_param"]; //for ssr
+	var params2 = ["name", "server", "mode", "port", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param"]; //for ssr
 	var params3 = ["name", "server", "mode", "port", "method", "koolgame_udp"]; //for ssr
 	if (flag == 'shadowsocks') {
 		for (var i = 0; i < params1.length; i++) {
@@ -784,6 +799,7 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 				document.form.ss_node_table_ss_obfs.value = "0";
 				document.form.ss_node_table_ss_obfs_host.value = "";
 				document.form.ss_node_table_rss_protocol.value = "origin";
+				document.form.ss_node_table_rss_protocol_para.value = "";
 				document.form.ss_node_table_rss_obfs.value = "plain";
 				document.form.ss_node_table_koolgame_udp.value = "0";
 				//updateSs_node_listView();
@@ -920,6 +936,9 @@ function remove_running_node() {
 }
 
 function apply_this_ss_node(s) { //应用此节点
+	document.form.ss_basic_action.value = 1;
+	$j('.show-btn1').addClass('active');
+	$j('.show-btn1_1').removeClass('active');
 	cancel_add_rule(); //隐藏节点编辑面板
 	$G("tablets").style.display = "";
 	$G("tablet_1").style.display = "";
@@ -1083,7 +1102,7 @@ function remove_conf_table(o) { //删除节点功能
 	var p = "ssconf_basic";
 	id = ids[ids.length - 1];
 	var ns = {};
-	var params = ["name", "server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "ss_obfs", "ss_obfs_host", "koolgame_udp", "ping", "web_test"];
+	var params = ["name", "server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "ss_obfs", "ss_obfs_host", "koolgame_udp", "ping", "web_test"];
 	for (var i = 0; i < params.length; i++) {
 		ns[p + "_" + params[i] + "_" + id] = "";
 	}
@@ -1123,6 +1142,7 @@ function edit_conf_table(o) { //编辑节点功能，显示编辑面板
 	document.form.ss_node_table_ss_obfs_host.value = c["ss_obfs_host"];
 	document.form.ss_node_table_rss_obfs_param.value = c["rss_obfs_param"];
 	document.form.ss_node_table_rss_protocol.value = c["rss_protocol"];
+	document.form.ss_node_table_rss_protocol_para.value = c["rss_protocol_para"];
 	document.form.ss_node_table_rss_obfs.value = c["rss_obfs"];
 	document.form.ss_node_table_koolgame_udp.value = c["koolgame_udp"];
 	$G("cancelBtn").style.display = "";
@@ -1164,7 +1184,7 @@ function edit_ss_node_conf(flag) { //编辑节点功能，数据重写
 	var ns = {};
 	var p = "ssconf_basic";
 	var params1 = ["name", "server", "mode", "port", "method", "onetime_auth", "ss_obfs", "ss_obfs_host"]; //for ss
-	var params2 = ["name", "server", "mode", "port", "method", "rss_protocol", "rss_obfs", "rss_obfs_param"]; //for ssr
+	var params2 = ["name", "server", "mode", "port", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param"]; //for ssr
 	var params3 = ["name", "server", "mode", "port", "method", "koolgame_udp"]; //for ssr
 	if (flag == 'shadowsocks') {
 		for (var i = 0; i < params1.length; i++) {
@@ -1206,6 +1226,7 @@ function edit_ss_node_conf(flag) { //编辑节点功能，数据重写
 			document.form.ss_node_table_ss_obfs.value = "0";
 			document.form.ss_node_table_ss_obfs_host.value = "";
 			document.form.ss_node_table_rss_protocol.value = "origin";
+			document.form.ss_node_table_rss_protocol_para.value = "";
 			document.form.ss_node_table_rss_obfs.value = "plain";
 			document.form.ss_node_table_koolgame_udp.value = "0";
 		}

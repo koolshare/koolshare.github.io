@@ -8,6 +8,20 @@ ss_basic_password=`echo $ss_basic_password|base64_decode`
 CONFIG_FILE=/koolshare/ss/ss.json
 DNS_PORT=7913
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
+ISP_DNS=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
+[ "$ss_dns_china" == "1" ] && [ ! -z "$ISP_DNS" ] && CDN="$ISP_DNS"
+[ "$ss_dns_china" == "1" ] && [ -z "$ISP_DNS" ] && CDN="114.114.114.114"
+[ "$ss_dns_china" == "2" ] && CDN="223.5.5.5"
+[ "$ss_dns_china" == "3" ] && CDN="223.6.6.6"
+[ "$ss_dns_china" == "4" ] && CDN="114.114.114.114"
+[ "$ss_dns_china" == "5" ] && CDN="114.114.115.115"
+[ "$ss_dns_china" == "6" ] && CDN="1.2.4.8"
+[ "$ss_dns_china" == "7" ] && CDN="210.2.4.8"
+[ "$ss_dns_china" == "8" ] && CDN="112.124.47.27"
+[ "$ss_dns_china" == "9" ] && CDN="114.215.126.16"
+[ "$ss_dns_china" == "10" ] && CDN="180.76.76.76"
+[ "$ss_dns_china" == "11" ] && CDN="119.29.29.29"
+[ "$ss_dns_china" == "12" ] && CDN="$ss_dns_china_user"
 
 # try to resolv the ss server ip if it is domain...
 resolv_server_ip(){
@@ -349,37 +363,11 @@ start_dns(){
 	fi
 }
 #--------------------------------------------------------------------------------------
-#creat_dnsmasq_basic_conf(){
-#	# make directory if not exist
-#	mkdir -p /jffs/configs/dnsmasq.d
-#	append dnsmasq basic conf
-#	echo_date 创建dnsmasq基础配置到/jffs/configs/dnsmasq.conf.add
-#	cat > /jffs/configs/dnsmasq.conf.add <<-EOF
-#		no-resolv
-#		all-servers
-#		server=$CDN#53
-#		server=127.0.0.1#7913
-#	EOF
-#}
-
 
 load_cdn_site(){
 	# append china site
 	rm -rf /tmp/sscdn.conf
-	ISP_DNS=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
-	[ "$ss_dns_china" == "1" ] && [ ! -z "$ISP_DNS" ] && CDN="$ISP_DNS"
-	[ "$ss_dns_china" == "1" ] && [ -z "$ISP_DNS" ] && CDN="114.114.114.114"
-	[ "$ss_dns_china" == "2" ] && CDN="223.5.5.5"
-	[ "$ss_dns_china" == "3" ] && CDN="223.6.6.6"
-	[ "$ss_dns_china" == "4" ] && CDN="114.114.114.114"
-	[ "$ss_dns_china" == "5" ] && CDN="114.114.115.115"
-	[ "$ss_dns_china" == "6" ] && CDN="1.2.4.8"
-	[ "$ss_dns_china" == "7" ] && CDN="210.2.4.8"
-	[ "$ss_dns_china" == "8" ] && CDN="112.124.47.27"
-	[ "$ss_dns_china" == "9" ] && CDN="114.215.126.16"
-	[ "$ss_dns_china" == "10" ] && CDN="180.76.76.76"
-	[ "$ss_dns_china" == "11" ] && CDN="119.29.29.29"
-	[ "$ss_dns_china" == "12" ] && CDN="$ss_dns_china_user"
+
 
 	if [ "$ss_dns_plan" == "2" ];then
 		echo_date 生成cdn加速列表到/tmp/sscdn.conf，加速用的dns：$CDN
@@ -411,12 +399,14 @@ append_white_black_conf(){
 	# append white domain list, bypass ss
 	rm -rf /tmp/wblist.conf
 	# github need to go ss
+	echo "#for github" >> //tmp/wblist.conf
 	echo "server=/.github.com/127.0.0.1#7913" >> /tmp/wblist.conf
 	echo "ipset=/.github.com/gfwlist" >> /tmp/wblist.conf
+	
 	#  append white domain list,not through ss
 	wanwhitedomain=$(echo $ss_wan_white_domain | base64_decode)
 	if [ ! -z $ss_wan_white_domain ];then
-		echo_date 添加域名白名单到/tmp/wblist.conf
+		echo_date 应用域名白名单
 		echo "#for white_domain" >> //tmp/wblist.conf
 		for wan_white_domain in $wanwhitedomain
 		do 
@@ -424,16 +414,19 @@ append_white_black_conf(){
 			echo "$wan_white_domain" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_list/g" >> /tmp/wblist.conf
 		done
 	fi
+	
 	# apple 和microsoft不能走ss
+	echo "#for special site" >> //tmp/wblist.conf
 	for wan_white_domain2 in "apple.com" "microsoft.com"
 	do 
 		echo "$wan_white_domain2" | sed "s/^/server=&\/./g" | sed "s/$/\/$CDN#53/g" >> /tmp/wblist.conf
 		echo "$wan_white_domain2" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_list/g" >> /tmp/wblist.conf
 	done
+	
 	# append black domain list,through ss
 	wanblackdomain=$(echo $ss_wan_black_domain | base64_decode)
 	if [ ! -z $ss_wan_black_domain ];then
-		echo_date 添加域名黑名单到/tmp/wblist.conf
+		echo_date 应用域名黑名单
 		echo "#for black_domain" >> /tmp/wblist.conf
 		for wan_black_domain in $wanblackdomain
 		do 
@@ -447,27 +440,27 @@ ln_conf(){
 	# custom dnsmasq
 	rm -rf /jffs/configs/dnsmasq.d/custom.conf
 	if [ -f /tmp/custom.conf ];then
-		echo_date 创建域自定义dnsmasq配置文件软链接到/jffs/configs/dnsmasq.d/custom.conf
+		#echo_date 创建域自定义dnsmasq配置文件软链接到/jffs/configs/dnsmasq.d/custom.conf
 		ln -sf /tmp/custom.conf /jffs/configs/dnsmasq.d/custom.conf
 	fi
 	
 	# custom dnsmasq
 	rm -rf /jffs/configs/dnsmasq.d/wblist.conf
 	if [ -f /tmp/wblist.conf ];then
-		echo_date 创建域名黑/白名单软链接到/jffs/configs/dnsmasq.d/wblist.conf
+		#echo_date 创建域名黑/白名单软链接到/jffs/configs/dnsmasq.d/wblist.conf
 		ln -sf /tmp/wblist.conf /jffs/configs/dnsmasq.d/wblist.conf
 	fi
 	rm -rf /jffs/configs/dnsmasq.d/cdn.conf
 	if [ -f /tmp/sscdn.conf ];then
-		echo_date 创建cdn加速列表软链接/jffs/configs/dnsmasq.d/cdn.conf
+		#echo_date 创建cdn加速列表软链接/jffs/configs/dnsmasq.d/cdn.conf
 		ln -sf /tmp/sscdn.conf /jffs/configs/dnsmasq.d/cdn.conf
 	fi
 	rm -rf /jffs/configs/dnsmasq.d/gfwlist.conf
 	if [ ! -f /jffs/configs/dnsmasq.d/gfwlist.conf ];then
-		echo_date 创建gfwlist的软连接到/jffs/configs/dnsmasq.d/文件夹.
+		#echo_date 创建gfwlist的软连接到/jffs/configs/dnsmasq.d/文件夹.
 		ln -sf /koolshare/ss/rules/gfwlist.conf /jffs/configs/dnsmasq.d/gfwlist.conf
 	fi
-	echo_date 创建dnsmasq.postconf软连接到/jffs/scripts/文件夹.
+	#echo_date 创建dnsmasq.postconf软连接到/jffs/scripts/文件夹.
 	rm -rf /jffs/scripts/dnsmasq.postconf
 	ln -sf /koolshare/ss/rules/dnsmasq.postconf /jffs/scripts/dnsmasq.postconf
 }
@@ -744,10 +737,10 @@ restart_dns)
 restart_wb_list)
 	#ss_basic_action=3
 	echo_date ---------------------------- 重启黑白名单服务 ----------------------------
-	ipset -F white_list >/dev/null 2>&1
-	ipset -F black_list >/dev/null 2>&1
-	append_white_black_conf && ln_conf
+	ipset -! flush white_list >/dev/null 2>&1
+	ipset -! flush black_list >/dev/null 2>&1
 	sh /koolshare/ss/nat-start.sh add_new_ip
+	append_white_black_conf && ln_conf
 	restart_dnsmasq
 	remove_status
 	echo_date ------------------------- 黑白名单服务重启完毕 ---------------------------

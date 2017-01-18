@@ -101,14 +101,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2017-01-18_11:34:36", 
+            "build_date": "2017-01-18_19:40:25", 
             "description": "科学上网", 
             "home_url": "Main_Ss_Content.asp", 
-            "md5": "0c9fb431777d85a43f40f1191b300cd0", 
+            "md5": "574c8151813b5ede350c681650573d5e", 
             "name": "shadowsocks", 
             "tar_url": "shadowsocks/shadowsocks.tar.gz", 
             "title": "shadowsocks", 
-            "version": "3.1.9"
+            "version": "3.2.0"
         }, 
         {
             "build_date": "2016-05-07_01:41:30", 

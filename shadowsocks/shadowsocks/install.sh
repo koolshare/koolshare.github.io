@@ -121,6 +121,7 @@ if [ "$comp" == "1" ];then
 fi
 
 # 设置一些默认值
+echo_date 设置一些默认值
 [ -z "$ss_dns_china" ] && dbus set ss_dns_china=11
 [ -z "$ss_dns_foreign" ] && dbus set ss_dns_foreign=1
 [ -z "$ss_basic_ss_obfs" ] && dbus set ss_basic_ss_obfs=0
@@ -133,6 +134,7 @@ fi
 echo_date 为新安装文件赋予执行权限...
 chmod 755 /koolshare/ss/koolgame/*
 chmod 755 /koolshare/ss/cru/*
+chmod 755 /koolshare/ss/rules/*
 chmod 755 /koolshare/ss/dns/*
 chmod 755 /koolshare/ss/socks5/*
 chmod 755 /koolshare/ss/*
