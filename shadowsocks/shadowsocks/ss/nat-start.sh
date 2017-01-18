@@ -2,7 +2,9 @@
 eval `dbus export ss`
 lan_ipaddr=$(nvram get lan_ipaddr)
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
-
+game_on=`dbus list ss_acl_mode|cut -d "=" -f 2 | grep 3`
+[ -n "$game_on" ] || [ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && mangle=1
+	
 load_tproxy(){
 	MODULES="nf_tproxy_core xt_TPROXY xt_socket xt_comment"
 	OS=$(uname -r)
@@ -285,19 +287,19 @@ apply_nat_rules(){
 	# cidr黑名单控制-chnroute（走ss）
 	iptables -t nat -A SHADOWSOCKS_GAM -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
 
-	load_tproxy
-	/usr/sbin/ip rule add fwmark 0x01/0x01 table 310 pref 789
-	/usr/sbin/ip route add local 0.0.0.0/0 dev lo table 310
+	[ "$mangle" == "1" ] && load_tproxy
+	[ "$mangle" == "1" ] && /usr/sbin/ip rule add fwmark 0x01/0x01 table 310 pref 789
+	[ "$mangle" == "1" ] && /usr/sbin/ip route add local 0.0.0.0/0 dev lo table 310
 	# 创建游戏模式udp rule
-	iptables -t mangle -N SHADOWSOCKS
+	[ "$mangle" == "1" ] && iptables -t mangle -N SHADOWSOCKS
 	# IP/cidr/白域名 白名单控制（不走ss）
-	iptables -t mangle -A SHADOWSOCKS -p udp -m set --match-set white_list dst -j RETURN
+	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS -p udp -m set --match-set white_list dst -j RETURN
 	# 创建游戏模式udp rule
-	iptables -t mangle -N SHADOWSOCKS_GAM
+	[ "$mangle" == "1" ] && iptables -t mangle -N SHADOWSOCKS_GAM
 	# IP/CIDR/域名 黑名单控制（走ss）
-	#iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set --match-set black_list dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
+	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set --match-set black_list dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
 	# cidr黑名单控制-chnroute（走ss）
-	iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
+	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
 	#-----------------------FOR ROUTER---------------------
 	# router itself
 	iptables -t nat -A OUTPUT -p tcp -m set --match-set gfwlist dst -j REDIRECT --to-ports 3333
@@ -309,15 +311,11 @@ apply_nat_rules(){
 	iptables -t nat -A SHADOWSOCKS -p tcp $(factor $ss_acl_default_port "-m multiport --dport") -j $(get_action_chain $ss_acl_default_mode)
 	# 如果是主模式游戏模式，则把SHADOWSOCKS链中剩余udp流量转发给SHADOWSOCKS_GAM链
 	# 如果主模式不是游戏模式，则不需要把SHADOWSOCKS链中剩余udp流量转发给SHADOWSOCKS_GAM，不然会造成其他模式主机的udp也走游戏模式
-	[ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && \
-	iptables -t mangle -A SHADOWSOCKS -p udp -j $(get_action_chain $ss_acl_default_mode) || \
-	iptables -t mangle -A SHADOWSOCKS -p udp -j RETURN
+	[ "$mangle" == "1" ] && ss_acl_default_mode=3
+	[ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && iptables -t mangle -A SHADOWSOCKS -p udp -j $(get_action_chain $ss_acl_default_mode)
 	# 重定所有流量到 SHADOWSOCKS
 	iptables -t nat -I PREROUTING 1 -p tcp -j SHADOWSOCKS
-	
-	game_on=`dbus list ss_acl_mode|cut -d "=" -f 2 | grep 3`
-	[ -n $game_on ] || [ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && iptables -t mangle -I PREROUTING 1 -p udp -j SHADOWSOCKS
-
+	[ "$mangle" == "1" ] && iptables -t mangle -I PREROUTING 1 -p udp -j SHADOWSOCKS
 }
 
 chromecast(){
