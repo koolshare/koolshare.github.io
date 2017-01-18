@@ -13,6 +13,7 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    			（这个问题导致了诸多问题，比如部分网址不能解析，黑白名单应用错误，重启dns后出现解析问题等等）；
    - fix	修复脚本变量传递问题，出现应用黑白名单时导致wblist.conf内dns丢失而导致dnsmasq无法启动的问题；
    - fix	修复应用黑白名单时chnroute被flush掉，从而让大陆白名单变成全局模式的bug；
+   - fix	fix game mode udp blocked
    - update	精简了一些日志，下次还会继续精简；
    - PS		上海电信的用户，如果希望定义IPTV，请修改/koolshare/ss/rules/dnsmasq.psotconf文件；
 		shadowsocks-libev 2.6.2本次暂时未跟进.

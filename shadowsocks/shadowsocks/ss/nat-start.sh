@@ -316,7 +316,8 @@ apply_nat_rules(){
 	iptables -t nat -I PREROUTING 1 -p tcp -j SHADOWSOCKS
 	
 	game_on=`dbus list ss_acl_mode|cut -d "=" -f 2 | grep 3`
-	[ -n $game_on ] || [ $ss_basic_mode -eq 3 ]iptables -t mangle -I PREROUTING 1 -p udp -j SHADOWSOCKS
+	[ -n $game_on ] || [ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && iptables -t mangle -I PREROUTING 1 -p udp -j SHADOWSOCKS
+
 }
 
 chromecast(){
