@@ -18,7 +18,7 @@ remove_conf(){
 # 检测版本号
 firmware_version=`nvram get extendno|cut -d "X" -f2`
 firmware_comp=`versioncmp $firmware_version 7.1`
-echo_date 因为固件原因，从3.1.6版本开始，SS插件将只适用于X7.2及以后的固件，X7.1及其以前的固件不再支持c
+echo_date 因为固件原因，从3.1.6版本开始，SS插件将只适用于X7.2及以后固件，X7.1及其以前固件不再支持!
 echo_date 开始检测是否符合升级条件！
 if [ "$firmware_comp" == "-1" ];then
 	echo_date 检测到固件版本X$firmware_version，符合升级条件！
