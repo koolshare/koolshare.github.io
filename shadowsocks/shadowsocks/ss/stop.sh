@@ -186,7 +186,7 @@ kill_process(){
 	if [ ! -z "$Pcap_DNSProxy" ];then 
 	echo_date 关闭Pcap_DNSProxy进程...
 	pid1=`ps|grep /koolshare/ss/dns/dns.sh | grep -v grep | awk '{print $1}'`
-	kill $pid1 >/dev/null 2>&1
+	kill -9 $pid1 >/dev/null 2>&1
 	killall Pcap_DNSProxy >/dev/null 2>&1
 	fi
 	#--------------------------------------------------------------------------

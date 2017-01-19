@@ -13,6 +13,7 @@
 <link rel="stylesheet" type="text/css" href="usp_style.css"/>
 <link rel="stylesheet" type="text/css" href="css/element.css">
 <link rel="stylesheet" type="text/css" href="/res/shadowsocks.css">
+	<link rel="stylesheet" type="text/css" href="/device-map/device-map.css">
 <script type="text/javascript" src="/state.js"></script>
 <script type="text/javascript" src="/popup.js"></script>
 <script type="text/javascript" src="/validator.js"></script>
@@ -1764,7 +1765,8 @@ function toggle_func() {
 				$G("ACL_table_game").style.display = "none"
 				$G("ACL_table").style.display = ""
 				$G("ACL_note").style.display = ""
-				generate_lan_list();
+    			setTimeout("showDropdownClientList('setClientIP', 'ip', 'all', 'ClientList_Block', 'pull_arrow', 'online');", 1000);
+				//generate_lan_list();
 				refresh_acl_table();
 			}
 			document.form.ss_basic_action.value = 1;
@@ -2003,6 +2005,8 @@ function addTr() {
 			confs = getAllConfigs();
 			refresh_acl_table();
 			document.form.ss_acl_name.value = "";
+			document.form.ss_acl_ip.value = "";
+			
 		}
 	});
 	aclid = 0;
@@ -2131,8 +2135,8 @@ function refresh_acl_html() {
 	for (var field in acl_confs) {
 		var ac = acl_confs[field];
 		code = code + '<tr>';
-		generate_lan_list();
-		$j("#ss_acl_ip option[value='" + ac["ip"] + "']").remove();
+		//generate_lan_list();
+		//$j("#ss_acl_ip option[value='" + ac["ip"] + "']").remove();
 		if(ac["mode"] == "3" && db_ss["ss_basic_use_kcp"] == "1" || db_ss["ss_basic_server"] == "127.0.0.1" || db_ss["ss_basic_ss_obfs"] != "0"){
 			code = code + '<td><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(52)">' + ac["ip"] + ' (UDP不通)</a></td>';
 		}else{
@@ -2212,8 +2216,31 @@ function refresh_acl_html() {
 	code = code + '</td>';
 	code = code + '</tr>';
 	return code;
+	
+}
+function setClientIP(ip , name){
+	document.form.ss_acl_ip.value = ip;
+	document.form.ss_acl_name.value = name;
+	hideClients_Block();
 }
 
+function pullLANIPList(obj){
+	var element = document.getElementById('ClientList_Block');
+	var isMenuopen = element.offsetWidth > 0 || element.offsetHeight > 0;
+	if(isMenuopen == 0){
+		obj.src = "/images/arrow-top.gif"
+		element.style.display = 'block';
+		document.form.ss_acl_ip.focus();
+	}
+	else
+		hideClients_Block();
+}
+
+function hideClients_Block(){
+	document.getElementById("pull_arrow").src = "/images/arrow-down.gif";
+	document.getElementById('ClientList_Block').style.display='none';
+	validator.validIPForm(document.form.ss_acl_ip, 0);
+}
 
 </script>
 </head>
@@ -3104,15 +3131,17 @@ taobao.com
 											</table>
 											<table id="ACL_table" style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
 													<tr>
-														<th style="width:170px;">主机IP地址</th>
-														<th style="width:170px;">主机别名</th>
-														<th style="width:170px;">访问控制</th>
-														<th style="width:170px;">目标端口</th>
+														<th style="width:180px;">主机IP地址</th>
+														<th style="width:160px;">主机别名</th>
+														<th style="width:160px;">访问控制</th>
+														<th style="width:160px;">目标端口</th>
 														<th style="width:60px;">添加/删除</th>
 													</tr>
 													<tr>
 														<td>
-															<select id="ss_acl_ip" name="ss_acl_ip" style="width:140px;margin:0px 0px 0px 2px;" class="input_option"></select>
+															<input type="text" maxlength="15" class="input_15_table" id="ss_acl_ip" name="ss_acl_ip" align="left" onkeypress="return validator.isIPAddr(this, event)" style="float:left;"/ autocomplete="off" onClick="hideClients_Block();" autocorrect="off" autocapitalize="off">
+															<img id="pull_arrow" height="14px;" src="images/arrow-down.gif" align="right" onclick="pullLANIPList(this);" title="<#select_IP#>">
+															<div id="ClientList_Block" class="clientlist_dropdown" style="margin-left:2px;margin-top:25px;"></div>
 														</td>
 														<td>
 															<input type="text" id="ss_acl_name" name="ss_acl_name" class="ssconfig input_ss_table" maxlength="50" style="width:140px;" placeholder="" />

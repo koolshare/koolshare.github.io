@@ -676,3 +676,144 @@ function openssHint(itemNum){
 	}
 }
 
+function showDropdownClientList(_callBackFun, _callBackFunParam, _interfaceMode, _containerID, _pullArrowID, _clientState) {
+	document.body.onclick = function() {control_dropdown_client_block(_containerID, _pullArrowID);}
+	if(clientList.length == 0){
+		setTimeout(function() {
+			genClientList();
+			showDropdownClientList(_callBackFun, _callBackFunParam, _interfaceMode, _containerID, _pullArrowID);
+		}, 500);
+		return false;
+	}
+
+	var htmlCode = "";
+	htmlCode += "<div id='clientlist_online'></div>";
+	htmlCode += "<div id='clientlist_dropdown_expand' class='clientlist_dropdown_expand' onclick='expand_hide_Client(\"clientlist_dropdown_expand\", \"clientlist_offline\");' onmouseover='over_var=1;' onmouseout='over_var=0;'>Show Offline Client List</div>";
+	htmlCode += "<div id='clientlist_offline'></div>";
+	document.getElementById(_containerID).innerHTML = htmlCode;
+
+	var param = _callBackFunParam.split(">");
+	var clientMAC = "";
+	var clientIP = "";
+	var getClientValue = function(_attribute, _clienyObj) {
+		var attribute_value = "";
+		switch(_attribute) {
+			case "mac" :
+				attribute_value = _clienyObj.mac;
+				break;
+			case "ip" :
+				if(clientObj.ip != "offline") {
+					attribute_value = _clienyObj.ip;
+				}
+				break;
+			case "name" :
+				attribute_value = (clientObj.nickName == "") ? clientObj.name : clientObj.nickName;
+				break;
+		}
+		return attribute_value;
+	};
+
+	var genClientItem = function(_state) {
+		var code = "";
+		var clientName = (clientObj.nickName == "") ? clientObj.name : clientObj.nickName;
+		
+		code += '<a id=' + clientList[i] + ' title=' + clientList[i] + '>';
+		if(_state == "online")
+			code += '<div onclick="' + _callBackFun + '(\'';
+		else if(_state == "offline")
+			code += '<div style="color:#A0A0A0" onclick="' + _callBackFun + '(\'';
+		for(var j = 0; j < param.length; j += 1) {
+			if(j == 0) {
+				code += getClientValue(param[j], clientObj);
+			}
+			else {
+				code += '\', \'';
+				code += getClientValue(param[j], clientObj);
+			}
+		}
+		code += '\''
+		code += ', '
+		code += '\''
+		code += clientName;
+		code += '\');">';
+		if(clientName.length > 32) {
+			code += clientName.substring(0, 30) + "..";
+		}
+		else {
+			code += clientName;
+		}
+		if(_state == "offline")
+			code += '<strong title="Remove this client" style="float:right;margin-right:5px;cursor:pointer;" onclick="removeClient(\'' + clientObj.mac + '\', \'clientlist_dropdown_expand\', \'clientlist_offline\')">×</strong>';
+		code += '</div><!--[if lte IE 6.5]><iframe class="hackiframe2"></iframe><![endif]--></a>';
+		return code;
+	};
+
+	for(var i = 0; i < clientList.length; i +=1 ) {
+		var clientObj = clientList[clientList[i]];
+		switch(_clientState) {
+			case "all" :
+				if(_interfaceMode == "wl" && (clientList[clientList[i]].isWL == 0)) {
+					continue;
+				}
+				if(_interfaceMode == "wired" && (clientList[clientList[i]].isWL != 0)) {
+					continue;
+				}
+				if(clientObj.isOnline) {
+					document.getElementById("clientlist_online").innerHTML += genClientItem("online");
+				}
+				else if(clientObj.from == "nmpClient") {
+					document.getElementById("clientlist_offline").innerHTML += genClientItem("offline");
+				}
+				break;
+			case "online" :
+				if(_interfaceMode == "wl" && (clientList[clientList[i]].isWL == 0)) {
+					continue;
+				}
+				if(_interfaceMode == "wired" && (clientList[clientList[i]].isWL != 0)) {
+					continue;
+				}
+				if(clientObj.isOnline) {
+					document.getElementById("clientlist_online").innerHTML += genClientItem("online");
+				}
+				break;
+			case "offline" :
+				if(_interfaceMode == "wl" && (clientList[clientList[i]].isWL == 0)) {
+					continue;
+				}
+				if(_interfaceMode == "wired" && (clientList[clientList[i]].isWL != 0)) {
+					continue;
+				}
+				if(clientObj.from == "nmpClient") {
+					document.getElementById("clientlist_offline").innerHTML += genClientItem("offline");
+				}
+				break;
+		}		
+	}
+	
+	if(document.getElementById("clientlist_offline").childNodes.length == "0") {
+		if(document.getElementById("clientlist_dropdown_expand") != null) {
+			removeElement(document.getElementById("clientlist_dropdown_expand"));
+		}
+		if(document.getElementById("clientlist_offline") != null) {
+			removeElement(document.getElementById("clientlist_offline"));
+		}
+	}
+	else {
+		if(document.getElementById("clientlist_dropdown_expand").innerText == "Show Offline Client List") {
+			document.getElementById("clientlist_offline").style.display = "none";
+		}
+		else {
+			document.getElementById("clientlist_offline").style.display = "";
+		}
+	}
+	if(document.getElementById("clientlist_online").childNodes.length == "0") {
+		if(document.getElementById("clientlist_online") != null) {
+			removeElement(document.getElementById("clientlist_online"));
+		}
+	}
+
+	if(document.getElementById(_containerID).childNodes.length == "0")
+		document.getElementById(_pullArrowID).style.display = "none";
+	else
+		document.getElementById(_pullArrowID).style.display = "";
+}

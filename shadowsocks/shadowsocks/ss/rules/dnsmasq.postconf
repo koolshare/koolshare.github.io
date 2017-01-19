@@ -9,7 +9,7 @@ ss_dns_plan=`dbus get ss_dns_plan`
 ISP_DNS1=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
 ISP_DNS2=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 2p)
 if [ "$ss_dns_china" == "1" ];then
-	[ -n "$ISP_DNS1" ] && CDN1="$ISP_DNS1" || CDN="114.114.114.114"
+	[ -n "$ISP_DNS1" ] && CDN1="$ISP_DNS1" || CDN1="114.114.114.114"
 	[ -n "$ISP_DNS2" ] && CDN2="$ISP_DNS2" || CDN2="114.114.115.115"
 fi
 [ "$ss_dns_china" == "2" ] && CDN="223.5.5.5"

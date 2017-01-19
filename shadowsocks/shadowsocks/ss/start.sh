@@ -369,7 +369,7 @@ load_cdn_site(){
 	rm -rf /tmp/sscdn.conf
 
 
-	if [ "$ss_dns_plan" == "2" ];then
+	if [ "$ss_dns_plan" == "2" ] && [ "$ss_dns_foreign" != "5" ] && [ "$ss_dns_foreign" != "6" ];then
 		echo_date 生成cdn加速列表到/tmp/sscdn.conf，加速用的dns：$CDN
 		echo "#for china site CDN acclerate" >> /tmp/sscdn.conf
 		cat /koolshare/ss/rules/cdn.txt | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" | sort | awk '{if ($0!=line) print;line=$0}' >>/tmp/sscdn.conf
@@ -579,6 +579,7 @@ stop_dns(){
 	chinadns=$(ps | grep "chinadns" | grep -v "grep")
 	DNS2SOCK=$(ps | grep "dns2socks" | grep -v "grep")
 	Pcap_DNSProxy=$(ps | grep "Pcap_DNSProxy" | grep -v "grep")
+	PID_DNS_SH=$(ps |grep "/koolshare/ss/dns/dns.sh" | grep -v "grep" |awk '{print $1}')
 	sstunnel=$(ps | grep "ss-tunnel" | grep -v "grep" | grep -vw "rss-tunnel")
 	rsstunnel=$(ps | grep "rss-tunnel" | grep -v "grep" | grep -vw "ss-tunnel")
 	# kill dnscrypt-proxy
@@ -603,7 +604,7 @@ stop_dns(){
 	# kill Pcap_DNSProxy
 	if [ ! -z "$Pcap_DNSProxy" ]; then 
 		echo_date 关闭Pcap_DNSProxy进程...
-		killall dns.sh >/dev/null 2>&1
+		kill -9 $PID_DNS_SH >/dev/null 2>&1
 		killall Pcap_DNSProxy >/dev/null 2>&1
 	fi
 	# kill chinadns
