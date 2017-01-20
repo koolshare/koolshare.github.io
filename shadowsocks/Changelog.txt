@@ -1,10 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 3.2.3
-   - fix	fix password form auto complete in some browser like google chrome;
-   - revert	re-add auth_sha1 protocal for SSR accroding to breakwa11's suggestion;
-   - fix	fix user define DNS for China won't work;
-   - update	sync latest ss rule.
+   - fix	修复密码表单被chrome等浏览器自动填充的问题；
+   - revert	根据破娃建议，重新加回了auth_sha1协议；
+   - fix	修复国内DNS不能自定义的问题。
 
 
 3.2.2
