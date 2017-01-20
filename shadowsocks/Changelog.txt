@@ -1,5 +1,12 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.2.3
+   - fix	fix password form auto complete in some browser like google chrome;
+   - revert	re-add auth_sha1 protocal for SSR accroding to breakwa11's suggestion;
+   - fix	fix user define DNS for China won't work;
+   - update	sync latest ss rule.
+
+
 3.2.2
    - update	修改访问控制页面内，主机ip地址的选填方式。
    		1 下拉选择：主机ip地址的选择方式，现在点击右侧红色箭头可以看到主机名，选择主机后，会自动填写主机的IP地址和主机别名；

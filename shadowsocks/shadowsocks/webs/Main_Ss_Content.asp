@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css" href="usp_style.css"/>
 <link rel="stylesheet" type="text/css" href="css/element.css">
 <link rel="stylesheet" type="text/css" href="/res/shadowsocks.css">
-	<link rel="stylesheet" type="text/css" href="/device-map/device-map.css">
+<link rel="stylesheet" type="text/css" href="/device-map/device-map.css">
 <script type="text/javascript" src="/state.js"></script>
 <script type="text/javascript" src="/popup.js"></script>
 <script type="text/javascript" src="/validator.js"></script>
@@ -153,7 +153,7 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		} else if (field == "ss_basic_rss_protocol") {
-			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" && obj[field] != "auth_aes128_md5" && obj[field] != "auth_aes128_sha1" ) {
+			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" && obj[field] != "auth_aes128_md5" && obj[field] != "auth_aes128_sha1" ) {
 				$j("#ss_basic_rss_protocol").val("origin");
 			} else {
 				$j("#ss_basic_rss_protocol").val(obj.ss_basic_rss_protocol);
@@ -348,7 +348,7 @@ function update_visibility_tab2(){
 		$j("#user_cdn_span").html("Pcap_DNSProxy方案自带国内cdn加速，无需定义cdn加速名单");
 	}else{
 		document.getElementById("ss_dns_china").style.display = "";
-		showhide("ss_dns_china_user", (rdc == "5"));
+		showhide("ss_dns_china_user", (rdc == "12"));
 		showhide("show_isp_dns", (rdc == "1"));
 		document.getElementById("ss_isp_website_web").style.display = "";
 		$j("#show_isp_dns").html("");
@@ -1468,7 +1468,7 @@ function version_show() {
 						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version + "</i>");
 					} else {
-						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.2.1</i></a>");
+						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.2.3</i></a>");
 					}
 				}
 			}
@@ -2478,6 +2478,7 @@ function hideClients_Block(){
 																		<option value="origin" selected>origin</option>
 																		<option value="verify_simple">verify_simple</option>
 																		<option value="verify_sha1">verify_sha1</option>
+																		<option value="auth_sha1">auth_sha1</option>
 																		<option value="auth_sha1_v2">auth_sha1_v2</option>
 																		<option value="auth_sha1_v4">auth_sha1_v4</option>
 																		<option value="auth_aes128_md5">auth_aes128_md5</option>
@@ -2585,7 +2586,7 @@ function hideClients_Block(){
 												<tr id="pass_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(4)">密码</a></th>
 													<td>
-														<input type="password" name="ss_basic_password" id="ss_basic_password" class="input_ss_table" autocomplete="new-password" autocorrect="off" autocapitalize="off" maxlength="100" value="" onBlur="switchType(this, false);" onFocus="switchType(this, true);"/>
+														<input type="password" name="ss_basic_password" id="ss_basic_password" class="input_ss_table" autocomplete="off" autocorrect="off" autocapitalize="off" maxlength="100" value="" readonly onBlur="switchType(this, false);" onFocus="switchType(this, true);this.removeAttribute('readonly');"/>
 													</td>
 												</tr>												
 												<tr id="method_tr">
@@ -2654,6 +2655,7 @@ function hideClients_Block(){
 															<option class="content_input_fd" value="origin">origin</option>
 															<option class="content_input_fd" value="verify_simple">verify_simple</option>
 															<option class="content_input_fd" value="verify_sha1">verify_sha1</option>
+															<option class="content_input_fd" value="auth_sha1">auth_sha1</option>
 															<option class="content_input_fd" value="auth_sha1_v2">auth_sha1_v2</option>
 															<option class="content_input_fd" value="auth_sha1_v4">auth_sha1_v4</option>
 															<option value="auth_aes128_md5">auth_aes128_md5</option>
@@ -2665,7 +2667,7 @@ function hideClients_Block(){
 												<tr id="ss_basic_rss_protocol_para_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(54)">协议参数 (SSR特性)</a></th>
 													<td>
-														<input type="password" name="ss_basic_rss_protocol_para" id="ss_basic_rss_protocol_para" placeholder="id:password"  class="ssconfig input_ss_table" maxlength="100" value="" onBlur="switchType(this, false);" onFocus="switchType(this, true);"></input>
+														<input type="password" name="ss_basic_rss_protocol_para" id="ss_basic_rss_protocol_para" placeholder="id:password"  class="ssconfig input_ss_table" maxlength="100" value="" readonly onBlur="switchType(this, false);" onFocus="switchType(this, true);this.removeAttribute('readonly');"></input>
 													</td>
 												</tr>
 												<tr id="ss_basic_rss_obfs_tr">
