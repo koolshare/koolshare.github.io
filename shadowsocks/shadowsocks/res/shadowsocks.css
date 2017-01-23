@@ -237,3 +237,21 @@ input[type=button]:focus {
     line-height: 1.5;
     padding:0px;
 }
+.ss_btn {
+	border: 1px solid #222;
+	background: linear-gradient(to bottom, #003333  0%, #000000 100%); /* W3C */
+	font-size:10pt;
+	color: #fff;
+	padding: 5px 5px;
+	border-radius: 5px 5px 5px 5px;
+	width:14%;
+}
+.ss_btn:hover {
+	border: 1px solid #222;
+	background: linear-gradient(to bottom, #27c9c9  0%, #279fd9 100%); /* W3C */
+	font-size:10pt;
+	color: #fff;
+	padding: 5px 5px;
+	border-radius: 5px 5px 5px 5px;
+	width:14%;
+}
