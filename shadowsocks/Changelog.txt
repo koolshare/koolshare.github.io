@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.2.4
+   - fix	修复访问控制的一个bug：当选择某个主机或者其它主机不走ss，实际上还是走了gfwlist
+   - update	调整了下节点页面的按钮。
+
 3.2.3
    - fix	修复密码表单被chrome等浏览器自动填充的问题；
    - revert	根据破娃建议，重新加回了auth_sha1协议；
