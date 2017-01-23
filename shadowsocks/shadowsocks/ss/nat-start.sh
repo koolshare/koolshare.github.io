@@ -52,18 +52,11 @@ flush_nat(){
 
 flush_ipset(){
 	echo_date 先清空已存在的ipset名单，防止重复添加
-	ipset -F chnroute >/dev/null 2>&1
-	ipset -F white_list >/dev/null 2>&1
-	ipset -F black_list >/dev/null 2>&1
-	ipset -F gfwlist >/dev/null 2>&1
-}
-
-destory_ipset(){
-	echo_date 摧毁ipset名单
-	ipset -X chnroute >/dev/null 2>&1
-	ipset -X white_list >/dev/null 2>&1
-	ipset -X black_list >/dev/null 2>&1
-	ipset -X gfwlist >/dev/null 2>&1
+	ipset -F chnroute >/dev/null 2>&1 && ipset -X chnroute >/dev/null 2>&1
+	ipset -F white_list >/dev/null 2>&1 && ipset -X white_list >/dev/null 2>&1
+	ipset -F black_list >/dev/null 2>&1 && ipset -X black_list >/dev/null 2>&1
+	ipset -F gfwlist >/dev/null 2>&1 && ipset -X gfwlist >/dev/null 2>&1
+	ipset -F router >/dev/null 2>&1 && ipset -X router >/dev/null 2>&1
 }
 
 remove_redundant_rule(){
@@ -82,7 +75,6 @@ remove_redundant_rule(){
 
 remove_route_table(){
 	echo_date 删除ip route规则.
-	#ip route del local 0.0.0.0/0 dev lo table 300 >/dev/null 2>&1
 	/usr/sbin/ip route del local 0.0.0.0/0 dev lo table 310 >/dev/null 2>&1
 }
 
@@ -92,6 +84,7 @@ creat_ipset(){
 	ipset -! create white_list nethash && ipset flush white_list
 	ipset -! create black_list nethash && ipset flush black_list
 	ipset -! create gfwlist nethash && ipset flush gfwlist
+	ipset -! create router nethash && ipset flush router
 	ipset -! create chnroute nethash && ipset flush chnroute
 	sed -e "s/^/add chnroute &/g" /koolshare/ss/rules/chnroute.txt | awk '{print $0} END{print "COMMIT"}' | ipset -R
 }
@@ -302,7 +295,7 @@ apply_nat_rules(){
 	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
 	#-----------------------FOR ROUTER---------------------
 	# router itself
-	iptables -t nat -A OUTPUT -p tcp -m set --match-set gfwlist dst -j REDIRECT --to-ports 3333
+	iptables -t nat -A OUTPUT -p tcp -m set --match-set router dst -j REDIRECT --to-ports 3333
 	#-------------------------------------------------------
 	# 局域网黑名单（不走ss）/局域网黑名单（走ss）
 	lan_acess_control
@@ -336,9 +329,6 @@ case $1 in
 start_all)
 	flush_nat
 	flush_ipset
-	#ipset -F chnroute >/dev/null 2>&1
-	#ipset -F router >/dev/null 2>&1
-	destory_ipset
 	remove_redundant_rule
 	remove_route_table
 	creat_ipset

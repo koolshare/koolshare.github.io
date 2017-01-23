@@ -399,11 +399,17 @@ append_white_black_conf(){
 	# append white domain list, bypass ss
 	rm -rf /tmp/wblist.conf
 	# github need to go ss
-	echo "#for github" >> //tmp/wblist.conf
+	echo "#for router itself" >> //tmp/wblist.conf
+	echo "server=/.google.com.tw/127.0.0.1#7913" >> /tmp/wblist.conf
+	echo "ipset=/.google.com.tw/router" >> /tmp/wblist.conf
 	echo "server=/.github.com/127.0.0.1#7913" >> /tmp/wblist.conf
-	echo "ipset=/.github.com/gfwlist" >> /tmp/wblist.conf
-	
-	#  append white domain list,not through ss
+	echo "ipset=/.github.com/router" >> /tmp/wblist.conf
+	echo "server=/.github.io/127.0.0.1#7913" >> /tmp/wblist.conf
+	echo "ipset=/.github.io/router" >> /tmp/wblist.conf
+	echo "server=/.raw.githubusercontent.com/127.0.0.1#7913" >> /tmp/wblist.conf
+	echo "ipset=/.raw.githubusercontent.com/router" >> /tmp/wblist.conf
+
+	# append white domain list,not through ss
 	wanwhitedomain=$(echo $ss_wan_white_domain | base64_decode)
 	if [ ! -z $ss_wan_white_domain ];then
 		echo_date 应用域名白名单

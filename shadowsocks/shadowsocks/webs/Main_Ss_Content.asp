@@ -850,6 +850,7 @@ function refresh_html() {
 		$G("ss_node_list_table_td").style.overflow = "auto";
 		$G("ss_node_list_table_td").style.position = "absolute";
 		$G("ss_node_list_table_btn").style.position = "absolute";
+		$G("ss_node_list_table_btn").style.bottom = "13px";
 		$G("ss_node_list_table_main").style.margin = "0px 0px 0px 0px";
 		$G("hide_when_folw").style.display = "none";
 	} else {
@@ -880,8 +881,8 @@ function refresh_html() {
 		} else {
 			html = html + '<td style="width:45px;"></td>';
 		}
-		html = html + '<td id="ss_node_name_' + c["node"] + '" style="width:85px;">' + c["name"] + '</td>';
-		html = html + '<td id="ss_node_server_' + c["node"] + '" style="width:85px;">' + c["server"] + '</td>';
+		html = html + '<td style="white-space: nowrap;width:85px;" id="ss_node_name_' + c["node"] + '">' + c["name"] + '</td>';
+		html = html + '<td style="white-space: nowrap;width:85px;" id="ss_node_server_' + c["node"] + '">' + c["server"] + '</td>';
 		html = html + '<td id="ss_node_port_' + c["node"] + '" style="width:37px;">' + c["port"] + '</td>';
 		html = html + '<td id="ss_node_method_' + c["node"] + '" style="width:75px;">' + c["method"] + '</td>';
 		html = html + '<td class="data_ping" id="ss_node_ping_' + c["node"] + '" style="width:78px;" id="ping_test_td_' + c["node"] + '" style="text-align: center;">' + c["ping"] + '</td>';
@@ -1008,7 +1009,7 @@ function refresh_html1() {
 		n++;
 	} //获取节点的数目
 	var random = parseInt(Math.random() * 7);
-	var phrase = ["koolshare", "你猜", "你猜不到", "我是马赛克", "我是节点", "火星节点", "引力波节点"];
+	var phrase = ["koolshare", "你猜", "假节点", "我是马赛克", "我是节点", "火星节点", "引力波节点"];
 	if (eval(n) > "12") { //当节点数目大于12个的时候，显示为overflow，节点可以滚动
 		if (isFirefox = navigator.userAgent.indexOf("Firefox") > 0) {
 			$G("ss_node_list_table_th").style.top = "400px";
@@ -1020,6 +1021,7 @@ function refresh_html1() {
 		$G("ss_node_list_table_td").style.overflow = "auto";
 		$G("ss_node_list_table_td").style.position = "absolute";
 		$G("ss_node_list_table_btn").style.position = "absolute";
+		$G("ss_node_list_table_btn").style.bottom = "13px";
 		$G("ss_node_list_table_main").style.margin = "0px 0px 0px 0px";
 		$G("hide_when_folw").style.display = "none";
 	} else {
@@ -2218,7 +2220,7 @@ function refresh_acl_html() {
 	return code;
 	
 }
-function setClientIP(ip , name){
+function setClientIP(ip , name, mac){
 	document.form.ss_acl_ip.value = ip;
 	document.form.ss_acl_name.value = name;
 	hideClients_Block();
@@ -2331,7 +2333,7 @@ function hideClients_Block(){
 														</div>
 														<div id="update_button" style="padding-top:5px;margin-left:90px;margin-top:-38px;float: left;">
 															<button id="updateBtn" class="button_gen" onclick="update_ss();">检查并更新</button>
-                                    	                	<input id="update_logo" style="cursor:pointer;margin-left: 130px;" type="button" value="更新日志"/>
+                                    	                	<a type="button" class="ss_btn" style="margin-left: 130px;">更新日志</a>
 														</div>
 														<div id="ss_version_show" style="padding-top:5px;margin-left:220px;margin-top:0px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(12)"><i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i></a></div>
 														<div id="ss_install_show" style="padding-top:5px;margin-left:220px;margin-top:0px;"></div>	
@@ -2741,9 +2743,9 @@ function hideClients_Block(){
 												<tr>
 													<th style="width:20%;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(24)">导出恢复</a></th>
 													<td>
-														<input type="button" class="button_gen" onclick="download_SS_node();" value="导出配置">
-														<input type="button" class="button_gen" onclick="remove_SS_node();" value="清空配置">
-														<input type="button" id="upload_btn" class="button_gen" onclick="upload_SS_node();" value="恢复配置">
+														<input type="button" class="ss_btn" onclick="download_SS_node();" value="导出配置">
+														<input type="button" class="ss_btn" onclick="remove_SS_node();" value="清空配置">
+														<input type="button" class="ss_btn" onclick="upload_SS_node();" value="恢复配置">
 
 														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file">
 														<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif">
@@ -2753,23 +2755,23 @@ function hideClients_Block(){
 												<tr>
 													<th style="width:20%;">ping测试</th>
 													<td>
-														<input class="button_gen" onClick="ping_test()" type="button" value="ping测试"/>
+														<input class="ss_btn" onClick="ping_test()" type="button" value="ping测试"/>
 														<select id="ssconf_basic_Ping_node" name="ssconf_basic_Ping_node" style="width:124px;margin:0px 0px 0px 2px;" class="input_option" onchange="update_ping_method();"></select>
 														<select id="ssconf_basic_Ping_Method" name="ssconf_basic_Ping_Method" style="width:160px;margin:0px 0px 0px 2px;" class="input_option"></select>
-														<input class="button_gen" onClick="remove_ping()" type="button" value="清空结果"/>
+														<input class="ss_btn" onClick="remove_ping()" type="button" value="清空结果"/>
 													</td>
 												</tr>
 												<tr>
 													<th style="width:20%;">web测试</th>
 													<td>
-														<input class="button_gen" onClick="web_test()" type="button" value="web测试"/>
+														<input class="ss_btn" onClick="web_test()" type="button" value="web测试"/>
 															<select id="ssconf_basic_test_node" name="ssconf_basic_test_node" style="width:124px;margin:0px 0px 0px 2px;" class="input_option">
 															</select>
 														<select id="ssconf_basic_test_domain" name="ssconf_basic_test_domain" style="width:160px;margin:0px 0px 0px 2px;" class="input_option">
 															<option class="content_input_fd" value="https://www.google.com/">google.com</option>
 															<option class="content_input_fd" value="https://www.youtube.com/">youtube.com</option>
 														</select>
-														<input class="button_gen" onClick="remove_test()" type="button" value="清空结果"/>
+														<input class="ss_btn" onClick="remove_test()" type="button" value="清空结果"/>
 													</td>
 												</tr>
 											</table>
@@ -3107,7 +3109,7 @@ taobao.com
 																<input type="hidden" id="hd_ss_basic_chnroute_update" name="ss_basic_chnroute_update" value=""/>
 																<input type="hidden" id="hd_ss_basic_cdn_update" name="ss_basic_cdn_update" value=""/>
 															</a>
-                                    	                		<input id="update_now" onclick="updatelist()" style="cursor:pointer" type="button" value="立即更新"/>
+                                    	                		<a type="button" class="ss_btn" onclick="updatelist()">立即更新</a>
 													</td>
 												</tr>											
 											</table>
