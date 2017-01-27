@@ -1779,7 +1779,7 @@ function toggle_func() {
 			ss_node_info_return();
 			checkCmdRet();
 		});
-	$j("#update_logo1").click(
+	$j("#update_logo").click(
 		function() {
 			window.open("https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt");
 		});
