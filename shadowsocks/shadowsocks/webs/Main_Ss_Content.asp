@@ -30,7 +30,6 @@ var $j = jQuery.noConflict();
 var over_var = 0;
 var isMenuopen = 0;
 var $G = function(id){return document.getElementById(id);};
-var refreshRate = 5;
 var retArea = $G('log_content');
 function init() {
 	show_menu(menu_hook);
@@ -217,7 +216,6 @@ function update_visibility_main() {
 	ssenable = document.form.ss_basic_enable.value;
 	crst = document.form.ss_basic_chromecast.value;
 	sru = document.form.ss_basic_rule_update.value;
-	std = readCookie("ss_table_detail");
 	srp = document.form.ss_basic_rss_protocol.value;
 	sro = document.form.ss_basic_rss_obfs.value;
 	sur = document.form.hd_ss_basic_use_rss.value;
@@ -1417,45 +1415,6 @@ function updatelist() {
 	setTimeout("checkCmdRet2();", 500);
 }
 
-
-function createCookie(name, value, days) {
-	var expires;
-	if (days) {
-		var date = new Date();
-		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-		expires = "; expires=" + date.toGMTString();
-	} else {
-		expires = "";
-	}
-	document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
-}
-
-function readCookie(name) {
-	var nameEQ = encodeURIComponent(name) + "=";
-	var ca = document.cookie.split(';');
-	for (var i = 0; i < ca.length; i++) {
-		var c = ca[i];
-		while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-		if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
-	}
-	return null;
-}
-
-function setRefresh(obj) {
-	refreshRate = getRefresh();
-	refreshRate = obj.value;
-	cookie.set('status_restart', refreshRate, 300);
-	get_ss_status_data();
-}
-
-function getRefresh() {
-	val = parseInt(cookie.get('status_restart'));
-	if ((val != 0) && (val != 5) && (val != 10) && (val != 15) && (val != 30) && (val != 60))
-		val = 10;
-	$G('refreshrate').value = val;
-	return val;
-}
-
 function version_show() {
 	$j.ajax({
 		url: 'https://koolshare.ngrok.wang/shadowsocks/config.json.js',
@@ -1470,7 +1429,7 @@ function version_show() {
 						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version + "</i>");
 					} else {
-						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.2.3</i></a>");
+						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.2.6</i></a>");
 					}
 				}
 			}
@@ -1482,6 +1441,7 @@ var checkss = 0;
 function get_ss_status_data() {
 	if (checkss < 10000) {
 		checkss++;
+		refreshRate = $j("#ss_basic_refreshrate").val();
 		$j.ajax({
 			type: "get",
 			url: "/dbconf?p=ss_basic_enable,ss_basic_dns_success",
@@ -1515,7 +1475,6 @@ function get_ss_status_data() {
 					$G('SS_IP').style.display = "";
 					$j('#SS_IP').html("<font color='#66FF66'>服务器IP地址解析正常！</font><a class='hintstyle' href='javascript:void(0);' onclick='openssHint(51)'><font color='#ffcc00'><u>查看说明</u></font></a>");
 				}
-				refreshRate = getRefresh();
 				if (refreshRate > 0) {
 					setTimeout("get_ss_status_data();", refreshRate * 1000);
 				}
@@ -2331,9 +2290,10 @@ function hideClients_Block(){
 																</div>
 															</label>
 														</div>
+														</div>
 														<div id="update_button" style="padding-top:5px;margin-left:90px;margin-top:-38px;float: left;">
 															<button id="updateBtn" class="button_gen" onclick="update_ss();">检查并更新</button>
-                                    	                	<a id="update_logo1" type="button" class="ss_btn" style="margin-left: 130px;" href="">更新日志</a>
+                                    	                	<input id="update_logo" style="cursor:pointer;margin-left: 130px;" type="button" value="更新日志"/>
 														</div>
 														<div id="ss_version_show" style="padding-top:5px;margin-left:220px;margin-top:0px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(12)"><i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i></a></div>
 														<div id="ss_install_show" style="padding-top:5px;margin-left:220px;margin-top:0px;"></div>	
@@ -3185,7 +3145,7 @@ taobao.com
 												<tr>
 													<th><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(42)">状态更新间隔</a></th>
 													<td>
-														<select title="立即生效，无须提交" id="refreshrate" class="input_option" onchange="setRefresh(this);">
+														<select title="立即生效，无须提交" id="ss_basic_refreshrate" name="ss_basic_refreshrate" class="input_option">
 															<option value="0">不更新</option>
 															<option value="5" selected>5s</option>
 															<option value="10">10s</option>
