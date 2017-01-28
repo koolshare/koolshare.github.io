@@ -1,8 +1,8 @@
 {
-"version":"3.0.4",
-"md5":"866641eb4fe6b493c942eacac9de0e44",
+"version":"3.2.2",
+"md5":"674a147a5f72fb85382bb36fa65ff1f5",
 "home_url":"Module_koolproxy.asp",
 "title":"koolproxy",
 "description":"koolproxy",
-"build_date":"2017-01-08_21:11:13"
+"build_date":"2017-01-28_10:46:40"
 }
