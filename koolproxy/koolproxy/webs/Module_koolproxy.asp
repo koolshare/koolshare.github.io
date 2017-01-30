@@ -1029,7 +1029,7 @@ function restore_crt() {
 												<th width="35%">证书下载（用于https过滤）</th>
 												<td>
 													<input type="button" id="download_cert" class="kp_btn" style="cursor:pointer" value="证书下载">
-													<a class="kp_btn" href="http://koolshare.cn/thread-79889-1-1.html" target="_blank">https过滤使用教程<a>
+													<a class="kp_btn" href="http://koolshare.cn/thread-80430-1-1.html" target="_blank">https过滤使用教程<a>
 												</td>
 											</tr>
 											<tr id="klloproxy_com">
