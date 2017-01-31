@@ -11,6 +11,11 @@
             "version": "1.3"
         }, 
         {
+            "name": "koolproxy", 
+            "tar_url": "koolproxy/koolproxy.tar.gz", 
+            "title": "koolproxy"
+        }, 
+        {
             "build_date": "2016-10-23_11:00:50", 
             "description": "让分流更简单", 
             "home_url": "Module_policy_route.asp", 
@@ -101,14 +106,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2017-01-24_01:06:43", 
+            "build_date": "2017-02-01_02:03:38", 
             "description": "科学上网", 
             "home_url": "Main_Ss_Content.asp", 
-            "md5": "77fef625de76a574eab23f17be5edd2f", 
+            "md5": "b16bb13ea04fcad5c6d300897f0e95f8", 
             "name": "shadowsocks", 
             "tar_url": "shadowsocks/shadowsocks.tar.gz", 
             "title": "shadowsocks", 
-            "version": "3.2.5"
+            "version": "3.2.6"
         }, 
         {
             "build_date": "2016-05-07_01:41:30", 

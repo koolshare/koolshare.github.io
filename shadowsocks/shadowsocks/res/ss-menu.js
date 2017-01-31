@@ -1,4 +1,12 @@
 ﻿function menu_hook(title, tab) {
+	var isChrome = navigator.userAgent.search("Chrome") > -1;
+		if(isChrome){
+		var major = navigator.userAgent.match("Chrome\/([0-9]*)\.");    //check for major version
+		var isChrome56 = (parseInt(major[1], 10) >= 56);
+	}
+	if((isChrome56) && document.getElementById("FormTitle")){
+		document.getElementById("FormTitle").className = "FormTitle_chrome56";
+	}
 	var ss_mode = '<% nvram_get("ss_mode"); %>';
 	tabtitle[16] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
 	tablink[16] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
@@ -604,7 +612,7 @@ function openssHint(itemNum){
 		_caption = "IP/CIDR黑名单";
 	}
 	else if(itemNum == 42){
-		statusmenu ="此处定义ss状态检测更新时间间隔，默认10秒。"
+		statusmenu ="此处定义ss状态检测更新时间间隔，默认5秒。"
 		_caption = "状态更新间隔";
 	}
 	else if(itemNum == 43){
