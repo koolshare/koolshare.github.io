@@ -62,13 +62,8 @@ location.href = "/Main_Soft_center.asp";
 var enable_ss = "<% nvram_get("enable_ss"); %>";
 var enable_soft = "<% nvram_get("enable_soft"); %>";
 function menu_hook(title, tab) {
-	if(enable_ss == "1" && enable_soft == "1"){
-		tabtitle[17] = new Array("", "软件中心", "离线安装");
-		tablink[17] = new Array("", "Main_Soft_center.asp", "Main_Soft_setting.asp");
-	}else{
-		tabtitle[16] = new Array("", "软件中心", "离线安装");
-		tablink[16] = new Array("", "Main_Soft_center.asp", "Main_Soft_setting.asp");
-	}
+	tabtitle[tabtitle.length -1] = new Array("", "软件中心", "离线安装");
+	tablink[tablink.length -1] = new Array("", "Main_Soft_center.asp", "Main_Soft_setting.asp");
 }
 function upload_software() {
 	var fullPath = document.getElementById('ss_file').value;
