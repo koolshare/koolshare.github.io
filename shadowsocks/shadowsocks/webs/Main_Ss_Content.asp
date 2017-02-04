@@ -130,13 +130,6 @@ function update_ss_ui(obj) {
 		var el = $G(field);
 		if (field == "ss_basic_method") {
 			continue;
-		} else if (field == "ss_basic_onetime_auth") {
-			if (obj[field] != "1") {
-				$j("#ss_basic_onetime_auth").val("0");
-			} else {
-				$j("#ss_basic_onetime_auth").val("1");
-			}
-			continue;
 		} else if (field == "ss_basic_ss_obfs") {
 			if (obj[field] != "http" && obj[field] != "tls" &&  obj[field] != "0") {
 				$j("#ss_basic_ss_obfs").val("0");
@@ -206,7 +199,6 @@ function validForm() {
 			continue;
 		}
 		$G(temp_ss[i]).value = Base64.encode(temp_str);
-
 	}
 	return true;
 }
@@ -220,7 +212,8 @@ function update_visibility_main() {
 	sro = document.form.ss_basic_rss_obfs.value;
 	sur = document.form.hd_ss_basic_use_rss.value;
 	suk = document.form.hd_ss_basic_use_kcp.value;
-
+	generate_method_options();
+	$j("#ss_basic_method").val(db_ss["ss_basic_method"]);
 	if (ssmode == "2" || ssmode == "3" || ssmode == "4"){
 		document.form.ss_dns_plan_chn.value=document.form.ss_dns_plan.value;
 	}else {
@@ -265,7 +258,6 @@ function update_visibility_main() {
 	showhide("dns_plan_foreign", (ssmode !== "4"));
 	showhide("dns_plan_foreign_game2", (ssmode == "4"));
 	showhide("ss_koolgame_udp_tr", (ssmode == "4"));
-	showhide("onetime_auth", (sur !== "1" && ssmode !== "4"));
 	//开启ssr，开启游戏模式，游戏模式v2，开启kcp协议，都将不支持ss-libev的混淆，因此不予显示
 	showhide("ss_obfs", (sur !== "1" && ssmode!== "3" && ssmode!== "4" && suk !=="1"));
 	showhide("ss_obfs_host", (sur !== "1" && ssmode !== "3" && ssmode !== "4" && suk !=="1" && document.form.ss_basic_ss_obfs.value !== "0"));
@@ -386,6 +378,39 @@ var confs = [
 	}
 }
 
+function generate_method_options(){
+	var ss_method = [ "rc4-md5", "aes-128-gcm", "aes-192-gcm", "aes-256-gcm", "aes-128-cfb", "aes-192-cfb", "aes-256-cfb", "aes-128-ctr", "aes-192-ctr", "aes-256-ctr", "camellia-128-cfb", "camellia-192-cfb", "camellia-256-cfb", "bf-cfb", "chacha20-poly1305", "chacha20-ietf-poly1305", "salsa20", "chacha20", "chacha20-ietf" ];
+	var ssr_method = [ "table", "rc4", "rc4-md5", "aes-128-cfb", "aes-192-cfb", "aes-256-cfb", "aes-128-ctr", "aes-192-ctr", "aes-256-ctr", "bf-cfb", "camellia-128-cfb", "camellia-192-cfb", "camellia-256-cfb", "cast5-cfb", "des-cfb", "idea-cfb", "rc2-cfb", "seed-cfb", "salsa20", "chacha20", "chacha20-ietf" ];
+	$j("#ss_basic_method").find('option').remove().end();
+	
+	if (document.form.hd_ss_basic_use_rss.value == 1){
+		for(var i = 0; i < ssr_method.length; i++) {
+			$j("#ss_basic_method").append("<option value='"  + ssr_method[i] + "'>" + ssr_method[i] + "</option>");
+		}
+	}else{
+		for(var i = 0; i < ss_method.length; i++) {
+			$j("#ss_basic_method").append("<option value='"  + ss_method[i] + "'>" + ss_method[i] + "</option>");
+		}
+	}
+}
+
+function generate_method_options2(x){
+	var ss_method = [ "rc4-md5", "aes-128-gcm", "aes-192-gcm", "aes-256-gcm", "aes-128-cfb", "aes-192-cfb", "aes-256-cfb", "aes-128-ctr", "aes-192-ctr", "aes-256-ctr", "camellia-128-cfb", "camellia-192-cfb", "camellia-256-cfb", "bf-cfb", "chacha20-poly1305", "chacha20-ietf-poly1305", "salsa20", "chacha20", "chacha20-ietf" ];
+	var ssr_method = [ "table", "rc4", "rc4-md5", "aes-128-cfb", "aes-192-cfb", "aes-256-cfb", "aes-128-ctr", "aes-192-ctr", "aes-256-ctr", "bf-cfb", "camellia-128-cfb", "camellia-192-cfb", "camellia-256-cfb", "cast5-cfb", "des-cfb", "idea-cfb", "rc2-cfb", "seed-cfb", "salsa20", "chacha20", "chacha20-ietf" ];
+	$j("#ss_node_table_method").find('option').remove().end();
+	
+	if (x == 1){
+		for(var i = 0; i < ssr_method.length; i++) {
+			$j("#ss_node_table_method").append("<option value='"  + ssr_method[i] + "'>" + ssr_method[i] + "</option>");
+		}
+	}else{
+		for(var i = 0; i < ss_method.length; i++) {
+			$j("#ss_node_table_method").append("<option value='"  + ss_method[i] + "'>" + ss_method[i] + "</option>");
+		}
+	}
+}
+
+
 function oncheckclick(obj) {
 	if (obj.checked) {
 		$G("hd_" + obj.id).value = "1";
@@ -408,7 +433,6 @@ function ssconf_node2obj(node_sel) {
 			"ss_basic_rss_obfs_param": "",
 			"ss_basic_use_rss": "",
 			"ss_basic_use_kcp": "",
-			"ss_basic_onetime_auth": "",
 			"ss_basic_ss_obfs": "",
 			"ss_basic_ss_obfs_host": "",
 			"ss_basic_koolgame_udp": ""
@@ -416,7 +440,7 @@ function ssconf_node2obj(node_sel) {
 		return obj;
 	} else {
 		var obj = {};
-		var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "ss_obfs", "ss_obfs_host", "koolgame_udp"];
+		var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "ss_obfs", "ss_obfs_host", "koolgame_udp"];
 		for (var i = 0; i < params.length; i++) {
 			obj["ss_basic_" + params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel];
 		}
@@ -434,7 +458,7 @@ function ss_node_sel() {
 function ss_node_object(node_sel, obj, isSubmit, end) {
 	var ns = {};
 	var p = "ssconf_basic";
-	var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "ss_obfs", "ss_obfs_host", "koolgame_udp"];
+	var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "ss_obfs", "ss_obfs_host", "koolgame_udp"];
 	for (var i = 0; i < params.length; i++) {
 		ns[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
 		db_ss[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
@@ -470,7 +494,6 @@ function ssform2obj() {
 	obj["rss_obfs_param"] = $G("ss_basic_rss_obfs_param").value;
 	obj["use_rss"] = $G("hd_ss_basic_use_rss").value;
 	obj["use_kcp"] = $G("hd_ss_basic_use_kcp").value;
-	obj["onetime_auth"] = $G("ss_basic_onetime_auth").value;
 	obj["ss_obfs"] = $G("ss_basic_ss_obfs").value;
 	obj["ss_obfs_host"] = $G("ss_basic_ss_obfs_host").value;
 	obj["koolgame_udp"] = $G("ss_basic_koolgame_udp").value;
@@ -517,13 +540,6 @@ function getAllConfigs() {
 		} else {
 			obj["mode"] = db_ss[p + "_mode_" + field];
 		}
-
-		if (typeof db_ss[p + "_onetime_auth_" + field] == "undefined") {
-			obj["onetime_auth"] = '';
-		} else {
-			obj["onetime_auth"] = db_ss[p + "_onetime_auth_" + field];
-		}
-
 		if (typeof db_ss[p + "_ss_obfs_" + field] == "undefined") {
 			obj["ss_obfs"] = '';
 		} else {
@@ -660,7 +676,6 @@ function Add_profile(){ //点击节点页面内添加节点动作
 	document.form.ss_node_table_rss_obfs_param.value = "";
 	document.form.ss_node_table_method.value = "aes-256-cfb";
 	document.form.ss_node_table_mode.value = "1";
-	document.form.ss_node_table_onetime_auth.value = "0";
 	document.form.ss_node_table_ss_obfs.value = "0";
 	document.form.ss_node_table_ss_obfs_host.value = "";
 	document.form.ss_node_table_rss_protocol.value = "origin";;
@@ -693,9 +708,9 @@ function tabclickhandler(_type){
 	if(_type == 0){
 		save_flag = "shadowsocks";
 		generate_options1(0);
+		generate_method_options2(0);
 		document.form.vpnc_type.value = "shadowsocks";
 		$G('ssTitle').className = "vpnClientTitle_td_click";
-		$G('ota_support').style.display = "";
 		showhide("ss_obfs_support", ($j("#ss_node_table_mode").val() !== "3"));
 		showhide("ss_obfs_host_support", ($j("#ss_node_table_mode").val() !== "3" && $j("#ss_node_table_ss_obfs").val() !== "0"));
 		$G('ssr_protocol_tr').style.display = "none";
@@ -706,9 +721,9 @@ function tabclickhandler(_type){
 	} else if(_type == 1){
 		save_flag = "shadowsocksR";
 		generate_options1(0);
+		generate_method_options2(1);
 		document.form.vpnc_type.value = "shadowsocksR";
 		$G('ssrTitle').className = "vpnClientTitle_td_click";
-		$G('ota_support').style.display = "none";
 		$G('ss_obfs_support').style.display = "none";
 		$G('ss_obfs_host_support').style.display = "none";
 		$G('ssr_protocol_tr').style.display = "";
@@ -719,9 +734,9 @@ function tabclickhandler(_type){
 	} else if(_type == 2){
 		save_flag = "gameV2";
 		generate_options1(1);
+		generate_method_options2(0);
 		document.form.vpnc_type.value = "gameV2";
 		$G('gamev2Title').className = "vpnClientTitle_td_click";
-		$G('ota_support').style.display = "none";
 		$G('ss_obfs_support').style.display = "none";
 		$G('ss_obfs_host_support').style.display = "none";
 		$G('ssr_protocol_tr').style.display = "none";
@@ -753,7 +768,7 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 	var ns = {};
 	var p = "ssconf_basic";
 	node_global_max += 1;
-	var params1 = ["name", "server", "mode", "port", "method", "onetime_auth", "ss_obfs", "ss_obfs_host"]; //for ss
+	var params1 = ["name", "server", "mode", "port", "method", "ss_obfs", "ss_obfs_host"]; //for ss
 	var params2 = ["name", "server", "mode", "port", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param"]; //for ssr
 	var params3 = ["name", "server", "mode", "port", "method", "koolgame_udp"]; //for ssr
 	if (flag == 'shadowsocks') {
@@ -795,7 +810,6 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 				document.form.ss_node_table_rss_obfs_param.value = "";
 				document.form.ss_node_table_method.value = "aes-256-cfb";
 				document.form.ss_node_table_mode.value = "1";
-				document.form.ss_node_table_onetime_auth.value = "0";
 				document.form.ss_node_table_ss_obfs.value = "0";
 				document.form.ss_node_table_ss_obfs_host.value = "";
 				document.form.ss_node_table_rss_protocol.value = "origin";
@@ -1104,7 +1118,7 @@ function remove_conf_table(o) { //删除节点功能
 	var p = "ssconf_basic";
 	id = ids[ids.length - 1];
 	var ns = {};
-	var params = ["name", "server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "onetime_auth", "ss_obfs", "ss_obfs_host", "koolgame_udp", "ping", "web_test"];
+	var params = ["name", "server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "ss_obfs", "ss_obfs_host", "koolgame_udp", "ping", "web_test"];
 	for (var i = 0; i < params.length; i++) {
 		ns[p + "_" + params[i] + "_" + id] = "";
 	}
@@ -1134,8 +1148,6 @@ function edit_conf_table(o) { //编辑节点功能，显示编辑面板
 	document.form.ss_node_table_server.value = c["server"];
 	document.form.ss_node_table_port.value = c["port"];
 	document.form.ss_node_table_password.value = Base64.decode(c["password"])
-	document.form.ss_node_table_method.value = c["method"];
-	document.form.ss_node_table_onetime_auth.value = c["onetime_auth"];
 	if (c["ss_obfs"] == "") {
 		document.form.ss_node_table_ss_obfs.value = "0";
 	} else {
@@ -1178,6 +1190,7 @@ function edit_conf_table(o) { //编辑节点功能，显示编辑面板
 			document.form.ss_node_table_mode.value = c["mode"];
 		}
 	}
+	document.form.ss_node_table_method.value = c["method"];
 	myid = id;
 }
 var myid;
@@ -1185,7 +1198,7 @@ var myid;
 function edit_ss_node_conf(flag) { //编辑节点功能，数据重写
 	var ns = {};
 	var p = "ssconf_basic";
-	var params1 = ["name", "server", "mode", "port", "method", "onetime_auth", "ss_obfs", "ss_obfs_host"]; //for ss
+	var params1 = ["name", "server", "mode", "port", "method", "ss_obfs", "ss_obfs_host"]; //for ss
 	var params2 = ["name", "server", "mode", "port", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param"]; //for ssr
 	var params3 = ["name", "server", "mode", "port", "method", "koolgame_udp"]; //for ssr
 	if (flag == 'shadowsocks') {
@@ -1224,7 +1237,6 @@ function edit_ss_node_conf(flag) { //编辑节点功能，数据重写
 			document.form.ss_node_table_rss_obfs_param.value = "";
 			document.form.ss_node_table_method.value = "aes-256-cfb";
 			document.form.ss_node_table_mode.value = "1";
-			document.form.ss_node_table_onetime_auth.value = "0";
 			document.form.ss_node_table_ss_obfs.value = "0";
 			document.form.ss_node_table_ss_obfs_host.value = "";
 			document.form.ss_node_table_rss_protocol.value = "origin";
@@ -1429,7 +1441,7 @@ function version_show() {
 						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version + "</i>");
 					} else {
-						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.2.6</i></a>");
+						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.2.7</i></a>");
 					}
 				}
 			}
@@ -2405,17 +2417,9 @@ function hideClients_Block(){
 																		<option value="salsa20">salsa20</option>
 																		<option value="chacha20">chacha20</option>
 																		<option value="chacha20-ietf">chacha20-ietf</option>
+																		<option value="chacha20-ietf-poly1305">chacha20-ietf-poly1305</option>
 																	</select>
 																</td>	
-															</tr>
-															<tr id="ota_support">
-																<th>OTA支持</th>
-																<td>
-																	<select name="ss_node_table_onetime_auth" id="ss_node_table_onetime_auth" class="input_option" style="width:350px;margin:0px 0px 0px 2px;">
-																		<option value="0" selected>否</option>
-																		<option value="1">是</option>
-																	</select>
-																</td>
 															</tr>
 															<tr id="ss_obfs_support">
 																<th>混淆 (obfs)</th>
@@ -2571,6 +2575,7 @@ function hideClients_Block(){
 															<option value="salsa20">salsa20</option>
 															<option value="chacha20">chacha20</option>
 															<option value="chacha20-ietf">chacha20-ietf</option>
+															<option value="chacha20-ietf-poly1305">chacha20-ietf-poly1305</option>
 														</select>
 													</td>
 												</tr>
@@ -2581,16 +2586,6 @@ function hideClients_Block(){
 															<option value="0">udp in udp</option>
 															<option value="1">udp in tcp</option>
 														</select>
-													</td>
-												</tr>
-												<tr id="onetime_auth">
-													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(7)">一次性验证(OTA)</a></th>
-													<td>
-														<select id="ss_basic_onetime_auth" name="ss_basic_onetime_auth" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
-															<option class="content_input_fd" value="0" selected>关闭</option>
-															<option class="content_input_fd" value="1">开启</option>
-														</select>
-														<span id="ss_basic_onetime_auth_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
 												</tr>
 												<tr id="ss_obfs">

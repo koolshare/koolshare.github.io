@@ -19,6 +19,7 @@ koolgame=$(ps | grep "koolgame" | grep -v "grep"|grep -v "pdu")
 client_linux_arm5=$(ps | grep "client_linux_arm5" | grep -v "grep")
 Pcap_DNSProxy=$(ps | grep "Pcap_DNSProxy" | grep -v "grep")
 haproxy=$(ps | grep "haproxy" | grep -v "grep")
+obfsLocal=$(ps | grep "obfs-local" | grep -v "grep")
 lan_ipaddr=$(nvram get lan_ipaddr)
 ip_rule_exist=`/usr/sbin/ip rule show | grep "fwmark 0x1/0x1 lookup 310" | grep -c 310`
 nvram set ss_mode=0
@@ -216,6 +217,8 @@ kill_process(){
 		echo_date 关闭haproxy进程...
 		killall haproxy >/dev/null 2>&1
 	fi
+
+    [ -n "$obfsLocal" ] && echo_date 关闭obfs-local进程... && killall obfs-local >/dev/null 2>&1
 }
 
 kill_cron_job(){

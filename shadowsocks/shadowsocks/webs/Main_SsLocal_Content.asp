@@ -291,15 +291,6 @@ function update_visibility(){
 													<input type="text" class="ssconfig input_ss_table" id="ss_local_proxyport" name="ss_local_proxyport" maxlength="100" value="1082">												
 												</td>
 											</tr>
-											<tr id="ota_support">
-												<th>OTA支持</th>
-												<td>
-													<select name="ss_local_ota" id="ss_local_ota" class="input_option" style="width:165px;margin:0px 0px 0px 2px;">
-														<option value="0" selected>否</option>
-														<option value="1">是</option>
-													</select>
-												</td>
-											</tr>
 											<tr id="ss_obfs">
 												<th width="35%">混淆 (obfs)</th>
 												<td>

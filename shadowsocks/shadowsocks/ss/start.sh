@@ -51,7 +51,6 @@ resolv_server_ip(){
 }
 # create shadowsocks config file...
 creat_ss_json(){
-	[ $ss_basic_onetime_auth -ne 1 ] && ARG_OTA="" || ARG_OTA="-A";
 	if [ "$ss_basic_ss_obfs_host" != "" ];then
 		if [ "$ss_basic_ss_obfs" == "http" ];then
 			ARG_OBFS="obfs=http;obfs-host=$ss_basic_ss_obfs_host"
@@ -160,12 +159,12 @@ start_dns(){
 			rss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_use_rss" == "0" ];then
 			if [ "$ss_basic_ss_obfs" == "0" ];then
-				ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE $ARG_OTA -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+				ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 			else
 				if [ "$ss_basic_ss_obfs" == "0" ];then
-					ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE $ARG_OTA -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+					ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 				else
-					ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE $ARG_OTA -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sslocal1.pid >/dev/null 2>&1
+					ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sslocal1.pid >/dev/null 2>&1
 				fi
 			fi
 		fi
@@ -186,9 +185,9 @@ start_dns(){
 		elif  [ "$ss_basic_use_rss" == "0" ];then
 			echo_date 开启ss-tunnel...
 			if [ "$ss_basic_ss_obfs" == "0" ];then
-				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$gs" $ARG_OTA -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 			else
-				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$gs" $ARG_OTA -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sstunnel.pid >/dev/null 2>&1
+				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$gs" -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sstunnel.pid >/dev/null 2>&1
 			fi
 		fi
 	fi
@@ -247,9 +246,9 @@ start_dns(){
 				elif  [ "$ss_basic_use_rss" == "0" ];then
 					echo_date 开启ss-tunnel作为pdnsd的上游服务器.
 					if [ "$ss_basic_ss_obfs" == "0" ];then
-						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$dns1" $ARG_OTA -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$dns1" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 					else
-						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$dns1" $ARG_OTA -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sstunnel.pid >/dev/null 2>&1
+						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$dns1" -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sstunnel.pid >/dev/null 2>&1
 					fi
 				fi
 			fi
@@ -321,9 +320,9 @@ start_dns(){
 					rss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 				elif  [ "$ss_basic_use_rss" == "0" ];then
 					if [ "$ss_basic_ss_obfs" == "0" ];then
-						ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE $ARG_OTA -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+						ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 					else
-						ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE $ARG_OTA -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sslocal1.pid >/dev/null 2>&1
+						ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sslocal1.pid >/dev/null 2>&1
 					fi
 				fi
 			echo_date ┣开启dns2socks，作为chinaDNS上游国外dns，转发dns：$rcfd
@@ -342,9 +341,9 @@ start_dns(){
 			elif  [ "$ss_basic_use_rss" == "0" ];then
 				echo_date ┣开启ss-tunnel，作为chinaDNS上游国外dns，转发dns：$rcfs
 				if [ "$ss_basic_ss_obfs" == "0" ];then
-					ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$rcfs" $ARG_OTA -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+					ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid
 				else
-					ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$rcfs" $ARG_OTA -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sstunnel.pid >/dev/null 2>&1
+					ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 1055 -L "$rcfs" -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sstunnel.pid >/dev/null 2>&1
 				fi
 			fi
 		elif [ "$ss_chinadns_foreign_method" == "4" ];then
@@ -542,9 +541,9 @@ start_ss_redir(){
 	elif  [ "$ss_basic_use_rss" == "0" ];then
 		echo_date 开启ss-redir进程，用于透明代理.
 		if [ "$ss_basic_ss_obfs" == "0" ];then
-			ss-redir -b 0.0.0.0 -c $CONFIG_FILE $ARG_OTA -u -f /var/run/shadowsocks.pid >/dev/null 2>&1
+			ss-redir -b 0.0.0.0 -c $CONFIG_FILE -u -f /var/run/shadowsocks.pid >/dev/null 2>&1
 		else
-			ss-redir -b 0.0.0.0 -c $CONFIG_FILE $ARG_OTA -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/shadowsocks.pid >/dev/null 2>&1
+			ss-redir -b 0.0.0.0 -c $CONFIG_FILE -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/shadowsocks.pid >/dev/null 2>&1
 		fi
 	fi
 }
