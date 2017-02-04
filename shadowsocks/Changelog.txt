@@ -1,6 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 3.2.7
+   - fix	web：修复开启ss侧边栏显示后，高亮的是软件中心菜单!
+   		为了这个问题推送一个版本的SS，是为了避免明日380.65-X7.4内测的时候，
+   		内测人员的X7.4固件ss插件发生菜单高亮错误，tab消失的问题。
+
+3.2.7
    - update	程序：更新shadowsocks-libev到3.0.0最新代码，移除OTA支持；
    - update 	程序：更新simple-obfs为最新0.0.2版本；
    - update	程序：更新shadowsocksr-libev到最新代码（2.5.6）；
