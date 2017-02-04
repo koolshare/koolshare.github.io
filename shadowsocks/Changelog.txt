@@ -13,7 +13,7 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    - update	web：配合ss-libev的更新，更改ss-libev的加密方式，ssr加密方式为原先的不变；
    - update	web：边栏菜单兼容380.65-X7.4固件.
    - update 	规则：更新ss-local acl规则为最新
-
+     note：	由于simple-obfs不支持udp，如果大家开了原版ss混淆的，请不要使用ss-tunnel和游戏模式
 3.2.6
    - fix	web：修复chrome56下页面布局问题（仅SS），其它固件自带页面的修复，需要等到下次固件发布。
    - fix	web：回滚更新日志按钮代码，因为可能还会有错位的情况（如更新后未生效，请按ctrl + F5）;
