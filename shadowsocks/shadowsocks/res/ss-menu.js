@@ -1,4 +1,4 @@
-function menu_hook(title, tab) {
+﻿function menu_hook(title, tab) {
 	var isChrome = navigator.userAgent.search("Chrome") > -1;
 		if(isChrome){
 		var major = navigator.userAgent.match("Chrome\/([0-9]*)\.");    //check for major version

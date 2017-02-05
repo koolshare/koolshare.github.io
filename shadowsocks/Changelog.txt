@@ -1,7 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
-3.2.9 （未推送）
+3.2.9
    - fix	web：修复chome56下，节点数量超过12个后，节点面板错乱的问题;
+   - fix	web：修复切换节点/应用节点，不能更换加密方式的问题
+   - fix	web：socks5页面增加ss 3.0.0的新加密方式
+   - update	程序：更新shadowsocksr-libev到最新代码(fix tls1.2_ticket_auth host name bug)
 
 3.2.8
    - fix	web：修复开启ss侧边栏显示后，高亮的是软件中心菜单!

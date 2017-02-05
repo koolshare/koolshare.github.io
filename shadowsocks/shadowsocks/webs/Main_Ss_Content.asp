@@ -212,8 +212,7 @@ function update_visibility_main() {
 	sro = document.form.ss_basic_rss_obfs.value;
 	sur = document.form.hd_ss_basic_use_rss.value;
 	suk = document.form.hd_ss_basic_use_kcp.value;
-	generate_method_options();
-	$j("#ss_basic_method").val(db_ss["ss_basic_method"]);
+
 	if (ssmode == "2" || ssmode == "3" || ssmode == "4"){
 		document.form.ss_dns_plan_chn.value=document.form.ss_dns_plan.value;
 	}else {
@@ -378,44 +377,11 @@ var confs = [
 	}
 }
 
-function generate_method_options(){
-	var ss_method = [ "rc4-md5", "aes-128-gcm", "aes-192-gcm", "aes-256-gcm", "aes-128-cfb", "aes-192-cfb", "aes-256-cfb", "aes-128-ctr", "aes-192-ctr", "aes-256-ctr", "camellia-128-cfb", "camellia-192-cfb", "camellia-256-cfb", "bf-cfb", "chacha20-poly1305", "chacha20-ietf-poly1305", "salsa20", "chacha20", "chacha20-ietf" ];
-	var ssr_method = [ "table", "rc4", "rc4-md5", "aes-128-cfb", "aes-192-cfb", "aes-256-cfb", "aes-128-ctr", "aes-192-ctr", "aes-256-ctr", "bf-cfb", "camellia-128-cfb", "camellia-192-cfb", "camellia-256-cfb", "cast5-cfb", "des-cfb", "idea-cfb", "rc2-cfb", "seed-cfb", "salsa20", "chacha20", "chacha20-ietf" ];
-	$j("#ss_basic_method").find('option').remove().end();
-	
-	if (document.form.hd_ss_basic_use_rss.value == 1){
-		for(var i = 0; i < ssr_method.length; i++) {
-			$j("#ss_basic_method").append("<option value='"  + ssr_method[i] + "'>" + ssr_method[i] + "</option>");
-		}
-	}else{
-		for(var i = 0; i < ss_method.length; i++) {
-			$j("#ss_basic_method").append("<option value='"  + ss_method[i] + "'>" + ss_method[i] + "</option>");
-		}
-	}
-}
-
-function generate_method_options2(x){
-	var ss_method = [ "rc4-md5", "aes-128-gcm", "aes-192-gcm", "aes-256-gcm", "aes-128-cfb", "aes-192-cfb", "aes-256-cfb", "aes-128-ctr", "aes-192-ctr", "aes-256-ctr", "camellia-128-cfb", "camellia-192-cfb", "camellia-256-cfb", "bf-cfb", "chacha20-poly1305", "chacha20-ietf-poly1305", "salsa20", "chacha20", "chacha20-ietf" ];
-	var ssr_method = [ "table", "rc4", "rc4-md5", "aes-128-cfb", "aes-192-cfb", "aes-256-cfb", "aes-128-ctr", "aes-192-ctr", "aes-256-ctr", "bf-cfb", "camellia-128-cfb", "camellia-192-cfb", "camellia-256-cfb", "cast5-cfb", "des-cfb", "idea-cfb", "rc2-cfb", "seed-cfb", "salsa20", "chacha20", "chacha20-ietf" ];
-	$j("#ss_node_table_method").find('option').remove().end();
-	
-	if (x == 1){
-		for(var i = 0; i < ssr_method.length; i++) {
-			$j("#ss_node_table_method").append("<option value='"  + ssr_method[i] + "'>" + ssr_method[i] + "</option>");
-		}
-	}else{
-		for(var i = 0; i < ss_method.length; i++) {
-			$j("#ss_node_table_method").append("<option value='"  + ss_method[i] + "'>" + ss_method[i] + "</option>");
-		}
-	}
-}
-
-
 function oncheckclick(obj) {
 	if (obj.checked) {
-		$G("hd_" + obj.id).value = "1";
+		document.form["hd_" + obj.id].value = "1";
 	} else {
-		$G("hd_" + obj.id).value = "0";
+		document.form["hd_" + obj.id].value = "0";
 	}
 }
 
@@ -708,7 +674,6 @@ function tabclickhandler(_type){
 	if(_type == 0){
 		save_flag = "shadowsocks";
 		generate_options1(0);
-		generate_method_options2(0);
 		document.form.vpnc_type.value = "shadowsocks";
 		$G('ssTitle').className = "vpnClientTitle_td_click";
 		showhide("ss_obfs_support", ($j("#ss_node_table_mode").val() !== "3"));
@@ -721,7 +686,6 @@ function tabclickhandler(_type){
 	} else if(_type == 1){
 		save_flag = "shadowsocksR";
 		generate_options1(0);
-		generate_method_options2(1);
 		document.form.vpnc_type.value = "shadowsocksR";
 		$G('ssrTitle').className = "vpnClientTitle_td_click";
 		$G('ss_obfs_support').style.display = "none";
@@ -734,7 +698,6 @@ function tabclickhandler(_type){
 	} else if(_type == 2){
 		save_flag = "gameV2";
 		generate_options1(1);
-		generate_method_options2(0);
 		document.form.vpnc_type.value = "gameV2";
 		$G('gamev2Title').className = "vpnClientTitle_td_click";
 		$G('ss_obfs_support').style.display = "none";
@@ -1015,6 +978,7 @@ function apply_this_ss_node(s) { //应用此节点
 	var obj = ssconf_node2obj(node_sel);
 	$G("ssconf_basic_node").value = node;
 	update_ss_ui(obj);
+	update_ss_ui(obj);
 	update_visibility_main();
 }
 
@@ -1087,7 +1051,7 @@ function refresh_html1() {
 	var html = '';
 	for (var field in confs) {
 		var c = confs[field];
-		html = html + '<tr>';
+		html = html + '<tr style="height:51px">';
 		if (c["mode"] == 1) {
 			html = html + '<td style="width:45px;"><img src="/res/gfw.png"th/></td>';
 		} else if (c["mode"] == 2) {
@@ -1478,7 +1442,7 @@ function version_show() {
 						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version + "</i>");
 					} else {
-						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.2.7</i></a>");
+						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.2.9</i></a>");
 					}
 				}
 			}
@@ -2438,21 +2402,28 @@ function hideClients_Block(){
 																<th>加密方式</th>
 																<td>
 																	<select id="ss_node_table_method" name="ss_node_table_method" class="input_option" style="width:350px;margin:0px 0px 0px 2px;">
-																		<option value="table">table</option>
 																		<option value="rc4">rc4</option>
 																		<option value="rc4-md5">rc4-md5</option>
+																		<option value="aes-128-gcm">aes-128-gcm</option>
+																		<option value="aes-192-gcm">aes-192-gcm</option>
+																		<option value="aes-256-gcm">aes-256-gcm</option>
 																		<option value="aes-128-cfb">aes-128-cfb</option>
 																		<option value="aes-192-cfb">aes-192-cfb</option>
 																		<option value="aes-256-cfb" selected>aes-256-cfb</option>
 																		<option value="aes-128-ctr">aes-128-ctr</option>
 																		<option value="aes-192-ctr">aes-192-ctr</option>
-																		<option value="aes-256-ctr" selected>aes-256-ctr</option>
-																		<option value="bf-cfb">bf-cfb</option>
+																		<option value="aes-256-ctr">aes-256-ctr</option>
 																		<option value="camellia-128-cfb">camellia-128-cfb</option>
 																		<option value="camellia-192-cfb">camellia-192-cfb</option>
 																		<option value="camellia-256-cfb">camellia-256-cfb</option>
+																		<option value="bf-cfb">bf-cfb</option>
+																		<option value="cast5-cfb">cast5-cfb</option>
+																		<option value="idea-cfb">idea-cfb</option>
+																		<option value="rc2-cfb">rc2-cfb</option>
+																		<option value="seed-cfb">seed-cfb</option>
 																		<option value="salsa20">salsa20</option>
 																		<option value="chacha20">chacha20</option>
+																		<option value="chacha20-poly1305">chacha20-poly1305</option>
 																		<option value="chacha20-ietf">chacha20-ietf</option>
 																		<option value="chacha20-ietf-poly1305">chacha20-ietf-poly1305</option>
 																	</select>
@@ -2596,21 +2567,28 @@ function hideClients_Block(){
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(5)">加密方式</a></th>
 													<td>
 														<select id="ss_basic_method" name="ss_basic_method" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
-															<option value="table">table</option>
 															<option value="rc4">rc4</option>
 															<option value="rc4-md5">rc4-md5</option>
+															<option value="aes-128-gcm">aes-128-gcm</option>
+															<option value="aes-192-gcm">aes-192-gcm</option>
+															<option value="aes-256-gcm">aes-256-gcm</option>
 															<option value="aes-128-cfb">aes-128-cfb</option>
 															<option value="aes-192-cfb">aes-192-cfb</option>
 															<option value="aes-256-cfb" selected>aes-256-cfb</option>
 															<option value="aes-128-ctr">aes-128-ctr</option>
 															<option value="aes-192-ctr">aes-192-ctr</option>
-															<option value="aes-256-ctr" selected>aes-256-ctr</option>
-															<option value="bf-cfb">bf-cfb</option>
+															<option value="aes-256-ctr">aes-256-ctr</option>
 															<option value="camellia-128-cfb">camellia-128-cfb</option>
 															<option value="camellia-192-cfb">camellia-192-cfb</option>
 															<option value="camellia-256-cfb">camellia-256-cfb</option>
+															<option value="bf-cfb">bf-cfb</option>
+															<option value="cast5-cfb">cast5-cfb</option>
+															<option value="idea-cfb">idea-cfb</option>
+															<option value="rc2-cfb">rc2-cfb</option>
+															<option value="seed-cfb">seed-cfb</option>
 															<option value="salsa20">salsa20</option>
 															<option value="chacha20">chacha20</option>
+															<option value="chacha20-poly1305">chacha20-poly1305</option>
 															<option value="chacha20-ietf">chacha20-ietf</option>
 															<option value="chacha20-ietf-poly1305">chacha20-ietf-poly1305</option>
 														</select>
