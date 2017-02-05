@@ -846,18 +846,41 @@ function refresh_table() {
 	});
 }
 function refresh_html() {
+
+	var isChrome = navigator.userAgent.search("Chrome") > -1;
+		if(isChrome){
+		var major = navigator.userAgent.match("Chrome\/([0-9]*)\.");    //check for major version
+		var isChrome56 = (parseInt(major[1], 10) >= 56);
+	}
+	if((isChrome56) && document.getElementById("FormTitle")){
+		document.getElementById("FormTitle").className = "FormTitle_chrome56";
+	}
 	confs = getAllConfigs();
 	var n = 0;
 	for (var i in confs) {
 		n++;
 	} //获取节点的数目
 	if (eval(n) > "12") { //当节点数目大于12个的时候，显示为overflow，节点可以滚动
+			$G("ss_node_list_table_th").style.top = "246px";
+			$G("ss_node_list_table_td").style.top = "286px";
+			$G("ss_node_list_table_td").style.height = "613px";
+			$G("ss_node_list_table_btn").style.top = "896px";
+			$G("FormTitle").style.height = "1100px";	
 		if (isFirefox = navigator.userAgent.indexOf("Firefox") > 0) {
 			$G("ss_node_list_table_th").style.top = "400px";
 			$G("ss_node_list_table_td").style.top = "440px";
-			$G("ss_node_list_table_td").style.bottom = "-75px";
-			$G("ss_node_list_table_btn").style.bottom = "-257px";
+			$G("ss_node_list_table_td").style.height = "613px";
+			$G("ss_node_list_table_btn").style.top = "1050px";
+			$G("FormTitle").style.height = "1100px";
 		}
+		if(isChrome56){
+			$G("ss_node_list_table_th").style.top = "244px";
+			$G("ss_node_list_table_td").style.top = "284px";
+			$G("ss_node_list_table_td").style.height = "613px";
+			$G("ss_node_list_table_btn").style.top = "894px";
+			$G("FormTitle").style.height = "1100px";
+		}
+
 		$G("ss_node_list_table_th").style.display = "";
 		$G("ss_node_list_table_td").style.overflow = "auto";
 		$G("ss_node_list_table_td").style.position = "absolute";
@@ -879,22 +902,22 @@ function refresh_html() {
 	var html = '';
 	for (var field in confs) {
 		var c = confs[field];
-		html = html + '<tr>';
+		html = html + '<tr style="height:51px">';
 		if (c["mode"] == 1) {
-			html = html + '<td style="width:45px;"><img src="/res/gfw.png"th/></td>';
+			html = html + '<td style="width:45px"><img src="/res/gfw.png"th/></td>';
 		} else if (c["mode"] == 2) {
-			html = html + '<td style="width:45px;"><img src="/res/chn.png"th/></td>';
+			html = html + '<td style="width:45px"><img src="/res/chn.png"th/></td>';
 		} else if (c["mode"] == 3) {
-			html = html + '<td style="width:45px;"><img src="/res/game.png"th/></td>';
+			html = html + '<td style="width:45px"><img src="/res/game.png"th/></td>';
 		} else if (c["mode"] == 4) {
-			html = html + '<td style="width:45px;"><img src="/res/gameV2.png"th/></td>';
+			html = html + '<td style="width:45px"><img src="/res/gameV2.png"th/></td>';
 		} else if (c["mode"] == 5) {
-			html = html + '<td style="width:45px;"><img src="/res/all.png"th/></td>';
+			html = html + '<td style="width:45px"><img src="/res/all.png"th/></td>';
 		} else {
-			html = html + '<td style="width:45px;"></td>';
+			html = html + '<td style="width:45px"></td>';
 		}
-		html = html + '<td style="white-space: nowrap;width:85px;" id="ss_node_name_' + c["node"] + '">' + c["name"] + '</td>';
-		html = html + '<td style="white-space: nowrap;width:85px;" id="ss_node_server_' + c["node"] + '">' + c["server"] + '</td>';
+		html = html + '<td style="width:85px;" id="ss_node_name_' + c["node"] + '">' + c["name"] + '</td>';
+		html = html + '<td style="width:85px;" id="ss_node_server_' + c["node"] + '">' + c["server"] + '</td>';
 		html = html + '<td id="ss_node_port_' + c["node"] + '" style="width:37px;">' + c["port"] + '</td>';
 		html = html + '<td id="ss_node_method_' + c["node"] + '" style="width:75px;">' + c["method"] + '</td>';
 		html = html + '<td class="data_ping" id="ss_node_ping_' + c["node"] + '" style="width:78px;" id="ping_test_td_' + c["node"] + '" style="text-align: center;">' + c["ping"] + '</td>';
@@ -1023,12 +1046,26 @@ function refresh_html1() {
 	var random = parseInt(Math.random() * 7);
 	var phrase = ["koolshare", "你猜", "假节点", "我是马赛克", "我是节点", "火星节点", "引力波节点"];
 	if (eval(n) > "12") { //当节点数目大于12个的时候，显示为overflow，节点可以滚动
+			$G("ss_node_list_table_th").style.top = "246px";
+			$G("ss_node_list_table_td").style.top = "286px";
+			$G("ss_node_list_table_td").style.height = "613px";
+			$G("ss_node_list_table_btn").style.top = "896px";
+			$G("FormTitle").style.height = "1100px";	
 		if (isFirefox = navigator.userAgent.indexOf("Firefox") > 0) {
 			$G("ss_node_list_table_th").style.top = "400px";
 			$G("ss_node_list_table_td").style.top = "440px";
-			$G("ss_node_list_table_td").style.bottom = "-75px";
-			$G("ss_node_list_table_btn").style.bottom = "-257px";
+			$G("ss_node_list_table_td").style.height = "613px";
+			$G("ss_node_list_table_btn").style.top = "1050px";
+			$G("FormTitle").style.height = "1100px";
 		}
+		if(isChrome56){
+			$G("ss_node_list_table_th").style.top = "244px";
+			$G("ss_node_list_table_td").style.top = "284px";
+			$G("ss_node_list_table_td").style.height = "613px";
+			$G("ss_node_list_table_btn").style.top = "894px";
+			$G("FormTitle").style.height = "1100px";
+		}
+
 		$G("ss_node_list_table_th").style.display = "";
 		$G("ss_node_list_table_td").style.overflow = "auto";
 		$G("ss_node_list_table_td").style.position = "absolute";
@@ -2693,7 +2730,7 @@ function hideClients_Block(){
 												</tr>
 											</table>
 										</div>
-										<div id="ss_node_list_table_btn" style="display: none;position: static;width: 747px; bottom: 0px;">
+										<div id="ss_node_list_table_btn" style="display: none;position: static;width: 747px;">
 											<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
 													<th style="width:20%;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(24)">导出恢复</a></th>
