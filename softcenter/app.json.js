@@ -11,10 +11,10 @@
             "version": "1.3"
         }, 
         {
-            "build_date": "2017-02-06_22:17:53", 
+            "build_date": "2017-02-06_22:20:04", 
             "description": "", 
             "home_url": "Module_policy_route.asp", 
-            "md5": "cc2dee71f8451bbbda1782bbaf77a86e", 
+            "md5": "81a8f99e947851378fa5b24914cf5ecd", 
             "name": "dualwan", 
             "tar_url": "dualwan/dualwan.tar.gz", 
             "title": "策略路由", 
