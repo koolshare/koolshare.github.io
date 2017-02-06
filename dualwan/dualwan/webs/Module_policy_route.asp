@@ -30,7 +30,7 @@ show_menu();
 buildswitch();
 conf2obj();
 version_show();
-var ss_mode = '<% nvram_get("ss_mode"); %>';
+var ss_mode = '<% dbus_get_def("ss_basic_mode", "0"); %>';
 if(ss_mode == '3'){
 $j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式下会和策略路由相冲突，不要同时开启</font></span>");
 } else if (ss_mode == '4') {
