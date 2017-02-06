@@ -33,9 +33,11 @@ version_show();
 var ss_mode = '<% nvram_get("ss_mode"); %>';
 if(ss_mode == '3'){
 $j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式下会和策略路由相冲突，不要同时开启</font></span>");
+} else if (ss_mode == '4') {
+$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式V2下会和策略路由相冲突，不要同时开启<</font></span>");
 } else if (ss_mode == '2') {
 $j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS大陆白名单模式下国外线路默认全部走SS</font></span>");
-} else if (ss_mode == '4') {
+} else if (ss_mode == '5') {
 $j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS全局模式下国内外线路默认全部走SS</font></span>");
 } else if (ss_mode == '1') {
 $j("#foreign_line1").html("<span class='software_action'><font color='#ffcc00'>当前gfwlsit模式下，gfwlsit以外的国外线路默认全部此端口</font></span>");
@@ -112,9 +114,9 @@ function reload_Soft_Center(){
 location.href = "/Main_Soft_center.asp";
 }
 function setIframeSrc() {
-    var s1 = "http://59.111.101.206/ip9.php";
-    var s2 = "http://ip100.info/ip9.php";
-    var s3 = "http://ip100info.appspot.com/ip9.php";
+    var s1 = "http://115.47.46.178/ip9.php";
+    var s2 = "http://x302.rashost.com/ip.php";
+    var s3 = "http://ip111cn.appspot.com/";
     var iframe1 = document.getElementById('iframe1');
     var iframe2 = document.getElementById('iframe2');
     var iframe3 = document.getElementById('iframe3');

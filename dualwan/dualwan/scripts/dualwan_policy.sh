@@ -4,7 +4,7 @@ eval `dbus export dualwanpolicy`
 eval `dbus export shadowsocks`
 #source /koolshare/configs/ss.sh
 CONFIG="/koolshare/dw"
-ss_mode=$(nvram get ss_mode)
+ss_mode=$(dbus get ss_basic_mode)
 # run this script when ss start
 start=$(dbus list __event__onssstart_)
 
