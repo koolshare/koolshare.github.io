@@ -118,7 +118,7 @@ function reload_Soft_Center(){
 location.href = "/Main_Soft_center.asp";
 }
 function setIframeSrc() {
-    var s1 = "http://115.47.46.178/ip9.php";
+    var s1 = "http://1212.ip138.com/ic.asp";
     var s2 = "http://x302.rashost.com/ip.php";
     var s3 = "http://ip111cn.appspot.com/";
     var iframe1 = document.getElementById('iframe1');
