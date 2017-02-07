@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.3.1
+   - update	binary: update shaodwsocks-libev to 3.0.1, this should sovle ss-tunnel and new encrypt method not working.
+
 3.2.9 - 3.3.0
    - fix	web：修复chome56下，节点数量超过12个后，节点面板错乱的问题;
    - fix	web：修复切换节点/应用节点，不能更换加密方式的问题
