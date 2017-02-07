@@ -31,19 +31,23 @@ buildswitch();
 conf2obj();
 version_show();
 var ss_mode = '<% dbus_get_def("ss_basic_mode", "0"); %>';
-if(ss_mode == '3'){
-$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式下会和策略路由相冲突，不要同时开启</font></span>");
-} else if (ss_mode == '4') {
-$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式V2下会和策略路由相冲突，不要同时开启<</font></span>");
-} else if (ss_mode == '2') {
-$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS大陆白名单模式下国外线路默认全部走SS</font></span>");
-} else if (ss_mode == '5') {
-$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS全局模式下国内外线路默认全部走SS</font></span>");
-} else if (ss_mode == '1') {
-$j("#foreign_line1").html("<span class='software_action'><font color='#ffcc00'>当前gfwlsit模式下，gfwlsit以外的国外线路默认全部此端口</font></span>");
-} else if (ss_mode == '0') {
-$j("#ss_line").html("<span class='software_action'><font color='#ffcc00'>不可用，因为SS未启用</font></span>");
+var ss_enable = '<% dbus_get_def("ss_basic_enable", "0"); %>';
+if(ss_enable != '0'){
+	if(ss_mode == '3'){
+		$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式下会和策略路由相冲突，不要同时开启</font></span>");
+	} else if (ss_mode == '4') {
+		$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式V2下会和策略路由相冲突，不要同时开启<</font></span>");
+	} else if (ss_mode == '2') {
+		$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS大陆白名单模式下国外线路默认全部走SS</font></span>");
+	} else if (ss_mode == '5') {
+		$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS全局模式下国内外线路默认全部走SS</font></span>");
+	} else if (ss_mode == '1') {
+		$j("#foreign_line1").html("<span class='software_action'><font color='#ffcc00'>当前gfwlsit模式下，gfwlsit以外的国外线路默认全部此端口</font></span>");
+	}
+}else{
+	$j("#ss_line").html("<span class='software_action'><font color='#ffcc00'>不可用，因为SS未启用</font></span>");
 }
+
 var lb_mode = '<% nvram_get("wans_mode"); %>';
 if(lb_mode !== "lb"){
 document.getElementById('Routing_rules_table').style.display = "none";
