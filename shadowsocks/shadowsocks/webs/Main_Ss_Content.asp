@@ -130,20 +130,6 @@ function update_ss_ui(obj) {
 		var el = $G(field);
 		if (field == "ss_basic_method") {
 			continue;
-		} else if (field == "ss_basic_ss_obfs") {
-			if (obj[field] != "http" && obj[field] != "tls" &&  obj[field] != "0") {
-				$j("#ss_basic_ss_obfs").val("0");
-			} else {
-				$j("#ss_basic_ss_obfs").val(obj.ss_basic_ss_obfs);
-			}
-			continue;
-		} else if (field == "ss_basic_ss_obfs_host") {
-			if (obj[field] == "undefined") {
-				$j("#ss_basic_ss_obfs_host").val("");
-			} else {
-				$j("#ss_basic_ss_obfs_host").val(obj.ss_basic_ss_obfs_host);
-			}
-			continue;
 		} else if (field == "ss_basic_rss_protocol") {
 			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" && obj[field] != "auth_aes128_md5" && obj[field] != "auth_aes128_sha1" ) {
 				$j("#ss_basic_rss_protocol").val("origin");
@@ -258,12 +244,8 @@ function update_visibility_main() {
 	showhide("dns_plan_foreign_game2", (ssmode == "4"));
 	showhide("ss_koolgame_udp_tr", (ssmode == "4"));
 	//开启ssr，开启游戏模式，游戏模式v2，开启kcp协议，都将不支持ss-libev的混淆，因此不予显示
-	showhide("ss_obfs", (sur !== "1" && ssmode!== "3" && ssmode!== "4" && suk !=="1"));
-	showhide("ss_obfs_host", (sur !== "1" && ssmode !== "3" && ssmode !== "4" && suk !=="1" && document.form.ss_basic_ss_obfs.value !== "0"));
-	showhide("ss_obfs_support", ($j("#ss_node_table_mode").val() !== "3"));
-	showhide("ss_obfs_host_support", ($j("#ss_node_table_mode").val() !== "3" && $j("#ss_node_table_ss_obfs").val() !== "0"));
 	showhide("SSR_name", (ssmode !== "4"));
-	showhide("KCP_name", (ssmode !== "3" && ssmode !== "4" && document.form.ss_basic_ss_obfs.value =="0"));
+	showhide("KCP_name", (ssmode !== "3" && ssmode !== "4"));
 	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode !== "4"));
 	showhide("ss_basic_rss_protocol_para_tr", (sur == "1" && ssmode !== "4"));
 	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode !== "4"));
@@ -399,14 +381,12 @@ function ssconf_node2obj(node_sel) {
 			"ss_basic_rss_obfs_param": "",
 			"ss_basic_use_rss": "",
 			"ss_basic_use_kcp": "",
-			"ss_basic_ss_obfs": "",
-			"ss_basic_ss_obfs_host": "",
 			"ss_basic_koolgame_udp": ""
 		};
 		return obj;
 	} else {
 		var obj = {};
-		var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "ss_obfs", "ss_obfs_host", "koolgame_udp"];
+		var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "koolgame_udp"];
 		for (var i = 0; i < params.length; i++) {
 			obj["ss_basic_" + params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel];
 		}
@@ -424,7 +404,7 @@ function ss_node_sel() {
 function ss_node_object(node_sel, obj, isSubmit, end) {
 	var ns = {};
 	var p = "ssconf_basic";
-	var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "ss_obfs", "ss_obfs_host", "koolgame_udp"];
+	var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "koolgame_udp"];
 	for (var i = 0; i < params.length; i++) {
 		ns[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
 		db_ss[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
@@ -460,8 +440,6 @@ function ssform2obj() {
 	obj["rss_obfs_param"] = $G("ss_basic_rss_obfs_param").value;
 	obj["use_rss"] = $G("hd_ss_basic_use_rss").value;
 	obj["use_kcp"] = $G("hd_ss_basic_use_kcp").value;
-	obj["ss_obfs"] = $G("ss_basic_ss_obfs").value;
-	obj["ss_obfs_host"] = $G("ss_basic_ss_obfs_host").value;
 	obj["koolgame_udp"] = $G("ss_basic_koolgame_udp").value;
 	return obj;
 }
@@ -505,16 +483,6 @@ function getAllConfigs() {
 			obj["mode"] = '';
 		} else {
 			obj["mode"] = db_ss[p + "_mode_" + field];
-		}
-		if (typeof db_ss[p + "_ss_obfs_" + field] == "undefined") {
-			obj["ss_obfs"] = '';
-		} else {
-			obj["ss_obfs"] = db_ss[p + "_ss_obfs_" + field];
-		}
-		if (typeof db_ss[p + "_ss_obfs_host_" + field] == "undefined") {
-			obj["ss_obfs_host"] = '';
-		} else {
-			obj["ss_obfs_host"] = db_ss[p + "_ss_obfs_host_" + field];
 		}
 		if (typeof db_ss[p + "_koolgame_udp_" + field] == "undefined") {
 			obj["koolgame_udp"] = '';
@@ -642,8 +610,6 @@ function Add_profile(){ //点击节点页面内添加节点动作
 	document.form.ss_node_table_rss_obfs_param.value = "";
 	document.form.ss_node_table_method.value = "aes-256-cfb";
 	document.form.ss_node_table_mode.value = "1";
-	document.form.ss_node_table_ss_obfs.value = "0";
-	document.form.ss_node_table_ss_obfs_host.value = "";
 	document.form.ss_node_table_rss_protocol.value = "origin";;
 	document.form.ss_node_table_rss_protocol_para.value = "";;
 	document.form.ss_node_table_rss_obfs.value = "plain";
@@ -676,8 +642,6 @@ function tabclickhandler(_type){
 		generate_options1(0);
 		document.form.vpnc_type.value = "shadowsocks";
 		$G('ssTitle').className = "vpnClientTitle_td_click";
-		showhide("ss_obfs_support", ($j("#ss_node_table_mode").val() !== "3"));
-		showhide("ss_obfs_host_support", ($j("#ss_node_table_mode").val() !== "3" && $j("#ss_node_table_ss_obfs").val() !== "0"));
 		$G('ssr_protocol_tr').style.display = "none";
 		$G('ssr_protocol_para_tr').style.display = "none";
 		$G('ssr_obfs_tr').style.display = "none";
@@ -688,8 +652,6 @@ function tabclickhandler(_type){
 		generate_options1(0);
 		document.form.vpnc_type.value = "shadowsocksR";
 		$G('ssrTitle').className = "vpnClientTitle_td_click";
-		$G('ss_obfs_support').style.display = "none";
-		$G('ss_obfs_host_support').style.display = "none";
 		$G('ssr_protocol_tr').style.display = "";
 		$G('ssr_protocol_para_tr').style.display = "";
 		$G('ssr_obfs_tr').style.display = "";
@@ -700,8 +662,6 @@ function tabclickhandler(_type){
 		generate_options1(1);
 		document.form.vpnc_type.value = "gameV2";
 		$G('gamev2Title').className = "vpnClientTitle_td_click";
-		$G('ss_obfs_support').style.display = "none";
-		$G('ss_obfs_host_support').style.display = "none";
 		$G('ssr_protocol_tr').style.display = "none";
 		$G('ssr_protocol_para_tr').style.display = "none";
 		$G('ssr_obfs_tr').style.display = "none";
@@ -731,7 +691,7 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 	var ns = {};
 	var p = "ssconf_basic";
 	node_global_max += 1;
-	var params1 = ["name", "server", "mode", "port", "method", "ss_obfs", "ss_obfs_host"]; //for ss
+	var params1 = ["name", "server", "mode", "port", "method"]; //for ss
 	var params2 = ["name", "server", "mode", "port", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param"]; //for ssr
 	var params3 = ["name", "server", "mode", "port", "method", "koolgame_udp"]; //for ssr
 	if (flag == 'shadowsocks') {
@@ -773,8 +733,6 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 				document.form.ss_node_table_rss_obfs_param.value = "";
 				document.form.ss_node_table_method.value = "aes-256-cfb";
 				document.form.ss_node_table_mode.value = "1";
-				document.form.ss_node_table_ss_obfs.value = "0";
-				document.form.ss_node_table_ss_obfs_host.value = "";
 				document.form.ss_node_table_rss_protocol.value = "origin";
 				document.form.ss_node_table_rss_protocol_para.value = "";
 				document.form.ss_node_table_rss_obfs.value = "plain";
@@ -1119,7 +1077,7 @@ function remove_conf_table(o) { //删除节点功能
 	var p = "ssconf_basic";
 	id = ids[ids.length - 1];
 	var ns = {};
-	var params = ["name", "server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "ss_obfs", "ss_obfs_host", "koolgame_udp", "ping", "web_test"];
+	var params = ["name", "server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "koolgame_udp", "ping", "web_test"];
 	for (var i = 0; i < params.length; i++) {
 		ns[p + "_" + params[i] + "_" + id] = "";
 	}
@@ -1149,12 +1107,6 @@ function edit_conf_table(o) { //编辑节点功能，显示编辑面板
 	document.form.ss_node_table_server.value = c["server"];
 	document.form.ss_node_table_port.value = c["port"];
 	document.form.ss_node_table_password.value = Base64.decode(c["password"])
-	if (c["ss_obfs"] == "") {
-		document.form.ss_node_table_ss_obfs.value = "0";
-	} else {
-		document.form.ss_node_table_ss_obfs.value = c["ss_obfs"];
-	}
-	document.form.ss_node_table_ss_obfs_host.value = c["ss_obfs_host"];
 	document.form.ss_node_table_rss_obfs_param.value = c["rss_obfs_param"];
 	document.form.ss_node_table_rss_protocol.value = c["rss_protocol"];
 	document.form.ss_node_table_rss_protocol_para.value = c["rss_protocol_para"];
@@ -1199,7 +1151,7 @@ var myid;
 function edit_ss_node_conf(flag) { //编辑节点功能，数据重写
 	var ns = {};
 	var p = "ssconf_basic";
-	var params1 = ["name", "server", "mode", "port", "method", "ss_obfs", "ss_obfs_host"]; //for ss
+	var params1 = ["name", "server", "mode", "port", "method"]; //for ss
 	var params2 = ["name", "server", "mode", "port", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param"]; //for ssr
 	var params3 = ["name", "server", "mode", "port", "method", "koolgame_udp"]; //for ssr
 	if (flag == 'shadowsocks') {
@@ -1238,8 +1190,6 @@ function edit_ss_node_conf(flag) { //编辑节点功能，数据重写
 			document.form.ss_node_table_rss_obfs_param.value = "";
 			document.form.ss_node_table_method.value = "aes-256-cfb";
 			document.form.ss_node_table_mode.value = "1";
-			document.form.ss_node_table_ss_obfs.value = "0";
-			document.form.ss_node_table_ss_obfs_host.value = "";
 			document.form.ss_node_table_rss_protocol.value = "origin";
 			document.form.ss_node_table_rss_protocol_para.value = "";
 			document.form.ss_node_table_rss_obfs.value = "plain";
@@ -1442,7 +1392,7 @@ function version_show() {
 						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version + "</i>");
 					} else {
-						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.2.9</i></a>");
+						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.3.2</i></a>");
 					}
 				}
 			}
@@ -2109,13 +2059,7 @@ function refresh_acl_html() {
 	for (var field in acl_confs) {
 		var ac = acl_confs[field];
 		code = code + '<tr>';
-		//generate_lan_list();
-		//$j("#ss_acl_ip option[value='" + ac["ip"] + "']").remove();
-		if(ac["mode"] == "3" && db_ss["ss_basic_use_kcp"] == "1" || db_ss["ss_basic_server"] == "127.0.0.1" || db_ss["ss_basic_ss_obfs"] != "0"){
-			code = code + '<td><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(52)">' + ac["ip"] + ' (UDP不通)</a></td>';
-		}else{
-			code = code + '<td>' + ac["ip"] + '</td>';
-		}
+		code = code + '<td>' + ac["ip"] + '</td>';
 		code = code + '<td>';
 		code = code + '<input type="text" placeholder="' + ac["acl_node"] + '号机" id="ss_acl_name_' + ac["acl_node"] + '" name="ss_acl_name_' + ac["acl_node"] + '" class="input_option_2" maxlength="50" style="width:140px;" placeholder="" />';
 		code = code + '</td>';
@@ -2404,9 +2348,7 @@ function hideClients_Block(){
 																	<select id="ss_node_table_method" name="ss_node_table_method" class="input_option" style="width:350px;margin:0px 0px 0px 2px;">
 																		<option value="rc4">rc4</option>
 																		<option value="rc4-md5">rc4-md5</option>
-																		<option value="aes-128-gcm">aes-128-gcm</option>
-																		<option value="aes-192-gcm">aes-192-gcm</option>
-																		<option value="aes-256-gcm">aes-256-gcm</option>
+																		<option value="rc4-md5-6">rc4-md5-6</option>
 																		<option value="aes-128-cfb">aes-128-cfb</option>
 																		<option value="aes-192-cfb">aes-192-cfb</option>
 																		<option value="aes-256-cfb" selected>aes-256-cfb</option>
@@ -2423,27 +2365,9 @@ function hideClients_Block(){
 																		<option value="seed-cfb">seed-cfb</option>
 																		<option value="salsa20">salsa20</option>
 																		<option value="chacha20">chacha20</option>
-																		<option value="chacha20-poly1305">chacha20-poly1305</option>
 																		<option value="chacha20-ietf">chacha20-ietf</option>
-																		<option value="chacha20-ietf-poly1305">chacha20-ietf-poly1305</option>
 																	</select>
 																</td>	
-															</tr>
-															<tr id="ss_obfs_support">
-																<th>混淆 (obfs)</th>
-																<td>
-																	<select name="ss_node_table_ss_obfs" id="ss_node_table_ss_obfs" class="input_option" style="width:350px;margin:0px 0px 0px 2px;" onchange="update_visibility_main();">
-																		<option value="0" selected>否</option>
-																		<option value="http">http</option>
-																		<option value="tls">tls</option>
-																	</select>
-																</td>
-															</tr>
-															<tr id="ss_obfs_host_support">
-																<th>混淆主机名 (obfs-host)</th>
-																<td>
-																	<input type="text" name="ss_node_table_ss_obfs_host" id="ss_node_table_ss_obfs_host" placeholder="bing.com"  class="input_ss_table" style="width:342px;" maxlength="100" value=""></input>
-																</td>
 															</tr>
 															<tr id="ssr_protocol_tr">
 																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>协议 (protocol)</u></a></th>
@@ -2569,9 +2493,7 @@ function hideClients_Block(){
 														<select id="ss_basic_method" name="ss_basic_method" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
 															<option value="rc4">rc4</option>
 															<option value="rc4-md5">rc4-md5</option>
-															<option value="aes-128-gcm">aes-128-gcm</option>
-															<option value="aes-192-gcm">aes-192-gcm</option>
-															<option value="aes-256-gcm">aes-256-gcm</option>
+															<option value="rc4-md5-6">rc4-md5-6</option>
 															<option value="aes-128-cfb">aes-128-cfb</option>
 															<option value="aes-192-cfb">aes-192-cfb</option>
 															<option value="aes-256-cfb" selected>aes-256-cfb</option>
@@ -2588,9 +2510,7 @@ function hideClients_Block(){
 															<option value="seed-cfb">seed-cfb</option>
 															<option value="salsa20">salsa20</option>
 															<option value="chacha20">chacha20</option>
-															<option value="chacha20-poly1305">chacha20-poly1305</option>
 															<option value="chacha20-ietf">chacha20-ietf</option>
-															<option value="chacha20-ietf-poly1305">chacha20-ietf-poly1305</option>
 														</select>
 													</td>
 												</tr>
@@ -2603,23 +2523,6 @@ function hideClients_Block(){
 														</select>
 													</td>
 												</tr>
-												<tr id="ss_obfs">
-													<th width="35%">混淆 (obfs)</th>
-													<td>
-														<select id="ss_basic_ss_obfs" name="ss_basic_ss_obfs" style="width:164px;margin:0px 0px 0px 2px;" class="input_option"  onchange="update_visibility_main();" >
-															<option class="content_input_fd" value="0">关闭</option>
-															<option class="content_input_fd" value="tls">tls</option>
-															<option class="content_input_fd" value="http">http</option>
-														</select>
-													</td>
-												</tr>
-												<tr id="ss_obfs_host">
-													<th width="35%">混淆主机名 (obfs_host)</th>
-													<td>
-														<input type="text" name="ss_basic_ss_obfs_host" id="ss_basic_ss_obfs_host" placeholder="bing.com"  class="ssconfig input_ss_table" maxlength="100" value=""></input>
-													</td>
-												</tr>
-												
 												<tr id="ss_basic_rss_protocol_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(8)">协议 (protocol)</a></th>
 													<td>
@@ -2713,9 +2616,9 @@ function hideClients_Block(){
 												<tr>
 													<th style="width:20%;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(24)">导出恢复</a></th>
 													<td>
-														<input type="button" class="ss_btn" onclick="download_SS_node();" value="导出配置">
-														<input type="button" class="ss_btn" onclick="remove_SS_node();" value="清空配置">
-														<input type="button" class="ss_btn" onclick="upload_SS_node();" value="恢复配置">
+														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="download_SS_node();" value="导出配置">
+														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="remove_SS_node();" value="清空配置">
+														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="upload_SS_node();" value="恢复配置">
 
 														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file">
 														<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif">
@@ -2725,23 +2628,23 @@ function hideClients_Block(){
 												<tr>
 													<th style="width:20%;">ping测试</th>
 													<td>
-														<input class="ss_btn" onClick="ping_test()" type="button" value="ping测试"/>
+														<input class="ss_btn" style="cursor:pointer;" onClick="ping_test()" type="button" value="ping测试"/>
 														<select id="ssconf_basic_Ping_node" name="ssconf_basic_Ping_node" style="width:124px;margin:0px 0px 0px 2px;" class="input_option" onchange="update_ping_method();"></select>
 														<select id="ssconf_basic_Ping_Method" name="ssconf_basic_Ping_Method" style="width:160px;margin:0px 0px 0px 2px;" class="input_option"></select>
-														<input class="ss_btn" onClick="remove_ping()" type="button" value="清空结果"/>
+														<input class="ss_btn" style="cursor:pointer;" onClick="remove_ping()" type="button" value="清空结果"/>
 													</td>
 												</tr>
 												<tr>
 													<th style="width:20%;">web测试</th>
 													<td>
-														<input class="ss_btn" onClick="web_test()" type="button" value="web测试"/>
+														<input class="ss_btn" style="cursor:pointer;" onClick="web_test()" type="button" value="web测试"/>
 															<select id="ssconf_basic_test_node" name="ssconf_basic_test_node" style="width:124px;margin:0px 0px 0px 2px;" class="input_option">
 															</select>
 														<select id="ssconf_basic_test_domain" name="ssconf_basic_test_domain" style="width:160px;margin:0px 0px 0px 2px;" class="input_option">
 															<option class="content_input_fd" value="https://www.google.com/">google.com</option>
 															<option class="content_input_fd" value="https://www.youtube.com/">youtube.com</option>
 														</select>
-														<input class="ss_btn" onClick="remove_test()" type="button" value="清空结果"/>
+														<input class="ss_btn" style="cursor:pointer;" onClick="remove_test()" type="button" value="清空结果"/>
 													</td>
 												</tr>
 											</table>

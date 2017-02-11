@@ -11,41 +11,17 @@ if [ ! -z "$webtest" ];then
 	done
 fi
 
-
-
-
 start_webtest(){
 	array1=`dbus get ssconf_basic_server_$nu`
 	array2=`dbus get ssconf_basic_port_$nu`
 	array3=`dbus get ssconf_basic_password_$nu|base64_decode`
 	array4=`dbus get ssconf_basic_method_$nu`
 	array5=`dbus get ssconf_basic_use_rss_$nu`
-	array6=`dbus get ssconf_basic_onetime_auth_$nu`
+	#array6=`dbus get ssconf_basic_onetime_auth_$nu`
 	array7=`dbus get ssconf_basic_rss_protocol_$nu`
 	array8=`dbus get ssconf_basic_rss_obfs_$nu`
-	array9=`dbus get ssconf_basic_ss_obfs_$nu`
-	array10=`dbus get ssconf_basic_ss_obfs_host_$nu`
 	array11=`dbus get ssconf_basic_mode_$nu`
-	
-	[ $array6 -ne 1 ] && ARG_OTA="" || ARG_OTA="-A";
-	if [ "$array10" != "" ];then
-		if [ "$array9" == "http" ];then
-			ARG_OBFS="--obfs http --obfs-host $array10"
-		elif [ "$array9" == "tls" ];then
-			ARG_OBFS="--obfs tls --obfs-host $array10"
-		else
-			ARG_OBFS=""
-		fi
-	else
-		if [ "$array9" == "http" ];then
-			ARG_OBFS="--obfs http"
-		elif [ "$array9" == "tls" ];then
-			ARG_OBFS="--obfs tls"
-		else
-			ARG_OBFS=""
-		fi
-	fi
-	
+	array12=`dbus get ssconf_basic_rss_protocol_para$nu`
 	if [ "$array11" == "1" ] || [ "$array11" == "2" ] || [ "$array11" == "3" ] || [ "$array11" == "5" ];then
 		if [ "$array5" == "1" ];then
 			cat > /tmp/tmp_ss.json <<-EOF
@@ -56,22 +32,24 @@ start_webtest(){
 			    "password":"$array3",
 			    "timeout":600,
 			    "protocol":"$array7",
+			    "protocol_param":"$array12",
 			    "obfs":"$array8",
 			    "method":"$array4"
 			}
 		EOF
 			rss-local -b 0.0.0.0 -l 23458 -c /tmp/tmp_ss.json -u -f /var/run/sslocal2.pid >/dev/null 2>&1
-			result=`curl -o /dev/null -s -w %{time_total}:%{speed_download} --socks5-hostname 127.0.0.1:23458 $ssconf_basic_test_domain`
-			# result=`curl -o /dev/null -s -w %{time_connect}:%{time_starttransfer}:%{time_total}:%{speed_download} --socks5-hostname 127.0.0.1:23456 https://www.google.com/`
+			result=`/usr/sbin/curl -o /dev/null -s -w %{time_total}:%{speed_download} --socks5-hostname 127.0.0.1:23458 $ssconf_basic_test_domain`
 			sleep 1
+			echo $result
 			dbus set ssconf_basic_webtest_$nu=$result
 			sleep 1
-			kill -9 `ps|grep ss-local|grep 23458|awk '{print $1}'`
+			kill -9 `ps|grep rss-local|grep 23458|awk '{print $1}'`
 			rm -rf /tmp/tmp_ss.json
 		else
-			ss-local -b 0.0.0.0 -l 23458 -s $array1 -p $array2 -k $array3 -m $array4 -u $ARG_OTA $ARG_OBFS -f /var/run/sslocal3.pid >/dev/null 2>&1
-			result=`curl -o /dev/null -s -w %{time_total}:%{speed_download} --socks5-hostname 127.0.0.1:23458 $ssconf_basic_test_domain`
+			ss-local -b 0.0.0.0 -l 23458 -s $array1 -p $array2 -k $array3 -m $array4 -u -f /var/run/sslocal3.pid >/dev/null 2>&1
+			result=`/usr/sbin/curl -o /dev/null -s -w %{time_total}:%{speed_download} --socks5-hostname 127.0.0.1:23458 $ssconf_basic_test_domain`
 			sleep 1
+			echo $result
 			dbus set ssconf_basic_webtest_$nu=$result
 			sleep 1
 			kill -9 `ps|grep ss-local|grep 23458|awk '{print $1}'`

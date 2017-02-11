@@ -154,10 +154,6 @@ function validForm(){
 	return is_ok;
 }
 
-function update_visibility(){
-	showhide("ss_obfs_host", (document.form.ss_local_obfs.value !== "0" ));
-}
-
 </script>
 </head>
 <body onload="init();">
@@ -258,10 +254,8 @@ function update_visibility(){
 												<th width="20%">加密方法</th>
 												<td>
 													<select id="ss_local_method" name="ss_local_method" style="width:165px;margin:0px 0px 0px 2px;" class="input_option">
+														<option value="rc4">rc4</option>
 														<option value="rc4-md5">rc4-md5</option>
-														<option value="aes-128-gcm">aes-128-gcm</option>
-														<option value="aes-192-gcm">aes-192-gcm</option>
-														<option value="aes-256-gcm">aes-256-gcm</option>
 														<option value="aes-128-cfb">aes-128-cfb</option>
 														<option value="aes-192-cfb">aes-192-cfb</option>
 														<option value="aes-256-cfb" selected>aes-256-cfb</option>
@@ -272,11 +266,13 @@ function update_visibility(){
 														<option value="camellia-192-cfb">camellia-192-cfb</option>
 														<option value="camellia-256-cfb">camellia-256-cfb</option>
 														<option value="bf-cfb">bf-cfb</option>
+														<option value="cast5-cfb">cast5-cfb</option>
+														<option value="idea-cfb">idea-cfb</option>
+														<option value="rc2-cfb">rc2-cfb</option>
+														<option value="seed-cfb">seed-cfb</option>
 														<option value="salsa20">salsa20</option>
 														<option value="chacha20">chacha20</option>
-														<option value="chacha20-poly1305">chacha20-poly1305</option>
 														<option value="chacha20-ietf">chacha20-ietf</option>
-														<option value="chacha20-ietf-poly1305">chacha20-ietf-poly1305</option>
 													</select>
 												</td>
 											</tr>
@@ -290,22 +286,6 @@ function update_visibility(){
 												<th width="20%">本地代理端口</th>
 												<td>
 													<input type="text" class="ssconfig input_ss_table" id="ss_local_proxyport" name="ss_local_proxyport" maxlength="100" value="1082">												
-												</td>
-											</tr>
-											<tr id="ss_obfs">
-												<th width="35%">混淆 (obfs)</th>
-												<td>
-													<select id="ss_local_obfs" name="ss_local_obfs" style="width:164px;margin:0px 0px 0px 2px;" class="input_option"  onchange="update_visibility();" >
-														<option class="content_input_fd" value="0">关闭</option>
-														<option class="content_input_fd" value="tls">tls</option>
-														<option class="content_input_fd" value="http">http</option>
-													</select>
-												</td>
-											</tr>
-											<tr id="ss_obfs_host">
-												<th width="35%">混淆主机名 (obfs_host)</th>
-												<td>
-													<input type="text" name="ss_local_obfs_host" id="ss_local_obfs_host" placeholder="bing.com"  class="ssconfig input_ss_table" maxlength="100" value=""></input>
 												</td>
 											</tr>
 											<tr id="acl_support">

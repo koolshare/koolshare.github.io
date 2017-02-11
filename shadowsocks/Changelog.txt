@@ -1,5 +1,15 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.3.2
+   - 说明	由于shadowsocks-libev最近变动过大，在推出之初我就想过merlin ss插件是否跟进，后来从插件3.2.7版本开始，我进行了跟进，
+		然而看到了诸多抱怨，因为很多购买账号的用户，或者是一键部署服务器端的用户很难能够升级最新的服务器端ss版本，
+   		加上ss-tunnel新老版本的兼容问题，最终导致我想要回滚shadowsocks-libev，所以考虑到多数用户，此次回滚shadowsocks-libev2.5.6版本，
+   		以后是否再做升级，再做观察。另外如果你的服务器端部署了新的ss-server，也建议做相应的回滚，不然可能还是有ss-tunnel兼容性问题。
+   - revert	程序：回滚shadowsocks-libev到2.5.6版本；
+   - remove	移除shadowsocks-libev的simple-obfs插件，去除web上的ss原版混淆功能（2.5.6不支持）；
+   - remove	鉴于最近OTA功能的争议，此次回滚并未打算重新加上OTA功能，请大家理解！
+   - update	socks5功能同样做相应的回滚。
+
 3.3.1
    - update	binary: update shaodwsocks-libev to 3.0.1, this should sovle ss-tunnel and new encrypt method not working.
 
