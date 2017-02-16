@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.3.3
+   - remove	移除koolshare logo和支持信息；
+   - add	添加电报群和qq群交流链接；
+
 3.3.2
    - 说明	由于shadowsocks-libev最近变动过大，在推出之初我就想过merlin ss插件是否跟进，后来从插件3.2.7版本开始，我进行了跟进，
 		然而看到了诸多抱怨，因为很多购买账号的用户，或者是一键部署服务器端的用户很难能够升级最新的服务器端ss版本，

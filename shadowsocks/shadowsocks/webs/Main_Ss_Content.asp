@@ -739,7 +739,6 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 				document.form.ss_node_table_koolgame_udp.value = "0";
 				//updateSs_node_listView();
 			}
-
 		}
 	});
 }
@@ -906,7 +905,6 @@ function apply_this_ss_node(s) { //应用此节点
 	$G("ss_node_list_table_th").style.display = "none";
 	$G("ss_node_list_table_td").style.display = "none";
 	$G("ss_node_list_table_btn").style.display = "none";
-	$G("KoolshareBottom_div").style.display = "";
 	confs = getAllConfigs();
 	var option = $j("#ssconf_basic_node");
 	option.find('option').remove().end();
@@ -935,7 +933,6 @@ function apply_this_ss_node(s) { //应用此节点
 	var node_sel = node;
 	var obj = ssconf_node2obj(node_sel);
 	$G("ssconf_basic_node").value = node;
-	update_ss_ui(obj);
 	update_ss_ui(obj);
 	update_visibility_main();
 }
@@ -1392,7 +1389,7 @@ function version_show() {
 						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
 						$j("#updateBtn").html("<i>升级到：" + res.version + "</i>");
 					} else {
-						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.3.2</i></a>");
+						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.3.3</i></a>");
 					}
 				}
 			}
@@ -1589,7 +1586,6 @@ function toggle_func() {
 			$G("ss_node_list_table_td").style.display = "";
 			$G("ss_node_list_table_btn").style.display = "";
 			$G("line_image1").style.display = "none";
-			$G("KoolshareBottom_div").style.display = "none";
 			refresh_table();
 			update_ping_method();
 		});
@@ -1758,7 +1754,6 @@ function ss_node_info_return() {
 	$G("ss_node_list_table_td").style.display = "none";
 	$G("ss_node_list_table_btn").style.display = "none";
 	$G("line_image1").style.display = "";
-	$G("KoolshareBottom_div").style.display = "";
 	updateSs_node_listView();
 	checkTime = 2001;
 }
@@ -2285,6 +2280,8 @@ function hideClients_Block(){
                                     	                <input id="show_btn5" class="show-btn5" style="cursor:pointer" type="button" value="访问控制"/>
                                     	                <input id="show_btn6" class="show-btn6" style="cursor:pointer" type="button" value="附加功能"/>
                                     	                <input id="show_btn7" class="show-btn7" style="cursor:pointer" type="button" value="查看日志"/>
+														<a style="margin-left:10px;"type="button" title="需要FQ才能访问" class="kp_btn" target="_blank" href="https://t.me/joinchat/AAAAAEC7pgV9vPdPcJ4dJw">电报群交流</a>
+														<a type="button" title="每月1号开放" class="kp_btn" target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=2b6356e55c7486191a2a0321dbabf2d27b2c3d015cadd786fa32f8b0f58f965a">QQ群交流</a>
                                     	            </td>
                                     	        </tr>
 											</table>
@@ -3133,11 +3130,6 @@ taobao.com
 										<div id="warn" style="display: none;font-size: 20px;position: static;" class="formfontdesc" id="cmdDesc"><i>你开启了kcptun,请先关闭后才能开启shadowsocks</i></div>
 										<div id="warn1" style="display: none;font-size: 20px;position: static;" class="formfontdesc" id="cmdDesc"><i>你开启了kcptun,请先关闭后才能开启shadowsocks</i></div>
 										<div id="line_image1" style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"/></div>
-										<div id ="KoolshareBottom_div" class="KoolshareBottom" style="position: static;">
-											论坛技术支持： <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a> <br/>
-											Github项目： <a href="https://github.com/koolshare/koolshare.github.io/tree/acelan_softcenter_ui/shadowsocks" target="_blank"> <i><u>github.com/koolshare</u></i> </a> <br/>
-											Shell by： <a href="mailto:sadoneli@gmail.com"> <i>sadoneli</i> , Web by： <i>Xiaobao</i></a>
-										</div>
 									</td>
 								</tr>
 							</table>
