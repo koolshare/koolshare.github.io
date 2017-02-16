@@ -2281,7 +2281,6 @@ function hideClients_Block(){
                                     	                <input id="show_btn6" class="show-btn6" style="cursor:pointer" type="button" value="附加功能"/>
                                     	                <input id="show_btn7" class="show-btn7" style="cursor:pointer" type="button" value="查看日志"/>
 														<a style="margin-left:10px;"type="button" title="需要FQ才能访问" class="kp_btn" target="_blank" href="https://t.me/joinchat/AAAAAEC7pgV9vPdPcJ4dJw">电报群交流</a>
-														<a type="button" title="每月1号开放" class="kp_btn" target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=2b6356e55c7486191a2a0321dbabf2d27b2c3d015cadd786fa32f8b0f58f965a">QQ群交流</a>
                                     	            </td>
                                     	        </tr>
 											</table>
