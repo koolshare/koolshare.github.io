@@ -593,7 +593,7 @@ load_nat(){
 	    i=$(($i-1))
 	    if [ "$i" -lt 1 ];then
 	        echo_date "错误：不能正确加载nat规则!"
-	        sh /koolshare/ss/stop.sh
+	        sh /koolshare/ss/stop.sh stop_all
 	        exit
 	    fi
 	    sleep 2
