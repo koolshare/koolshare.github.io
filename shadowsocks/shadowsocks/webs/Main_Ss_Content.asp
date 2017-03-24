@@ -12,6 +12,8 @@
 <link rel="stylesheet" type="text/css" href="form_style.css"/>
 <link rel="stylesheet" type="text/css" href="usp_style.css"/>
 <link rel="stylesheet" type="text/css" href="css/element.css">
+<link rel="stylesheet" type="text/css" href="/res/shadowsocks.css">
+<link rel="stylesheet" type="text/css" href="/device-map/device-map.css">
 <script type="text/javascript" src="/state.js"></script>
 <script type="text/javascript" src="/popup.js"></script>
 <script type="text/javascript" src="/validator.js"></script>
@@ -20,216 +22,67 @@
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
 <script type="text/javascript" src="/client_function.js"></script>
 <script type="text/javascript" src="/help.js"></script>
-<script type="text/javascript" src="/dbconf?p=ss&v=<% uptime(); %>"></script>
 <script type="text/javascript" src="/res/ss-menu.js"></script>
-
-<style>
-.Bar_container {
-	width:85%;
-	height:20px;
-	border:1px inset #999;
-	margin:0 auto;
-	margin-top:20px \9;
-	background-color:#FFFFFF;
-	z-index:100;
-}
-#proceeding_img_text {
-	position:absolute;
-	z-index:101;
-	font-size:11px;
-	color:#000000;
-	line-height:21px;
-	width: 83%;
-}
-#proceeding_img {
-	height:21px;
-	background:#C0D1D3 url(/images/ss_proceding.gif);
-}
-#ss_node_edit {
-	background: url(/images/New_ui/ss_list.png);
-	background-position: 0px 0px;
-	width: 30px;
-	height: 35px;
-}
-.show-btn1, .show-btn2, .show-btn3, .show-btn4 {
-	border: 1px solid #222;
-	background: #576d73;
-	font-size:10pt;
-	color: #fff;
-	padding: 10px 3.75px;
-	border-radius: 5px 5px 0px 0px;
-	width:8.45601%;
-}
-.active {
-	background: #2f3a3e;
-}
-input[type=button]:focus {
-	outline: none;
-}
-.contentM_qis {
-	position: absolute;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	z-index: 200;
-	background-color:#2B373B;
-	margin-left: 50px;
-	top: 290px;
-	width:650px;
-	return height:auto;
-	box-shadow: 3px 3px 10px #000;
-	display:none;
-}
-
-
-.QISform_wireless {
-	width:600px;
-	font-size:12px;
-	color:#FFFFFF;
-	margin-top:10px;
-	*margin-left:10px;
-}
-.QISform_wireless thead {
-	font-size:15px;
-	line-height:20px;
-	color:#FFFFFF;
-}
-.QISform_wireless th {
-	padding-left:10px;
-	*padding-left:30px;
-	font-size:12px;
-	font-weight:bolder;
-	color: #FFFFFF;
-	text-align:left;
-}
-.vpnClientTitle_td_unclick {
-	background-color: #000;
-	height: 30px;
-	cursor: pointer;
-	border: 1px solid #222;
-}
-.vpnClientTitle_td_click {
-	background-color: #4D595D;
-	height: 30px;
-	cursor: pointer;
-	border: 1px solid #222;
-}
-
-/* Oculta la scroll-bar pero sigue permitiendo hacer scroll con el </li> */
-#ss_node_list_table_td { -ms-overflow-style: none; overflow: auto; } /* for IE hide scrollbar on ss node ta */
-#ss_node_list_table_td::-webkit-scrollbar {
-    width: 0px;  /* remove scrollbar space */
-    background: transparent;  /* optional: just make scrollbar invisible */
-}
-.FormTable1{
-	table-layout:fixed;
-	width:748px;
-	font-size:12px;
-	font-family:Arial, Helvetica, sans-serif;
-	border: 1px solid #000000;
-	border-collapse: collapse;
-}
-.FormTable1 th{
-	table-layout:fixed;
-	overflow:hidden;
-	font-family:Arial, Helvetica, sans-serif;
-	background-color:#1F2D35;
-	color:#FFFFFF	;	/*Viz add*/
-	font-weight:normal;
-	text-align: center;
-	line-height:15px;
-	height: 30px;
-	font-size:12px;
-	padding-left: 5px;
-	border: 1px solid #222;
-	border-collapse: collapse;
-	background:#2F3A3E;
-}
-
-.FormTable1 td{
-	table-layout:fixed;
-	overflow:hidden;
-	height: 30px;
-	padding-left: 5px;
-	background-color:#475A5F;
-	text-align: center;
-	border: 1px solid #222;
-	border-collapse: collapse;
-	word-wrap:break-word;
-}
-
-
-.SimpleNote { padding:5px 10px;}
-.KoolshareBottom {
-    width: 230px;
-    height: 100px;
-    background: url(/images/New_ui/koolshare.png) 0px 3px no-repeat;
-    text-align: left;
-	padding-left:120px;
-	margin-top:50px;
-	float:right;
-}
-#iframe1{
-   font-family: sans-serif;
-   color: red;
-}
-</style>
+<script type="text/javascript" src="/dbconf?p=ss&v=<% uptime(); %>"></script>
 <script>
 var socks5 = 0
 var $j = jQuery.noConflict();
 var over_var = 0;
 var isMenuopen = 0;
-var $G = function(id) {
-    return document.getElementById(id);
-};
-String.prototype.replaceAll = function(s1,s2){
-　　return this.replace(new RegExp(s1,"gm"),s2);
-}
-var refreshRate = 5;
+var $G = function(id){return document.getElementById(id);};
+var retArea = $G('log_content');
 function init() {
-    show_menu(menu_hook);
-    version_show();
-    buildswitch();
-    //refresh_table();
-    toggle_func();
+	show_menu(menu_hook);
+	buildswitch();
+	toggle_func();
     toggle_switch();
-    detect_kcptun();
-    refreshRate = getRefresh();
-    for (var field in db_ss) {
-        $j('#'+field).val(db_ss[field]);
-    }
-    if (typeof db_ss != "undefined") {
-        update_ss_ui(db_ss);
-        loadAllConfigs();
-    } else {
-        $G("logArea").innerHTML = "无法读取配置,jffs为空或配置文件不存在?";
-    }
-	var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_dnsmasq", "ss_redchn_wan_white_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_ip", "ss_redchn_wan_black_domain", "ss_basic_black_lan", "ss_basic_white_lan","ss_ipset_black_domain_web", "ss_ipset_white_domain_web", "ss_ipset_dnsmasq", "ss_ipset_black_ip", "ss_game_dnsmasq", "ss_gameV2_dnsmasq"];
-	for (var i = 0; i < temp_ss.length; i++) {
-		temp_str = $G(temp_ss[i]).value;
-			$G(temp_ss[i]).value = temp_str.replaceAll(",","\n");
+	update_ss_ui(db_ss);
+	detect_kcptun();
+	generate_options();
+	loadAllConfigs();
+	decode_show();
+	setTimeout("get_ss_status_data()", 500);
+	detect_JFFS2();
+	update_visibility_main();
+	version_show();
+	conf_to_obj();
+	document.form.ss_basic_action.value = 1;
+}
+
+function conf_to_obj(){
+	ssmode = document.form.ss_basic_mode.value;
+	if (ssmode == "2" || ssmode == "3" || ssmode == "4"){
+			$j("#ss_dns_plan").val($j("#ss_dns_plan_chn").val());
+	}else{
+			$j("#ss_dns_plan").val($j("#ss_dns_plan_gfw").val());
 	}
-    setTimeout("checkSSStatus();", 5000);
-    setTimeout("write_ss_install_status()", 1000);
-    
+	update_visibility_tab2();
+}
+
+function detect_JFFS2(){
     var jffs2_scripts = '<% nvram_get("jffs2_scripts"); %>';
 	if(jffs2_scripts == "0"){
+		$G("warn").style.display = "";
 		$j("#warn").html("<i>发现Enable JFFS custom scripts and configs选项未开启！</br></br>请开启并重启路由器后才能正常使用SS。<a href='/Advanced_System_Content.asp'><em><u> 前往设置 </u></em></a> </i>");
 		document.form.ss_basic_enable.value = 0;
 		inputCtrl(document.form.switch,0);
 	}
-	var retArea = $G('log_content');
-	retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
-	//setTimeout(setIframeSrc, 5000);	
+}
 
+function decode_show(){
+	var temp_ss = ["ss_isp_website_web", "ss_dnsmasq", "ss_wan_white_ip", "ss_wan_white_domain", "ss_wan_black_ip", "ss_wan_black_domain", "ss_game2_black_lan", "ss_game2_white_lan"];
+	for (var i = 0; i < temp_ss.length; i++) {
+		temp_str = $G(temp_ss[i]).value;
+		$G(temp_ss[i]).value = Base64.decode(temp_str);
+	}
 }
 
 function detect_kcptun(){
     var kcptun_mode = '<% nvram_get("KCP_mode"); %>';
 	if(kcptun_mode != "0" && kcptun_mode != ''){
 		$G('ss_status1').style.display = "none";
-		$G('tablet_show').style.display = "none";
-		$G('basic_show').style.display = "none";
+		$G('tablets').style.display = "none";
+		$G('tablet_1').style.display = "none";
 		$G('apply_button').style.display = "none";
 		$G('warn1').style.display = "";
 		document.form.ss_basic_enable.value = 0;
@@ -238,30 +91,14 @@ function detect_kcptun(){
 }
 
 function onSubmitCtrl() {
-	ssmode = $G("ss_basic_mode").value;
-	ssaction = $G("ss_basic_action").value;
-	global_status_enable=false;
-	checkSSStatus();
+	checkss = 10001;
+	$G("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
+	$G("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
     if (validForm()) {
         if (0 == node_global_max) {
             var obj = ssform2obj();
             ss_node_object("1", obj, true,
             function(a) {
-			setTimeout("checkSSStatus();", 50000); //make sure ss_status do not update during reloading
-			if(ssaction == 1){
-				if (ssmode == "2" || ssmode == "3"){			
-				} else if (ssmode == "1"){
-					showSSLoadingBar(4);
-				} else if (ssmode == "0"){
-					showSSLoadingBar(4);
-				} else if (ssmode == "4"){
-					showSSLoadingBar(4);
-				} else if (ssmode == "5"){
-					showSSLoadingBar(4);
-				}
-			}else if(ssaction == 2 || ssaction == 3 || ssaction == 4){
-					showSSLoadingBar(2);
-			}
         	updateOptions();
             });
         } else {
@@ -269,48 +106,23 @@ function onSubmitCtrl() {
             var obj = ssform2obj();
             ss_node_object(node_sel, obj, true,
             function(a) {
-			setTimeout("checkSSStatus();", 50000);
-			if(ssaction == 1){
-				if (ssmode == "2" || ssmode == "3"){
-					showSSLoadingBar(4);
-				} else if (ssmode == "1"){
-					showSSLoadingBar(3);
-				} else if (ssmode == "0"){
-					showSSLoadingBar(4);
-				} else if (ssmode == "4"){
-					showSSLoadingBar(4);
-				} else if (ssmode == "5"){
-					showSSLoadingBar(4);
-				}
-			}else if(ssaction == 2 || ssaction == 3 || ssaction == 4){
-					showSSLoadingBar(2);
-			}
     		updateOptions();
             });
         }
     }
 }
 
-
 function updateOptions() {
 	document.form.action_mode.value = ' Refresh ';
-	document.form.action = "/applydb.cgi?p=ss";
 	document.form.SystemCmd.value = "ss_config.sh";
 	document.form.submit();
+	showSSLoadingBar();
+    noChange2 = 0;
+    setTimeout("checkCmdRet2();", 500);
 }
 
 function done_validating(action) {
 	return true;
-}
-
-function save_ss_method(m) {
-    var o = $G("ss_basic_method");
-    for (var c = 0; c < o.length; c++) {
-        if (o.options[c].value == m) {
-            o.options[c].selected = true;
-            break;
-        }
-    }
 }
 
 function update_ss_ui(obj) {
@@ -318,29 +130,29 @@ function update_ss_ui(obj) {
 		var el = $G(field);
 		if (field == "ss_basic_method") {
 			continue;
-		} else if (field == "ss_basic_onetime_auth") {
-			if (obj[field] != "1") {
-				$j("#ss_basic_onetime_auth").val("0");
-			} else {
-				$j("#ss_basic_onetime_auth").val("1");
-			}
-			continue;
 		} else if (field == "ss_basic_rss_protocol") {
-			if (obj[field] != "origin" && obj[field] != "verify_simple" &&  obj[field] != "auth_simple" && obj[field] != "auth_sha1" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v3" && obj[field] != "auth_sha1_v4" ) {
+			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" && obj[field] != "auth_aes128_md5" && obj[field] != "auth_aes128_sha1" ) {
 				$j("#ss_basic_rss_protocol").val("origin");
 			} else {
 				$j("#ss_basic_rss_protocol").val(obj.ss_basic_rss_protocol);
 			}
 			continue;
+		} else if (field == "ss_basic_rss_protocol_para") {
+			if (obj[field] == "undefined") {
+				$j("#ss_basic_rss_protocol_para").val("");
+			} else {
+				$j("#ss_basic_rss_protocol_para").val(obj.ss_basic_rss_protocol_para);
+			}
+			continue;
 		} else if (field == "ss_basic_rss_obfs") {
-			if (obj[field] != "plain" && obj[field] != "http_simple" &&  obj[field] != "random_head"  && obj[field] != "tls1.2_ticket_auth" ) {
+			if (obj[field] != "plain" && obj[field] != "http_simple" &&  obj[field] != "http_post"  && obj[field] != "tls1.2_ticket_auth" ) {
 				$j("#ss_basic_rss_obfs").val("plain");
 			} else {
 				$j("#ss_basic_rss_obfs").val(obj.ss_basic_rss_obfs);
 			}
 			continue;
 		} else if (field == "ss_basic_rss_obfs_param") {
-			if (obj[field] == "undefied") {
+			if (obj[field] == "undefined") {
 				$j("#ss_basic_rss_obfs_param").val("");
 			} else {
 				$j("#ss_basic_rss_obfs_param").val(obj.ss_basic_rss_obfs_param);
@@ -361,31 +173,18 @@ function update_ss_ui(obj) {
 		}
 	}
 	$j("#ss_basic_method").val(obj.ss_basic_method);
+	$G("ss_basic_password").value = Base64.decode($G("ss_basic_password").value);
+	
 }
 
 function validForm() {
-	var temp_ss = ["ss_redchn_isp_website_web", "ss_redchn_dnsmasq", "ss_redchn_wan_white_ip", "ss_redchn_wan_white_domain", "ss_redchn_wan_black_ip", "ss_redchn_wan_black_domain", "ss_basic_black_lan", "ss_basic_white_lan","ss_ipset_black_domain_web", "ss_ipset_white_domain_web", "ss_ipset_dnsmasq", "ss_ipset_black_ip", "ss_game_dnsmasq", "ss_gameV2_dnsmasq"];
+	var temp_ss = ["ss_basic_password", "ss_isp_website_web", "ss_dnsmasq", "ss_wan_white_ip", "ss_wan_white_domain", "ss_wan_black_ip", "ss_wan_black_domain", "ss_game2_black_lan", "ss_game2_white_lan"];
 	for(var i = 0; i < temp_ss.length; i++) {
 		var temp_str = $G(temp_ss[i]).value;
 		if(temp_str == "") {
 			continue;
 		}
-		var lines = temp_str.split("\n");
-		var rlt = "";
-		for(var j = 0; j < lines.length; j++) {
-			var nstr = lines[j].trim();
-			if(nstr != "") {
-				rlt = rlt + nstr + ",";
-			}
-		}
-		if(rlt.length > 0) {
-			rlt = rlt.substring(0, rlt.length-1);
-		}
-		if(rlt.length > 10000) {
-			alert(temp_ss[i] + " 不能超过10000个字符");
-			return false;
-		}
-		$G(temp_ss[i]).value = rlt;
+		$G(temp_ss[i]).value = Base64.encode(temp_str);
 	}
 	return true;
 }
@@ -395,39 +194,15 @@ function update_visibility_main() {
 	ssenable = document.form.ss_basic_enable.value;
 	crst = document.form.ss_basic_chromecast.value;
 	sru = document.form.ss_basic_rule_update.value;
-	slc = document.form.ss_basic_lan_control.value;
-	std = readCookie("ss_table_detail");
 	srp = document.form.ss_basic_rss_protocol.value;
 	sro = document.form.ss_basic_rss_obfs.value;
 	sur = document.form.hd_ss_basic_use_rss.value;
-	if (srp == "origin"){
-		$j("#ss_basic_rss_protocol_alert").html("原版协议");
-	} else if (srp == "verify_simple"){
-		$j("#ss_basic_rss_protocol_alert").html("带校验的协议");
-	} else if (srp == "verify_deflate"){
-		$j("#ss_basic_rss_protocol_alert").html("带压缩的协议");
-	} else if (srp == "verify_sha1"){
-		$j("#ss_basic_rss_protocol_alert").html("带验证抗CCA攻击的协议可兼容libev的OTA");
-	} else if (srp == "auth_simple"){
-		$j("#ss_basic_rss_protocol_alert").html("带验证抗重放攻击的协议");
-	} else if (srp == "auth_sha1"){
-		$j("#ss_basic_rss_protocol_alert").html("抗重放、CCA攻击协议");
-	} else if (srp == "auth_sha1_v2"){
-		$j("#ss_basic_rss_protocol_alert").html("抗重放、CCA攻击升级版协议");
-	} else if (srp == "auth_sha1_v3"){
-		$j("#ss_basic_rss_protocol_alert").html("");
-	} else if (srp == "auth_sha1_v4"){
-		$j("#ss_basic_rss_protocol_alert").html("");
-	}
+	suk = document.form.hd_ss_basic_use_kcp.value;
 
-	if (sro == "plain"){
-		$j("#ss_basic_rss_obfs_alert").html("不混淆");
-	} else if (sro == "http_simple"){
-		$j("#ss_basic_rss_obfs_alert").html("伪装为http协议");
-	} else if (sro == "random_head"){
-		$j("#ss_basic_rss_obfs_alert").html("发送一个随机包再通讯的协议");
-	} else if (sro == "tls1.2_ticket_auth"){
-		$j("#ss_basic_rss_obfs_alert").html("模拟TLS1.2，强烈推荐");
+	if (ssmode == "2" || ssmode == "3" || ssmode == "4"){
+		document.form.ss_dns_plan_chn.value=document.form.ss_dns_plan.value;
+	}else {
+		document.form.ss_dns_plan_gfw.value=document.form.ss_dns_plan.value;;
 	}
 	
 	if (ssmode == "0"){
@@ -461,430 +236,368 @@ function update_visibility_main() {
 		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
 		$j("#ss_title").html("shadowsocks - 账号信息配置");
 	}
-	showhide("show_btn3", (ssmode == "1" || ssmode == "2" ));
+	//showhide("show_btn3", (ssmode == "1" || ssmode == "2" ));
 	showhide("ss_state1", (ssmode == "0"));
 	showhide("ss_state2", (ssmode !== "0"));
 	showhide("ss_state3", (ssmode !== "0"));
-	showhide("game_alert", (ssmode == "3"));
+	showhide("dns_plan_foreign", (ssmode !== "4"));
+	showhide("dns_plan_foreign_game2", (ssmode == "4"));
 	showhide("ss_koolgame_udp_tr", (ssmode == "4"));
-
-	showhide("onetime_auth", (sur !== "1" && ssmode!== "4"));
-	showhide("SSR_name", (ssmode!== "4"));	
-	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode!== "4"));
-	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode!== "4"));
-	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode!== "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple"));
+	//开启ssr，开启游戏模式，游戏模式v2，开启kcp协议，都将不支持ss-libev的混淆，因此不予显示
+	showhide("SSR_name", (ssmode !== "4"));
+	showhide("KCP_name", (ssmode !== "3" && ssmode !== "4"));
+	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode !== "4"));
+	showhide("ss_basic_rss_protocol_para_tr", (sur == "1" && ssmode !== "4"));
+	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode !== "4"));
+	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode !== "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple" || document.form.ss_basic_rss_obfs.value == "http_post" ));
+	showhide("ss_basic_kcp_port_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
+	showhide("ss_basic_kcp_parameter_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
+	var text = document.getElementById("ss_basic_kcp_parameter");
+	autoTextarea(text);
+	refresh_acl_table();
 }
 
 function update_visibility_tab4(){
 	ssmode = document.form.ss_basic_mode.value;
 	crst = document.form.ss_basic_chromecast.value;
 	sru = document.form.ss_basic_rule_update.value;
-	slc = document.form.ss_basic_lan_control.value;
 	showhide("update_rules", (ssmode !== "0"));
 	showhide("chromecast1", (crst == "0"));
-	showhide("gfw_number", (ssmode == "1"));
-	showhide("chn_number", (ssmode == "2" || ssmode == "3"));
-	showhide("cdn_number", (ssmode == "2" || ssmode == "3"));
 	showhide("ss_basic_rule_update_time", (sru == "1"));
 	showhide("update_choose", (sru == "1"));
-	showhide("ss_basic_black_lan", (slc == "1"));
-	showhide("ss_basic_white_lan", (slc == "2"));
+	showhide("ss_game2_black_lan", (document.form.ss_game2_lan_control.value == "1"));
+	showhide("ss_game2_white_lan", (document.form.ss_game2_lan_control.value == "2"));
+	showhide("ss_basic_dnslookup_server", (document.form.ss_basic_dnslookup.value == "1"));
 }
 
-function update_visibility_tab2_redchn(){
-	rdc = document.form.ss_redchn_dns_china.value;
-	rdf = document.form.ss_redchn_dns_foreign.value;
-	rs = document.form.ss_redchn_sstunnel.value
-	rcc = document.form.ss_redchn_chinadns_china.value
-	rcf = document.form.ss_redchn_chinadns_foreign.value
-	srpm= document.form.ss_redchn_pdnsd_method.value
-	showhide("redchn_show_isp_dns", (rdc == "1"));
-	showhide("ss_redchn_dns_china_user", (rdc == "5"));
-	showhide("ss_redchn_opendns", (rdf == "1"));
-	showhide("ss_redchn_sstunnel", (rdf == "2"));
-	showhide("redchn_chinadns_china", (rdf == "3"));
-	showhide("redchn_chinadns_foreign", (rdf == "3"));
-	showhide("redchn_pdnsd_up_stream_tcp", (rdf == "6" && srpm == "2"));
-	showhide("redchn_pdnsd_up_stream_udp", (rdf == "6" && srpm == "1"));
-	showhide("ss_redchn_pdnsd_udp_server_dns2socks", (rdf == "6" && srpm == "1" && document.form.ss_redchn_pdnsd_udp_server.value == 1));
-	showhide("ss_redchn_pdnsd_udp_server_dnscrypt", (rdf == "6" && srpm == "1" && document.form.ss_redchn_pdnsd_udp_server.value == 2));
-	showhide("ss_redchn_pdnsd_udp_server_ss_tunnel", (rdf == "6" && srpm == "1" && document.form.ss_redchn_pdnsd_udp_server.value == 3));
-	showhide("ss_redchn_pdnsd_udp_server_ss_tunnel_user", (rdf == "6" && srpm == "1" && document.form.ss_redchn_pdnsd_udp_server.value == 3 && document.form.ss_redchn_pdnsd_udp_server_ss_tunnel.value == 4));
-	showhide("redchn_pdnsd_cache", (rdf == "6"));
-	showhide("redchn_pdnsd_method", (rdf == "6"));
-	showhide("ss_redchn_sstunnel_user", ((rdf == "2") && (rs == "4")));
-	showhide("ss_redchn_chinadns_china_user", (rcc == "4"));
-	showhide("ss_redchn_chinadns_foreign_user", (rcf == "4"));
-	showhide("ss_redchn_dns2socks_user", (rdf == "4"));
-	generate_options();
+function update_visibility_tab2(){
+	ssmode = document.form.ss_basic_mode.value;
+	rdc = document.form.ss_dns_china.value;
+	rdf = document.form.ss_dns_foreign.value;
+	rs = document.form.ss_sstunnel.value
+	rcc = document.form.ss_chinadns_china.value
+	rcfm = document.form.ss_chinadns_foreign_method.value
+	srpm= document.form.ss_pdnsd_method.value
+	showhide("show_isp_dns", (rdc == "1"));
+	showhide("ss_dns_china_user", (rdc == "12"));
+	showhide("ss_dns2socks_user", (rdf == "1"));
+	showhide("ss_sstunnel", (rdf == "2"));
+	showhide("ss_sstunnel_user", ((rdf == "2") && (rs == "4")));
+	showhide("ss_opendns", (rdf == "3"));
+	showhide("chinadns_china", (rdf == "5"));
+	showhide("chinadns_foreign", (rdf == "5"));
+	showhide("ss_chinadns_china_user", (rcc == "11"));
+	showhide("pdnsd_up_stream_tcp", (rdf == "4" && srpm == "2"));
+	showhide("pdnsd_up_stream_udp", (rdf == "4" && srpm == "1"));
+	showhide("ss_pdnsd_udp_server_dns2socks", (rdf == "4" && srpm == "1" && document.form.ss_pdnsd_udp_server.value == 1));
+	showhide("ss_pdnsd_udp_server_dnscrypt", (rdf == "4" && srpm == "1" && document.form.ss_pdnsd_udp_server.value == 2));
+	showhide("ss_pdnsd_udp_server_ss_tunnel", (rdf == "4" && srpm == "1" && document.form.ss_pdnsd_udp_server.value == 3));
+	showhide("ss_pdnsd_udp_server_ss_tunnel_user", (rdf == "4" && srpm == "1" && document.form.ss_pdnsd_udp_server.value == 3 && document.form.ss_pdnsd_udp_server_ss_tunnel.value == 4));
+	showhide("pdnsd_cache", (rdf == "4"));
+	showhide("pdnsd_method", (rdf == "4"));
+	showhide("ss_chinadns_foreign_dns2socks", (rcfm == "1"));
+	showhide("ss_chinadns_foreign_dnscrypt", (rcfm == "2"));
+	showhide("ss_chinadns_foreign_sstunnel", (rcfm == "3"));
+	showhide("ss_chinadns_foreign_dns2socks_user", (rcfm == "1" && document.form.ss_chinadns_foreign_dns2socks.value == 4));
+	showhide("ss_chinadns_foreign_sstunnel_user", (rcfm == "3" && document.form.ss_chinadns_foreign_sstunnel.value == 4));
+	showhide("ss_chinadns_foreign_method_user", (rcfm == "4"));
+	showhide("ss_chinadns_foreign_method_user_txt", (rcfm == "4"));
+
+	if (rdf == "5"){
+		document.getElementById("ss_dns_china").style.display = "none";
+		document.getElementById("ss_dns_china_user").style.display = "none";
+		document.getElementById("ss_isp_website_web").style.display = "none";
+		document.getElementById("show_isp_dns").style.display = "";
+		$j("#show_isp_dns").html("ChinaDNS方案自带国内cdn加速，请在ChinaDNS国内DNS选取国内DNS");
+		$j("#user_cdn_span").html("ChinaDNS方案自带国内cdn加速，无需定义cdn加速名单");
+	}else if(rdf == "6"){
+		document.getElementById("ss_dns_china").style.display = "none";
+		document.getElementById("ss_dns_china_user").style.display = "none";
+		document.getElementById("ss_isp_website_web").style.display = "none";
+		document.getElementById("show_isp_dns").style.display = "";
+		$j("#show_isp_dns").html("Pcap_DNSProxy方案自带国内cdn加速，无需定义国内DNS");
+		$j("#user_cdn_span").html("Pcap_DNSProxy方案自带国内cdn加速，无需定义cdn加速名单");
+	}else{
+		document.getElementById("ss_dns_china").style.display = "";
+		showhide("ss_dns_china_user", (rdc == "12"));
+		showhide("show_isp_dns", (rdc == "1"));
+		document.getElementById("ss_isp_website_web").style.display = "";
+		$j("#show_isp_dns").html("");
+		$j("#user_cdn_span").html("");
+	}
+	if (ssmode == "2" || ssmode == "3" || ssmode == "4"){
+		document.form.ss_dns_plan_chn.value=document.form.ss_dns_plan.value;
+	}else {
+		document.form.ss_dns_plan_gfw.value=document.form.ss_dns_plan.value;;
+	}
+
+	if (document.form.ss_dns_plan.value == "1"){
+		$j("#ss_dns_plan_note").html("国外dns解析gfwlist名单内的国外域名，剩下的域名用国内dns解析。");
+	}else if (document.form.ss_dns_plan.value == "2"){
+		$j("#ss_dns_plan_note").html("国内dns解析cdn名单内的国内域名用，剩下的域名用国外dns解析。");
+	}
 }
 
-function update_visibility_tab2_ipset(){
-	icd = document.form.ss_ipset_cdn_dns.value;
-    ifd = document.form.ss_ipset_foreign_dns.value;
-    it = document.form.ss_ipset_tunnel.value;
-    sipm= document.form.ss_ipset_pdnsd_method.value
-    showhide("ss_ipset_cdn_dns_user", (icd == "5"));
-    showhide("china_dns1", (icd !== "5"));
-    showhide("ss_ipset_opendns", (ifd == "0"));
-    showhide("ss_ipset_foreign_dns1", (ifd == "2"));
-    showhide("ss_ipset_foreign_dns2", (ifd == "0"));
-    showhide("ss_ipset_tunnel", (ifd == "1"));
-    showhide("ss_ipset_foreign_dns3", (ifd == "1"));
-    showhide("ss_ipset_tunnel_user", ((ifd == "1") && (it == "4")));
-    showhide("ss_ipset_dns2socks_user", (ifd == "2"));
-    showhide("DNS2SOCKS1", (ifd == "2"));
-	showhide("ipset_pdnsd_up_stream_tcp", (ifd == "4" && sipm == "2"));
-	showhide("ipset_pdnsd_up_stream_udp", (ifd == "4" && sipm == "1"));
-	showhide("ss_ipset_pdnsd_udp_server_dns2socks", (ifd == "4" && sipm == "1" && document.form.ss_ipset_pdnsd_udp_server.value == 1));
-	showhide("ss_ipset_pdnsd_udp_server_dnscrypt", (ifd == "4" && sipm == "1" && document.form.ss_ipset_pdnsd_udp_server.value == 2));
-	showhide("ss_ipset_pdnsd_udp_server_ss_tunnel", (ifd == "4" && sipm == "1" && document.form.ss_ipset_pdnsd_udp_server.value == 3));
-	showhide("ss_ipset_pdnsd_udp_server_ss_tunnel_user", (ifd == "4" && sipm == "1" && document.form.ss_ipset_pdnsd_udp_server.value == 3 && document.form.ss_ipset_pdnsd_udp_server_ss_tunnel.value == 4));
-	showhide("ipset_pdnsd_cache", (ifd == "4"));
-	showhide("ipset_pdnsd_method", (ifd == "4"));
-	generate_options();
-}
-
-function update_visibility_tab2_game(){
-	gdc = document.form.ss_game_dns_china.value;
-	gdf = document.form.ss_game_dns_foreign.value;
-	gs = document.form.ss_game_sstunnel.value
-	gcc = document.form.ss_game_chinadns_china.value
-	gcf = document.form.ss_game_chinadns_foreign.value
-	grpm= document.form.ss_game_pdnsd_method.value
-	showhide("game_show_isp_dns", (gdc == "1"));
-	showhide("ss_game_dns_china_user", (gdc == "5"));
-	showhide("ss_game_opendns", (gdf == "1"));
-	showhide("ss_game_sstunnel", (gdf == "2"));
-	showhide("game_chinadns_china", (gdf == "3"));
-	showhide("game_chinadns_foreign", (gdf == "3"));
-	showhide("ss_game_sstunnel_user", ((gdf == "2") && (gs == "4")));
-	showhide("ss_game_chinadns_china_user", (gcc == "4"));
-	showhide("ss_game_chinadns_foreign_user", (gcf == "4"));
-	showhide("ss_game_dns2socks_user", (gdf == "4"));
-	showhide("game_pdnsd_up_stream_tcp", (gdf == "6" && grpm == "2"));
-	showhide("game_pdnsd_up_stream_udp", (gdf == "6" && grpm == "1"));
-	showhide("ss_game_pdnsd_udp_server_dns2socks", (gdf == "6" && grpm == "1" && document.form.ss_game_pdnsd_udp_server.value == 1));
-	showhide("ss_game_pdnsd_udp_server_dnscrypt", (gdf == "6" && grpm == "1" && document.form.ss_game_pdnsd_udp_server.value == 2));
-	showhide("ss_game_pdnsd_udp_server_ss_tunnel", (gdf == "6" && grpm == "1" && document.form.ss_game_pdnsd_udp_server.value == 3));
-	showhide("ss_game_pdnsd_udp_server_ss_tunnel_user", (gdf == "6" && grpm == "1" && document.form.ss_game_pdnsd_udp_server.value == 3 && document.form.ss_game_pdnsd_udp_server_ss_tunnel.value == 4));
-	showhide("game_pdnsd_cache", (gdf == "6"));
-	showhide("game_pdnsd_method", (gdf == "6"));
-	generate_options();
-}
-
-function update_visibility_tab2_gameV2(){
-	g2dc = document.form.ss_gameV2_dns_china.value;
-	g2df = document.form.ss_gameV2_dns_foreign.value;
-	showhide("gameV2_show_isp_dns", (g2dc == "1"));
-	showhide("ss_gameV2_dns_china_user", (g2dc == "5"));
-	showhide("ss_gameV2_dns_china_user_txt1", (g2dc !== "5"));
-	showhide("ss_gameV2_dns_china_user_txt2", (g2dc == "5"));
-	generate_options();
+function generate_lan_list(){
+	ipaddr="<% nvram_get("lan_ipaddr"); %>";
+    var ips = ipaddr.split(".");
+    ip = ips[0] + "." + ips[1] + "." + ips[2] + ".";
+	//$j("#ss_acl_ip").find('option').remove().end();
+	for(var i = 2; i < 255; i++) {
+		$j("#ss_acl_ip").append("<option value='"  + ip + i + "'>" + ip + i + "</option>");
+	}
 }
 
 function generate_options(){
-	var confs = ["4armed",  "cisco(opendns)",  "cisco-familyshield",  "cisco-ipv6",  "cisco-port53",  "cloudns-can",  "cloudns-syd",  "cs-cawest",  "cs-cfi",  "cs-cfii",  "cs-ch",  "cs-de",  "cs-fr",  "cs-fr2",  "cs-rome",  "cs-useast",  "cs-usnorth",  "cs-ussouth",  "cs-ussouth2",  "cs-uswest",  "cs-uswest2",  "d0wn-bg-ns1",  "d0wn-ch-ns1",  "d0wn-de-ns1",  "d0wn-fr-ns2",  "d0wn-gr-ns1",  "d0wn-hk-ns1",  "d0wn-it-ns1",  "d0wn-lv-ns1",  "d0wn-nl-ns1",  "d0wn-nl-ns2",  "d0wn-random-ns1",  "d0wn-random-ns2",  "d0wn-ro-ns1",  "d0wn-ru-ns1",  "d0wn-tz-ns1",  "d0wn-ua-ns1",  "dnscrypt.eu-dk",  "dnscrypt.eu-dk-ipv6",  "dnscrypt.eu-nl",  "dnscrypt.eu-nl-ipv6",  "dnscrypt.org-fr",  "fvz-rec-at-vie-01",  "fvz-rec-ca-tor-01",  "fvz-rec-ca-tor-01-ipv6",  "fvz-rec-de-fra-01",  "fvz-rec-gb-brs-01",  "fvz-rec-gb-lon-01",  "fvz-rec-gb-lon-03",  "fvz-rec-hk-ztw-01",  "fvz-rec-ie-du-01",  "fvz-rec-no-osl-01",  "fvz-rec-nz-akl-01",  "fvz-rec-nz-akl-01-ipv6",  "fvz-rec-us-ler-01",  "fvz-rec-us-mia-01",  "ipredator",  "ns0.dnscrypt.is",  "okturtles",  "opennic-tumabox",  "ovpnto-ro",  "ovpnto-se",  "ovpnto-se-ipv6",  "shea-us-noads",  "shea-us-noads-ipv6",  "soltysiak",  "soltysiak-ipv6",  "yandex"];
+var confs = [
+["adguard-dns-family-ns1 ", "Adguard DNS Family Protection 1"], ["adguard-dns-family-ns2 ", "Adguard DNS Family Protection 2"], ["adguard-dns-ns1 ", "Adguard DNS 1"], ["adguard-dns-ns2 ", "Adguard DNS 2"], ["cisco ", "Cisco OpenDNS"], ["cisco-familyshield ", "Cisco OpenDNS with FamilyShield"], ["cisco-ipv6 ", "Cisco OpenDNS over IPv6"], ["cisco-port53 ", "Cisco OpenDNS backward compatibility port 53"], ["cloudns-syd ", "CloudNS Sydney"], ["cs-cawest ", "CS Canada west DNSCrypt server"], ["cs-cfi ", "CS cryptofree France DNSCrypt server"], ["cs-cfii ", "CS secondary cryptofree France DNSCrypt server"], ["cs-ch ", "CS Switzerland DNSCrypt server"], ["cs-de ", "CS Germany DNSCrypt server"], ["cs-fr2 ", "CS secondary France DNSCrypt server"], ["cs-rome ", "CS Italy DNSCrypt server"], ["cs-useast ", "CS New York City NY US DNSCrypt server"], ["cs-usnorth ", "CS Chicago IL US DNSCrypt server"], ["cs-ussouth ", "CS Dallas TX US DNSCrypt server"], ["cs-ussouth2 ", "CS Atlanta GA US DNSCrypt server"], ["cs-uswest ", "CS Seattle WA US DNSCrypt server"], ["cs-uswest2 ", "CS Las Vegas NV US DNSCrypt server"], ["d0wn-au-ns1 ", "OpenNIC Resolver Australia 01 - d0wn"], ["d0wn-bg-ns1 ", "OpenNIC Resolver Bulgaria 01 - d0wn"], ["d0wn-cy-ns1 ", "OpenNIC Resolver Cyprus 01 - d0wn"], ["d0wn-de-ns1 ", "OpenNIC Resolver Germany 01 - d0wn"], ["d0wn-de-ns2 ", "OpenNIC Resolver Germany 02 - d0wn"], ["d0wn-dk-ns1 ", "OpenNIC Resolver Denmark 01 - d0wn"], ["d0wn-fr-ns2 ", "OpenNIC Resolver France 02 - d0wn"], ["d0wn-es-ns1 ", "OpenNIC Resolver Spain 01- d0wn"], ["d0wn-gr-ns1 ", "OpenNIC Resolver Greece 01 - d0wn"], ["d0wn-hk-ns1 ", "OpenNIC Resolver Hong Kong 01 - d0wn"], ["d0wn-is-ns1 ", "OpenNIC Resolver Iceland 01 - d0wn"], ["d0wn-lu-ns1 ", "OpenNIC Resolver Luxembourg 01 - d0wn"], ["d0wn-lu-ns1-ipv6 ", "OpenNIC Resolver Luxembourg 01 over IPv6 - d0wn"], ["d0wn-lv-ns1 ", "OpenNIC Resolver Latvia 01 - d0wn"], ["d0wn-lv-ns2 ", "OpenNIC Resolver Latvia 02 - d0wn"], ["d0wn-lv-ns2-ipv6 ", "OpenNIC Resolver Latvia 01 over IPv6 - d0wn"], ["d0wn-nl-ns3 ", "OpenNIC Resolver Netherlands 03 - d0wn"], ["d0wn-nl-ns3-ipv6 ", "OpenNIC Resolver Netherlands 03 over IPv6 - d0wn"], ["d0wn-random-ns1 ", "OpenNIC Resolver Moldova 01 - d0wn"], ["d0wn-random-ns2 ", "OpenNIC Resolver Netherlands 02 - d0wn"], ["d0wn-ro-ns1 ", "OpenNIC Resolver Romania 01 - d0wn"], ["d0wn-ro-ns1-ipv6 ", "OpenNIC Resolver Romania 01 over IPv6 - d0wn"], ["d0wn-ru-ns1 ", "OpenNIC Resolver Russia 01 - d0wn"], ["d0wn-se-ns1 ", "OpenNIC Resolver Sweden 01 - d0wn"], ["d0wn-se-ns1-ipv6 ", "OpenNIC Resolver Sweden 01 over IPv6 - d0wn"], ["d0wn-sg-ns1 ", "OpenNIC Resolver Singapore 01 - d0wn"], ["d0wn-sg-ns2 ", "OpenNIC Resolver Singapore 02 - d0wn"], ["d0wn-sg-ns2-ipv6 ", "OpenNIC Resolver Singapore 01 over IPv6 - d0wn"], ["d0wn-tz-ns1 ", "OpenNIC Resolver Tanzania 01 - d0wn"], ["d0wn-ua-ns1 ", "OpenNIC Resolver Ukraine 01 - d0wn"], ["d0wn-ua-ns1-ipv6 ", "OpenNIC Resolver Ukraine 01 over IPv6 - d0wn"], ["d0wn-uk-ns1 ", "OpenNIC Resolver United Kingdom 01 - d0wn"], ["d0wn-uk-ns1-ipv6 ", "OpenNIC Resolver United Kingdom 01 over IPv6 - d0wn"], ["d0wn-us-ns1 ", "OpenNIC Resolver United States of America 01 - d0wn"], ["d0wn-us-ns1-ipv6 ", "OpenNIC Resolver United States of America 01 over IPv6 - d0wn"], ["d0wn-us-ns2 ", "OpenNIC Resolver United States of America 02 - d0wn"], ["d0wn-us-ns2-ipv6 ", "OpenNIC Resolver United States of America 02 over IPv6 - d0wn"], ["dns-freedom ", "DNS Freedom"], ["dnscrypt.eu-dk ", "DNSCrypt.eu Denmark"], ["dnscrypt.eu-dk-ipv6 ", "DNSCrypt.eu Denmark over IPv6"], ["dnscrypt.eu-nl ", "DNSCrypt.eu Holland"], ["dnscrypt.eu-nl-ipv6 ", "DNSCrypt.eu Holland over IPv6"], ["dnscrypt.org-fr ", "DNSCrypt.org France"], ["fvz-anyone ", "Primary OpenNIC Anycast DNS Resolver"], ["fvz-anyone-ipv6 ", "Primary OpenNIC Anycast DNS IPv6 Resolver"], ["fvz-anytwo ", "Secondary OpenNIC Anycast DNS Resolver"], ["fvz-anytwo-ipv6 ", "Secondary OpenNIC Anycast DNS IPv6 Resolver"], ["ipredator ", "Ipredator.se Server"], ["ns0.dnscrypt.is ", "ns0.dnscrypt.is in Reykjav铆k, Iceland"], ["okturtles ", "okTurtles"], ["opennic-tumabox ", "TumaBox"], ["ovpnse ", "OVPN.se Integritet AB"], ["soltysiak ", "Soltysiak"], ["soltysiak-ipv6 ", "Soltysiak over IPv6"], ["ventricle.us ", "Anatomical DNS"], ["yandex ", "Yandex"]
+	];
 	for(var i = 0; i < confs.length; i++) {
-		$j("#ss_redchn_opendns").append("<option value='"  + confs[i] + "'>" + confs[i] + "</option>");
-		$j("#ss_redchn_pdnsd_udp_server_dnscrypt").append("<option value='"  + confs[i] + "'>" + confs[i] + "</option>");
-		$j("#ss_ipset_opendns").append("<option value='"  + confs[i] + "'>" + confs[i] + "</option>");
-		$j("#ss_ipset_pdnsd_udp_server_dnscrypt").append("<option value='"  + confs[i] + "'>" + confs[i] + "</option>");
-		$j("#ss_game_opendns").append("<option value='"  + confs[i] + "'>" + confs[i] + "</option>");
-		$j("#ss_game_pdnsd_udp_server_dnscrypt").append("<option value='"  + confs[i] + "'>" + confs[i] + "</option>");
+		$j("#ss_opendns").append("<option value='"  + confs[i][0] + "'>" + confs[i][1] + "</option>");
+		$j("#ss_pdnsd_udp_server_dnscrypt").append("<option value='"  + confs[i][0] + "'>" + confs[i][1] + "</option>");
+		$j("#ss_chinadns_foreign_dnscrypt").append("<option value='"  + confs[i][0] + "'>" + confs[i][1] + "</option>");
 	}
 }
 
 function oncheckclick(obj) {
 	if (obj.checked) {
-		$G("hd_" + obj.id).value = "1";
+		document.form["hd_" + obj.id].value = "1";
 	} else {
-		$G("hd_" + obj.id).value = "0";
+		document.form["hd_" + obj.id].value = "0";
 	}
 }
-
-var global_status_enable = true;
-function checkSSStatus() {
-	if (db_ss['ss_basic_enable'] !== "0") {
-	    if(!global_status_enable) {//not enabled
-		    if(refreshRate > 0) {
-			    setTimeout("checkSSStatus();", refreshRate * 100000);
-		    }
-		    return;
-	    }
-		$j.ajax({
-		url: '/ss_status',
-		dataType: "html",
-        error: function(xhr) {
-	        refreshRate = getRefresh();
-	        if (refreshRate > 0)
-            setTimeout("checkSSStatus();", refreshRate * 1000);
-        },
-		success: function() {
-			if (db_ss_basic_state_foreign['ss_basic_state_foreign'] == undefined){
-				$G("ss_state2").innerHTML = "国外连接 - " + "Waiting for first refresh...";
-        		$G("ss_state3").innerHTML = "国内连接 - " + "Waiting for first refresh...";
-        		refreshRate = getRefresh();
-				if (refreshRate > 0)
-        		setTimeout("checkSSStatus();", refreshRate * 1000);
-			} else {
-				$j("#ss_state2").html("国外连接 - " + db_ss_basic_state_foreign['ss_basic_state_foreign']);
-				$j("#ss_state3").html("国内连接 - " + db_ss_basic_state_china['ss_basic_state_china']);
-				$G('update_button').style.display = "";
-				refreshRate = getRefresh();
-				if (refreshRate > 0)
-        		setTimeout("checkSSStatus();", refreshRate * 1000);
-    		}
-		}
-		});
-	} else {
-		$G("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
-        $G("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
-	}
-}
-
-
 
 function ssconf_node2obj(node_sel) {
-    var p = "ssconf_basic";
-    if (typeof db_ss[p + "_server_" + node_sel] == "undefined") {
-        var obj = {
-            "ss_basic_server": "",
-            "ss_basic_port": "",
-            "ss_basic_password": "",
-            "ss_basic_method": "table",
-            "ss_basic_rss_protocol": "",
-            "ss_basic_rss_obfs": "",
-            "ss_basic_use_rss": "",
-            "ss_basic_rss_obfs_param": "",
-            "ss_basic_onetime_auth": "",
-            "ss_basic_koolgame_udp": ""
-        };
-        return obj;
-    } else {
-        var obj = {};
-        var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth", "koolgame_udp"];
-        for (var i = 0; i < params.length; i++) {
-            obj["ss_basic_" + params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel];
-        }
-        return obj;
-    }
+	var p = "ssconf_basic";
+	if (typeof db_ss[p + "_server_" + node_sel] == "undefined") {
+		var obj = {
+			"ss_basic_server": "",
+			"ss_basic_port": "",
+			"ss_basic_password": "",
+			"ss_basic_method": "table",
+			"ss_basic_rss_protocol": "",
+			"ss_basic_rss_protocol_para": "",
+			"ss_basic_rss_obfs": "",
+			"ss_basic_rss_obfs_param": "",
+			"ss_basic_use_rss": "",
+			"ss_basic_use_kcp": "",
+			"ss_basic_koolgame_udp": ""
+		};
+		return obj;
+	} else {
+		var obj = {};
+		var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "koolgame_udp"];
+		for (var i = 0; i < params.length; i++) {
+			obj["ss_basic_" + params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel];
+		}
+		return obj;
+	}
 }
 
 function ss_node_sel() {
-    var node_sel = $G("ssconf_basic_node").value;
-    var obj = ssconf_node2obj(node_sel);
-    update_visibility_main();
-    update_ss_ui(obj);
+	var node_sel = $G("ssconf_basic_node").value;
+	var obj = ssconf_node2obj(node_sel);
+	update_visibility_main();
+	update_ss_ui(obj);
 }
 
 function ss_node_object(node_sel, obj, isSubmit, end) {
-    var ns = {};
-    var p = "ssconf_basic";
-    var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth", "koolgame_udp"];
-    for (var i = 0; i < params.length; i++) {
-        ns[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
-        db_ss[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
-    }
-    if (isSubmit) {
-        ns[p + "_node"] = node_sel;
-        db_ss[p + "_node"] = node_sel;
-    }
-    $j.ajax({
-        url: '/applydb.cgi?p=' + p,
-        contentType: "application/x-www-form-urlencoded",
-        dataType: 'text',
-        data: $j.param(ns),
-        error: function(xhr) {
-            end("error");
-        },
-        success: function(response) {
-            end("ok");
-        }
-    });
+	var ns = {};
+	var p = "ssconf_basic";
+	var params = ["server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "koolgame_udp"];
+	for (var i = 0; i < params.length; i++) {
+		ns[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
+		db_ss[p + "_" + params[i] + "_" + node_sel] = obj[params[i]];
+	}
+	if (isSubmit) {
+		ns[p + "_node"] = node_sel;
+		db_ss[p + "_node"] = node_sel;
+	}
+	$j.ajax({
+		url: '/applydb.cgi?p=' + p,
+		contentType: "application/x-www-form-urlencoded",
+		dataType: 'text',
+		data: $j.param(ns),
+		error: function(xhr) {
+			end("error");
+		},
+		success: function(response) {
+			end("ok");
+		}
+	});
 }
 
 function ssform2obj() {
-    var obj = {};
-    obj["mode"] = $G("ss_basic_mode").value;
-    obj["server"] = $G("ss_basic_server").value;
-    obj["port"] = $G("ss_basic_port").value;
-    obj["password"] = $G("ss_basic_password").value;
-    obj["method"] = $G("ss_basic_method").value;
-    obj["rss_protocol"] = $G("ss_basic_rss_protocol").value;
-    obj["rss_obfs"] = $G("ss_basic_rss_obfs").value;
-    obj["rss_obfs_param"] = $G("ss_basic_rss_obfs_param").value;
-    obj["use_rss"] = $G("hd_ss_basic_use_rss").value;
-    obj["onetime_auth"] = $G("ss_basic_onetime_auth").value;
-    obj["koolgame_udp"] = $G("ss_basic_koolgame_udp").value;
-    return obj;
+	var obj = {};
+	obj["mode"] = $G("ss_basic_mode").value;
+	obj["server"] = $G("ss_basic_server").value;
+	obj["port"] = $G("ss_basic_port").value;
+	obj["password"] = $G("ss_basic_password").value;
+	obj["method"] = $G("ss_basic_method").value;
+	obj["rss_protocol"] = $G("ss_basic_rss_protocol").value;
+	obj["rss_protocol_para"] = $G("ss_basic_rss_protocol_para").value;
+	obj["rss_obfs"] = $G("ss_basic_rss_obfs").value;
+	obj["rss_obfs_param"] = $G("ss_basic_rss_obfs_param").value;
+	obj["use_rss"] = $G("hd_ss_basic_use_rss").value;
+	obj["use_kcp"] = $G("hd_ss_basic_use_kcp").value;
+	obj["koolgame_udp"] = $G("ss_basic_koolgame_udp").value;
+	return obj;
 }
-
 
 function getAllConfigs() {
-    var dic = {};
-    node_global_max = 0;
-    for (var field in db_ss) {
-        names = field.split("_");
-        dic[names[names.length - 1]] = 'ok';
-    }
-    confs = {};
-    var p = "ssconf_basic";
-    var params = ["mode", "name", "server", "port", "password", "method"];
-    for (var field in dic) {
-        var obj = {};
-        if (typeof db_ss[p + "_name_" + field] == "undefined") {
-            obj["name"] = '节点' + field;
-        } else {
-            obj["name"] = db_ss[p + "_name_" + field];
-        }
-        
-        if (typeof db_ss[p + "_ping_" + field] == "undefined") {
-            obj["ping"] = '';
-        } else if (db_ss[p + "_ping_" + field] == "failed") {
-	        obj["ping"] = '<font color="#FFCC00">failed</font>';
-	    } else {
-            obj["ping"] = parseFloat(db_ss[p + "_ping_" + field].split(" ")[0]).toPrecision(3) + " ms / " + parseFloat(db_ss[p + "_ping_" + field].split(" ")[3]) + "%";
-        }
-        
-        if (typeof db_ss[p + "_webtest_" + field] == "undefined") {
-            obj["webtest"] = '';
-        } else {
-	        var time_total = parseFloat(db_ss[p + "_webtest_" + field].split(":")[0]).toFixed(2);
-	        if (time_total == 0.00){
-		        obj["webtest"] = '<font color=#FFCC00">failed</font>';
-	        }else{
-		         obj["webtest"] = parseFloat(db_ss[p + "_webtest_" + field].split(":")[0]).toFixed(2) + " s";
-	        }
-        }
-        
-		if (typeof db_ss[p + "_mode_" + field] == "undefined"){
+	var dic = {};
+	node_global_max = 0;
+	for (var field in db_ss) {
+		names = field.split("_");
+		dic[names[names.length - 1]] = 'ok';
+	}
+	confs = {};
+	var p = "ssconf_basic";
+	var params = ["name", "server", "port", "password", "method"];
+	for (var field in dic) {
+		var obj = {};
+		if (typeof db_ss[p + "_name_" + field] == "undefined") {
+			obj["name"] = '节点' + field;
+		} else {
+			obj["name"] = db_ss[p + "_name_" + field];
+		}
+		if (typeof db_ss[p + "_ping_" + field] == "undefined") {
+			obj["ping"] = '';
+		} else if (db_ss[p + "_ping_" + field] == "failed") {
+			obj["ping"] = '<font color="#FFCC00">failed</font>';
+		} else {
+			obj["ping"] = parseFloat(db_ss[p + "_ping_" + field].split(" ")[0]).toPrecision(3) + " ms / " + parseFloat(db_ss[p + "_ping_" + field].split(" ")[3]) + "%";
+		}
+
+		if (typeof db_ss[p + "_webtest_" + field] == "undefined") {
+			obj["webtest"] = '';
+		} else {
+			var time_total = parseFloat(db_ss[p + "_webtest_" + field].split(":")[0]).toFixed(2);
+			if (time_total == 0.00) {
+				obj["webtest"] = '<font color=#FFCC00">failed</font>';
+			} else {
+				obj["webtest"] = parseFloat(db_ss[p + "_webtest_" + field].split(":")[0]).toFixed(2) + " s";
+			}
+		}
+		if (typeof db_ss[p + "_mode_" + field] == "undefined") {
 			obj["mode"] = '';
-		}else {
-            obj["mode"] = db_ss[p + "_mode_" + field];
-        }
-
-        if (typeof db_ss[p + "_onetime_auth_" + field] == "undefined"){
-			obj["onetime_auth"] = '';
-		}else {
-            obj["onetime_auth"] = db_ss[p + "_onetime_auth_" + field];
-        }
-        
-        if (typeof db_ss[p + "_koolgame_udp_" + field] == "undefined"){
+		} else {
+			obj["mode"] = db_ss[p + "_mode_" + field];
+		}
+		if (typeof db_ss[p + "_koolgame_udp_" + field] == "undefined") {
 			obj["koolgame_udp"] = '';
-		}else {
-            obj["koolgame_udp"] = db_ss[p + "_koolgame_udp_" + field];
-        }
-        if (typeof db_ss[p + "_use_rss_" + field] == "undefined"){
+		} else {
+			obj["koolgame_udp"] = db_ss[p + "_koolgame_udp_" + field];
+		}
+		if (typeof db_ss[p + "_use_rss_" + field] == "undefined") {
 			obj["use_rss"] = '';
-		}else {
-            obj["use_rss"] = db_ss[p + "_use_rss_" + field];
-        }
-        if (typeof db_ss[p + "_rss_protocol_" + field] == "undefined"){
-			obj["rss_protocol"] = '';
-		}else {
-            obj["rss_protocol"] = db_ss[p + "_rss_protocol_" + field];
-        }
-        
-        if (typeof db_ss[p + "_rss_obfs_" + field] == "undefined"){
-			obj["rss_obfs"] = '';
-		}else {
-            obj["rss_obfs"] = db_ss[p + "_rss_obfs_" + field];
-        }
-        
-        if (typeof db_ss[p + "_rss_obfs_param_" + field] == "undefined"){
-			obj["rss_obfs_param"] = '';
-		}else {
-            obj["rss_obfs_param"] = db_ss[p + "_rss_obfs_param_" + field];
-        }
+		} else {
+			obj["use_rss"] = db_ss[p + "_use_rss_" + field];
+		}
+		if (typeof db_ss[p + "_use_kcp_" + field] == "undefined") {
+			obj["use_kcp"] = '';
+		} else {
+			obj["use_kcp"] = db_ss[p + "_use_kcp_" + field];
+		}
 
-        for (var i = 1; i < params.length; i++) {
-            var ofield = p + "_" + params[i] + "_" + field;
-            if (typeof db_ss[ofield] == "undefined") {
-                obj = null;
-                break;
-            }
-            obj[params[i]] = db_ss[ofield];
-        }
-        if (obj != null) {
-            var node_i = parseInt(field);
-            if (node_i > node_global_max) {
-                node_global_max = node_i;
-            }
-            obj["node"] = field;
-            confs[field] = obj;
-        }
-    }
-    return confs;    
+		if (typeof db_ss[p + "_rss_protocol_" + field] == "undefined") {
+			obj["rss_protocol"] = '';
+		} else {
+			obj["rss_protocol"] = db_ss[p + "_rss_protocol_" + field];
+		}
+		if (typeof db_ss[p + "_rss_protocol_para_" + field] == "undefined") {
+			obj["rss_protocol_para"] = '';
+		} else {
+			obj["rss_protocol_para"] = db_ss[p + "_rss_protocol_para_" + field];
+		}
+
+		if (typeof db_ss[p + "_rss_obfs_" + field] == "undefined") {
+			obj["rss_obfs"] = '';
+		} else {
+			obj["rss_obfs"] = db_ss[p + "_rss_obfs_" + field];
+		}
+
+		if (typeof db_ss[p + "_rss_obfs_param_" + field] == "undefined") {
+			obj["rss_obfs_param"] = '';
+		} else {
+			obj["rss_obfs_param"] = db_ss[p + "_rss_obfs_param_" + field];
+		}
+
+		for (var i = 1; i < params.length; i++) {
+			var ofield = p + "_" + params[i] + "_" + field;
+			if (typeof db_ss[ofield] == "undefined") {
+				obj = null;
+				break;
+			}
+			obj[params[i]] = db_ss[ofield];
+		}
+		if (obj != null) {
+			var node_i = parseInt(field);
+			if (node_i > node_global_max) {
+				node_global_max = node_i;
+			}
+			obj["node"] = field;
+			confs[field] = obj;
+		}
+	}
+	return confs;
 }
 
-
-
 function loadBasicOptions(confs) {
-    var option = $j("#ssconf_basic_node");
-    option.find('option').remove().end();
-    for (var field in confs) {
-        var c = confs[field];
-        option.append($j("<option>", {
-            value: field,
-            text: c.name
-        }));
-    }
-    if (node_global_max > 0) {
-        var node_sel = "1";
-        if (typeof db_ss.ssconf_basic_node != "undefined") {
-            node_sel = db_ss.ssconf_basic_node;
-        }
-        option.val(node_sel);
-        ss_node_sel();
-    }
+	var option = $j("#ssconf_basic_node");
+	var option1 = $j("#ssconf_basic_Ping_node");
+	var option2 = $j("#ssconf_basic_test_node");
+	option.find('option').remove().end();
+	option1.find('option').remove().end();
+	option2.find('option').remove().end();
+	option1.append($j("<option>", {
+		value: 0,
+		text: "全部节点"
+	}));
+	option2.append($j("<option>", {
+		value: 0,
+		text: "全部节点"
+	}));
+	for (var field in confs) {
+		var c = confs[field];
+		option.append($j("<option>", {
+			value: field,
+			text: c.name
+		}));
+		option1.append($j("<option>", {
+			value: field,
+			text: c.name
+		}));
+		option2.append($j("<option>", {
+			value: field,
+			text: c.name
+		}));
+	}
+	if (node_global_max > 0) {
+		var node_sel = "1";
+		if (typeof db_ss.ssconf_basic_node != "undefined") {
+			node_sel = db_ss.ssconf_basic_node;
+		}
+		option.val(node_sel);
+		ss_node_sel();
+	}
 }
 
 function loadAllConfigs() {
-    confs = getAllConfigs();
-    loadBasicOptions(confs);
+	confs = getAllConfigs();
+	loadBasicOptions(confs);
 }
 
-function show_ss_node_info(){ //进入节点显示，编辑页面
-		//checkTime = 1;
-		//setTimeout("refresh_ss_node_list()", 2000);
-		$G("tablet_show").style.display = "none";
-		$G("basic_show").style.display = "none";
-		$G("add_fun").style.display = "none";
-		$G("apply_button").style.display = "none";
-		$G("line_image1").style.display = "none";
-		//$G("ss_node_list_table_th").style.display = "";
-		$G("ss_node_list_table_td").style.display = "";
-		$G("ss_node_list_table_btn").style.display = "";
-		$G("KoolshareBottom_div").style.display = "none";
-		refresh_table();
-}
-function ss_node_info_return(){ //退出节点页面，进入主面板
-		cancel_add_rule(); //隐藏节点编辑面板
-		$G("tablet_show").style.display = "";
-		$G("basic_show").style.display = "";
-		$G("apply_button").style.display = "";
-		$G("line_image1").style.display = "";
-		$G("ss_node_list_table_th").style.display = "none";
-		$G("ss_node_list_table_td").style.display = "none";
-		$G("ss_node_list_table_btn").style.display = "none";
-		$G("KoolshareBottom_div").style.display = "";
-		updateSs_node_listView(); //更新主面板内的节点
-		checkTime = 2001; //停止节点页面刷新
-}
-
-
-function updateSs_node_listView(){
-    $j.ajax({
-        url: '/dbconf?p=ss',
-        dataType: 'html',
-        error: function(xhr) {            
-	        },
-        success: function(response) {
-            $j.globalEval(response);
-            loadAllConfigs();
-        }
-    });
+function updateSs_node_listView() {
+	$j.ajax({
+		url: '/dbconf?p=ss',
+		dataType: 'html',
+		error: function(xhr) {},
+		success: function(response) {
+			$j.globalEval(response);
+			loadAllConfigs();
+		}
+	});
 }
 
 function Add_profile(){ //点击节点页面内添加节点动作
@@ -897,8 +610,8 @@ function Add_profile(){ //点击节点页面内添加节点动作
 	document.form.ss_node_table_rss_obfs_param.value = "";
 	document.form.ss_node_table_method.value = "aes-256-cfb";
 	document.form.ss_node_table_mode.value = "1";
-	document.form.ss_node_table_onetime_auth.value = "0";
 	document.form.ss_node_table_rss_protocol.value = "origin";;
+	document.form.ss_node_table_rss_protocol_para.value = "";;
 	document.form.ss_node_table_rss_obfs.value = "plain";
 	document.form.ss_node_table_koolgame_udp.value = "0";
 	$G("cancelBtn").style.display = "";
@@ -909,10 +622,13 @@ function Add_profile(){ //点击节点页面内添加节点动作
 	$G("edit_node").style.display = "none";
 	$G("continue_add").style.display = "";
 	$G("vpnc_settings").style.position = "fixed";
-    $j("#vpnc_settings").fadeIn(200);
+	scroll_bottoom();
+	$j("#vpnc_settings").fadeIn(200);
+	update_visibility_main();
 }
 function cancel_add_rule(){ //点击添加节点面板上的返回
 	//$j("#vpnc_settings").fadeOut(0);
+	scroll_top();
 	$G("vpnc_settings").style.display = "none";
 }
 
@@ -926,8 +642,8 @@ function tabclickhandler(_type){
 		generate_options1(0);
 		document.form.vpnc_type.value = "shadowsocks";
 		$G('ssTitle').className = "vpnClientTitle_td_click";
-		$G('ota_support').style.display = "";
 		$G('ssr_protocol_tr').style.display = "none";
+		$G('ssr_protocol_para_tr').style.display = "none";
 		$G('ssr_obfs_tr').style.display = "none";
 		$G('ssr_obfs_param_tr').style.display = "none";
 		$G('gameV2_udp_tr').style.display = "none";
@@ -936,8 +652,8 @@ function tabclickhandler(_type){
 		generate_options1(0);
 		document.form.vpnc_type.value = "shadowsocksR";
 		$G('ssrTitle').className = "vpnClientTitle_td_click";
-		$G('ota_support').style.display = "none";
 		$G('ssr_protocol_tr').style.display = "";
+		$G('ssr_protocol_para_tr').style.display = "";
 		$G('ssr_obfs_tr').style.display = "";
 		$G('ssr_obfs_param_tr').style.display = "";
 		$G('gameV2_udp_tr').style.display = "none";
@@ -946,8 +662,8 @@ function tabclickhandler(_type){
 		generate_options1(1);
 		document.form.vpnc_type.value = "gameV2";
 		$G('gamev2Title').className = "vpnClientTitle_td_click";
-		$G('ota_support').style.display = "none";
 		$G('ssr_protocol_tr').style.display = "none";
+		$G('ssr_protocol_para_tr').style.display = "none";
 		$G('ssr_obfs_tr').style.display = "none";
 		$G('ssr_obfs_param_tr').style.display = "none";
 		$G('gameV2_udp_tr').style.display = "";
@@ -956,7 +672,6 @@ function tabclickhandler(_type){
 }
 
 function generate_options1(w){ //为节点添加面板增加模式选择选项
-	var obj=$G('ss_node_table_mode');
 	$j("#ss_node_table_mode option[value='1']").remove();
 	$j("#ss_node_table_mode option[value='2']").remove();
 	$j("#ss_node_table_mode option[value='3']").remove();
@@ -972,226 +687,268 @@ function generate_options1(w){ //为节点添加面板增加模式选择选项
 	}
 }
 
-function add_ss_node_conf(flag){ //点击添加按钮动作
-    var ns = {};
-    var p = "ssconf_basic";
-    node_global_max += 1;	
-	var params1 = ["name", "server", "mode",  "port", "password", "method", "onetime_auth"];//for ss
-	var params2 = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param"];//for ssr
-	var params3 = ["name", "server", "mode",  "port", "password", "method", "koolgame_udp"];//for ssr
-	if(flag == 'shadowsocks'){
-    	for (var i = 0; i < params1.length; i++) {
-    	    ns[p + "_" + params1[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params1[i]).val();
-    	    ns[p + "_use_rss_" + node_global_max] = 0;
-    	}
-	}else if(flag == 'shadowsocksR'){
-    	for (var i = 0; i < params2.length; i++) {
-    	    ns[p + "_" + params2[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params2[i]).val();
-    	    ns[p + "_use_rss_" + node_global_max] = 1;
-    	}
-	}else if(flag == 'gameV2'){
-    	for (var i = 0; i < params3.length; i++) {
-    	    ns[p + "_" + params3[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params3[i]).val();
-    	    ns[p + "_use_rss_" + node_global_max] = 0;
-    	}
+function add_ss_node_conf(flag) { //点击添加按钮动作
+	var ns = {};
+	var p = "ssconf_basic";
+	node_global_max += 1;
+	var params1 = ["name", "server", "mode", "port", "method"]; //for ss
+	var params2 = ["name", "server", "mode", "port", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param"]; //for ssr
+	var params3 = ["name", "server", "mode", "port", "method", "koolgame_udp"]; //for ssr
+	if (flag == 'shadowsocks') {
+		for (var i = 0; i < params1.length; i++) {
+			ns[p + "_" + params1[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params1[i]).val();
+			ns[p + "_use_rss_" + node_global_max] = 0;
+			ns[p + "_password_" + node_global_max] = Base64.encode($j("#ss_node_table_password").val());
+		}
+	} else if (flag == 'shadowsocksR') {
+		for (var i = 0; i < params2.length; i++) {
+			ns[p + "_" + params2[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params2[i]).val();
+			ns[p + "_password_" + node_global_max] = Base64.encode($j("#ss_node_table_password").val());
+			ns[p + "_use_rss_" + node_global_max] = 1;
+		}
+	} else if (flag == 'gameV2') {
+		for (var i = 0; i < params3.length; i++) {
+			ns[p + "_" + params3[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params3[i]).val();
+			ns[p + "_password_" + node_global_max] = Base64.encode($j("#ss_node_table_password").val());
+			ns[p + "_use_rss_" + node_global_max] = 0;
+		}
 	}
-    $j.ajax({
-        url: '/applydb.cgi?p=ssconf_basic',
-        contentType: "application/x-www-form-urlencoded",
-        dataType: 'text',
-        data: $j.param(ns),
-        error: function(xhr) {
-            console.log("error in posting config of table");
-        },
-        success: function(response) {
-            refresh_table();
-            //尝试将table拉动到最下方
-            var nodeaera = $G('ss_node_list_table_td');
-			nodeaera.scrollTop = nodeaera.scrollHeight;
+	$j.ajax({
+		url: '/applydb.cgi?p=ssconf_basic',
+		contentType: "application/x-www-form-urlencoded",
+		dataType: 'text',
+		data: $j.param(ns),
+		error: function(xhr) {
+			console.log("error in posting config of table");
+		},
+		success: function(response) {
+			refresh_table();
+			//尝试将table拉动到最下方
+			setTimeout("scroll_bottoom()", 500);
 			document.form.ss_node_table_server.value = ""; //选择连续添加的时候，只清空服务器一栏
-			if(($G("continue_add_box").checked) == false){ //不选择连续添加的时候，清空其他数据
+			if (($G("continue_add_box").checked) == false) { //不选择连续添加的时候，清空其他数据
 				document.form.ss_node_table_name.value = "";
 				document.form.ss_node_table_port.value = "";
 				document.form.ss_node_table_password.value = "";
 				document.form.ss_node_table_rss_obfs_param.value = "";
 				document.form.ss_node_table_method.value = "aes-256-cfb";
 				document.form.ss_node_table_mode.value = "1";
-				document.form.ss_node_table_onetime_auth.value = "0";
 				document.form.ss_node_table_rss_protocol.value = "origin";
+				document.form.ss_node_table_rss_protocol_para.value = "";
 				document.form.ss_node_table_rss_obfs.value = "plain";
 				document.form.ss_node_table_koolgame_udp.value = "0";
 				//updateSs_node_listView();
 			}
-        }
-    });
+		}
+	});
+}
+
+function scroll_bottoom() {
+	var nodeaera = $G('ss_node_list_table_td');
+	$G('ss_node_list_table_td').scrollTop = nodeaera.scrollHeight;
+}
+
+function scroll_top() {
+	var nodeaera = $G('ss_node_list_table_td');
+	$G('ss_node_list_table_td').scrollTop = 0;
 }
 
 function refresh_table() {
 	$j.ajax({
 		url: '/dbconf?p=ss',
 		dataType: 'html',
-		error: function(xhr){
-		},
-		success: function(response){
+		error: function(xhr) {},
+		success: function(response) {
 			$j.globalEval(response);
 			$j("#ss_node_list_table_main").find("tr:gt(0)").remove();
 			$j('#ss_node_list_table_main tr:last').after(refresh_html());
 		}
 	});
 }
-
 function refresh_html() {
+
+	var isChrome = navigator.userAgent.search("Chrome") > -1;
+		if(isChrome){
+		var major = navigator.userAgent.match("Chrome\/([0-9]*)\.");    //check for major version
+		var isChrome56 = (parseInt(major[1], 10) >= 56);
+	}
+	if((isChrome56) && document.getElementById("FormTitle")){
+		document.getElementById("FormTitle").className = "FormTitle_chrome56";
+	}
 	confs = getAllConfigs();
-	var n = 0; for(var i in confs){n++;} //获取节点的数目
-	if(eval(n) > "13"){ //当节点数目大于12个的时候，显示为overflow，节点可以滚动
-		if(isFirefox=navigator.userAgent.indexOf("Firefox")>0){ 
-			$G("ss_node_list_table_th").style.top = "354px";
-			$G("ss_node_list_table_td").style.top = "394px";
-			$G("ss_node_list_table_td").style.bottom = "-108px";
-			$G("ss_node_list_table_btn").style.bottom = "-290px";
+	var n = 0;
+	for (var i in confs) {
+		n++;
+	} //获取节点的数目
+	if (eval(n) > "12") { //当节点数目大于12个的时候，显示为overflow，节点可以滚动
+			$G("ss_node_list_table_th").style.top = "246px";
+			$G("ss_node_list_table_td").style.top = "286px";
+			$G("ss_node_list_table_td").style.height = "613px";
+			$G("ss_node_list_table_btn").style.top = "896px";
+			$G("FormTitle").style.height = "1100px";	
+		if (isFirefox = navigator.userAgent.indexOf("Firefox") > 0) {
+			$G("ss_node_list_table_th").style.top = "400px";
+			$G("ss_node_list_table_td").style.top = "440px";
+			$G("ss_node_list_table_td").style.height = "613px";
+			$G("ss_node_list_table_btn").style.top = "1050px";
+			$G("FormTitle").style.height = "1100px";
 		}
+		if(isChrome56){
+			$G("ss_node_list_table_th").style.top = "244px";
+			$G("ss_node_list_table_td").style.top = "284px";
+			$G("ss_node_list_table_td").style.height = "613px";
+			$G("ss_node_list_table_btn").style.top = "894px";
+			$G("FormTitle").style.height = "1100px";
+		}
+
 		$G("ss_node_list_table_th").style.display = "";
 		$G("ss_node_list_table_td").style.overflow = "auto";
 		$G("ss_node_list_table_td").style.position = "absolute";
 		$G("ss_node_list_table_btn").style.position = "absolute";
+		$G("ss_node_list_table_btn").style.bottom = "13px";
 		$G("ss_node_list_table_main").style.margin = "0px 0px 0px 0px";
 		$G("hide_when_folw").style.display = "none";
-	}else{
+	} else {
+		$G("ss_node_list_table_th").style.top = "242px";
+		$G("ss_node_list_table_td").style.top = "282px";
+		$G("ss_node_list_table_td").style.bottom = "190px";
 		$G("ss_node_list_table_th").style.display = "none";
 		$G("ss_node_list_table_td").style.overflow = "visible";
 		$G("ss_node_list_table_td").style.position = "static";
 		$G("ss_node_list_table_btn").style.position = "static";
-		$G("ss_node_list_table_main").style.margin = "6px 0px 0px 0px";
+		$G("ss_node_list_table_main").style.margin = "-1px 0px 0px 0px";
 		$G("hide_when_folw").style.display = "";
 	}
 	var html = '';
-    for (var field in confs) {
-        var c = confs[field];
-    	html = html + '<tr>';
-    	if(c["mode"] == 1){
-		    html = html + '<td style="width:45px;"><img src="/res/gfw.png"th/></td>';
-    	}else if(c["mode"] == 2){
-		    html = html + '<td style="width:45px;"><img src="/res/chn.png"th/></td>';
-    	}else if(c["mode"] == 3){
-		    html = html + '<td style="width:45px;"><img src="/res/game.png"th/></td>';
-    	}else if(c["mode"] == 4){
-		    html = html + '<td style="width:45px;"><img src="/res/gameV2.png"th/></td>';
-    	}else if(c["mode"] == 5){
-		    html = html + '<td style="width:45px;"><img src="/res/all.png"th/></td>';
-    	}else{
-		    html = html + '<td style="width:45px;"></td>';
-    	}
-    	html = html + '<td id="ss_node_name_' + c["node"] + '" style="width:85px;">' + c["name"] + '</td>';
-    	html = html + '<td id="ss_node_server_' + c["node"] + '" style="width:85px;">' + c["server"] + '</td>';
-    	html = html + '<td id="ss_node_port_' + c["node"] + '" style="width:37px;">' + c["port"] + '</td>';
-    	html = html + '<td id="ss_node_method_' + c["node"] + '" style="width:75px;">' + c["method"] + '</td>';
+	for (var field in confs) {
+		var c = confs[field];
+		html = html + '<tr style="height:51px">';
+		if (c["mode"] == 1) {
+			html = html + '<td style="width:45px"><img src="/res/gfw.png"th/></td>';
+		} else if (c["mode"] == 2) {
+			html = html + '<td style="width:45px"><img src="/res/chn.png"th/></td>';
+		} else if (c["mode"] == 3) {
+			html = html + '<td style="width:45px"><img src="/res/game.png"th/></td>';
+		} else if (c["mode"] == 4) {
+			html = html + '<td style="width:45px"><img src="/res/gameV2.png"th/></td>';
+		} else if (c["mode"] == 5) {
+			html = html + '<td style="width:45px"><img src="/res/all.png"th/></td>';
+		} else {
+			html = html + '<td style="width:45px"></td>';
+		}
+		html = html + '<td style="width:85px;" id="ss_node_name_' + c["node"] + '">' + c["name"] + '</td>';
+		html = html + '<td style="width:85px;" id="ss_node_server_' + c["node"] + '">' + c["server"] + '</td>';
+		html = html + '<td id="ss_node_port_' + c["node"] + '" style="width:37px;">' + c["port"] + '</td>';
+		html = html + '<td id="ss_node_method_' + c["node"] + '" style="width:75px;">' + c["method"] + '</td>';
 		html = html + '<td class="data_ping" id="ss_node_ping_' + c["node"] + '" style="width:78px;" id="ping_test_td_' + c["node"] + '" style="text-align: center;">' + c["ping"] + '</td>';
-		if(c["mode"] == 4){
-   			html = html + '<td class="data_webtest" id="ss_node_webtest_' + c["node"] + '" style="width:36px;" id="web_test_td_' +c["node"] + '">' + '不支持' + '</td>';
-		}else{
-			html = html + '<td class="data_webtest" id="ss_node_webtest_' + c["node"] + '" style="width:36px;" id="web_test_td_' +c["node"] + '">' + c["webtest"] + '</td>';
+		if (c["mode"] == 4) {
+			html = html + '<td class="data_webtest" id="ss_node_webtest_' + c["node"] + '" style="width:36px;" id="web_test_td_' + c["node"] + '">' + '不支持' + '</td>';
+		} else {
+			html = html + '<td class="data_webtest" id="ss_node_webtest_' + c["node"] + '" style="width:36px;" id="web_test_td_' + c["node"] + '">' + c["webtest"] + '</td>';
 		}
-    	html = html + '<td style="width:33px;">'
-    	html = html + '<input style="margin-left:-3px;" id="dd_node_' + c["node"] + '" class="edit_btn" type="button" onclick="return edit_conf_table(this);" value="">'
-    	html = html + '</td>';
-    	html = html + '<td style="width:33px;">'
-    	if((c["node"]) == db_ss["ssconf_basic_node"]){
-    		html = html + '<input style="margin-top: 4px;margin-left:-3px;" id="td_node_' + c["node"] + '" class="remove_btn" type="button" onclick="remove_running_node(this);" value="">'
-		}else{
-    		html = html + '<input style="margin-top: 4px;margin-left:-3px;" id="td_node_' + c["node"] + '" class="remove_btn" type="button" onclick="return remove_conf_table(this);" value="">'
+		html = html + '<td style="width:33px;">'
+		html = html + '<input style="margin-left:-3px;" id="dd_node_' + c["node"] + '" class="edit_btn" type="button" onclick="return edit_conf_table(this);" value="">'
+		html = html + '</td>';
+		html = html + '<td style="width:33px;">'
+		if ((c["node"]) == db_ss["ssconf_basic_node"]) {
+			html = html + '<input style="margin-top: 4px;margin-left:-3px;" id="td_node_' + c["node"] + '" class="remove_btn" type="button" onclick="remove_running_node(this);" value="">'
+		} else {
+			html = html + '<input style="margin-top: 4px;margin-left:-3px;" id="td_node_' + c["node"] + '" class="remove_btn" type="button" onclick="return remove_conf_table(this);" value="">'
 		}
-    	html = html + '</td>';
-    	html = html + '<td style="width:85px;">'
-    	if((c["node"]) == db_ss["ssconf_basic_node"]){
-    		if(c["use_rss"] == "1"){
+		html = html + '</td>';
+		html = html + '<td style="width:85px;">'
+		if ((c["node"]) == db_ss["ssconf_basic_node"]) {
+			if (c["use_rss"] == "1") {
 				html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #f072a5;" onclick="apply_Running_node(this);" value="Running">'
-			}else{
-				if(c["koolgame_udp"] == "0" || c["koolgame_udp"] == "1"){
+			} else {
+				if (c["koolgame_udp"] == "0" || c["koolgame_udp"] == "1") {
 					html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #33CC33;" onclick="apply_Running_node(this);" value="Running">'
-				}else{
+				} else {
 					html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #00CCFF;" onclick="apply_Running_node(this);" value="Running">'
 				}
 			}
-    	} else {
-    		if(c["use_rss"] == "1"){
+		} else {
+			if (c["use_rss"] == "1") {
 				html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #f072a5;" onclick="apply_this_ss_node(this);" value="Apply">'
-			}else{
-				if(c["koolgame_udp"] == "0" || c["koolgame_udp"] == "1"){
+			} else {
+				if (c["koolgame_udp"] == "0" || c["koolgame_udp"] == "1") {
 					html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #33CC33;" onclick="apply_this_ss_node(this);" value="Apply">'
-				}else{
+				} else {
 					html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #00CCFF;" onclick="apply_this_ss_node(this);" value="Apply">'
 				}
-			} 
-    	}
-    	html = html + '</td>';
-    	html = html + '</tr>';
-    }
-    return html;
+			}
+		}
+		html = html + '</td>';
+		html = html + '</tr>';
+	}
+	return html;
 }
 var node_nu;
-function apply_Running_node(){
+
+function apply_Running_node() {
 	alert("这个节点正在运行，你要干嘛？")
 }
-function remove_running_node(){
+
+function remove_running_node() {
 	alert("人家正在为你工作，你就要抛弃我？不干！")
 }
 
 function apply_this_ss_node(s) { //应用此节点
+	document.form.ss_basic_action.value = 1;
+	$j('.show-btn1').addClass('active');
+	$j('.show-btn1_1').removeClass('active');
 	cancel_add_rule(); //隐藏节点编辑面板
-	$G("tablet_show").style.display = "";
-	$G("basic_show").style.display = "";
+	$G("tablets").style.display = "";
+	$G("tablet_1").style.display = "";
 	$G("apply_button").style.display = "";
 	$G("line_image1").style.display = "";
 	$G("ss_node_list_table_th").style.display = "none";
 	$G("ss_node_list_table_td").style.display = "none";
 	$G("ss_node_list_table_btn").style.display = "none";
-	$G("KoolshareBottom_div").style.display = "";
-    confs = getAllConfigs();
-    var option = $j("#ssconf_basic_node");
-    option.find('option').remove().end();
-    for (var field in confs) {
-        var c = confs[field];
-        option.append($j("<option>", {
-            value: field,
-            text: c.name
-        }));
-    }
-    if (node_global_max > 0) {
-        var node_sel = "1";
-        if (typeof db_ss.ssconf_basic_node != "undefined") {
-            node_sel = db_ss.ssconf_basic_node;
-        }
-        option.val(node_sel);
-        //ss_node_sel();
-    }
+	confs = getAllConfigs();
+	var option = $j("#ssconf_basic_node");
+	option.find('option').remove().end();
+	for (var field in confs) {
+		var c = confs[field];
+		option.append($j("<option>", {
+			value: field,
+			text: c.name
+		}));
+	}
+	if (node_global_max > 0) {
+		var node_sel = "1";
+		if (typeof db_ss.ssconf_basic_node != "undefined") {
+			node_sel = db_ss.ssconf_basic_node;
+		}
+		option.val(node_sel);
+		//ss_node_sel();
+	}
 
-	
 	//updateSs_node_listView(); //更新主面板内的节点
 	checkTime = 2001; //停止节点页面刷新
-    //ss_node_info_return();
-    var node = $j(s).attr("id");
-    var nodes = node.split("_");
-    node = nodes[nodes.length - 1];
-    var node_sel = node;
-    var obj = ssconf_node2obj(node_sel);
-    $G("ssconf_basic_node").value = node;
-    update_ss_ui(obj);
-    update_visibility_main();
+	//ss_node_info_return();
+	var node = $j(s).attr("id");
+	var nodes = node.split("_");
+	node = nodes[nodes.length - 1];
+	var node_sel = node;
+	var obj = ssconf_node2obj(node_sel);
+	$G("ssconf_basic_node").value = node;
+	update_ss_ui(obj);
+	update_visibility_main();
 }
 
 function hide_text() {
 	$j.ajax({
 		url: '/dbconf?p=ss',
 		dataType: 'html',
-		error: function(xhr){
-		},
-		success: function(response){
+		error: function(xhr) {},
+		success: function(response) {
 			$j.globalEval(response);
-    		var reg = /^[\u4E00-\u9FA5]+$/;   
-    		if(($G("ss_node_server_" + node_global_max).innerHTML) == "你猜"+ node_global_max){ //服务器一栏不可能有中文，因此判断中文字符
-	    		$j("#ss_node_list_table_main").find("tr:gt(0)").remove();
+			var reg = /^[\u4E00-\u9FA5]+$/;
+			if (($G("ss_node_server_" + node_global_max).innerHTML) == "你猜" + node_global_max) { //服务器一栏不可能有中文，因此判断中文字符
+				$j("#ss_node_list_table_main").find("tr:gt(0)").remove();
 				$j('#ss_node_list_table_main tr:last').after(refresh_html());
-			}else{
+			} else {
 				$j("#ss_node_list_table_main").find("tr:gt(0)").remove();
 				$j('#ss_node_list_table_main tr:last').after(refresh_html1());
 			}
@@ -1201,138 +958,162 @@ function hide_text() {
 
 function refresh_html1() {
 	confs = getAllConfigs();
-	var n = 0; for(var i in confs){n++;} //获取节点的数目
-	var random = parseInt(Math.random()*7);
-	var phrase = ["看你妹", "你猜", "你猜不到", "我是马赛克", "我是节点", "火星节点", "引力波节点"];
-	if(eval(n) > "12"){ //当节点数目大于12个的时候，显示为overflow，节点可以滚动
+	var n = 0;
+	for (var i in confs) {
+		n++;
+	} //获取节点的数目
+	var random = parseInt(Math.random() * 7);
+	var phrase = ["koolshare", "你猜", "假节点", "我是马赛克", "我是节点", "火星节点", "引力波节点"];
+	if (eval(n) > "12") { //当节点数目大于12个的时候，显示为overflow，节点可以滚动
+			$G("ss_node_list_table_th").style.top = "246px";
+			$G("ss_node_list_table_td").style.top = "286px";
+			$G("ss_node_list_table_td").style.height = "613px";
+			$G("ss_node_list_table_btn").style.top = "896px";
+			$G("FormTitle").style.height = "1100px";	
+		if (isFirefox = navigator.userAgent.indexOf("Firefox") > 0) {
+			$G("ss_node_list_table_th").style.top = "400px";
+			$G("ss_node_list_table_td").style.top = "440px";
+			$G("ss_node_list_table_td").style.height = "613px";
+			$G("ss_node_list_table_btn").style.top = "1050px";
+			$G("FormTitle").style.height = "1100px";
+		}
+		if(isChrome56){
+			$G("ss_node_list_table_th").style.top = "244px";
+			$G("ss_node_list_table_td").style.top = "284px";
+			$G("ss_node_list_table_td").style.height = "613px";
+			$G("ss_node_list_table_btn").style.top = "894px";
+			$G("FormTitle").style.height = "1100px";
+		}
+
+		$G("ss_node_list_table_th").style.display = "";
 		$G("ss_node_list_table_td").style.overflow = "auto";
 		$G("ss_node_list_table_td").style.position = "absolute";
 		$G("ss_node_list_table_btn").style.position = "absolute";
+		$G("ss_node_list_table_btn").style.bottom = "13px";
 		$G("ss_node_list_table_main").style.margin = "0px 0px 0px 0px";
 		$G("hide_when_folw").style.display = "none";
-		$G("ss_node_list_table_th").style.display = "";
-	}else{
+	} else {
+		$G("ss_node_list_table_th").style.top = "242px";
+		$G("ss_node_list_table_td").style.top = "282px";
+		$G("ss_node_list_table_td").style.bottom = "190px";
+		$G("ss_node_list_table_th").style.display = "none";
 		$G("ss_node_list_table_td").style.overflow = "visible";
 		$G("ss_node_list_table_td").style.position = "static";
 		$G("ss_node_list_table_btn").style.position = "static";
-		$G("ss_node_list_table_btn").style.width = "747px";
-		$G("ss_node_list_table_main").style.margin = "6px 0px 0px 0px";
+		$G("ss_node_list_table_main").style.margin = "-1px 0px 0px 0px";
 		$G("hide_when_folw").style.display = "";
-		$G("ss_node_list_table_th").style.display = "none";
 	}
 	var html = '';
-    for (var field in confs) {
-        var c = confs[field];
-    	html = html + '<tr>';
-    	if(c["mode"] == 1){
-		    html = html + '<td style="width:45px;"><img src="/res/gfw.png"th/></td>';
-    	}else if(c["mode"] == 2){
-		    html = html + '<td style="width:45px;"><img src="/res/chn.png"th/></td>';
-    	}else if(c["mode"] == 3){
-		    html = html + '<td style="width:45px;"><img src="/res/game.png"th/></td>';
-    	}else if(c["mode"] == 4){
-		    html = html + '<td style="width:45px;"><img src="/res/gameV2.png"th/></td>';
-    	}else if(c["mode"] == 5){
-		    html = html + '<td style="width:45px;"><img src="/res/all.png"th/></td>';
-    	}else{
-		    html = html + '<td style="width:45px;"></td>';
-    	}
-    	html = html + '<td id="ss_node_name_' + c["node"] + '" style="width:85px;">' + phrase[random] + c["node"] + '</td>';
-    	html = html + '<td id="ss_node_server_' + c["node"] + '" style="width:85px;">你猜' + c["node"] + '</td>';
-    	html = html + '<td id="ss_node_port_' + c["node"] + '" style="width:37px;">23333</td>';
-    	html = html + '<td id="ss_node_method_' + c["node"] + '" style="width:75px;">666666</td>';
+	for (var field in confs) {
+		var c = confs[field];
+		html = html + '<tr style="height:51px">';
+		if (c["mode"] == 1) {
+			html = html + '<td style="width:45px;"><img src="/res/gfw.png"th/></td>';
+		} else if (c["mode"] == 2) {
+			html = html + '<td style="width:45px;"><img src="/res/chn.png"th/></td>';
+		} else if (c["mode"] == 3) {
+			html = html + '<td style="width:45px;"><img src="/res/game.png"th/></td>';
+		} else if (c["mode"] == 4) {
+			html = html + '<td style="width:45px;"><img src="/res/gameV2.png"th/></td>';
+		} else if (c["mode"] == 5) {
+			html = html + '<td style="width:45px;"><img src="/res/all.png"th/></td>';
+		} else {
+			html = html + '<td style="width:45px;"></td>';
+		}
+		html = html + '<td id="ss_node_name_' + c["node"] + '" style="width:85px;">' + phrase[random] + c["node"] + '</td>';
+		html = html + '<td id="ss_node_server_' + c["node"] + '" style="width:85px;">你猜' + c["node"] + '</td>';
+		html = html + '<td id="ss_node_port_' + c["node"] + '" style="width:37px;">23333</td>';
+		html = html + '<td id="ss_node_method_' + c["node"] + '" style="width:75px;">666666</td>';
 		html = html + '<td id="ss_node_ping_' + c["node"] + '" style="width:78px;" id="ping_test_td_' + c["node"] + '" style="text-align: center;">' + c["ping"] + '</td>';
-		if(c["mode"] == 4){
-   			html = html + '<td id="ss_node_webtest_' + c["node"] + '" style="width:36px;" id="web_test_td_' +c["node"] + '">' + '不支持' + '</td>';
-		}else{
-			html = html + '<td id="ss_node_webtest_' + c["node"] + '" style="width:36px;" id="web_test_td_' +c["node"] + '">' + c["webtest"] + '</td>';
+		if (c["mode"] == 4) {
+			html = html + '<td id="ss_node_webtest_' + c["node"] + '" style="width:36px;" id="web_test_td_' + c["node"] + '">' + '不支持' + '</td>';
+		} else {
+			html = html + '<td id="ss_node_webtest_' + c["node"] + '" style="width:36px;" id="web_test_td_' + c["node"] + '">' + c["webtest"] + '</td>';
 		}
-    	html = html + '<td style="width:33px;">'
-    	html = html + '<input style="margin-left:-3px;" id="dd_node_' + c["node"] + '" class="edit_btn" type="button" onclick="return edit_conf_table(this);" value="">'
-    	html = html + '</td>';
-    	html = html + '<td style="width:33px;">'
-    	if((c["node"]) == db_ss["ssconf_basic_node"]){
-    		html = html + '<input style="margin-top: 4px;margin-left:-3px;" id="td_node_' + c["node"] + '" class="remove_btn" type="button" onclick="remove_running_node(this);" value="">'
-		}else{
-    		html = html + '<input style="margin-top: 4px;margin-left:-3px;" id="td_node_' + c["node"] + '" class="remove_btn" type="button" onclick="return remove_conf_table(this);" value="">'
+		html = html + '<td style="width:33px;">'
+		html = html + '<input style="margin-left:-3px;" id="dd_node_' + c["node"] + '" class="edit_btn" type="button" onclick="return edit_conf_table(this);" value="">'
+		html = html + '</td>';
+		html = html + '<td style="width:33px;">'
+		if ((c["node"]) == db_ss["ssconf_basic_node"]) {
+			html = html + '<input style="margin-top: 4px;margin-left:-3px;" id="td_node_' + c["node"] + '" class="remove_btn" type="button" onclick="remove_running_node(this);" value="">'
+		} else {
+			html = html + '<input style="margin-top: 4px;margin-left:-3px;" id="td_node_' + c["node"] + '" class="remove_btn" type="button" onclick="return remove_conf_table(this);" value="">'
 		}
-    	html = html + '</td>';
-    	html = html + '<td style="width:85px;">'
-    	if((c["node"]) == db_ss["ssconf_basic_node"]){
-    		if(c["use_rss"] == "1"){
+		html = html + '</td>';
+		html = html + '<td style="width:85px;">'
+		if ((c["node"]) == db_ss["ssconf_basic_node"]) {
+			if (c["use_rss"] == "1") {
 				html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #f072a5;" onclick="apply_Running_node(this);" value="Running">'
-			}else{
-				if(c["koolgame_udp"] == "0" || c["koolgame_udp"] == "1"){
+			} else {
+				if (c["koolgame_udp"] == "0" || c["koolgame_udp"] == "1") {
 					html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #33CC33;" onclick="apply_Running_node(this);" value="Running">'
-				}else{
+				} else {
 					html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #00CCFF;" onclick="apply_Running_node(this);" value="Running">'
 				}
 			}
-    	} else {
-    		if(c["use_rss"] == "1"){
+		} else {
+			if (c["use_rss"] == "1") {
 				html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #f072a5;" onclick="apply_this_ss_node(this);" value="Apply">'
-			}else{
-				if(c["koolgame_udp"] == "0" || c["koolgame_udp"] == "1"){
+			} else {
+				if (c["koolgame_udp"] == "0" || c["koolgame_udp"] == "1") {
 					html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #33CC33;" onclick="apply_this_ss_node(this);" value="Apply">'
-				}else{
+				} else {
 					html = html + '<input id="apply_ss_node_' + c["node"] + '" type="button" class="button_gen_short" style="color: #00CCFF;" onclick="apply_this_ss_node(this);" value="Apply">'
 				}
-			} 
-    	}
-    	html = html + '</td>';
-    	html = html + '</tr>';
-    }
-    return html;
+			}
+		}
+		html = html + '</td>';
+		html = html + '</tr>';
+	}
+	return html;
 }
 
 function remove_conf_table(o) { //删除节点功能
-    var id = $j(o).attr("id");
-    var ids = id.split("_");
-    var p = "ssconf_basic";
-    id = ids[ids.length - 1];
-    var ns = {};
-    var params = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param", "use_rss", "onetime_auth", "koolgame_udp", "ping", "web_test"];
-    for (var i = 0; i < params.length; i++) {
-        ns[p + "_" + params[i] + "_" + id] = "";
-    }
-    $j.ajax({
-        url: '/applydb.cgi?use_rm=1&p=ssconf_basic',
-        contentType: "application/x-www-form-urlencoded",
-        dataType: 'text',
-        data: $j.param(ns),
-        error: function(xhr) {
-            console.log("error in posting config of table");
-        },
-        success: function(response) {
-            refresh_table();
-            //updateSs_node_listView();
-        }
-    });
+	var id = $j(o).attr("id");
+	var ids = id.split("_");
+	var p = "ssconf_basic";
+	id = ids[ids.length - 1];
+	var ns = {};
+	var params = ["name", "server", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param", "use_rss", "use_kcp", "koolgame_udp", "ping", "web_test"];
+	for (var i = 0; i < params.length; i++) {
+		ns[p + "_" + params[i] + "_" + id] = "";
+	}
+	$j.ajax({
+		url: '/applydb.cgi?use_rm=1&p=ssconf_basic',
+		contentType: "application/x-www-form-urlencoded",
+		dataType: 'text',
+		data: $j.param(ns),
+		error: function(xhr) {
+			console.log("error in posting config of table");
+		},
+		success: function(response) {
+			refresh_table();
+		}
+	});
 }
 
-function edit_conf_table(o){ //编辑节点功能，显示编辑面板
+function edit_conf_table(o) { //编辑节点功能，显示编辑面板
 	checkTime = 2001; //编辑节点时停止可能在进行的刷新
-    var id = $j(o).attr("id");
-    var ids = id.split("_");
-    var p = "ssconf_basic";
-    confs = getAllConfigs();
-    id = ids[ids.length - 1];
+	var id = $j(o).attr("id");
+	var ids = id.split("_");
+	var p = "ssconf_basic";
+	confs = getAllConfigs();
+	id = ids[ids.length - 1];
 	var c = confs[id];
 	document.form.ss_node_table_name.value = c["name"];
 	document.form.ss_node_table_server.value = c["server"];
 	document.form.ss_node_table_port.value = c["port"];
-	document.form.ss_node_table_password.value = c["password"];
-	document.form.ss_node_table_method.value = c["method"];
-	document.form.ss_node_table_onetime_auth.value = c["onetime_auth"];
+	document.form.ss_node_table_password.value = Base64.decode(c["password"])
 	document.form.ss_node_table_rss_obfs_param.value = c["rss_obfs_param"];
 	document.form.ss_node_table_rss_protocol.value = c["rss_protocol"];
+	document.form.ss_node_table_rss_protocol_para.value = c["rss_protocol_para"];
 	document.form.ss_node_table_rss_obfs.value = c["rss_obfs"];
 	document.form.ss_node_table_koolgame_udp.value = c["koolgame_udp"];
 	$G("cancelBtn").style.display = "";
 	$G("add_node").style.display = "none";
 	$G("edit_node").style.display = "";
 	$G("continue_add").style.display = "none";
-	if(c["use_rss"] == "1"){ //判断节点为SSR
+	if (c["use_rss"] == "1") { //判断节点为SSR
 		$j("#vpnc_settings").fadeIn(200);
 		$G("ssTitle").style.display = "none";
 		$G("ssrTitle").style.display = "";
@@ -1340,8 +1121,8 @@ function edit_conf_table(o){ //编辑节点功能，显示编辑面板
 		$j("#ssrTitle").html("编辑SSR账号");
 		tabclickhandler(1);
 		document.form.ss_node_table_mode.value = c["mode"];
-	}else{
-		if(c["koolgame_udp"] == "0" || c["koolgame_udp"] == "1"){ //判断节点为游戏模式V2
+	} else {
+		if (c["koolgame_udp"] == "0" || c["koolgame_udp"] == "1") { //判断节点为游戏模式V2
 			$j("#vpnc_settings").fadeIn(200);
 			$G("ssTitle").style.display = "none";
 			$G("ssrTitle").style.display = "none";
@@ -1349,7 +1130,7 @@ function edit_conf_table(o){ //编辑节点功能，显示编辑面板
 			$j("#gamev2Title").html("编辑GameV2账号");
 			tabclickhandler(2);
 			document.form.ss_node_table_mode.value = c["mode"];
-		}else{ //判断节点为SS
+		} else { //判断节点为SS
 			$j("#vpnc_settings").fadeIn(200);
 			$G("ssTitle").style.display = "";
 			$G("ssrTitle").style.display = "none";
@@ -1359,42 +1140,46 @@ function edit_conf_table(o){ //编辑节点功能，显示编辑面板
 			document.form.ss_node_table_mode.value = c["mode"];
 		}
 	}
-	myid=id; //返回ID号
+	document.form.ss_node_table_method.value = c["method"];
+	myid = id;
 }
 var myid;
 
-function edit_ss_node_conf(flag){ //编辑节点功能，数据重写
-    var ns = {};
-    var p = "ssconf_basic";	
-	var params1 = ["name", "server", "mode",  "port", "password", "method", "onetime_auth"];//for ss
-	var params2 = ["name", "server", "mode",  "port", "password", "method", "rss_protocol", "rss_obfs", "rss_obfs_param"];//for ssr
-	var params3 = ["name", "server", "mode",  "port", "password", "method", "koolgame_udp"];//for ssr
-	if(flag == 'shadowsocks'){
-    	for (var i = 0; i < params1.length; i++) {
-    	    ns[p + "_" + params1[i] + "_" + myid] = $j('#ss_node_table' + "_" + params1[i]).val();
-    	    ns[p + "_use_rss_" + myid] = 0;
-    	}
-	}else if(flag == 'shadowsocksR'){
-    	for (var i = 0; i < params2.length; i++) {
-    	    ns[p + "_" + params2[i] + "_" + myid] = $j('#ss_node_table' + "_" + params2[i]).val();
-    	    ns[p + "_use_rss_" + myid] = 1;
-    	}
-	}else if(flag == 'gameV2'){
-    	for (var i = 0; i < params3.length; i++) {
-    	    ns[p + "_" + params3[i] + "_" + myid] = $j('#ss_node_table' + "_" + params3[i]).val();
-    	    ns[p + "_use_rss_" + myid] = 0;
-    	}
+function edit_ss_node_conf(flag) { //编辑节点功能，数据重写
+	var ns = {};
+	var p = "ssconf_basic";
+	var params1 = ["name", "server", "mode", "port", "method"]; //for ss
+	var params2 = ["name", "server", "mode", "port", "method", "rss_protocol", "rss_protocol_para", "rss_obfs", "rss_obfs_param"]; //for ssr
+	var params3 = ["name", "server", "mode", "port", "method", "koolgame_udp"]; //for ssr
+	if (flag == 'shadowsocks') {
+		for (var i = 0; i < params1.length; i++) {
+			ns[p + "_" + params1[i] + "_" + myid] = $j('#ss_node_table' + "_" + params1[i]).val();
+			ns[p + "_password_" + myid] = Base64.encode($j("#ss_node_table_password").val());
+			ns[p + "_use_rss_" + myid] = 0;
+		}
+	} else if (flag == 'shadowsocksR') {
+		for (var i = 0; i < params2.length; i++) {
+			ns[p + "_" + params2[i] + "_" + myid] = $j('#ss_node_table' + "_" + params2[i]).val();
+			ns[p + "_password_" + myid] = Base64.encode($j("#ss_node_table_password").val());
+			ns[p + "_use_rss_" + myid] = 1;
+		}
+	} else if (flag == 'gameV2') {
+		for (var i = 0; i < params3.length; i++) {
+			ns[p + "_" + params3[i] + "_" + myid] = $j('#ss_node_table' + "_" + params3[i]).val();
+			ns[p + "_password_" + myid] = Base64.encode($j("#ss_node_table_password").val());
+			ns[p + "_use_rss_" + myid] = 0;
+		}
 	}
-    $j.ajax({
-        url: '/applydb.cgi?p=ssconf_basic',
-        contentType: "application/x-www-form-urlencoded",
-        dataType: 'text',
-        data: $j.param(ns),
-        error: function(xhr) {
-            console.log("error in posting config of table");
-        },
-        success: function(response) {
-            refresh_table();
+	$j.ajax({
+		url: '/applydb.cgi?p=ssconf_basic',
+		contentType: "application/x-www-form-urlencoded",
+		dataType: 'text',
+		data: $j.param(ns),
+		error: function(xhr) {
+			console.log("error in posting config of table");
+		},
+		success: function(response) {
+			refresh_table();
 			document.form.ss_node_table_name.value = "";
 			document.form.ss_node_table_server.value = "";
 			document.form.ss_node_table_port.value = "";
@@ -1402,18 +1187,18 @@ function edit_ss_node_conf(flag){ //编辑节点功能，数据重写
 			document.form.ss_node_table_rss_obfs_param.value = "";
 			document.form.ss_node_table_method.value = "aes-256-cfb";
 			document.form.ss_node_table_mode.value = "1";
-			document.form.ss_node_table_onetime_auth.value = "0";
 			document.form.ss_node_table_rss_protocol.value = "origin";
+			document.form.ss_node_table_rss_protocol_para.value = "";
 			document.form.ss_node_table_rss_obfs.value = "plain";
 			document.form.ss_node_table_koolgame_udp.value = "0";
-        }
-    });
-    $j("#vpnc_settings").fadeOut(200);
+		}
+	});
+	$j("#vpnc_settings").fadeOut(200);
 }
 
 
 function download_SS_node() {
-	location.href='ss_conf_backup.txt';
+	location.href = 'ss_conf_backup.txt';
 }
 
 function upload_SS_node() {
@@ -1424,606 +1209,969 @@ function upload_SS_node() {
 	document.form.enctype = "multipart/form-data";
 	document.form.encoding = "multipart/form-data";
 	document.form.action = "/ssupload.cgi?a=/tmp/ss_conf_backup.txt";
-	if (validForm()){
+	if (validForm()) {
 		document.form.submit();
 	}
 }
 
 function upload_ok(isok) {
 	var info = $G('ss_file_info');
-	if(isok==1){
-		info.innerHTML="上传完成";
+	if (isok == 1) {
+		info.innerHTML = "上传完成";
 		setTimeout("restore_ss_conf();", 1000);
 	} else {
-		info.innerHTML="上传失败";
+		info.innerHTML = "上传失败";
 	}
 	info.style.display = "block";
 	$G('loadingicon').style.display = "none";
 }
 
 function restore_ss_conf() {
-	checkTime = 2001;  //停止可能在进行的刷新
-	document.form.action_mode.value = ' Refresh ';
-	document.form.action = "/applydb.cgi?p=ss";
-    document.form.SystemCmd.value = "ss_conf_restore.sh";
-	document.form.enctype = "";
-	document.form.encoding = "";
-	if (validForm()){
-		document.form.submit();
-	}
-    //setTimeout("onSubmitCtrl();", 2000);
-    //refreshpage(5);
-    showLoadingBar(8);
-    $j("#loading_block3").html("恢复SS配置");
-    $j("#loading_block2").html("<li><font color='#ffcc00'>正在恢复相关配置中...</font></li></br><li><font color='#ffcc00'>配置恢复后需要重新提交！</font></li></br><li><font color='#ffcc00'>恢复配置后将返回网络地图！</font></li>");
-}
-
-function remove_SS_node(){
-	checkTime = 2001;  //停止可能在进行的刷新
-	document.form.action_mode.value = ' Refresh ';
-	document.form.action = "/applydb.cgi?p=ss";
-    document.form.SystemCmd.value = "ss_conf_remove.sh";
-	document.form.enctype = "";
-	document.form.encoding = "";
-	if (validForm()){
-		document.form.submit();
-	}
-	//refreshpage(5);
-	showLoadingBar(8);
-	 $j("#loading_block3").html("清除SS配置");
-	 $j("#loading_block2").html("<li><font color='#ffcc00'>正在清除所有SS配置...</font></li></br><li><font color='#ffcc00'>配置清除后将自动关闭SS...</font></li></br><li><font color='#ffcc00'>恢复配置后将返回网络地图！</font></li>");
-}
-
-function ping_test(){
-	checkTime = 2001;  //停止可能在进行的刷新
-    document.form.SystemCmd.value = "ss_ping.sh";
-	document.form.action_mode.value = ' Refresh ';
-	if (validForm()){
-		document.form.submit();
-		checkTime = 0;
-		refresh_ss_node_list_ping();
-	}
-}
-/*
-function remove_ping(){
-	checkTime = 2001;  //停止可能在进行的刷新
-    document.form.SystemCmd.value = "ss_ping_remove.sh";
-	document.form.action_mode.value = ' Refresh ';
-	if (validForm()){
-		document.form.submit();
-	}
-	setTimeout(refresh_table(), 3000);
-}
-*/
-function web_test(){
 	checkTime = 2001; //停止可能在进行的刷新
-	//updateSs_node_listView();
+	document.form.action_mode.value = ' Refresh ';
+	document.form.action = "/applydb.cgi?p=ss";
+	document.form.SystemCmd.value = "ss_conf_restore.sh";
+	document.form.enctype = "";
+	document.form.encoding = "";
+	document.form.ss_basic_action.value = 7;
+	if (validForm()) {
+		document.form.submit();
+	}
+	showSSLoadingBar();
+	noChange2 = 0;
+	setTimeout("checkCmdRet2();", 500);
+}
+
+function remove_SS_node() {
+	checkTime = 2001; //停止可能在进行的刷新
+	document.form.action_mode.value = ' Refresh ';
+	document.form.action = "/applydb.cgi?p=ss";
+	document.form.SystemCmd.value = "ss_conf_remove.sh";
+	document.form.enctype = "";
+	document.form.encoding = "";
+	if (validForm()) {
+		document.form.submit();
+	}
+	document.form.ss_basic_action.value = 8;
+	if (validForm()) {
+		document.form.submit();
+	}
+	showSSLoadingBar();
+	noChange2 = 0;
+	setTimeout("checkCmdRet2();", 500);
+}
+
+function ping_test() {
+	checkTime = 2001; //停止可能在进行的刷新
+	document.form.SystemCmd.value = "ss_ping.sh";
+	document.form.action_mode.value = ' Refresh ';
+	document.form.action = "/applydb.cgi?p=ssconf_basic_Ping";
+	document.form.submit();
+	checkTime = 0;
+	refresh_ss_node_list_ping();
+	alert("请等待片刻，测试结果将自动显示在对应节点列表!");
+}
+
+function remove_ping() {
+	checkTime = 2001; //停止可能在进行的刷新
+	document.form.SystemCmd.value = "ss_ping_remove.sh";
+	document.form.action_mode.value = ' Refresh ';
+	document.form.submit();
+	setTimeout("refresh_table()", 3000);
+	alert("请等待片刻，如果结果未清空，请手动刷新页面!");
+}
+
+function web_test() {
+	checkTime = 2001; //停止可能在进行的刷新
 	document.form.SystemCmd.value = "ss_webtest.sh";
 	document.form.action_mode.value = ' Refresh ';
-	if (validForm()){
-		document.form.submit();
-		checkTime = 0;
-		refresh_ss_node_list_webtest();
-	}
+	document.form.action = "/applydb.cgi?p=ssconf_basic_test";
+	document.form.submit();
+	checkTime = 0;
+	refresh_ss_node_list_webtest();
+	alert("请等待片刻，测试结果将自动显示在对应节点列表!");
 }
-/*
-function remove_web_test(){
+
+function remove_test() {
 	checkTime = 2001; //停止可能在进行的刷新
-	//updateSs_node_listView();
 	document.form.SystemCmd.value = "ss_webtest_remove.sh";
 	document.form.action_mode.value = ' Refresh ';
-	if (validForm()){
-		document.form.submit();
-	}
-	setTimeout(refresh_table(), 3000);
+	document.form.submit();
+	setTimeout("refresh_table()", 3000);
+	alert("请等待片刻，如果结果未清空，请手动刷新页面!");
 }
-*/
+
 var ping_flag;
 var checkTime = 0;
-function refresh_ss_node_list_ping(){
-	if (checkTime < 200){
+
+function refresh_ss_node_list_ping() {
+	if (checkTime < 200) {
 		checkTime++;
 		refresh_table();
 		setTimeout("refresh_ss_node_list_ping()", 1000);
 	}
-	if (checkTime > 4){
+	if (checkTime > 4) {
 		confs = getAllConfigs();
-		var n = 0; for(var i in confs){n++;} //获取节点的数目
+		var n = 0;
+		for (var i in confs) {
+			n++;
+		} //获取节点的数目
 		var ping_flag = 0;
-    	for (var field in confs) {
-    	    var c = confs[field].ping;
-				if(c != "" ){
-					ping_flag++;
-				}
+		for (var field in confs) {
+			var c = confs[field].ping;
+			if (c != "") {
+				ping_flag++;
 			}
-		if (ping_flag == eval(n)){ //当ping被填满时，停止刷新
-			checkTime = 2001;
+		}
+		if (document.form.ssconf_basic_Ping_node.value == "0") {
+			if (ping_flag == eval(n)) { //当ping被填满时，停止刷新
+				checkTime = 2001;
+			}
+		} else {
+			if (ping_flag == "1") { //当ping被填满时，停止刷新
+				checkTime = 2001;
+			}
 		}
 	}
 }
 
 var webtest_flag;
-function refresh_ss_node_list_webtest(){
-	if (checkTime < 200){
+
+function refresh_ss_node_list_webtest() {
+	if (checkTime < 200) {
 		checkTime++;
 		refresh_table();
 		setTimeout("refresh_ss_node_list_webtest()", 3000); //ping 出结果较慢，3秒刷新一次
 	}
-	if (checkTime > 2){
+	if (checkTime > 2) {
 		confs = getAllConfigs();
-		var n = 0; for(var i in confs){n++;} //获取节点的数目
+		var n = 0;
+		for (var i in confs) {
+			n++;
+		} //获取节点的数目
 		var webtest_flag = 0;
-    	for (var field in confs) {
-    	    var c = confs[field].webtest;
-				if(c != "" ){
-					webtest_flag++;
-				}
+		for (var field in confs) {
+			var c = confs[field].webtest;
+			if (c != "") {
+				webtest_flag++;
 			}
-		if (webtest_flag == eval(n)){ //当ping被填满时，停止刷新
+		}
+		if (webtest_flag == eval(n)) { //当ping被填满时，停止刷新
 			checkTime = 2001;
 		}
 	}
 }
 
-
-
-
-function updatelist(){
-    document.form.SystemCmd.value = "ss_rule_update.sh";
+function updatelist() {
+	document.form.action = "/applydb.cgi?p=ss_basic";
+	document.form.SystemCmd.value = "ss_rule_update.sh";
 	document.form.action_mode.value = ' Refresh ';
-	if (validForm()){
-		document.form.submit();
-		//refresh_ss_node_list();
-		show_log_info();
-	}
-}
-
-
-function createCookie(name, value, days) {
-    var expires;
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toGMTString();
-    } else {
-        expires = "";
-    }
-    document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
-}
-
-function readCookie(name) {
-    var nameEQ = encodeURIComponent(name) + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
-    }
-    return null;
-}
-
-function setRefresh(obj) {
-	refreshRate = obj.value;
-	cookie.set('status_restart', refreshRate, 300);
-	checkSSStatus();
-}
-function getRefresh() {
-	val = parseInt(cookie.get('status_restart'));
-	if ((val != 0) && (val != 5) && (val != 10) && (val != 15) && (val != 30) && (val != 60))
-	val = 10;
-	$G('refreshrate').value = val;
-	return val;
-}
-
-function version_show(){
-    $j.ajax({
-        url: 'http://koolshare.ngrok.wang:5000/shadowsocks/config.json.js',
-        type: 'GET',
-        dataType: 'jsonp',
-        success: function(res) {
-            if(typeof(res["version"]) != "undefined" && res["version"].length > 0) {
-	            if(res["version"] == db_ss["ss_basic_version_local"]){
-		        	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
-	       		}else if(res["version"] !== db_ss["ss_basic_version_local"]) {
-					 if(typeof(db_ss["ss_basic_version_local"]) != "undefined") {
-                    	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
-						$j("#updateBtn").html("<i>升级到：" + res.version  + "</i>");
-                	}else{
-	                	$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：2.8.9</i></a>");
-                	}
-		        }
-            }
-        }
-    });
-}
-
-function write_ss_install_status(){
-		$j.ajax({
-		type: "get",
-		url: "dbconf?p=ss_basic_install_status,ss_basic_state_china,ss_basic_state_foreign",
-		dataType: "script",
-		success: function() {
-		if (db_ss_basic_install_status['ss_basic_install_status'] == "3"){
-			document.form.ss_basic_action.value = 1;
-			setTimeout("write_ss_install_status()", 200000);
-			setTimeout("onSubmitCtrl();", 4000);
-		} else if (db_ss_basic_install_status['ss_basic_install_status'] == "5"){
-			$G('update_button').style.display = "";
-		} else if (db_ss_basic_install_status['ss_basic_install_status'] == "0"){
-			$G('update_button').style.display = "";
-		}
-		setTimeout("write_ss_install_status()", 1500);
-		}
-		});
-	}
-
-function update_ss(){
-	$G('update_button').style.display = "none";
-	document.form.action_mode.value = ' Refresh ';
-    document.form.SystemCmd.value = "ss_update.sh";
-	if (validForm()){
+	document.form.ss_basic_action.value = 6;
+	if (validForm()) {
 		document.form.submit();
 	}
-	show_log_info();
+	noChange2 = 0;
+	showSSLoadingBar();
+	setTimeout("checkCmdRet2();", 500);
 }
-function buildswitch(){
-	$j("#switch").click(
-	function(){
-		var ssmode = $G("ss_basic_mode").value;
-		if($G('switch').checked){
-			document.form.action_mode.value = ' Refresh ';
-			$G('ss_basic_enable').value = 1;
-			$G("ss_status1").style.display = "";
-			$G("tablet_show").style.display = "";
-			$G("basic_show").style.display = "";
-			$G("apply_button").style.display = "";
-			update_visibility_main();
-		}else{
-			document.form.ss_basic_enable.value = 0;
-			showSSLoadingBar(5);
-			document.form.action_mode.value = ' Refresh ';
-			document.form.action = "/applydb.cgi?p=ss";
-			document.form.SystemCmd.value = "ss_config.sh";
-			if (validForm()){
-				document.form.submit();
+
+function version_show() {
+	$j.ajax({
+		url: 'https://koolshare.ngrok.wang/shadowsocks/config.json.js',
+		type: 'GET',
+		dataType: 'jsonp',
+		success: function(res) {
+			if (typeof(res["version"]) != "undefined" && res["version"].length > 0) {
+				if (res["version"] == db_ss["ss_basic_version_local"]) {
+					$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
+				} else if (res["version"] !== db_ss["ss_basic_version_local"]) {
+					if (typeof(db_ss["ss_basic_version_local"]) != "undefined") {
+						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：" + db_ss['ss_basic_version_local'] + "</i></a>");
+						$j("#updateBtn").html("<i>升级到：" + res.version + "</i>");
+					} else {
+						$j("#ss_version_show").html("<a class='hintstyle' href='javascript:void(12);' onclick='openssHint(12)'><i>当前版本：3.3.3</i></a>");
+					}
+				}
 			}
-			$G("basic_show").style.display = "none";
-			
-			
 		}
 	});
 }
+var checkss = 0;
 
-function toggle_switch(){
-	if (db_ss['ss_basic_enable'] == "1"){
+function get_ss_status_data() {
+	if (checkss < 10000) {
+		checkss++;
+		refreshRate = $j("#ss_basic_refreshrate").val();
+		$j.ajax({
+			type: "get",
+			url: "/dbconf?p=ss_basic_enable,ss_basic_dns_success",
+			dataType: "script",
+			success: function() {
+				if (refreshRate !== 0) {
+					if (db_ss_basic_enable['ss_basic_enable'] == "1") {
+						$j.ajax({
+							url: '/ss_status',
+							dataType: "html",
+							success: function(response) {
+								var arr = JSON.parse(response);
+								if (arr[0] == "" || arr[1] == "") {
+									$G("ss_state2").innerHTML = "国外连接 - " + "Waiting for first refresh...";
+									$G("ss_state3").innerHTML = "国内连接 - " + "Waiting for first refresh...";
+								} else {
+									$G("ss_state2").innerHTML = "国外连接 - " + arr[0];
+									$G("ss_state3").innerHTML = "国内连接 - " + arr[1];
+								}
+							}
+						});
+					} else {
+						$G("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
+						$G("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
+					}
+				}
+				if (db_ss_basic_dns_success['ss_basic_dns_success'] == "0") {
+					$G('SS_IP').style.display = "";
+					$j('#SS_IP').html("<font color='#66FF66'>服务器IP地址解析异常！</font><a class='hintstyle' href='javascript:void(0);' onclick='openssHint(51)'><font color='#ffcc00'><u>查看帮助</u></font></a>");
+				} else if (db_ss_basic_dns_success['ss_basic_dns_success'] == "1") {
+					$G('SS_IP').style.display = "";
+					$j('#SS_IP').html("<font color='#66FF66'>服务器IP地址解析正常！</font><a class='hintstyle' href='javascript:void(0);' onclick='openssHint(51)'><font color='#ffcc00'><u>查看说明</u></font></a>");
+				}
+				if (refreshRate > 0) {
+					setTimeout("get_ss_status_data();", refreshRate * 1000);
+				}
+			}
+
+		});
+	}
+}
+
+function update_ss() {
+	$G('update_button').style.display = "none";
+	document.form.action_mode.value = ' Refresh ';
+	document.form.SystemCmd.value = "ss_update.sh";
+	document.form.ss_basic_action.value = 5;
+	if (validForm()) {
+		document.form.submit();
+	}
+	showSSLoadingBar();
+	noChange2 = 0;
+	setTimeout("checkCmdRet2();", 500);
+}
+
+function buildswitch() {
+	$j("#switch").click(
+		function() {
+			var ssmode = $G("ss_basic_mode").value;
+			if ($G('switch').checked) {
+				document.form.action_mode.value = ' Refresh ';
+				$G('ss_basic_enable').value = 1;
+				$G("ss_status1").style.display = "";
+				$G("tablets").style.display = "";
+				$G("tablet_1").style.display = "";
+				$G("tablet_2").style.display = "none";
+				$G("tablet_3").style.display = "none";
+				$G("tablet_4").style.display = "none";
+				$G("tablet_5").style.display = "none";
+				$G("tablet_6").style.display = "none";
+				$G("tablet_7").style.display = "none";
+				$j('.show-btn1').addClass('active');
+				$j('.show-btn1_1').removeClass('active');
+				$j('.show-btn2').removeClass('active');
+				$j('.show-btn3').removeClass('active');
+				$j('.show-btn4').removeClass('active');
+				$j('.show-btn5').removeClass('active');
+				$j('.show-btn6').removeClass('active');
+				$j('.show-btn7').removeClass('active');
+				$G("apply_button").style.display = "";
+				document.form.ss_basic_action.value = 1;
+				update_visibility_main();
+			} else {
+				document.form.ss_basic_enable.value = 0;
+				showSSLoadingBar(5);
+				document.form.action_mode.value = ' Refresh ';
+				document.form.action = "/applydb.cgi?p=ss";
+				document.form.SystemCmd.value = "ss_config.sh";
+				if (validForm()) {
+					document.form.submit();
+				}
+				$G("ss_status1").style.display = "none";
+				$G("tablets").style.display = "none";
+				$G("tablet_1").style.display = "none";
+				$G("tablet_2").style.display = "none";
+				$G("tablet_3").style.display = "none";
+				$G("tablet_4").style.display = "none";
+				$G("tablet_5").style.display = "none";
+				$G("tablet_6").style.display = "none";
+				$G("tablet_7").style.display = "none";
+				$G("ss_node_list_table_th").style.display = "none";
+				$G("ss_node_list_table_td").style.display = "none";
+				$G("ss_node_list_table_btn").style.display = "none";
+				$G("apply_button").style.display = "none";
+				$G("log_content").style.display = "none";
+				noChange2 = 0;
+				showSSLoadingBar(5);
+				setTimeout("checkCmdRet2();", 500);
+			}
+		});
+}
+
+function toggle_switch() {
+	if (db_ss['ss_basic_enable'] == "1") {
 		$G("switch").checked = true;
-    	update_visibility_main();
+		update_visibility_main();
 	} else {
 		$G("switch").checked = false;
 		$G("ss_status1").style.display = "none";
-		$G("tablet_show").style.display = "none";
-		$G("basic_show").style.display = "none";
-		$G("apply_button").style.display = "none";
-		$G("ss_node_list_table_th").style.display = "none";
-	}
-}
-
-
-function toggle_func(){
-	ssmode = $G("ss_basic_mode").value;
-	document.form.ss_basic_action.value = 1;
-	$j('.show-btn1').addClass('active');
-	$j(".show-btn1").click(
-	function(){
-		$j('.show-btn1').addClass('active');
-		$j('.show-btn2').removeClass('active');
-		$j('.show-btn3').removeClass('active');
-		$j('.show-btn4').removeClass('active');
-		$G("basic_show").style.display = "";
-		$G("add_fun").style.display = "none";
-		$G("redchn_dns").style.display = "none";
-		$G("redchn_list").style.display = "none";
-		$G("ipset_dns").style.display = "none";
-		$G("ipset_list").style.display = "none";
-		$G("game_dns").style.display = "none";
-		$G("game_list").style.display = "none";
-		$G("gameV2_dns").style.display = "none";
-		$G("gameV2_list").style.display = "none";
-		$G("overall_dns").style.display = "none";
-		$G("overall_list").style.display = "none";	
-		$G("cmdBtn").value = "提交";
-		//$j("#cmdBtn").html("提交");
-		document.form.ss_basic_action.value = 1;
-		update_visibility_main();
-	});
-		$j(".show-btn2").click(
-	function(){
-		$j('.show-btn1').removeClass('active');
-		$j('.show-btn2').addClass('active');
-		$j('.show-btn3').removeClass('active');
-		$j('.show-btn4').removeClass('active');
-		$G("basic_show").style.display = "none";
-		$G("add_fun").style.display = "none";
-		$G("cmdBtn").value = "应用DNS设定";
-		//$j("#cmdBtn").html("应用DNS设定");
-		document.form.ss_basic_action.value = 2;
-		if (ssmode == "1"){
-			$G("ipset_dns").style.display = "";
-			$G("ipset_list").style.display = "none";
-			$G("redchn_dns").style.display = "none";
-			$G("redchn_list").style.display = "none";
-			$G("game_dns").style.display = "none";
-			$G("game_list").style.display = "none";
-			$G("gameV2_dns").style.display = "none";
-			$G("gameV2_list").style.display = "none";
-			$G("overall_dns").style.display = "none";
-			$G("overall_list").style.display = "none";
-			update_visibility_tab2_ipset();
-		}else if(ssmode == "2"){
-			$G("ipset_dns").style.display = "none";
-			$G("ipset_list").style.display = "none";
-			$G("redchn_dns").style.display = "";
-			$G("redchn_list").style.display = "none";
-			$G("game_dns").style.display = "none";
-			$G("game_list").style.display = "none";
-			$G("gameV2_dns").style.display = "none";
-			$G("gameV2_list").style.display = "none";
-			$G("overall_dns").style.display = "none";
-			$G("overall_list").style.display = "none";
-			update_visibility_tab2_redchn();
-		}else if(ssmode == "3"){
-			$G("ipset_dns").style.display = "none";
-			$G("ipset_list").style.display = "none";
-			$G("redchn_dns").style.display = "none";
-			$G("redchn_list").style.display = "none";
-			$G("game_dns").style.display = "";
-			$G("game_list").style.display = "none";
-			$G("gameV2_dns").style.display = "none";
-			$G("gameV2_list").style.display = "none";
-			$G("overall_dns").style.display = "none";
-			$G("overall_list").style.display = "none";
-			update_visibility_tab2_game();
-		}else if(ssmode == "4"){
-			$G("ipset_dns").style.display = "none";
-			$G("ipset_list").style.display = "none";
-			$G("redchn_dns").style.display = "none";
-			$G("redchn_list").style.display = "none";
-			$G("game_dns").style.display = "none";
-			$G("game_list").style.display = "none";
-			$G("gameV2_dns").style.display = "";
-			$G("gameV2_list").style.display = "none";
-			$G("overall_dns").style.display = "none";
-			$G("overall_list").style.display = "none";
-		}else if(ssmode == "5"){
-			$G("ipset_dns").style.display = "none";
-			$G("ipset_list").style.display = "none";
-			$G("redchn_dns").style.display = "none";
-			$G("redchn_list").style.display = "none";
-			$G("game_dns").style.display = "none";
-			$G("game_list").style.display = "none";
-			$G("gameV2_dns").style.display = "none";
-			$G("gameV2_list").style.display = "none";
-			$G("overall_dns").style.display = "";
-			$G("overall_list").style.display = "none";	
-			update_visibility_tab2_gameV2();
-		}
-	});
-	$j(".show-btn3").click(
-	function(){
-		$j('.show-btn1').removeClass('active');
-		$j('.show-btn2').removeClass('active');
-		$j('.show-btn3').addClass('active');
-		$j('.show-btn4').removeClass('active');
-		$G("basic_show").style.display = "none";
-		$G("add_fun").style.display = "none";
-		$G("cmdBtn").value = "应用黑白名单";
-		//$j("#cmdBtn").html("应用黑白名单");
-		document.form.ss_basic_action.value = 3;
-		if (ssmode == "1"){
-			$G("ipset_dns").style.display = "none";
-			$G("ipset_list").style.display = "";
-			$G("redchn_dns").style.display = "none";
-			$G("redchn_list").style.display = "none";
-			$G("game_dns").style.display = "none";
-			$G("game_list").style.display = "none";
-			$G("gameV2_dns").style.display = "none";
-			$G("gameV2_dns").style.display = "none";
-			$G("overall_dns").style.display = "none";
-			$G("overall_list").style.display = "none";
-		}else if(ssmode == "2"){
-			$G("ipset_dns").style.display = "none";
-			$G("ipset_list").style.display = "none";
-			$G("redchn_dns").style.display = "none";
-			$G("redchn_list").style.display = "";
-			$G("game_dns").style.display = "none";
-			$G("game_list").style.display = "none";
-			$G("gameV2_dns").style.display = "none";
-			$G("gameV2_dns").style.display = "none";
-			$G("overall_dns").style.display = "none";
-			$G("overall_list").style.display = "none";
-		}else if(ssmode == "3"){
-			$G("ipset_dns").style.display = "none";
-			$G("ipset_list").style.display = "none";
-			$G("redchn_dns").style.display = "none";
-			$G("redchn_list").style.display = "none";
-			$G("game_dns").style.display = "none";
-			$G("game_list").style.display = "";
-			$G("gameV2_dns").style.display = "none";
-			$G("gameV2_dns").style.display = "none";
-			$G("overall_dns").style.display = "none";
-			$G("overall_list").style.display = "none";
-		}else if(ssmode == "4"){
-			$G("ipset_dns").style.display = "none";
-			$G("ipset_list").style.display = "none";
-			$G("redchn_dns").style.display = "none";
-			$G("redchn_list").style.display = "none";
-			$G("game_dns").style.display = "none";
-			$G("game_list").style.display = "none";
-			$G("gameV2_dns").style.display = "none";
-			$G("gameV2_list").style.display = "";
-			$G("overall_dns").style.display = "none";
-			$G("overall_list").style.display = "none";
-		}else if(ssmode == "5"){
-			$G("ipset_dns").style.display = "none";
-			$G("ipset_list").style.display = "none";
-			$G("redchn_dns").style.display = "none";
-			$G("redchn_list").style.display = "none";
-			$G("game_dns").style.display = "none";
-			$G("game_list").style.display = "none";
-			$G("gameV2_dns").style.display = "none";
-			$G("gameV2_list").style.display = "none";
-			$G("overall_dns").style.display = "none";
-			$G("overall_list").style.display = "";	
-		}
-	});
-		$j(".show-btn4").click(
-	function(){
-		$j('.show-btn1').removeClass('active');
-		$j('.show-btn2').removeClass('active');
-		$j('.show-btn3').removeClass('active');
-		$j('.show-btn4').addClass('active');
-		$G("basic_show").style.display = "none";
-		$G("add_fun").style.display = "";
-		$G("redchn_dns").style.display = "none";
-		$G("redchn_list").style.display = "none";
-		$G("ipset_dns").style.display = "none";
-		$G("ipset_list").style.display = "none";
-		$G("game_dns").style.display = "none";
-		$G("game_list").style.display = "none";
-		$G("gameV2_dns").style.display = "none";
-		$G("gameV2_list").style.display = "none";
-		$G("overall_dns").style.display = "none";
-		$G("overall_list").style.display = "none";	
-		//$j("#cmdBtn").html("应用附加功能");
-		$G("cmdBtn").value = "应用附加功能";
-		document.form.ss_basic_action.value = 4;
-		update_visibility_tab4();
-	});	
-}
-function show_log_info(){
-		$G("basic_show").style.display = "none";
-		$G("add_fun").style.display = "none";
-		$G("ipset_dns").style.display = "none";
-		$G("ipset_list").style.display = "none";
-		$G("redchn_dns").style.display = "none";
-		$G("redchn_list").style.display = "none";
-		$G("game_dns").style.display = "none";
-		$G("game_list").style.display = "none";
-		$G("gameV2_dns").style.display = "none";
-		$G("gameV2_list").style.display = "none";
-		$G("overall_dns").style.display = "none";
-		$G("overall_list").style.display = "none";
-		$G("tablet_show").style.display = "none";
+		$G("tablets").style.display = "none";
+		$G("tablet_1").style.display = "none";
+		$G("tablet_2").style.display = "none";
+		$G("tablet_3").style.display = "none";
+		$G("tablet_4").style.display = "none";
+		$G("tablet_5").style.display = "none";
+		$G("tablet_6").style.display = "none";
+		$G("tablet_7").style.display = "none";
 		$G("apply_button").style.display = "none";
 		$G("line_image1").style.display = "none";
 		$G("ss_node_list_table_th").style.display = "none";
 		$G("ss_node_list_table_td").style.display = "none";
 		$G("ss_node_list_table_btn").style.display = "none";
-		$G("log_content").style.display = "";
-		$G("log_return_button").style.display = "";
-		checkCmdRet();
-}
-function return_basic(){
-		$G("tablet_show").style.display = "";
-		$G("basic_show").style.display = "";
-		$G("apply_button").style.display = "";
-		$G("line_image1").style.display = "";
 		$G("log_content").style.display = "none";
-		$G("log_return_button").style.display = "none";
-		$G("loading_icon").style.display = "none";
-		$j('.show-btn1').addClass('active');
-		$j('.show-btn2').removeClass('active');
-		$j('.show-btn3').removeClass('active');
-		$j('.show-btn4').removeClass('active');
-		//$j("#cmdBtn").html("提交");
-		$G("cmdBtn").value = "提交";
-		document.form.ss_basic_action.value = 1;
-		update_visibility_main();
+	}
 }
 
+function toggle_func() {
+	ssmode = document.form.ss_basic_mode.value;
+	document.form.ss_basic_action.value = 1;
+	$j('.show-btn1').addClass('active');
+	$j(".show-btn1").click(
+		function() {
+			$j('.show-btn1').addClass('active');
+			$j('.show-btn1_1').removeClass('active');
+			$j('.show-btn2').removeClass('active');
+			$j('.show-btn3').removeClass('active');
+			$j('.show-btn4').removeClass('active');
+			$j('.show-btn5').removeClass('active');
+			$j('.show-btn6').removeClass('active');
+			$j('.show-btn7').removeClass('active');
+			$G("tablet_1").style.display = "";
+			$G("tablet_2").style.display = "none";
+			$G("tablet_3").style.display = "none";
+			$G("tablet_4").style.display = "none";
+			$G("tablet_5").style.display = "none";
+			$G("tablet_6").style.display = "none";
+			$G("tablet_7").style.display = "none";
+			$G("apply_button").style.display = "";
+			$G("cmdBtn").value = "提交";
+			document.form.ss_basic_action.value = 1;
+			update_visibility_main();
+			ss_node_info_return();
+		});
+	$j(".show-btn1_1").click(
+		function() {
+			$j('.show-btn1').removeClass('active');
+			$j('.show-btn1_1').addClass('active');
+			$j('.show-btn2').removeClass('active');
+			$j('.show-btn3').removeClass('active');
+			$j('.show-btn4').removeClass('active');
+			$j('.show-btn5').removeClass('active');
+			$j('.show-btn6').removeClass('active');
+			$j('.show-btn7').removeClass('active');
+			$G("tablet_1").style.display = "none";
+			$G("tablet_2").style.display = "none";
+			$G("tablet_3").style.display = "none";
+			$G("tablet_4").style.display = "none";
+			$G("tablet_5").style.display = "none";
+			$G("tablet_6").style.display = "none";
+			$G("tablet_7").style.display = "none";
+			$G("apply_button").style.display = "none";
+			$G("ss_node_list_table_td").style.display = "";
+			$G("ss_node_list_table_btn").style.display = "";
+			$G("line_image1").style.display = "none";
+			refresh_table();
+			update_ping_method();
+		});
+	$j(".show-btn2").click(
+		function() {
+			$j('.show-btn1').removeClass('active');
+			$j('.show-btn1_1').removeClass('active');
+			$j('.show-btn2').addClass('active');
+			$j('.show-btn3').removeClass('active');
+			$j('.show-btn4').removeClass('active');
+			$j('.show-btn5').removeClass('active');
+			$j('.show-btn6').removeClass('active');
+			$j('.show-btn7').removeClass('active');
+			$G("tablet_1").style.display = "none";
+			$G("tablet_2").style.display = "";
+			$G("tablet_3").style.display = "none";
+			$G("tablet_4").style.display = "none";
+			$G("tablet_5").style.display = "none";
+			$G("tablet_6").style.display = "none";
+			$G("tablet_7").style.display = "none";
+			$G("apply_button").style.display = "";
+			$G("cmdBtn").value = "应用DNS设定";
+			update_visibility_tab2();
+			document.form.ss_basic_action.value = 2;
+			ss_node_info_return();
+		});
+	$j(".show-btn3").click(
+		function() {
+			$j('.show-btn1').removeClass('active');
+			$j('.show-btn1_1').removeClass('active');
+			$j('.show-btn2').removeClass('active');
+			$j('.show-btn3').addClass('active');
+			$j('.show-btn4').removeClass('active');
+			$j('.show-btn5').removeClass('active');
+			$j('.show-btn6').removeClass('active');
+			$j('.show-btn7').removeClass('active');
+			$G("tablet_1").style.display = "none";
+			$G("tablet_2").style.display = "none";
+			$G("tablet_3").style.display = "";
+			$G("tablet_4").style.display = "none";
+			$G("tablet_5").style.display = "none";
+			$G("tablet_6").style.display = "none";
+			$G("tablet_7").style.display = "none";
+			showhide("ss_wan_black_ip_tr", (ssmode != "5"));
+			showhide("ss_wan_black_domain_tr", (ssmode != "5"));
+			$G("apply_button").style.display = "";
+			$G("cmdBtn").value = "应用黑白名单";
+			document.form.ss_basic_action.value = 3;
+			ss_node_info_return();
+		});
+	$j(".show-btn4").click(
+		function() {
+			$j('.show-btn1').removeClass('active');
+			$j('.show-btn1_1').removeClass('active');
+			$j('.show-btn2').removeClass('active');
+			$j('.show-btn3').removeClass('active');
+			$j('.show-btn4').addClass('active');
+			$j('.show-btn5').removeClass('active');
+			$j('.show-btn6').removeClass('active');
+			$j('.show-btn7').removeClass('active');
+			$G("tablet_1").style.display = "none";
+			$G("tablet_2").style.display = "none";
+			$G("tablet_3").style.display = "none";
+			$G("tablet_4").style.display = "";
+			$G("tablet_5").style.display = "none";
+			$G("tablet_6").style.display = "none";
+			$G("tablet_7").style.display = "none";
+			$G("apply_button").style.display = "none";
+			update_visibility_tab4();
+			ss_node_info_return();
+		});
+	$j(".show-btn5").click(
+		function() {
+			$j('.show-btn1').removeClass('active');
+			$j('.show-btn1_1').removeClass('active');
+			$j('.show-btn2').removeClass('active');
+			$j('.show-btn3').removeClass('active');
+			$j('.show-btn4').removeClass('active');
+			$j('.show-btn5').addClass('active');
+			$j('.show-btn6').removeClass('active');
+			$j('.show-btn7').removeClass('active');
+			$G("tablet_1").style.display = "none";
+			$G("tablet_2").style.display = "none";
+			$G("tablet_3").style.display = "none";
+			$G("tablet_4").style.display = "none";
+			$G("tablet_5").style.display = "";
+			$G("tablet_6").style.display = "none";
+			$G("tablet_7").style.display = "none";
+			$G("apply_button").style.display = "";
+			$G("cmdBtn").value = "提交";
+			ss_node_info_return();
+			if (ssmode == 4) {
+				$G("ACL_table_game").style.display = ""
+				$G("ACL_table").style.display = "none"
+				$G("ACL_note").style.display = "none"
+			} else {
+				$G("ACL_table_game").style.display = "none"
+				$G("ACL_table").style.display = ""
+				$G("ACL_note").style.display = ""
+    			setTimeout("showDropdownClientList('setClientIP', 'ip', 'all', 'ClientList_Block', 'pull_arrow', 'online');", 1000);
+				//generate_lan_list();
+				refresh_acl_table();
+			}
+			document.form.ss_basic_action.value = 1;
+			update_visibility_tab4();
+		});
+	$j(".show-btn6").click(
+		function() {
+			$j('.show-btn1').removeClass('active');
+			$j('.show-btn1_1').removeClass('active');
+			$j('.show-btn2').removeClass('active');
+			$j('.show-btn3').removeClass('active');
+			$j('.show-btn4').removeClass('active');
+			$j('.show-btn5').removeClass('active');
+			$j('.show-btn6').addClass('active');
+			$j('.show-btn7').removeClass('active');
+			$G("tablet_1").style.display = "none";
+			$G("tablet_2").style.display = "none";
+			$G("tablet_3").style.display = "none";
+			$G("tablet_4").style.display = "none";
+			$G("tablet_5").style.display = "none";
+			$G("tablet_6").style.display = "";
+			$G("tablet_7").style.display = "none";
+			$G("apply_button").style.display = "";
+			$G("cmdBtn").value = "应用附加功能";
+			document.form.ss_basic_action.value = 4;
+			update_visibility_tab4();
+			ss_node_info_return();
+		});
+	$j(".show-btn7").click(
+		function() {
+			$j('.show-btn1').removeClass('active');
+			$j('.show-btn1_1').removeClass('active');
+			$j('.show-btn2').removeClass('active');
+			$j('.show-btn3').removeClass('active');
+			$j('.show-btn4').removeClass('active');
+			$j('.show-btn5').removeClass('active');
+			$j('.show-btn6').removeClass('active');
+			$j('.show-btn7').addClass('active');
+			$G("tablet_1").style.display = "none";
+			$G("tablet_2").style.display = "none";
+			$G("tablet_3").style.display = "none";
+			$G("tablet_4").style.display = "none";
+			$G("tablet_5").style.display = "none";
+			$G("tablet_6").style.display = "none";
+			$G("tablet_7").style.display = "";
+			$G("apply_button").style.display = "none";
+			$G("line_image1").style.display = "none";
+			$G("log_content").style.display = "";
+			ss_node_info_return();
+			checkCmdRet();
+		});
+	$j("#update_logo").click(
+		function() {
+			window.open("https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt");
+		});
+	$j("#log_content2").click(
+		function() {
+			x = -1;
+		});
+}
+
+function ss_node_info_return() {
+	cancel_add_rule();
+	$G("ss_node_list_table_th").style.display = "none";
+	$G("ss_node_list_table_td").style.display = "none";
+	$G("ss_node_list_table_btn").style.display = "none";
+	$G("line_image1").style.display = "";
+	updateSs_node_listView();
+	checkTime = 2001;
+}
 
 var _responseLen;
 var noChange = 0;
-function checkCmdRet(){
 
+function checkCmdRet() {
 	$j.ajax({
 		url: '/cmdRet_check.htm',
 		dataType: 'html',
-		
-		error: function(xhr){
+
+		error: function(xhr) {
 			setTimeout("checkCmdRet();", 1000);
-			},
-		success: function(response){
+		},
+		success: function(response) {
 			var retArea = $G("log_content1");
-			if(response.search("XU6J03M6") != -1){
-				$G("loadingIcon").style.display = "none";
+			if (response.search("XU6J03M6") != -1) {
 				retArea.value = response.replace("XU6J03M6", " ");
-				//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
-				retArea.scrollTop = retArea.scrollHeight;
-				//return false;
+				return true;
 			}
-			
-			if(_responseLen == response.length){
+			if (_responseLen == response.length) {
 				noChange++;
-			}else{
+			} else {
 				noChange = 0;
 			}
 
-			if(noChange > 20){
-				$G("loadingIcon").style.display = "none";
-				//retArea.scrollTop = retArea.scrollHeight;
-				//setTimeout("checkCmdRet();", 2000);
+			if (noChange > 5) {
+				retArea.value = "当前日志文件为空";
 				return false;
-			}else{
-				$G("loadingIcon").style.display = "";
-				setTimeout("checkCmdRet();", 500);
+			} else {
+				setTimeout("checkCmdRet();", 1000);
 			}
-			
+
 			retArea.value = response;
-			//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
+			_responseLen = response.length;
+		}
+	});
+}
+
+var noChange2 = 0;
+
+function checkCmdRet2() {
+	$j.ajax({
+		url: '/cmdRet_check.htm',
+		dataType: 'html',
+		error: function(xhr) {
+			setTimeout("checkCmdRe2t();", 1000);
+		},
+		success: function(response) {
+			var retArea = $G("log_content3");
+			if (response.search("XU6J03M6") != -1) {
+				retArea.value = response.replace("XU6J03M6", " ");
+				$G("ok_button").style.display = "";
+				retArea.scrollTop = retArea.scrollHeight;
+				x = 6;
+				count_down_close();
+				return true;
+			} else {
+				$G("ok_button").style.display = "none";
+			}
+			if (_responseLen == response.length) {
+				noChange2++;
+			} else {
+				noChange2 = 0;
+			}
+			if (noChange2 > 100) {
+				hideSSLoadingBar();
+				return false;
+			} else {
+				setTimeout("checkCmdRet2();", 500);
+			}
+			retArea.value = response;
 			retArea.scrollTop = retArea.scrollHeight;
 			_responseLen = response.length;
 		}
 	});
 }
-function reload_Soft_Center(){
+
+var x = 6;
+
+function count_down_close() {
+	if (x == "0") {
+		hideSSLoadingBar();
+	}
+	if (x < 0) {
+		$G("ok_button1").value = "手动关闭"
+		return false;
+	}
+	$G("ok_button1").value = "自动关闭（" + x + "）"
+		--x;
+	setTimeout("count_down_close();", 1000);
+}
+
+function update_ping_method() {
+	$j("#ssconf_basic_Ping_Method").find('option').remove().end();
+	if (document.form.ssconf_basic_Ping_node.value == "0") {
+		$j("#ssconf_basic_Ping_Method").append("<option value='1'>单线ping(10次/节点)</option>");
+		$j("#ssconf_basic_Ping_Method").append("<option value='2'>并发ping(10次/节点)</option>");
+		$j("#ssconf_basic_Ping_Method").append("<option value='3'>并发ping(20次/节点)</option>");
+		$j("#ssconf_basic_Ping_Method").append("<option value='4'>并发ping(50次/节点)</option>");
+	} else {
+		$j("#ssconf_basic_Ping_Method").append("<option value='5'>ping(10次)</option>");
+		$j("#ssconf_basic_Ping_Method").append("<option value='6'>ping(20次)</option>");
+		$j("#ssconf_basic_Ping_Method").append("<option value='7'>ping(50次)</option>");
+	}
+}
+
+function reload_Soft_Center() {
 	location.href = "/Main_Soft_center.asp";
 }
-/*
-function setIframeSrc() {
-    var s1 = "http://1212.ip138.com/ic.asp";
-    var s2 = "http://x302.rashost.com/ip.php";
-    var s3 = "http://ip111cn.appspot.com/";
-    var iframe1 = document.getElementById('iframe1');
-    var iframe2 = document.getElementById('iframe2');
-    var iframe3 = document.getElementById('iframe3');
-    if ( - 1 == navigator.userAgent.indexOf("MSIE")) {
-        iframe1.src = s1;
-        iframe2.src = s2;
-        iframe3.src = s3;
-    } else {
-        iframe1.location = s1;
-        iframe2.location = s2;
-        iframe3.location = s3;
-    }
+
+
+function getACLConfigs() {
+	var dict = {};
+	acl_node_max = 0;
+	for (var field in db_ss) {
+		names = field.split("_");
+		dict[names[names.length - 1]] = 'ok';
+	}
+	acl_confs = {};
+	var p = "ss_acl";
+	var params = ["ip", "port", "mode"];
+	for (var field in dict) {
+		var obj = {};
+		if (typeof db_ss[p + "_name_" + field] == "undefined") {
+			obj["name"] = db_ss[p + "_ip_" + field];
+		} else {
+			obj["name"] = db_ss[p + "_name_" + field];
+		}
+		for (var i = 0; i < params.length; i++) {
+			var ofield = p + "_" + params[i] + "_" + field;
+			if (typeof db_ss[ofield] == "undefined") {
+				obj = null;
+				break;
+			}
+			obj[params[i]] = db_ss[ofield];
+		}
+		if (obj != null) {
+			var node_a = parseInt(field);
+			if (node_a > acl_node_max) {
+				acl_node_max = node_a;
+			}
+			obj["acl_node"] = field;
+			acl_confs[field] = obj;
+		}
+	}
+	return acl_confs;
 }
-*/
+
+function addTr() {
+	var acls = {};
+	var p = "ss_acl";
+	acl_node_max += 1;
+	var params = ["ip", "name", "port", "mode"];
+	for (var i = 0; i < params.length; i++) {
+		acls[p + "_" + params[i] + "_" + acl_node_max] = $j('#' + p + "_" + params[i]).val();
+	}
+	$j.ajax({
+		url: '/applydb.cgi?p=ss_acl',
+		contentType: "application/x-www-form-urlencoded",
+		dataType: 'text',
+		data: $j.param(acls),
+		error: function(xhr) {
+			console.log("error in posting config of table");
+		},
+		success: function(response) {
+			confs = getAllConfigs();
+			refresh_acl_table();
+			document.form.ss_acl_name.value = "";
+			document.form.ss_acl_ip.value = "";
+			
+		}
+	});
+	aclid = 0;
+}
+
+function delTr(o) {
+	var id = $j(o).attr("id");
+	var ids = id.split("_");
+	var p = "ss_acl";
+	id = ids[ids.length - 1];
+	var acls = {};
+	var params = ["ip", "name", "port", "mode"];
+	for (var i = 0; i < params.length; i++) {
+		acls[p + "_" + params[i] + "_" + id] = "";
+	}
+	$j.ajax({
+		url: '/applydb.cgi?use_rm=1&p=ss_acl',
+		contentType: "application/x-www-form-urlencoded",
+		dataType: 'text',
+		data: $j.param(acls),
+		error: function(xhr) {
+			console.log("error in posting config of table");
+		},
+		success: function(response) {
+			refresh_acl_table();
+		}
+	});
+}
+
+function refresh_acl_table(q) {
+	$j.ajax({
+		url: '/dbconf?p=ss',
+		dataType: 'html',
+		error: function(xhr) {},
+		success: function(response) {
+			$j.globalEval(response);
+			$j("#ACL_table").find("tr:gt(1)").remove();
+			$j('#ACL_table tr:last').after(refresh_acl_html());
+			//write defaut rule mode when switching ss mode
+			if (typeof db_ss["ss_acl_default_mode"] != "undefined") {
+				if (document.form.ss_basic_mode == 1 && db_ss["ss_acl_default_mode"] == 1 || db_ss["ss_acl_default_mode"] == 0) {
+					$j('#ss_acl_default_mode').val(db_ss["ss_acl_default_mode"]);
+				}
+				if (document.form.ss_basic_mode == 2 && db_ss["ss_acl_default_mode"] == 2 || db_ss["ss_acl_default_mode"] == 0) {
+					$j('#ss_acl_default_mode').val(db_ss["ss_acl_default_mode"]);
+				}
+				if (document.form.ss_basic_mode == 3 && db_ss["ss_acl_default_mode"] == 3 || db_ss["ss_acl_default_mode"] == 0) {
+					$j('#ss_acl_default_mode').val(db_ss["ss_acl_default_mode"]);
+				}
+				if (document.form.ss_basic_mode == 5 && db_ss["ss_acl_default_mode"] == 5 || db_ss["ss_acl_default_mode"] == 0) {
+					$j('#ss_acl_default_mode').val(db_ss["ss_acl_default_mode"]);
+				}
+			}
+			//write default rule port
+			if (typeof db_ss["ss_acl_default_port"] != "undefined") {
+				$j('#ss_acl_default_port').val(db_ss["ss_acl_default_port"]);
+			} else {
+				$j('#ss_acl_default_port').val("all");
+			}
+			//write dynamic table value
+			for (var i = 1; i < acl_node_max + 1; i++) {
+				$j('#ss_acl_mode_' + i).val(db_ss["ss_acl_mode_" + i]);
+				$j('#ss_acl_port_' + i).val(db_ss["ss_acl_port_" + i]);
+				$j('#ss_acl_name_' + i).val(db_ss["ss_acl_name_" + i]);
+			}
+			//set default rule port to all when game mode enabled
+			set_default_port();
+			//after table generated and value filled, set default value for first line_image1
+			$j('#ss_acl_mode').val("1");
+			$j('#ss_acl_port').val("80,443");
+		}
+	});
+}
+
+function set_mode_1() {
+	//set the first line of the table, if mode is gfwlist mode or game mode,set the port to all
+	if ($j('#ss_acl_mode').val() == 0 || $j('#ss_acl_mode').val() == 3) {
+		$j("#ss_acl_port").val("all");
+		$G("ss_acl_port").readonly = "readonly";
+		$G("ss_acl_port").title = "不可更改，游戏模式下默认全端口";
+	} else if ($j('#ss_acl_mode').val() == 1) {
+		$j("#ss_acl_port").val("80,443");
+		$G("ss_acl_port").readonly = "readonly";
+		$G("ss_acl_port").title = "";
+	} else if ($j('#ss_acl_mode').val() == 2 || $j('#ss_acl_mode').val() == 5) {
+		$j("#ss_acl_port").val("22,80,443");
+		$G("ss_acl_port").readonly = "";
+		$G("ss_acl_port").title = "";
+	}
+}
+
+function set_mode_2(o) {
+	var id2 = $j(o).attr("id");
+	var ids2 = id2.split("_");
+	id2 = ids2[ids2.length - 1];
+	if ($j(o).val() == 0 || $j(o).val() == 3) {
+		$j("#ss_acl_port_" + id2).val("all");
+		//$G("ss_acl_port_" + id2).disabled=true;
+	} else if ($j(o).val() == 1) {
+		$j("#ss_acl_port_" + id2).val("80,443");
+		//$G("ss_acl_port_" + id2).disabled=false;
+	} else if ($j(o).val() == 2) {
+		$j("#ss_acl_port_" + id2).val("22,80,443");
+		//$G("ss_acl_port_" + id2).disabled=false;
+	}
+}
+
+function set_default_port() {
+	if ($j('#ss_acl_default_mode').val() == 3) {
+		$j("#ss_acl_default_port").val("all");
+		$G("ss_acl_default_port").readonly = "readonly";
+		$G("ss_acl_default_port").title = "不可更改，游戏模式下默认全端口";
+	} else {
+		$G("ss_acl_default_port").readonly = "";
+		$G("ss_acl_default_port").title = "";
+	}
+}
+
+function refresh_acl_html() {
+	acl_confs = getACLConfigs();
+	var n = 0;
+	for (var i in acl_confs) {
+		n++;
+	} //获取节点的数目
+	var code = '';
+	for (var field in acl_confs) {
+		var ac = acl_confs[field];
+		code = code + '<tr>';
+		code = code + '<td>' + ac["ip"] + '</td>';
+		code = code + '<td>';
+		code = code + '<input type="text" placeholder="' + ac["acl_node"] + '号机" id="ss_acl_name_' + ac["acl_node"] + '" name="ss_acl_name_' + ac["acl_node"] + '" class="input_option_2" maxlength="50" style="width:140px;" placeholder="" />';
+		code = code + '</td>';
+		code = code + '<td>';
+		code = code + '<select id="ss_acl_mode_' + ac["acl_node"] + '" name="ss_acl_mode_' + ac["acl_node"] + '" style="width:160px;margin:0px 0px 0px 2px;" class="input_option_2" onchange="set_mode_2(this);">';
+		code = code + '<option value="0">不通过ss</option>';
+		code = code + '<option value="1">gfwlist模式</option>';
+		code = code + '<option value="2">大陆白名单模式</option>';
+		code = code + '<option value="3">游戏模式</option>';
+		code = code + '<option value="5">全局代理模式</option>';
+		code = code + '</select>'
+		code = code + '</td>';
+		code = code + '<td>';
+		if (ac["mode"] == 3) {
+			code = code + '<input type="text" id="ss_acl_port_' + ac["acl_node"] + '" name="ss_acl_port_' + ac["acl_node"] + '" class="input_option_2" maxlength="50" style="width:140px;" title="不可更改，游戏模式下默认全端口" readonly = "readonly" />';
+		} else if (ac["mode"] == 0) {
+			code = code + '<input type="text" id="ss_acl_port_' + ac["acl_node"] + '" name="ss_acl_port_' + ac["acl_node"] + '" class="input_option_2" maxlength="50" style="width:140px;" title="不可更改，不通过SS下默认全端口" readonly = "readonly" />';
+		} else {
+			code = code + '<input type="text" id="ss_acl_port_' + ac["acl_node"] + '" name="ss_acl_port_' + ac["acl_node"] + '" class="input_option_2" maxlength="50" style="width:140px;" placeholder="" />';
+		}
+		code = code + '</td>';
+		code = code + '<td>';
+		code = code + '<input style="margin: -3px 0px -5px 6px;" id="acl_node_' + ac["acl_node"] + '" class="remove_btn" type="button" onclick="delTr(this);" value="">'
+		code = code + '</td>';
+		code = code + '</tr>';
+	}
+	code = code + '<tr>';
+	if (n == 0) {
+		code = code + '<td>所有主机</td>';
+	} else {
+		code = code + '<td>其它主机</td>';
+	}
+	code = code + '<td>缺省规则</td>';
+	if (n == 0) {
+		ssmode = document.form.ss_basic_mode.value;
+		if (ssmode == 0) {
+			code = code + '<td>SS关闭</td>';
+		} else if (ssmode == 1) {
+			code = code + '<td>gfwlist模式</td>';
+		} else if (ssmode == 2) {
+			code = code + '<td>大陆白名单模式</td>';
+		} else if (ssmode == 3) {
+			code = code + '<td>游戏模式</td>';
+		} else if (ssmode == 5) {
+			code = code + '<td>全局模式</td>';
+		}
+	} else {
+		code = code + '<td>';
+		code = code + '<select id="ss_acl_default_mode" name="ss_acl_default_mode" style="width:160px;margin:0px 0px 0px 2px;" class="input_option_2" onchange="set_default_port();">';
+		if (ssmode == 0) {
+			code = code + '<td>SS关闭</td>';
+		} else if (ssmode == 1) {
+			code = code + '<option value="0">不通过ss</option>';
+			code = code + '<option value="1" selected>gfwlist模式</option>';
+		} else if (ssmode == 2) {
+			code = code + '<option value="0">不通过ss</option>';
+			code = code + '<option value="2" selected>大陆白名单模式</option>';
+		} else if (ssmode == 3) {
+			code = code + '<option value="0">不通过ss</option>';
+			code = code + '<option value="3" selected>游戏模式</option>';
+		} else if (ssmode == 5) {
+			code = code + '<option value="0">不通过ss</option>';
+			code = code + '<option value="5" selected>全局代理模式</option>';
+		}
+		code = code + '</select>';
+		code = code + '</td>';
+	}
+	code = code + '<td>';
+	code = code + '<input type="text" id="ss_acl_default_port" name="ss_acl_default_port" class="input_option_2" maxlength="50" style="width:140px;" placeholder="" />';
+	code = code + '</td>';
+	code = code + '<td>';
+	code = code + '</td>';
+	code = code + '</tr>';
+	return code;
+	
+}
+function setClientIP(ip , name, mac){
+	document.form.ss_acl_ip.value = ip;
+	document.form.ss_acl_name.value = name;
+	hideClients_Block();
+}
+
+function pullLANIPList(obj){
+	var element = document.getElementById('ClientList_Block');
+	var isMenuopen = element.offsetWidth > 0 || element.offsetHeight > 0;
+	if(isMenuopen == 0){
+		obj.src = "/images/arrow-top.gif"
+		element.style.display = 'block';
+		document.form.ss_acl_ip.focus();
+	}
+	else
+		hideClients_Block();
+}
+
+function hideClients_Block(){
+	document.getElementById("pull_arrow").src = "/images/arrow-down.gif";
+	document.getElementById('ClientList_Block').style.display='none';
+	validator.validIPForm(document.form.ss_acl_ip, 0);
+}
+
 </script>
 </head>
 <body onload="init();">
 <div id="TopBanner"></div>
 <div id="Loading" class="popup_bg"></div>
 <div id="LoadingBar" class="popup_bar_bg">
-<table cellpadding="5" cellspacing="0" id="loadingBarBlock" class="loadingBarBlock" align="center">
+<table cellpadding="5" cellspacing="0" id="loadingBarBlock" class="loadingBarBlock"  align="center">
 	<tr>
 		<td height="100">
-		<div id="loading_block3" style="margin:10px auto;width:85%; font-size:12pt;"></div>
-		<div id="loading_block1" class="Bar_container">
-			<span id="proceeding_img_text"></span>
-			<div id="proceeding_img"></div>
+		<div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
+		<div id="loading_block2" style="margin:10px auto;width:95%;"></div>
+		<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;overflow:hidden">
+			<textarea cols="63" rows="21" wrap="on" readonly="readonly" id="log_content3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="border:1px solid #000;width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
 		</div>
-		
-		<div id="loading_block2" style="margin:10px auto; width:85%;"></div>
+		<div id="ok_button" class="apply_gen" style="background: #000;display: none;">
+			<input id="ok_button1" class="button_gen" type="button" onclick="hideSSLoadingBar()" value="确定">
+		</div>
 		</td>
 	</tr>
 </table>
@@ -2039,8 +2187,11 @@ function setIframeSrc() {
 <input type="hidden" name="action_wait" value="6"/>
 <input type="hidden" name="first_time" value=""/>
 <input type="hidden" name="vpnc_type" value="">
+<input type="hidden" id="ss_ACL_txt" name="ss_ACL_txt" value='<% dbus_get_def("ss_ACL_txt", ""); %>'/>
 <input type="hidden" id="ss_basic_enable" name="ss_basic_enable" value="0" />
 <input type="hidden" id="ss_basic_action" name="ss_basic_action" value="1" />
+<input type="hidden" id="ss_dns_plan_chn" name="ss_dns_plan_chn" value="2" />
+<input type="hidden" id="ss_dns_plan_gfw" name="ss_dns_plan_gfw" value="1" />
 <input type="hidden" id="ss_basic_install_status" name="ss_basic_install_status" value="0" />
 <input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>"/>
 <input type="hidden" name="SystemCmd" value=""/>
@@ -2056,9 +2207,7 @@ function setIframeSrc() {
 		</td>
 		<td valign="top">
 			<div id="tabMenu" class="submenuBlock" style="width:768px;"></div>
-			
 			<!--=====Beginning of Main Content=====-->
-			
 			<table width="98%" border="0" align="left" cellpadding="0" cellspacing="0" id="table_for_all" style="display: block;">
 				<tr>
 					<td align="left" valign="top">
@@ -2093,9 +2242,10 @@ function setIframeSrc() {
 																</div>
 															</label>
 														</div>
+														</div>
 														<div id="update_button" style="padding-top:5px;margin-left:90px;margin-top:-38px;float: left;">
 															<button id="updateBtn" class="button_gen" onclick="update_ss();">检查并更新</button>
-															<a style="margin-left: 170px;" href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt" target="_blank"><em><u>[ 更新日志 ]</u></em></a>
+                                    	                	<input id="update_logo" style="cursor:pointer;margin-left: 130px;" type="button" value="更新日志"/>
 														</div>
 														<div id="ss_version_show" style="padding-top:5px;margin-left:220px;margin-top:0px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(12)"><i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i></a></div>
 														<div id="ss_install_show" style="padding-top:5px;margin-left:220px;margin-top:0px;"></div>	
@@ -2118,14 +2268,19 @@ function setIframeSrc() {
 												</tr>
 											</table>
 										</div>
-										<div id="tablet_show">
+										<div id="tablets">
 											<table style="margin:10px 0px 0px 0px;border-collapse:collapse"  width="100%" height="37px">
 										        <tr width="235px">
                                     	            <td colspan="4" cellpadding="0" cellspacing="0" style="padding:0" border="1" bordercolor="#000">
                                     	                <input id="show_btn1" class="show-btn1" style="cursor:pointer" type="button" value="账号设置"/>
+                                    	                <input id="show_btn1_1" class="show-btn1_1" style="cursor:pointer" type="button" value="节点管理"/>
                                     	                <input id="show_btn2" class="show-btn2" style="cursor:pointer" type="button" value="DNS设定"/>
                                     	                <input id="show_btn3" class="show-btn3" style="cursor:pointer" type="button" value="黑白名单"/>
-                                    	                <input id="show_btn4" class="show-btn4" style="cursor:pointer" type="button" value="附加功能"/>
+                                    	                <input id="show_btn4" class="show-btn4" style="cursor:pointer" type="button" value="规则管理"/>
+                                    	                <input id="show_btn5" class="show-btn5" style="cursor:pointer" type="button" value="访问控制"/>
+                                    	                <input id="show_btn6" class="show-btn6" style="cursor:pointer" type="button" value="附加功能"/>
+                                    	                <input id="show_btn7" class="show-btn7" style="cursor:pointer" type="button" value="查看日志"/>
+														<a style="margin-left:10px;"type="button" title="需要FQ才能访问" class="kp_btn" target="_blank" href="https://t.me/joinchat/AAAAAEC7pgV9vPdPcJ4dJw">电报群交流</a>
                                     	            </td>
                                     	        </tr>
 											</table>
@@ -2153,7 +2308,7 @@ function setIframeSrc() {
 															<tr>
 																<th>使用模式</th>
 																<td>
-																	<select id="ss_node_table_mode" name="ss_node_table_mode" class="input_option" style="width:350px;margin:0px 0px 0px 2px;">
+																	<select id="ss_node_table_mode" name="ss_node_table_mode" class="input_option" style="width:350px;margin:0px 0px 0px 2px;" onchange="update_visibility_main();">
 																	</select>
 																</td>
 															</tr>
@@ -2187,18 +2342,20 @@ function setIframeSrc() {
 																<th>加密方式</th>
 																<td>
 																	<select id="ss_node_table_method" name="ss_node_table_method" class="input_option" style="width:350px;margin:0px 0px 0px 2px;">
-																		<option value="table">table</option>
 																		<option value="rc4">rc4</option>
 																		<option value="rc4-md5">rc4-md5</option>
+																		<option value="rc4-md5-6">rc4-md5-6</option>
 																		<option value="aes-128-cfb">aes-128-cfb</option>
 																		<option value="aes-192-cfb">aes-192-cfb</option>
 																		<option value="aes-256-cfb" selected>aes-256-cfb</option>
-																		<option value="bf-cfb">bf-cfb</option>
+																		<option value="aes-128-ctr">aes-128-ctr</option>
+																		<option value="aes-192-ctr">aes-192-ctr</option>
+																		<option value="aes-256-ctr">aes-256-ctr</option>
 																		<option value="camellia-128-cfb">camellia-128-cfb</option>
 																		<option value="camellia-192-cfb">camellia-192-cfb</option>
 																		<option value="camellia-256-cfb">camellia-256-cfb</option>
+																		<option value="bf-cfb">bf-cfb</option>
 																		<option value="cast5-cfb">cast5-cfb</option>
-																		<option value="des-cfb">des-cfb</option>
 																		<option value="idea-cfb">idea-cfb</option>
 																		<option value="rc2-cfb">rc2-cfb</option>
 																		<option value="seed-cfb">seed-cfb</option>
@@ -2208,15 +2365,6 @@ function setIframeSrc() {
 																	</select>
 																</td>	
 															</tr>
-															<tr id="ota_support">
-																<th>OTA支持</th>
-																<td>
-																	<select name="ss_node_table_onetime_auth" id="ss_node_table_onetime_auth" class="input_option" style="width:350px;margin:0px 0px 0px 2px;">
-																		<option value="0" selected>否</option>
-																		<option value="1">是</option>
-																	</select>
-																</td>
-															</tr>
 															<tr id="ssr_protocol_tr">
 																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>协议 (protocol)</u></a></th>
 																<td>
@@ -2224,27 +2372,34 @@ function setIframeSrc() {
 																		<option value="origin" selected>origin</option>
 																		<option value="verify_simple">verify_simple</option>
 																		<option value="verify_sha1">verify_sha1</option>
-																		<option value="auth_simple">auth_simple</option>
 																		<option value="auth_sha1">auth_sha1</option>
 																		<option value="auth_sha1_v2">auth_sha1_v2</option>
-																		<option value="auth_sha1_v3">auth_sha1_v3</option>
 																		<option value="auth_sha1_v4">auth_sha1_v4</option>
+																		<option value="auth_aes128_md5">auth_aes128_md5</option>
+																		<option value="auth_aes128_sha1">auth_aes128_sha1</option>
 																	</select>
 																</td>
 															</tr>
+															<tr id="ssr_protocol_para_tr">
+																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>协议参数 (SSR特性)</u></a></th>
+																<td>
+																	<input type="text" maxlength="64" id="ss_node_table_rss_protocol_para" name="ss_node_table_rss_protocol_para" value="" class="input_ss_table" style="width:342px;float:left;" autocomplete="off" autocorrect="off" autocapitalize="off"></input>
+																</td>
+															</tr>
+															
 															<tr id="ssr_obfs_tr">
-																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>混淆插件 (obfs)</u></a></th>
+																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>混淆方式 (obfs)</u></a></th>
 																<td>
 																	<select id="ss_node_table_rss_obfs" name="ss_node_table_rss_obfs" style="width:350px;margin:0px 0px 0px 2px;" class="input_option">
 																		<option value="plain">plain</option>
 																		<option value="http_simple">http_simple</option>
-																		<option value="random_head">random_head</option>
+																		<option value="http_post">http_post</option>
 																		<option value="tls1.2_ticket_auth">tls1.2_ticket_auth</option>
 																	</select>
 																</td>
 															</tr>
 															<tr id="ssr_obfs_param_tr">
-																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md" target="_blank"><u>自定义参数 (obfs_param)</u></a></th>
+																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md" target="_blank"><u>混淆参数 (SSR特性)</u></a></th>
 																<td>
 																	<input type="text" name="ss_node_table_rss_obfs_param" id="ss_node_table_rss_obfs_param" placeholder="cloudflare.com"  class="input_ss_table" style="width:342px;" maxlength="100" value=""></input>
 																</td>
@@ -2273,12 +2428,11 @@ function setIframeSrc() {
 											</div>	
 										      <!--===================================Ending of vpnc setting Content===========================================-->			
 										</div>
-
-
 										
 										<!--=====bacic show =====-->
-										<div id="basic_show">
-											<table style="margin:-1px 0px 0px 0px;" width="100%"  border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
+										<div id="tablet_1">
+											<table style="margin:-1px 0px 0px 0px;" width="100%" border="0" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
+
 												<tr id="node_select">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(15)">节点选择</a></th>
 													<td>
@@ -2286,7 +2440,6 @@ function setIframeSrc() {
 															<select id="ssconf_basic_node" name="ssconf_basic_node" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" onchange="ss_node_sel();update_visibility_main();" >
 															</select>
 														</div>
-														<div id="ss_node_edit" style="float:left; width:35px; height:35px;margin:-3px 0px -5px 2px;cursor:pointer" onclick="show_ss_node_info();"></div>
 													</td>
 												</tr>
 												<tr>
@@ -2304,54 +2457,56 @@ function setIframeSrc() {
 															<input type="hidden" id="hd_ss_basic_use_rss" name="ss_basic_use_rss" value="" />
 															<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(13)">使用SSR</a>
 														</div>
-														<div id="game_alert" style="margin-left:270px;margin-top:-20px;margin-bottom:0px;">
-															<a href="http://koolshare.cn/thread-4519-1-1.html" target="_blank"><i>&nbsp;账号需支持UDP转发&nbsp;&nbsp;<u>FAQ</u></i></a>
+
+														<div id="KCP_name"style="margin-left:250px;margin-top:-23px;margin-bottom:0px;">
+															<input type="checkbox" id="ss_basic_use_kcp" onclick="oncheckclick(this);update_visibility_main();" />
+															<input type="hidden" id="hd_ss_basic_use_kcp" name="ss_basic_use_kcp" value="" />
+															<a>启用KCP协议</a>
 														</div>
 													</td>
 												</tr>
 												<tr id="server_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(2)">服务器</a></th>
 													<td>
-														<input type="text" class="ssconfig input_ss_table" id="ss_basic_server" name="ss_basic_server" maxlength="100" value=""/>
+														<input type="text" class="input_ss_table" id="ss_basic_server" name="ss_basic_server" maxlength="100" value="" />
 													</td>
 												</tr>
 												<tr id="port_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(3)">服务器端口</a></th>
 													<td>
-														<input type="text" class="ssconfig input_ss_table" id="ss_basic_port" name="ss_basic_port" maxlength="100" value="" />
+														<input type="text" class="input_ss_table" id="ss_basic_port" name="ss_basic_port" maxlength="100" value="" />
 													</td>
 												</tr>
 												<tr id="pass_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(4)">密码</a></th>
 													<td>
-														<input type="password" name="ss_basic_password" id="ss_basic_password" class="ssconfig input_ss_table" maxlength="100" value=""></input>
-														<div style="margin-left:170px;margin-top:-20px;margin-bottom:0px"><input type="checkbox" name="show_pass" onclick="pass_checked(document.form.ss_basic_password);">
-															<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(14)">显示密码</a>
-														</div>
+														<input type="password" name="ss_basic_password" id="ss_basic_password" class="input_ss_table" autocomplete="off" autocorrect="off" autocapitalize="off" maxlength="100" value="" readonly onBlur="switchType(this, false);" onFocus="switchType(this, true);this.removeAttribute('readonly');"/>
 													</td>
 												</tr>												
 												<tr id="method_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(5)">加密方式</a></th>
 													<td>
 														<select id="ss_basic_method" name="ss_basic_method" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
-															<option class="content_input_fd" value="table">table</option>
-															<option class="content_input_fd" value="rc4">rc4</option>
-															<option class="content_input_fd" value="rc4-md5">rc4-md5</option>
-															<option class="content_input_fd" value="aes-128-cfb">aes-128-cfb</option>
-															<option class="content_input_fd" value="aes-192-cfb">aes-192-cfb</option>
-															<option class="content_input_fd" value="aes-256-cfb" selected="">aes-256-cfb</option>
-															<option class="content_input_fd" value="bf-cfb">bf-cfb</option>
-															<option class="content_input_fd" value="camellia-128-cfb">camellia-128-cfb</option>
-															<option class="content_input_fd" value="camellia-192-cfb">camellia-192-cfb</option>
-															<option class="content_input_fd" value="camellia-256-cfb">camellia-256-cfb</option>
-															<option class="content_input_fd" value="cast5-cfb">cast5-cfb</option>
-															<option class="content_input_fd" value="des-cfb">des-cfb</option>
-															<option class="content_input_fd" value="idea-cfb">idea-cfb</option>
-															<option class="content_input_fd" value="rc2-cfb">rc2-cfb</option>
-															<option class="content_input_fd" value="seed-cfb">seed-cfb</option>
-															<option class="content_input_fd" value="salsa20">salsa20</option>
-															<option class="content_input_fd" value="chacha20">chacha20</option>
-															<option class="content_input_fd" value="chacha20-ietf">chacha20-ietf</option>
+															<option value="rc4">rc4</option>
+															<option value="rc4-md5">rc4-md5</option>
+															<option value="rc4-md5-6">rc4-md5-6</option>
+															<option value="aes-128-cfb">aes-128-cfb</option>
+															<option value="aes-192-cfb">aes-192-cfb</option>
+															<option value="aes-256-cfb" selected>aes-256-cfb</option>
+															<option value="aes-128-ctr">aes-128-ctr</option>
+															<option value="aes-192-ctr">aes-192-ctr</option>
+															<option value="aes-256-ctr">aes-256-ctr</option>
+															<option value="camellia-128-cfb">camellia-128-cfb</option>
+															<option value="camellia-192-cfb">camellia-192-cfb</option>
+															<option value="camellia-256-cfb">camellia-256-cfb</option>
+															<option value="bf-cfb">bf-cfb</option>
+															<option value="cast5-cfb">cast5-cfb</option>
+															<option value="idea-cfb">idea-cfb</option>
+															<option value="rc2-cfb">rc2-cfb</option>
+															<option value="seed-cfb">seed-cfb</option>
+															<option value="salsa20">salsa20</option>
+															<option value="chacha20">chacha20</option>
+															<option value="chacha20-ietf">chacha20-ietf</option>
 														</select>
 													</td>
 												</tr>
@@ -2364,55 +2519,62 @@ function setIframeSrc() {
 														</select>
 													</td>
 												</tr>
-												<tr id="onetime_auth">
-													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(7)">一次性验证(OTA)</a></th>
-													<td>
-														<select id="ss_basic_onetime_auth" name="ss_basic_onetime_auth" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
-															<option class="content_input_fd" value="1">开启</option>
-															<option class="content_input_fd" value="0">关闭</option>
-														</select>
-														<span id="ss_basic_onetime_auth_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
-													</td>
-												</tr>
 												<tr id="ss_basic_rss_protocol_tr">
-													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(8)">协议插件（protocol）</a></th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(8)">协议 (protocol)</a></th>
 													<td>
 														<select id="ss_basic_rss_protocol" name="ss_basic_rss_protocol" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" onchange="update_visibility_main();" >
 															<option class="content_input_fd" value="origin">origin</option>
 															<option class="content_input_fd" value="verify_simple">verify_simple</option>
 															<option class="content_input_fd" value="verify_sha1">verify_sha1</option>
-															<option class="content_input_fd" value="auth_simple">auth_simple</option>
 															<option class="content_input_fd" value="auth_sha1">auth_sha1</option>
 															<option class="content_input_fd" value="auth_sha1_v2">auth_sha1_v2</option>
-															<option class="content_input_fd" value="auth_sha1_v3">auth_sha1_v3</option>
 															<option class="content_input_fd" value="auth_sha1_v4">auth_sha1_v4</option>
+															<option value="auth_aes128_md5">auth_aes128_md5</option>
+															<option value="auth_aes128_sha1">auth_aes128_sha1</option>
 														</select>
 														<span id="ss_basic_rss_protocol_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
 												</tr>
+												<tr id="ss_basic_rss_protocol_para_tr">
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(54)">协议参数 (SSR特性)</a></th>
+													<td>
+														<input type="password" name="ss_basic_rss_protocol_para" id="ss_basic_rss_protocol_para" placeholder="id:password"  class="ssconfig input_ss_table" maxlength="100" value="" readonly onBlur="switchType(this, false);" onFocus="switchType(this, true);this.removeAttribute('readonly');"></input>
+													</td>
+												</tr>
 												<tr id="ss_basic_rss_obfs_tr">
-													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(9)">混淆插件 (obfs)</a></th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(9)">混淆方式 (obfs)</a></th>
 													<td>
 														<select id="ss_basic_rss_obfs" name="ss_basic_rss_obfs" style="width:164px;margin:0px 0px 0px 2px;" class="input_option"  onchange="update_visibility_main();" >
 															<option class="content_input_fd" value="plain">plain</option>
 															<option class="content_input_fd" value="http_simple">http_simple</option>
-															<option class="content_input_fd" value="random_head">random_head</option>
+															<option class="content_input_fd" value="http_post">http_post</option>
 															<option class="content_input_fd" value="tls1.2_ticket_auth">tls1.2_ticket_auth</option>
 														</select>
 														<span id="ss_basic_rss_obfs_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
 												</tr>
 												<tr id="ss_basic_ticket_tr">
-													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(11)">自定义参数 (obfs_param)</a></th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(11)">混淆参数 (SSR特性)</a></th>
 													<td>
 														<input type="text" name="ss_basic_rss_obfs_param" id="ss_basic_rss_obfs_param" placeholder="cloudflare.com"  class="ssconfig input_ss_table" maxlength="100" value=""></input>
-														<span id="ss_basic_ticket_tr_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px">不知道如何填写请留空</span>
 													</td>
-												</tr>											
+												</tr>
+												<tr id="ss_basic_kcp_port_tr" style="display: none;">
+													<th width="35%">KCP端口</th>
+													<td>
+														<input type="text" name="ss_basic_kcp_port" id="ss_basic_kcp_port"  class="ssconfig input_ss_table" maxlength="200" value=""></input>
+													</td>
+												</tr>
+												<tr id="ss_basic_kcp_parameter_tr" style="display: none;">
+													<th width="35%">KCP参数</th>
+													<td>
+														<textarea style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#576D73;color:#FFFFFF;border:1px solid gray;" id="ss_basic_kcp_parameter" name="ss_basic_kcp_parameter" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" title=""></textarea>
+													</td>
+												</tr>
 											</table>
 										</div>
 										
-										<div id="ss_node_list_table_th" style="display: none; position: absolute; top: 202px; width: 98.8%;">
+										<div id="ss_node_list_table_th" style="display: none; position: absolute; top: 242px; width: 98.8%;">
 											<table style="margin:0px 0px 0px 0px;table-layout:fixed;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable1">
 												<tr height="40px">
 													<th style="width:45px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(16)">模式</a></th>
@@ -2429,7 +2591,7 @@ function setIframeSrc() {
 											</table>
 										</div>
 										
-										<div id="ss_node_list_table_td"  style="display: none; position: static; top: 242px; bottom: 183px; width: 98.8%; overflow: visible">
+										<div id="ss_node_list_table_td"  style="display: none; position: static; top: 282px; bottom: 190px; width: 98.8%; overflow: visible">
 											<table id="ss_node_list_table_main" style="margin:0px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable1">
 												<tr id="hide_when_folw" height="40px" style="display: none;">
 													<th style="width:45px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(16)">模式</a></th>
@@ -2445,14 +2607,14 @@ function setIframeSrc() {
 												</tr>
 											</table>
 										</div>
-										<div id="ss_node_list_table_btn" style="display: none;position: static;width: 747px; bottom: 0px;">
-											<table style="margin:7px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
+										<div id="ss_node_list_table_btn" style="display: none;position: static;width: 747px;">
+											<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
 													<th style="width:20%;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(24)">导出恢复</a></th>
 													<td>
-														<input type="button" class="button_gen" onclick="download_SS_node();" value="导出配置">
-														<input type="button" class="button_gen" onclick="remove_SS_node();" value="清空配置">
-														<input type="button" id="upload_btn" class="button_gen" onclick="upload_SS_node();" value="恢复配置">
+														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="download_SS_node();" value="导出配置">
+														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="remove_SS_node();" value="清空配置">
+														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="upload_SS_node();" value="恢复配置">
 
 														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file">
 														<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif">
@@ -2462,33 +2624,30 @@ function setIframeSrc() {
 												<tr>
 													<th style="width:20%;">ping测试</th>
 													<td>
-														<!--<input class="button_gen" onClick="remove_ping()" type="button" value="移除ping"/>-->
-														<input class="button_gen" onClick="ping_test()" type="button" value="ping测试"/>
-														<select id="ssconf_basic_Ping_Method" name="ssconf_basic_Ping_Method" style="width:300px;margin:0px 0px 0px 2px;" class="input_option">
-															<option class="content_input_fd" value="1">单线ping(10次/节点)</option>
-															<option class="content_input_fd" value="2">并发ping(10次/节点)</option>
-															<option class="content_input_fd" value="3">并发ping(20次/节点)</option>
-															<option class="content_input_fd" value="4">并发ping(50次/节点)</option>
-														</select>
+														<input class="ss_btn" style="cursor:pointer;" onClick="ping_test()" type="button" value="ping测试"/>
+														<select id="ssconf_basic_Ping_node" name="ssconf_basic_Ping_node" style="width:124px;margin:0px 0px 0px 2px;" class="input_option" onchange="update_ping_method();"></select>
+														<select id="ssconf_basic_Ping_Method" name="ssconf_basic_Ping_Method" style="width:160px;margin:0px 0px 0px 2px;" class="input_option"></select>
+														<input class="ss_btn" style="cursor:pointer;" onClick="remove_ping()" type="button" value="清空结果"/>
 													</td>
 												</tr>
 												<tr>
 													<th style="width:20%;">web测试</th>
 													<td>
-														<!--<input class="button_gen" onClick="remove_test()" type="button" value="移除web测试"/>-->
-														<input class="button_gen" onClick="web_test()" type="button" value="web测试"/>
-														<select id="ssconf_basic_test_domain" name="ssconf_basic_test_domain" style="width:300px;margin:0px 0px 0px 2px;" class="input_option">
+														<input class="ss_btn" style="cursor:pointer;" onClick="web_test()" type="button" value="web测试"/>
+															<select id="ssconf_basic_test_node" name="ssconf_basic_test_node" style="width:124px;margin:0px 0px 0px 2px;" class="input_option">
+															</select>
+														<select id="ssconf_basic_test_domain" name="ssconf_basic_test_domain" style="width:160px;margin:0px 0px 0px 2px;" class="input_option">
 															<option class="content_input_fd" value="https://www.google.com/">google.com</option>
 															<option class="content_input_fd" value="https://www.youtube.com/">youtube.com</option>
 														</select>
+														<input class="ss_btn" style="cursor:pointer;" onClick="remove_test()" type="button" value="清空结果"/>
 													</td>
 												</tr>
 											</table>
 											<table>
 												<tr>
 													<td>
-														<div id="node_return_button" class="apply_gen" style="margin-left: 105px;;float: left;">
-															<input type="button" class="button_gen" onclick="ss_node_info_return();" value="返回">
+														<div id="node_return_button" class="apply_gen" style="margin-left: 188px;;float: left;">
 															<input class="button_gen" id="returnBtn" onClick="hide_text()" type="button" value="黑科技按钮"/>
 															<input class="button_gen" onClick="Add_profile()" type="button" value="添加节点"/>
 														</div>
@@ -2498,241 +2657,184 @@ function setIframeSrc() {
 										</div>
 									
 
-										<!--=====gfwlist_dns=====-->
-										<div id="ipset_dns" style="display: none;">
+										<!--=====tablet_2=====-->
+										<div id="tablet_2" style="display: none;">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
-												<tr>
-													<th id="china_dns" width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(25)">选择国内DNS</a></th>
+												<tr id="dns_plan_tr">
+												<th id="dns_plan_th" width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(53)"><font color="#CC0000">选择DNS解析偏好</font></a></th>
 													<td>
-														<select id="ss_ipset_cdn_dns" name="ss_ipset_cdn_dns" class="input_option" onclick="update_visibility_tab2_ipset();" >
-															<option value="1">运营商DNS【自动获取】</option>
-															<option value="2">阿里DNS1【223.5.5.5】</option>
-															<option value="3">阿里DNS2【223.6.6.6】</option>
-															<option value="4">114DNS【114.114.114.114】</option>
-															<option value="6">百度DNS【180.76.76.76】</option>
-															<option value="7">cnnic DNS【1.2.4.8】</option>
-															<option value="8">dnspod DNS【119.29.29.29】</option>
-															<option value="5">自定义</option>
+														<select id="ss_dns_plan" name="ss_dns_plan" class="input_option" onclick="update_visibility_tab2();" >
+															<option value="1" selected="">国内优先</option>
+															<option value="2">国外优先</option>
 														</select>
-															<input type="text" class="ssconfig input_ss_table" id="ss_ipset_cdn_dns_user" name="ss_ipset_cdn_dns_user" maxlength="100" value="">
-															<span id="china_dns1">默认：运营商DNS【自动获取】</span>
-															<br/>
-															<span id="china_dns1">选择国内DNS解析gfwlist之外的域名</span>
+														<span id="ss_dns_plan_note"></span> <br/>
 													</td>
 												</tr>
-												<tr>
-													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(26)">选择国外DNS</a></th>
-													<td>
-														<select id="ss_ipset_foreign_dns" name="ss_ipset_foreign_dns" class="input_option" onclick="update_visibility_tab2_ipset();" >
-															<option value="2">DNS2SOCKS</option>
-															<option value="0">dnscrypt-proxy</option>
-															<option value="1">ss-tunnel</option>
-															<option value="3">Pcap_DNSProxy</option>
-															<option value="4">pdnsd</option>
-														</select>
-														<select id="ss_ipset_opendns" name="ss_ipset_opendns" class="input_option"></select>
-														<select id="ss_ipset_tunnel" name="ss_ipset_tunnel" class="input_option" onclick="update_visibility_tab2_ipset();" >
-															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">google DNS1 [8.8.8.8]</option>
-															<option value="3">google DNS2 [8.8.4.4]</option>
-															<option value="4">自定义</option>
-														</select>
-															<input type="text" class="ssconfig input_ss_table" id="ss_ipset_tunnel_user" name="ss_ipset_tunnel_user" placeholder="需端口号如：8.8.8.8:53" maxlength="100" value="">
-															<input type="text" class="ssconfig input_ss_table" id="ss_ipset_dns2socks_user" name="ss_ipset_dns2socks_user" placeholder="需端口号如：8.8.8.8:53" maxlength="100" value="8.8.8.8:53">
-															<span id="ss_ipset_foreign_dns1">默认：DNS2SOCKS</span> <br/>
-															<span id="DNS2SOCKS1">启用DNS2SOCKS后会自动开启SOCKS5</span>
-															<span id="ss_ipset_foreign_dns2">用dnscrypt-proxy加密解析gfwlist中的<% nvram_get("ss_ipset_numbers"); %>条域名</span>
-															<span id="ss_ipset_foreign_dns3">
-																ss-tunnel通过udp转发将DNS交给SS服务器解析gfwlist中的<% nvram_get("ss_ipset_numbers"); %>条域名<br/>！！ss-tunnel需要ss账号支持udp转发才能使用！！
-															</span>
-													</td>
-												</tr>
-												<tr id="ipset_pdnsd_method">
-													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(29)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd查询方式</font></a></th>
-													<td>
-														<select id="ss_ipset_pdnsd_method" name="ss_ipset_pdnsd_method" class="input_option" onclick="update_visibility_tab2_ipset();" >
-															<option value="1" selected >仅udp查询</option>
-															<option value="2">仅tcp查询</option>
-														</select>
-													</td>
-												</tr>
-												<tr id="ipset_pdnsd_up_stream_tcp">
-													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(30)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（TCP）</font></a></th>
-													<td>
-														<input type="text" class="ssconfig input_ss_table" id="ss_ipset_pdnsd_server_ip" name="ss_ipset_pdnsd_server_ip" placeholder="DNS地址：8.8.4.4" style="width:128px;" maxlength="100" value="8.8.4.4">
-														：
-														<input type="text" class="ssconfig input_ss_table" id="ss_ipset_pdnsd_server_port" name="ss_ipset_pdnsd_server_port" placeholder="DNS端口" style="width:50px;" maxlength="6" value="53">
-														
-														<span id="ipset_pdnsd1">请填写支持TCP查询的DNS服务器</span>
-													</td>
-												</tr>
-												<tr id="ipset_pdnsd_up_stream_udp">
-													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(31)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（UDP）</font></a></th>
-													<td>
-														<select id="ss_ipset_pdnsd_udp_server" name="ss_ipset_pdnsd_udp_server" class="input_option" onclick="update_visibility_tab2_ipset();" >
-															<option value="1">DNS2SOCKS</option>
-															<option value="2">dnscrypt-proxy</option>
-															<option value="3">ss-tunnel</option>
-															
-														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_ipset_pdnsd_udp_server_dns2socks" name="ss_ipset_pdnsd_udp_server_dns2socks" style="width:128px;" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
-														<select id="ss_ipset_pdnsd_udp_server_dnscrypt" name="ss_ipset_pdnsd_udp_server_dnscrypt" class="input_option"></select>
-														<select id="ss_ipset_pdnsd_udp_server_ss_tunnel" name="ss_ipset_pdnsd_udp_server_ss_tunnel" class="input_option" onclick="update_visibility_tab2_ipset();" >
-															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">google DNS1 [8.8.8.8]</option>
-															<option value="3">google DNS2 [8.8.4.4]</option>
-															<option value="4">自定义</option>
-														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_ipset_pdnsd_udp_server_ss_tunnel_user" name="ss_ipset_pdnsd_udp_server_ss_tunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8">
-													</td>
-												</tr>
-												<tr id="ipset_pdnsd_cache">
-													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(32)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd缓存设置</font></a></th>
-													<td>
-														<input type="text" class="ssconfig input_ss_table" id="ss_ipset_pdnsd_server_cache_min" name="ss_ipset_pdnsd_server_cache_min" title="最小TTL时间" style="width:30px;" maxlength="100" value="24h">
-														→
-														<input type="text" class="ssconfig input_ss_table" id="ss_ipset_pdnsd_server_cache_max" name="ss_ipset_pdnsd_server_cache_max" title="最长TTL时间" style="width:30px;" maxlength="100" value="1w">
-														
-														<span id="ipset_pdnsd1">填写最小TTL时间与最长TTL时间</span>
-													</td>
-												</tr>
-												<tr>
-													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(34)">自定义dnsmasq</a></th>
-													<td>
-														<textarea placeholder="# 填入自定义的dnsmasq设置，一行一个
-# 例如hosts设置：
-address=/koolshare.cn/2.2.2.2
-# 防DNS劫持设置：
-bogus-nxdomain=220.250.64.18
-# 如果填入了错误的格式，可能会导致页面错乱，请用命令：dbus remove ss_ipset_dnsmasq，手动清除此项配置。" rows="7" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_ipset_dnsmasq" name="ss_ipset_dnsmasq" title=""></textarea>
-													</td>
-												</tr>
-											</table>
-										</div>
-
-										<!--=====redchn_dns=====-->
-										<div id="redchn_dns" style="display: none;">
-											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
-												<tr id="redchn_dns_plan_china">
+												<tr id="dns_plan_china">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(25)">选择国内DNS</a></th>
-													<td>
-														<select id="ss_redchn_dns_china" name="ss_redchn_dns_china" class="input_option" onclick="update_visibility_tab2_redchn();" >
-															<option value="1">运营商DNS【自动获取】</option>
+													<td id="dns_plan_china_td">
+														<select id="ss_dns_china" name="ss_dns_china" class="input_option" onclick="update_visibility_tab2();" >
+															<option value="1" selected>运营商DNS【自动获取】</option>
 															<option value="2">阿里DNS1【223.5.5.5】</option>
 															<option value="3">阿里DNS2【223.6.6.6】</option>
-															<option value="4">114DNS【114.114.114.114】</option>
-															<option value="6">百度DNS【180.76.76.76】</option>
-															<option value="7">cnnic DNS【1.2.4.8】</option>
-															<option value="8">dnspod DNS【119.29.29.29】</option>
-															<option value="5">自定义</option>
+															<option value="4">114DNS1【114.114.114.114】</option>
+															<option value="5">114DNS1【114.114.115.115】</option>
+															<option value="6">cnnic DNS【1.2.4.8】</option>
+															<option value="7">cnnic DNS【210.2.4.8】</option>
+															<option value="8">oneDNS1【112.124.47.27】</option>
+															<option value="9">oneDNS2【114.215.126.16】</option>
+															<option value="10">百度DNS【180.76.76.76】</option>
+															<option value="11">DNSpod DNS【119.29.29.29】</option>
+															<option value="12">自定义</option>
 														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_dns_china_user" name="ss_redchn_dns_china_user" maxlength="100" value="">
-														<span id="redchn_show_isp_dns">【<% nvram_get("wan0_dns"); %>】</span> <br/>
+														<input type="text" class="ssconfig input_ss_table" id="ss_dns_china_user" name="ss_dns_china_user" maxlength="100" value="">
+														<span id="show_isp_dns"></span> <br/>
 													</td>
 												</tr>
+
+												
 												<tr id="dns_plan_foreign">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(26)">选择国外DNS</a></th>
 													<td>
-														<select id="ss_redchn_dns_foreign" name="ss_redchn_dns_foreign" class="input_option" onclick="update_visibility_tab2_redchn();" >
-															<option value="4">DNS2SOCKS</option>
-															<option value="1">dnscrypt-proxy</option>
+														<select id="ss_dns_foreign" name="ss_dns_foreign" class="input_option" onclick="update_visibility_tab2();" >
+															<option value="1" selected="">dns2socks</option>
 															<option value="2">ss-tunnel</option>
-															<option value="3">ChinaDNS</option>
-															<option value="5">Pcap_DNSProxy</option>
-															<option value="6">pdnsd</option>
+															<option value="3">dnscrypt-proxy</option>
+															<option value="4">pdnsd</option>
+															<option value="5">ChinaDNS</option>
+															<option value="6">Pcap_DNSProxy</option>
 														</select>
-														<select id="ss_redchn_opendns" name="ss_redchn_opendns" class="input_option"></select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_dns2socks_user" name="ss_redchn_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
-														<select id="ss_redchn_sstunnel" name="ss_redchn_sstunnel" class="input_option" onclick="update_visibility_tab2_redchn();" >
-															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">google DNS1 [8.8.8.8]</option>
-															<option value="3">google DNS2 [8.8.4.4]</option>
+														<select id="ss_opendns" name="ss_opendns" class="input_option" style="width:320px"></select>
+														<input type="text" class="ssconfig input_ss_table" id="ss_dns2socks_user" name="ss_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
+														<select id="ss_sstunnel" name="ss_sstunnel" class="input_option" style="width:200px" onclick="update_visibility_tab2();" >
+															<option value="2" selected>google dns[8.8.8.8]</option>
+															<option value="3">google dns[8.8.4.4]</option>
+															<option value="1">OpenDNS[208.67.220.220]</option>
 															<option value="4">自定义</option>
 														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_sstunnel_user" name="ss_redchn_sstunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
+														<input type="text" class="ssconfig input_ss_table" id="ss_sstunnel_user" name="ss_sstunnel_user" style="width:150px" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
 													</td>
 												</tr>
-												<tr id="redchn_chinadns_china">
+												<tr id="dns_plan_foreign_game2" style="display: none;">
+												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(47)">选择国外DNS</a></th>
+													<td>
+														<select id="ss_game2_dns_foreign" name="ss_game2_dns_foreign" class="input_option" onclick="update_visibility_tab2_gameV2();" >
+															<option value="1" disabled selected>DNS2SS</option>
+														</select>
+														<input type="text" class="ssconfig input_ss_table" id="ss_game2_dns2ss_user" name="ss_game2_dns2ss_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
+														<br/>
+															<span id="dns_plan_foreign0">默认：koolgame内置DNS2SS，用以解析国内6000+域名以外的国内域名和国外域名</span>
+													</td>
+												</tr>
+												<tr id="chinadns_china">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(27)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*ChinaDNS国内DNS</font></a></th>
 													<td>
-														<select id="ss_redchn_chinadns_china" name="ss_redchn_chinadns_china" class="input_option" onclick="update_visibility_tab2_redchn();" >
+														<select id="ss_chinadns_china" name="ss_chinadns_china" class="input_option" onclick="update_visibility_tab2();" >
 															<option value="1">阿里DNS1【223.5.5.5】</option>
 															<option value="2">阿里DNS2【223.6.6.6】</option>
-															<option value="3">114DNS【114.114.114.114】</option>
-															<option value="4">自定义</option>
+															<option value="3">114DNS1【114.114.114.114】</option>
+															<option value="4">114DNS1【114.114.115.115】</option>
+															<option value="5">cnnic DNS【1.2.4.8】</option>
+															<option value="6">cnnic DNS【210.2.4.8】</option>
+															<option value="7">oneDNS1【112.124.47.27】</option>
+															<option value="8">oneDNS2【114.215.126.16】</option>
+															<option value="9">百度DNS【180.76.76.76】</option>
+															<option value="10">DNSpod DNS【119.29.29.29】</option>
+															<option value="11">自定义</option>
 														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_chinadns_china_user" name="ss_redchn_chinadns_china_user" placeholder="需端口号如：8.8.8.8:53" maxlength="100" value="">
+														<input type="text" class="ssconfig input_ss_table" id="ss_chinadns_china_user" name="ss_chinadns_china_user" placeholder="需端口号如：8.8.8.8:53" maxlength="100" value="">
 													</td>
 												</tr>
-												<tr id="redchn_chinadns_foreign">
+												<tr id="chinadns_foreign">
 													<th width="20%"><font color="#66FF66"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(28)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*ChinaDNS国外DNS</font></a></th>
 													<td>
-														<select id="ss_redchn_chinadns_foreign" name="ss_redchn_chinadns_foreign" class="input_option" onclick="update_visibility_tab2_redchn();" >
-															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">Google DNS1 [8.8.8.8]</option>
-															<option value="3">Google DNS2 [8.8.4.4]</option>
+														<select id="ss_chinadns_foreign_method" name="ss_chinadns_foreign_method" class="input_option" style="width:100px" onclick="update_visibility_tab2();" >
+															<option value="1" selected>DNS2SOCKS</option>
+															<option value="2">dnscrypt-proxy</option>
+															<option value="3">ss-tunnel</option>
 															<option value="4">自定义</option>
 														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_chinadns_foreign_user" name="ss_redchn_chinadns_foreign_user" maxlength="100" value="">
-														<span>此处DNS通过ss-tunnel转发给SS服务器解析</span> <br/>
+														<input type="text" class="ssconfig input_ss_table" id="ss_chinadns_foreign_method_user" name="ss_chinadns_foreign_method_user" style="width:150px" maxlength="100" value="">
+														<span id="ss_chinadns_foreign_method_user_txt">自定义直连的chinaDNS国外dns。</span>
+
+														<select id="ss_chinadns_foreign_dns2socks" name="ss_chinadns_foreign_dns2socks" class="input_option" style="width:200px" onclick="update_visibility_tab2();" >
+															<option value="2" selected>Google dns [8.8.8.8]</option>
+															<option value="3">Google dns [8.8.4.4]</option>
+															<option value="1">OpenDNS [208.67.220.220]</option>
+															<option value="4">自定义</option>
+														</select>
+														<input type="text" class="ssconfig input_ss_table" id="ss_chinadns_foreign_dns2socks_user" name="ss_chinadns_foreign_dns2socks_user" style="width:150px" maxlength="100" value="">
+
+														<select id="ss_chinadns_foreign_dnscrypt" name="ss_chinadns_foreign_dnscrypt" class="input_option" style="width:320px"></select>
+
+														
+														<select id="ss_chinadns_foreign_sstunnel" name="ss_chinadns_foreign_sstunnel" class="input_option" style="width:200px" onclick="update_visibility_tab2();" >
+															<option value="2" selected>Google dns [8.8.8.8]</option>
+															<option value="3">Google dns [8.8.4.4]</option>
+															<option value="1">OpenDNS [208.67.220.220]</option>
+															<option value="4">自定义</option>
+														</select>
+														<input type="text" class="ssconfig input_ss_table" id="ss_chinadns_foreign_sstunnel_user" name="ss_chinadns_foreign_sstunnel_user" style="width:150px" maxlength="100" value="">
 													</td>
 												</tr>
-												<tr id="redchn_pdnsd_method">
+												<tr id="pdnsd_method">
 													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(29)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd查询方式</font></th>
 													<td>
-														<select id="ss_redchn_pdnsd_method" name="ss_redchn_pdnsd_method" class="input_option" onclick="update_visibility_tab2_redchn();" >
+														<select id="ss_pdnsd_method" name="ss_pdnsd_method" class="input_option" onclick="update_visibility_tab2();" >
 															<option value="1" selected >仅udp查询</option>
 															<option value="2">仅tcp查询</option>
 														</select>
 													</td>
 												</tr>
-												<tr id="redchn_pdnsd_up_stream_tcp">
+												<tr id="pdnsd_up_stream_tcp">
 													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(30)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（TCP）</font></a></th>
 													<td>
-														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_pdnsd_server_ip" name="ss_redchn_pdnsd_server_ip" placeholder="DNS地址：8.8.4.4" style="width:128px;" maxlength="100" value="8.8.4.4">
+														<input type="text" class="ssconfig input_ss_table" id="ss_pdnsd_server_ip" name="ss_pdnsd_server_ip" placeholder="DNS地址：8.8.4.4" style="width:128px;" maxlength="100" value="8.8.4.4">
 														：
-														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_pdnsd_server_port" name="ss_redchn_pdnsd_server_port" placeholder="DNS端口" style="width:50px;" maxlength="6" value="53">
+														<input type="text" class="ssconfig input_ss_table" id="ss_pdnsd_server_port" name="ss_pdnsd_server_port" placeholder="DNS端口" style="width:50px;" maxlength="6" value="53">
 														
-														<span id="redchn_pdnsd1">请填写支持TCP查询的DNS服务器</span>
+														<span id="pdnsd1">请填写支持TCP查询的DNS服务器</span>
 													</td>
 												</tr>
-												<tr id="redchn_pdnsd_up_stream_udp">
+												<tr id="pdnsd_up_stream_udp">
 													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(31)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（UDP）</font></a></th>
 													<td>
-														<select id="ss_redchn_pdnsd_udp_server" name="ss_redchn_pdnsd_udp_server" class="input_option" onclick="update_visibility_tab2_redchn();" >
-															<option value="1">DNS2SOCKS</option>
+														<select id="ss_pdnsd_udp_server" name="ss_pdnsd_udp_server" class="input_option" onclick="update_visibility_tab2();" >
+															<option value="1" selected>DNS2SOCKS</option>
 															<option value="2">dnscrypt-proxy</option>
 															<option value="3">ss-tunnel</option>
 														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_pdnsd_udp_server_dns2socks" name="ss_redchn_pdnsd_udp_server_dns2socks" style="width:128px;" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
-														<select id="ss_redchn_pdnsd_udp_server_dnscrypt" name="ss_redchn_pdnsd_udp_server_dnscrypt" class="input_option"></select>
-														<select id="ss_redchn_pdnsd_udp_server_ss_tunnel" name="ss_redchn_pdnsd_udp_server_ss_tunnel" class="input_option" onclick="update_visibility_tab2_redchn();" >
-															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">google DNS1 [8.8.8.8]</option>
+														<input type="text" class="ssconfig input_ss_table" id="ss_pdnsd_udp_server_dns2socks" name="ss_pdnsd_udp_server_dns2socks" style="width:128px;" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
+														<select id="ss_pdnsd_udp_server_dnscrypt" name="ss_pdnsd_udp_server_dnscrypt" class="input_option" style="width:320px"></select>
+														<select id="ss_pdnsd_udp_server_ss_tunnel" name="ss_pdnsd_udp_server_ss_tunnel" class="input_option" onclick="update_visibility_tab2();" >
+															<option value="2" selected>google DNS1 [8.8.8.8]</option>
 															<option value="3">google DNS2 [8.8.4.4]</option>
+															<option value="1">OpenDNS [208.67.220.220]</option>
 															<option value="4">自定义</option>
 														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_pdnsd_udp_server_ss_tunnel_user" name="ss_redchn_pdnsd_udp_server_ss_tunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8">
+														<input type="text" class="ssconfig input_ss_table" id="ss_pdnsd_udp_server_ss_tunnel_user" name="ss_pdnsd_udp_server_ss_tunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8">
 													</td>
 												</tr>
-												<tr id="redchn_pdnsd_cache">
+												<tr id="pdnsd_cache">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(32)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd缓存设置</font></a></th>
 													<td>
-														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_pdnsd_server_cache_min" name="ss_redchn_pdnsd_server_cache_min" title="最小TTL时间" style="width:30px;" maxlength="100" value="24h">
+														<input type="text" class="ssconfig input_ss_table" id="ss_pdnsd_server_cache_min" name="ss_pdnsd_server_cache_min" title="最小TTL时间" style="width:30px;" maxlength="100" value="24h">
 														→
-														<input type="text" class="ssconfig input_ss_table" id="ss_redchn_pdnsd_server_cache_max" name="ss_redchn_pdnsd_server_cache_max" title="最长TTL时间" style="width:30px;" maxlength="100" value="1w">
+														<input type="text" class="ssconfig input_ss_table" id="ss_pdnsd_server_cache_max" name="ss_pdnsd_server_cache_max" title="最长TTL时间" style="width:30px;" maxlength="100" value="1w">
 														
-														<span id="redchn_pdnsd1">填写最小TTL时间与最长TTL时间</span>
+														<span id="pdnsd1">填写最小TTL时间与最长TTL时间</span>
 													</td>
 												</tr>
-												<tr>
+												<tr id="user_cdn_tr">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(33)">自定义需要CDN加速名单</a></th>
 													<td>
 														<textarea placeholder="# 填入需要强制用国内DNS解析的域名，一行一个，格式如下：
 koolshare.cn
 baidu.com
-# 默认已经添加了1万多条国内域名，请勿重复添加！
-# 注意：不支持通配符！" cols="50" rows="7" id="ss_redchn_isp_website_web" name="ss_redchn_isp_website_web" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
+默认除了gfwlist名单外的域名都由国内DNS解析
+# 注意：不支持通配符！" cols="50" rows="7" id="ss_isp_website_web" name="ss_isp_website_web" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+														</textarea>
+														<span id="user_cdn_span"></span>
 													</td>
 												</tr>
 												<tr>
@@ -2742,256 +2844,15 @@ baidu.com
 # 例如hosts设置：
 address=/koolshare.cn/2.2.2.2
 # 防DNS劫持设置：
-bogus-nxdomain=220.250.64.18" rows="7" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" id="ss_redchn_dnsmasq" name="ss_redchn_dnsmasq" title=""></textarea>
+bogus-nxdomain=220.250.64.18" rows="12" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" id="ss_dnsmasq" name="ss_dnsmasq" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" title=""></textarea>
 													</td>
 												</tr>
 											</table>
 										</div>
-
-										<!--=====game_dns=====-->
-										<div id="game_dns" style="display: none;">
+										<!--=====tablet_3=====-->
+										<div id="tablet_3" style="display: none;">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
-												<tr id="game_dns_plan_china">
-												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(25)">选择国内DNS</a></th>
-													<td>
-														<select id="ss_game_dns_china" name="ss_game_dns_china" class="input_option" onclick="update_visibility_tab2_game();" >
-															<option value="1">运营商DNS【自动获取】</option>
-															<option value="2">阿里DNS1【223.5.5.5】</option>
-															<option value="3">阿里DNS2【223.6.6.6】</option>
-															<option value="4">114DNS【114.114.114.114】</option>
-															<option value="6">百度DNS【180.76.76.76】</option>
-															<option value="7">cnnic DNS【1.2.4.8】</option>
-															<option value="8">dnspod DNS【119.29.29.29】</option>
-															<option value="5">自定义</option>
-														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_game_dns_china_user" name="ss_game_dns_china_user" maxlength="100" value=""></input>
-														<span id="game_show_isp_dns">【<% nvram_get("wan0_dns"); %>】</span>
-													</td>
-												</tr>
-												<tr id="dns_plan_foreign">
-												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(26)">选择国外DNS</a></th>
-													<td>
-														<select id="ss_game_dns_foreign" name="ss_game_dns_foreign" class="input_option" onclick="update_visibility_tab2_game();" >
-															<option value="4">DNS2SOCKS</option>
-															<option value="1">dnscrypt-proxy</option>
-															<option value="2">ss-tunnel</option>
-															<option value="3">ChinaDNS（CDN最优）</option>
-															<option value="5">PcapDNSProxy</option>
-															<option value="6">pdnsd</option>
-														</select>
-														<select id="ss_game_opendns" name="ss_game_opendns" class="input_option"></select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_game_dns2socks_user" name="ss_game_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
-														<select id="ss_game_sstunnel" name="ss_game_sstunnel" class="input_option" onclick="update_visibility_tab2_game();" >
-															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">google DNS1 [8.8.8.8]</option>
-															<option value="3">google DNS2 [8.8.4.4]</option>
-															<option value="4">自定义</option>
-														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_game_sstunnel_user" name="ss_game_sstunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
-													</td>
-												</tr>
-												<tr id="game_chinadns_china">
-												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(27)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*ChinaDNS国内DNS</font></a></th>
-													<td>
-														<select id="ss_game_chinadns_china" name="ss_game_chinadns_china" class="input_option" onclick="update_visibility_tab2_game();" >
-															<option value="1">阿里DNS1【223.5.5.5】</option>
-															<option value="2">阿里DNS2【223.6.6.6】</option>
-															<option value="3">114DNS【114.114.114.114】</option>
-															<option value="4">自定义</option>
-														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_game_chinadns_china_user" name="ss_game_chinadns_china_user" placeholder="需端口号如：8.8.8.8:53" maxlength="100" value="">
-													</td>
-												</tr>
-												<tr id="game_chinadns_foreign">
-												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(28)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*ChinaDNS国外DNS</font></a></th>
-													<td>
-														<select id="ss_game_chinadns_foreign" name="ss_game_chinadns_foreign" class="input_option" onclick="update_visibility_tab2_game();" >
-															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">Google DNS1 [8.8.8.8]</option>
-															<option value="3">Google DNS2 [8.8.4.4]</option>
-															<option value="4">自定义</option>
-														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_game_chinadns_foreign_user" name="ss_game_chinadns_foreign_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="">
-															<span>此处DNS通过ss-tunnel转发给SS服务器解析</span> 
-													</td>
-												</tr>
-												<tr id="game_pdnsd_method">
-													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(29)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd查询方式</font></th>
-													<td>
-														<select id="ss_game_pdnsd_method" name="ss_game_pdnsd_method" class="input_option" onclick="update_visibility_tab2_game();" >
-															<option value="1" selected >仅udp查询</option>
-															<option value="2">仅tcp查询</option>
-														</select>
-													</td>
-												</tr>
-												<tr id="game_pdnsd_up_stream_tcp">
-													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(30)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（TCP）</font></a></th>
-													<td>
-														<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_server_ip" name="ss_game_pdnsd_server_ip" placeholder="DNS地址：8.8.4.4" style="width:128px;" maxlength="100" value="8.8.4.4">
-														：
-														<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_server_port" name="ss_game_pdnsd_server_port" placeholder="DNS端口" style="width:50px;" maxlength="6" value="53">
-														
-														<span id="game_pdnsd1">请填写支持TCP查询的DNS服务器</span>
-													</td>
-												</tr>
-												<tr id="game_pdnsd_up_stream_udp">
-													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(31)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（UDP）</font></a></th>
-													<td>
-														<select id="ss_game_pdnsd_udp_server" name="ss_game_pdnsd_udp_server" class="input_option" onclick="update_visibility_tab2_game();" >
-															<option value="1">DNS2SOCKS</option>
-															<option value="2">dnscrypt-proxy</option>
-															<option value="3">ss-tunnel</option>
-														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_udp_server_dns2socks" name="ss_game_pdnsd_udp_server_dns2socks" style="width:128px;" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
-														<select id="ss_game_pdnsd_udp_server_dnscrypt" name="ss_game_pdnsd_udp_server_dnscrypt" class="input_option"></select>
-														<select id="ss_game_pdnsd_udp_server_ss_tunnel" name="ss_game_pdnsd_udp_server_ss_tunnel" class="input_option" onclick="update_visibility_tab2_game();" >
-															<option value="1">OpenDNS [208.67.220.220]</option>
-															<option value="2">google DNS1 [8.8.8.8]</option>
-															<option value="3">google DNS2 [8.8.4.4]</option>
-															<option value="4">自定义</option>
-														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_udp_server_ss_tunnel_user" name="ss_game_pdnsd_udp_server_ss_tunnel_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8">
-													</td>
-												</tr>
-												<tr id="game_pdnsd_cache">
-													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(32)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd缓存设置</font></a></th>
-													<td>
-														<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_server_cache_min" name="ss_game_pdnsd_server_cache_min" title="最小TTL时间" style="width:30px;" maxlength="100" value="24h">
-														→
-														<input type="text" class="ssconfig input_ss_table" id="ss_game_pdnsd_server_cache_max" name="ss_game_pdnsd_server_cache_max" title="最长TTL时间" style="width:30px;" maxlength="100" value="1w">
-														
-														<span id="game_pdnsd1">填写最小TTL时间与最长TTL时间</span>
-													</td>
-												</tr>
-												<tr>
-												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(34)">自定义dnsmasq</a></th>
-													<td>
-														<textarea placeholder="# 填入自定义的dnsmasq设置，一行一个
-# 例如hosts设置：
-address=/koolshare.cn/2.2.2.2
-# 防DNS劫持设置：
-bogus-nxdomain=220.250.64.18" rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_game_dnsmasq" name="ss_game_dnsmasq" title=""></textarea>
-													</td>
-												</tr>
-											</table>
-										</div>
-
-										<!--=====gameV2_dns=====-->
-										<div id="gameV2_dns" style="display: none;">
-											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
-												<tr id="gameV2_dns_plan_china">
-												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(25)">选择国内DNS</a></th>
-													<td>
-														<select id="ss_gameV2_dns_china" name="ss_gameV2_dns_china" class="input_option" onclick="update_visibility_tab2_gameV2();" >
-															<option value="1">运营商DNS【自动获取】</option>
-															<option value="2">阿里DNS1【223.5.5.5】</option>
-															<option value="3">阿里DNS2【223.6.6.6】</option>
-															<option value="4">114DNS【114.114.114.114】</option>
-															<option value="6">百度DNS【180.76.76.76】</option>
-															<option value="7">cnnic DNS【1.2.4.8】</option>
-															<option value="8">dnspod DNS【119.29.29.29】</option>
-															<option value="5">自定义</option>
-														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_gameV2_dns_china_user" name="ss_gameV2_dns_china_user" maxlength="100" value=""></input>
-														<span id="gameV2_show_isp_dns">【<% nvram_get("wan0_dns"); %>】</span> <br/>
-														<span id="ss_gameV2_dns_china_user_txt1">默认：运营商DNS【用于解析国内6000+个域名】</span> 
-														<span id="ss_gameV2_dns_china_user_txt2">确保你自定义输入的国内DNS在chnroute中</span>
-													</td>
-												</tr>
-												<tr id="dns_plan_foreign">
-												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(47)">选择国外DNS</a></th>
-													<td>
-														<select id="ss_gameV2_dns_foreign" name="ss_gameV2_dns_foreign" class="input_option" onclick="update_visibility_tab2_gameV2();" >
-															<option value="1" disabled selected>DNS2SS</option>
-														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_gameV2_dns2ss_user" name="ss_gameV2_dns2ss_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
-														<br/>
-															<span id="dns_plan_foreign0">默认：koolgame内置DNS2SS，用以解析国内6000+域名以外的国内域名和国外域名</span>
-													</td>
-												</tr>
-												<tr>
-												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(34)">自定义dnsmasq</a></th>
-													<td>
-														<textarea placeholder="# 填入自定义的dnsmasq设置，一行一个
-# 例如hosts设置：
-address=/koolshare.cn/2.2.2.2
-# 防DNS劫持设置：
-bogus-nxdomain=220.250.64.18" rows=12 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_gameV2_dnsmasq" name="ss_gameV2_dnsmasq" title=""></textarea>
-													</td>
-												</tr>
-											</table>
-										</div>
-
-										<!--=====overall_dns=====-->
-										<div id="overall_dns" style="display: none;">
-											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
-                    						  <tr>
-                    						    <th width="10%"><b>
-                    						      <center>
-                    						        <a class="hintstyle" href="javascript:void(0);" onclick="openssHint(48)"><font color="#ffcc00">全局模式</font></a>
-                    						      </center>
-                    						      </b></th>
-                    						    <td><select id="ss_overall_mode" name="ss_overall_mode" class="input_option">
-                    						        <option value="0">全局HTTP(s)</option>
-                    						        <option value="1">全局TCP</option>
-                    						      </select>
-                    						      <span>默认：全局HTTP(s)</span></td>
-                    						  </tr>
-                    						  <tr>
-                    						    <th width="20%"><center>
-                    						        <b><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(49)"><font color="#ffcc00">全局模式DNS</font></a></b>
-                    						      </center></th>
-                    						    <td><select id="ss_overall_dns" name="ss_overall_dns" class="input_option">
-                    						        <option value="0">OpenDNS方式</option>
-                    						        <option value="1">UDP转发方式</option>
-                    						        <option value="2">OpenDNS方式 + UDP转发方式</option>
-                    						      </select>
-                    						      <span>默认：OpenDNS方式 </span></td>
-                    						  </tr>
-                    						</table>
-                    					</div>
-
-										<!--=====ipset_list=====-->
-										<div id="ipset_list" style="display: none;">
-											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
-												<tr>
-													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(35)">域名白名单（新增）</a></th>
-													<td>
-														<textarea placeholder="# 此处填入不需要走ss的域名，一行一个，格式如下：
-google.com.sg
-youtube.com
-# 默认gfwlist以外的域名都不会走ss，故添加gfwlist内的域名才有意义!
-# 屏蔽一个域名可能导致其他网址被屏蔽，例如解析结果一致的youtube.com和google.com.
-# 只有域名污染，没有IP未阻断的网站，不能被屏蔽，例如twitter.com." rows="7" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_ipset_white_domain_web" name="ss_ipset_white_domain_web" title=""></textarea>
-													</td>
-												</tr>
-												<tr>
-													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(36)">域名黑名单</a></th>
-													<td>
-														<textarea placeholder="# 此处填入需要强制走ss的域名，一行一个，格式如下：
-koolshare.cn
-baidu.com
-# 默认已经由gfwlist提供了上千条被墙域名，请勿重复添加!" rows="7" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_ipset_black_domain_web" name="ss_ipset_black_domain_web" title=""></textarea>
-													</td>
-												</tr>	
-												<tr>
-													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(37)">IP/CIDR黑名单</a></th>
-													<td>
-														<textarea placeholder="# 此处填入需要强制走kcptun的IP或IP段（CIDR格式），一行一个，格式如下：
-91.108.4.0/22
-91.108.56.0/24
-109.239.140.0/24
-67.198.55.0/24
-# 对于某些没有域名但是被墙的服务很有用处，比如telegram等!" rows="7" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_ipset_black_ip" name="ss_ipset_black_ip" title=""></textarea>
-													</td>
-												</tr>
-											</table>
-										</div>
-
-										<!--=====redchn_list=====-->
-										<div id="redchn_list" style="display: none;">
-											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
-												<tr>
+												<tr id="ss_wan_white_ip_tr">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(38)">IP/CIDR白名单</a><br>
 														<br>
 														<font color="#ffcc00">添加不需要走代理的外网ip地址</font>
@@ -3000,11 +2861,10 @@ baidu.com
 														<textarea placeholder="# 填入不需要走代理的外网ip地址，一行一个，格式（IP/CIDR）如下
 2.2.2.2
 3.3.3.3
-4.4.4.4/24
-# 因为默认大陆的ip都不会走SS，所以此处填入国外IP/CIDR更有意义！" cols="50" rows="7" id="ss_redchn_wan_white_ip" name="ss_redchn_wan_white_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
+4.4.4.4/24" cols="50" rows="7" id="ss_wan_white_ip" name="ss_wan_white_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
 													</td>
 												</tr>
-												<tr>
+												<tr id="ss_wan_white_domain_tr">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(39)">域名白名单</a><br>
 														<br>
 														<font color="#ffcc00">添加不需要走代理的域名</font>
@@ -3013,11 +2873,10 @@ baidu.com
 														<textarea placeholder="# 填入不需要走代理的域名，一行一个，格式如下：
 google.com
 facebook.com
-# 因为默认大陆的ip都不会走SS，所以此处填入国外域名更有意义！
-# 需要清空电脑DNS缓存，才能立即看到效果。" cols="50" rows="7" id="ss_redchn_wan_white_domain" name="ss_redchn_wan_white_domain" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
+# 需要清空电脑DNS缓存，才能立即看到效果。" cols="50" rows="7" id="ss_wan_white_domain" name="ss_wan_white_domain" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
 													</td>
 												</tr>
-												<tr>
+												<tr id="ss_wan_black_ip_tr">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(40)">IP/CIDR黑名单</a><br>
 														<br>
 														<font color="#ffcc00">添加需要强制走代理的外网ip地址</font>
@@ -3026,11 +2885,10 @@ facebook.com
 														<textarea placeholder="# 填入需要强制走代理的外网ip地址，一行一个，格式（IP/CIDR）如下：
 5.5.5.5
 6.6.6.6
-7.7.7.7/8
-# 因为默认大陆以外ip都会走SS，所以此处填入国内IP/CIDR更有意义！" cols="50" rows="7" id="ss_redchn_wan_black_ip" name="ss_redchn_wan_black_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
+7.7.7.7/8" cols="50" rows="7" id="ss_wan_black_ip" name="ss_wan_black_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF; autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false""></textarea>
 													</td>
 												</tr>
-												<tr>
+												<tr id="ss_wan_black_domain_tr">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(41)">域名黑名单</a><br>
 														<br>
 														<font color="#ffcc00">添加需要强制走代理的域名</font>
@@ -3039,52 +2897,16 @@ facebook.com
 														<textarea placeholder="# 填入需要强制走代理的域名，一行一个，格式如下：
 baidu.com
 taobao.com
-# 因为默认大陆以外的ip都会走SS，所以此处填入国内域名更有意义！
-# 需要清空电脑DNS缓存，才能立即看到效果。" cols="50" rows="7" id="ss_redchn_wan_black_domain" name="ss_redchn_wan_black_domain" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;"></textarea>
+# 需要清空电脑DNS缓存，才能立即看到效果。" cols="50" rows="7" id="ss_wan_black_domain" name="ss_wan_black_domain" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
 													</td>
 												</tr>
 											</table>
 										</div>
 
-										<!--=====game_list=====-->
-										<div id="game_list" style="display: none;">
-
-										</div>
-										
-										<!--=====gameV2_list=====-->
-										<div id="gameV2_list" style="display: none;">
-
-										</div>
-
-										<!--=====overall_list=====-->
-										<div id="overall_list" style="display: none;">
-
-										</div>
-
-										<!--===== addon =====-->
-										<div id="add_fun" style="display: none;">
+										<div id="tablet_4" style="display: none;">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
-												<tr>
-													<th>查看日志信息</th>
-													<td>
-														<input class="button_gen" id="logBtn" onclick="show_log_info()" type="button" value="查看日志"/>
-													</td>
-												</tr>
-												<tr>
-													<th><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(42)">状态更新间隔</a></th>
-													<td>
-														<select title="立即生效，无须提交" name="refreshrate" id="refreshrate" class="input_option" onchange="setRefresh(this);">
-															<option value="0">不更新</option>
-															<option value="5">5s</option>
-															<option value="10" selected>10s</option>
-															<option value="15">15s</option>
-															<option value="30">30s</option>
-															<option value="60">60s</option>
-														</select>
-													</td>
-												</tr>
 												<tr  id="gfw_number">
-													<th id="gfw_nu1" width="35%">当前gfwlist域名数量</th>
+													<th id="gfw_nu1" width="35%">gfwlist域名数量</th>
 													<td id="gfw_nu2">
 															<% nvram_get("ipset_numbers"); %>&nbsp;条，最后更新版本：
 															<a href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf" target="_blank">
@@ -3093,7 +2915,7 @@ taobao.com
 													</td>
 												</tr>
 												<tr  id="chn_number">
-													<th id="chn_nu1" width="35%">当前大陆白名单IP段数量</th>
+													<th id="chn_nu1" width="35%">大陆白名单IP段数量</th>
 												<td id="chn_nu2">
 													<p>
 														<% nvram_get("chnroute_numbers"); %>&nbsp;行，最后更新版本：
@@ -3103,26 +2925,16 @@ taobao.com
 													</p>
 												</td>
 												</tr>
-												<tr  id="cdn_number">
-													<th id="cdn_nu1" width="35%">当前国内域名数量（cdn名单）</th>
-													<td id="cdn_nu2">
-														<p>
-														<% nvram_get("cdn_numbers"); %>&nbsp;条，最后更新版本：
-															<a href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt" target="_blank">
-																<i><% nvram_get("update_cdn"); %></i>
-															</a>
-														</p>
-													</td>
-												</tr>
-												<tr id="chromecast">
-													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(43)">Chromecast支持</a></th>
-													<td>
-														<select id="ss_basic_chromecast" name="ss_basic_chromecast" class="ssconfig input_option" onchange="update_visibility_tab4();" >
-															<option value="0">禁用</option>
-															<option value="1" selected>开启</option>
-														</select>
-															<span id="chromecast1"> 建议开启chromecast支持 </span>
-													</td>
+												<tr  id="cdn_number">		
+													<th id="cdn_nu1" width="35%">国内域名数量（cdn名单）</th>		
+													<td id="cdn_nu2">		
+														<p>		
+														<% nvram_get("cdn_numbers"); %>&nbsp;条，最后更新版本：		
+															<a href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt" target="_blank">		
+																<i><% nvram_get("update_cdn"); %></i>		
+															</a>		
+														</p>		
+													</td>		
 												</tr>
 												<tr id="update_rules">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(44)">shadowsocks规则自动更新</a></th>
@@ -3159,26 +2971,107 @@ taobao.com
 														</select>
 															&nbsp;
 															<a id="update_choose">
-																<input type="checkbox" id="ss_basic_gfwlist_update" name="a" title="选择此项应用gfwlist自动更新" onclick="oncheckclick(this);">gfwlist
-																<input type="checkbox" id="ss_basic_chnroute_update" name="a2" onclick="oncheckclick(this);">chnroute
-																<input type="checkbox" id="ss_basic_cdn_update" name="a3" onclick="oncheckclick(this);">CDN
+																<input type="checkbox" id="ss_basic_gfwlist_update" title="选择此项应用gfwlist自动更新" onclick="oncheckclick(this);">gfwlist
+																<input type="checkbox" id="ss_basic_chnroute_update" onclick="oncheckclick(this);">chnroute
+																<input type="checkbox" id="ss_basic_cdn_update" onclick="oncheckclick(this);">CDN
 																<input type="hidden" id="hd_ss_basic_gfwlist_update" name="ss_basic_gfwlist_update" value=""/>
 																<input type="hidden" id="hd_ss_basic_chnroute_update" name="ss_basic_chnroute_update" value=""/>
 																<input type="hidden" id="hd_ss_basic_cdn_update" name="ss_basic_cdn_update" value=""/>
 															</a>
-																<input id="update_now" onclick="updatelist()" style="font-family:'Courier New'; Courier, mono; font-size:11px;" type="submit" value="立即更新" />
+                                    	                		<a type="button" class="ss_btn" onclick="updatelist()">立即更新</a>
 													</td>
-												</tr>
+												</tr>											
+											</table>
+										</div>
+
+										<!--====LAN ACL=====-->
+										<div id="tablet_5" style="display: none;">
+											<table id="ACL_table_game" style="margin:-1px 0px 0px 0px;display: none;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
+												
 												<tr id="ss_lan_control">
-													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(45)">局域网客户端控制</a>&nbsp;&nbsp;&nbsp;&nbsp;<select id="ss_basic_lan_control" name="ss_basic_lan_control" class="input_ss_table" style="width:auto;height:25px;margin-left: 0px;" onchange="update_visibility_tab4();">
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(45)">局域网客户端控制</a>&nbsp;&nbsp;&nbsp;&nbsp;<select id="ss_game2_lan_control" name="ss_game2_lan_control" class="input_ss_table" style="width:auto;height:25px;margin-left: 0px;" onchange="update_visibility_tab4();">
 															<option value="0">禁用</option>
 															<option value="1">黑名单模式</option>
 															<option value="2">白名单模式</option>
 														</select>
 													</th>
 													<td>
-														<textarea placeholder="填入需要限制客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=3 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_basic_black_lan" name="ss_basic_black_lan" title=""></textarea>
-														<textarea placeholder="填入仅允许的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=3 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_basic_white_lan" name="ss_basic_white_lan" title=""></textarea>
+														<textarea placeholder="填入需要限制客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=3 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_game2_black_lan" name="ss_game2_black_lan" title="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+														<textarea placeholder="填入仅允许的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=3 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_game2_white_lan" name="ss_game2_white_lan" title="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+													</td>
+												</tr>
+												
+											</table>
+											<table id="ACL_table" style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
+													<tr>
+														<th style="width:180px;">主机IP地址</th>
+														<th style="width:160px;">主机别名</th>
+														<th style="width:160px;">访问控制</th>
+														<th style="width:160px;">目标端口</th>
+														<th style="width:60px;">添加/删除</th>
+													</tr>
+													<tr>
+														<td>
+															<input type="text" maxlength="15" class="input_15_table" id="ss_acl_ip" name="ss_acl_ip" align="left" onkeypress="return validator.isIPAddr(this, event)" style="float:left;"/ autocomplete="off" onClick="hideClients_Block();" autocorrect="off" autocapitalize="off">
+															<img id="pull_arrow" height="14px;" src="images/arrow-down.gif" align="right" onclick="pullLANIPList(this);" title="<#select_IP#>">
+															<div id="ClientList_Block" class="clientlist_dropdown" style="margin-left:2px;margin-top:25px;"></div>
+														</td>
+														<td>
+															<input type="text" id="ss_acl_name" name="ss_acl_name" class="ssconfig input_ss_table" maxlength="50" style="width:140px;" placeholder="" />
+														</td>
+														<td>
+															<select id="ss_acl_mode" name="ss_acl_mode" style="width:160px;margin:0px 0px 0px 2px;" class="input_option" onchange="set_mode_1(this);">
+																<option value="0">不通过ss</option>
+																<option value="1">gfwlist模式</option>
+																<option value="2">大陆白名单模式</option>
+																<option value="3">游戏模式</option>
+																<option value="5">全局代理模式</option>
+															</select>
+														</td>
+														<td>
+															<select id="ss_acl_port" name="ss_acl_port" style="width:100px;margin:0px 0px 0px 2px;" class="input_option">
+																<option value="80,443">80,443</option>
+																<option value="22,80,443">22,80,443</option>
+																<option value="all">all</option>
+															</select>
+														</td>
+														<td style="width:66px">
+															<input style="margin-left: 6px;margin: -3px 0px -5px 6px;" type="button" class="add_btn" onclick="addTr()" value="" />
+														</td>
+													</tr>
+											</table>
+											<div id="ACL_note">
+											<div><i>1&nbsp;&nbsp;默认状态下，所有局域网的主机都会走当前节点的模式（主模式），相当于即不启用局域网访问控制。</i></div>
+											<div><i>2&nbsp;&nbsp;当你添加了主机，并设置缺省规则为不通过SS，则只有添加的主机才会走相应的模式。</i></div>
+											<div><i>3&nbsp;&nbsp;当你添加了主机，并设置缺省规则为当前节点的模式，除了添加的主机才会走相应的模式，未添加的主机会走缺省规则的模式。</i></div>
+											<div><i>4&nbsp;&nbsp;如果使用了KCP协议，或者负载均衡，因为它们不支持udp，所以不能控制单个主机走游戏模式。</i></div>
+											</div>
+										</div>
+
+										<!--===== addon =====-->
+										<div id="tablet_6" style="display: none;">
+											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
+												<tr>
+													<th><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(42)">状态更新间隔</a></th>
+													<td>
+														<select title="立即生效，无须提交" id="ss_basic_refreshrate" name="ss_basic_refreshrate" class="input_option">
+															<option value="0">不更新</option>
+															<option value="5" selected>5s</option>
+															<option value="10">10s</option>
+															<option value="15">15s</option>
+															<option value="30">30s</option>
+															<option value="60">60s</option>
+														</select>
+													</td>
+												</tr>
+												<tr id="chromecast">
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(43)">Chromecast支持</a></th>
+													<td>
+														<select id="ss_basic_chromecast" name="ss_basic_chromecast" class="ssconfig input_option" onchange="update_visibility_tab4();" >
+															<option value="0">禁用</option>
+															<option value="1" selected>开启</option>
+														</select>
+															<span id="chromecast1"> 建议开启chromecast支持 </span>
 													</td>
 												</tr>
 												<tr id="ss_sleep_tr">
@@ -3186,7 +3079,7 @@ taobao.com
 													<td>
 														<select id="ss_basic_sleep" name="ss_basic_sleep" class="ssconfig input_option" onchange="update_visibility_tab4();" >
 															<option value="0">0s</option>
-															<option value="5">5s</option>
+															<option value="5" selected>5s</option>
 															<option value="10">10s</option>
 															<option value="15">15s</option>
 															<option value="30">30s</option>
@@ -3203,56 +3096,39 @@ taobao.com
 														</select>
 													</td>
 												</tr>
+												<tr id="ss_basic_dnslookup_tr">
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(51)">SS服务器地址解析</a></th>
+													<td>
+														<select id="ss_basic_dnslookup" name="ss_basic_dnslookup" class="ssconfig input_option" onchange="update_visibility_tab4();" >
+															<option value="0">resolveip方式</option>
+															<option value="1" selected>nslookup方式</option>
+														</select>
+														<input type="text" class="ssconfig input_ss_table" id="ss_basic_dnslookup_server" name="ss_basic_dnslookup_server" style="width:128px;"  value="119.29.29.29">
+														<span id="SS_IP"style="margin-left:auto;margin-top:-23px;margin-bottom:0px;display: none;">
+														</span>
+													</td>
+												</tr>												
 											</table>
 										</div>
 
 										<!--log_content-->
-										<div id="log_content" style="margin-top:10px;display: none;">
-											<textarea cols="63" rows="30" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;"></textarea>
-										</div>
-										<div id="log_return_button" class="apply_gen" style="display: none;">
-											<input class="button_gen" id="returnBtn" onClick="return_basic()" type="button" value="返回"/>
-										</div>
+										<div id="tablet_7" style="display: none;">
+											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
+												<div id="log_content" style="margin-top:-1px;display: none;">
+													<textarea cols="63" rows="36" wrap="on" readonly="readonly" id="log_content1" style="width:97%;padding-left:10px;padding-right:10px;border:1px solid #222;font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;outline: none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+												</div>
+											</table>
+										</div>		
+
 										<div class="apply_gen" id="loading_icon">
 											<img id="loadingIcon" style="display:none;" src="/images/InternetScan.gif">
 										</div>
-											<!-- not for this version
-											<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="Routing_rules_table1">
-												<thead>
-												<tr>
-													<td colspan="2">双线双拨策略路由状态</td>
-												</tr>
-												</thead>
-												<tr>
-													<th>国内连接</th>
-													<td>
-														<iframe id="iframe1" src="" width="100%" height="22" scrolling="no" frameborder="0" marginheight="3" marginwidth="0"></iframe>
-													</td>
-												<tr>
-													<th>国外连接</th>
-													<td >
-														<iframe id="iframe2" src="" width="100%" height="22" scrolling="no" frameborder="0" marginheight="3" marginwidth="0"></iframe>
-													</td>
-												<tr>
-													<th>谷歌网站</th>
-													<td>
-														<iframe id="iframe3" src="" width="100%" height="22" scrolling="no" frameborder="0" marginheight="3" marginwidth="0"></iframe>
-													</td>
-												</tr>
-											</table>
-										</div>
-										-->
 										<div id="apply_button" class="apply_gen">
 											<input id="cmdBtn" class="button_gen" type="button" onclick="onSubmitCtrl()" value="提交">
 										</div>
-										<div id="warn1" style="display: none;font-size: 20px;position: absolute; bottom: 350px; left: 0px;" class="formfontdesc" id="cmdDesc"><i>你开启了kcptun,请先关闭后才能开启shadowsocks</i></div>
+										<div id="warn" style="display: none;font-size: 20px;position: static;" class="formfontdesc" id="cmdDesc"><i>你开启了kcptun,请先关闭后才能开启shadowsocks</i></div>
+										<div id="warn1" style="display: none;font-size: 20px;position: static;" class="formfontdesc" id="cmdDesc"><i>你开启了kcptun,请先关闭后才能开启shadowsocks</i></div>
 										<div id="line_image1" style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"/></div>
-										<div id ="KoolshareBottom_div" class="KoolshareBottom" style="position: static;">
-											论坛技术支持： <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a> <br/>
-											博客技术支持： <a href="http://www.mjy211.com" target="_blank"> <i><u>www.mjy211.com</u></i> </a> <br/>
-											Github项目： <a href="https://github.com/koolshare/koolshare.github.io" target="_blank"> <i><u>github.com/koolshare</u></i> </a> <br/>
-											Shell by： <a href="mailto:sadoneli@gmail.com"> <i>sadoneli</i> , Web by： <i>Xiaobao</i></a>
-										</div>
 									</td>
 								</tr>
 							</table>
@@ -3270,4 +3146,3 @@ taobao.com
 <div id="footer"></div>
 </body>
 </html>
-

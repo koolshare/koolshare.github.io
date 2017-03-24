@@ -58,19 +58,21 @@ mkswap(){
 }
 
 swap_load_start(){
-	if [ ! -f /jffs/scripts/post-mount ]; then
+	if [ -f /jffs/scripts/post-mount ]; then
+		startswap=$(cat /jffs/scripts/post-mount | grep "swap_load" |wc -l)
+		if [ "$startswap" != "1" ];then
+			echo "#! /bin/sh" > /jffs/scripts/post-mount
+			echo " " >> /jffs/scripts/post-mount
+			sed -i '$a\sh\ \/koolshare/scripts/swap_load.sh' /jffs/scripts/post-mount
+		else
+			echo already set start up for swap load
+		fi
+	else
 		echo "#! /bin/sh" > /jffs/scripts/post-mount
 		echo " " >> /jffs/scripts/post-mount
-		chmod +x /jffs/scripts/post-mount
-	fi
-
-	startswap=$(cat /jffs/scripts/post-mount | grep "swap_load")
-	if [ -z "$startstart" ];then
-		#sed -i '2a sh /koolshare/scripts/swap_load.sh' /jffs/scripts/post-mount
-		#awk '{print $0}END{print "sh /koolshare/scripts/swap_load.sh"}' /jffs/scripts/post-mount
 		sed -i '$a\sh\ \/koolshare/scripts/swap_load.sh' /jffs/scripts/post-mount
 	fi
-		chmod +x /jffs/scripts/post-mount
+	chmod +x /jffs/scripts/post-mount
 }
 
 swap_unload_start(){

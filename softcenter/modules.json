@@ -1,0 +1,14 @@
+[
+{"module": "tunnel", "git_source": "https://github.com/koolshare/merlin_tunnel.git"},
+{"module": "kms", "git_source": "https://github.com/Major-k/merlin-kms.git"},
+{"module": "aliddns", "git_source": "https://github.com/koolshare/merlin-aliddns.git"},
+{"module": "aria2", "git_source": "https://github.com/koolshare/merlin-aria2.git"},
+{"module": "ssserver", "git_source": "https://github.com/koolshare/merlin-ssserver.git"},
+{"module": "adm", "git_source": "https://github.com/koolshare/merlin-adm.git"},
+{"module": "webshell", "git_source": "https://github.com/koolshare/merlin-webshell.git"},
+{"module": "frpc", "git_source": "https://github.com/koolshare/merlin_frpc.git"},
+{"module": "koolproxy", "git_source": "https://github.com/koolproxy/merlin-koolproxy.git"},
+{"module": "softether", "git_source": "https://github.com/koolshare/merlin-SoftEtherVPN.git"},
+{}
+]
+

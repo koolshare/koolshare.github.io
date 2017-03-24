@@ -1,5 +1,26 @@
 Koolshare Asuswrt-Merlin kcptun Changelog
 ===========================================
+2.2.6
+   - update	update kcptun binary to 20161118
+2.2.5
+   - update	update kcptun binary to latest
+2.2.4
+   - update	adapt to X7.2 firmware
+2.2.3
+   - update	update kcptun binary to latest
+2.2.2
+   - Add	增加datashard和parityshard选项
+2.2.1
+   - fix	修复版本显示问题
+2.2.0
+   - update	update kcptun binary to latest
+   - update	update cdn list
+   - update	update gfwlist list
+   - fix	修复kcptun运行状态显示结果
+2.1
+   - fix	fix uninstall shell
+2.0
+   - update	update kcptun binary to latest
 1.9
    - fix	fix cndlist won't work
    - update	update kcptun binary to latest

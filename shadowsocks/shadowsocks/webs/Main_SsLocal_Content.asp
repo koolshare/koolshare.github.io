@@ -10,6 +10,7 @@
 <title>Shadowsocks - Socks5代理设置</title>
 <link rel="stylesheet" type="text/css" href="index_style.css">
 <link rel="stylesheet" type="text/css" href="form_style.css">
+<link rel="stylesheet" type="text/css" href="css/element.css">
 <script language="JavaScript" type="text/javascript" src="/state.js"></script>
 <script language="JavaScript" type="text/javascript" src="/help.js"></script>
 <script language="JavaScript" type="text/javascript" src="/general.js"></script>
@@ -88,6 +89,30 @@ return document.getElementById(id);
 function init(){
 	show_menu(menu_hook);
 	conf_to_obj();
+    buildswitch();
+    toggle_switch();
+    update_visibility();
+}
+
+function toggle_switch(){
+    var rrt = document.getElementById("switch");
+    if (document.form.ss_local_enable.value != "1") {
+        rrt.checked = false;
+    } else {
+        rrt.checked = true;
+    }
+}
+
+function buildswitch(){
+    $j("#switch").click(
+    function(){
+        if(document.getElementById('switch').checked){
+            document.form.ss_local_enable.value = 1;
+            
+        }else{
+            document.form.ss_local_enable.value = 0;
+        }
+    });
 }
 
 function conf_to_obj(){
@@ -129,10 +154,6 @@ function validForm(){
 	return is_ok;
 }
 
-function pass_checked(obj){
-	switchType(obj, document.form.show_pass.checked, true);
-}
-
 </script>
 </head>
 <body onload="init();">
@@ -165,7 +186,7 @@ function pass_checked(obj){
 	<input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>">
 	<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="">
 	<input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>">
-	<input type="hidden" id="dns2socks" name="dns2socks" value='<% dbus_get_def("dns2socks", ""); %>'/>
+	<input type="hidden" id="ss_local_enable" name="ss_local_enable" value='<% dbus_get_def("ss_local_enable", "0"); %>'/>
 	<table class="content" align="center" cellpadding="0" cellspacing="0">
 		<tr>
 			<td width="17">&nbsp;</td>
@@ -193,15 +214,24 @@ function pass_checked(obj){
 													<td colspan="2">Shadowsocks - ss-local - 高级设置</td>
 												</tr>
 											</thead>
-											<tr>
-												<th width="20%">开关</th>
-												<td>
-													<select id="ss_local_enable" name="ss_local_enable" style="width:165px;margin:0px 0px 0px 2px;" class="ssconfig input_option">
-														<option value="0">不开启</option>
-														<option value="1">开启</option>
-													</select>
-												</td>
-											</tr>
+                                        	<tr id="switch_tr">
+                                        	    <th>
+                                        	        <label>开关</label>
+                                        	    </th>
+                                        	    <td colspan="2">
+                                        	        <div class="switch_field" style="display:table-cell;float: left;">
+                                        	            <label for="switch">
+                                        	                <input id="switch" class="switch" type="checkbox" style="display: none;">
+                                        	                <div class="switch_container" >
+                                        	                    <div class="switch_bar"></div>
+                                        	                    <div class="switch_circle transition_style">
+                                        	                        <div></div>
+                                        	                    </div>
+                                        	                </div>
+                                        	            </label>
+                                        	        </div>
+                                        	    </td>
+                                        	</tr>
 											<tr>
 												<th width="20%">服务器(建议填写IP地址)</th>
 												<td>
@@ -217,28 +247,26 @@ function pass_checked(obj){
 											<tr>
 												<th width="20%">密码</th>
 													<td>
-														<input type="password" class="ssconfig input_ss_table" id="ss_local_password" name="ss_local_password" maxlength="100" value="">
-													<div style="margin-left:170px;margin-top:-20px;margin-bottom:0px">
-														<input type="checkbox" name="show_pass" onclick="pass_checked(document.form.ss_local_password);">显示密码
-													</div>
+														<input type="password" class="ssconfig input_ss_table" id="ss_local_password" name="ss_local_password" maxlength="100" value="" onBlur="switchType(this, false);" onFocus="switchType(this, true);">
 												</td>
 											</tr>
 											<tr>
 												<th width="20%">加密方法</th>
 												<td>
 													<select id="ss_local_method" name="ss_local_method" style="width:165px;margin:0px 0px 0px 2px;" class="input_option">
-														<option value="table">table</option>
 														<option value="rc4">rc4</option>
 														<option value="rc4-md5">rc4-md5</option>
 														<option value="aes-128-cfb">aes-128-cfb</option>
 														<option value="aes-192-cfb">aes-192-cfb</option>
-														<option value="aes-256-cfb">aes-256-cfb</option>
-														<option value="bf-cfb">bf-cfb</option>
+														<option value="aes-256-cfb" selected>aes-256-cfb</option>
+														<option value="aes-128-ctr">aes-128-ctr</option>
+														<option value="aes-192-ctr">aes-192-ctr</option>
+														<option value="aes-256-ctr">aes-256-ctr</option>
 														<option value="camellia-128-cfb">camellia-128-cfb</option>
 														<option value="camellia-192-cfb">camellia-192-cfb</option>
 														<option value="camellia-256-cfb">camellia-256-cfb</option>
+														<option value="bf-cfb">bf-cfb</option>
 														<option value="cast5-cfb">cast5-cfb</option>
-														<option value="des-cfb">des-cfb</option>
 														<option value="idea-cfb">idea-cfb</option>
 														<option value="rc2-cfb">rc2-cfb</option>
 														<option value="seed-cfb">seed-cfb</option>
@@ -260,16 +288,22 @@ function pass_checked(obj){
 													<input type="text" class="ssconfig input_ss_table" id="ss_local_proxyport" name="ss_local_proxyport" maxlength="100" value="1082">												
 												</td>
 											</tr>
+											<tr id="acl_support">
+												<th>ACL控制</th>
+												<td>
+													<select name="ss_local_acl" id="ss_local_acl" class="input_option" style="width:165px;margin:0px 0px 0px 2px;">
+														<option value="0" selected>不使用</option>
+														<option value="1">gfwlist.pac</option>
+														<option value="2">chn.pac</option>
+													</select>
+												</td>
+											</tr>
 										</table>
 										<div id="warning" style="font-size:14px;margin:20px auto;"></div>
 										<div class="apply_gen">
 											<input class="button_gen" id="cmdBtn" onClick="onSubmitCtrl(this, ' Refresh ')" type="button" value="提交" />
 										</div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
-										<div class="KoolshareBottom">论坛技术支持： <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a> <br/>
-										博客技术支持： <a href="http://www.mjy211.com" target="_blank"> <i><u>www.mjy211.com</u></i> </a> <br/>
-										Github项目： <a href="https://github.com/koolshare/koolshare.github.io" target="_blank"> <i><u>github.com/koolshare</u></i> </a> <br/>
-										Shell by： <a href="mailto:sadoneli@gmail.com"> <i>sadoneli</i> </a>, Web by： <i>Xiaobao</i> </div>
 									</td>
 								</tr>
 							</table>

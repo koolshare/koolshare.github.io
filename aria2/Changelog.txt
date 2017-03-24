@@ -1,7 +1,0 @@
-Koolshare Asuswrt-Merlin adm Changelog
-===========================================
-1.7.4
-	-fix	fix issue in this thread:http://koolshare.cn/thread-63443-1-1.html
-
-1.6.1
-	-add	adapt aria2 to new softcenter

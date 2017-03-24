@@ -16,5 +16,7 @@ Koolshare Asuswrt-Merlin dualwan Changelog
    - update ip database
 0.8 (28/04/2016 16:21:00)
    - revert to 0.6
-1.0 (28/04/2016 16:21:00)
+1.0 (24/09/2016 16:21:00)
    - Update the routing table, other operators optimization rules
+1.1 (25/09/2016 16:21:00)
+   - fix erro

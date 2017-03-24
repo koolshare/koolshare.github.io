@@ -96,9 +96,13 @@ set_ulimit(){
 	ulimit -n 8192
 }
 
-set_local_version(){
-	KCP_basic_version_local=`cat /koolshare/kcptun/version`
-	dbus set KCP_basic_version="$KCP_basic_version_local"
+load_module(){
+	xt=`lsmod | grep xt_set`
+	OS=$(uname -r)
+	if [ -f /lib/modules/${OS}/kernel/net/netfilter/xt_set.ko ] && [ -z "$xt" ];then
+		echo $(date): "加载xt_set.ko内核模块！"
+		insmod /lib/modules/${OS}/kernel/net/netfilter/xt_set.ko
+	fi
 }
 
 case $ACTION in
@@ -107,16 +111,17 @@ start)
 	if [ "$KCP_basic_enable" == "1" ];then
 	creat_folder
 	set_ulimit
-    apply_KCP
+	load_module
+	apply_KCP
 	fi
 	;;
 stop | kill )
 	disable_KCP
 	;;
 restart)
-	set_local_version
 	creat_folder
 	set_ulimit
+	load_module
 	apply_KCP
 	print_success_info
 	;;

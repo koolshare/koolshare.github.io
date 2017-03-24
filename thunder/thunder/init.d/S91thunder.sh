@@ -1,1 +1,0 @@
-/koolshare/scripts/thunder_start.sh

@@ -1,5 +1,7 @@
 Koolshare Asuswrt-Merlin softeware center Changelog
 ===========================================
+1.2.4
+   - fix	support https
 
 1.1.9
    - fix	fix hightlight of submeunL2

@@ -1,7 +1,32 @@
 ﻿function menu_hook(title, tab) {
-	var ss_mode = '<% nvram_get("ss_mode"); %>';
-	tabtitle[16] = new Array("", "shadowsocks设置", "Socks5设置");
-	tablink[16] = new Array("", "Main_Ss_Content.asp", "Main_SsLocal_Content.asp");
+	var isChrome = navigator.userAgent.search("Chrome") > -1;
+		if(isChrome){
+		var major = navigator.userAgent.match("Chrome\/([0-9]*)\.");    //check for major version
+		var isChrome56 = (parseInt(major[1], 10) >= 56);
+	}
+	if((isChrome56) && document.getElementById("FormTitle")){
+		document.getElementById("FormTitle").className = "FormTitle_chrome56";
+	}
+
+	var enable_ss = "<% nvram_get("enable_ss"); %>";
+	var enable_soft = "<% nvram_get("enable_soft"); %>";
+	if(enable_ss == "1" && enable_soft == "1"){
+		tabtitle[tabtitle.length -2] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
+		tablink[tablink.length -2] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
+	}else{
+		tabtitle[tabtitle.length -1] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
+		tablink[tablink.length -1] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
+	}
+}
+
+var Base64;
+if(typeof btoa == "Function") {
+   Base64 = {encode:function(e){ return btoa(e); }, decode:function(e){ return atob(e);}};
+} else {
+   Base64 ={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/\r\n/g,"\n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
+}
+String.prototype.replaceAll = function(s1,s2){
+　　return this.replace(new RegExp(s1,"gm"),s2);
 }
 
 function showSSLoadingBar(seconds){
@@ -36,21 +61,22 @@ function showSSLoadingBar(seconds){
 	
 		winPadding = (winWidth-1050)/2;	
 		winWidth = 1105;
-		blockmarginLeft= (winWidth*0.3)+winPadding;
+		blockmarginLeft= (winWidth*0.3)+winPadding-150;
 	}
 	else if(winWidth <=1050){
-		blockmarginLeft= (winWidth)*0.3+document.body.scrollLeft;	
+		blockmarginLeft= (winWidth)*0.3+document.body.scrollLeft-160;
 
 	}
 	
 	if(winHeight >660)
 		winHeight = 660;
 	
-	blockmarginTop= winHeight*0.3			
+	blockmarginTop= winHeight*0.3-140		
 	
 	document.getElementById("loadingBarBlock").style.marginTop = blockmarginTop+"px";
 	// marked by Jerry 2012.11.14 using CSS to decide the margin
 	document.getElementById("loadingBarBlock").style.marginLeft = blockmarginLeft+"px";
+	document.getElementById("loadingBarBlock").style.width = 770+"px";
 
 	
 	/*blockmarginTop = document.documentElement.scrollTop + 200;
@@ -73,7 +99,11 @@ function showSSLoadingBar(seconds){
 
 function LoadingSSProgress(seconds){
 	document.getElementById("LoadingBar").style.visibility = "visible";
-
+	if (document.form.ss_basic_action.value == 9){
+		document.getElementById("loading_block3").innerHTML = "应用负载均衡设置 ..."
+		$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，应用负载均衡设置 ...</font></li>");
+		return true;
+	}
 	if (document.form.ss_basic_enable.value == 0){
 		document.getElementById("loading_block3").innerHTML = "SS服务关闭中 ..."
 		$j("#loading_block2").html("<li><font color='#ffcc00'><a href='http://www.koolshare.cn' target='_blank'></font>SS工作有问题？请来我们的<font color='#ffcc00'>论坛www.koolshare.cn</font>反应问题...</font></li>");
@@ -81,19 +111,19 @@ function LoadingSSProgress(seconds){
 		if (document.form.ss_basic_action.value == 1){
 			if (document.form.ss_basic_mode.value == 5){
 				document.getElementById("loading_block3").innerHTML = "全局模式启用中 ..."
-				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>此模式非科学上网方式，会影响国内网页速度...</font></li><li><font color='#ffcc00'>注意：全局模式并非VPN，只支持TCP流量转发...</font></li>");
+				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>此模式非科学上网方式，会影响国内网页速度...</font></li><li><font color='#ffcc00'>注意：全局模式并非VPN，只支持TCP流量转发...</font></li><li><font color='#ffcc00'>请等待日志显示完毕，并出现自动关闭按钮！</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
 			} else if (document.form.ss_basic_mode.value == 4){
 				document.getElementById("loading_block3").innerHTML = "游戏模式V2启用中 ..."
-				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>游戏模式V2模式使用内建的DNS防污染解决方案...</font></li><li><font color='#ffcc00'>游戏模式加载时间较长，请等待进度条...</font></li>");
+				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>游戏模式V2模式使用内建的DNS防污染解决方案...</font></li><li><font color='#ffcc00'>请等待日志显示完毕，并出现自动关闭按钮！</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
 			} else if (document.form.ss_basic_mode.value == 3){
 				document.getElementById("loading_block3").innerHTML = "游戏模式启用中 ..."
-				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>为确保游戏工作，请确保你的SS账号支持UDP转发...</font></li><font color='#ffcc00'><li>游戏模式加载时间较长，请等待进度条...</font></li>");
+				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>为确保游戏工作，请确保你的SS账号支持UDP转发...</font></li><font color='#ffcc00'><li>请等待日志显示完毕，并出现自动关闭按钮！</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
 			} else if (document.form.ss_basic_mode.value == 2){
 				document.getElementById("loading_block3").innerHTML = "大陆白名单模式启用中 ..."
-				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>模式加载时间较长，请耐心等待进度条...</font></li>");
+				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>请等待日志显示完毕，并出现自动关闭按钮！</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
 			} else if (document.form.ss_basic_mode.value == 1){
 				document.getElementById("loading_block3").innerHTML = "gfwlist模式启用中 ..."
-				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>尝试不同的DNS解析方案，可以达到最佳的效果哦...</font></li>");
+				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>尝试不同的DNS解析方案，可以达到最佳的效果哦...</font></li><li><font color='#ffcc00'>请等待日志显示完毕，并出现自动关闭按钮！</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
 			}
 		}else if (document.form.ss_basic_action.value == 2){
 			document.getElementById("loading_block3").innerHTML = "快速重启DNS服务 ..."
@@ -104,13 +134,27 @@ function LoadingSSProgress(seconds){
 		} else if (document.form.ss_basic_action.value == 4){
 			document.getElementById("loading_block3").innerHTML = "快速应用附加功能 ..."
 			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>无需重启全部服务，附加功能即可生效~</font></li>");
+		} else if (document.form.ss_basic_action.value == 5){
+			document.getElementById("loading_block3").innerHTML = "shadowsocks插件升级 ..."
+			//document.getElementById("log_content3").rows = 12;
+			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，等待脚本运行完毕后再刷新！</font></li><li><font color='#ffcc00'>升级服务会自动检测最新版本并下载升级...</font></li>");
+		} else if (document.form.ss_basic_action.value == 6){
+			document.getElementById("loading_block3").innerHTML = "shadowsocks规则更新 ..."
+			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，等待脚本运行完毕后再刷新！</font></li><li><font color='#ffcc00'>正在自动检测github上的更新...</font></li>");
+		} else if (document.form.ss_basic_action.value == 7){
+			document.getElementById("loading_block3").innerHTML = "恢复shadowsocks配置 ..."
+			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，配置恢复后需要重新提交！</font></li><li><font color='#ffcc00'>恢复配置中...</font></li>");
+		} else if (document.form.ss_basic_action.value == 8){
+			document.getElementById("loading_block3").innerHTML = "清空shadowsocks配置 ..."
+			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，正在清空shadowsocks配置...</font></li>");
 		}
 	}
+	/*
 	y = y + progress;
 	if(typeof(seconds) == "number" && seconds >= 0){
 		if(seconds != 0){
-			document.getElementById("proceeding_img").style.width = Math.round(y) + "%";
-			document.getElementById("proceeding_img_text").innerHTML = Math.round(y) + "%";
+			//document.getElementById("proceeding_img").style.width = Math.round(y) + "%";
+			//document.getElementById("proceeding_img_text").innerHTML = Math.round(y) + "%";
 	
 			if(document.getElementById("loading_block1")){
 				document.getElementById("proceeding_img_text").style.width = document.getElementById("loading_block1").clientWidth;
@@ -123,9 +167,16 @@ function LoadingSSProgress(seconds){
 			document.getElementById("proceeding_img_text").innerHTML = "完成";
 			y = 0;
 				setTimeout("hideSSLoadingBar();",1000);
-				refreshpage()
+				//refreshpage()
+				htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
+				htmlbodyforIE[0].style.overflow = "visible";	  //hidden the Y-scrollbar for preventing from user scroll it.
+				line_show();
+				checkss = 0;
+				setTimeout("get_ss_status_data();",6000);
 		}
 	}
+	*/
+
 }
 
 function LoadingLocalProgress(seconds){
@@ -149,13 +200,27 @@ function LoadingLocalProgress(seconds){
 			document.getElementById("proceeding_img_text").innerHTML = "完成";
 			y = 0;
 				setTimeout("hideSSLoadingBar();",1000);
-				refreshpage()
+				refreshpage();
 		}
 	}
 }
 
 function hideSSLoadingBar(){
+	x = -1;
 	document.getElementById("LoadingBar").style.visibility = "hidden";
+	checkss = 0;
+	var action = document.form.ss_basic_action.value;
+	if (action == 5 || action == 6 ||action == 7 ||action == 8 || action == 9){
+		refreshpage();
+	}else{
+		htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
+		htmlbodyforIE[0].style.overflowY = "visible";
+		decode_show();
+		checkss = 0;
+		$G("ss_basic_password").value = Base64.decode($G("ss_basic_password").value);
+		setTimeout("get_ss_status_data();",2000);
+	}
+
 }
 
 function pass_checked(obj){
@@ -183,6 +248,69 @@ function openShutManager(oSourceObj, oTargetObj, shutAble, oOpenTip, oShutTip) {
 		}
 	}
 }
+
+var autoTextarea = function (elem, extra, maxHeight) {
+        extra = extra || 0;
+        var isFirefox = !!document.getBoxObjectFor || 'mozInnerScreenX' in window,
+        isOpera = !!window.opera && !!window.opera.toString().indexOf('Opera'),
+                addEvent = function (type, callback) {
+                        elem.addEventListener ?
+                                elem.addEventListener(type, callback, false) :
+                                elem.attachEvent('on' + type, callback);
+                },
+                getStyle = elem.currentStyle ? function (name) {
+                        var val = elem.currentStyle[name];
+ 
+                        if (name === 'height' && val.search(/px/i) !== 1) {
+                                var rect = elem.getBoundingClientRect();
+                                return rect.bottom - rect.top -
+                                        parseFloat(getStyle('paddingTop')) -
+                                        parseFloat(getStyle('paddingBottom')) + 'px';        
+                        };
+ 
+                        return val;
+                } : function (name) {
+                                return getComputedStyle(elem, null)[name];
+                },
+                minHeight = parseFloat(getStyle('height'));
+ 
+        elem.style.resize = 'none';
+ 
+        var change = function () {
+                var scrollTop, height,
+                        padding = 0,
+                        style = elem.style;
+ 
+                if (elem._length === elem.value.length) return;
+                elem._length = elem.value.length;
+ 
+                if (!isFirefox && !isOpera) {
+                        padding = parseInt(getStyle('paddingTop')) + parseInt(getStyle('paddingBottom'));
+                };
+                scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+ 
+                elem.style.height = minHeight + 'px';
+                if (elem.scrollHeight > minHeight) {
+                        if (maxHeight && elem.scrollHeight > maxHeight) {
+                                height = maxHeight - padding;
+                                style.overflowY = 'auto';
+                        } else {
+                                height = elem.scrollHeight - padding;
+                                style.overflowY = 'hidden';
+                        };
+                        style.height = height + extra + 'px';
+                        scrollTop += parseInt(style.height) - elem.currHeight;
+                        document.body.scrollTop = scrollTop;
+                        document.documentElement.scrollTop = scrollTop;
+                        elem.currHeight = parseInt(style.height);
+                };
+        };
+ 
+        addEvent('propertychange', change);
+        addEvent('input', change);
+        addEvent('focus', change);
+        change();
+};
 
 
 function openssHint(itemNum){
@@ -291,30 +419,12 @@ function openssHint(itemNum){
 		_caption = "一次性验证(OTA)";
 	}
 	else if(itemNum == 8){
-		width="700px";
-		statusmenu ="<b><font color='#669900'>plain：</font></b>plain：表示不混淆，使用原协议"
-		statusmenu +="</br></br><b><font color='#669900'>verify_simple（不建议使用）：</font></b>对每一个包都进行CRC32验证和长度混淆，数据格式为：包长度(2字节)|随机数据长度+1(1字节)|随机数据|原数据包|CRC32。此插件与原协议握手延迟相同，整个通讯过程中存在验证及混淆用的冗余数据包，下载的情况下冗余数据平均占比1%，普通浏览时占比略高一些，但平均也不会超过5%。"
-		statusmenu +="</br></br><b><font color='#669900'>verify_sha1：</font></b>对每一个包都进行SHA-1校验，具体协议描述参阅<a href='https://shadowsocks.org/en/spec/one-time-auth.html' target='_blank'><u><font color='#00F'>One Time Auth</font></u></a>，握手数据包增加10字节，其它数据包增加12字节。此插件能兼容原协议（需要在服务端配置为verify_sha1_compatible)。"
-		statusmenu +="</br></br><b><font color='#669900'>auth_simple（不建议使用）：</font></b>首个客户端数据包会发送由客户端生成的随机客户端id(4byte)、连接id(4byte)、unix时间戳(4byte)以及CRC32，服务端通过验证后，之后的通讯与verify_simple相同。此插件提供了最基本的认证，能抵抗一般的重放攻击，默认同一端口最多支持16个客户端同时使用，可通过修改此值限制客户端数量，缺点是使用此插件的服务器与客户机的UTC时间差不能超过5分钟，通常只需要客户机校对本地时间并正确设置时区就可以了。此插件与原协议握手延迟相同，支持服务端自定义参数，参数为10进制整数，表示最大客户端同时使用数。"
-		statusmenu +="</br></br><b><font color='#669900'>auth_sha1：</font></b>对首个包进行SHA-1校验，同时会发送由客户端生成的随机客户端id(4byte)、连接id(4byte)、unix时间戳(4byte)，之后的通讯使用Adler-32作为效验码。此插件提供了能抵抗CCA的认证，也能抵抗一般的重放攻击，默认同一端口最多支持64个客户端同时使用，可通过修改此值限制客户端数量，使用此插件的服务器与客户机的UTC时间差不能超过1小时，通常只需要客户机校对本地时间并正确设置时区就可以了。此插件与原协议握手延迟相同，能兼容原协议（需要在服务端配置为auth_sha1_compatible)，支持服务端自定义参数，参数为10进制整数，表示最大客户端同时使用数。"
-		statusmenu +="</br></br><b><font color='#669900'>auth_sha1_v2：</font></b>与auth_sha1相似，去除时间验证，以避免部分设备由于时间导致无法连接的问题，增长客户端ID为8字节，使用更大的长度混淆。能兼容原协议（需要在服务端配置为auth_sha1_v2_compatible)，支持服务端自定义参数，参数为10进制整数，表示最大客户端同时使用数。"
-		statusmenu +="</br></br>更多信息，请参考<a href='https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
+		statusmenu ="更多信息，请参考<a href='https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
 		_caption = "协议插件（protocol）";
-		return overlib(statusmenu, OFFSETX, -860, OFFSETY, -290, LEFT, STICKY, WIDTH, 'width', CAPTION, _caption, CLOSETITLE, '');
 	}
 	else if(itemNum == 9){
-		width="700px";
-		statusmenu ="<b><font color='#669900'>origin：</font></b>plain：表示不混淆，使用原协议"
-		statusmenu +="</br></br><b><font color='#669900'>http_simple：</font></b>并非完全按照http1.1标准实现，仅仅做了一个头部的GET请求和一个简单的回应，之后依然为原协议流。使用这个混淆后，已在部分地区观察到似乎欺骗了QoS的结果。对于这种混淆，它并非为了减少特征，相反的是提供一种强特征，试图欺骗GFW的协议检测。要注意的是应用范围变大以后因特征明显有可能会被封锁。此插件可以兼容原协议(需要在服务端配置为http_simple_compatible)，延迟与原协议几乎无异（在存在QoS的地区甚至可能更快），除了头部数据包外没有冗余数据包，支持自定义参数，参数为http请求的host，例如设置为cloudfront.com伪装为云服务器请求，可以使用逗号分割多个host如a.com,b.net,c.org（仅C#版支持），这时会随机使用。注意，错误设置此参数可能导致连接被断开甚至IP被封锁，如不清楚如何设置那么请留空。"
-		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;本插件的高级设置（C#版、python版及ssr-libev版支持）：本插件可以自定义几乎完整的http header，其中前两行的GET和host不能修改，可自定义从第三行开始的内容。例子：baidu.com#User-Agent: abc\nAccept: text/html\nConnection: keep-alive&nbsp;&nbsp;&nbsp;&nbsp;这是填于混淆参数的内容，在#号前面的是上文所说的host，后面即为自定义header，所有的换行使用\n表示（写于配置文件时也可直接使用\n而不必写成\n，换行符亦会转换），如遇到需要使用单独的\号，可写为\\，最末尾不需要写\n，程序会自动加入连续的两个换行。"
-		statusmenu +="</br></br><b><font color='#669900'>http_post：</font></b>与http_simple绝大部分相同，区别是使用POST方式发送数据，符合http规范，欺骗性更好，但只有POST请求这种行为容易被统计分析出异常。此插件可以兼容http_simple，同时也可兼容原协议(需要在服务端配置为http_post_compatible)，参数设置等内容参见http_simple，密切注意如果使用自定义http header，请务必填写boundary。"
-		statusmenu +="</br></br><b><font color='#669900'>random_head：</font></b>开始通讯前发送一个几乎为随机的数据包（目前末尾4字节为CRC32，会成为特征，以后会有改进版本），之后为原协议流。目标是让首个数据包根本不存在任何有效信息，让统计学习机制见鬼去吧。此插件可以兼容原协议(需要在服务端配置为random_head_compatible)，比原协议多一次握手导致连接时间会长一些，除了握手过程之后没有冗余数据包，不支持自定义参数。"
-		statusmenu +="</br></br><b><font color='#669900'>tls_simple（不建议使用）：</font></b>模拟https/TLS1.2的握手过程，但server hello的应答数据不完整，但亦可使用。对于防火墙针对TLS握手协议篡改会无视，但结果是会导致此连接超时断开，浏览器响应缓慢。此插件可以兼容原协议(需要在服务端配置为tls_simple_compatible)，比原协议多一次握手导致连接时间会长一些，除了握手过程之后没有冗余数据包，不支持自定义参数。"
-		statusmenu +="</br></br><b><font color='#669900'>tls1.0_session_auth（不建议使用）:</font></b>:模拟TLS1.0在客户端有session ID的情况下的握手连接。但实现有错误，已观察到有可能是防火墙的封锁。此插件可以兼容原协议(需要在服务端配置为tls1.0_session_auth_compatible)，比原协议多一次握手导致连接时间会长一些，除了握手过程之后没有冗余数据包，不支持自定义参数。"
-		statusmenu +="</br></br><b><font color='#669900'>tls1.2_ticket_auth（强烈推荐）:</font></b>:模拟TLS1.2在客户端有session ticket的情况下的握手连接。目前为完整模拟实现，经抓包软件测试完美伪装为TLS1.2。因为有ticket所以没有发送证书等复杂步骤，因而防火墙无法根据证书做判断。同时自带一定的抗重放攻击的能力。如遇到重放攻击则会在服务端log里搜索到，可以通过grep 'replay attack'搜索，可以用此插件发现你所在地区线路有没有针对TLS的干扰。防火墙对TLS比较无能为力，抗封锁能力应该会较其它插件强，但遇到的干扰也可能不少，不过协议本身会检查出任何干扰，遇到干扰便断开连接，避免长时间等待，让客户端或浏览器自行重连。此插件可以兼容原协议(需要在服务端配置为tls1.2_ticket_auth_compatible)，比原协议多一次握手导致连接时间会长一些，使用C#客户端开启自动重连时比其它插件表现更好。支持自定义参数，参数为SNI，即发送host名称的字段，此功能与TOR的meet插件十分相似，例如设置为cloudfront.net伪装为云服务器请求，可以使用逗号分割多个host如a.com,b.net,c.org（仅C#版支持），这时会随机使用。注意，错误设置此参数可能导致连接被断开甚至IP被封锁，如不清楚如何设置那么请留空。推荐自定义参数设置为cloudflare.com或cloudfront.net。"
-		statusmenu +="</br></br>更多信息，请参考<a href='https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
+		statusmenu ="更多信息，请参考<a href='https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
 		_caption = "混淆插件 (obfs)";
-		return overlib(statusmenu, OFFSETX, -860, OFFSETY, -290, LEFT, STICKY, WIDTH, 'width', CAPTION, _caption, CLOSETITLE, '');
 		
 	}
 	else if(itemNum == 11){
@@ -342,10 +452,6 @@ function openssHint(itemNum){
 		statusmenu ="&nbsp;&nbsp;&nbsp;&nbsp;SSR表示shadowwocksR-libev，相比较原版shadowwocksR-libev，其提供了强大的协议混淆插件，让你避开gfw的侦测。"
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;虽然你在节点编辑界面能够指定使用SS的类型，不过这里还是提供了勾选使用SSR的选项，是为了方便一些服务器端是兼容原版协议的用户，快速切换SS账号类型而设定。";
 		_caption = "使用SSR";
-	}
-	else if(itemNum == 14){
-		statusmenu ="&nbsp;&nbsp;&nbsp;&nbsp;建议清楚chrome等浏览器禁用在该页的自动保存密码，不然可能导致表单自动填写，将本页的密码替换掉！"
-		_caption = "显示密码";
 	}
 	else if(itemNum == 15){
 		statusmenu ="&nbsp;&nbsp;&nbsp;&nbsp;点击右侧的铅笔图标，进入节点界面，在节点界面，你可以进行节点的添加，修改，删除，应用，检查节点ping，和web访问性等操作。"
@@ -418,29 +524,21 @@ function openssHint(itemNum){
 		//ChinaDNS
 		statusmenu +="</br><font color='#CC0066'>4:ChinaDNS：</font>"
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;原理是通过ChinaDNS自身的DNS并发查询，同时将你要请求的域名同时向国内和国外DNS发起查询，然后用ChinaDNS内置的双向过滤+指针压缩功能来过滤掉污染ip，双向过滤保证了国内地址都用国内域名查询，因此使用ChinaDNS能够获得最佳的国内CDN效果，这里ChinaDNS国内服务器的选择是有要求的，这个DNS的ip地址必须在<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/chnroute.txt' target='_blank'><u><font color='#00F'>chnroute</font></u></a>定义的IP段内，同理你选择或者自定义的国外DNS必须在chnroute定义的IP段外，所以比如你在国内DNS处填写你的上级路由器的ip地址，类似192.168.1.1这种，会被ChinaDNS判断为国外IP地址,从而使得双向过滤功能失效，国外DNS解析的IP地址就会进入DNS缓存；";
-		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;虽然给出了国内解析选项，但是可能作用性不是很大，因为国内的很多域名（由<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>定义），已经走了国内DNS，而ChinaDNS对国内DNS的解析就是做扫尾工作：对于一些没有定义在国内cdn名单内的域名，能发挥作用；"
-		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;为了保证ChinaDNS国外解析的效果，这里我给出的ChinaDNS国外DNS都是又经过了一层软件（dns2socks，dnscrypt-proxy，ss-tunnel）的，并没有由ChinaDNS直接去请求国外DNS服务器，因为大家都知道8.8.8.8之类的直接去请求丢包可能很严重的。这里如果选择dns2socks或者ss-tunnel，ChinaDNS解析国外DNS会向上游软件去请求，而这两个上游软件都会经过SS服务器，可以说能达到良好的国外CDN效果；"
+		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;因为ChinaDNS自己具备cdn解析能力，所以没必要再使用<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>,因为使用这个名单会对dnsmasq造成很大的负担！"
+		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;为了保证ChinaDNS国外解析的效果，这里我给出的ChinaDNS国外DNS都是又经过了一层软件（dns2socks，dnscrypt-proxy，ss-tunnel）的；同时你也可以自定义ChinaDNS国外dns去直接去请求国外DNS服务器，但是cdn效果就不会有经过上层软件后好。这里如果选择dns2socks或者ss-tunnel，ChinaDNS解析国外DNS会向上游软件去请求，而这两个上游软件都会经过SS服务器，可以说能达到良好的国外CDN效果；"
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;因为gfwlist模式的原理，不需要用到这个软件，也有良好的cdn效果，所以并没有必要在gfwlist模式中集成该方案;"
 		//Pcap_DNSProxy
 		statusmenu +="</br><font color='#CC0066'>5:Pcap_DNSProxy：</font>"
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;官方介绍：Pcap_DNSProxy 是一个基于 WinPcap/LibPcap 用于过滤 DNS 投毒污染的工具，提供支持正则表达式的 Hosts 提供更便捷和强大的修改 Hosts 的方法，以及对 DNSCurve/DNSCrypt 协议、并行和 TCP 协议请求的支持。多服务器并行请求功能，更可提高在恶劣网络环境下域名解析的可靠性。";
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;简单的说，Pcap_DNSProxy用底层抓包的方法来进行过滤DNS 投毒污染，其功能强大到令其它几种工具都汗颜，不过我们在集成该工具时考虑到其复杂性，因此都是预先为大家定义好了Pcap_DNSProxy的配置文件，如果你需要修改，可以进入路由器内的/koolshare/ss/dns文件夹去修改配置，Pcap_DNSProxy因为各种依赖，导致在merlin下用自带的工具链编译无法通过，使用了新的交叉编译工具链才顺利编译，其在merlin固件下运行的稳定性已经逐渐提高，但是其在解析DNS时发出大量的并发包，还是为路由器带来的不小的挑战，因此该解析软件对系统cpu和内存的暂用都要比其它几个稍高一些；"
-		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;Pcap_DNSProxy 也是具备国内CDN解析效果的,不过在前面ChinaDNS部分提到过，已经由国内DNS解析国内cdn名单，Pcap_DNSProxy解析国内域名也是进行扫尾工作：对于一些没有定义在国内cdn名单内的域名，能发挥作用；而对于国外的解析，由于是通过路由器直接请求国外DNS服务器，并没有经过SS服务器，解析到的ip地址和ss服务器的距离比较随机，所以国外cdn效果是相对比较弱的。";
+		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;Pcap_DNSProxy也是具备国内CDN解析效果的,不过在前面ChinaDNS部分提到过，已经由国内DNS解析国内cdn名单，Pcap_DNSProxy解析国内域名也是进行扫尾工作：对于一些没有定义在国内cdn名单内的域名，能发挥作用；而对于国外的解析，由于是通过路由器直接请求国外DNS服务器，并没有经过SS服务器，解析到的ip地址和ss服务器的距离比较随机，所以国外cdn效果是相对比较弱的。";
+		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;Pcap_DNSProxy也是具备国内CDN解析效果的,所以没必要再使用<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>,因为使用这个名单会对dnsmasq造成很大的负担！";
 		//pdnsd
 		statusmenu +="</br><font color='#CC0066'>5:pdnsd：</font>"
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;pdnsd是一个老牌的dns解析软件了它不仅可以用来做解析软件，还能用来自己搭建dns缓存服务器；早期pdnsd的流行，主要是其支持TCP解析，然而随着gfw对投毒范围的越来越广泛，tcp解析已经不能保证无毒了，但是其强大的dns缓存机制，让我仍然不肯放弃它；";
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;pdnsd域名解析具备强大的dns缓存机制，通过修改最小ttl时间，可以让缓存进入电脑后很长时间才会失效，优点就是每次解析国外网站，仅需1ms的时间；";
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;设置pdnsd的上有服务器，建议使用UDP方式，因为TCP方式，除非自己搭建支持TCP查询的DNS服务器，很难避免污染的情况，而UDP方式也是提供了（dns2socks，dnscrypt-proxy，ss-tunnel）三种上游软件，这里就不再赘述；";
 		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;在gfwlist模式下，pdnsd用于针对性的解析gfwlist内的域名名单，因此pdnsd的DNS缓存也只针对这部分域名；在使用chnroute的模式（大陆白名单模式，游戏模式，游戏模式V2）dnscrypt-proxy用于解析<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>以外的所有域名，pdnsd的DNS缓存也针对这部分域名（但是范围比使用gfwlist要大得多了），所以一些没有包含在这份名单内的网站，而正好这个网站有部署国外地址的话，那么这个网站就会被解析为国外ip，然后由ipset判断流量走ss，当然这种情况是比较少的，因为一般常用的国内网站都包含在这份cdn名单内了。";
-		//end
-		statusmenu +="</br></br>&nbsp;&nbsp;&nbsp;&nbsp;问：那么你说了上面那么多，那么DNS解析方案到底哪家强？";
-		statusmenu +="</br></br>&nbsp;&nbsp;&nbsp;&nbsp;答：我一口老血喷死你，不是给你渔了吗？";
-		statusmenu +="</br></br>&nbsp;&nbsp;&nbsp;&nbsp;问：我要渔干嘛，直接给我鱼好了~";
-		statusmenu +="</br></br>&nbsp;&nbsp;&nbsp;&nbsp;答：虽然我很无奈，但是我还是回答下吧："
-		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#00F'>1:</font>&nbsp;&nbsp;在gfwlist模式下，因为只有gfwlist模式内的域名会用国外DNS解析，所以是不用担心国内DNS解析的，那么如果要获得良好的国外CDN效果，这里<b>推荐大家用万金油dns2socks，还有ss-tunnel</b>,前者的解析和电脑上用socks5的远端解析式一样样的，后者ss-tunnel虽然走了不同的路（udp）去解析，但是最终殊途同归，解析效果应该和dns2socks是一样的；那么一定要分出个优劣的话，就看你的网络是udp给力还是tcp给力了；如果你像解析效果还还能缓存，那就<b>推荐pdnsd+dns2socks/ss-tunnel组合</b>";
-		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;<font color='#00F'>2:</font>&nbsp;&nbsp;在使用chnroute的模式下（大陆白名单模式，游戏模式，游戏模式V2），要获得良好的国内cdn效果和国外cdn效果，<b>推荐使用ChinaDNS + dns2socks/ss-tunnel</b>的组合；如果你想要给力的DNS缓存效果，那就牺牲点国内cdn好了，推荐<b>推荐pdnsd+dns2socks/ss-tunnel组合</b>"
-		statusmenu +="</br></br>&nbsp;&nbsp;&nbsp;&nbsp;问：好吧，那我还是用默认的好了！";
-		statusmenu +="</br></br>&nbsp;&nbsp;&nbsp;&nbsp;答：噗~~~~~~~~~~";
 		_caption = "国外DNS";
 		return overlib(statusmenu, OFFSETX, -860, OFFSETY, -290, LEFT, STICKY, WIDTH, 'width', CAPTION, _caption, CLOSETITLE, '');
 		
@@ -476,7 +574,6 @@ function openssHint(itemNum){
 		statusmenu +="</br></br>koolshare.cn"
 		statusmenu +="</br>baidu.com"
 		statusmenu +="</br></br>需要注意的是，这里要填写的一定是网站的一级域名，比如taobao.com才是正确的，www.taobao.com，http://www.taobao.com/这些格式都是错误的！"
-		statusmenu +="</br>默认已经添加了2万多条<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>，请勿重复添加"
 		_caption = "自定义需要CDN加速网站";
 	}
 	else if(itemNum == 34){
@@ -491,48 +588,17 @@ function openssHint(itemNum){
 		statusmenu +="</br></br>如果填入的信息里带有英文逗号的，也会导致dnsmasq启动失败！"
 		_caption = "自定义dnsamsq";
 	}
-	else if(itemNum == 35){
-		statusmenu ="此处填入不需要走ss的域名，一行一个，格式如下：。"
-		statusmenu +="</br></br>google.com.sg"
-		statusmenu +="</br>youtube.com"
-		statusmenu +="</br></br>默认<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf' target='_blank'><font color='#00F'>gfwlist</font></a>以外的域名都不会走ss，故添加<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf' target='_blank'><font color='#00F'>gfwlist</font></a>内的域名才有意义!"
-		statusmenu +="</br></br>屏蔽一个域名可能导致其他网址被屏蔽，例如解析结果一致的youtube.com和google.com."
-		statusmenu +="</br></br>只有域名污染，没有IP未阻断的网站，不能被屏蔽，例如twitter.com."
-		statusmenu +="</br></br>需要注意的是，这里要填写的一定是网站的一级域名，比如youtbe.com才是正确的，www.youtbe.com，https://www.youtbe.com/这些格式都是错误的！"
-		_caption = "域名白名单（新增）";
-	}
-	else if(itemNum == 36){
-		statusmenu ="此处填入需要强制走ss的域名，一行一个，格式如下：。"
-		statusmenu +="</br></br>koolshare.cn"
-		statusmenu +="</br>baidu.com"
-		statusmenu +="</br></br>默认已经由<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf' target='_blank'><font color='#00F'>gfwlist</font></a>提供了上千条被墙域名，请勿重复添加！"
-		statusmenu +="</br></br>需要注意的是，这里要填写的一定是网站的一级域名，比如baidu.com才是正确的，www.baidu.com，http://www.baidu.com/这些格式都是错误的！"
-		_caption = "域名黑名单";
-	}
-	else if(itemNum == 37){
-		statusmenu ="此处填入需要强制走ss的IP或IP段（CIDR格式），一行一个，格式如下：。"
-		statusmenu +="</br></br>#telegram rule"
-		statusmenu +="</br>149.154.0.0/16"
-		statusmenu +="</br>91.108.4.0/22"
-		statusmenu +="</br>91.108.56.0/24"
-		statusmenu +="</br>109.239.140.0/24"
-		statusmenu +="</br>67.198.55.0/24"
-		statusmenu +="</br></br>对于某些没有域名但是被墙的服务很有用处，比如telegram等！"
-		_caption = "IP/CIDR黑名单";
-	}
 	else if(itemNum == 38){
 		statusmenu ="填入不需要走代理的外网ip/cidr地址，一行一个，格式如下：。"
 		statusmenu +="</br></br>2.2.2.2"
 		statusmenu +="</br>3.3.3.3"
 		statusmenu +="</br>4.4.4.4/24"
-		statusmenu +="</br></br>因为默认大陆的ip都不会走SS，所以此处填入国外IP/CIDR更有意义！"
 		_caption = "IP/CIDR白名单";
 	}
 	else if(itemNum == 39){
 		statusmenu ="填入不需要走代理的域名，一行一个，格式如下：。"
 		statusmenu +="</br></br>google.com"
 		statusmenu +="</br>facebook.com"
-		statusmenu +="</br></br>因为默认大陆的ip都不会走SS，所以此处填入国外域名更有意义！"
 		statusmenu +="</br></br>需要注意的是，这里要填写的一定是网站的一级域名，比如google.com才是正确的，www.google.com，https://www.google.com/这些格式都是错误的！"
 		statusmenu +="</br></br>需要清空电脑DNS缓存，才能立即看到效果"
 		_caption = "域名白名单";
@@ -542,20 +608,18 @@ function openssHint(itemNum){
 		statusmenu +="</br></br>5.5.5.5"
 		statusmenu +="</br>6.6.6.6"
 		statusmenu +="</br>7.7.7.7/8"
-		statusmenu +="</br></br>因为默认大陆以外ip都会走SS，所以此处填入国内IP/CIDR更有意义"
 		_caption = "IP/CIDR黑名单";
 	}
 	else if(itemNum == 41){
 		statusmenu ="填入需要强制走代理的域名，，一行一个，格式如下：。"
 		statusmenu +="</br></br>baidu.com"
 		statusmenu +="</br>taobao.com"
-		statusmenu +="</br></br>因为默认大陆以外的ip都会走SS，所以此处填入国内域名更有意义！"
 		statusmenu +="</br></br>需要注意的是，这里要填写的一定是网站的一级域名，比如google.com才是正确的，www.baidu.com，http://www.baidu.com/这些格式都是错误的！"
 		statusmenu +="</br></br>需要清空电脑DNS缓存，才能立即看到效果。"
 		_caption = "IP/CIDR黑名单";
 	}
 	else if(itemNum == 42){
-		statusmenu ="此处定义ss状态检测更新时间间隔，默认10秒。"
+		statusmenu ="此处定义ss状态检测更新时间间隔，默认5秒。"
 		_caption = "状态更新间隔";
 	}
 	else if(itemNum == 43){
@@ -577,25 +641,35 @@ function openssHint(itemNum){
 		statusmenu ="一些用户的网络拨号可能比较滞后，为了保证SS在路由器开机后能正常启动，可以通过此功能，为ss的启动增加开机延迟。"
 		_caption = "开机启动延迟";
 	}
-	else if(itemNum == 47){
-		statusmenu ="游戏内模式V2模式使用了koolgame程序内置的dns2ss。"
-		_caption = "选择国外dns";
-	}
-	else if(itemNum == 48){
-		statusmenu ="选择全局全局HTTP(s)，将80和443端口的流量导向ss。"
-		statusmenu +="</br>选择全局全局TCP，将所有TCP端口的流量导向ss。"
-		_caption = "全局模式";
-	}
-	else if(itemNum == 49){
-		statusmenu ="选择全局OpenDNS方式，使用dnscrypt-proxy解析dns。"
-		statusmenu +="</br>选择全局UDP转发方式，将使用ss-tunnel解析dns。"
-		statusmenu +="</br>选择全局OpenDNS方式 + UDP转发方式，将使用dnscrypt-proxy 和 ss-tunnel并发解析dns。"
-		_caption = "全局模式";
-	}
 	else if(itemNum == 50){
 		statusmenu ="通过此开关，你可以开启或者关闭侧边栏面板上的shadowsocks入口;"
 		statusmenu +="</br>该开关在固件版本6.6.1（不包括6.6.1）以上起作用。"
 		_caption = "侧边栏开关";
+	}
+	else if(itemNum == 51){
+		width="600px";
+		statusmenu ="如果你的ss服务器填写了域名，可以通过此处的设置来定义域名的解析方式"
+		statusmenu +="</br></br><font color='#00F'>如果解析正确:</font>ip地址将用于ss的配置文件和iptables对vps ip的RETURN操作"
+		statusmenu +="</br></br><font color='#00F'>如果解析失败:</font>ss的配置文件将会使用域名，然后由ss-redir自己去解析；iptables对vps ip的RETURN将不会添加，就会造成两种情况："
+		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;1，如果ss-redir自己也解析失败，就会出现Problem detected!，然后你将不能访问自己的vps，除非关闭ss"
+		statusmenu +="</br>&nbsp;&nbsp;&nbsp;&nbsp;2，如果ss-redir自己解析成功，就会出现working...，虽然你能访问你的vps，但是是vps自己（127.0.0.1）访问自己，此时切换节点、关闭ss等操作，会断开你访问你vps的链接！当然，这对普通用户和购买ss帐号的用户没什么影响。"
+		statusmenu +="</br></br>nslookup解析方式比较自由，能自定义dns解析服务器，解析成功率比较高，但是解析失败的时候可能导致脚本开在nslookup处，可能导致过早提交结束，从而导致fq的dns污染。"
+		statusmenu +="</br></br>resolveip解析方式不会卡住脚本，如果4秒内不能解析成功，将不再尝试，然后把域名交给ss-redir自己取解析，并且不添加vps ip的RETURN条目。"
+		statusmenu +="</br></br>如果你使用IP地址作为服务器地址，那么选择两者没有区别，如果你使用域名，建议优先使用resolveip方式，如果还是不行再使用nslookup方式，再不行，就更换nslookup方式的解析服务器"
+		_caption = "SS服务器解析";
+	}else if(itemNum == 52){
+		statusmenu ="KCP协议，ss-libev混淆，负载均衡下均不支持UDP！"
+		statusmenu +="</br>请检查你是否启用了其中之一。"
+		_caption = "侧边栏开关";
+	}else if(itemNum == 53){
+		statusmenu ="此处可以自定义你偏向使用的DNS解析方案"
+		statusmenu +="</br></br>国内优先：国外dns解析gfwlist名单内的国外域名，其余域名用国内dns解析，需要<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf' target='_blank'><u><font color='#00F'>gfwlist</font></u></a>，占用cpu较小，国内解析效果好。"
+		statusmenu +="</br></br>国外优先：国内dns解析cdn名单内的国内域名用，其余域名用国外dns解析，需要<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>，占用cpu较大，国外解析效果好。"
+		_caption = "侧边栏开关";
+	}
+	else if(itemNum == 54){
+		statusmenu ="更多信息，请参考<a href='https://breakwa11.blogspot.jp/2017/01/shadowsocksr-mu.html' target='_blank'><u><font color='#00F'>ShadowsocksR 协议参数文档</font></u></a>"
+		_caption = "协议参数（protocol）";
 	}
 		//return overlib(statusmenu, OFFSETX, -160, LEFT, DELAY, 200);
 		//return overlib(statusmenu, OFFSETX, -160, LEFT, STICKY, WIDTH, 'width', CAPTION, " ", FGCOLOR, "#4D595D", CAPCOLOR, "#000000", CLOSECOLOR, "#000000", MOUSEOFF, "1",TEXTCOLOR, "#FFF", CLOSETITLE, '');
@@ -617,3 +691,144 @@ function openssHint(itemNum){
 	}
 }
 
+function showDropdownClientList(_callBackFun, _callBackFunParam, _interfaceMode, _containerID, _pullArrowID, _clientState) {
+	document.body.onclick = function() {control_dropdown_client_block(_containerID, _pullArrowID);}
+	if(clientList.length == 0){
+		setTimeout(function() {
+			genClientList();
+			showDropdownClientList(_callBackFun, _callBackFunParam, _interfaceMode, _containerID, _pullArrowID);
+		}, 500);
+		return false;
+	}
+
+	var htmlCode = "";
+	htmlCode += "<div id='clientlist_online'></div>";
+	htmlCode += "<div id='clientlist_dropdown_expand' class='clientlist_dropdown_expand' onclick='expand_hide_Client(\"clientlist_dropdown_expand\", \"clientlist_offline\");' onmouseover='over_var=1;' onmouseout='over_var=0;'>Show Offline Client List</div>";
+	htmlCode += "<div id='clientlist_offline'></div>";
+	document.getElementById(_containerID).innerHTML = htmlCode;
+
+	var param = _callBackFunParam.split(">");
+	var clientMAC = "";
+	var clientIP = "";
+	var getClientValue = function(_attribute, _clienyObj) {
+		var attribute_value = "";
+		switch(_attribute) {
+			case "mac" :
+				attribute_value = _clienyObj.mac;
+				break;
+			case "ip" :
+				if(clientObj.ip != "offline") {
+					attribute_value = _clienyObj.ip;
+				}
+				break;
+			case "name" :
+				attribute_value = (clientObj.nickName == "") ? clientObj.name : clientObj.nickName;
+				break;
+		}
+		return attribute_value;
+	};
+
+	var genClientItem = function(_state) {
+		var code = "";
+		var clientName = (clientObj.nickName == "") ? clientObj.name : clientObj.nickName;
+		
+		code += '<a id=' + clientList[i] + ' title=' + clientList[i] + '>';
+		if(_state == "online")
+			code += '<div onclick="' + _callBackFun + '(\'';
+		else if(_state == "offline")
+			code += '<div style="color:#A0A0A0" onclick="' + _callBackFun + '(\'';
+		for(var j = 0; j < param.length; j += 1) {
+			if(j == 0) {
+				code += getClientValue(param[j], clientObj);
+			}
+			else {
+				code += '\', \'';
+				code += getClientValue(param[j], clientObj);
+			}
+		}
+		code += '\''
+		code += ', '
+		code += '\''
+		code += clientName;
+		code += '\');">';
+		if(clientName.length > 32) {
+			code += clientName.substring(0, 30) + "..";
+		}
+		else {
+			code += clientName;
+		}
+		if(_state == "offline")
+			code += '<strong title="Remove this client" style="float:right;margin-right:5px;cursor:pointer;" onclick="removeClient(\'' + clientObj.mac + '\', \'clientlist_dropdown_expand\', \'clientlist_offline\')">×</strong>';
+		code += '</div><!--[if lte IE 6.5]><iframe class="hackiframe2"></iframe><![endif]--></a>';
+		return code;
+	};
+
+	for(var i = 0; i < clientList.length; i +=1 ) {
+		var clientObj = clientList[clientList[i]];
+		switch(_clientState) {
+			case "all" :
+				if(_interfaceMode == "wl" && (clientList[clientList[i]].isWL == 0)) {
+					continue;
+				}
+				if(_interfaceMode == "wired" && (clientList[clientList[i]].isWL != 0)) {
+					continue;
+				}
+				if(clientObj.isOnline) {
+					document.getElementById("clientlist_online").innerHTML += genClientItem("online");
+				}
+				else if(clientObj.from == "nmpClient") {
+					document.getElementById("clientlist_offline").innerHTML += genClientItem("offline");
+				}
+				break;
+			case "online" :
+				if(_interfaceMode == "wl" && (clientList[clientList[i]].isWL == 0)) {
+					continue;
+				}
+				if(_interfaceMode == "wired" && (clientList[clientList[i]].isWL != 0)) {
+					continue;
+				}
+				if(clientObj.isOnline) {
+					document.getElementById("clientlist_online").innerHTML += genClientItem("online");
+				}
+				break;
+			case "offline" :
+				if(_interfaceMode == "wl" && (clientList[clientList[i]].isWL == 0)) {
+					continue;
+				}
+				if(_interfaceMode == "wired" && (clientList[clientList[i]].isWL != 0)) {
+					continue;
+				}
+				if(clientObj.from == "nmpClient") {
+					document.getElementById("clientlist_offline").innerHTML += genClientItem("offline");
+				}
+				break;
+		}		
+	}
+	
+	if(document.getElementById("clientlist_offline").childNodes.length == "0") {
+		if(document.getElementById("clientlist_dropdown_expand") != null) {
+			removeElement(document.getElementById("clientlist_dropdown_expand"));
+		}
+		if(document.getElementById("clientlist_offline") != null) {
+			removeElement(document.getElementById("clientlist_offline"));
+		}
+	}
+	else {
+		if(document.getElementById("clientlist_dropdown_expand").innerText == "Show Offline Client List") {
+			document.getElementById("clientlist_offline").style.display = "none";
+		}
+		else {
+			document.getElementById("clientlist_offline").style.display = "";
+		}
+	}
+	if(document.getElementById("clientlist_online").childNodes.length == "0") {
+		if(document.getElementById("clientlist_online") != null) {
+			removeElement(document.getElementById("clientlist_online"));
+		}
+	}
+
+	if(document.getElementById(_containerID).childNodes.length == "0")
+		document.getElementById(_pullArrowID).style.display = "none";
+	else
+		document.getElementById(_pullArrowID).style.display = "";
+}

@@ -25,24 +25,29 @@
 <script type="text/javascript" src="/dbconf?p=dualwanpolicy_&v=<% uptime(); %>"></script>
 <script>
 var $j = jQuery.noConflict();
-
 function init() {
 show_menu();
 buildswitch();
 conf2obj();
 version_show();
-var ss_mode = '<% nvram_get("ss_mode"); %>';
-if(ss_mode == '3'){
-$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式下会和策略路由相冲突，不要同时开启</font></span>");
-} else if (ss_mode == '2') {
-$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS大陆白名单模式下国外线路默认全部走SS</font></span>");
-} else if (ss_mode == '4') {
-$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS全局模式下国内外线路默认全部走SS</font></span>");
-} else if (ss_mode == '1') {
-$j("#foreign_line1").html("<span class='software_action'><font color='#ffcc00'>当前gfwlsit模式下，gfwlsit以外的国外线路默认全部此端口</font></span>");
-} else if (ss_mode == '0') {
-$j("#ss_line").html("<span class='software_action'><font color='#ffcc00'>不可用，因为SS未启用</font></span>");
+var ss_mode = '<% dbus_get_def("ss_basic_mode", "0"); %>';
+var ss_enable = '<% dbus_get_def("ss_basic_enable", "0"); %>';
+if(ss_enable != '0'){
+	if(ss_mode == '3'){
+		$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式下会和策略路由相冲突，不要同时开启</font></span>");
+	} else if (ss_mode == '4') {
+		$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式V2下会和策略路由相冲突，不要同时开启<</font></span>");
+	} else if (ss_mode == '2') {
+		$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS大陆白名单模式下国外线路默认全部走SS</font></span>");
+	} else if (ss_mode == '5') {
+		$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS全局模式下国内外线路默认全部走SS</font></span>");
+	} else if (ss_mode == '1') {
+		$j("#foreign_line1").html("<span class='software_action'><font color='#ffcc00'>当前gfwlsit模式下，gfwlsit以外的国外线路默认全部此端口</font></span>");
+	}
+}else{
+	$j("#ss_line").html("<span class='software_action'><font color='#ffcc00'>不可用，因为SS未启用</font></span>");
 }
+
 var lb_mode = '<% nvram_get("wans_mode"); %>';
 if(lb_mode !== "lb"){
 document.getElementById('Routing_rules_table').style.display = "none";
@@ -86,7 +91,6 @@ document.form.action_mode.value = s;
 showLoading(3);
 document.form.submit();
 }
-
 function conf2obj(){
 $j.ajax({
 type: "get",
@@ -105,7 +109,6 @@ for (var i = 0; i < params.length; i++) {
 	}
 	}
 	});
-
 }
 function update_visibility() {
 showhide("dualwanpolicy_wan1_custom", (document.form.dualwanpolicy_wan1.value == "2"));
@@ -114,10 +117,8 @@ showhide("dualwanpolicy_wan2_custom", (document.form.dualwanpolicy_wan2.value ==
 function reload_Soft_Center(){
 location.href = "/Main_Soft_center.asp";
 }
-
- 
 function setIframeSrc() {
-    var s1 = "http://119228.vhost131.cloudvhost.cn/ip.php";
+    var s1 = "http://1212.ip138.com/ic.asp";
     var s2 = "http://x302.rashost.com/ip.php";
     var s3 = "http://ip111cn.appspot.com/";
     var iframe1 = document.getElementById('iframe1');
@@ -134,10 +135,8 @@ function setIframeSrc() {
     }
 }
 setTimeout(setIframeSrc, 5000);	
-
 function version_show(){
 	$j("#dualwan_version_status").html("<i>当前版本：" + db_dualwanpolicy_['dualwan_version']);
-
     $j.ajax({
         url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/dualwan/config.json.js',
         type: 'GET',
@@ -154,7 +153,6 @@ function version_show(){
         }
     });
 }
-
 </script>
 </head>
 <body onload="init();">
@@ -270,7 +268,7 @@ function version_show(){
 </td>
 </tr>
 </table>
-<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="Routing_rules_table1">
+<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="left" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="Routing_rules_table1">
 <thead>
 <tr>
 <td colspan="2">双线双拨策略路由状态</td>
@@ -279,20 +277,20 @@ function version_show(){
 <tr>
 <th>国内连接</th>
 <td colspan="2">
-<iframe id="iframe1" src="" width="100%" height="30" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+<iframe id="iframe1" src="" height="55px" scrolling="no" frameborder="0"></iframe>
 <tr>
-<th>国外连接</th>
+<th>国外普通网站</th>
 <td colspan="2">
-<iframe id="iframe2" src="" width="100%" height="30" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+<iframe id="iframe2" src="" height="55px" scrolling="no" frameborder="0"></iframe>
 <tr>
-<th>谷歌网站</th>
+<th>谷歌等和谐网站</th>
 <td colspan="2">
-<iframe id="iframe3" src="" width="100%" height="30" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+<iframe id="iframe3" src="" height="55px" scrolling="no" frameborder="0"></iframe> 
 </td>
 </tr>
 </table>
-<div id="warn" style="display: none;margin-top: 20px;text-align: center;font-size: 20px;margin-bottom: 20px;"class="formfontdesc" id="cmdDesc"><i>开启双线路负载均衡模式才能进行本页面设置</i></div>
-<div class="apply_gen">
+<div id="warn" style="display: none;margin-top: 30px;text-align: center;font-size: 20px;margin-bottom: 20px;"class="formfontdesc" id="cmdDesc"><i>开启双线路负载均衡模式才能进行本页面设置</i></div>
+<div class="apply_gen" style="margin-top:240px;">
 <button id="cmdBtn" class="button_gen" onclick="onSubmitCtrl(this, ' Refresh ')">提交</button>
 </div>
 <div id="line_image1" style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"/></div>
@@ -326,4 +324,3 @@ Shell, Web by： <i>fw867</i><br/>
 <div id="footer"></div>
 </body>
 </html>
-
