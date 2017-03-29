@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.3.5
+   - fix	脚本：修复一个小问题
+
 3.3.4
    - update	程序：更新shadowsocks-libev 3.0.5；
    - update	程序：更新simple-obfs 0.0.3；

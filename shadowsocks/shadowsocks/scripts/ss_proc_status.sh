@@ -86,9 +86,9 @@ check_status(){
 	SS_REDIR=`pidof ss-redir`
 	SS_TUNNEL=`pidof ss-tunnel`
 	SS_LOCAL=`ps|grep ss-local|grep 23456|awk '{print $1}'`
-	SSR_REDIR=`pidof ssr-redir`
+	SSR_REDIR=`pidof rss-redir`
 	SSR_LOCAL=`ps|grep rss-local|grep 23456|awk '{print $1}'`
-	SSR_TUNNEL=`pidof ssr-tunnel`
+	SSR_TUNNEL=`pidof rss-tunnel`
 	KOOLGAME=`pidof koolgame`
 	DNS2SOCKS=`pidof dns2socks`
 	DNS_CRYPT=`pidof dnscrypt-proxy`
