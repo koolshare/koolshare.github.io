@@ -175,7 +175,7 @@ check_status(){
 						[ -n "$DNS2SOCKS" ] && echo "dns2socks	工作中	pid：$DNS2SOCKS" || echo "dns2socks	未运行"
 					fi
 				fi
-			elif [ "$ss_pdnsd_udp_server" == "2" ];then
+			elif [ "$ss_pdnsd_udp_server" == "3" ];then
 				if [ "$ss_basic_use_rss" == "1" ];then
 					[ -n "$SSR_TUNNEL" ] && echo "ssr-tunnel	工作中	pid：$SS_TUNNEL" || echo "ssr-tunnel	未运行"
 				else
@@ -185,7 +185,7 @@ check_status(){
 						[ -n "$SS_TUNNEL" ] && echo "ss-tunnel	工作中	pid：$SS_TUNNEL" || echo "ss-tunnel	未运行"
 					fi
 				fi
-			elif [ "$ss_pdnsd_udp_server" == "3" ];then
+			elif [ "$ss_pdnsd_udp_server" == "2" ];then
 				if [ "$ss_basic_mode" == "4" ];then
 					[ -n "$KOOLGAME" ] && echo "dns2ss	工作中	pid：$KOOLGAME" || echo "dns2ss	未运行	游戏模式v2 dns由主程序koolgame提供"
 				else
@@ -210,6 +210,13 @@ check_status(){
 				fi
 			fi
 		elif [ "$ss_chinadns_foreign_method" == "2" ];then
+			if [ "$ss_basic_mode" == "4" ];then
+				[ -n "$KOOLGAME" ] && echo "dns2ss	工作中	pid：$KOOLGAME" || echo "dns2ss	未运行	游戏模式v2 dns由主程序koolgame提供"
+			else
+				
+				[ -n "$DNS_CRYPT" ] && echo "dnscrypt-proxy	工作中	pid：$DNS_CRYPT" || echo "dnscrypt-proxy	未运行"
+			fi
+		elif [ "$ss_chinadns_foreign_method" == "3" ];then
 			if [ "$ss_basic_use_rss" == "1" ];then
 				[ -n "$SSR_TUNNEL" ] && echo "ssr-tunnel	工作中	pid：$SS_TUNNEL" || echo "ssr-tunnel	未运行"
 			else
@@ -218,13 +225,6 @@ check_status(){
 				else
 					[ -n "$SS_TUNNEL" ] && echo "ss-tunnel	工作中	pid：$SS_TUNNEL" || echo "ss-tunnel	未运行"
 				fi
-			fi
-		elif [ "$ss_chinadns_foreign_method" == "3" ];then
-			if [ "$ss_basic_mode" == "4" ];then
-				[ -n "$KOOLGAME" ] && echo "dns2ss	工作中	pid：$KOOLGAME" || echo "dns2ss	未运行	游戏模式v2 dns由主程序koolgame提供"
-			else
-				
-				[ -n "$DNS_CRYPT" ] && echo "dnscrypt-proxy	工作中	pid：$DNS_CRYPT" || echo "dnscrypt-proxy	未运行"
 			fi
 		fi
 		[ -n "$CHINADNS" ] && echo "chinadns	工作中	pid：$CHINADNS" || echo "chinadns	未运行"
