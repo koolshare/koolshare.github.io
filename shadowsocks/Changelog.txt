@@ -11,6 +11,7 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    - fix	脚本：修复pdnsd上游dns为dns2socks时，ss-local未开启的bug
    - update	脚本：现在大陆白名单和游戏模式下，gfwlist只有在访问控制中存在gfwlist模式的主机时才会加载
    - update	规则：同步最新gfwlist，chnroute和cdn名单。
+   
 3.3.3
    - remove	移除koolshare logo和支持信息；
    - add	添加电报群交流链接；
