@@ -93,7 +93,7 @@ rm -rf /tmp/shadowsocks* >/dev/null 2>&1
 # transform data in skipd when ss version below 3.0.6
 curr_version=`dbus get ss_basic_version_local`
 comp=`/usr/bin/versioncmp $curr_version 3.0.6`
-if [ "$comp" == "1" ];then
+if [ -n "$curr_version" ] && [ "$comp" == "1" ];then
 	echo_date 从ss3.0.6版本开始，将对界面内textarea内的值和ss的密码进行base64加密，方便储存！
 	echo_date 生成当前SS版本：$curr_version的配置文件到/jffs根目录！
 	dbus list ss > /jffs/ss_conf_backup_$curr_version.txt

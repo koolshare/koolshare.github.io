@@ -1,5 +1,16 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.3.4
+   - update	程序：更新shadowsocks-libev 3.0.5；
+   - update	程序：更新simple-obfs 0.0.3；
+   - update	程序：更新kcptun 为20170322；
+   - add	web：添加shadowsocks-libev混淆支持(需要服务器端支持)；
+   - add	web：节点名前添加帐号类型标志；
+   - add	web：添加详细状态显示，目前显示的内容：1，版本信息；2,程序运行状态；3，iptables状态；
+   - fix	脚本：修复pdnsd上游dns为dns2socks时，ss-local未开启的bug；
+   - update	脚本：现在大陆白名单和游戏模式下，gfwlist只有在访问控制中存在gfwlist模式的主机时才会加载；
+   - update	规则：同步最新gfwlist，chnroute和cdn名单。
+
 3.3.3
    - remove	移除koolshare logo和支持信息；
    - add	添加电报群交流链接；

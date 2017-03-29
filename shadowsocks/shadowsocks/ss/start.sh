@@ -51,6 +51,23 @@ resolv_server_ip(){
 }
 # create shadowsocks config file...
 creat_ss_json(){
+	if [ "$ss_basic_ss_obfs_host" != "" ];then
+		if [ "$ss_basic_ss_obfs" == "http" ];then
+			ARG_OBFS="obfs=http;obfs-host=$ss_basic_ss_obfs_host"
+		elif [ "$ss_basic_ss_obfs" == "tls" ];then
+			ARG_OBFS="obfs=tls;obfs-host=$ss_basic_ss_obfs_host"
+		else
+			ARG_OBFS=""
+		fi
+	else
+		if [ "$ss_basic_ss_obfs" == "http" ];then
+			ARG_OBFS="obfs=http"
+		elif [ "$ss_basic_ss_obfs" == "tls" ];then
+			ARG_OBFS="obfs=tls"
+		else
+			ARG_OBFS=""
+		fi
+	fi
 	echo_date 创建SS配置文件到$CONFIG_FILE
 	if [ "$ss_basic_use_kcp" == "1" ];then
 		if [ "$ss_basic_use_rss" == "0" ];then
@@ -132,22 +149,24 @@ creat_game2_json(){
 	EOF
 }
 
+start_sslocal(){
+	echo_date ┣开启ss-local,为dns2socks提供socks5端口：23456
+	if [ "$ss_basic_use_rss" == "1" ];then
+		rss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+	elif  [ "$ss_basic_use_rss" == "0" ];then
+		if [ "$ss_basic_ss_obfs" == "0" ];then
+			ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
+		else
+			ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sslocal1.pid >/dev/null 2>&1
+		fi
+	fi
+}
 
 start_dns(){
 	# Start DNS2SOCKS
 	if [ "1" == "$ss_dns_foreign" ] || [ -z "$ss_dns_foreign" ]; then
 		# start ss-local on port 23456
-		if [ "$ss_basic_use_rss" == "1" ];then
-		echo_date 开启ss-local，提供socks5端口：23456
-			rss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
-		elif  [ "$ss_basic_use_rss" == "0" ];then
-			if [ "$ss_basic_ss_obfs" == "0" ];then
-				ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
-			else
-				ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
-			fi
-		fi
-
+		start_sslocal
 		echo_date 开启dns2socks，监听端口：23456
 		dns2socks 127.0.0.1:23456 "$ss_dns2socks_user" 127.0.0.1:$DNS_PORT > /dev/null 2>&1 &
 	fi
@@ -160,10 +179,14 @@ start_dns(){
 	if [ "2" == "$ss_dns_foreign" ];then
 		if [ "$ss_basic_use_rss" == "1" ];then
 			echo_date 开启ssr-tunnel...
-			rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+			rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l $DNS_PORT -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_use_rss" == "0" ];then
 			echo_date 开启ss-tunnel...
-			ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+			if [ "$ss_basic_ss_obfs" == "0" ];then
+				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l $DNS_PORT -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+			else
+				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l $DNS_PORT -L "$gs" -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sstunnel.pid >/dev/null 2>&1
+			fi
 		fi
 	fi
 
@@ -206,6 +229,7 @@ start_dns(){
 				EOF
 			if [ "$ss_pdnsd_udp_server" == "1" ];then
 				echo_date 开启dns2socks作为pdnsd的上游服务器.
+				start_sslocal
 				dns2socks 127.0.0.1:23456 "$ss_pdnsd_udp_server_dns2socks" 127.0.0.1:1099 > /dev/null 2>&1 &
 			elif [ "$ss_pdnsd_udp_server" == "2" ];then
 				echo_date 开启dnscrypt-proxy作为pdnsd的上游服务器.
@@ -217,10 +241,14 @@ start_dns(){
 				[ "$ss_pdnsd_udp_server_ss_tunnel" == "4" ] && dns1="$ss_pdnsd_udp_server_ss_tunnel_user"
 				if [ "$ss_basic_use_rss" == "1" ];then
 					echo_date 开启ssr-tunnel作为pdnsd的上游服务器.
-					rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+					rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 				elif  [ "$ss_basic_use_rss" == "0" ];then
 					echo_date 开启ss-tunnel作为pdnsd的上游服务器.
-					ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l $DNS_PORT -L "$dns1" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+					if [ "$ss_basic_ss_obfs" == "0" ];then
+						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l $DNS_PORT -L "$dns1" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+					else
+						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l $DNS_PORT -L "$dns1" -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sstunnel.pid >/dev/null 2>&1
+					fi
 				fi
 			fi
 		elif [ "$ss_pdnsd_method" == "2" ];then
@@ -286,12 +314,8 @@ start_dns(){
 			[ "$ss_chinadns_foreign_dns2socks" == "2" ] && rcfd="8.8.8.8:53"
 			[ "$ss_chinadns_foreign_dns2socks" == "3" ] && rcfd="8.8.4.4:53"
 			[ "$ss_chinadns_foreign_dns2socks" == "4" ] && rcfd="$ss_chinadns_foreign_dns2socks_user"
-				echo_date ┣开启ss-local,为dns2socks提供socks5端口：23456
-				if [ "$ss_basic_use_rss" == "1" ];then
-					rss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
-				elif  [ "$ss_basic_use_rss" == "0" ];then
-					ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
-				fi
+			
+			start_sslocal
 			echo_date ┣开启dns2socks，作为chinaDNS上游国外dns，转发dns：$rcfd
 			dns2socks 127.0.0.1:23456 "$rcfd" 127.0.0.1:1055 > /dev/null 2>&1 &
 		elif [ "$ss_chinadns_foreign_method" == "2" ];then
@@ -304,10 +328,14 @@ start_dns(){
 			[ "$ss_chinadns_foreign_sstunnel" == "4" ] && rcfs="$ss_chinadns_foreign_sstunnel_user"
 			if [ "$ss_basic_use_rss" == "1" ];then
 				echo_date ┣开启ssr-tunnel，作为chinaDNS上游国外dns，转发dns：$rcfs
-				rss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+				rss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 			elif  [ "$ss_basic_use_rss" == "0" ];then
 				echo_date ┣开启ss-tunnel，作为chinaDNS上游国外dns，转发dns：$rcfs
-				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -c $CONFIG_FILE -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid
+				if [ "$ss_basic_ss_obfs" == "0" ];then
+					ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid
+				else
+					ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l 1055 -L "$rcfs" -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sstunnel.pid >/dev/null 2>&1
+				fi
 			fi
 		elif [ "$ss_chinadns_foreign_method" == "4" ];then
 			echo_date ┣你选择了自定义chinadns国外dns！dns：$ss_chinadns_foreign_method_user
@@ -361,7 +389,7 @@ append_white_black_conf(){
 	# append white domain list, bypass ss
 	rm -rf /tmp/wblist.conf
 	# github need to go ss
-	echo "#for router itself" >> //tmp/wblist.conf
+	echo "#for router itself" >> /tmp/wblist.conf
 	echo "server=/.google.com.tw/127.0.0.1#7913" >> /tmp/wblist.conf
 	echo "ipset=/.google.com.tw/router" >> /tmp/wblist.conf
 	echo "server=/.github.com/127.0.0.1#7913" >> /tmp/wblist.conf
@@ -370,12 +398,14 @@ append_white_black_conf(){
 	echo "ipset=/.github.io/router" >> /tmp/wblist.conf
 	echo "server=/.raw.githubusercontent.com/127.0.0.1#7913" >> /tmp/wblist.conf
 	echo "ipset=/.raw.githubusercontent.com/router" >> /tmp/wblist.conf
-
+	echo "server=/.adblockplus.org/127.0.0.1#7913" >> /tmp/wblist.conf
+	echo "ipset=/.adblockplus.org/router" >> /tmp/wblist.conf
+	
 	# append white domain list,not through ss
 	wanwhitedomain=$(echo $ss_wan_white_domain | base64_decode)
 	if [ ! -z $ss_wan_white_domain ];then
 		echo_date 应用域名白名单
-		echo "#for white_domain" >> //tmp/wblist.conf
+		echo "#for white_domain" >> /tmp/wblist.conf
 		for wan_white_domain in $wanwhitedomain
 		do 
 			echo "$wan_white_domain" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#7913/g" >> /tmp/wblist.conf
@@ -384,7 +414,7 @@ append_white_black_conf(){
 	fi
 	
 	# apple 和microsoft不能走ss
-	echo "#for special site" >> //tmp/wblist.conf
+	echo "#for special site" >> /tmp/wblist.conf
 	for wan_white_domain2 in "apple.com" "microsoft.com"
 	do 
 		echo "$wan_white_domain2" | sed "s/^/server=&\/./g" | sed "s/$/\/$CDN#53/g" >> /tmp/wblist.conf
@@ -423,11 +453,19 @@ ln_conf(){
 		#echo_date 创建cdn加速列表软链接/jffs/configs/dnsmasq.d/cdn.conf
 		ln -sf /tmp/sscdn.conf /jffs/configs/dnsmasq.d/cdn.conf
 	fi
+
+	gfw_on=`dbus list ss_acl_mode_|cut -d "=" -f 2 | grep 1`
 	rm -rf /jffs/configs/dnsmasq.d/gfwlist.conf
-	if [ ! -f /jffs/configs/dnsmasq.d/gfwlist.conf ];then
-		#echo_date 创建gfwlist的软连接到/jffs/configs/dnsmasq.d/文件夹.
+	if [ "$ss_basic_mode" == "1" ];then
+		echo_date 创建gfwlist的软连接到/jffs/etc/dnsmasq.d/文件夹.
 		ln -sf /koolshare/ss/rules/gfwlist.conf /jffs/configs/dnsmasq.d/gfwlist.conf
+	elif [ "$ss_basic_mode" == "2" ] || [ "$ss_basic_mode" == "3" ];then
+		if [ ! -f /jffs/configs/dnsmasq.d/gfwlist.conf ] && [ "$ss_dns_plan" == "1" ] || [ -n "$gfw_on" ];then
+			echo_date 创建gfwlist的软连接到/jffs/etc/dnsmasq.d/文件夹.
+			ln -sf /koolshare/ss/rules/gfwlist.conf /jffs/configs/dnsmasq.d/gfwlist.conf
+		fi
 	fi
+
 	#echo_date 创建dnsmasq.postconf软连接到/jffs/scripts/文件夹.
 	rm -rf /jffs/scripts/dnsmasq.postconf
 	ln -sf /koolshare/ss/rules/dnsmasq.postconf /jffs/scripts/dnsmasq.postconf
@@ -503,7 +541,11 @@ start_ss_redir(){
 		rss-redir -b 0.0.0.0 -c $CONFIG_FILE -u -f /var/run/shadowsocks.pid >/dev/null 2>&1
 	elif  [ "$ss_basic_use_rss" == "0" ];then
 		echo_date 开启ss-redir进程，用于透明代理.
-		ss-redir -b 0.0.0.0 -c $CONFIG_FILE -u -f /var/run/shadowsocks.pid >/dev/null 2>&1
+		if [ "$ss_basic_ss_obfs" == "0" ];then
+			ss-redir -b 0.0.0.0 -c $CONFIG_FILE -u -f /var/run/shadowsocks.pid >/dev/null 2>&1
+		else
+			ss-redir -b 0.0.0.0 -c $CONFIG_FILE -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/shadowsocks.pid >/dev/null 2>&1
+		fi
 	fi
 }
 

@@ -78,7 +78,28 @@ input[type=button]:focus {
 	display:none;
 }
 
-
+.content_status {
+	position: absolute;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius:10px;
+	z-index: 10;
+	background-color:#2B373B;
+	margin-left: -215px;
+	top: 240px;
+	width:980px;
+	return height:auto;
+	box-shadow: 3px 3px 10px #000;
+	background: rgba(0,0,0,0.85);
+	display:none;
+}
+.user_title{
+	text-align:center;
+	font-size:18px;
+	color:#99FF00;
+	padding:10px;
+	font-weight:bold;
+}
 .QISform_wireless {
 	width:600px;
 	font-size:12px;
@@ -118,16 +139,16 @@ input[type=button]:focus {
     background: transparent;  /* optional: just make scrollbar invisible */
 }
 
-#log_content3, #log_content1 { -ms-overflow-style: none; overflow: auto; } /* for IE hide scrollbar on ss node ta */
-#log_content3::-webkit-scrollbar, #log_content1::-webkit-scrollbar {
+#log_content3, #log_content1, #proc_status { -ms-overflow-style: none; overflow: auto; } /* for IE hide scrollbar on ss node ta */
+#log_content3::-webkit-scrollbar, #log_content1::-webkit-scrollbar, #proc_status::-webkit-scrollbar {
     width: 0px;  /* remove scrollbar space */
     background: transparent;  /* optional: just make scrollbar invisible */
 }
-#log_content3:focus, #log_content1:focus {
+#log_content3:focus, #log_content1:focus, #proc_status:focus {
 	outline: none;
 }
 
-#log_content3, #log_content1 {overflow: -moz-scrollbars-none;}
+#log_content3, #log_content1, #proc_status {overflow: -moz-scrollbars-none;}
 .FormTable1{
 	table-layout:fixed;
 	width:748px;
