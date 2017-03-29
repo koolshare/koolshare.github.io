@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.3.6
+   - fix	web：fix edit botton missing when edit ss node.
+
 3.3.5
    - fix	脚本：修复一个小问题
 
