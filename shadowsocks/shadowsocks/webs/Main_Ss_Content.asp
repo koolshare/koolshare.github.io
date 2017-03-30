@@ -30,7 +30,7 @@ var $j = jQuery.noConflict();
 var over_var = 0;
 var isMenuopen = 0;
 var $G = function(id){return document.getElementById(id);};
-var retArea = $G('log_content');
+var retArea = $G('log_content1');
 function init() {
 	show_menu(menu_hook);
 	buildswitch();
@@ -2359,13 +2359,14 @@ function write_proc_status(){
 									<td bgcolor="#4D595D" colspan="3" valign="top">									
 										<div>&nbsp;</div>
 										<div class="formfonttitle" style="margin-top: -18px;" id="ss_title">shadowsocks - 账号信息配置</div>
-										<div style="float:right; width:15px; height:0px;margin-top:-6px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img></div>
+										<div style="float:right; width:15px; height:0px;margin-top:-6px"><img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'">
+										</div>
 										<div id="line1" style="margin-left:3px;margin-top:0px;margin-bottom:3px;"><img src="/images/New_ui/export/line_export.png"></div>
 										<div class="SimpleNote"  id="head_illustrate"><i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。</div>
-										<div style="margin-top: 0px;text-align: center;font-size: 18px;margin-bottom: 0px;"class="formfontdesc" id="cmdDesc"></div>
+										<div style="margin-top: 0px;text-align: center;font-size: 18px;margin-bottom: 0px;" class="formfontdesc" id="cmdDesc"></div>
 										<!-- this is the popup area for status -->
 										<div id="detail_status"  class="content_status" style="box-shadow: 3px 3px 10px #000;margin-top: 100px;display: none;">
-											<div class="user_title">shadowsocks状态检测</i></div>
+											<div class="user_title">shadowsocks状态检测</div>
 											<div style="margin-left:15px"><i>&nbsp;&nbsp;目前本功能支持ss相关进程状态和iptables表状态检测。</i></div>
 											<div id="user_tr" style="margin: 10px 10px 10px 10px;width:98%;text-align:center;">
 												<textarea cols="63" rows="36" wrap="off" id="proc_status" style="width:97%;padding-left:10px;padding-right:10px;border:0px solid #222;font-family:'Courier New', Courier, mono; font-size:11px;background: transparent;color:#FFFFFF;outline: none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
@@ -2396,7 +2397,6 @@ function write_proc_status(){
 																	</div>
 																</div>
 															</label>
-														</div>
 														</div>
 														<div id="update_button" style="padding-top:5px;margin-left:90px;margin-top:-38px;float: left;">
 															<button id="updateBtn" class="button_gen" onclick="update_ss();">检查并更新</button>
@@ -2440,7 +2440,7 @@ function write_proc_status(){
                                     	                <input id="show_btn5" class="show-btn5" style="cursor:pointer" type="button" value="访问控制"/>
                                     	                <input id="show_btn6" class="show-btn6" style="cursor:pointer" type="button" value="附加功能"/>
                                     	                <input id="show_btn7" class="show-btn7" style="cursor:pointer" type="button" value="查看日志"/>
-														<a style="margin-left:10px;"type="button" title="需要FQ才能访问" class="kp_btn" target="_blank" href="https://t.me/joinchat/AAAAAEC7pgV9vPdPcJ4dJw">电报群交流</a>
+														<a style="margin-left:10px;" type="button" title="需要FQ才能访问" class="kp_btn" target="_blank" href="https://t.me/joinchat/AAAAAEC7pgV9vPdPcJ4dJw">电报群交流</a>
                                     	            </td>
                                     	        </tr>
 											</table>
@@ -2462,7 +2462,7 @@ function write_proc_status(){
 												</tr>
 												<tr>
 													<td>
-														<!---- vpnc_pptp/l2tp start  ---->
+														<!-- vpnc_pptp/l2tp start  -->
 														<div>
 														<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" class="FormTable">
 															<tr>
@@ -2475,27 +2475,27 @@ function write_proc_status(){
 															<tr>
 																<th>节点别名</th>
 																<td>
-																  	<input type="text" maxlength="64" id="ss_node_table_name" name="ss_node_table_name" value="" class="input_ss_table" style="width:342px;float:left;" autocorrect="off" autocapitalize="off"></input>
+																  	<input type="text" maxlength="64" id="ss_node_table_name" name="ss_node_table_name" value="" class="input_ss_table" style="width:342px;float:left;" autocorrect="off" autocapitalize="off"/>
 																</td>
 															</tr>
 															<tr>
 																<th>服务器地址</th>
 																<td>
-																	<input type="text" maxlength="64" id="ss_node_table_server" name="ss_node_table_server" value="" class="input_ss_table" style="width:342px;float:left;" autocorrect="off" autocapitalize="off"></input>
+																	<input type="text" maxlength="64" id="ss_node_table_server" name="ss_node_table_server" value="" class="input_ss_table" style="width:342px;float:left;" autocorrect="off" autocapitalize="off"/>
 																</td>
 															</tr>
 										
 															<tr>
 																<th>服务器端口</th>
 																<td>
-																	<input type="text" maxlength="64" id="ss_node_table_port" name="ss_node_table_port" value="" class="input_ss_table" style="width:342px;float:left;" autocomplete="off" autocorrect="off" autocapitalize="off"></input>
+																	<input type="text" maxlength="64" id="ss_node_table_port" name="ss_node_table_port" value="" class="input_ss_table" style="width:342px;float:left;" autocomplete="off" autocorrect="off" autocapitalize="off"/>
 																</td>
 															</tr>
 										
 															<tr>
 																<th>密码</th>
 																<td>
-																	<input type="text" maxlength="64" id="ss_node_table_password" name="ss_node_table_password" value="" class="input_ss_table" style="width:342px;float:left;" autocomplete="off" autocorrect="off" autocapitalize="off"></input>
+																	<input type="text" maxlength="64" id="ss_node_table_password" name="ss_node_table_password" value="" class="input_ss_table" style="width:342px;float:left;" autocomplete="off" autocorrect="off" autocapitalize="off"/>
 																</td>
 															</tr>
 															<tr>
@@ -2542,7 +2542,7 @@ function write_proc_status(){
 															<tr id="ss_obfs_host_support">
 																<th>混淆主机名 (obfs-host)</th>
 																<td>
-																	<input type="text" name="ss_node_table_ss_obfs_host" id="ss_node_table_ss_obfs_host" placeholder="bing.com"  class="input_ss_table" style="width:342px;" maxlength="100" value=""></input>
+																	<input type="text" name="ss_node_table_ss_obfs_host" id="ss_node_table_ss_obfs_host" placeholder="bing.com"  class="input_ss_table" style="width:342px;" maxlength="100" value=""/>
 																</td>
 															</tr>
 															<tr id="ssr_protocol_tr">
@@ -2563,7 +2563,7 @@ function write_proc_status(){
 															<tr id="ssr_protocol_para_tr">
 																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>协议参数 (SSR特性)</u></a></th>
 																<td>
-																	<input type="text" maxlength="64" id="ss_node_table_rss_protocol_para" name="ss_node_table_rss_protocol_para" value="" class="input_ss_table" style="width:342px;float:left;" autocomplete="off" autocorrect="off" autocapitalize="off"></input>
+																	<input type="text" maxlength="64" id="ss_node_table_rss_protocol_para" name="ss_node_table_rss_protocol_para" value="" class="input_ss_table" style="width:342px;float:left;" autocomplete="off" autocorrect="off" autocapitalize="off"/>
 																</td>
 															</tr>
 															
@@ -2581,7 +2581,7 @@ function write_proc_status(){
 															<tr id="ssr_obfs_param_tr">
 																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md" target="_blank"><u>混淆参数 (SSR特性)</u></a></th>
 																<td>
-																	<input type="text" name="ss_node_table_rss_obfs_param" id="ss_node_table_rss_obfs_param" placeholder="cloudflare.com"  class="input_ss_table" style="width:342px;" maxlength="100" value=""></input>
+																	<input type="text" name="ss_node_table_rss_obfs_param" id="ss_node_table_rss_obfs_param" placeholder="cloudflare.com"  class="input_ss_table" style="width:342px;" maxlength="100" value=""/>
 																</td>
 															</tr>
 															<tr id="gameV2_udp_tr" >
@@ -2595,7 +2595,7 @@ function write_proc_status(){
 															</tr>
 															</table>
 												 		</div>
-												 		<!---- vpnc_pptp/l2tp end  ---->		 			 	
+												 		<!-- vpnc_pptp/l2tp end  -->		 			 	
 													</td>
 												</tr>
 											</table>
@@ -2632,13 +2632,13 @@ function write_proc_status(){
 															<option value="4">【4】 游戏模式V2</option>
 															<option value="5">【5】 全局代理模式</option>
 														</select>
-														<div id="SSR_name"style="margin-left:170px;margin-top:-20px;margin-bottom:0px;">
+														<div id="SSR_name" style="margin-left:170px;margin-top:-20px;margin-bottom:0px;">
 															<input type="checkbox" id="ss_basic_use_rss" onclick="oncheckclick(this);update_visibility_main();" />
 															<input type="hidden" id="hd_ss_basic_use_rss" name="ss_basic_use_rss" value="" />
 															<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(13)">使用SSR</a>
 														</div>
 
-														<div id="KCP_name"style="margin-left:250px;margin-top:-23px;margin-bottom:0px;">
+														<div id="KCP_name" style="margin-left:250px;margin-top:-23px;margin-bottom:0px;">
 															<input type="checkbox" id="ss_basic_use_kcp" onclick="oncheckclick(this);update_visibility_main();" />
 															<input type="hidden" id="hd_ss_basic_use_kcp" name="ss_basic_use_kcp" value="" />
 															<a>启用KCP协议</a>
@@ -2716,7 +2716,7 @@ function write_proc_status(){
 												<tr id="ss_obfs_host">
 													<th width="35%">混淆主机名 (obfs_host)</th>
 													<td>
-														<input type="text" name="ss_basic_ss_obfs_host" id="ss_basic_ss_obfs_host" placeholder="bing.com"  class="ssconfig input_ss_table" maxlength="100" value=""></input>
+														<input type="text" name="ss_basic_ss_obfs_host" id="ss_basic_ss_obfs_host" placeholder="bing.com"  class="ssconfig input_ss_table" maxlength="100" value=""/>
 													</td>
 												</tr>
 												
@@ -2739,7 +2739,7 @@ function write_proc_status(){
 												<tr id="ss_basic_rss_protocol_para_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(54)">协议参数 (SSR特性)</a></th>
 													<td>
-														<input type="password" name="ss_basic_rss_protocol_para" id="ss_basic_rss_protocol_para" placeholder="id:password"  class="ssconfig input_ss_table" maxlength="100" value="" readonly onBlur="switchType(this, false);" onFocus="switchType(this, true);this.removeAttribute('readonly');"></input>
+														<input type="password" name="ss_basic_rss_protocol_para" id="ss_basic_rss_protocol_para" placeholder="id:password"  class="ssconfig input_ss_table" maxlength="100" value="" readonly onBlur="switchType(this, false);" onFocus="switchType(this, true);this.removeAttribute('readonly');"/>
 													</td>
 												</tr>
 												<tr id="ss_basic_rss_obfs_tr">
@@ -2757,13 +2757,13 @@ function write_proc_status(){
 												<tr id="ss_basic_ticket_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(11)">混淆参数 (SSR特性)</a></th>
 													<td>
-														<input type="text" name="ss_basic_rss_obfs_param" id="ss_basic_rss_obfs_param" placeholder="cloudflare.com"  class="ssconfig input_ss_table" maxlength="100" value=""></input>
+														<input type="text" name="ss_basic_rss_obfs_param" id="ss_basic_rss_obfs_param" placeholder="cloudflare.com"  class="ssconfig input_ss_table" maxlength="100" value=""/>
 													</td>
 												</tr>
 												<tr id="ss_basic_kcp_port_tr" style="display: none;">
 													<th width="35%">KCP端口</th>
 													<td>
-														<input type="text" name="ss_basic_kcp_port" id="ss_basic_kcp_port"  class="ssconfig input_ss_table" maxlength="200" value=""></input>
+														<input type="text" name="ss_basic_kcp_port" id="ss_basic_kcp_port"  class="ssconfig input_ss_table" maxlength="200" value=""/>
 													</td>
 												</tr>
 												<tr id="ss_basic_kcp_parameter_tr" style="display: none;">
@@ -2947,7 +2947,11 @@ function write_proc_status(){
 													</td>
 												</tr>
 												<tr id="chinadns_foreign">
-													<th width="20%"><font color="#66FF66"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(28)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*ChinaDNS国外DNS</font></a></th>
+													<th width="20%">
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(28)">
+															<font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*ChinaDNS国外DNS</font>
+														</a>
+													</th>
 													<td>
 														<select id="ss_chinadns_foreign_method" name="ss_chinadns_foreign_method" class="input_option" style="width:100px" onclick="update_visibility_tab2();" >
 															<option value="1" selected>DNS2SOCKS</option>
@@ -2979,7 +2983,11 @@ function write_proc_status(){
 													</td>
 												</tr>
 												<tr id="pdnsd_method">
-													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(29)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd查询方式</font></th>
+													<th width="20%" >
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(29)">
+															<font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd查询方式</font>
+														</a>
+													</th>
 													<td>
 														<select id="ss_pdnsd_method" name="ss_pdnsd_method" class="input_option" onclick="update_visibility_tab2();" >
 															<option value="1" selected >仅udp查询</option>
@@ -3086,7 +3094,7 @@ facebook.com
 														<textarea placeholder="# 填入需要强制走代理的外网ip地址，一行一个，格式（IP/CIDR）如下：
 5.5.5.5
 6.6.6.6
-7.7.7.7/8" cols="50" rows="7" id="ss_wan_black_ip" name="ss_wan_black_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF; autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false""></textarea>
+7.7.7.7/8" cols="50" rows="7" id="ss_wan_black_ip" name="ss_wan_black_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
 													</td>
 												</tr>
 												<tr id="ss_wan_black_domain_tr">
@@ -3213,7 +3221,7 @@ taobao.com
 													</tr>
 													<tr>
 														<td>
-															<input type="text" maxlength="15" class="input_15_table" id="ss_acl_ip" name="ss_acl_ip" align="left" onkeypress="return validator.isIPAddr(this, event)" style="float:left;"/ autocomplete="off" onClick="hideClients_Block();" autocorrect="off" autocapitalize="off">
+															<input type="text" maxlength="15" class="input_15_table" id="ss_acl_ip" name="ss_acl_ip" align="left" onkeypress="return validator.isIPAddr(this, event)" style="float:left;" autocomplete="off" onClick="hideClients_Block();" autocorrect="off" autocapitalize="off">
 															<img id="pull_arrow" height="14px;" src="images/arrow-down.gif" align="right" onclick="pullLANIPList(this);" title="<#select_IP#>">
 															<div id="ClientList_Block" class="clientlist_dropdown" style="margin-left:2px;margin-top:25px;"></div>
 														</td>
@@ -3305,7 +3313,7 @@ taobao.com
 															<option value="1" selected>nslookup方式</option>
 														</select>
 														<input type="text" class="ssconfig input_ss_table" id="ss_basic_dnslookup_server" name="ss_basic_dnslookup_server" style="width:128px;"  value="119.29.29.29">
-														<span id="SS_IP"style="margin-left:auto;margin-top:-23px;margin-bottom:0px;display: none;">
+														<span id="SS_IP" style="margin-left:auto;margin-top:-23px;margin-bottom:0px;display: none;">
 														</span>
 													</td>
 												</tr>												
@@ -3314,11 +3322,7 @@ taobao.com
 
 										<!--log_content-->
 										<div id="tablet_7" style="display: none;">
-											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
-												<div id="log_content" style="margin-top:-1px;display: none;">
-													<textarea cols="63" rows="36" wrap="on" readonly="readonly" id="log_content1" style="width:97%;padding-left:10px;padding-right:10px;border:1px solid #222;font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;outline: none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-												</div>
-											</table>
+												<div id="log_content" style="margin-top:-1px;display:none"><textarea cols="63" rows="36" wrap="on" readonly="readonly" id="log_content1" style="width:97%; padding-left:10px; padding-right:10px; border:1px solid #222; font-family:'Courier New', Courier, mono; font-size:11px; background:#475A5F; color:#FFFFFF; outline:none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea></div>
 										</div>		
 
 										<div class="apply_gen" id="loading_icon">
