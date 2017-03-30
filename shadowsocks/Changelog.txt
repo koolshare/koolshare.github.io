@@ -5,6 +5,7 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    - fix	fix some element in web
    - remove	remove useless binary in bin folder
    - update	decrease the interval of get log, now the log should be more smooth.
+   - add	add link of one key install ss/ssr server script by clang.
 
 3.3.6
    - fix	web：fix edit botton missing when edit ss node.
