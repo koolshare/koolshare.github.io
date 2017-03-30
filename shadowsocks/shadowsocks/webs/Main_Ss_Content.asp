@@ -2400,7 +2400,7 @@ function write_proc_status(){
 														</div>
 														<div id="update_button" style="padding-top:5px;margin-left:90px;margin-top:-38px;float: left;">
 															<button id="updateBtn" class="button_gen" onclick="update_ss();">检查并更新</button>
-                                    	                	<input id="update_logo" style="cursor:pointer;margin-left: 130px;width:64px" type="button" value="更新日志"/>
+                                    	                	<input id="update_logo" style="cursor:pointer;margin-left: 131px;width:64px" type="button" value="更新日志"/>
 														</div>
 														<div id="ss_version_show" style="padding-top:5px;margin-left:220px;margin-top:0px;">
 															<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(12)">
@@ -2417,7 +2417,7 @@ function write_proc_status(){
 												<tr id="ss_state">
 												<th id="mode_state" width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(0)">SS运行状态</a></th>
 													<td>
-														<input type="button" class="ss_btn" style="cursor:pointer;margin-left:345px;margin-top:6px;position: absolute;width:64px" onclick="get_proc_status();" value="详细状态">
+														<input type="button" class="ss_btn" style="cursor:pointer;margin-left:346px;margin-top:6px;position: absolute;width:64px" onclick="get_proc_status();" value="详细状态">
 														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(0)">
 															<span style="display: none" id="ss_state1">尚未启用! </span>
 															<span id="ss_state2">国外连接 - Waiting...</span>
@@ -2440,7 +2440,8 @@ function write_proc_status(){
                                     	                <input id="show_btn5" class="show-btn5" style="cursor:pointer" type="button" value="访问控制"/>
                                     	                <input id="show_btn6" class="show-btn6" style="cursor:pointer" type="button" value="附加功能"/>
                                     	                <input id="show_btn7" class="show-btn7" style="cursor:pointer" type="button" value="查看日志"/>
-														<a style="margin-left:10px;" type="button" title="需要FQ才能访问" class="kp_btn" target="_blank" href="https://t.me/joinchat/AAAAAEC7pgV9vPdPcJ4dJw">电报群交流</a>
+														<a style="margin-left:10px;" type="button" title="需要FQ才能访问" class="kp_btn" target="_blank" href="https://t.me/joinchat/AAAAAEC7pgV9vPdPcJ4dJw">电报交流</a>
+														<a style="margin-left:10px;" type="button" class="kp_btn" target="_blank" href="https://github.com/onekeyshell/kcptun_for_ss_ssr">一键脚本</a>
                                     	            </td>
                                     	        </tr>
 											</table>

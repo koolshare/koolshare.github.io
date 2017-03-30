@@ -1,5 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.3.7 (not pushed yet)
+   - fix	fix ssr-tunnel show working but have no pid
+   - fix	fix some element in web
+   - remove	remove useless binary in bin folder
+   - update	decrease the interval of get log, now the log should be more smooth.
+
 3.3.6
    - fix	web：fix edit botton missing when edit ss node.
 
