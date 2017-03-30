@@ -146,7 +146,7 @@ check_status(){
 		fi
 	elif [ "$ss_dns_foreign" == "2" ];then
 		if [ "$ss_basic_use_rss" == "1" ];then
-			[ -n "$SSR_TUNNEL" ] && echo "ssr-tunnel	工作中	pid：$SS_TUNNEL" || echo "ssr-tunnel	未运行"
+			[ -n "$SSR_TUNNEL" ] && echo "ssr-tunnel	工作中	pid：$SSR_TUNNEL" || echo "ssr-tunnel	未运行"
 		else
 			if [ "$ss_basic_mode" == "4" ];then
 				[ -n "$KOOLGAME" ] && echo "dns2ss	工作中	pid：$KOOLGAME" || echo "dns2ss	未运行	游戏模式v2 dns由主程序koolgame提供"
@@ -177,7 +177,7 @@ check_status(){
 				fi
 			elif [ "$ss_pdnsd_udp_server" == "3" ];then
 				if [ "$ss_basic_use_rss" == "1" ];then
-					[ -n "$SSR_TUNNEL" ] && echo "ssr-tunnel	工作中	pid：$SS_TUNNEL" || echo "ssr-tunnel	未运行"
+					[ -n "$SSR_TUNNEL" ] && echo "ssr-tunnel	工作中	pid：$SSR_TUNNEL" || echo "ssr-tunnel	未运行"
 				else
 					if [ "$ss_basic_mode" == "4" ];then
 						[ -n "$KOOLGAME" ] && echo "dns2ss	工作中	pid：$KOOLGAME" || echo "dns2ss	未运行	游戏模式v2 dns由主程序koolgame提供"
@@ -218,7 +218,7 @@ check_status(){
 			fi
 		elif [ "$ss_chinadns_foreign_method" == "3" ];then
 			if [ "$ss_basic_use_rss" == "1" ];then
-				[ -n "$SSR_TUNNEL" ] && echo "ssr-tunnel	工作中	pid：$SS_TUNNEL" || echo "ssr-tunnel	未运行"
+				[ -n "$SSR_TUNNEL" ] && echo "ssr-tunnel	工作中	pid：$SSR_TUNNEL" || echo "ssr-tunnel	未运行"
 			else
 				if [ "$ss_basic_mode" == "4" ];then
 					[ -n "$KOOLGAME" ] && echo "dns2ss	工作中	pid：$KOOLGAME" || echo "dns2ss	未运行	游戏模式v2 dns由主程序koolgame提供"
