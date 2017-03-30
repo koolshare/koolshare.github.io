@@ -1864,7 +1864,7 @@ function checkCmdRet() {
 				retArea.value = "当前日志文件为空";
 				return false;
 			} else {
-				setTimeout("checkCmdRet();", 1000);
+				setTimeout("checkCmdRet();", 200);
 			}
 
 			retArea.value = response;
@@ -1903,7 +1903,7 @@ function checkCmdRet2() {
 				hideSSLoadingBar();
 				return false;
 			} else {
-				setTimeout("checkCmdRet2();", 500);
+				setTimeout("checkCmdRet2();", 200);
 			}
 			retArea.value = response;
 			retArea.scrollTop = retArea.scrollHeight;
