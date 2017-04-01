@@ -1,6 +1,6 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
-3.3.7 (not pushed yet)
+3.3.7
    - fix	fix ssr-tunnel show working but have no pid
    - fix	fix some element in web
    - remove	remove useless binary in bin folder
