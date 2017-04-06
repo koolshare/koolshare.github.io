@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -48,7 +48,7 @@
     input[type=button]:focus {
         outline: none;
     }
-    .icon{
+   .icon{
         float:left;
         position:relative;
         margin: 10px 0px 30px 0px;
@@ -106,15 +106,24 @@
     .icon-desc .install-btn,
     .icon-desc .uninstall-btn,
     .icon-desc .update-btn{
+    	background: #fff;
+    	color:#333;
+    	cursor:pointer;
+    	text-align: center;
+    	font-size: 13px;
+    	padding-bottom: 5px;
+    	margin-left: 10px;
+    	margin-right: 10px;
         display: block;
-        border: none;
         width: 100%;
         height: 18px;
         border-radius: 0px 0px 5px 5px;
+        border: 0px;
         position: absolute;
         bottom: 0;
-        left: 0;
+        left: -10px;
     }
+
     .icon-desc .uninstall-btn{
         display: none;
     }
@@ -192,7 +201,7 @@
     }
     .install-view .install-status-4{
         display: block;
-    }
+    } 
     .cloud_main_radius h2 { border-bottom:1px #AAA dashed;}
 	.cloud_main_radius h3,
 	.cloud_main_radius h4 { font-size:12px;color:#FC0;font-weight:normal;font-style: normal;}
@@ -423,9 +432,9 @@ function appUninstallModule(moduleInfo) {
                         '#{description}',
                     '</a>',
                     '<div class="opt">',
-                        '<button type="button" class="install-btn" data-name="#{name}">安装</button>',
-                        '<button type="button" class="update-btn" data-name="#{name}">更新</button>',
-                        '<button type="button" class="uninstall-btn" data-name="#{name}">卸载</button>',
+                        '<a type="button" class="install-btn" data-name="#{name}">安装</a>',
+                        '<a type="button" class="update-btn" data-name="#{name}">更新</button>',
+                        '<a type="button" class="uninstall-btn" data-name="#{name}">卸载</a>',
                     '</div>',
                 '</dd>',
             '</dl>'
