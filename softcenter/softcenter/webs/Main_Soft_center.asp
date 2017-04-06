@@ -433,7 +433,7 @@ function appUninstallModule(moduleInfo) {
                     '</a>',
                     '<div class="opt">',
                         '<a type="button" class="install-btn" data-name="#{name}">安装</a>',
-                        '<a type="button" class="update-btn" data-name="#{name}">更新</button>',
+                        '<a type="button" class="update-btn" data-name="#{name}">更新</a>',
                         '<a type="button" class="uninstall-btn" data-name="#{name}">卸载</a>',
                     '</div>',
                 '</dd>',
