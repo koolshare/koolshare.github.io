@@ -41,10 +41,12 @@ resolv_server_ip(){
 			dbus set ss_basic_server_ip="$server_ip"
 			dbus set ss_basic_dns_success="1"
 		else
+			dbus remvoe ss_basic_server_ip
 			echo_date SS服务器的ip地址解析失败，将由ss-redir自己解析.
 			dbus set ss_basic_dns_success="0"
 		fi
 	else
+		dbus set ss_basic_server_ip=$ss_basic_server
 		echo_date 检测到你的SS服务器已经是IP格式：$ss_basic_server,跳过解析... 
 		dbus set ss_basic_dns_success="1"
 	fi
