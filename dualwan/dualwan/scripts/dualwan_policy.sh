@@ -105,8 +105,8 @@ if [ ! -z "$shadowsocks_server_ip" ] && [ "$ss_mode" != "0" ];then
 	ip rule add from $shadowsocks_server_ip table $sstable pref 123
 	ip rule add to $shadowsocks_server_ip table $sstable pref 124
 fi
-ip rule add fwmark 7777 table 100 pref 555
-ip rule add fwmark 8888 table 200 pref 666
+ip rule add fwmark 7777 table 100 pref 20555
+ip rule add fwmark 8888 table 200 pref 20666
 echo -1 > /proc/sys/net/ipv4/rt_cache_rebuild_count
 ip route flush cache
 echo $(date): --------------Custom operators rule runs successfully!-------------- >> /tmp/syslog.log
