@@ -169,8 +169,9 @@
         display: block;
         width: 40%;
         border-radius: 0px 0px 5px 0px;
-        right: 0;
+        right: -10px;
         left: auto;
+        border-left: 1px solid #000;
     }
     .install-status-2 .install-btn{
         display: none;
