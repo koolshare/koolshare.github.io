@@ -57,7 +57,9 @@ stop | kill )
     ;;
 restart)
     kill_socks5
-    start_socks5
+    if [ "$ss_local_enable" == "1" ];then
+        start_socks5
+    fi
     ;;
 *)
     echo "Usage: $0 (start|stop|restart)"

@@ -1,5 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.3.8
+   - add	添加回国模式:回国模式下建议使用dnscrypt-proxy和ChinaDNS(国外自定义例如8.8.8.8直连)两种方案。
+   - fix	修复某些情况下ss-tunnel的启动问题
+   - fix	修复socks5关闭后进程仍然存在的问题
+
+
 3.3.7
    - fix	fix ssr-tunnel show working but have no pid
    - fix	fix some element in web

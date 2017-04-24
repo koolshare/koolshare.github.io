@@ -181,7 +181,7 @@ start_dns(){
 	if [ "2" == "$ss_dns_foreign" ];then
 		if [ "$ss_basic_use_rss" == "1" ];then
 			echo_date 开启ssr-tunnel...
-			rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l $DNS_PORT -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+			rss-tunnel -b 0.0.0.0 -c /koolshare/ss/ss.json -l $DNS_PORT -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_use_rss" == "0" ];then
 			echo_date 开启ss-tunnel...
 			if [ "$ss_basic_ss_obfs" == "0" ];then
@@ -243,7 +243,7 @@ start_dns(){
 				[ "$ss_pdnsd_udp_server_ss_tunnel" == "4" ] && dns1="$ss_pdnsd_udp_server_ss_tunnel_user"
 				if [ "$ss_basic_use_rss" == "1" ];then
 					echo_date 开启ssr-tunnel作为pdnsd的上游服务器.
-					rss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+					rss-tunnel -b 0.0.0.0 -c /koolshare/ss/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 				elif  [ "$ss_basic_use_rss" == "0" ];then
 					echo_date 开启ss-tunnel作为pdnsd的上游服务器.
 					if [ "$ss_basic_ss_obfs" == "0" ];then
@@ -330,7 +330,7 @@ start_dns(){
 			[ "$ss_chinadns_foreign_sstunnel" == "4" ] && rcfs="$ss_chinadns_foreign_sstunnel_user"
 			if [ "$ss_basic_use_rss" == "1" ];then
 				echo_date ┣开启ssr-tunnel，作为chinaDNS上游国外dns，转发dns：$rcfs
-				rss-tunnel -b 127.0.0.1 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+				rss-tunnel -b 127.0.0.1 -c /koolshare/ss/ss.json -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 			elif  [ "$ss_basic_use_rss" == "0" ];then
 				echo_date ┣开启ss-tunnel，作为chinaDNS上游国外dns，转发dns：$rcfs
 				if [ "$ss_basic_ss_obfs" == "0" ];then
@@ -391,18 +391,19 @@ append_white_black_conf(){
 	# append white domain list, bypass ss
 	rm -rf /tmp/wblist.conf
 	# github need to go ss
-	echo "#for router itself" >> /tmp/wblist.conf
-	echo "server=/.google.com.tw/127.0.0.1#7913" >> /tmp/wblist.conf
-	echo "ipset=/.google.com.tw/router" >> /tmp/wblist.conf
-	echo "server=/.github.com/127.0.0.1#7913" >> /tmp/wblist.conf
-	echo "ipset=/.github.com/router" >> /tmp/wblist.conf
-	echo "server=/.github.io/127.0.0.1#7913" >> /tmp/wblist.conf
-	echo "ipset=/.github.io/router" >> /tmp/wblist.conf
-	echo "server=/.raw.githubusercontent.com/127.0.0.1#7913" >> /tmp/wblist.conf
-	echo "ipset=/.raw.githubusercontent.com/router" >> /tmp/wblist.conf
-	echo "server=/.adblockplus.org/127.0.0.1#7913" >> /tmp/wblist.conf
-	echo "ipset=/.adblockplus.org/router" >> /tmp/wblist.conf
-	
+	if [ "$ss_basic_mode" != "6" ];then
+		echo "#for router itself" >> /tmp/wblist.conf
+		echo "server=/.google.com.tw/127.0.0.1#7913" >> /tmp/wblist.conf
+		echo "ipset=/.google.com.tw/router" >> /tmp/wblist.conf
+		echo "server=/.github.com/127.0.0.1#7913" >> /tmp/wblist.conf
+		echo "ipset=/.github.com/router" >> /tmp/wblist.conf
+		echo "server=/.github.io/127.0.0.1#7913" >> /tmp/wblist.conf
+		echo "ipset=/.github.io/router" >> /tmp/wblist.conf
+		echo "server=/.raw.githubusercontent.com/127.0.0.1#7913" >> /tmp/wblist.conf
+		echo "ipset=/.raw.githubusercontent.com/router" >> /tmp/wblist.conf
+		echo "server=/.adblockplus.org/127.0.0.1#7913" >> /tmp/wblist.conf
+		echo "ipset=/.adblockplus.org/router" >> /tmp/wblist.conf
+	fi
 	# append white domain list,not through ss
 	wanwhitedomain=$(echo $ss_wan_white_domain | base64_decode)
 	if [ ! -z $ss_wan_white_domain ];then
@@ -448,12 +449,12 @@ ln_conf(){
 	rm -rf /jffs/configs/dnsmasq.d/wblist.conf
 	if [ -f /tmp/wblist.conf ];then
 		#echo_date 创建域名黑/白名单软链接到/jffs/configs/dnsmasq.d/wblist.conf
-		ln -sf /tmp/wblist.conf /jffs/configs/dnsmasq.d/wblist.conf
+		mv -f /tmp/wblist.conf /jffs/configs/dnsmasq.d/wblist.conf
 	fi
 	rm -rf /jffs/configs/dnsmasq.d/cdn.conf
 	if [ -f /tmp/sscdn.conf ];then
 		#echo_date 创建cdn加速列表软链接/jffs/configs/dnsmasq.d/cdn.conf
-		ln -sf /tmp/sscdn.conf /jffs/configs/dnsmasq.d/cdn.conf
+		mv -f /tmp/sscdn.conf /jffs/configs/dnsmasq.d/cdn.conf
 	fi
 
 	gfw_on=`dbus list ss_acl_mode_|cut -d "=" -f 2 | grep 1`

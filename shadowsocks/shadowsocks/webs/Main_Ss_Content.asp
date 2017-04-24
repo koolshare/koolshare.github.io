@@ -249,6 +249,11 @@ function update_visibility_main() {
 		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
 		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
 		$j("#ss_title").html("shadowsocks - 账号信息配置");
+	} else if (ssmode == "6"){
+		$j("#mode_state").html("SS运行状态【回国模式】");
+		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
+		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
+		$j("#ss_title").html("shadowsocks - 账号信息配置");
 	}
 	//showhide("show_btn3", (ssmode == "1" || ssmode == "2" ));
 	showhide("ss_state1", (ssmode == "0"));
@@ -349,10 +354,14 @@ function update_visibility_tab2(){
 		document.form.ss_dns_plan_gfw.value=document.form.ss_dns_plan.value;;
 	}
 
+	if (ssmode == "6"){
+		document.getElementById("dns_note").style.display = "";
+	}
+
 	if (document.form.ss_dns_plan.value == "1"){
 		$j("#ss_dns_plan_note").html("国外dns解析gfwlist名单内的国外域名，剩下的域名用国内dns解析。");
 	}else if (document.form.ss_dns_plan.value == "2"){
-		$j("#ss_dns_plan_note").html("国内dns解析cdn名单内的国内域名用，剩下的域名用国外dns解析。");
+		$j("#ss_dns_plan_note").html("国内dns解析cdn名单内的国内域名，剩下的域名用国外dns解析。");
 	}
 }
 
@@ -731,11 +740,13 @@ function generate_options1(w){ //为节点添加面板增加模式选择选项
 	$j("#ss_node_table_mode option[value='3']").remove();
 	$j("#ss_node_table_mode option[value='4']").remove();
 	$j("#ss_node_table_mode option[value='5']").remove();
+	$j("#ss_node_table_mode option[value='6']").remove();
 	if(w == 0){
 		$j("#ss_node_table_mode").append("<option value='1'>【1】 gfwlist模式</option>");
 		$j("#ss_node_table_mode").append("<option value='2'>【2】 大陆白名单模式</option>");
 		$j("#ss_node_table_mode").append("<option value='3'>【3】 游戏模式</option>");
 		$j("#ss_node_table_mode").append("<option value='5'>【5】 全局代理模式</option>");
+		$j("#ss_node_table_mode").append("<option value='6'>【6】 回国模式</option>");
 	} else if (w == 1){
 		$j("#ss_node_table_mode").append("<option value='4'>【4】 游戏模式V2</option>");
 	}
@@ -2145,11 +2156,17 @@ function refresh_acl_html() {
 		code = code + '</td>';
 		code = code + '<td>';
 		code = code + '<select id="ss_acl_mode_' + ac["acl_node"] + '" name="ss_acl_mode_' + ac["acl_node"] + '" style="width:160px;margin:0px 0px 0px 2px;" class="input_option_2" onchange="set_mode_2(this);">';
-		code = code + '<option value="0">不通过ss</option>';
-		code = code + '<option value="1">gfwlist模式</option>';
-		code = code + '<option value="2">大陆白名单模式</option>';
-		code = code + '<option value="3">游戏模式</option>';
-		code = code + '<option value="5">全局代理模式</option>';
+		if($j("#ss_basic_mode").val() == 6){
+			code = code + '<option value="0">不通过ss</option>';
+			code = code + '<option value="6">回国模式</option>';
+		}else{
+			code = code + '<option value="0">不通过ss</option>';
+			code = code + '<option value="1">gfwlist模式</option>';
+			code = code + '<option value="2">大陆白名单模式</option>';
+			code = code + '<option value="3">游戏模式</option>';
+			code = code + '<option value="5">全局代理模式</option>';
+			code = code + '<option value="6">回国模式</option>';
+		}
 		code = code + '</select>'
 		code = code + '</td>';
 		code = code + '<td>';
@@ -2185,6 +2202,8 @@ function refresh_acl_html() {
 			code = code + '<td>游戏模式</td>';
 		} else if (ssmode == 5) {
 			code = code + '<td>全局模式</td>';
+		} else if (ssmode == 6) {
+			code = code + '<td>回国模式</td>';
 		}
 	} else {
 		code = code + '<td>';
@@ -2203,6 +2222,9 @@ function refresh_acl_html() {
 		} else if (ssmode == 5) {
 			code = code + '<option value="0">不通过ss</option>';
 			code = code + '<option value="5" selected>全局代理模式</option>';
+		} else if (ssmode == 6) {
+			code = code + '<option value="0">不通过ss</option>';
+			code = code + '<option value="5" selected>回国模式</option>';
 		}
 		code = code + '</select>';
 		code = code + '</td>';
@@ -2632,6 +2654,7 @@ function write_proc_status(){
 															<option value="3">【3】 游戏模式</option>
 															<option value="4">【4】 游戏模式V2</option>
 															<option value="5">【5】 全局代理模式</option>
+															<option value="6">【6】 回国模式</option>
 														</select>
 														<div id="SSR_name" style="margin-left:170px;margin-top:-20px;margin-bottom:0px;">
 															<input type="checkbox" id="ss_basic_use_rss" onclick="oncheckclick(this);update_visibility_main();" />
@@ -3058,6 +3081,7 @@ bogus-nxdomain=220.250.64.18" rows="12" style="width:99%; font-family:'Courier N
 													</td>
 												</tr>
 											</table>
+										<lable id="dns_note" style="display: none;">回国模式用户建议使用dnscrypt-proxy和ChinaDNS(国外自定义例如8.8.8.8直连)两种方案。</lable>
 										</div>
 										<!--=====tablet_3=====-->
 										<div id="tablet_3" style="display: none;">
@@ -3236,6 +3260,7 @@ taobao.com
 																<option value="2">大陆白名单模式</option>
 																<option value="3">游戏模式</option>
 																<option value="5">全局代理模式</option>
+																<option value="6">回国模式</option>
 															</select>
 														</td>
 														<td>

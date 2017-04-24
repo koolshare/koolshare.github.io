@@ -109,7 +109,10 @@ function LoadingSSProgress(seconds){
 		$j("#loading_block2").html("<li><font color='#ffcc00'><a href='http://www.koolshare.cn' target='_blank'></font>SS工作有问题？请来我们的<font color='#ffcc00'>论坛www.koolshare.cn</font>反应问题...</font></li>");
 	} else {
 		if (document.form.ss_basic_action.value == 1){
-			if (document.form.ss_basic_mode.value == 5){
+			if (document.form.ss_basic_mode.value == 6){
+				document.getElementById("loading_block3").innerHTML = "回国启用中 ..."
+				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
+			}else if (document.form.ss_basic_mode.value == 5){
 				document.getElementById("loading_block3").innerHTML = "全局模式启用中 ..."
 				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>此模式非科学上网方式，会影响国内网页速度...</font></li><li><font color='#ffcc00'>注意：全局模式并非VPN，只支持TCP流量转发...</font></li><li><font color='#ffcc00'>请等待日志显示完毕，并出现自动关闭按钮！</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
 			} else if (document.form.ss_basic_mode.value == 4){
