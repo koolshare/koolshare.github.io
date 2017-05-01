@@ -1,3 +1,6 @@
 [submodule "aria2/aria2/www/glutton"]
 	path = aria2/aria2/www/glutton
 	url = https://github.com/NemoAlex/glutton.git
+[submodule "gdddns"]
+    path = gdddns
+    url = https://github.com/mritd/koolshare-gdddns.git
