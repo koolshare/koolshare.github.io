@@ -9,7 +9,7 @@
 {"module": "frpc", "git_source": "https://github.com/koolshare/merlin_frpc.git"},
 {"module": "koolproxy", "git_source": "https://github.com/koolproxy/merlin-koolproxy.git"},
 {"module": "softether", "git_source": "https://github.com/koolshare/merlin-SoftEtherVPN.git"},
-{"module": "gdddns", "git_source": "https://github.com/koolshare/koolshare-gdddns.git"},
+{"module": "gdddns", "git_source": "https://github.com/mritd/koolshare-gdddns.git"},
 {}
 ]
 
