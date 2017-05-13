@@ -3,8 +3,9 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
 3.4.0
    - add	ss配置恢复支持SSR json格式节点；
    - update	ss配置导出/恢复功能移动到附加功能；
-   - fix	用json导入节点配置时导致已有的节点密码变成乱码；
-   - 说明	ss配置恢复不仅可以恢复本插件保存的ss数据:ss_conf_backup.txt，如果已经有配置，导入此配置将覆盖已有配置
+   - update	现在导入json格式节点默认为大陆白名单模式；
+   - fix	修复用json导入节点配置时导致已有的节点密码变成乱码的bug；
+   - 说明	ss配置恢复不仅可以恢复本插件保存的ss数据:ss_conf_backup.txt，如果已经有配置，导入此配置将覆盖已有配置
    			还能导入ss/ssr服务商，PC端ss/ssr等提供的json格式的节点数据，如果已经有配置，导入此配置将新增json内的节点，而不会覆盖
    			建议大家在用json导入节点后，用插件的【导出配置】功能备份一次插件数据。
 
