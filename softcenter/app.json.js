@@ -61,6 +61,16 @@
             "version": "1.4"
         }, 
         {
+            "description": "穿透 DDNS, 服务器转发方式", 
+            "home_url": "Module_tunnel.asp", 
+            "md5": "c9f45ccde00d04943ddcf4f8ddecbada", 
+            "module": "tunnel", 
+            "name": "tunnel", 
+            "tar_url": "tunnel/tunnel.tar.gz", 
+            "title": "穿透DDNS", 
+            "version": "0.8"
+        }, 
+        {
             "build_date": "2016-10-09_14:54:55", 
             "description": "老板，来一斤虚拟内存~", 
             "home_url": "Module_swap.asp", 
@@ -101,14 +111,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2017-05-03_16:57:23", 
+            "build_date": "2017-05-13_17:28:01", 
             "description": "科学上网", 
             "home_url": "Main_Ss_Content.asp", 
-            "md5": "ba426d7314e4279056115cd80e680a06", 
+            "md5": "77dc73afe009fa57b910e497cfe50919", 
             "name": "shadowsocks", 
             "tar_url": "shadowsocks/shadowsocks.tar.gz", 
             "title": "shadowsocks", 
-            "version": "3.3.9"
+            "version": "3.4.0"
         }, 
         {
             "build_date": "2016-05-07_01:41:30", 

@@ -270,7 +270,7 @@ function update_visibility_main() {
 	showhide("SSR_name", (ssmode != "4" && document.getElementById("ss_basic_ss_obfs").value == "0" ));
 	showhide("KCP_name", (ssmode != "3" && ssmode != "4" && document.form.ss_basic_ss_obfs.value =="0"));
 	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode != "4"));
-	showhide("ss_basic_rss_protocol_para_tr", (sur == "1" && ssmode != "4" && srp == "auth_aes128_md5" || srp == "auth_aes128_sha1"));
+	showhide("ss_basic_rss_protocol_para_tr", (sur == "1" && ssmode != "4" && document.getElementById("ss_basic_rss_protocol_para").value != ""));
 	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode != "4"));
 	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode != "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple" || document.form.ss_basic_rss_obfs.value == "http_post" ));
 	showhide("ss_basic_kcp_port_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
@@ -2835,18 +2835,6 @@ function write_proc_status(){
 										<div id="ss_node_list_table_btn" style="display: none;position: static;width: 747px;">
 											<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
-													<th style="width:20%;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(24)">导出恢复</a></th>
-													<td>
-														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="download_SS_node();" value="导出配置">
-														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="remove_SS_node();" value="清空配置">
-														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="upload_SS_node();" value="恢复配置">
-
-														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file">
-														<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif">
-														<span id="ss_file_info" style="display:none;">完成</span>
-													</td>
-												</tr>
-												<tr>
 													<th style="width:20%;">ping测试</th>
 													<td>
 														<input class="ss_btn" style="cursor:pointer;" onClick="ping_test()" type="button" value="ping测试"/>
@@ -3342,7 +3330,23 @@ taobao.com
 														<span id="SS_IP" style="margin-left:auto;margin-top:-23px;margin-bottom:0px;display: none;">
 														</span>
 													</td>
-												</tr>												
+												</tr>
+												<tr>
+													<th style="width:20%;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(24)">导出SS配置</a></th>
+													<td>
+														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="download_SS_node();" value="导出配置">
+														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="remove_SS_node();" value="清空配置">
+													</td>
+												</tr>
+												<tr>
+													<th style="width:20%;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(24)">恢复SS配置（支持ss/ssr的json节点）</a></th>
+													<td>
+														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file">
+														<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif">
+														<span id="ss_file_info" style="display:none;">完成</span>
+														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="upload_SS_node();" value="恢复配置">
+													</td>
+												</tr>											
 											</table>
 										</div>
 
