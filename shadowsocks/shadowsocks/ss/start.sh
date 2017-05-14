@@ -30,13 +30,24 @@ resolv_server_ip(){
 		echo_date 使用nslookup方式解析SS服务器的ip地址,解析dns：$ss_basic_dnslookup_server
 		if [ "$ss_basic_dnslookup" == "1" ];then
 			server_ip=`nslookup "$ss_basic_server" $ss_basic_dnslookup_server | sed '1,4d' | awk '{print $3}' | grep -v :|awk 'NR==1{print}'`
+			if [ "$?" == "0" ]; then
+				echo_date SS服务器的ip地址解析成功：$server_ip.
+			else
+				echo_date SS服务器域名解析失败！
+				echo_date 尝试用resolveip方式解析...
+				server_ip=`resolveip -4 -t 2 $ss_basic_server|awk 'NR==1{print}'`
+				if [ "$?" == "0" ]; then
+			    	echo_date SS服务器的ip地址解析成功：$server_ip.
+				else
+					echo_date 使用resolveip方式SS服务器域名解析失败！请更换nslookup解析方式的DNS地址后重试！
+				fi
+			fi
 		else
 			echo_date 使用resolveip方式解析SS服务器的ip地址.
 			server_ip=`resolveip -4 -t 2 $ss_basic_server|awk 'NR==1{print}'`
 		fi
 
 		if [ ! -z "$server_ip" ];then
-			echo_date SS服务器的ip地址解析成功：$server_ip.
 			ss_basic_server="$server_ip"
 			dbus set ss_basic_server_ip="$server_ip"
 			dbus set ss_basic_dns_success="1"
@@ -728,71 +739,71 @@ start_all)
 	nvram commit
 	echo_date ------------------------- shadowsocks 启动完毕 -------------------------
 	;;
-restart_dns)
-	#ss_basic_action=2
-	echo_date ----------------------------- 重启dns服务 ------------------------------
-	creat_ss_json
-	resolv_server_ip
-	[ "$ss_basic_mode" != "4" ] && stop_dns || killall koolgame
-	#creat_dnsmasq_basic_conf
-	load_cdn_site
-	custom_dnsmasq
-	ln_conf
-	[ "$ss_basic_mode" != "4" ] && start_dns || start_koolgame
-	#load_nat
-	restart_dnsmasq
-	remove_status
-	echo_date ---------------------------- dns服务重启完毕 ----------------------------
-	;;
-restart_wb_list)
-	#ss_basic_action=3
-	echo_date ---------------------------- 重启黑白名单服务 ----------------------------
-	ipset -! flush white_list >/dev/null 2>&1
-	ipset -! flush black_list >/dev/null 2>&1
-	sh /koolshare/ss/nat-start.sh add_new_ip
-	append_white_black_conf && ln_conf
-	restart_dnsmasq
-	remove_status
-	echo_date ------------------------- 黑白名单服务重启完毕 ---------------------------
-	;;
-restart_addon)
-	#ss_basic_action=4
-	echo_date ----------------------------- 重启附加功能 -----------------------------
-	# for sleep walue in start up files
-	old_sleep=`cat /jffs/scripts/nat-start | grep sleep | awk '{print $2}'`
-	new_sleep="$ss_basic_sleep"
-	if [ "$old_sleep" = "$new_sleep" ];then
-		echo_date 开机延迟时间未改变，仍然是"$ss_basic_sleep"秒.
-	else
-		echo_date 设置"$ss_basic_sleep"秒开机延迟...
-		# delete boot delay in nat-start and wan-start
-		sed -i '/koolshare/d' /jffs/scripts/nat-start >/dev/null 2>&1
-		sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
-		sed -i '/koolshare/d' /jffs/scripts/wan-start >/dev/null 2>&1
-		sed -i '/sleep/d' /jffs/scripts/wan-start >/dev/null 2>&1
-		# re add delay in nat-start and wan-start
-		nat_auto_start >/dev/null 2>&1
-		wan_auto_start >/dev/null 2>&1
-	fi
-	
-	# for chromecast surpport
-	# also for chromecast
-	sh /koolshare/ss/nat-start.sh start_part_for_addon
-	
-	# for list update
-	kill_cron_job
-	write_cron_job
-	#remove_status
-	remove_status
-	main_portal
-	
-	if [ "$ss_basic_dnslookup" == "1" ];then
-		echo_date 设置使用nslookup方式解析SS服务器的ip地址.
-	else
-		echo_date 设置使用resolveip方式解析SS服务器的ip地址.
-	fi
-	echo_date -------------------------- 附加功能重启完毕！ ---------------------------
-	;;
+#restart_dns)
+#	#ss_basic_action=2
+#	echo_date ----------------------------- 重启dns服务 ------------------------------
+#	creat_ss_json
+#	resolv_server_ip
+#	[ "$ss_basic_mode" != "4" ] && stop_dns || killall koolgame
+#	#creat_dnsmasq_basic_conf
+#	load_cdn_site
+#	custom_dnsmasq
+#	ln_conf
+#	[ "$ss_basic_mode" != "4" ] && start_dns || start_koolgame
+#	#load_nat
+#	restart_dnsmasq
+#	remove_status
+#	echo_date ---------------------------- dns服务重启完毕 ----------------------------
+#	;;
+#restart_wb_list)
+#	#ss_basic_action=3
+#	echo_date ---------------------------- 重启黑白名单服务 ----------------------------
+#	ipset -! flush white_list >/dev/null 2>&1
+#	ipset -! flush black_list >/dev/null 2>&1
+#	sh /koolshare/ss/nat-start.sh add_new_ip
+#	append_white_black_conf && ln_conf
+#	restart_dnsmasq
+#	remove_status
+#	echo_date ------------------------- 黑白名单服务重启完毕 ---------------------------
+#	;;
+#restart_addon)
+#	#ss_basic_action=4
+#	echo_date ----------------------------- 重启附加功能 -----------------------------
+#	# for sleep walue in start up files
+#	old_sleep=`cat /jffs/scripts/nat-start | grep sleep | awk '{print $2}'`
+#	new_sleep="$ss_basic_sleep"
+#	if [ "$old_sleep" = "$new_sleep" ];then
+#		echo_date 开机延迟时间未改变，仍然是"$ss_basic_sleep"秒.
+#	else
+#		echo_date 设置"$ss_basic_sleep"秒开机延迟...
+#		# delete boot delay in nat-start and wan-start
+#		sed -i '/koolshare/d' /jffs/scripts/nat-start >/dev/null 2>&1
+#		sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
+#		sed -i '/koolshare/d' /jffs/scripts/wan-start >/dev/null 2>&1
+#		sed -i '/sleep/d' /jffs/scripts/wan-start >/dev/null 2>&1
+#		# re add delay in nat-start and wan-start
+#		nat_auto_start >/dev/null 2>&1
+#		wan_auto_start >/dev/null 2>&1
+#	fi
+#	
+#	# for chromecast surpport
+#	# also for chromecast
+#	sh /koolshare/ss/nat-start.sh start_part_for_addon
+#	
+#	# for list update
+#	kill_cron_job
+#	write_cron_job
+#	#remove_status
+#	remove_status
+#	main_portal
+#	
+#	if [ "$ss_basic_dnslookup" == "1" ];then
+#		echo_date 设置使用nslookup方式解析SS服务器的ip地址.
+#	else
+#		echo_date 设置使用resolveip方式解析SS服务器的ip地址.
+#	fi
+#	echo_date -------------------------- 附加功能重启完毕！ ---------------------------
+#	;;
 *)
 	echo "Usage: $0 (start_all|restart_dns|restart_wb_list|restart_addon)"
 	exit 1

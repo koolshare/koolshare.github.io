@@ -43,7 +43,7 @@ if [ -z "$format" ];then
 	echo_date 配置恢复成功！
 	
 else
-	ss_formate=`echo $confs|grep "obfsparam"`
+	ss_formate=`echo $confs|grep "obfs"`
 	if [ -z "$ss_formate" ];then
 
 		echo_date 检测到ss json配置文件...

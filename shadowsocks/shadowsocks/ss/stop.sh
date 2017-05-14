@@ -262,20 +262,20 @@ stop_all)
 	kill_cron_job
 	echo_date -------------------------- Shadowsocks已关闭 -----------------------------
 	;;
-stop_part)
-	#KCP_basic_action=1 应用DNS设置
-	echo_date ================ 梅林固件 - shadowsocks by sadoneli\&Xiaobao ==============
-	echo_date
-	echo_date ----------------------------- 停止上个SS模式 -----------------------------
-	restore_conf
-	remove_conf_and_settings
-	#bring_up_dnsmasq
-	restore_nat
-	destory_ipset
-	restore_start_file
-	kill_process
-	#kill_cron_job
-	;;
+#stop_part)
+#	#KCP_basic_action=1 应用DNS设置
+#	echo_date ================ 梅林固件 - shadowsocks by sadoneli\&Xiaobao ==============
+#	echo_date
+#	echo_date ----------------------------- 停止上个SS模式 -----------------------------
+#	restore_conf
+#	remove_conf_and_settings
+#	#bring_up_dnsmasq
+#	restore_nat
+#	destory_ipset
+#	restore_start_file
+#	kill_process
+#	#kill_cron_job
+#	;;
 *)
 	echo "Usage: $0 (stop_all|stop_part)"
 	exit 1

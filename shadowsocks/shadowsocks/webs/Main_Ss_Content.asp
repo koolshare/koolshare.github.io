@@ -94,6 +94,9 @@ function onSubmitCtrl() {
 	checkss = 10001;
 	$G("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
 	$G("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
+	document.form.ss_basic_server.value = $j.trim($j("#ss_basic_server").val());
+	document.form.ss_basic_port.value = $j.trim($j("#ss_basic_port").val());
+	document.form.ss_basic_password.value = $j.trim($j("#ss_basic_password").val());
     if (validForm()) {
         if (0 == node_global_max) {
             var obj = ssform2obj();
@@ -188,7 +191,7 @@ function update_ss_ui(obj) {
 	}
 	$j("#ss_basic_method").val(obj.ss_basic_method);
 	$G("ss_basic_password").value = Base64.decode($G("ss_basic_password").value);
-	
+
 }
 
 function validForm() {
@@ -761,20 +764,21 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 	var params3 = ["name", "server", "mode", "port", "method", "koolgame_udp"]; //for ssr
 	if (flag == 'shadowsocks') {
 		for (var i = 0; i < params1.length; i++) {
-			ns[p + "_" + params1[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params1[i]).val();
+			ns[p + "_" + params1[i] + "_" + node_global_max] = $j.trim($j('#ss_node_table' + "_" + params1[i]).val());
+			ns[p + "_password_" + node_global_max] = Base64.encode($j.trim($j("#ss_node_table_password").val()));
 			ns[p + "_use_rss_" + node_global_max] = 0;
-			ns[p + "_password_" + node_global_max] = Base64.encode($j("#ss_node_table_password").val());
+			
 		}
 	} else if (flag == 'shadowsocksR') {
 		for (var i = 0; i < params2.length; i++) {
-			ns[p + "_" + params2[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params2[i]).val();
-			ns[p + "_password_" + node_global_max] = Base64.encode($j("#ss_node_table_password").val());
+			ns[p + "_" + params2[i] + "_" + node_global_max] = $j.trim($j('#ss_node_table' + "_" + params2[i]).val());
+			ns[p + "_password_" + node_global_max] = Base64.encode($j.trim($j("#ss_node_table_password").val()));
 			ns[p + "_use_rss_" + node_global_max] = 1;
 		}
 	} else if (flag == 'gameV2') {
 		for (var i = 0; i < params3.length; i++) {
-			ns[p + "_" + params3[i] + "_" + node_global_max] = $j('#ss_node_table' + "_" + params3[i]).val();
-			ns[p + "_password_" + node_global_max] = Base64.encode($j("#ss_node_table_password").val());
+			ns[p + "_" + params3[i] + "_" + node_global_max] = $j.trim($j('#ss_node_table' + "_" + params3[i]).val());
+			ns[p + "_password_" + node_global_max] = Base64.encode($j.trim($j("#ss_node_table_password").val()));
 			ns[p + "_use_rss_" + node_global_max] = 0;
 		}
 	}
@@ -1650,7 +1654,7 @@ function toggle_func() {
 			$G("tablet_6").style.display = "none";
 			$G("tablet_7").style.display = "none";
 			$G("apply_button").style.display = "";
-			$G("cmdBtn").value = "提交";
+			//$G("cmdBtn").value = "提交";
 			document.form.ss_basic_action.value = 1;
 			update_visibility_main();
 			ss_node_info_return();
@@ -1697,7 +1701,7 @@ function toggle_func() {
 			$G("tablet_6").style.display = "none";
 			$G("tablet_7").style.display = "none";
 			$G("apply_button").style.display = "";
-			$G("cmdBtn").value = "应用DNS设定";
+			//$G("cmdBtn").value = "应用DNS设定";
 			update_visibility_tab2();
 			document.form.ss_basic_action.value = 2;
 			ss_node_info_return();
@@ -1722,7 +1726,7 @@ function toggle_func() {
 			showhide("ss_wan_black_ip_tr", (ssmode != "5"));
 			showhide("ss_wan_black_domain_tr", (ssmode != "5"));
 			$G("apply_button").style.display = "";
-			$G("cmdBtn").value = "应用黑白名单";
+			//$G("cmdBtn").value = "应用黑白名单";
 			document.form.ss_basic_action.value = 3;
 			ss_node_info_return();
 		});
@@ -1765,7 +1769,7 @@ function toggle_func() {
 			$G("tablet_6").style.display = "none";
 			$G("tablet_7").style.display = "none";
 			$G("apply_button").style.display = "";
-			$G("cmdBtn").value = "提交";
+			//$G("cmdBtn").value = "提交";
 			ss_node_info_return();
 			if (ssmode == 4) {
 				$G("ACL_table_game").style.display = ""
@@ -1800,7 +1804,7 @@ function toggle_func() {
 			$G("tablet_6").style.display = "";
 			$G("tablet_7").style.display = "none";
 			$G("apply_button").style.display = "";
-			$G("cmdBtn").value = "应用附加功能";
+			//$G("cmdBtn").value = "应用附加功能";
 			document.form.ss_basic_action.value = 4;
 			update_visibility_tab4();
 			ss_node_info_return();
@@ -3326,7 +3330,7 @@ taobao.com
 															<option value="0">resolveip方式</option>
 															<option value="1" selected>nslookup方式</option>
 														</select>
-														<input type="text" class="ssconfig input_ss_table" id="ss_basic_dnslookup_server" name="ss_basic_dnslookup_server" style="width:128px;"  value="119.29.29.29">
+														<input type="text" class="ssconfig input_ss_table" id="ss_basic_dnslookup_server" name="ss_basic_dnslookup_server" style="width:128px;"  value="114.114.114.114">
 														<span id="SS_IP" style="margin-left:auto;margin-top:-23px;margin-bottom:0px;display: none;">
 														</span>
 													</td>

@@ -142,19 +142,21 @@ update_ss2(){
 
 # Enable service by user choose
 apply_ss(){
-	
-	if [ "1" == "$ss_basic_action" ]; then
-		sh /koolshare/ss/stop.sh stop_part
-		sh /koolshare/scripts/ss_prestart.sh
-		sh /koolshare/ss/start.sh start_all
-	elif [ "2" == "$ss_basic_action" ]; then
-		sh /koolshare/ss/start.sh restart_dns
-	elif [ "3" == "$ss_basic_action" ]; then
-		sh /koolshare/ss/start.sh restart_wb_list
-	elif [ "4" == "$ss_basic_action" ]; then
-		sh /koolshare/ss/start.sh restart_addon
-	fi
-	dbus set ss_basic_action="1"
+	sh /koolshare/ss/stop.sh stop_all
+	sh /koolshare/scripts/ss_prestart.sh
+	sh /koolshare/ss/start.sh start_all
+	# if [ "1" == "$ss_basic_action" ]; then
+	# 	sh /koolshare/ss/stop.sh stop_part
+	# 	sh /koolshare/scripts/ss_prestart.sh
+	# 	sh /koolshare/ss/start.sh start_all
+	# elif [ "2" == "$ss_basic_action" ]; then
+	# 	sh /koolshare/ss/start.sh restart_dns
+	# elif [ "3" == "$ss_basic_action" ]; then
+	# 	sh /koolshare/ss/start.sh restart_wb_list
+	# elif [ "4" == "$ss_basic_action" ]; then
+	# 	sh /koolshare/ss/start.sh restart_addon
+	# fi
+	# dbus set ss_basic_action="1"
 }
 
 disable_ss(){

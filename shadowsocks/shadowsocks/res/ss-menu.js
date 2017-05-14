@@ -98,6 +98,7 @@ function showSSLoadingBar(seconds){
 
 
 function LoadingSSProgress(seconds){
+	action = document.form.ss_basic_action.value;
 	document.getElementById("LoadingBar").style.visibility = "visible";
 	if (document.form.ss_basic_action.value == 9){
 		document.getElementById("loading_block3").innerHTML = "应用负载均衡设置 ..."
@@ -108,7 +109,7 @@ function LoadingSSProgress(seconds){
 		document.getElementById("loading_block3").innerHTML = "SS服务关闭中 ..."
 		$j("#loading_block2").html("<li><font color='#ffcc00'><a href='http://www.koolshare.cn' target='_blank'></font>SS工作有问题？请来我们的<font color='#ffcc00'>论坛www.koolshare.cn</font>反应问题...</font></li>");
 	} else {
-		if (document.form.ss_basic_action.value == 1){
+		if (action == 1 || action == 2 || action == 3 || action == 4){
 			if (document.form.ss_basic_mode.value == 6){
 				document.getElementById("loading_block3").innerHTML = "回国启用中 ..."
 				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
@@ -128,26 +129,17 @@ function LoadingSSProgress(seconds){
 				document.getElementById("loading_block3").innerHTML = "gfwlist模式启用中 ..."
 				$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>尝试不同的DNS解析方案，可以达到最佳的效果哦...</font></li><li><font color='#ffcc00'>请等待日志显示完毕，并出现自动关闭按钮！</font></li><li><font color='#ffcc00'>在此期间请不要刷新本页面，不然可能导致问题！</font></li>");
 			}
-		}else if (document.form.ss_basic_action.value == 2){
-			document.getElementById("loading_block3").innerHTML = "快速重启DNS服务 ..."
-			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>无需重启全部服务，DNS即可生效~</font></li>");
-		} else if (document.form.ss_basic_action.value == 3){
-			document.getElementById("loading_block3").innerHTML = "快速应用黑白名单 ..."
-			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>无需重启全部服务，黑白名单即可生效~</font></li>");
-		} else if (document.form.ss_basic_action.value == 4){
-			document.getElementById("loading_block3").innerHTML = "快速应用附加功能 ..."
-			$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>无需重启全部服务，附加功能即可生效~</font></li>");
-		} else if (document.form.ss_basic_action.value == 5){
+		} else if (action == 5){
 			document.getElementById("loading_block3").innerHTML = "shadowsocks插件升级 ..."
 			//document.getElementById("log_content3").rows = 12;
 			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，等待脚本运行完毕后再刷新！</font></li><li><font color='#ffcc00'>升级服务会自动检测最新版本并下载升级...</font></li>");
-		} else if (document.form.ss_basic_action.value == 6){
+		} else if (action == 6){
 			document.getElementById("loading_block3").innerHTML = "shadowsocks规则更新 ..."
 			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，等待脚本运行完毕后再刷新！</font></li><li><font color='#ffcc00'>正在自动检测github上的更新...</font></li>");
-		} else if (document.form.ss_basic_action.value == 7){
+		} else if (action == 7){
 			document.getElementById("loading_block3").innerHTML = "恢复shadowsocks配置 ..."
 			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，配置恢复后需要重新提交！</font></li><li><font color='#ffcc00'>恢复配置中...</font></li>");
-		} else if (document.form.ss_basic_action.value == 8){
+		} else if (action == 8){
 			document.getElementById("loading_block3").innerHTML = "清空shadowsocks配置 ..."
 			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，正在清空shadowsocks配置...</font></li>");
 		}
