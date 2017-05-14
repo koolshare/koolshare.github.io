@@ -2,13 +2,14 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 3.4.1
    - fix	修复SSR json格式检测不准确问题；
-   - update	nslookup方式解析错误后会用resolveip尝试一次（ps：前几日腾讯DNS：119.29.29.29出现问题导致很多朋友出现问题，119.29.29.29现已恢复）；
+   - update	nslookup方式解析错误后会用resolveip尝试一次
+   		（ps：前几日腾讯DNS：119.29.29.29出现问题导致很多朋友出现问题，119.29.29.29现已恢复）；
    - update	当输入服务器，端口，密码时，如果开头或者结束有空格，会自动清除之；
    - update	去除快速应用DNS，快速应用黑白名单，快速应用附加设置；
  		因为重启部分服务或者进程有时候会出现问题，现在改为重启全部服务；
  		在这些设置提交时都会重启整个SS服务器，以保证SS相关的所有进程和配置工作正常。
-   - update	更新kcptun客户端到20170329版本
-   - update 同步最新ss规则
+   - update	更新kcptun客户端到20170329版本；
+   - update	同步最新ss规则。
 
 3.4.0
    - add	ss配置恢复支持SSR json格式节点；
