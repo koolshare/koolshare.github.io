@@ -838,15 +838,6 @@ function refresh_table() {
 	});
 }
 function refresh_html() {
-
-	var isChrome = navigator.userAgent.search("Chrome") > -1;
-		if(isChrome){
-		var major = navigator.userAgent.match("Chrome\/([0-9]*)\.");    //check for major version
-		var isChrome56 = (parseInt(major[1], 10) >= 56);
-	}
-	if((isChrome56) && document.getElementById("FormTitle")){
-		document.getElementById("FormTitle").className = "FormTitle_chrome56";
-	}
 	confs = getAllConfigs();
 	var n = 0;
 	for (var i in confs) {
@@ -863,13 +854,6 @@ function refresh_html() {
 			$G("ss_node_list_table_td").style.top = "440px";
 			$G("ss_node_list_table_td").style.height = "613px";
 			$G("ss_node_list_table_btn").style.top = "1050px";
-			$G("FormTitle").style.height = "1100px";
-		}
-		if(isChrome56){
-			$G("ss_node_list_table_th").style.top = "244px";
-			$G("ss_node_list_table_td").style.top = "284px";
-			$G("ss_node_list_table_td").style.height = "613px";
-			$G("ss_node_list_table_btn").style.top = "894px";
 			$G("FormTitle").style.height = "1100px";
 		}
 
