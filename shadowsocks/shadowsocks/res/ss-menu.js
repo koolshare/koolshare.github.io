@@ -1,13 +1,4 @@
 ﻿function menu_hook(title, tab) {
-	var isChrome = navigator.userAgent.search("Chrome") > -1;
-		if(isChrome){
-		var major = navigator.userAgent.match("Chrome\/([0-9]*)\.");    //check for major version
-		var isChrome56 = (parseInt(major[1], 10) >= 56);
-	}
-	if((isChrome56) && document.getElementById("FormTitle")){
-		document.getElementById("FormTitle").className = "FormTitle_chrome56";
-	}
-
 	var enable_ss = "<% nvram_get("enable_ss"); %>";
 	var enable_soft = "<% nvram_get("enable_soft"); %>";
 	if(enable_ss == "1" && enable_soft == "1"){

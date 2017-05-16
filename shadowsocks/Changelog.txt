@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.4.2
+   - fix	修复ss主界面在380.66_X7.5固件中的错位问题，仅此而已。
+
 3.4.1
    - fix	修复SSR json格式检测不准确问题；
    - update	nslookup方式解析错误后会用resolveip尝试一次
