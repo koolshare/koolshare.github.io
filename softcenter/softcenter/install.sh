@@ -25,6 +25,7 @@ softcenter_install() {
 		if [ -f "/koolshare/ss/ssconfig.sh" ]; then
 			dbus set softcenter_module_shadowsocks_install=4
 		fi
+		[ ! -L /koolshare/bin/netstat ] && ln -sf /koolshare/bin/koolbox /koolshare/bin/netstat
 	fi
 }
 
