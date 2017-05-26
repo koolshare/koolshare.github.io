@@ -714,6 +714,39 @@ detect_qos(){
 }
 
 
+restart_addon(){
+	#ss_basic_action=4
+	echo_date ----------------------------- 重启附加功能 -----------------------------
+	# for sleep walue in start up files
+	old_sleep=`cat /jffs/scripts/nat-start | grep sleep | awk '{print $2}'`
+	new_sleep="$ss_basic_sleep"
+	if [ "$old_sleep" = "$new_sleep" ];then
+		echo_date 开机延迟时间未改变，仍然是"$ss_basic_sleep"秒.
+	else
+		echo_date 设置"$ss_basic_sleep"秒开机延迟...
+		# delete boot delay in nat-start and wan-start
+		sed -i '/koolshare/d' /jffs/scripts/nat-start >/dev/null 2>&1
+		sed -i '/sleep/d' /jffs/scripts/nat-start >/dev/null 2>&1
+		sed -i '/koolshare/d' /jffs/scripts/wan-start >/dev/null 2>&1
+		sed -i '/sleep/d' /jffs/scripts/wan-start >/dev/null 2>&1
+		# re add delay in nat-start and wan-start
+		nat_auto_start >/dev/null 2>&1
+		wan_auto_start >/dev/null 2>&1
+	fi
+	
+	#remove_status
+	remove_status
+	main_portal
+	
+	if [ "$ss_basic_dnslookup" == "1" ];then
+		echo_date 设置使用nslookup方式解析SS服务器的ip地址.
+	else
+		echo_date 设置使用resolveip方式解析SS服务器的ip地址.
+	fi
+	echo_date -------------------------- 附加功能重启完毕！ ---------------------------
+}
+
+
 case $1 in
 start_all)
 	#ss_basic_action=1
@@ -738,6 +771,7 @@ start_all)
 	nvram set ss_mode=2
 	nvram commit
 	echo_date ------------------------- shadowsocks 启动完毕 -------------------------
+	[ "$ss_basic_action" == "4" ] && restart_addon
 	;;
 #restart_dns)
 #	#ss_basic_action=2

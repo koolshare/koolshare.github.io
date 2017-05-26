@@ -149,6 +149,8 @@ input[type=button]:focus {
 }
 
 #log_content3, #log_content1, #proc_status {overflow: -moz-scrollbars-none;}
+
+
 .FormTable1{
 	table-layout:fixed;
 	width:748px;
@@ -165,7 +167,6 @@ input[type=button]:focus {
 	color:#FFFFFF	;	/*Viz add*/
 	font-weight:normal;
 	text-align: center;
-	line-height:15px;
 	height: 30px;
 	font-size:12px;
 	padding-left: 5px;
@@ -183,42 +184,20 @@ input[type=button]:focus {
 	text-align: center;
 	border: 1px solid #222;
 	border-collapse: collapse;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+	/*
 	word-wrap:break-word;
+	*/
 }
-
 
 .SimpleNote { padding:5px 10px;}
-.KoolshareBottom {
-    width: 230px;
-    height: 100px;
-    background: url(/images/New_ui/koolshare.png) 0px 3px no-repeat;
-    text-align: left;
-	padding-left:120px;
-	margin-top:50px;
-	float:right;
-}
+
 #iframe1{
    font-family: sans-serif;
    color: red;
 }
-.FormTable thead td{
-	color: #FFF;
-	font-size:12px;
-	background-color:#4D595D;
-	text-align:left;
-	font-weight:bolder;
-	border: 0px solid #222;
-	padding: 3px;
-	padding-left: 10px;
-	border-collapse: collapse;
- 	background: #92A0A5; /* Old browsers */
-	background: -moz-linear-gradient(top, #92A0A5  0%, #66757C 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#92A0A5 ), color-stop(100%,#66757C)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #92A0A5  0%, #66757C 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #92A0A5 0%, #66757C 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #92A0A5  0%, #66757C 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #92A0A5  0%, #66757C 100%); /* W3C */
-}
+
 #log_content3, #loading_block2, #log_content1 {line-height:1.5}
 .input_option{
 	height:25px;
@@ -334,6 +313,25 @@ input[type=button]:focus {
     color: #1cfe16;
     font-style: normal;
 	font-weight:normal;
+}
+
+.FormTitle_firefox{
+	margin-top:-100px;
+	line-height:160%;
+	font-size:12px;
+	font-family:Arial, Verdana, Arial, Helvetica, sans-serif;
+	border:1px solid #4D595D;
+	color:white;
+}
+.FormTitle_firefox thead{
+	color:#FFF;
+	font-size:13px;
+	text-align:center;	
+	font-weight:bold;
+	background-color:#4D595D;
+}
+.FormTitle_firefox tbody{
+	line-height:180%;
 }
 
 .FormTitle_firefox i {
