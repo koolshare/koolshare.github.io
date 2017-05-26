@@ -1,7 +1,7 @@
-﻿function browser_compatibility1(){
+function browser_compatibility1(){
 	//fw versiom
 	var _fw="<% nvram_get("extendno"); %>";
-	fw_version=parseFloat(_fw.replace("X",""));
+	fw_version=parseFloat(_fw.split("X")[1]);
 	// chrome
 	var isChrome = navigator.userAgent.search("Chrome") > -1;
 	if(isChrome){
@@ -12,11 +12,10 @@
 	}
 	if((isChrome56) && document.getElementById("FormTitle") && fw_version < 7.5){
 		document.getElementById("FormTitle").className = "FormTitle_chrome56";
-		console.log("chrome", fw_version);
-		console.log("fw_version", fw_version);
+		//console.log("fw_version", fw_version);
 	}else if((isChrome56) && document.getElementById("FormTitle") && fw_version >= 7.5){
 		document.getElementById("FormTitle").className = "FormTitle";
-		console.log("chrome", fw_version);
+		//console.log("chrome", fw_version);
 	}
 	//firefox
 	var isFirefox = navigator.userAgent.search("Firefox") > -1;
@@ -24,14 +23,14 @@
 		document.getElementById("FormTitle").className = "FormTitle_firefox";
 		if(current_url.indexOf("Main_Ss_Content.asp") == 0){
 			document.getElementById("FormTitle").style.marginTop = "-100px"
-			console.log("firefox -100");
+			//console.log("firefox -100");
 		}
 
 	}else if((isFirefox) && document.getElementById("FormTitle") && fw_version >= 7.5){
 		document.getElementById("FormTitle").className = "FormTitle_firefox";
 		if(current_url.indexOf("Main_Ss_Content.asp") == 0){
 			document.getElementById("FormTitle").style.marginTop = "0px"		
-			console.log("firefox 0");
+			//console.log("firefox 0");
 		}
 
 	}
