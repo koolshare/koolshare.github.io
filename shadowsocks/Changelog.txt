@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.4.4
+   - fix	修复https://github.com/koolshare/koolshare.github.io/issues/333
+		修复在低分辨率屏幕上，添加SS节点被浏览器边缘挡住;
+		修复添加SSR节点时，切换模式后参数展示错误;
+		
 3.4.3
    - fix	修复在X7.5固件下，ss界面整体偏移的问题；
    - fix	修复SS节点在不同浏览器(firefox, chrome56, chrome58)下或者不同固件版本下(X7.4, X7.5)错位的问题；

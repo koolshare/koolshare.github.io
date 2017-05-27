@@ -268,8 +268,10 @@ function update_visibility_main() {
 	//开启ssr，开启游戏模式，游戏模式v2，开启kcp协议，都将不支持ss-libev的混淆，因此不予显示
 	showhide("ss_obfs", (sur != "1" && ssmode != "4" && suk !="1"));
 	showhide("ss_obfs_host", (sur != "1" && ssmode != "4" && suk !="1" && document.form.ss_basic_ss_obfs.value != "0"));
-	showhide("ss_obfs_support", ($j("#ss_node_table_mode").val() != "3"));
-	showhide("ss_obfs_host_support", ($j("#ss_node_table_mode").val() != "3" && $j("#ss_node_table_ss_obfs").val() != "0"));
+	if (save_flag == "shadowsocks"){
+		showhide("ss_obfs_support", ($j("#ss_node_table_mode").val() != "3"));
+		showhide("ss_obfs_host_support", ($j("#ss_node_table_mode").val() != "3" && $j("#ss_node_table_ss_obfs").val() != "0"));
+	}
 	showhide("SSR_name", (ssmode != "4" && document.getElementById("ss_basic_ss_obfs").value == "0" ));
 	showhide("KCP_name", (ssmode != "3" && ssmode != "4" && document.form.ss_basic_ss_obfs.value =="0"));
 	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode != "4"));
@@ -681,7 +683,7 @@ function Add_profile(){ //点击节点页面内添加节点动作
 	$G("add_node").style.display = "";
 	$G("edit_node").style.display = "none";
 	$G("continue_add").style.display = "";
-	$G("vpnc_settings").style.position = "fixed";
+	//$G("vpnc_settings").style.position = "fixed";
 	scroll_bottoom();
 	$j("#vpnc_settings").fadeIn(200);
 	update_visibility_main();
@@ -808,9 +810,8 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 				document.form.ss_node_table_rss_protocol_para.value = "";
 				document.form.ss_node_table_rss_obfs.value = "plain";
 				document.form.ss_node_table_koolgame_udp.value = "0";
-				//updateSs_node_listView();
+				cancel_add_rule();
 			}
-
 		}
 	});
 }
@@ -1887,9 +1888,13 @@ function checkCmdRet2() {
 				retArea.value = response.replace("XU6J03M6", " ");
 				$G("ok_button").style.display = "";
 				retArea.scrollTop = retArea.scrollHeight;
-				x = 6;
-				count_down_close();
-				return true;
+				if (document.form.ss_basic_action.value == 4){
+					refreshpage();
+				}else{
+					x = 6;
+					count_down_close();
+					return true;
+				}
 			} else {
 				$G("ok_button").style.display = "none";
 			}
@@ -2457,7 +2462,7 @@ function write_proc_status(){
 										</div>
 
 
-										<div id="vpnc_settings"  class="contentM_qis" style="box-shadow: 3px 3px 10px #000;margin-top: -65px;">
+										<div id="vpnc_settings"  class="contentM_qis" style="box-shadow: 3px 3px 10px #000;margin-top: 50px;">
 											<table class="QISform_wireless" border=0 align="center" cellpadding="5" cellspacing="0">
 												<tr style="height:32px;">
 													<td>		
@@ -2615,7 +2620,6 @@ function write_proc_status(){
 												<input id="add_node" class="button_gen" type="button" onclick="add_ss_node_conf(save_flag);" value="添加">
 												<input id="edit_node" style="display: none;" class="button_gen" type="button" onclick="edit_ss_node_conf(save_flag);" value="修改">	
 												<a id="continue_add" style="display: none;margin-left: 20px;"><input id="continue_add_box" type="checkbox"  />连续添加</a>
-												
 											</div>	
 										      <!--===================================Ending of vpnc setting Content===========================================-->			
 										</div>
