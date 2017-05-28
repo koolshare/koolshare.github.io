@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+
+3.4.5
+   - fix	去掉auth_chain_a选项，之前因为测试时加上了，推送时忘了去掉，实际上现在并不支持该协议。
+	
 3.4.4
    - fix	修复https://github.com/koolshare/koolshare.github.io/issues/333
 		修复在低分辨率屏幕上，添加SS节点被浏览器边缘挡住;

@@ -148,7 +148,7 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		} else if (field == "ss_basic_rss_protocol") {
-			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" && obj[field] != "auth_aes128_md5" && obj[field] != "auth_aes128_sha1" && obj[field] != "auth_chain_a" ) {
+			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" && obj[field] != "auth_aes128_md5" && obj[field] != "auth_aes128_sha1" ) {
 				$j("#ss_basic_rss_protocol").val("origin");
 			} else {
 				$j("#ss_basic_rss_protocol").val(obj.ss_basic_rss_protocol);
@@ -2572,7 +2572,6 @@ function write_proc_status(){
 																		<option value="auth_sha1_v4">auth_sha1_v4</option>
 																		<option value="auth_aes128_md5">auth_aes128_md5</option>
 																		<option value="auth_aes128_sha1">auth_aes128_sha1</option>
-																		<option value="auth_chain_a">auth_chain_a</option>
 																	</select>
 																</td>
 															</tr>
@@ -2748,7 +2747,6 @@ function write_proc_status(){
 															<option class="content_input_fd" value="auth_sha1_v4">auth_sha1_v4</option>
 															<option value="auth_aes128_md5">auth_aes128_md5</option>
 															<option value="auth_aes128_sha1">auth_aes128_sha1</option>
-															<option value="auth_chain_a">auth_chain_a</option>
 														</select>
 														<span id="ss_basic_rss_protocol_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
