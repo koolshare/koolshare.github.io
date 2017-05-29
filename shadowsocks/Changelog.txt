@@ -1,7 +1,7 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 3.4.6
-   - update	更新shadowsocks-libev最新版，支持none加密和auth_chain_a
+   - update	更新shadowsocksR-libev最新版，支持none加密和auth_chain_a
    		注意：因为该版本ssr-tunnel官方并没有做好，所以选择none加密或者auth_chain_a协议时不能使用ss-tunnel作为DNS解析！
 
 3.4.5
