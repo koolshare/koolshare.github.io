@@ -148,7 +148,7 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		} else if (field == "ss_basic_rss_protocol") {
-			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" && obj[field] != "auth_aes128_md5" && obj[field] != "auth_aes128_sha1" ) {
+			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" && obj[field] != "auth_aes128_md5" && obj[field] != "auth_aes128_sha1" && obj[field] != "auth_chain_a" ) {
 				$j("#ss_basic_rss_protocol").val("origin");
 			} else {
 				$j("#ss_basic_rss_protocol").val(obj.ss_basic_rss_protocol);
@@ -280,6 +280,11 @@ function update_visibility_main() {
 	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode != "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple" || document.form.ss_basic_rss_obfs.value == "http_post" ));
 	showhide("ss_basic_kcp_port_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
 	showhide("ss_basic_kcp_parameter_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
+	if ($j("#ss_basic_rss_protocol").val() == "auth_chain_a" || $j("#ss_basic_method").val() == "none"){
+		$j("#ss_dns_foreign option[value='2']").hide();
+	}else{
+		$j("#ss_dns_foreign option[value='2']").show();
+	}
 	var text = document.getElementById("ss_basic_kcp_parameter");
 	autoTextarea(text);
 	refresh_acl_table();
@@ -368,6 +373,7 @@ function update_visibility_tab2(){
 	}else if (document.form.ss_dns_plan.value == "2"){
 		$j("#ss_dns_plan_note").html("国内dns解析cdn名单内的国内域名，剩下的域名用国外dns解析。");
 	}
+
 }
 
 function generate_lan_list(){
@@ -2517,6 +2523,7 @@ function write_proc_status(){
 																<th>加密方式</th>
 																<td>
 																	<select id="ss_node_table_method" name="ss_node_table_method" class="input_option" style="width:350px;margin:0px 0px 0px 2px;">
+																		<option value="none">none</option>
 																		<option value="rc4">rc4</option>
 																		<option value="rc4-md5">rc4-md5</option>
 																		<option value="rc4-md5-6">rc4-md5-6</option>
@@ -2572,6 +2579,7 @@ function write_proc_status(){
 																		<option value="auth_sha1_v4">auth_sha1_v4</option>
 																		<option value="auth_aes128_md5">auth_aes128_md5</option>
 																		<option value="auth_aes128_sha1">auth_aes128_sha1</option>
+																		<option value="auth_chain_a">auth_chain_a</option>
 																	</select>
 																</td>
 															</tr>
@@ -2681,7 +2689,8 @@ function write_proc_status(){
 												<tr id="method_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(5)">加密方式</a></th>
 													<td>
-														<select id="ss_basic_method" name="ss_basic_method" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" >
+														<select id="ss_basic_method" name="ss_basic_method" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" onchange="update_visibility_main();">
+															<option value="none">none</option>
 															<option value="rc4">rc4</option>
 															<option value="rc4-md5">rc4-md5</option>
 															<option value="rc4-md5-6">rc4-md5-6</option>
@@ -2747,6 +2756,7 @@ function write_proc_status(){
 															<option class="content_input_fd" value="auth_sha1_v4">auth_sha1_v4</option>
 															<option value="auth_aes128_md5">auth_aes128_md5</option>
 															<option value="auth_aes128_sha1">auth_aes128_sha1</option>
+															<option value="auth_chain_a">auth_chain_a</option>
 														</select>
 														<span id="ss_basic_rss_protocol_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>
