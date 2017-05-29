@@ -282,8 +282,13 @@ function update_visibility_main() {
 	showhide("ss_basic_kcp_parameter_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
 	if ($j("#ss_basic_rss_protocol").val() == "auth_chain_a" || $j("#ss_basic_method").val() == "none"){
 		$j("#ss_dns_foreign option[value='2']").hide();
+		$j("#ss_chinadns_foreign_method option[value='3']").hide();
+		$j("#ss_pdnsd_udp_server option[value='3']").hide();
+		
 	}else{
 		$j("#ss_dns_foreign option[value='2']").show();
+		$j("#ss_chinadns_foreign_method option[value='3']").show();
+		$j("#ss_pdnsd_udp_server option[value='3']").show();
 	}
 	var text = document.getElementById("ss_basic_kcp_parameter");
 	autoTextarea(text);
