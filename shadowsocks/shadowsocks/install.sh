@@ -49,11 +49,8 @@ echo_date 清理旧文件
 rm -rf /koolshare/ss/*
 rm -rf /koolshare/scripts/ss_*
 rm -rf /koolshare/webs/Main_Ss*
-rm -rf /koolshare/bin/ss-tunnel
-rm -rf /koolshare/bin/ss-local
-rm -rf /koolshare/bin/ss-server
-rm -rf /koolshare/bin/ss-redir
-rm -rf /koolshare/bin/rss*
+rm -rf /koolshare/bin/ss-*
+rm -rf /koolshare/bin/rss-*
 rm -rf /koolshare/bin/obfs*
 rm -rf /koolshare/bin/haproxy
 rm -rf /koolshare/bin/redsocks2
@@ -72,6 +69,8 @@ cd /tmp
 echo_date 复制相关二进制文件！
 cp -rf /tmp/shadowsocks/bin/* /koolshare/bin/
 chmod 755 /koolshare/bin/*
+[ ! -L "/koolshare/bin/rss-tunnel" ] && ln -sf /koolshare/bin/rss-local /koolshare/bin/rss-tunnel
+
 
 if [ ! -L /koolshare/bin/base64_decode ];then
 	ln -s /koolshare/bin/base64_encode /koolshare/bin/base64_decode
