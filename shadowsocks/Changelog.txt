@@ -2,6 +2,7 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 3.4.7
    - fix	恢复shadowsocksR的ss-tunnel DNS解析功能.
+   		3.4.6更新日志大雾：ssr-tunnel并不是没有做好，而是和ssr-local合并了，此次更新已经恢复。
 
 3.4.6
    - update	更新shadowsocksR-libev最新版，支持none加密和auth_chain_a协议;
