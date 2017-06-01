@@ -1,8 +1,8 @@
 {
-"version":"3.4.7",
-"md5":"8d213f70572b1ce13910f46fa977191f",
+"version":"3.4.8",
+"md5":"c3a7db13429641545681fef8648ad7db",
 "home_url":"Main_Ss_Content.asp",
 "title":"shadowsocks",
 "description":"科学上网",
-"build_date":"2017-05-31_20:27:28"
+"build_date":"2017-06-01_21:31:43"
 }

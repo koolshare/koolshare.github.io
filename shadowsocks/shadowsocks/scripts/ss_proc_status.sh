@@ -64,14 +64,14 @@ echo_version(){
 	echo ① 程序版本（插件版本：3.3.4）：
 	echo -----------------------------------------------------------
 	echo "程序			版本		备注"
-	echo "ss-reidr		3.0.5		2017年3月28日"
-	echo "ss-tunnel		3.0.5 		2017年3月28日"
-	echo "ss-local		3.0.5		2017年3月28日"
+	echo "ss-reidr		3.0.6		2017年4月26日"
+	echo "ss-tunnel		3.0.6 		2017年4月26日"
+	echo "ss-local		3.0.6		2017年4月26日"
 	echo "obfs-local		0.0.3		2017年3月28日"
 	echo "ssr-reidr		2.5.6 		with mbed TLS 2.4.0"
 	echo "ssr-tunnel		2.5.6 		with mbed TLS 2.4.0"
 	echo "ssr-local		2.5.6 		with mbed TLS 2.4.0"
-	echo "client_linux_arm5	20170322	kcptun"
+	echo "client_linux_arm5	20170525	kcptun"
 	echo "haproxy			1.7.1	"
 	echo "dns2socks		V2.0 	"
 	echo "dnscrypt-proxy		1.7.0 	"
