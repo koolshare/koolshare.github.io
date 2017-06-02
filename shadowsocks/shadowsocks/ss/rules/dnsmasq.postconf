@@ -4,6 +4,7 @@
 CONFIG=$1
 source /usr/sbin/helper.sh
 ss_dns_china=`dbus get ss_dns_china`
+ss_dns_china_user=`dbus get ss_dns_china_user`
 ss_dns_plan=`dbus get ss_dns_plan`
 
 ISP_DNS1=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
