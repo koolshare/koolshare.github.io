@@ -130,7 +130,7 @@ check_status(){
 		[ -n "$KCPTUN" ] && echo "kcptun		工作中	pid：$KCPTUN" || echo "kcptun		未运行"
 	fi
 	if [ "$ss_basic_server" == "127.0.0.1" ];then
-	 	 -n "$HAPROXY" ] && echo "haproxy		工作中	pid：$HAPROXY" || echo "haproxy		未运行"
+	 	[ -n "$HAPROXY" ] && echo "haproxy		工作中	pid：$HAPROXY" || echo "haproxy		未运行"
 	fi
 	if [ "$ss_dns_foreign" == "1" ];then
 		if [ "$ss_basic_use_rss" == "1" ];then
