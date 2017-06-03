@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.4.9
+   - fix	修复在DNS解析在国内优先下，自定义国内DNS不起作用的bug;
+   - fix	修复使用负载均衡时，详细状态检测出错的bug；修复详细状态内一些拼写错误；
+   - update	同步ssr-libev最新代码，commit:0f529efa4cc37713822a32b0a662a4735dd8962a.
+
 3.4.8
    - update	ssr-libev刚修复了一个auth_chain_a协议下UDP相关的BUG，因此merlin ss插件同步更新；
    - update	更新ss-libev到最新代码，同时更换为全静态编译；
