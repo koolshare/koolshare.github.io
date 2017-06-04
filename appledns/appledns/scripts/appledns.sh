@@ -12,23 +12,25 @@ avgcompare(){
   for ip_addr in $*
   do
   avgtime=`ping -s 1000 -c 2 $ip_addr |awk -F'/' '/round-trip/ {print $4}'|sed 's/\.//g'`
+  lossnum=`ping -s 1000 -c 2 $ip_addr |awk '/loss/{split($7,a,"%");print a[1]}'`
   echo "$ip_addr  $avgtime"
-  if [ "$avgtime" != "" ];then
+  if [ "$avgtime" != "" -a $lossnum -eq 0 ];then
   if [ $avgtime -le $compare ];then
   ip_addr_sel=$ip_addr
   compare=$avgtime
   fi
   fi
   done
-  echo $ip_addr_sel
+  #echo $ip_addr_sel
 }
 dnsmasq(){
 for domain in $*
 do
-if [ "$domain" != "itunes.apple.com" ];then
+if [ "$domain" != "itunes.apple.com" -a "$ip_addr_sel" != "" ];then
 echo "address=/$domain/$ip_addr_sel" >>/jffs/configs/dnsmasq.d/apple.conf
 fi
 done
+$ip_addr_sel=""
 }
 configuration(){
 for i in 3 7 11 15 19
@@ -42,7 +44,10 @@ avgcompare $ip_addrs
 dnsmasq $domains
 done
 sleep 2
-cat $CONFIG/appstore |awk '{if( /^a/) {print "address=/"$1".phobos.apple.com""/"$4"" }}' >>/jffs/configs/dnsmasq.d/apple.conf
+#cat $CONFIG/appstore |awk '{if( /^a/) {print "address=/"$1".phobos.apple.com""/"$4"" }}' >>/jffs/configs/dnsmasq.d/apple.conf
+cat $CONFIG/appstore |awk '/^a/ {print "address=/phobos.apple.com/"$4 }' >>/jffs/configs/dnsmasq.d/apple.conf
+awk '!a[$0]++' /jffs/configs/dnsmasq.d/apple.conf >>/jffs/configs/dnsmasq.d/apple.conf.bak
+mv /jffs/configs/dnsmasq.d/apple.conf.bak /jffs/configs/dnsmasq.d/apple.conf
 }
 
 if [ "$appledns_enable" == "1" ];then
