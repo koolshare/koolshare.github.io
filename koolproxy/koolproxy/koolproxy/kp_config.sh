@@ -189,11 +189,11 @@ factor(){
 
 flush_nat(){
 	echo_date 移除nat规则...
-	cd /tmp
-	iptables -t nat -S | grep -E "KOOLPROXY|KOOLPROXY_HTTP|KOOLPROXY_HTTPS" | sed 's/-A/iptables -t nat -D/g'|sed 1,3d > clean.sh && chmod 777 clean.sh && ./clean.sh && rm clean.sh
-	iptables -t nat -X KOOLPROXY > /dev/null 2>&1
-	iptables -t nat -X KOOLPROXY_HTTP > /dev/null 2>&1
-	iptables -t nat -X KOOLPROXY_HTTPS > /dev/null 2>&1
+	iptables -t nat -F KOOLPROXY > /dev/null 2>&1 && iptables -t nat -X KOOLPROXY > /dev/null 2>&1
+	iptables -t nat -F KOOLPROXY_HTTP > /dev/null 2>&1 && iptables -t nat -X KOOLPROXY_HTTP > /dev/null 2>&1
+	iptables -t nat -F KOOLPROXY_HTTPS > /dev/null 2>&1 && iptables -t nat -X KOOLPROXY_HTTPS > /dev/null 2>&1
+	iptables -t nat -D PREROUTING -p tcp -j KOOLPROXY > /dev/null 2>&1
+	iptables -t nat -D PREROUTING -p tcp -m set --set black_koolproxy dst -j KOOLPROXY > /dev/null 2>&1
 	ipset -F black_koolproxy > /dev/null 2>&1 && ipset -X black_koolproxy > /dev/null 2>&1
 	ipset -F white_kp_list > /dev/null 2>&1 && ipset -X white_kp_list > /dev/null 2>&1
 }
