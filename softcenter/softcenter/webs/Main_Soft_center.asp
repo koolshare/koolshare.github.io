@@ -47,7 +47,7 @@
     input[type=button]:focus {
         outline: none;
     }
-    .icon{
+   .icon{
         float:left;
         position:relative;
         margin: 10px 0px 30px 0px;
@@ -105,15 +105,24 @@
     .icon-desc .install-btn,
     .icon-desc .uninstall-btn,
     .icon-desc .update-btn{
+    	background: #fff;
+    	color:#333;
+    	cursor:pointer;
+    	text-align: center;
+    	font-size: 13px;
+    	padding-bottom: 5px;
+    	margin-left: 10px;
+    	margin-right: 10px;
         display: block;
-        border: none;
         width: 100%;
         height: 18px;
         border-radius: 0px 0px 5px 5px;
+        border: 0px;
         position: absolute;
         bottom: 0;
-        left: 0;
+        left: -10px;
     }
+
     .icon-desc .uninstall-btn{
         display: none;
     }
@@ -140,11 +149,14 @@
     .install-status-1 .install-btn{
         display: none;
     }
+    .update-btn{
+        display: none;
+    }
     .install-status-1 .update-btn{
         display: none;
     }
     .install-status-4 .uninstall-btn{
-        display: none;
+        display: block;
     }
     .install-status-4 .install-btn{
         display: none;
@@ -156,8 +168,9 @@
         display: block;
         width: 40%;
         border-radius: 0px 0px 5px 0px;
-        right: 0;
+        right: -10px;
         left: auto;
+        border-left: 1px solid #000;
     }
     .install-status-2 .install-btn{
         display: none;
@@ -188,7 +201,7 @@
     }
     .install-view .install-status-4{
         display: block;
-    }
+    } 
     .cloud_main_radius h2 { border-bottom:1px #AAA dashed;}
 	.cloud_main_radius h3,
 	.cloud_main_radius h4 { font-size:12px;color:#FC0;font-weight:normal;font-style: normal;}
@@ -240,7 +253,6 @@ function appPostScript(moduleInfo, script) {
     //currState.name = moduleInfo.name;
     //TODO auto choose for home_url
     data["softcenter_home_url"] = "http://mips.ngrok.wang:5000";
-
     data["softcenter_installing_todo"] = moduleInfo.name;
     if(script == "ks_app_install.sh") {
     data["softcenter_installing_tar_url"] = moduleInfo.tar_url;
@@ -284,6 +296,7 @@ function appUninstallModule(moduleInfo) {
 <script>
     //TODO auto detect home url
     db_softcenter_["softcenter_home_url"] = "http://mips.ngrok.wang:5000";
+    
     // 安装信息更新策略:
     // 当软件安装的时候,安装进程内部会有超时时间. 超过超时时间 没安装成功,则认为失败.
     // 但是路由内部的绝对时间与浏览器上的时间可能不同步,所以无法使用路由器内的时间. 浏览器的策略是,
@@ -411,6 +424,7 @@ function appUninstallModule(moduleInfo) {
                 '<dd class="icon-pic">',
                     //当图标娶不到的时候，使用默认图标，如果已经是默认图标且娶不到，就狗带了，不管
                     '<img src="#{icon}" onerror="this.src.indexOf(\'icon-default.png\')===-1 && (this.src=\'/res/icon-default.png\');" alt="图标出走了～"/>',
+                    '<img class="update-btn" style="position: absolute;width:20px;height:20px;margin-top:-66px;margin-left:44px;" src="/res/upgrade.png"',
                 '</dd>',
                 '<dt class="icon-title">#{title}</dt>',
                 '<dd class="icon-desc">',
@@ -418,9 +432,9 @@ function appUninstallModule(moduleInfo) {
                         '#{description}',
                     '</a>',
                     '<div class="opt">',
-                        '<button type="button" class="install-btn" data-name="#{name}">安装</button>',
-                        '<button type="button" class="update-btn" data-name="#{name}">更新</button>',
-                        '<button type="button" class="uninstall-btn" data-name="#{name}">卸载</button>',
+                        '<a type="button" class="install-btn" data-name="#{name}">安装</a>',
+                        '<a type="button" class="update-btn" data-name="#{name}">更新</a>',
+                        '<a type="button" class="uninstall-btn" data-name="#{name}">卸载</a>',
                     '</div>',
                 '</dd>',
             '</dl>'
@@ -490,15 +504,7 @@ function softceterInitData(data) {
                     }
                 }
             });
-            //shadowsocks 将默认安装在软件中心
-            result["koolsocks"] = {};
-            result["koolsocks"].name = "koolsocks";
-            result["koolsocks"].title = "shadowsocks";
-            result["koolsocks"].install = "4";
-            result["koolsocks"].home_url = "Main_Ss_Content.asp";
-            result["koolsocks"].description = "科学上网";
-            result["koolsocks"].version = "1.3";
-            result["koolsocks"].order = "1";
+
             return result;
         }
         //将本地和远程进行一次对比合并
@@ -512,11 +518,52 @@ function softceterInitData(data) {
                 result[name] = $.extend(oldApp, app);
                 result[name].install = install;
             });
+            
             $.map(localData, function (app, name) {
                 if (!result[name]) {
                     result[name] = app;
                 }
             });
+             //shadowsocks 将默认安装在软件中心
+             //刚刷机完成时，软件中心初始化情况下ss需要手动安装
+             //安装完毕后，ss显示在已安装面板，并且不能卸载，同时兼容了老的固件和新的固件
+			if(result["shadowsocks"].install == "0"){
+    			$.ajax({
+    			    url: 'http://mips.ngrok.wang:5000/shadowsocks/config.json.js',
+    			    type: 'GET',
+    			    dataType: 'jsonp',
+                	    error: function() {
+            			result["shadowsocks"] = {};
+            			result["shadowsocks"].name = "shadowsocks";
+            			result["shadowsocks"].title = "shadowsocks";
+	        			result["shadowsocks"].install = "0";
+	        			result["shadowsocks"].md5 = "47346b43aedc7c91f73bd0d5c51f2df9";
+            			result["shadowsocks"].home_url = "Main_Ss_Content.asp";
+            			result["shadowsocks"].tar_url = "shadowsocks/history/shadowsocks.tar.gz";
+            			result["shadowsocks"].description = "科学上网";
+            			result["shadowsocks"].version = "2.8.9";
+                	    },
+    			    success: function(res) {
+            			result["shadowsocks"] = {};
+            			result["shadowsocks"].name = "shadowsocks";
+            			result["shadowsocks"].title = "shadowsocks";
+	        			result["shadowsocks"].install = "0";
+	        			result["shadowsocks"].md5 = res.md5;
+            			result["shadowsocks"].home_url = "Main_Ss_Content.asp";
+            			result["shadowsocks"].tar_url = "shadowsocks/shadowsocks.tar.gz";
+            			result["shadowsocks"].description = "科学上网";
+            			result["shadowsocks"].version = res.version;
+    			     }
+    			});
+         	}else{
+	        	result["shadowsocks"] = {};
+            	result["shadowsocks"].name = "shadowsocks";
+            	result["shadowsocks"].title = "shadowsocks";
+	        	result["shadowsocks"].install = "4";
+            	result["shadowsocks"].home_url = "Main_Ss_Content.asp";
+            	result["shadowsocks"].description = "科学上网";
+         	}
+
             //设置默认值和设置icon的路径
             $.map(result, function (item, name) {
                 _setDefault(item, {
@@ -607,10 +654,11 @@ function softceterInitData(data) {
         });
 
     });
+var enable_ss = "<% nvram_get("enable_ss"); %>";
+var enable_soft = "<% nvram_get("enable_soft"); %>";
 function menu_hook(title, tab) {
-	var ss_mode = '<% nvram_get("ss_mode"); %>';
-	tabtitle[17] = new Array("", "软件中心");
-	tablink[17] = new Array("", "Main_Soft_center.asp");
+	tabtitle[tabtitle.length -1] = new Array("", "软件中心", "离线安装");
+	tablink[tablink.length -1] = new Array("", "Main_Soft_center.asp", "Main_Soft_setting.asp");
 }
 function notice_show(){
     $.ajax({
