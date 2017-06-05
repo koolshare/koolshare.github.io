@@ -5,22 +5,34 @@ eval `dbus export koolproxy`
 # 引用环境变量等
 source /koolshare/scripts/base.sh
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
+flag1=1
+
+write_user_txt(){
+	if [ -n "$koolproxy_user_rule" ];then
+		echo $koolproxy_user_rule | base64_decode > /koolshare/koolproxy/data/rules/user.txt
+		#dbus remove koolproxy_user_rule
+	fi
+}
 
 start_koolproxy(){
-	rules_date_local=`cat /koolshare/koolproxy/data/version|awk 'NR==2{print}'`
-	rules_nu_local=`grep -v "!x" /koolshare/koolproxy/data/koolproxy.txt | wc -l`
-	video_date_local=`cat /koolshare/koolproxy/data/version|awk 'NR==4{print}'`
-	echo_date 加载静态规则日期：$rules_date_local
-	echo_date 加载静态规则条数：$rules_nu_local
+	rules_date_local=`cat /koolshare/koolproxy/data/rules/koolproxy.txt  | sed -n '3p'|awk '{print $3}'`
+	rules_nu_local=`grep -v "!x" /koolshare/koolproxy/data/rules/koolproxy.txt | wc -l`
+	video_date_local=`cat /koolshare/koolproxy/data/rules/koolproxy.txt  | sed -n '4p'|awk '{print $3}'`
+	echo_date 加载静态规则日期：$rules_date_local,条数：$rules_nu_local
 	dbus set koolproxy_rule_info="更新日期：$rules_date_local / $rules_nu_local条"
-	echo_date 加载视频规则日期：$video_date_local
+	[ "$koolproxy_policy" != "3" ] && echo_date 加载视频规则日期：$video_date_local
 	dbus set koolproxy_video_info="更新日期：$video_date_local"
 
+	kp_version=`cd /koolshare/koolproxy && ./koolproxy -v`
+	dbus set koolproxy_binary_version="koolproxy $kp_version "
 	echo_date 开启koolproxy主进程！
-	cd /koolshare/koolproxy
-	[ $koolproxy_policy -eq 3 ] && ARG_VIDEO="-e" || ARG_VIDEO=""
-	koolproxy -d $ARG_VIDEO
+	[ -f "/koolshare/bin/koolproxy" ] && rm -rf /koolshare/bin/koolproxy
+	[ ! -L "/koolshare/bin/koolproxy" ] && ln -sf /koolshare/koolproxy/koolproxy /koolshare/bin/koolproxy
+	[ "$koolproxy_policy" == "3" ] && EXT_ARG="-e" || EXT_ARG=""
+	cd /koolshare/koolproxy && koolproxy $EXT_ARG -d
 }
+
+
 
 stop_koolproxy(){
 	echo_date 关闭koolproxy主进程...
@@ -68,28 +80,6 @@ restart_dnsmasq(){
 	if [ "$dnsmasq_restart" == "1" ];then
 		echo_date 重启dnsmasq进程...
 		service restart_dnsmasq > /dev/null 2>&1
-	fi
-}
-
-write_cron_job(){
-	# start setvice
-	if [ "1" == "$koolproxy_update" ]; then
-		echo_date 开启规则定时更新，每天"$koolproxy_update_hour"时"$koolproxy_update_min"分，检查在线规则更新...
-		cru a koolproxy_update "$koolproxy_update_min $koolproxy_update_hour * * * /bin/sh /koolshare/scripts/koolproxy_rule_update.sh"
-	elif [ "2" == "$koolproxy_update" ]; then
-		echo_date 开启规则定时更新，每隔"$koolproxy_update_inter_hour"时"$koolproxy_update_inter_min"分，检查在线规则更新...
-		cru a koolproxy_update "*/$koolproxy_update_inter_min */$koolproxy_update_inter_hour * * * /bin/sh /koolshare/scripts/koolproxy_rule_update.sh"
-	else
-		echo_date 规则自动更新关闭状态，不启用自动更新...
-	fi
-}
-
-kill_cron_job(){
-	jobexist=`cru l|grep koolproxy_update`
-	# kill crontab job
-	if [ ! -z "$jobexist" ];then
-		echo_date 关闭定时更新...
-		sed -i '/koolproxy_update/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
 	fi
 }
 
@@ -141,8 +131,7 @@ creat_ipset(){
 }
 
 add_white_black_ip(){
-	ip1=$(nvram get wan0_ipaddr | cut -d"." -f1,2)
-	ip_lan="0.0.0.0/8 10.0.0.0/8 100.64.0.0/10 127.0.0.0/8 169.254.0.0/16 172.16.0.0/12 192.168.0.0/16 224.0.0.0/4 240.0.0.0/4 $ip1.0.0/16"
+	ip_lan="0.0.0.0/8 10.0.0.0/8 100.64.0.0/10 127.0.0.0/8 169.254.0.0/16 172.16.0.0/12 192.168.0.0/16 224.0.0.0/4 240.0.0.0/4"
 	for ip in $ip_lan
 	do
 		ipset -A white_kp_list $ip >/dev/null 2>&1
@@ -200,11 +189,11 @@ factor(){
 
 flush_nat(){
 	echo_date 移除nat规则...
-	iptables -t nat -F KOOLPROXY > /dev/null 2>&1 && iptables -t nat -X KOOLPROXY > /dev/null 2>&1
-	iptables -t nat -F KOOLPROXY_HTTP > /dev/null 2>&1 && iptables -t nat -X KOOLPROXY_HTTP > /dev/null 2>&1
-	iptables -t nat -F KOOLPROXY_HTTPS > /dev/null 2>&1 && iptables -t nat -X KOOLPROXY_HTTPS > /dev/null 2>&1
-	iptables -t nat -D PREROUTING -p tcp -j KOOLPROXY > /dev/null 2>&1
-	iptables -t nat -D PREROUTING -p tcp -m set --set black_koolproxy dst -j KOOLPROXY > /dev/null 2>&1
+	cd /tmp
+	iptables -t nat -S | grep -E "KOOLPROXY|KOOLPROXY_HTTP|KOOLPROXY_HTTPS" | sed 's/-A/iptables -t nat -D/g'|sed 1,3d > clean.sh && chmod 777 clean.sh && ./clean.sh && rm clean.sh
+	iptables -t nat -X KOOLPROXY > /dev/null 2>&1
+	iptables -t nat -X KOOLPROXY_HTTP > /dev/null 2>&1
+	iptables -t nat -X KOOLPROXY_HTTPS > /dev/null 2>&1
 	ipset -F black_koolproxy > /dev/null 2>&1 && ipset -X black_koolproxy > /dev/null 2>&1
 	ipset -F white_kp_list > /dev/null 2>&1 && ipset -X white_kp_list > /dev/null 2>&1
 }
@@ -220,10 +209,9 @@ lan_acess_control(){
 			mac=`dbus get koolproxy_acl_mac_$acl`
 			proxy_name=`dbus get koolproxy_acl_name_$acl`
 			proxy_mode=`dbus get koolproxy_acl_mode_$acl`
-			[ "$proxy_mode" == "0" ] && ports=""
-			[ "$proxy_mode" == "1" ] && ports="80"
-			[ "$proxy_mode" == "2" ] && ports="80,443"
-			echo_date 加载ACL规则：$ipaddr【$mac】模式为：$(get_mode_name $proxy_mode)
+			[ "$koolproxy_acl_method" == "1" ] && echo_date 加载ACL规则：【$ipaddr】【$mac】模式为：$(get_mode_name $proxy_mode)
+			[ "$koolproxy_acl_method" == "2" ] && mac="" && echo_date 加载ACL规则：【$ipaddr】模式为：$(get_mode_name $proxy_mode)
+			[ "$koolproxy_acl_method" == "3" ] && ipaddr="" && echo_date 加载ACL规则：【$mac】模式为：$(get_mode_name $proxy_mode)
 			iptables -t nat -A KOOLPROXY $(factor $ipaddr "-s") $(factor $mac "-m mac --mac-source") -p tcp $(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
 		done
 		echo_date 加载ACL规则：其余主机模式为：$(get_mode_name $koolproxy_acl_default_mode)
@@ -248,6 +236,7 @@ load_nat(){
 	    fi
 	    sleep 1
 	done
+	
 	echo_date 加载nat规则！
 	#----------------------BASIC RULES---------------------
 	echo_date 写入iptables规则到nat表中...
@@ -257,9 +246,9 @@ load_nat(){
 	iptables -t nat -A KOOLPROXY -m set --set white_kp_list dst -j RETURN
 	#  生成对应CHAIN
 	iptables -t nat -N KOOLPROXY_HTTP
-	iptables -t nat -A KOOLPROXY_HTTP -p tcp --dport 80 -j REDIRECT --to-ports 3000
+	iptables -t nat -A KOOLPROXY_HTTP -p tcp -m multiport --dport 80,$koolproxy_ext_ports -j REDIRECT --to-ports 3000
 	iptables -t nat -N KOOLPROXY_HTTPS
-	iptables -t nat -A KOOLPROXY_HTTPS -p tcp -m multiport --dport 80,443 -j REDIRECT --to-ports 3000
+	iptables -t nat -A KOOLPROXY_HTTPS -p tcp -m multiport --dport 80,443,$koolproxy_ext_ports -j REDIRECT --to-ports 3000
 	# 局域网控制
 	lan_acess_control
 	# 剩余流量转发到缺省规则定义的链中
@@ -304,6 +293,7 @@ detect_cert(){
 
 case $ACTION in
 start)
+	echo_date ================== koolproxy启用 =================
 	detect_cert
 	start_koolproxy
 	add_ipset_conf && restart_dnsmasq
@@ -314,18 +304,23 @@ start)
 	dns_takeover
 	creat_start_up
 	write_nat_start
-	write_cron_job
 	write_reboot_job
 	add_ss_event
+	rm -rf /tmp/user.txt && ln -sf /koolshare/koolproxy/data/rules/user.txt /tmp/user.txt
+	echo_date =================================================
 	;;
 restart)
+	# now stop
+	echo_date ================== 关闭 =================
+	rm -rf /tmp/user.txt && ln -sf /koolshare/koolproxy/data/rules/user.txt /tmp/user.txt
 	remove_ss_event
 	remove_reboot_job
 	remove_ipset_conf
 	remove_nat_start
 	flush_nat
 	stop_koolproxy
-	kill_cron_job
+	# now start
+	echo_date ================== koolproxy启用 =================
 	detect_cert
 	start_koolproxy
 	add_ipset_conf && restart_dnsmasq
@@ -336,19 +331,19 @@ restart)
 	dns_takeover
 	creat_start_up
 	write_nat_start
-	write_cron_job
 	write_reboot_job
 	add_ss_event
 	echo_date koolproxy启用成功，请等待日志窗口自动关闭，页面会自动刷新...
+	echo_date =================================================
 	;;
 stop)
+	rm -rf /tmp/user.txt
 	remove_ss_event
 	remove_reboot_job
 	remove_ipset_conf && restart_dnsmasq
 	remove_nat_start
 	flush_nat
 	stop_koolproxy
-	kill_cron_job
 	del_start_up
 	;;
 *)

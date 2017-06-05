@@ -12,9 +12,8 @@ else
 
 	#step 1, root ca
 	mkdir -p certs private
-	rm -f index.txt serial private/ca.key.pem
+	rm -f serial private/ca.key.pem
 	chmod 700 private
-	touch index.txt
 	echo 1000 > serial
 	openssl genrsa -aes256 -passout pass:koolshare -out private/ca.key.pem 2048
 	chmod 400 private/ca.key.pem

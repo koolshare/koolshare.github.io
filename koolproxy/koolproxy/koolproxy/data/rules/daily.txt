@@ -1,0 +1,40 @@
+!x  -----------------------------------------------------------------------------------------------------------------
+!x  -----[KoolProxy Plus 3.5.8]
+!x  -----update[rules]: 2017-6-2 20:00
+!x  -----Thanks: From KP Rule Group -- <houzi-> <today2004> <a-len> <xiaoxia> <leo> <Carseason>
+!x  -----Thanks for help: <CJX> <yiclear> <xwhyz> 
+!x  -----Tip: Welcome to rule group,Please Send mail to <wojiaolinmu008@gmail.com>
+!x  -----------------------------------------------------------------------------------------------------------------
+www.golangtc.com###ads
+www.golangtc.com##.companel.panel-default
+!x  -----------------------------------------------------------------------------------------------------------------
+|http://www.80smp4.com/$r@http://www.80smp4.com@http://www.baidu.com@
+!|http://v.youku.com$r@/http:\/\/v\.youku\.com\/v_show\/id_(.*)$/@http://m.youku.com/video/id_$1@
+!||static.youku.com/$r@http://static.youku.com/*/v/swf/upsplayer/player_yknpsv.swf@http://koolshare.b0.upaiyun.com/kp/swf/dszw/youku.swf@
+!||static.youku.com/$r@http://static.youku.com/*/v/swf/upsplayer/loader.swf@http://koolshare.b0.upaiyun.com/kp/swf/dszw/youku.swf@
+!x  -----------------------------------------------------------------------------------------------------------------
+!\/\/([^\.\/]+\.){3}[^\.\/]+\/videos\/other\/([^\/]+\/){3}.+\.f4v/
+|https://api.bilibili.com/x/web-show/res/loc?pf=0&id=160
+|https://m.youtube.com/_get_ads
+|https://pagead2.googlesyndication.com/pagead
+|https://s0.2mdn.net/ads
+|https://stats.tubemogul.com/stats
+|https://ads.exoclick.com/
+|https://adserver.juicyads.com/js/
+||https://histats.com/$script
+||ads.youtube.com
+||azabu-u.ac.jp
+||autoimg.cn/engine/root/fggxl.js
+||couchcoaster.jp
+||crt.comodoca.com
+||delivery.dmkt-sp.jp
+||ehg-youtube.hitbox.com
+||m-78.jp,REJECT
+||nichibenren.or.jp
+||nicorette.co.kr
+||ssl-youtube.2cnt.net
+||youtube.112.2o7.net
+||youtube.2cnt.net
+!x  -----------------------------------------------------------------------------------------------------------------
+
+!x  -----------------------------------------------------------------------------------------------------------------

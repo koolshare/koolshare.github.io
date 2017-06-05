@@ -11,14 +11,14 @@
             "version": "1.1"
         }, 
         {
-            "build_date": "2017-01-30_21:49:09", 
+            "build_date": "2017-06-04_13:49:55", 
             "description": "koolproxy", 
             "home_url": "Module_koolproxy.asp", 
-            "md5": "9e1d6431fc6116277837d28ce73ccf03", 
+            "md5": "61b611bc59cef4e6f596679c3fd6dca3", 
             "name": "koolproxy", 
             "tar_url": "koolproxy/koolproxy.tar.gz", 
             "title": "koolproxy", 
-            "version": "3.2.4"
+            "version": "3.2.5"
         }, 
         {
             "build_date": "2016-09-01_17:20:46", 
@@ -69,10 +69,20 @@
             "tar_url": "kuainiao/kuainiao.tar.gz", 
             "title": "讯雷快鸟", 
             "version": "0.3.6"
+        }, 
+        {
+            "build_date": "2017-06-05_22:38:47", 
+            "description": "shadowsocks", 
+            "home_url": "Main_Ss_Content.asp", 
+            "md5": "bfa39714d9e8d3f002689546fa0b34ba", 
+            "name": "shadowsocks", 
+            "tar_url": "shadowsocks/shadowsocks.tar.gz", 
+            "title": "shadowsocks", 
+            "version": "2.9.0"
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "1522fe87823108461b4c9d0a183a969a", 
+    "md5": "84e032b0fa52a03d6fa9e13e01dd90ca", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.1.3"
 }
