@@ -11,14 +11,14 @@
             "version": "1.1"
         }, 
         {
-            "build_date": "2017-06-04_13:49:55", 
+            "build_date": "2017-06-05_23:14:57", 
             "description": "koolproxy", 
             "home_url": "Module_koolproxy.asp", 
-            "md5": "61b611bc59cef4e6f596679c3fd6dca3", 
+            "md5": "b0b603e51fe76e837e4020a1719aaea8", 
             "name": "koolproxy", 
             "tar_url": "koolproxy/koolproxy.tar.gz", 
             "title": "koolproxy", 
-            "version": "3.2.5"
+            "version": "3.2.6"
         }, 
         {
             "build_date": "2016-09-01_17:20:46", 
