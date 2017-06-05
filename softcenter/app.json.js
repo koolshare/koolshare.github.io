@@ -71,10 +71,10 @@
             "version": "0.3.6"
         }, 
         {
-            "build_date": "2017-06-05_23:40:40", 
+            "build_date": "2017-06-05_23:42:45", 
             "description": "shadowsocks", 
             "home_url": "Main_Ss_Content.asp", 
-            "md5": "26c9314f54b4b0cae1e284293722758d", 
+            "md5": "f3552b66b5ea7c0c727e874b71a18658", 
             "name": "shadowsocks", 
             "tar_url": "shadowsocks/shadowsocks.tar.gz", 
             "title": "shadowsocks", 
