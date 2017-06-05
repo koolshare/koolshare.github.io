@@ -712,7 +712,6 @@ function hideClients_Block(){
 }
 
 function showDropdownClientList(_callBackFun, _callBackFunParam, _interfaceMode, _containerID, _pullArrowID, _clientState) {
-	document.body.onclick = function() {control_dropdown_client_block(_containerID, _pullArrowID);}
 	if(clientList.length == 0){
 		setTimeout(function() {
 			genClientList();
