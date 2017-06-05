@@ -492,7 +492,7 @@ function LoadingKPProgress(seconds){
 		document.getElementById("loading_block3").innerHTML = "koolproxy关闭中 ..."
 		$j("#loading_block2").html("<li><font color='#ffcc00'><a href='http://www.koolshare.cn' target='_blank'></font>koolproxy工作有问题？请来我们的<font color='#ffcc00'>论坛www.koolshare.cn</font>反应问题...</font></li>");
 	} else {
-			$j("#loading_block2").html("<font color='#ffcc00'>--------------------------------------------------------------------------------------------------------------------------------------");
+			$j("#loading_block2").html("<font color='#ffcc00'>-----------------------------------------------------------------------------------------------------------------------------------");
 		if (document.form.koolproxy_basic_action.value == 1){
 			document.getElementById("loading_block3").innerHTML = "开启koolproxy ..."
 		}else if (document.form.koolproxy_basic_action.value == 2){
