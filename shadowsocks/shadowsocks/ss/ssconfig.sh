@@ -4,8 +4,8 @@ eval `dbus export ss`
 source /koolshare/scripts/base.sh
 ss_basic_version_local=`cat /koolshare/ss/version`
 dbus set ss_basic_version_local=$ss_basic_version_local
-backup_url="http://master.ngrok.wang:5000/shadowsocks_mips/"
-main_url="https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks_mips"
+backup_url="http://mips.ngrok.wang:5000/shadowsocks/"
+main_url="https://raw.githubusercontent.com/koolshare/koolshare.github.io/mips_softerware_center/shadowsocks"
 
 # creat dnsmasq.d folder
 creat_folder(){

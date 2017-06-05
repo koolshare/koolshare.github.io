@@ -1450,7 +1450,7 @@ function getRefresh() {
 
 function version_show(){
     $j.ajax({
-        url: 'http://master.ngrok.wang:5000/shadowsocks_mips/config.json.js',
+        url: 'http://mips.ngrok.wang:5000/shadowsocks/config.json.js',
         type: 'GET',
         dataType: 'jsonp',
         success: function(res) {
