@@ -72,7 +72,7 @@ echo_version(){
 	echo "ssr-tunnel		2.5.6 		with mbed TLS 2.4.0"
 	echo "ssr-local		2.5.6 		with mbed TLS 2.4.0"
 	echo "client_linux_arm5	20170525	kcptun"
-	echo "haproxy			1.7.1	"
+	echo "haproxy			1.7.5	"
 	echo "dns2socks		V2.0 	"
 	echo "dnscrypt-proxy		1.7.0 	"
 	echo "ChinaDNS		1.3.2 	"

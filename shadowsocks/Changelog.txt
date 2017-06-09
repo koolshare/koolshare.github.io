@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.5.0
+   - update	update ss-rlibev to latest: fix UDP host & portl;
+   - update	update haproxy to 1.7.5.
+
 3.4.9
    - fix	修复在DNS解析在国内优先下，自定义国内DNS不起作用的bug;
    - fix	修复使用负载均衡时，详细状态检测出错的bug；修复详细状态内一些拼写错误；
