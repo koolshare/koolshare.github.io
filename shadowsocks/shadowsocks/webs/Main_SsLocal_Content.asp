@@ -10,6 +10,7 @@
 <title>Shadowsocks - Socks5代理设置</title>
 <link rel="stylesheet" type="text/css" href="index_style.css">
 <link rel="stylesheet" type="text/css" href="form_style.css">
+<link rel="stylesheet" type="text/css" href="css/element.css">
 <script language="JavaScript" type="text/javascript" src="/state.js"></script>
 <script language="JavaScript" type="text/javascript" src="/help.js"></script>
 <script language="JavaScript" type="text/javascript" src="/general.js"></script>
@@ -88,6 +89,30 @@ return document.getElementById(id);
 function init(){
 	show_menu(menu_hook);
 	conf_to_obj();
+    buildswitch();
+    toggle_switch();
+    update_visibility();
+}
+
+function toggle_switch(){
+    var rrt = document.getElementById("switch");
+    if (document.form.ss_local_enable.value != "1") {
+        rrt.checked = false;
+    } else {
+        rrt.checked = true;
+    }
+}
+
+function buildswitch(){
+    $j("#switch").click(
+    function(){
+        if(document.getElementById('switch').checked){
+            document.form.ss_local_enable.value = 1;
+            
+        }else{
+            document.form.ss_local_enable.value = 0;
+        }
+    });
 }
 
 function conf_to_obj(){
@@ -129,8 +154,8 @@ function validForm(){
 	return is_ok;
 }
 
-function pass_checked(obj){
-	switchType(obj, document.form.show_pass.checked, true);
+function update_visibility(){
+	showhide("ss_obfs_host", (document.form.ss_local_obfs.value !== "0" ));
 }
 
 </script>
@@ -165,7 +190,7 @@ function pass_checked(obj){
 	<input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>">
 	<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="">
 	<input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>">
-	<input type="hidden" id="dns2socks" name="dns2socks" value='<% dbus_get_def("dns2socks", ""); %>'/>
+	<input type="hidden" id="ss_local_enable" name="ss_local_enable" value='<% dbus_get_def("ss_local_enable", "0"); %>'/>
 	<table class="content" align="center" cellpadding="0" cellspacing="0">
 		<tr>
 			<td width="17">&nbsp;</td>
@@ -184,7 +209,7 @@ function pass_checked(obj){
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 										<div class="SimpleNote">
 											<li><i>说明：</i>此页面允许配置第二个shadosocks账号，功能仅限于在路由器上打开一个连接到shadowsocks服务器的socks5端口。如果你使用chrome浏览器，你可以使用SwitchyOmega插件去连接这个socks5代理。</li></br>
-											<li><i>此页面功能独立于ss，单独开关.</i></li>
+											<li><i>此页面功能独立于ss，单独开关：</i></li>
 										</div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 										<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
@@ -193,15 +218,24 @@ function pass_checked(obj){
 													<td colspan="2">Shadowsocks - ss-local - 高级设置</td>
 												</tr>
 											</thead>
-											<tr>
-												<th width="20%">开关</th>
-												<td>
-													<select id="ss_local_enable" name="ss_local_enable" style="width:165px;margin:0px 0px 0px 2px;" class="ssconfig input_option">
-														<option value="0">不开启</option>
-														<option value="1">开启</option>
-													</select>
-												</td>
-											</tr>
+                                        	<tr id="switch_tr">
+                                        	    <th>
+                                        	        <label>开关</label>
+                                        	    </th>
+                                        	    <td colspan="2">
+                                        	        <div class="switch_field" style="display:table-cell;float: left;">
+                                        	            <label for="switch">
+                                        	                <input id="switch" class="switch" type="checkbox" style="display: none;">
+                                        	                <div class="switch_container" >
+                                        	                    <div class="switch_bar"></div>
+                                        	                    <div class="switch_circle transition_style">
+                                        	                        <div></div>
+                                        	                    </div>
+                                        	                </div>
+                                        	            </label>
+                                        	        </div>
+                                        	    </td>
+                                        	</tr>
 											<tr>
 												<th width="20%">服务器(建议填写IP地址)</th>
 												<td>
@@ -217,34 +251,32 @@ function pass_checked(obj){
 											<tr>
 												<th width="20%">密码</th>
 													<td>
-														<input type="password" class="ssconfig input_ss_table" id="ss_local_password" name="ss_local_password" maxlength="100" value="">
-													<div style="margin-left:170px;margin-top:-20px;margin-bottom:0px">
-														<input type="checkbox" name="show_pass" onclick="pass_checked(document.form.ss_local_password);">显示密码
-													</div>
+														<input type="password" class="ssconfig input_ss_table" id="ss_local_password" name="ss_local_password" maxlength="100" value="" onBlur="switchType(this, false);" onFocus="switchType(this, true);">
 												</td>
 											</tr>
 											<tr>
 												<th width="20%">加密方法</th>
 												<td>
 													<select id="ss_local_method" name="ss_local_method" style="width:165px;margin:0px 0px 0px 2px;" class="input_option">
-														<option value="table">table</option>
-														<option value="rc4">rc4</option>
 														<option value="rc4-md5">rc4-md5</option>
+														<option value="aes-128-gcm">aes-128-gcm</option>
+														<option value="aes-192-gcm">aes-192-gcm</option>
+														<option value="aes-256-gcm">aes-256-gcm</option>
 														<option value="aes-128-cfb">aes-128-cfb</option>
 														<option value="aes-192-cfb">aes-192-cfb</option>
-														<option value="aes-256-cfb">aes-256-cfb</option>
-														<option value="bf-cfb">bf-cfb</option>
+														<option value="aes-256-cfb" selected>aes-256-cfb</option>
+														<option value="aes-128-ctr">aes-128-ctr</option>
+														<option value="aes-192-ctr">aes-192-ctr</option>
+														<option value="aes-256-ctr">aes-256-ctr</option>
 														<option value="camellia-128-cfb">camellia-128-cfb</option>
 														<option value="camellia-192-cfb">camellia-192-cfb</option>
 														<option value="camellia-256-cfb">camellia-256-cfb</option>
-														<option value="cast5-cfb">cast5-cfb</option>
-														<option value="des-cfb">des-cfb</option>
-														<option value="idea-cfb">idea-cfb</option>
-														<option value="rc2-cfb">rc2-cfb</option>
-														<option value="seed-cfb">seed-cfb</option>
+														<option value="bf-cfb">bf-cfb</option>
 														<option value="salsa20">salsa20</option>
 														<option value="chacha20">chacha20</option>
+														<option value="chacha20-poly1305">chacha20-poly1305</option>
 														<option value="chacha20-ietf">chacha20-ietf</option>
+														<option value="chacha20-ietf-poly1305">chacha20-ietf-poly1305</option>
 													</select>
 												</td>
 											</tr>
@@ -258,6 +290,32 @@ function pass_checked(obj){
 												<th width="20%">本地代理端口</th>
 												<td>
 													<input type="text" class="ssconfig input_ss_table" id="ss_local_proxyport" name="ss_local_proxyport" maxlength="100" value="1082">												
+												</td>
+											</tr>
+											<tr id="ss_obfs">
+												<th width="35%">混淆 (obfs)</th>
+												<td>
+													<select id="ss_local_obfs" name="ss_local_obfs" style="width:164px;margin:0px 0px 0px 2px;" class="input_option"  onchange="update_visibility();" >
+														<option class="content_input_fd" value="0">关闭</option>
+														<option class="content_input_fd" value="tls">tls</option>
+														<option class="content_input_fd" value="http">http</option>
+													</select>
+												</td>
+											</tr>
+											<tr id="ss_obfs_host">
+												<th width="35%">混淆主机名 (obfs_host)</th>
+												<td>
+													<input type="text" name="ss_local_obfs_host" id="ss_local_obfs_host" placeholder="bing.com"  class="ssconfig input_ss_table" maxlength="100" value=""></input>
+												</td>
+											</tr>
+											<tr id="acl_support">
+												<th>ACL控制</th>
+												<td>
+													<select name="ss_local_acl" id="ss_local_acl" class="input_option" style="width:165px;margin:0px 0px 0px 2px;">
+														<option value="0" selected>不使用</option>
+														<option value="1">gfwlist.pac</option>
+														<option value="2">chn.pac</option>
+													</select>
 												</td>
 											</tr>
 										</table>

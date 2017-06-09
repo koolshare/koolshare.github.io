@@ -71,14 +71,14 @@
             "version": "0.3.6"
         }, 
         {
-            "build_date": "2017-06-07_23:04:09", 
+            "build_date": "2017-06-10_00:26:32", 
             "description": "shadowsocks", 
             "home_url": "Main_Ss_Content.asp", 
-            "md5": "16500981a7987189b6192609fb1dfbb7", 
+            "md5": "0c224d6191a3f28b3390db7462a2e12b", 
             "name": "shadowsocks", 
             "tar_url": "shadowsocks/shadowsocks.tar.gz", 
             "title": "shadowsocks", 
-            "version": "2.9.2"
+            "version": "3.0.0"
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 

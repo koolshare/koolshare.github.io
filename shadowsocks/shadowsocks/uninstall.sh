@@ -11,10 +11,11 @@ rm -rf /koolshare/bin/ss-local
 rm -rf /koolshare/bin/ss-server
 rm -rf /koolshare/bin/ss-redir
 rm -rf /koolshare/bin/rss*
+rm -rf /koolshare/bin/obfs*
 rm -rf /koolshare/bin/haproxy
 rm -rf /koolshare/bin/redsocks2
 rm -rf /koolshare/bin/pdnsd
-rm -rf /koolshare/bin/Pcap_DNSProxy
+#rm -rf /koolshare/bin/Pcap_DNSProxy
 rm -rf /koolshare/bin/dnscrypt-proxy
 rm -rf /koolshare/bin/dns2socks
 rm -rf /koolshare/bin/client_linux_arm5

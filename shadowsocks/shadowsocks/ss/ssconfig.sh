@@ -6,7 +6,7 @@ ss_basic_version_local=`cat /koolshare/ss/version`
 dbus set ss_basic_version_local=$ss_basic_version_local
 backup_url="http://mips.ngrok.wang:5000/shadowsocks/"
 main_url="https://raw.githubusercontent.com/koolshare/koolshare.github.io/mips_softerware_center/shadowsocks"
-
+alias echo_date='echo $(date +%Yå¹´%mæœˆ%dæ—¥\ %X):'
 # creat dnsmasq.d folder
 creat_folder(){
 if [ ! -d /koolshare/configs/dnsmasq.d ];then
@@ -15,79 +15,67 @@ fi
 }
 
 install_ss(){
-	echo $(date): ¿ªÊ¼½âÑ¹Ñ¹Ëõ°ü... >> /tmp/syscmd.log
+	echo_date å¼€å§‹è§£å‹å‹ç¼©åŒ…...
 	tar -zxf shadowsocks.tar.gz
 	dbus set ss_basic_install_status="2"
 	chmod a+x /tmp/shadowsocks/install.sh
-	echo $(date): ¿ªÊ¼°²×°¸üĞÂÎÄ¼ş... >> /tmp/syscmd.log
-	/tmp/shadowsocks/install.sh
-	dbus set ss_basic_version_local=$ss_basic_version_web1
-	sleep 1
-	dbus set ss_basic_install_status="3"
-	sleep 1
-	dbus set ss_basic_install_status="0"
-	echo $(date): Ò»µãµãÇåÀí¹¤×÷... >> /tmp/syscmd.log
-	rm -rf /tmp/shadowsocks* >/dev/null 2>&1
-	echo $(date): °²×°¸üĞÂ³É¹¦£¬ÄãÎªÊ²Ã´ÕâÃ´ŒÅ£¿... >> /tmp/syscmd.log
-	echo $(date): ÇëµÈ´ı5Ãë£¬½çÃæ½«×Ô¶¯ÖØÆô... >> /tmp/syscmd.log
-	exit
+	echo_date å¼€å§‹å®‰è£…æ›´æ–°æ–‡ä»¶...
+	sh /tmp/shadowsocks/install.sh
 }
-
 
 # update ss
 update_ss(){
 	# ss_basic_install_status=	#
 	# ss_basic_install_status=0	#
-	# ss_basic_install_status=1	#ÕıÔÚÏÂÔØ¸üĞÂ......
-	# ss_basic_install_status=2	#ÕıÔÚ°²×°¸üĞÂ...
-	# ss_basic_install_status=3	#°²×°¸üĞÂ³É¹¦£¬5ÃëºóË¢ĞÂ±¾Ò³£¡
-	# ss_basic_install_status=4	#ÏÂÔØÎÄ¼şĞ£Ñé²»Ò»ÖÂ£¡
-	# ss_basic_install_status=5	#È»¶ø²¢Ã»ÓĞ¸üĞÂ£¡
-	# ss_basic_install_status=6	#ÕıÔÚ¼ì²éÊÇ·ñÓĞ¸üĞÂ~
-	# ss_basic_install_status=7	#¼ì²â¸üĞÂ´íÎó£¡
-	# ss_basic_install_status=8	#¸ü»»¸üĞÂ·şÎñÆ÷
-	echo $(date): ¸üĞÂ¹ı³ÌÖĞÇë²»Òª×öÆæ¹ÖµÄÊÂ£¬²»È»¿ÉÄÜµ¼ÖÂÎÊÌâ£¡ > /tmp/syscmd.log
-	echo $(date): >> /tmp/syscmd.log
+	# ss_basic_install_status=1	#æ­£åœ¨ä¸‹è½½æ›´æ–°......
+	# ss_basic_install_status=2	#æ­£åœ¨å®‰è£…æ›´æ–°...
+	# ss_basic_install_status=3	#å®‰è£…æ›´æ–°æˆåŠŸï¼Œ5ç§’ååˆ·æ–°æœ¬é¡µï¼
+	# ss_basic_install_status=4	#ä¸‹è½½æ–‡ä»¶æ ¡éªŒä¸ä¸€è‡´ï¼
+	# ss_basic_install_status=5	#ç„¶è€Œå¹¶æ²¡æœ‰æ›´æ–°ï¼
+	# ss_basic_install_status=6	#æ­£åœ¨æ£€æŸ¥æ˜¯å¦æœ‰æ›´æ–°~
+	# ss_basic_install_status=7	#æ£€æµ‹æ›´æ–°é”™è¯¯ï¼
+	# ss_basic_install_status=8	#æ›´æ¢æ›´æ–°æœåŠ¡å™¨
+	echo_date æ›´æ–°è¿‡ç¨‹ä¸­è¯·ä¸è¦åšå¥‡æ€ªçš„äº‹ï¼Œä¸ç„¶å¯èƒ½å¯¼è‡´é—®é¢˜ï¼
 	dbus set ss_basic_install_status="6"
-	echo $(date): ¿ªÆôSS¼ì²é¸üĞÂ£ºÕıÔÚ¼ì²âÖ÷·şÎñÆ÷ÔÚÏß°æ±¾ºÅ... >> /tmp/syscmd.log
+	echo_date å¼€å¯SSæ£€æŸ¥æ›´æ–°ï¼šæ­£åœ¨æ£€æµ‹ä¸»æœåŠ¡å™¨åœ¨çº¿ç‰ˆæœ¬å·...
 	ss_basic_version_web1=`curl --connect-timeout 5 -s "$main_url"/version | sed -n 1p`
 	if [ ! -z $ss_basic_version_web1 ];then
-		echo $(date): ¼ì²âµ½Ö÷·şÎñÆ÷ÔÚÏß°æ±¾ºÅ£º$ss_basic_version_web1 >> /tmp/syscmd.log
+		echo_date æ£€æµ‹åˆ°ä¸»æœåŠ¡å™¨åœ¨çº¿ç‰ˆæœ¬å·ï¼š$ss_basic_version_web1
 		dbus set ss_basic_version_web=$ss_basic_version_web1
 		if [ "$ss_basic_version_local" != "$ss_basic_version_web1" ];then
-		echo $(date): Ö÷·şÎñÆ÷ÔÚÏß°æ±¾ºÅ£º"$ss_basic_version_web1" ºÍ±¾µØ°æ±¾ºÅ£º"$ss_basic_version_local" ²»Í¬£¡ >> /tmp/syscmd.log
+		echo_date ä¸»æœåŠ¡å™¨åœ¨çº¿ç‰ˆæœ¬å·ï¼š"$ss_basic_version_web1" å’Œæœ¬åœ°ç‰ˆæœ¬å·ï¼š"$ss_basic_version_local" ä¸åŒï¼
 			dbus set ss_basic_install_status="1"
 			cd /tmp
 			md5_web1=`curl -s "$main_url"/version | sed -n 2p`
-			echo $(date): ¿ªÆôÏÂÔØ½ø³Ì£¬´ÓÖ÷·şÎñÆ÷ÉÏÏÂÔØ¸üĞÂ°ü... >> /tmp/syscmd.log
-			wget --no-check-certificate --timeout=5 "$main_url"/shadowsocks.tar.gz >> /tmp/syscmd.log
+			echo_date å¼€å¯ä¸‹è½½è¿›ç¨‹ï¼Œä»ä¸»æœåŠ¡å™¨ä¸Šä¸‹è½½æ›´æ–°åŒ…...
+			wget --no-check-certificate --timeout=5 "$main_url"/shadowsocks.tar.gz
 			md5sum_gz=`md5sum /tmp/shadowsocks.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web1" ]; then
-				echo $(date): ¸üĞÂ°ümd5Ğ£Ñé²»Ò»ÖÂ£¡¹À¼ÆÊÇÏÂÔØµÄÊ±ºò³ıÁËÊ²Ã´×´¿ö£¬ÇëµÈ´ıÒ»»á¶ùÔÙÊÔ... >> /tmp/syscmd.log
+				echo_date æ›´æ–°åŒ…md5æ ¡éªŒä¸ä¸€è‡´ï¼ä¼°è®¡æ˜¯ä¸‹è½½çš„æ—¶å€™å‡ºäº†ä»€ä¹ˆçŠ¶å†µï¼Œè¯·ç­‰å¾…ä¸€ä¼šå„¿å†è¯•...
 				dbus set ss_basic_install_status="4"
 				rm -rf /tmp/shadowsocks* >/dev/null 2>&1
 				sleep 1
-				echo $(date): ¸ü»»±¸ÓÃ¸üĞÂ·şÎñÆ÷1£¬ÇëÉÔºó... >> /tmp/syscmd.log
+				echo_date æ›´æ¢å¤‡ç”¨æ›´æ–°æœåŠ¡å™¨1ï¼Œè¯·ç¨å...
 				dbus set ss_basic_install_status="8"
 				sleep 1
 				update_ss2
 			else
-				echo $(date): ¸üĞÂ°ümd5Ğ£ÑéÒ»ÖÂ£¡ ¿ªÊ¼°²×°£¡... >> /tmp/syscmd.log
+				echo_date æ›´æ–°åŒ…md5æ ¡éªŒä¸€è‡´ï¼ å¼€å§‹å®‰è£…ï¼...
 				install_ss
 			fi
 		else
-			echo $(date): Ö÷·şÎñÆ÷ÔÚÏß°æ±¾ºÅ£º"$ss_basic_version_web1" ºÍ±¾µØ°æ±¾ºÅ£º"$ss_basic_version_local" ÏàÍ¬£¡ >> /tmp/syscmd.log
+			echo_date ä¸»æœåŠ¡å™¨åœ¨çº¿ç‰ˆæœ¬å·ï¼š"$ss_basic_version_web1" å’Œæœ¬åœ°ç‰ˆæœ¬å·ï¼š"$ss_basic_version_local" ç›¸åŒï¼
 			dbus set ss_basic_install_status="5"
 			sleep 1
-			echo $(date): ÄÇ»¹¸üĞÂ¸öÃ«°¡£¬¹Ø±Õ¸üĞÂ½ø³Ì! >> /tmp/syscmd.log
+			echo_date é‚£è¿˜æ›´æ–°ä¸ªæ¯›å•Šï¼Œå…³é—­æ›´æ–°è¿›ç¨‹!
 			dbus set ss_basic_install_status="0"
 			exit
 		fi
 	else
-		echo $(date): Ã»ÓĞ¼ì²âµ½Ö÷·şÎñÆ÷ÔÚÏß°æ±¾ºÅ,·ÃÎÊgithub·şÎñÆ÷ÓĞµãÎÊÌâÅ¶~ >> /tmp/syscmd.log
+		echo_date æ²¡æœ‰æ£€æµ‹åˆ°ä¸»æœåŠ¡å™¨åœ¨çº¿ç‰ˆæœ¬å·,è®¿é—®githubæœåŠ¡å™¨æœ‰ç‚¹é—®é¢˜å“¦~
 		dbus set ss_basic_install_status="7"
 		sleep 2
-		echo $(date): ¸ü»»±¸ÓÃ¸üĞÂ·şÎñÆ÷1£¬ÇëÉÔºó... >> /tmp/syscmd.log
+		echo_date æ›´æ¢å¤‡ç”¨æ›´æ–°æœåŠ¡å™¨1ï¼Œè¯·ç¨å...
 		dbus set ss_basic_install_status="8"
 		sleep 1
 		update_ss2
@@ -98,184 +86,97 @@ update_ss(){
 update_ss2(){
 	# ss_basic_install_status=	#
 	# ss_basic_install_status=0	#
-	# ss_basic_install_status=1	#ÕıÔÚÏÂÔØ¸üĞÂ......
-	# ss_basic_install_status=2	#ÕıÔÚ°²×°¸üĞÂ...
-	# ss_basic_install_status=3	#°²×°¸üĞÂ³É¹¦£¬5ÃëºóË¢ĞÂ±¾Ò³£¡
-	# ss_basic_install_status=4	#ÏÂÔØÎÄ¼şĞ£Ñé²»Ò»ÖÂ£¡
-	# ss_basic_install_status=5	#È»¶ø²¢Ã»ÓĞ¸üĞÂ£¡
-	# ss_basic_install_status=6	#ÕıÔÚ¼ì²éÊÇ·ñÓĞ¸üĞÂ~
-	# ss_basic_install_status=7	#¼ì²â¸üĞÂ´íÎó1£¡
-	# ss_basic_install_status=8	#¸ü»»±¼Ó¿¸üĞÂ·şÎñÆ÷1
-	# ss_basic_install_status=9	#¼ì²â¸üĞÂ´íÎó2£¡
+	# ss_basic_install_status=1	#æ­£åœ¨ä¸‹è½½æ›´æ–°......
+	# ss_basic_install_status=2	#æ­£åœ¨å®‰è£…æ›´æ–°...
+	# ss_basic_install_status=3	#å®‰è£…æ›´æ–°æˆåŠŸï¼Œ5ç§’ååˆ·æ–°æœ¬é¡µï¼
+	# ss_basic_install_status=4	#ä¸‹è½½æ–‡ä»¶æ ¡éªŒä¸ä¸€è‡´ï¼
+	# ss_basic_install_status=5	#ç„¶è€Œå¹¶æ²¡æœ‰æ›´æ–°ï¼
+	# ss_basic_install_status=6	#æ­£åœ¨æ£€æŸ¥æ˜¯å¦æœ‰æ›´æ–°~
+	# ss_basic_install_status=7	#æ£€æµ‹æ›´æ–°é”™è¯¯1ï¼
+	# ss_basic_install_status=8	#æ›´æ¢å¥”æ¶Œæ›´æ–°æœåŠ¡å™¨1
+	# ss_basic_install_status=9	#æ£€æµ‹æ›´æ–°é”™è¯¯2ï¼
 
 	dbus set ss_basic_install_status="6"
-	echo $(date): ¿ªÆôSS¼ì²é¸üĞÂ£ºÕıÔÚ¼ì²â±¸ÓÃ·şÎñÆ÷ÔÚÏß°æ±¾ºÅ... >> /tmp/syscmd.log
+	echo_date å¼€å¯SSæ£€æŸ¥æ›´æ–°ï¼šæ­£åœ¨æ£€æµ‹å¤‡ç”¨æœåŠ¡å™¨åœ¨çº¿ç‰ˆæœ¬å·...
 	ss_basic_version_web2=`curl --connect-timeout 5 -s "$backup_url"/version | sed -n 1p`
 	if [ ! -z $ss_basic_version_web2 ];then
-	echo $(date): ¼ì²âµ½±¸ÓÃ·şÎñÆ÷ÔÚÏß°æ±¾ºÅ£º$ss_basic_version_web1 >> /tmp/syscmd.log
+	echo_date æ£€æµ‹åˆ°å¤‡ç”¨æœåŠ¡å™¨åœ¨çº¿ç‰ˆæœ¬å·ï¼š$ss_basic_version_web1
 		dbus set ss_basic_version_web=$ss_basic_version_web2
 		if [ "$ss_basic_version_local" != "$ss_basic_version_web2" ];then
-		echo $(date): ±¸ÓÃ·şÎñÆ÷ÔÚÏß°æ±¾ºÅ£º"$ss_basic_version_web1" ºÍ±¾µØ°æ±¾ºÅ£º"$ss_basic_version_local" ²»Í¬£¡ >> /tmp/syscmd.log
+		echo_date å¤‡ç”¨æœåŠ¡å™¨åœ¨çº¿ç‰ˆæœ¬å·ï¼š"$ss_basic_version_web1" å’Œæœ¬åœ°ç‰ˆæœ¬å·ï¼š"$ss_basic_version_local" ä¸åŒï¼
 			dbus set ss_basic_install_status="1"
 			cd /tmp
 			md5_web2=`curl -s "$backup_url"/version | sed -n 2p`
-			echo $(date): ¿ªÆôÏÂÔØ½ø³Ì£¬´Ó±¸ÓÃ·şÎñÆ÷ÉÏÏÂÔØ¸üĞÂ°ü... >> /tmp/syscmd.log
+			echo_date å¼€å¯ä¸‹è½½è¿›ç¨‹ï¼Œä»å¤‡ç”¨æœåŠ¡å™¨ä¸Šä¸‹è½½æ›´æ–°åŒ…...
 			wget "$backup_url"/shadowsocks.tar.gz
 			md5sum_gz=`md5sum /tmp/shadowsocks.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web2" ]; then
-				echo $(date): ¸üĞÂ°ümd5Ğ£Ñé²»Ò»ÖÂ£¡¹À¼ÆÊÇÏÂÔØµÄÊ±ºò³ıÁËÊ²Ã´×´¿ö£¬ÇëµÈ´ıÒ»»á¶ùÔÙÊÔ... >> /tmp/syscmd.log
+				echo_date æ›´æ–°åŒ…md5æ ¡éªŒä¸ä¸€è‡´ï¼ä¼°è®¡æ˜¯ä¸‹è½½çš„æ—¶å€™é™¤äº†ä»€ä¹ˆçŠ¶å†µï¼Œè¯·ç­‰å¾…ä¸€ä¼šå„¿å†è¯•...
 				dbus set ss_basic_install_status="4"
 				rm -rf /tmp/shadowsocks* >/dev/null 2>&1
 				sleep 2
-				echo $(date): È»¶øÖ»ÓĞÕâÒ»Ì¨±¸ÓÃ¸ü¸üĞÂ·şÎñÆ÷£¬Çë³¢ÊÔÀëÏßÊÖ¶¯°²×°... >> /tmp/syscmd.log
+				echo_date ç„¶è€Œåªæœ‰è¿™ä¸€å°å¤‡ç”¨æ›´æ›´æ–°æœåŠ¡å™¨ï¼Œè¯·å°è¯•ç¦»çº¿æ‰‹åŠ¨å®‰è£…...
 				dbus set ss_basic_install_status="0"
 				exit
 			else
-				echo $(date): ¸üĞÂ°ümd5Ğ£ÑéÒ»ÖÂ£¡ ¿ªÊ¼°²×°£¡... >> /tmp/syscmd.log
+				echo_date æ›´æ–°åŒ…md5æ ¡éªŒä¸€è‡´ï¼ å¼€å§‹å®‰è£…ï¼...
 				install_ss
 			fi
 		else
-			echo $(date): ±¸ÓÃ·şÎñÆ÷ÔÚÏß°æ±¾ºÅ£º"$ss_basic_version_web1" ºÍ±¾µØ°æ±¾ºÅ£º"$ss_basic_version_local" ÏàÍ¬£¡ >> /tmp/syscmd.log
+			echo_date å¤‡ç”¨æœåŠ¡å™¨åœ¨çº¿ç‰ˆæœ¬å·ï¼š"$ss_basic_version_web1" å’Œæœ¬åœ°ç‰ˆæœ¬å·ï¼š"$ss_basic_version_local" ç›¸åŒï¼
 			dbus set ss_basic_install_status="5"
 			sleep 2
-			echo $(date): ÄÇ»¹¸üĞÂ¸öÃ«°¡£¬¹Ø±Õ¸üĞÂ½ø³Ì! >> /tmp/syscmd.log
+			echo_date é‚£è¿˜æ›´æ–°ä¸ªæ¯›å•Šï¼Œå…³é—­æ›´æ–°è¿›ç¨‹!
 			dbus set ss_basic_install_status="0"
 			exit
 		fi
 	else
-		echo $(date): Ã»ÓĞ¼ì²âµ½±¸ÓÃ·şÎñÆ÷ÔÚÏß°æ±¾ºÅ,·ÃÎÊ±¸ÓÃ·şÎñÆ÷ÓĞµãÎÊÌâÅ¶£¬ÄãÍøÂçºÜ²îšG~ >> /tmp/syscmd.log
+		echo_date æ²¡æœ‰æ£€æµ‹åˆ°å¤‡ç”¨æœåŠ¡å™¨åœ¨çº¿ç‰ˆæœ¬å·,è®¿é—®å¤‡ç”¨æœåŠ¡å™¨æœ‰ç‚¹é—®é¢˜å“¦ï¼Œä½ ç½‘ç»œå¾ˆå·®æ¬¸~
 		dbus set ss_basic_install_status="7"
 		sleep 2
-		echo $(date): È»¶øÖ»ÓĞÕâÒ»Ì¨±¸ÓÃ¸ü¸üĞÂ·şÎñÆ÷£¬Çë³¢ÊÔÀëÏßÊÖ¶¯°²×°... >> /tmp/syscmd.log
+		echo_date ç„¶è€Œåªæœ‰è¿™ä¸€å°å¤‡ç”¨æ›´æ›´æ–°æœåŠ¡å™¨ï¼Œè¯·å°è¯•ç¦»çº¿æ‰‹åŠ¨å®‰è£…...
 		dbus set ss_basic_install_status="0"
 		exit
 	fi
 }
 
-
-# Decteting if jffs partion is enabled
-enable_jffs2(){
-	if [ ! -d /jffs/scripts ]
-	then
-	  nvram set jffs2_on=1
-	  nvram set jffs2_format=1
-	  nvram set jffs2_scripts=1
-	  nvram commit
-	  echo You have to reboot the router and try again. Exiting...
-	  exit 1
-	fi
-
-	jffs2_script=`nvram get jffs2_scripts`
-	if [ "$jffs2_script" != "1" ]
-	then
-	  nvram set jffs2_on=1
-	  nvram set jffs2_scripts=1
-	  nvram commit
-	  echo "auto enable jffs2 scripts"
-	fi
-}
-
 # Enable service by user choose
 apply_ss(){
-	if [ "1" == "$ss_basic_mode" ]; then
-		if [ "1" == "$ss_basic_action" ]; then
-			. /koolshare/ss/stop.sh stop_part
-			. /koolshare/ss/ipset/start.sh start_all
-		elif [ "2" == "$ss_basic_action" ]; then
-			. /koolshare/ss/ipset/start.sh restart_dns
-		elif [ "3" == "$ss_basic_action" ]; then
-			. /koolshare/ss/ipset/start.sh restart_wb_list
-		elif [ "4" == "$ss_basic_action" ]; then
-			. /koolshare/ss/ipset/start.sh restart_addon
-		fi
-	elif [ "2" == "$ss_basic_mode" ]; then
-		if [ "1" == "$ss_basic_action" ]; then
-			. /koolshare/ss/stop.sh stop_part
-			. /koolshare/ss/redchn/start.sh start_all
-		elif [ "2" == "$ss_basic_action" ]; then
-			. /koolshare/ss/redchn/start.sh restart_dns
-		elif [ "3" == "$ss_basic_action" ]; then
-			. /koolshare/ss/redchn/start.sh restart_wb_list
-		elif [ "4" == "$ss_basic_action" ]; then
-			. /koolshare/ss/redchn/start.sh restart_addon
-		fi
-	elif [ "3" == "$ss_basic_mode" ]; then
-		if [ "1" == "$ss_basic_action" ]; then
-			. /koolshare/ss/stop.sh stop_part
-			. /koolshare/ss/game/start.sh start_all
-		elif [ "2" == "$ss_basic_action" ]; then
-			. /koolshare/ss/game/start.sh restart_dns
-		elif [ "3" == "$ss_basic_action" ]; then
-			. /koolshare/ss/game/start.sh restart_wb_list
-		elif [ "4" == "$ss_basic_action" ]; then
-			. /koolshare/ss/game/start.sh restart_addon
-		fi
-	elif [ "4" == "$ss_basic_mode" ]; then
-		if [ "1" == "$ss_basic_action" ]; then
-			. /koolshare/ss/stop.sh stop_part
-			. /koolshare/ss/koolgame/start.sh start_all
-		elif [ "2" == "$ss_basic_action" ]; then
-			. /koolshare/ss/koolgame/start.sh restart_dns
-		elif [ "3" == "$ss_basic_action" ]; then
-			. /koolshare/ss/koolgame/start.sh restart_wb_list
-		elif [ "4" == "$ss_basic_action" ]; then
-			. /koolshare/ss/koolgame/start.sh restart_addon
-		fi
-	elif [ "5" == "$ss_basic_mode" ]; then
-		if [ "1" == "$ss_basic_action" ]; then
-			. /koolshare/ss/stop.sh stop_part
-			. /koolshare/ss/overall/start.sh start_all
-		elif [ "2" == "$ss_basic_action" ]; then
-			. /koolshare/ss/overall/start.sh restart_dns
-		elif [ "3" == "$ss_basic_action" ]; then
-			. /koolshare/ss/overall/start.sh restart_wb_list
-		elif [ "4" == "$ss_basic_action" ]; then
-			. /koolshare/ss/overall/start.sh restart_addon
-		fi
-	fi
-	dbus set ss_basic_action="1"
+	sh /koolshare/ss/stop.sh stop_all
+	sh /koolshare/scripts/ss_prestart.sh
+	sh /koolshare/ss/start.sh start_all
+	# if [ "1" == "$ss_basic_action" ]; then
+	# 	sh /koolshare/ss/stop.sh stop_part
+	# 	sh /koolshare/scripts/ss_prestart.sh
+	# 	sh /koolshare/ss/start.sh start_all
+	# elif [ "2" == "$ss_basic_action" ]; then
+	# 	sh /koolshare/ss/start.sh restart_dns
+	# elif [ "3" == "$ss_basic_action" ]; then
+	# 	sh /koolshare/ss/start.sh restart_wb_list
+	# elif [ "4" == "$ss_basic_action" ]; then
+	# 	sh /koolshare/ss/start.sh restart_addon
+	# fi
+	# dbus set ss_basic_action="1"
 }
 
 disable_ss(){
-	. /koolshare/ss/stop.sh stop_all
+	sh /koolshare/ss/stop.sh stop_all
 	dbus set ss_basic_action="1"
 }
 
-
 # write number into nvram with no commit
 write_numbers(){
-	nvram set update_ipset="$(cat /koolshare/ss/cru/version | sed -n 1p | sed 's/#/\n/g'| sed -n 1p)"
-	nvram set update_chnroute="$(cat /koolshare/ss/cru/version | sed -n 2p | sed 's/#/\n/g'| sed -n 1p)"
-	nvram set update_cdn="$(cat /koolshare/ss/cru/version | sed -n 4p | sed 's/#/\n/g'| sed -n 1p)"
-	nvram set ipset_numbers=$(cat /koolshare/ss/ipset/gfwlist.conf | grep -c ipset)
-	nvram set chnroute_numbers=$(cat /koolshare/ss/redchn/chnroute.txt | grep -c .)
-	nvram set cdn_numbers=$(cat /koolshare/ss/redchn/cdn.txt | grep -c .)
+	nvram set update_ipset="$(cat /koolshare/ss/rules/version | sed -n 1p | sed 's/#/\n/g'| sed -n 1p)"
+	nvram set update_chnroute="$(cat /koolshare/ss/rules/version | sed -n 2p | sed 's/#/\n/g'| sed -n 1p)"
+	nvram set update_cdn="$(cat /koolshare/ss/rules/version | sed -n 4p | sed 's/#/\n/g'| sed -n 1p)"
+	nvram set ipset_numbers=$(cat /koolshare/ss/rules/gfwlist.conf | grep -c ipset)
+	nvram set chnroute_numbers=$(cat /koolshare/ss/rules/chnroute.txt | grep -c .)
+	nvram set cdn_numbers=$(cat /koolshare/ss/rules/cdn.txt | grep -c .)
 }
-
-fire_ss_depend_scripts(){
-	#sh /koolshare/scripts/onssstart.sh
-	dbus fire onssstart
-}
-
-
-# detect ss version after ss service applied.
-detect_ss_version(){
-	ss_basic_version_web1=`curl --connect-timeout 5 -s "$main_url"/version | sed -n 1p`
-	if [ ! -z $ss_basic_version_web1 ];then
-		dbus set ss_basic_version_web=$ss_basic_version_web1
-	else
-		ss_basic_version_web2=`curl --connect-timeout 5 -s "$backup_url"/version | sed -n 1p`
-		if [ ! -z $ss_basic_version_web2 ];then
-			dbus set ss_basic_version_web=$ss_basic_version_web2
-		fi
-	fi
-}
-
 
 set_ulimit(){
-	ulimit -n 8192
+	ulimit -n 16384
 }
-
 
 case $ACTION in
 start)
@@ -283,18 +184,18 @@ start)
 		creat_folder
 		set_ulimit
 		apply_ss
-    		write_numbers
+    	write_numbers
 	else
 		echo ss not enabled
 	fi
 	;;
 stop | kill )
 	disable_ss
-	echo $(date):
-	echo $(date): You have disabled the shadowsocks service
-	echo $(date): See you again!
-	echo $(date):
-	echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
+	echo_date
+	echo_date ä½ å·²ç»æˆåŠŸå…³é—­shadowsocksæœåŠ¡~
+	echo_date See you again!
+	echo_date
+	echo_date =============== æ¢…æ—å›ºä»¶ - shadowsocks by sadoneli\&Xiaobao ===============
 	;;
 restart)
 	#disable_ss
@@ -302,21 +203,18 @@ restart)
 	set_ulimit
 	apply_ss
 	write_numbers
-	echo $(date):
-	echo $(date): Enjoy surfing internet without "Great Fire Wall"!
-	echo $(date):
-	echo $(date): ================= Shell by sadoneli, Web by Xiaobao =====================
-	fire_ss_depend_scripts
+	echo_date
+	echo_date Enjoy surfing internet without "Great Fire Wall"!
+	echo_date
+	echo_date =============== æ¢…æ—å›ºä»¶ - shadowsocks by sadoneli\&Xiaobao ===============
+	dbus fire onssstart
 	dbus set ss_basic_install_status="0"
-	;;
-check)
-	detect_ss_version
 	;;
 update)
 	update_ss
 	;;
 *)
-	echo "Usage: $0 (start|stop|restart|check|kill|reconfigure)"
+	echo "Usage: $0 (start|stop|restart|kill|reconfigure)"
 	exit 1
 	;;
 esac
