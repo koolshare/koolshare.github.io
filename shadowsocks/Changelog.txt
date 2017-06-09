@@ -1,5 +1,12 @@
 Koolshare Asuswrt-Merlin shadowsocks_mips Changelog
 ===========================================
+3.0.1
+   - update	更新ssr-libev到最新，修复udp问题。
+3.0.0
+   - update	大版本更新已经推送，更新后除了游戏模式/V2、Pcap_DNSproxy、KCPTUN功能外，其余和arm机型一致。
+   		支持最新ss，各种新加密方式，混淆等；支持最新ssr各种协议、加密方式、混淆等；支持负载均衡;....
+   		此处不再做过多说明，如果需要查看一些具体更新变化，可以参考arm机型的更新日志：（从2.8.9开始到3.4.9）
+   		https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt
 
 2.8.8
    - fix	fix redchn mode:
