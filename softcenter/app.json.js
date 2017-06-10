@@ -51,6 +51,17 @@
             "version": "0.1.3"
         }, 
         {
+            "build_date": "2017-05-03_19:15:58", 
+            "description": "godaddy ddns！", 
+            "home_url": "Module_gdddns.asp", 
+            "md5": "6d1fce64a66aa830df21abf764456def", 
+            "module": "gdddns", 
+            "name": "gdddns", 
+            "tar_url": "gdddns/gdddns.tar.gz", 
+            "title": "gdddns", 
+            "version": "1.0.0"
+        }, 
+        {
             "build_date": "2016-09-01_17:21:04", 
             "description": "老板，来一斤虚拟内存~", 
             "home_url": "Module_swap.asp", 
@@ -93,7 +104,7 @@
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "382d6e1714018dae9a6017cb0ae23581", 
+    "md5": "408750ee7012d43c91713c195fa19411", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.1.4"
 }
