@@ -71,6 +71,17 @@
             "version": "0.3.6"
         }, 
         {
+            "build_date": "2016-09-27_18:43:33", 
+            "description": "阿里云解析自动更新IP", 
+            "home_url": "Module_aliddns.asp", 
+            "md5": "fc718d993788fe2f2850e485e933e8d2", 
+            "module": "aliddns", 
+            "name": "aliddns", 
+            "tar_url": "aliddns/aliddns.tar.gz", 
+            "title": "aliddns", 
+            "version": "1.0"
+        }, 
+        {
             "build_date": "2017-06-10_01:05:17", 
             "description": "shadowsocks", 
             "home_url": "Main_Ss_Content.asp", 
@@ -82,7 +93,7 @@
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "a91b46276f81fa7cdf8191bbcb7375ce", 
+    "md5": "2bb2a3c6952b8764b191f7ab24eaa351", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.1.4"
 }
