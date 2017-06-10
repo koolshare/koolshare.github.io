@@ -101,10 +101,21 @@
             "tar_url": "shadowsocks/shadowsocks.tar.gz", 
             "title": "shadowsocks", 
             "version": "3.0.1"
+        }, 
+        {
+            "build_date": "2016-11-25_21:35:44", 
+            "description": "来自网络的胃軟系统工具", 
+            "home_url": "Module_kms.asp", 
+            "md5": "be5771db13551ef1b87d4dc77eff3fde", 
+            "module": "kms", 
+            "name": "kms", 
+            "tar_url": "kms/kms.tar.gz", 
+            "title": "系统工具", 
+            "version": "1.4"
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "408750ee7012d43c91713c195fa19411", 
+    "md5": "d6c32838926aa65c2a68e6fa6f99eaa6", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.1.4"
 }
