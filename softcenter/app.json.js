@@ -85,7 +85,7 @@
             "build_date": "2016-09-27_18:43:33", 
             "description": "阿里云解析自动更新IP", 
             "home_url": "Module_aliddns.asp", 
-            "md5": "865e0bd46bc6b7e79605a442dfab3d0e", 
+            "md5": "00c97793e5b7195dd1d1def15f506883", 
             "module": "aliddns", 
             "name": "aliddns", 
             "tar_url": "aliddns/aliddns.tar.gz", 
@@ -115,7 +115,7 @@
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "d6c32838926aa65c2a68e6fa6f99eaa6", 
+    "md5": "8b38a7688484d86c25c21068d9526019", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.1.4"
 }
