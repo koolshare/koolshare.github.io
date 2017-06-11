@@ -2325,7 +2325,8 @@ function write_proc_status(){
 		<div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
 		<div id="loading_block2" style="margin:10px auto;width:95%;"></div>
 		<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;overflow:hidden">
-			<textarea cols="63" rows="21" wrap="on" readonly="readonly" id="log_content3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="border:1px solid #000;width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
+			<textarea cols="63" rows="21" wrap="on" readonly="readonly" id="log_content3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="border:1px solid #000;width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#000;color:#FFFFFF;">
+			</textarea>
 		</div>
 		<div id="ok_button" class="apply_gen" style="background: #000;display: none;">
 			<input id="ok_button1" class="button_gen" type="button" onclick="hideSSLoadingBar()" value="确定">
@@ -2384,7 +2385,8 @@ function write_proc_status(){
 											<div class="user_title">shadowsocks状态检测</div>
 											<div style="margin-left:15px"><i>&nbsp;&nbsp;目前本功能支持ss相关进程状态和iptables表状态检测。</i></div>
 											<div id="user_tr" style="margin: 10px 10px 10px 10px;width:98%;text-align:center;">
-												<textarea cols="63" rows="36" wrap="off" id="proc_status" style="width:97%;padding-left:10px;padding-right:10px;border:0px solid #222;font-family:'Courier New', Courier, mono; font-size:11px;background: transparent;color:#FFFFFF;outline: none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+												<textarea cols="63" rows="36" wrap="off" id="proc_status" style="width:97%;padding-left:10px;padding-right:10px;border:0px solid #222;font-family:'Courier New', Courier, mono; font-size:11px;background: transparent;color:#FFFFFF;outline: none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+												</textarea>
 											</div>
 											<div style="margin-top:5px;padding-bottom:10px;width:100%;text-align:center;">
 												<input class="button_gen" type="button" onclick="close_proc_status();" value="返回主界面">	
@@ -2455,8 +2457,8 @@ function write_proc_status(){
                                     	                <input id="show_btn5" class="show-btn5" style="cursor:pointer" type="button" value="访问控制"/>
                                     	                <input id="show_btn6" class="show-btn6" style="cursor:pointer" type="button" value="附加功能"/>
                                     	                <input id="show_btn7" class="show-btn7" style="cursor:pointer" type="button" value="查看日志"/>
-														<a style="margin-left:10px;" type="button" title="需要FQ才能访问" class="kp_btn" target="_blank" href="https://t.me/joinchat/AAAAAEC7pgV9vPdPcJ4dJw">电报交流</a>
-														<a style="margin-left:10px;" type="button" class="kp_btn" target="_blank" href="https://github.com/onekeyshell/kcptun_for_ss_ssr">一键脚本</a>
+														<a style="margin-left:9px;" type="button" title="需要FQ才能访问" class="kp_btn" target="_blank" href="https://t.me/joinchat/AAAAAEC7pgV9vPdPcJ4dJw">电报交流</a>
+														<a style="margin-left:9px;" type="button" class="kp_btn" target="_blank" href="https://github.com/onekeyshell/kcptun_for_ss_ssr">一键脚本</a>
                                     	            </td>
                                     	        </tr>
 											</table>
@@ -2789,7 +2791,8 @@ function write_proc_status(){
 												<tr id="ss_basic_kcp_parameter_tr" style="display: none;">
 													<th width="35%">KCP参数</th>
 													<td>
-														<textarea style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#576D73;color:#FFFFFF;border:1px solid gray;" id="ss_basic_kcp_parameter" name="ss_basic_kcp_parameter" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" title=""></textarea>
+														<textarea style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#576D73;color:#FFFFFF;border:1px solid gray;" id="ss_basic_kcp_parameter" name="ss_basic_kcp_parameter" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" title="">
+														</textarea>
 													</td>
 												</tr>
 											</table>
@@ -3061,7 +3064,8 @@ baidu.com
 # 例如hosts设置：
 address=/koolshare.cn/2.2.2.2
 # 防DNS劫持设置：
-bogus-nxdomain=220.250.64.18" rows="12" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" id="ss_dnsmasq" name="ss_dnsmasq" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" title=""></textarea>
+bogus-nxdomain=220.250.64.18" rows="12" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" id="ss_dnsmasq" name="ss_dnsmasq" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" title="">
+														</textarea>
 													</td>
 												</tr>
 											</table>
@@ -3079,7 +3083,8 @@ bogus-nxdomain=220.250.64.18" rows="12" style="width:99%; font-family:'Courier N
 														<textarea placeholder="# 填入不需要走代理的外网ip地址，一行一个，格式（IP/CIDR）如下
 2.2.2.2
 3.3.3.3
-4.4.4.4/24" cols="50" rows="7" id="ss_wan_white_ip" name="ss_wan_white_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+4.4.4.4/24" cols="50" rows="7" id="ss_wan_white_ip" name="ss_wan_white_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+														</textarea>
 													</td>
 												</tr>
 												<tr id="ss_wan_white_domain_tr">
@@ -3091,7 +3096,8 @@ bogus-nxdomain=220.250.64.18" rows="12" style="width:99%; font-family:'Courier N
 														<textarea placeholder="# 填入不需要走代理的域名，一行一个，格式如下：
 google.com
 facebook.com
-# 需要清空电脑DNS缓存，才能立即看到效果。" cols="50" rows="7" id="ss_wan_white_domain" name="ss_wan_white_domain" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+# 需要清空电脑DNS缓存，才能立即看到效果。" cols="50" rows="7" id="ss_wan_white_domain" name="ss_wan_white_domain" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+														</textarea>
 													</td>
 												</tr>
 												<tr id="ss_wan_black_ip_tr">
@@ -3103,7 +3109,8 @@ facebook.com
 														<textarea placeholder="# 填入需要强制走代理的外网ip地址，一行一个，格式（IP/CIDR）如下：
 5.5.5.5
 6.6.6.6
-7.7.7.7/8" cols="50" rows="7" id="ss_wan_black_ip" name="ss_wan_black_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+7.7.7.7/8" cols="50" rows="7" id="ss_wan_black_ip" name="ss_wan_black_ip" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+														</textarea>
 													</td>
 												</tr>
 												<tr id="ss_wan_black_domain_tr">
@@ -3115,7 +3122,8 @@ facebook.com
 														<textarea placeholder="# 填入需要强制走代理的域名，一行一个，格式如下：
 baidu.com
 taobao.com
-# 需要清空电脑DNS缓存，才能立即看到效果。" cols="50" rows="7" id="ss_wan_black_domain" name="ss_wan_black_domain" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+# 需要清空电脑DNS缓存，才能立即看到效果。" cols="50" rows="7" id="ss_wan_black_domain" name="ss_wan_black_domain" style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+														</textarea>
 													</td>
 												</tr>
 											</table>
@@ -3214,8 +3222,10 @@ taobao.com
 														</select>
 													</th>
 													<td>
-														<textarea placeholder="填入需要限制客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=3 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_game2_black_lan" name="ss_game2_black_lan" title="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-														<textarea placeholder="填入仅允许的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=3 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_game2_white_lan" name="ss_game2_white_lan" title="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+														<textarea placeholder="填入需要限制客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=3 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_game2_black_lan" name="ss_game2_black_lan" title="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+														</textarea>
+														<textarea placeholder="填入仅允许的客户端IP如:192.168.1.2,192.168.1.3，每个ip之间用英文逗号隔开" rows=3 style="width:99%; font-family:'Courier New', 'Courier', 'mono'; font-size:12px;background:#475A5F;color:#FFFFFF;border:1px solid gray;" id="ss_game2_white_lan" name="ss_game2_white_lan" title="" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+														</textarea>
 													</td>
 												</tr>
 												
@@ -3337,10 +3347,10 @@ taobao.com
 												<tr>
 													<th style="width:20%;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(24)">恢复SS配置（支持ss/ssr的json节点）</a></th>
 													<td>
-														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file">
-														<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif">
+														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file"/>
+														<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif"/>
 														<span id="ss_file_info" style="display:none;">完成</span>
-														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="upload_SS_node();" value="恢复配置">
+														<input type="button" class="ss_btn" style="cursor:pointer;" onclick="upload_SS_node();" value="恢复配置"/>
 													</td>
 												</tr>											
 											</table>
@@ -3348,7 +3358,10 @@ taobao.com
 
 										<!--log_content-->
 										<div id="tablet_7" style="display: none;">
-												<div id="log_content" style="margin-top:-1px;display:none"><textarea cols="63" rows="36" wrap="on" readonly="readonly" id="log_content1" style="width:97%; padding-left:10px; padding-right:10px; border:1px solid #222; font-family:'Courier New', Courier, mono; font-size:11px; background:#475A5F; color:#FFFFFF; outline:none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea></div>
+												<div id="log_content" style="margin-top:-1px;display:none">
+													<textarea cols="63" rows="36" wrap="on" readonly="readonly" id="log_content1" style="width:97%; padding-left:10px; padding-right:10px; border:1px solid #222; font-family:'Courier New', Courier, mono; font-size:11px; background:#475A5F; color:#FFFFFF; outline:none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+													</textarea>
+												</div>
 										</div>		
 
 										<div class="apply_gen" id="loading_icon">

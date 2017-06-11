@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.5.1
+   - fix	修复在X7.5固件下自定义dnsmasq,IP/CIDR白名单,域名白名单,IP/CIDR黑名单,域名黑名单内容在IE浏览器下显示乱码的问题;
+   		该问题是由X7.5固件浏览器兼容性的更改造成的，导致用IE浏览器提交后，ss不正常工作。
+
 3.5.0
    - update	update ss-rlibev to latest: fix UDP host & portl;
    - update	update haproxy to 1.7.5.
