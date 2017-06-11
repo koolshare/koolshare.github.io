@@ -2,7 +2,7 @@
 
 
 MODULE=shadowsocks
-VERSION=3.0.3
+VERSION=3.0.4
 TITLE=shadowsocks
 DESCRIPTION=shadowsocks
 HOME_URL=Main_Ss_Content.asp

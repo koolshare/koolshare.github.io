@@ -93,14 +93,14 @@
             "version": "1.0"
         }, 
         {
-            "build_date": "2017-06-12_00:00:09", 
+            "build_date": "2017-06-12_01:12:52", 
             "description": "shadowsocks", 
             "home_url": "Main_Ss_Content.asp", 
-            "md5": "26933222e34bda8b86ceff72a9840bc9", 
+            "md5": "12530989ad53ce99084ecd4fc88c4c47", 
             "name": "shadowsocks", 
             "tar_url": "shadowsocks/shadowsocks.tar.gz", 
             "title": "shadowsocks", 
-            "version": "3.0.3"
+            "version": "3.0.4"
         }, 
         {
             "build_date": "2016-11-25_21:35:44", 
