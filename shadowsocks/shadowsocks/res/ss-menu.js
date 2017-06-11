@@ -1,3 +1,55 @@
+
+function browser_compatibility1(){
+	//fw versiom
+	var _fw="<% nvram_get("extendno"); %>";
+	fw_version=parseFloat(_fw.split("X")[1]);
+	// chrome
+	var isChrome = navigator.userAgent.search("Chrome") > -1;
+	if(isChrome){
+		var major = navigator.userAgent.match("Chrome\/([0-9]*)\.");    //check for major version
+		var isChrome56 = (parseInt(major[1], 10) >= 56);
+	} else {
+		var isChrome56 = false;
+	}
+	if((isChrome56) && document.getElementById("FormTitle") && fw_version < 7.5){
+		document.getElementById("FormTitle").className = "FormTitle_chrome56";
+		//console.log("fw_version", fw_version);
+	}else if((isChrome56) && document.getElementById("FormTitle") && fw_version >= 7.5){
+		document.getElementById("FormTitle").className = "FormTitle";
+		//console.log("chrome", fw_version);
+	}
+	//firefox
+	var isFirefox = navigator.userAgent.search("Firefox") > -1;
+	if((isFirefox) && document.getElementById("FormTitle") && fw_version < 7.5){
+		document.getElementById("FormTitle").className = "FormTitle_firefox";
+		if(current_url.indexOf("Main_Ss_Content.asp") == 0){
+			document.getElementById("FormTitle").style.marginTop = "-100px"
+			//console.log("firefox -100");
+		}
+
+	}else if((isFirefox) && document.getElementById("FormTitle") && fw_version >= 7.5){
+		document.getElementById("FormTitle").className = "FormTitle_firefox";
+		if(current_url.indexOf("Main_Ss_Content.asp") == 0){
+			document.getElementById("FormTitle").style.marginTop = "0px"		
+			//console.log("firefox 0");
+		}
+
+	}
+}
+
+function menu_hook(title, tab) {
+	browser_compatibility1();
+	var enable_ss = "<% nvram_get("enable_ss"); %>";
+	var enable_soft = "<% nvram_get("enable_soft"); %>";
+	if(enable_ss == "1" && enable_soft == "1"){
+		tabtitle[tabtitle.length -2] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
+		tablink[tablink.length -2] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
+	}else{
+		tabtitle[tabtitle.length -1] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
+		tablink[tablink.length -1] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
+	}
+}
+
 var Base64;
 if (typeof btoa == "Function") {
 	Base64 = {

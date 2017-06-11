@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.5.3
+   - fix	fix layout of load Main_Ss_LoadBlance.asp and Main_SsLocal_Content.asp
+
 3.5.2
    - fix	修复SS访问控制，默认模式有几率变为空值，导致显示双working但是不能翻墙的问题。
    - fix 	修复可能的浏览器兼容问题，导致不显示节点列表的问题。
