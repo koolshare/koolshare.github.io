@@ -49,6 +49,57 @@ function init() {
 	document.form.ss_basic_action.value = 1;
 }
 
+function browser_compatibility1(){
+	//fw versiom
+	var _fw="<% nvram_get("extendno"); %>";
+	fw_version=parseFloat(_fw.split("X")[1]);
+	// chrome
+	var isChrome = navigator.userAgent.search("Chrome") > -1;
+	if(isChrome){
+		var major = navigator.userAgent.match("Chrome\/([0-9]*)\.");    //check for major version
+		var isChrome56 = (parseInt(major[1], 10) >= 56);
+	} else {
+		var isChrome56 = false;
+	}
+	if((isChrome56) && document.getElementById("FormTitle") && fw_version < 7.5){
+		document.getElementById("FormTitle").className = "FormTitle_chrome56";
+		//console.log("fw_version", fw_version);
+	}else if((isChrome56) && document.getElementById("FormTitle") && fw_version >= 7.5){
+		document.getElementById("FormTitle").className = "FormTitle";
+		//console.log("chrome", fw_version);
+	}
+	//firefox
+	var isFirefox = navigator.userAgent.search("Firefox") > -1;
+	if((isFirefox) && document.getElementById("FormTitle") && fw_version < 7.5){
+		document.getElementById("FormTitle").className = "FormTitle_firefox";
+		if(current_url.indexOf("Main_Ss_Content.asp") == 0){
+			document.getElementById("FormTitle").style.marginTop = "-100px"
+			//console.log("firefox -100");
+		}
+
+	}else if((isFirefox) && document.getElementById("FormTitle") && fw_version >= 7.5){
+		document.getElementById("FormTitle").className = "FormTitle_firefox";
+		if(current_url.indexOf("Main_Ss_Content.asp") == 0){
+			document.getElementById("FormTitle").style.marginTop = "0px"		
+			//console.log("firefox 0");
+		}
+
+	}
+}
+
+function menu_hook(title, tab) {
+	browser_compatibility1();
+	var enable_ss = "<% nvram_get("enable_ss"); %>";
+	var enable_soft = "<% nvram_get("enable_soft"); %>";
+	if(enable_ss == "1" && enable_soft == "1"){
+		tabtitle[tabtitle.length -2] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
+		tablink[tablink.length -2] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
+	}else{
+		tabtitle[tabtitle.length -1] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
+		tablink[tablink.length -1] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
+	}
+}
+
 function conf_to_obj(){
 	ssmode = document.form.ss_basic_mode.value;
 	if (ssmode == "2" || ssmode == "3" || ssmode == "4"){
@@ -2183,7 +2234,7 @@ function refresh_acl_html() {
 	} else {
 		code = code + '<td>其它主机</td>';
 	}
-	code = code + '<td>缺省规则</td>';
+	code = code + '<td>默认规则</td>';
 	if (n == 0) {
 		ssmode = document.form.ss_basic_mode.value;
 		if (ssmode == 0) {
@@ -2346,7 +2397,6 @@ function write_proc_status(){
 <input type="hidden" name="action_wait" value="6"/>
 <input type="hidden" name="first_time" value=""/>
 <input type="hidden" name="vpnc_type" value="">
-<input type="hidden" id="ss_ACL_txt" name="ss_ACL_txt" value='<% dbus_get_def("ss_ACL_txt", ""); %>'/>
 <input type="hidden" id="ss_basic_enable" name="ss_basic_enable" value="0" />
 <input type="hidden" id="ss_basic_action" name="ss_basic_action" value="1" />
 <input type="hidden" id="ss_dns_plan_chn" name="ss_dns_plan_chn" value="2" />
@@ -3271,8 +3321,8 @@ taobao.com
 											</table>
 											<div id="ACL_note">
 											<div><i>1&nbsp;&nbsp;默认状态下，所有局域网的主机都会走当前节点的模式（主模式），相当于即不启用局域网访问控制。</i></div>
-											<div><i>2&nbsp;&nbsp;当你添加了主机，并设置缺省规则为不通过SS，则只有添加的主机才会走相应的模式。</i></div>
-											<div><i>3&nbsp;&nbsp;当你添加了主机，并设置缺省规则为当前节点的模式，除了添加的主机才会走相应的模式，未添加的主机会走缺省规则的模式。</i></div>
+											<div><i>2&nbsp;&nbsp;当你添加了主机，并设置默认规则为不通过SS，则只有添加的主机才会走相应的模式。</i></div>
+											<div><i>3&nbsp;&nbsp;当你添加了主机，并设置默认规则为当前节点的模式，除了添加的主机才会走相应的模式，未添加的主机会走默认规则的模式。</i></div>
 											<div><i>4&nbsp;&nbsp;如果使用了KCP协议，或者负载均衡，因为它们不支持udp，所以不能控制单个主机走游戏模式。</i></div>
 											</div>
 										</div>

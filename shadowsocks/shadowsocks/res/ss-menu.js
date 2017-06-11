@@ -1,62 +1,108 @@
-function browser_compatibility1(){
-	//fw versiom
-	var _fw="<% nvram_get("extendno"); %>";
-	fw_version=parseFloat(_fw.split("X")[1]);
-	// chrome
-	var isChrome = navigator.userAgent.search("Chrome") > -1;
-	if(isChrome){
-		var major = navigator.userAgent.match("Chrome\/([0-9]*)\.");    //check for major version
-		var isChrome56 = (parseInt(major[1], 10) >= 56);
-	} else {
-		var isChrome56 = false;
-	}
-	if((isChrome56) && document.getElementById("FormTitle") && fw_version < 7.5){
-		document.getElementById("FormTitle").className = "FormTitle_chrome56";
-		//console.log("fw_version", fw_version);
-	}else if((isChrome56) && document.getElementById("FormTitle") && fw_version >= 7.5){
-		document.getElementById("FormTitle").className = "FormTitle";
-		//console.log("chrome", fw_version);
-	}
-	//firefox
-	var isFirefox = navigator.userAgent.search("Firefox") > -1;
-	if((isFirefox) && document.getElementById("FormTitle") && fw_version < 7.5){
-		document.getElementById("FormTitle").className = "FormTitle_firefox";
-		if(current_url.indexOf("Main_Ss_Content.asp") == 0){
-			document.getElementById("FormTitle").style.marginTop = "-100px"
-			//console.log("firefox -100");
-		}
-
-	}else if((isFirefox) && document.getElementById("FormTitle") && fw_version >= 7.5){
-		document.getElementById("FormTitle").className = "FormTitle_firefox";
-		if(current_url.indexOf("Main_Ss_Content.asp") == 0){
-			document.getElementById("FormTitle").style.marginTop = "0px"		
-			//console.log("firefox 0");
-		}
-
-	}
-}
-
-function menu_hook(title, tab) {
-	browser_compatibility1();
-	var enable_ss = "<% nvram_get("enable_ss"); %>";
-	var enable_soft = "<% nvram_get("enable_soft"); %>";
-	if(enable_ss == "1" && enable_soft == "1"){
-		tabtitle[tabtitle.length -2] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
-		tablink[tablink.length -2] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
-	}else{
-		tabtitle[tabtitle.length -1] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
-		tablink[tablink.length -1] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
-	}
-}
-
 var Base64;
-if(typeof btoa == "Function") {
-   Base64 = {encode:function(e){ return btoa(e); }, decode:function(e){ return atob(e);}};
+if (typeof btoa == "Function") {
+	Base64 = {
+		encode: function(e) {
+			return btoa(e);
+		},
+		decode: function(e) {
+			return atob(e);
+		}
+	};
 } else {
-   Base64 ={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/\r\n/g,"\n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
+	Base64 = {
+		_keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+		encode: function(e) {
+			var t = "";
+			var n, r, i, s, o, u, a;
+			var f = 0;
+			e = Base64._utf8_encode(e);
+			while (f < e.length) {
+				n = e.charCodeAt(f++);
+				r = e.charCodeAt(f++);
+				i = e.charCodeAt(f++);
+				s = n >> 2;
+				o = (n & 3) << 4 | r >> 4;
+				u = (r & 15) << 2 | i >> 6;
+				a = i & 63;
+				if (isNaN(r)) {
+					u = a = 64
+				} else if (isNaN(i)) {
+					a = 64
+				}
+				t = t + this._keyStr.charAt(s) + this._keyStr.charAt(o) + this._keyStr.charAt(u) + this._keyStr.charAt(a)
+			}
+			return t
+		},
+		decode: function(e) {
+			var t = "";
+			var n, r, i;
+			var s, o, u, a;
+			var f = 0;
+			e = e.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+			while (f < e.length) {
+				s = this._keyStr.indexOf(e.charAt(f++));
+				o = this._keyStr.indexOf(e.charAt(f++));
+				u = this._keyStr.indexOf(e.charAt(f++));
+				a = this._keyStr.indexOf(e.charAt(f++));
+				n = s << 2 | o >> 4;
+				r = (o & 15) << 4 | u >> 2;
+				i = (u & 3) << 6 | a;
+				t = t + String.fromCharCode(n);
+				if (u != 64) {
+					t = t + String.fromCharCode(r)
+				}
+				if (a != 64) {
+					t = t + String.fromCharCode(i)
+				}
+			}
+			t = Base64._utf8_decode(t);
+			return t
+		},
+		_utf8_encode: function(e) {
+			e = e.replace(/\r\n/g, "\n");
+			var t = "";
+			for (var n = 0; n < e.length; n++) {
+				var r = e.charCodeAt(n);
+				if (r < 128) {
+					t += String.fromCharCode(r)
+				} else if (r > 127 && r < 2048) {
+					t += String.fromCharCode(r >> 6 | 192);
+					t += String.fromCharCode(r & 63 | 128)
+				} else {
+					t += String.fromCharCode(r >> 12 | 224);
+					t += String.fromCharCode(r >> 6 & 63 | 128);
+					t += String.fromCharCode(r & 63 | 128)
+				}
+			}
+			return t
+		},
+		_utf8_decode: function(e) {
+			var t = "";
+			var n = 0;
+			var r = c1 = c2 = 0;
+			while (n < e.length) {
+				r = e.charCodeAt(n);
+				if (r < 128) {
+					t += String.fromCharCode(r);
+					n++
+				} else if (r > 191 && r < 224) {
+					c2 = e.charCodeAt(n + 1);
+					t += String.fromCharCode((r & 31) << 6 | c2 & 63);
+					n += 2
+				} else {
+					c2 = e.charCodeAt(n + 1);
+					c3 = e.charCodeAt(n + 2);
+					t += String.fromCharCode((r & 15) << 12 | (c2 & 63) << 6 | c3 & 63);
+					n += 3
+				}
+			}
+			return t
+		}
+	}
 }
-String.prototype.replaceAll = function(s1,s2){
-　　return this.replace(new RegExp(s1,"gm"),s2);
+
+String.prototype.replaceAll = function(s1, s2) {　　
+	return this.replace(new RegExp(s1, "gm"), s2);
 }
 
 function showSSLoadingBar(seconds){
@@ -104,14 +150,8 @@ function showSSLoadingBar(seconds){
 	blockmarginTop= winHeight*0.3-140		
 	
 	document.getElementById("loadingBarBlock").style.marginTop = blockmarginTop+"px";
-	// marked by Jerry 2012.11.14 using CSS to decide the margin
 	document.getElementById("loadingBarBlock").style.marginLeft = blockmarginLeft+"px";
 	document.getElementById("loadingBarBlock").style.width = 770+"px";
-
-	
-	/*blockmarginTop = document.documentElement.scrollTop + 200;
-	document.getElementById("loadingBarBlock").style.marginTop = blockmarginTop+"px";*/
-
 	document.getElementById("LoadingBar").style.width = winW+"px";
 	document.getElementById("LoadingBar").style.height = winH+"px";
 	
@@ -161,7 +201,6 @@ function LoadingSSProgress(seconds){
 			}
 		} else if (action == 5){
 			document.getElementById("loading_block3").innerHTML = "shadowsocks插件升级 ..."
-			//document.getElementById("log_content3").rows = 12;
 			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，等待脚本运行完毕后再刷新！</font></li><li><font color='#ffcc00'>升级服务会自动检测最新版本并下载升级...</font></li>");
 		} else if (action == 6){
 			document.getElementById("loading_block3").innerHTML = "shadowsocks规则更新 ..."
@@ -174,34 +213,6 @@ function LoadingSSProgress(seconds){
 			$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，正在清空shadowsocks配置...</font></li>");
 		}
 	}
-	/*
-	y = y + progress;
-	if(typeof(seconds) == "number" && seconds >= 0){
-		if(seconds != 0){
-			//document.getElementById("proceeding_img").style.width = Math.round(y) + "%";
-			//document.getElementById("proceeding_img_text").innerHTML = Math.round(y) + "%";
-	
-			if(document.getElementById("loading_block1")){
-				document.getElementById("proceeding_img_text").style.width = document.getElementById("loading_block1").clientWidth;
-				document.getElementById("proceeding_img_text").style.marginLeft = "175px";
-			}
-			--seconds;
-			setTimeout("LoadingSSProgress("+seconds+");", 1000);
-		}
-		else{
-			document.getElementById("proceeding_img_text").innerHTML = "完成";
-			y = 0;
-				setTimeout("hideSSLoadingBar();",1000);
-				//refreshpage()
-				htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
-				htmlbodyforIE[0].style.overflow = "visible";	  //hidden the Y-scrollbar for preventing from user scroll it.
-				line_show();
-				checkss = 0;
-				setTimeout("get_ss_status_data();",6000);
-		}
-	}
-	*/
-
 }
 
 function LoadingLocalProgress(seconds){
@@ -413,6 +424,7 @@ function openssHint(itemNum){
 		statusmenu +="<b><font color='#669900'>优点：</font></b>简单暴力，全部出国；可选仅web浏览走ss，还是全部tcp代理走ss，因为不需要区分国内外流量，因此性能最好。</br>"
 		statusmenu +="<b><font color='#669900'>缺点：</font></b>国内网站全部走ss，迅雷下载和BT全部走SS流量。</span></br></br>"
 		_caption = "模式说明";
+	
 		return overlib(statusmenu, OFFSETX, -860, OFFSETY, -290, LEFT, STICKY, WIDTH, 'width', CAPTION, _caption, CLOSETITLE, '');
 	}
 	else if(itemNum == 2){

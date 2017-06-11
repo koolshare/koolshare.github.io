@@ -246,7 +246,13 @@ lan_acess_control(){
 				[ "$proxy_mode" == "3" ] || [ "$proxy_mode" == "4" ] && \
 				iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") -p udp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
 			done
-			echo_date 加载ACL规则：其余主机模式为：$(get_mode_name $ss_acl_default_mode)
+			
+			if [ -n "ss_acl_default_mode=" ];then
+				echo_date 加载ACL规则：其余主机模式为：$(get_mode_name $ss_acl_default_mode)
+			else
+				echo_date 加载ACL规则：其余主机模式为：$(get_mode_name $ss_basic_mode)
+				dbus set ss_acl_default_mode="$ss_basic_mode"
+			fi
 		else
 			ss_acl_default_mode=$ss_basic_mode
 			echo_date 加载ACL规则：所有模式为：$(get_mode_name $ss_basic_mode)

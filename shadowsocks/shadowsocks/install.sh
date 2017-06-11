@@ -124,7 +124,8 @@ echo_date 设置一些默认值
 [ -z "$ss_dns_china" ] && dbus set ss_dns_china=11
 [ -z "$ss_dns_foreign" ] && dbus set ss_dns_foreign=1
 [ -z "$ss_basic_ss_obfs" ] && dbus set ss_basic_ss_obfs=0
-[ -z "$ss_acl_default_mode" ] && dbus set ss_acl_default_mode="$ss_basic_mode"
+[ -z "$ss_acl_default_mode" ] && [ -n "$ss_basic_mode" ] && dbus set ss_acl_default_mode="$ss_basic_mode"
+[ -z "$ss_acl_default_mode" ] && [ -z "$ss_basic_mode" ] && dbus set ss_acl_default_mode=1
 [ -z "$ss_acl_default_port" ] && dbus set ss_acl_default_port=all
 [ -z "$ss_dns_plan" ] && dbus set ss_dns_china=1
 [ -z "$ss_dns_plan_chn" ] && dbus set ss_dns_china=2
