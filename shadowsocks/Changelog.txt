@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.5.4
+   - fix	游戏模式V2回滚为和ss插件3.1.5版本一样的体验（iptables，后台脚本，访问控制等），现在游戏模式V2的流量在iptables中会少转发一次；
+   - fix	修复游戏模式V2局域网控制黑白名单为空时所有客户端都不走koolgame的bug；
+   - update 	同步最新gfwlist.conf chnroute.txt cdn.txt。
+
 3.5.3
    - fix	fix layout of load Main_Ss_LoadBlance.asp and Main_SsLocal_Content.asp
 

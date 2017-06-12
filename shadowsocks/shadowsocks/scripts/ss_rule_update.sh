@@ -9,7 +9,7 @@ version_gfwlist1=$(cat /koolshare/ss/rules/version | sed -n 1p | sed 's/ /\n/g'|
 version_chnroute1=$(cat /koolshare/ss/rules/version | sed -n 2p | sed 's/ /\n/g'| sed -n 1p)
 version_cdn1=$(cat /koolshare/ss/rules/version | sed -n 4p | sed 's/ /\n/g'| sed -n 1p)
 
-echo =======================================================================================================
+echo ====================================================================================================
 echo_date 开始更新shadowsocks规则，请等待...
 wget --no-check-certificate --timeout=8 -qO - https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/maintain_files/version1 > /tmp/version1
 if [ "$?" == "0" ]; then
@@ -140,6 +140,6 @@ echo_date 自动重启shadowsocks，以应用新的规则文件！请稍后！
 dbus set ss_basic_action=1
 sh /koolshare/ss/ssconfig.sh restart
 fi
-echo =======================================================================================================
+echo ====================================================================================================
 exit
 

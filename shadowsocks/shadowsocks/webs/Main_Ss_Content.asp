@@ -295,7 +295,7 @@ function update_visibility_main() {
 		$j("#ss_title").html("shadowsocks - 账号信息配置");
 	} else if (ssmode == "4"){
 		$j("#mode_state").html("SS运行状态【游戏模式V2】");
-		$j("#head_illustrate").html("<i>说明：</i>游戏模式V2需要架设自己的游戏模式V2服务器才能使用。&nbsp;&nbsp;<a href='http://koolshare.io/koolgame/latest/' target='_blank'><i><u>服务器端下载</u></i></a>&nbsp;&nbsp;<a style='margin-left: 20px;' href='https://koolshare.cn/thread-38263-1-1.html' target='_blank'><i><u>&nbsp;游戏模式v2服务器一键安装脚本</u></i></a>");
+		$j("#head_illustrate").html("<i>说明：</i>游戏模式V2是koolshare小宝为游戏玩家专门开发的加速软件，并针对udp包专门优化。&nbsp;&nbsp;<a style='margin-left: 20px;' href='https://github.com/clangcn/game-server' target='_blank'><i><u>&nbsp;游戏模式v2服务器一键安装脚本</u></i></a>");
 		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>游戏模式V2 开关</a>");
 		$j("#ss_title").html("游戏模式V2 - 账号信息配置");
 	} else if (ssmode == "5"){
@@ -2431,7 +2431,7 @@ function write_proc_status(){
 										<div class="SimpleNote"  id="head_illustrate"><i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。</div>
 										<div style="margin-top: 0px;text-align: center;font-size: 18px;margin-bottom: 0px;" class="formfontdesc" id="cmdDesc"></div>
 										<!-- this is the popup area for status -->
-										<div id="detail_status"  class="content_status" style="box-shadow: 3px 3px 10px #000;margin-top: 100px;display: none;">
+										<div id="detail_status"  class="content_status" style="box-shadow: 3px 3px 10px #000;margin-top: 0px;display: none;">
 											<div class="user_title">shadowsocks状态检测</div>
 											<div style="margin-left:15px"><i>&nbsp;&nbsp;目前本功能支持ss相关进程状态和iptables表状态检测。</i></div>
 											<div id="user_tr" style="margin: 10px 10px 10px 10px;width:98%;text-align:center;">

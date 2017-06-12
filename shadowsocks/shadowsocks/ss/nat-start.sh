@@ -197,66 +197,70 @@ get_jump_mode(){
 	esac
 }
 
-lan_acess_control(){
-	if [ "$ss_basic_mode" == "4" ];then
-		# lan control
-		black=$(echo $ss_game2_black_lan | base64_decode | sed "s/,/ /g")
-		white=$(echo $ss_game2_white_lan | base64_decode | sed "s/,/ /g")
-		if [ "$ss_game2_lan_control" == "1" ];then
-			if [ ! -z $ss_game2_black_lan ];then
-				echo_date 添加局域网黑名单IP，添加的IP地址将不会走游戏模式V2，其余的走游戏模式V2。
-				for balck_ip in $black
-				do
-					iptables -t nat -A SHADOWSOCKS -p tcp -s $balck_ip -j RETURN
-					iptables -t mangle -A SHADOWSOCKS -p udp -s $balck_ip -j RETURN
-				done
-			else
-				echo_date 你开启了局域网黑名单，但是未填写任何内容，跳过！
-			fi
-			ss_acl_default_mode=$ss_basic_mode
-		elif [ "$ss_game2_lan_control" == "2" ];then
-			if [ ! -z $ss_game2_white_lan ];then
-				echo_date 添加局域网白名单IP，添加的IP地址将会走游戏模式V2，其余的不走游戏模式V2。
-				for white_ip in $white
-				do
-					iptables -t nat -A SHADOWSOCKS -p tcp -s $white_ip -j SHADOWSOCKS_GAM
-					iptables -t mangle -A SHADOWSOCKS -p udp -s $white_ip -j SHADOWSOCKS_GAM
-				done
-			else
-				echo_date 你开启了局域网白名单，但是未填写任何内容，跳过！
-			fi
+gamev2_control(){
+	# lan control
+	black=$(echo $ss_game2_black_lan | base64_decode | sed "s/,/ /g")
+	white=$(echo $ss_game2_white_lan | base64_decode | sed "s/,/ /g")
+	if [ "$ss_game2_lan_control" == "1" ];then
+		if [ ! -z $ss_game2_black_lan ];then
+			echo_date 添加局域网黑名单IP，添加的IP地址将不会走游戏模式V2，其余的走游戏模式V2。
+			for balck_ip in $black
+			do
+				iptables -t nat -A SHADOWSOCKS -p tcp -s $balck_ip -j RETURN
+				iptables -t mangle -A SHADOWSOCKS -p udp -s $balck_ip -j RETURN
+			done
+		else
+			echo_date 你开启了局域网黑名单，但是未填写任何内容，跳过！
+		fi
+		iptables -t nat -A SHADOWSOCKS -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
+		iptables -t mangle -A SHADOWSOCKS -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
+	elif [ "$ss_game2_lan_control" == "2" ];then
+		if [ ! -z $ss_game2_white_lan ];then
+			echo_date 添加局域网白名单IP，添加的IP地址将会走游戏模式V2，其余的不走游戏模式V2。
+			for white_ip in $white
+			do
+				iptables -t nat -A SHADOWSOCKS -p tcp -s $white_ip -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
+				iptables -t mangle -A SHADOWSOCKS -p udp -s $white_ip -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
+			done
 			ss_acl_default_mode=0
-		else 
-			echo_date 局域网控制功能未启用！
-			ss_acl_default_mode=$ss_basic_mode
+		else
+			echo_date 你开启了局域网白名单，但是未填写任何内容，跳过！
+			iptables -t nat -A SHADOWSOCKS -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
+			iptables -t mangle -A SHADOWSOCKS -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
+		fi
+	else 
+		echo_date 局域网控制功能未启用！
+		iptables -t nat -A SHADOWSOCKS -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
+		iptables -t mangle -A SHADOWSOCKS -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
+	fi	
+}
+
+lan_acess_control(){
+	# lan access control
+	acl_nu=`dbus list ss_acl_mode|sed 1d|sort -n -t "=" -k 2|cut -d "=" -f 1 | cut -d "_" -f 4`
+	if [ -n "$acl_nu" ]; then
+		for acl in $acl_nu
+		do
+			ipaddr=`dbus get ss_acl_ip_$acl`
+			ports=`dbus get ss_acl_port_$acl`
+			[ "$ports" == "all" ] && ports=""
+			proxy_mode=`dbus get ss_acl_mode_$acl`
+			proxy_name=`dbus get ss_acl_name_$acl`
+			[ "$ports" == "" ] && echo_date 加载ACL规则：$ipaddr:all模式为：$(get_mode_name $proxy_mode) || echo_date 加载ACL规则：$ipaddr:$ports模式为：$(get_mode_name $proxy_mode)
+			iptables -t nat -A SHADOWSOCKS $(factor $ipaddr "-s") -p tcp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
+			[ "$proxy_mode" == "3" ] || [ "$proxy_mode" == "4" ] && \
+			iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") -p udp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
+		done
+		
+		if [ -n "ss_acl_default_mode=" ];then
+			echo_date 加载ACL规则：其余主机模式为：$(get_mode_name $ss_acl_default_mode)
+		else
+			echo_date 加载ACL规则：其余主机模式为：$(get_mode_name $ss_basic_mode)
+			dbus set ss_acl_default_mode="$ss_basic_mode"
 		fi
 	else
-		# lan access control
-		acl_nu=`dbus list ss_acl_mode|sed 1d|sort -n -t "=" -k 2|cut -d "=" -f 1 | cut -d "_" -f 4`
-		if [ -n "$acl_nu" ]; then
-			for acl in $acl_nu
-			do
-				ipaddr=`dbus get ss_acl_ip_$acl`
-				ports=`dbus get ss_acl_port_$acl`
-				[ "$ports" == "all" ] && ports=""
-				proxy_mode=`dbus get ss_acl_mode_$acl`
-				proxy_name=`dbus get ss_acl_name_$acl`
-				[ "$ports" == "" ] && echo_date 加载ACL规则：$ipaddr:all模式为：$(get_mode_name $proxy_mode) || echo_date 加载ACL规则：$ipaddr:$ports模式为：$(get_mode_name $proxy_mode)
-				iptables -t nat -A SHADOWSOCKS $(factor $ipaddr "-s") -p tcp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
-				[ "$proxy_mode" == "3" ] || [ "$proxy_mode" == "4" ] && \
-				iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") -p udp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
-			done
-			
-			if [ -n "ss_acl_default_mode=" ];then
-				echo_date 加载ACL规则：其余主机模式为：$(get_mode_name $ss_acl_default_mode)
-			else
-				echo_date 加载ACL规则：其余主机模式为：$(get_mode_name $ss_basic_mode)
-				dbus set ss_acl_default_mode="$ss_basic_mode"
-			fi
-		else
-			ss_acl_default_mode=$ss_basic_mode
-			echo_date 加载ACL规则：所有模式为：$(get_mode_name $ss_basic_mode)
-		fi
+		ss_acl_default_mode=$ss_basic_mode
+		echo_date 加载ACL规则：所有模式为：$(get_mode_name $ss_basic_mode)
 	fi
 }
 
@@ -269,37 +273,37 @@ apply_nat_rules(){
 	iptables -t nat -A SHADOWSOCKS -p tcp -m set --match-set white_list dst -j RETURN
 	#-----------------------FOR GLOABLE---------------------
 	# 创建gfwlist模式nat rule
-	iptables -t nat -N SHADOWSOCKS_GLO
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -N SHADOWSOCKS_GLO
 	# IP黑名单控制-gfwlist（走ss）
-	iptables -t nat -A SHADOWSOCKS_GLO -p tcp -j REDIRECT --to-ports 3333
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_GLO -p tcp -j REDIRECT --to-ports 3333
 	#-----------------------FOR GFWLIST---------------------
 	# 创建gfwlist模式nat rule
-	iptables -t nat -N SHADOWSOCKS_GFW
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -N SHADOWSOCKS_GFW
 	# IP/CIDR/黑域名 黑名单控制（走ss）
-	iptables -t nat -A SHADOWSOCKS_GFW -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_GFW -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
 	# IP黑名单控制-gfwlist（走ss）
-	iptables -t nat -A SHADOWSOCKS_GFW -p tcp -m set --match-set gfwlist dst -j REDIRECT --to-ports 3333
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_GFW -p tcp -m set --match-set gfwlist dst -j REDIRECT --to-ports 3333
 	#-----------------------FOR CHNMODE---------------------
 	# 创建大陆白名单模式nat rule
-	iptables -t nat -N SHADOWSOCKS_CHN
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -N SHADOWSOCKS_CHN
 	# IP/CIDR/域名 黑名单控制（走ss）
-	iptables -t nat -A SHADOWSOCKS_CHN -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_CHN -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
 	# cidr黑名单控制-chnroute（走ss）
-	iptables -t nat -A SHADOWSOCKS_CHN -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_CHN -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
 	#-----------------------FOR GAMEMODE---------------------
 	# 创建游戏模式nat rule
-	iptables -t nat -N SHADOWSOCKS_GAM
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -N SHADOWSOCKS_GAM
 	# IP/CIDR/域名 黑名单控制（走ss）
-	iptables -t nat -A SHADOWSOCKS_GAM -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_GAM -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
 	# cidr黑名单控制-chnroute（走ss）
-	iptables -t nat -A SHADOWSOCKS_GAM -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_GAM -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
 	#-----------------------FOR HOMEMODE---------------------
 	# 创建回国模式nat rule
-	iptables -t nat -N SHADOWSOCKS_HOM
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -N SHADOWSOCKS_HOM
 	# IP/CIDR/域名 黑名单控制（走ss）
-	iptables -t nat -A SHADOWSOCKS_HOM -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_HOM -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
 	# cidr黑名单控制-chnroute（走ss）
-	iptables -t nat -A SHADOWSOCKS_HOM -p tcp -m set --match-set chnroute dst -j REDIRECT --to-ports 3333
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_HOM -p tcp -m set --match-set chnroute dst -j REDIRECT --to-ports 3333
 
 	[ "$mangle" == "1" ] && load_tproxy
 	[ "$mangle" == "1" ] && /usr/sbin/ip rule add fwmark 0x01/0x01 table 310 pref 789
@@ -309,24 +313,24 @@ apply_nat_rules(){
 	# IP/cidr/白域名 白名单控制（不走ss）
 	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS -p udp -m set --match-set white_list dst -j RETURN
 	# 创建游戏模式udp rule
-	[ "$mangle" == "1" ] && iptables -t mangle -N SHADOWSOCKS_GAM
+	[ "$mangle" == "1" ] && [ "$ss_basic_mode" == "3" ] && iptables -t mangle -N SHADOWSOCKS_GAM
 	# IP/CIDR/域名 黑名单控制（走ss）
-	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set --match-set black_list dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
+	[ "$mangle" == "1" ] && [ "$ss_basic_mode" == "3" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set --match-set black_list dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
 	# cidr黑名单控制-chnroute（走ss）
-	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
+	[ "$mangle" == "1" ] && [ "$ss_basic_mode" == "3" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
 	#-----------------------FOR ROUTER---------------------
 	# router itself
 	[ "$ss_basic_mode" != "6" ] && iptables -t nat -A OUTPUT -p tcp -m set --match-set router dst -j REDIRECT --to-ports 3333
 	#-------------------------------------------------------
 	# 局域网黑名单（不走ss）/局域网黑名单（走ss）
-	lan_acess_control
+	[ "$ss_basic_mode" != "4" ] && lan_acess_control || gamev2_control
 	# 把最后剩余流量重定向到相应模式的nat表中对对应的主模式的链
 	[ "$ss_acl_default_port" == "all" ] && ss_acl_default_port=""
-	iptables -t nat -A SHADOWSOCKS -p tcp $(factor $ss_acl_default_port "-m multiport --dport") -j $(get_action_chain $ss_acl_default_mode)
+	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS -p tcp $(factor $ss_acl_default_port "-m multiport --dport") -j $(get_action_chain $ss_acl_default_mode)
 	# 如果是主模式游戏模式，则把SHADOWSOCKS链中剩余udp流量转发给SHADOWSOCKS_GAM链
 	# 如果主模式不是游戏模式，则不需要把SHADOWSOCKS链中剩余udp流量转发给SHADOWSOCKS_GAM，不然会造成其他模式主机的udp也走游戏模式
 	[ "$mangle" == "1" ] && ss_acl_default_mode=3
-	[ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && iptables -t mangle -A SHADOWSOCKS -p udp -j $(get_action_chain $ss_acl_default_mode)
+	[ "$ss_basic_mode" == "3" ] && iptables -t mangle -A SHADOWSOCKS -p udp -j $(get_action_chain $ss_acl_default_mode)
 	# 重定所有流量到 SHADOWSOCKS
 	iptables -t nat -I PREROUTING 1 -p tcp -j SHADOWSOCKS
 	[ "$mangle" == "1" ] && iptables -t mangle -I PREROUTING 1 -p udp -j SHADOWSOCKS
