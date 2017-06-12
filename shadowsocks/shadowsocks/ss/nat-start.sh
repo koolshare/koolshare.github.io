@@ -313,11 +313,11 @@ apply_nat_rules(){
 	# IP/cidr/白域名 白名单控制（不走ss）
 	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS -p udp -m set --match-set white_list dst -j RETURN
 	# 创建游戏模式udp rule
-	[ "$mangle" == "1" ] && [ "$ss_basic_mode" == "3" ] && iptables -t mangle -N SHADOWSOCKS_GAM
+	[ "$mangle" == "1" ] && iptables -t mangle -N SHADOWSOCKS_GAM
 	# IP/CIDR/域名 黑名单控制（走ss）
-	[ "$mangle" == "1" ] && [ "$ss_basic_mode" == "3" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set --match-set black_list dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
+	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set --match-set black_list dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
 	# cidr黑名单控制-chnroute（走ss）
-	[ "$mangle" == "1" ] && [ "$ss_basic_mode" == "3" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
+	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01/0x01
 	#-----------------------FOR ROUTER---------------------
 	# router itself
 	[ "$ss_basic_mode" != "6" ] && iptables -t nat -A OUTPUT -p tcp -m set --match-set router dst -j REDIRECT --to-ports 3333
