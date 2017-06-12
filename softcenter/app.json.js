@@ -21,16 +21,6 @@
             "version": "1.6"
         }, 
         {
-            "build_date": "2016-04-27_23:31:52", 
-            "description": "让测速更简单", 
-            "home_url": "Module_speedtest.asp", 
-            "md5": "5a072a57af3b9bb1343a241a44278dd2", 
-            "name": "speedtest", 
-            "tar_url": "speedtest/speedtest.tar.gz", 
-            "title": "网络测速", 
-            "version": "0.2.2"
-        }, 
-        {
             "build_date": "2016-11-25_21:41:36", 
             "description": "SVPN让游戏更畅快", 
             "home_url": "Module_shadowvpn.asp", 
@@ -132,7 +122,7 @@
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "cf5f8fe6ec69d7db38557979e6184baa", 
+    "md5": "04b7ccbe4db7b9abb000bb0478b1a4db", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.3.2"
 }
