@@ -41,14 +41,14 @@
             "version": "0.1.6"
         }, 
         {
-            "build_date": "2016-10-05_16:51:29", 
+            "build_date": "2017-06-23_15:33:30", 
             "description": "超强的SSH网页客户端，webshell替代品~", 
             "home_url": "Module_shellinabox.asp", 
-            "md5": "9597d03693b8bf8ee7e6d3d565eed5a5", 
+            "md5": "5d42a45489e4565130b7471685abd381", 
             "name": "shellinabox", 
             "tar_url": "shellinabox/shellinabox.tar.gz", 
             "title": "shellinabox", 
-            "version": "1.4"
+            "version": "1.5"
         }, 
         {
             "description": "穿透 DDNS, 服务器转发方式", 
