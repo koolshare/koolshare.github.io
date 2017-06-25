@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/js/jquery.js"></script>
 <script language="javascript">
 var current_url = window.location.href;
 //console.log(current_url.indexOf("ddns.to"));
