@@ -102,7 +102,6 @@ input[type=button]:focus {
 
 </style>
 <script>
-var socks5 = 1
 var $j = jQuery.noConflict();
 var $G = function (id) {
 return document.getElementById(id);
@@ -260,12 +259,12 @@ function showSSLoadingBar(seconds){
 
 function LoadingLocalProgress(seconds){
 	document.getElementById("LoadingBar").style.visibility = "visible";
-	if (document.form.ddnsto_enable == 1){
-		document.getElementById("loading_block3").innerHTML = "ddnsto启用中 ..."
-	}else{
+	if (document.form.ddnsto_enable.value != "1"){
 		document.getElementById("loading_block3").innerHTML = "ddnsto关闭中 ..."
+	}else{
+		document.getElementById("loading_block3").innerHTML = "ddnsto启用中 ..."
 	}
-	//$j("#loading_block2").html("<li><font color='#ffcc00'>此期间请勿访问屏蔽网址，以免污染DNS进入缓存</font></li><li><font color='#ffcc00'>此模式非科学上网方式，会影响国内网页速度...</font></li><li><font color='#ffcc00'>注意：全局模式并非VPN，只支持TCP流量转发...</font></li>");
+
 	y = y + progress;
 	if(typeof(seconds) == "number" && seconds >= 0){
 		if(seconds != 0){

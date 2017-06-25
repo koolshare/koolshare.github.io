@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=ddnsto
-VERSION=1.1
+VERSION=1.2
 TITLE="ddnsto内网穿透"
 DESCRIPTION="ddnsto：koolshare小宝开发的基于http2的快速穿透。"
 HOME_URL="Module_ddnsto.asp"
