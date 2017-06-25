@@ -21,6 +21,16 @@
             "version": "1.6"
         }, 
         {
+            "build_date": "2017-06-25_17:00:33", 
+            "description": "ddnsto：koolshare小宝开发的基于http2的快速穿透。", 
+            "home_url": "Module_ddnsto.asp", 
+            "md5": "581bc8dbb6a84fe39463398b763f0cee", 
+            "name": "ddnsto", 
+            "tar_url": "ddnsto/ddnsto.tar.gz", 
+            "title": "ddnsto内网穿透", 
+            "version": "1.0.0"
+        }, 
+        {
             "build_date": "2016-11-25_21:41:36", 
             "description": "SVPN让游戏更畅快", 
             "home_url": "Module_shadowvpn.asp", 
