@@ -155,14 +155,14 @@ input[type=button]:focus {
 	table-layout:fixed;
 	width:748px;
 	font-size:12px;
-	font-family:Arial, Helvetica, sans-serif;
+	font-family: Lucida Console;
 	border: 1px solid #000000;
 	border-collapse: collapse;
 }
 .FormTable1 th{
 	table-layout:fixed;
 	overflow:hidden;
-	font-family:Arial, Helvetica, sans-serif;
+	font-family: Lucida Console;
 	background-color:#1F2D35;
 	color:#FFFFFF	;	/*Viz add*/
 	font-weight:normal;
@@ -194,7 +194,7 @@ input[type=button]:focus {
 .SimpleNote { padding:5px 10px;}
 
 #iframe1{
-   font-family: sans-serif;
+   font-family: Lucida Console;
    color: red;
 }
 
@@ -206,7 +206,7 @@ input[type=button]:focus {
 	border-bottom-width:1px; 
 	border-color:#888;	
 	color:#FFFFFF;
-	font-family:'Courier New', Courier, mono;
+	font-family: Lucida Console;
 	font-size:13px;
 }
 .input_option_2{
@@ -214,7 +214,7 @@ input[type=button]:focus {
 	background-color:#475a5f;
 	border: 0px solid #222;
 	color:#FFFFFF;
-	font-family:'Courier New', Courier, mono;
+	font-family: Lucida Console;
 	font-size:13px;
 }
 
@@ -223,7 +223,7 @@ input[type=button]:focus {
 	background-color:#576D73;
 	border: 0px solid #222;
 	color:#FFFFFF;
-	font-family:'Courier New', Courier, mono;
+	font-family: Lucida Console;
 	font-size:13px;
 }
 #ss_basic_kcp_parameter{
@@ -232,7 +232,7 @@ input[type=button]:focus {
     overflow: hidden;
     width: 99%;
     font-size: 13px;
-	font-family:'Courier New', Courier, mono;
+	font-family: Lucida Console;
     height: 25px;
     line-height: 1.5;
     padding:0px;
@@ -277,7 +277,7 @@ input[type=button]:focus {
 	margin-top:-100px;
 	line-height:160%;
 	font-size:12px;
-	font-family:Arial, Verdana, Arial, Helvetica, sans-serif;
+	font-family: Lucida Console;
 	border:1px solid #4D595D;
 	color:white;
 	position:relative;
@@ -319,7 +319,7 @@ input[type=button]:focus {
 	margin-top:-100px;
 	line-height:160%;
 	font-size:12px;
-	font-family:Arial, Verdana, Arial, Helvetica, sans-serif;
+	font-family: Lucida Console;
 	border:1px solid #4D595D;
 	color:white;
 }
@@ -346,4 +346,17 @@ input[type=button]:focus {
     color: #1cfe16;
     font-style: normal;
 	font-weight:normal;
+}
+.input_ss_table{
+	margin-left:2px;
+	padding-left:0.4em;
+	height:21px;
+	width:158.2px;
+	line-height:23px \9;	/*IE*/
+	font-size:13px;
+	font-family: Lucida Console;
+	background-image:none;
+	background-color: #576d73;
+	border:1px solid gray;
+	color:#FFFFFF;
 }

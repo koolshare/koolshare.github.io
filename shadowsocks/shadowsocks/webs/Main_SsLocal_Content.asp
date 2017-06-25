@@ -70,7 +70,7 @@ padding-left: 2px;
 background-color: #EFEFEF;
 color: #FFF;
 font-size: 12px;
-font-family: Arial, Helvetica, sans-serif;
+font-family: Lucida Console;
 text-decoration: none;
 }
 #ClientList_Block_PC div:hover, #ClientList_Block a:hover {

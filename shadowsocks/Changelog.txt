@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.5.6 （尚未推送）
+   - update	更新ss-libev ssr-libev到最新
+   - update 	更新界面字体
+
 3.5.5
    - fix	修复SHADOWSOCKS_GAM链有时候不创建的问题。
 

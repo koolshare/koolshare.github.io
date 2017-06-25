@@ -531,7 +531,7 @@ function count_down_close(){
 			<div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
 			<div id="loading_block2" style="margin:10px auto;width:95%;"></div>
 			<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;">
-			<textarea cols="63" rows="25" wrap="off" readonly="readonly" id="log_content3" style="border:1px solid #000;width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
+			<textarea cols="63" rows="25" wrap="off" readonly="readonly" id="log_content3" style="border:1px solid #000;width:99%; font-family:'Lucida Console'; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
 			</div>
 			<div id="ok_button" class="apply_gen" style="background: #000;display: none;">
 				<input id="ok_button1" class="button_gen" type="button" onclick="hideSSLoadingBar()" value="确定">
@@ -714,7 +714,7 @@ function count_down_close(){
 											</tr>
 										</table>
                                     	<div id="log_content" style="margin-top:10px;display: none;">
-											<textarea cols="63" rows="21" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;"></textarea>
+											<textarea cols="63" rows="21" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Lucida Console'; font-size:11px;background:#475A5F;color:#FFFFFF;"></textarea>
 										</div>
                                     	
 										<div class="apply_gen">
