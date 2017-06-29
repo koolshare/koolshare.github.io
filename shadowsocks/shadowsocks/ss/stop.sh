@@ -68,6 +68,7 @@ restore_nat(){
 	# flush iptables and destory SHADOWSOCKS chain
 	iptables -t nat -D PREROUTING -p tcp -j SHADOWSOCKS >/dev/null 2>&1
 	iptables -t nat -F SHADOWSOCKS > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS > /dev/null 2>&1
+	iptables -t nat -F SHADOWSOCKS_EXT > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS_EXT > /dev/null 2>&1
 	iptables -t nat -F SHADOWSOCKS_GFW > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS_GFW > /dev/null 2>&1
 	iptables -t nat -F SHADOWSOCKS_CHN > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS_CHN > /dev/null 2>&1
 	iptables -t nat -F SHADOWSOCKS_GAM > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS_GAM > /dev/null 2>&1
@@ -77,6 +78,7 @@ restore_nat(){
 	iptables -t mangle -F SHADOWSOCKS >/dev/null 2>&1 && iptables -t mangle -X SHADOWSOCKS >/dev/null 2>&1
 	iptables -t mangle -F SHADOWSOCKS_GAM > /dev/null 2>&1 && iptables -t mangle -X SHADOWSOCKS_GAM > /dev/null 2>&1
 	iptables -t nat -D OUTPUT -p tcp -m set --match-set gfwlist dst -j REDIRECT --to-ports 3333 >/dev/null 2>&1
+	iptables -t nat -F OUTPUT > /dev/null 2>&1
 	iptables -t nat -D PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 	
 	
@@ -88,8 +90,8 @@ restore_nat(){
 	if [ ! -z "ip_rule_exist" ];then
 		until [ "$ip_rule_exist" = 0 ]
 		do 
-			#ip rule del fwmark 0x01/0x01 table 310
-			/usr/sbin/ip rule del fwmark 0x01/0x01 table 310 pref 789
+			#ip rule del fwmark 0x01 table 310
+			/usr/sbin/ip rule del fwmark 0x01 table 310
 			ip_rule_exist=`expr $ip_rule_exist - 1`
 		done
 	fi
