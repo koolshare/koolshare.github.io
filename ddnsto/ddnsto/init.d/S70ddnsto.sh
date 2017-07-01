@@ -1,1 +1,0 @@
-../scripts/ddnsto_config.sh
