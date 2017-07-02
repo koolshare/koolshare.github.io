@@ -1,12 +1,12 @@
 #!/bin/sh
+
+
 eval `dbus export ss`
 lan_ipaddr=$(nvram get lan_ipaddr)
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
 game_on=`dbus list ss_acl_mode|cut -d "=" -f 2 | grep 3`
 [ -n "$game_on" ] || [ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && mangle=1
-KP_NU=`iptables -nvL PREROUTING -t nat |sed 1,2d | sed -n '/KOOLPROXY/='`
 ip_prefix_hex=`nvram get lan_ipaddr | awk -F "." '{printf ("0x%02x", $1)} {printf ("%02x", $2)} {printf ("%02x", $3)} {printf ("00/0xffffff00\n")}'`
-[ "$KP_NU" == "" ] && KP_NU=0
 
 load_tproxy(){
 	MODULES="nf_tproxy_core xt_TPROXY xt_socket xt_comment"
@@ -43,7 +43,7 @@ flush_nat(){
 	iptables -t nat -D PREROUTING -p tcp -j SHADOWSOCKS >/dev/null 2>&1
 	sleep 1
 	iptables -t nat -F SHADOWSOCKS > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS > /dev/null 2>&1
-	iptables -t nat -F SHADOWSOCKS_EXT > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS_EXT > /dev/null 2>&1
+	iptables -t nat -F SHADOWSOCKS_EXT > /dev/null 2>&1
 	iptables -t nat -F SHADOWSOCKS_GFW > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS_GFW > /dev/null 2>&1
 	iptables -t nat -F SHADOWSOCKS_CHN > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS_CHN > /dev/null 2>&1
 	iptables -t nat -F SHADOWSOCKS_GAM > /dev/null 2>&1 && iptables -t nat -X SHADOWSOCKS_GAM > /dev/null 2>&1
@@ -54,6 +54,7 @@ flush_nat(){
 	iptables -t mangle -F SHADOWSOCKS_GAM > /dev/null 2>&1 && iptables -t mangle -X SHADOWSOCKS_GAM > /dev/null 2>&1
 	iptables -t nat -D OUTPUT -p tcp -m set --match-set router dst -j REDIRECT --to-ports 3333 >/dev/null 2>&1
 	iptables -t nat -F OUTPUT > /dev/null 2>&1
+	iptables -t nat -X SHADOWSOCKS_EXT > /dev/null 2>&1
 	iptables -t nat -D PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 }
 
@@ -345,7 +346,9 @@ apply_nat_rules(){
 	[ "$mangle" == "1" ] && ss_acl_default_mode=3
 	[ "$ss_basic_mode" == "3" ] && iptables -t mangle -A SHADOWSOCKS -p udp -j $(get_action_chain $ss_acl_default_mode)
 	# 重定所有流量到 SHADOWSOCKS
-	INSET_NU=`expr $KP_NU + 1`
+	KP_NU=`iptables -nvL PREROUTING -t nat |sed 1,2d | sed -n '/KOOLPROXY/='`
+	[ "$KP_NU" == "" ] && KP_NU=0
+	INSET_NU=`expr "$KP_NU" + 1`
 	iptables -t nat -I PREROUTING "$INSET_NU" -p tcp -j SHADOWSOCKS
 	#iptables -t nat -I PREROUTING 1 -p tcp -j SHADOWSOCKS
 	[ "$mangle" == "1" ] && iptables -t mangle -I PREROUTING 1 -p udp -j SHADOWSOCKS
@@ -367,6 +370,9 @@ chromecast(){
 
 case $1 in
 start_all)
+	SS_CHAIN=`iptables -nvL -t nat | grep SHADOWSOCKS`
+	[ -f "/tmp/ss_nat_locker" ] || [ -n "$SS_CHAIN" ] && exit
+	touch /tmp/ss_nat_locker
 	flush_nat
 	flush_ipset
 	remove_redundant_rule
@@ -375,6 +381,7 @@ start_all)
 	add_white_black_ip
 	apply_nat_rules
 	chromecast
+	rm -rf /tmp/ss_nat_locker
 	;;
 add_new_ip)
 	add_white_black_ip
@@ -384,6 +391,12 @@ start_part_for_addon)
 	flush_nat
 	chromecast
 	apply_nat_rules
+	;;
+stop)
+	flush_nat
+	flush_ipset
+	remove_redundant_rule
+	remove_route_table
 	;;
 *)
 	echo "Usage: $0 (start_all|restart_wb_list)"

@@ -21,16 +21,6 @@
             "version": "1.6"
         }, 
         {
-            "build_date": "2017-06-25_17:26:25", 
-            "description": "ddnsto：koolshare小宝开发的基于http2的快速穿透。", 
-            "home_url": "Module_ddnsto.asp", 
-            "md5": "af9bcdc7174f410f8272553c74d84a82", 
-            "name": "ddnsto", 
-            "tar_url": "ddnsto/ddnsto.tar.gz", 
-            "title": "ddnsto内网穿透", 
-            "version": "1.2"
-        }, 
-        {
             "build_date": "2016-11-25_21:41:36", 
             "description": "SVPN让游戏更畅快", 
             "home_url": "Module_shadowvpn.asp", 
@@ -111,14 +101,14 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2017-06-29_23:26:07", 
+            "build_date": "2017-07-02_17:20:43", 
             "description": "科学上网", 
             "home_url": "Main_Ss_Content.asp", 
-            "md5": "2e5b78761ce0749fcb85f71bdb63bfb9", 
+            "md5": "a96bc5aa0ce4364fda3a7aae237aa27d", 
             "name": "shadowsocks", 
             "tar_url": "shadowsocks/shadowsocks.tar.gz", 
             "title": "shadowsocks", 
-            "version": "3.5.6"
+            "version": "3.5.7"
         }, 
         {
             "build_date": "2016-05-07_01:41:30", 

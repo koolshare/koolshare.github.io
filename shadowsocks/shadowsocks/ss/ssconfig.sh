@@ -207,7 +207,7 @@ restart)
 	echo_date Enjoy surfing internet without "Great Fire Wall"!
 	echo_date
 	echo_date =============== 梅林固件 - shadowsocks by sadoneli\&Xiaobao ===============
-	dbus fire onssstart
+	#dbus fire onssstart
 	dbus set ss_basic_install_status="0"
 	;;
 update)

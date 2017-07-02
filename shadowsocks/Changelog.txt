@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.5.7
+   - fix	修复节点面板字体超出边界的问题；
+   - fix 	修复nat-start在开机时候被触发多次造成nat规则重复；
+   - fix	修复开机启动后在nat PREROUTING内ss在kp之前，造成使用kp后国外过滤失效；
+
 3.5.6
    - update	更新ss-libev ssr-libev到最新;
    - update 	更新界面字体;
