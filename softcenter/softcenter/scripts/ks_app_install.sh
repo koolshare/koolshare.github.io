@@ -239,6 +239,8 @@ case $BIN_NAME in
 start)
 	sh /koolshare/perp/perp.sh stop
 	sh /koolshare/perp/perp.sh start
+	# init install status
+	dbus set softcenter_installing_status=1
 	;;
 update)
 	install_module
