@@ -254,10 +254,14 @@ lan_acess_control(){
 			proxy_mode=`dbus get ss_acl_mode_$acl`
 			proxy_name=`dbus get ss_acl_name_$acl`
 			[ "$ports" == "" ] && echo_date 加载ACL规则：$ipaddr:all模式为：$(get_mode_name $proxy_mode) || echo_date 加载ACL规则：$ipaddr:$ports模式为：$(get_mode_name $proxy_mode)
+			# normal acl
 			iptables -t nat -A SHADOWSOCKS $(factor $ipaddr "-s") -p tcp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
+			# acl in OUTPUT（used by koolproxy）
 			iptables -t nat -A SHADOWSOCKS_EXT -p tcp  $(factor $ports "-m multiport --dport") -m mark --mark "$ipaddr_hex" -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
-			[ "$proxy_mode" == "3" ] || [ "$proxy_mode" == "4" ] && 
-			iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") -p udp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
+			# 当主模式为游戏模式(3)，acl主机为其它模式（!3），则这些主机的udp默认不走ss
+			[ "$ss_basic_mode" == "3" ] && [ "$proxy_mode" != "3" ] && iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") -p udp -j RETURN
+			# acl主机为游戏模式(3)，这些主机的udp走ss
+			[ "$proxy_mode" == "3" ] && iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") -p udp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
 		done
 		
 		if [ -n "ss_acl_default_mode=" ];then
@@ -337,7 +341,7 @@ apply_nat_rules(){
 	[ "$ss_basic_mode" != "6" ] && iptables -t nat -A OUTPUT -p tcp -m set --match-set router dst -j REDIRECT --to-ports 3333
 	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A OUTPUT -p tcp -m mark --mark "$ip_prefix_hex" -j SHADOWSOCKS_EXT
 	
-	# 把最后剩余流量重定向到相应模式的nat表中对对应的主模式的链
+	# 把最后剩余流量重定向到相应模式的nat表中对应的主模式的链
 	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS -p tcp $(factor $ss_acl_default_port "-m multiport --dport") -j $(get_action_chain $ss_acl_default_mode)
 	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_EXT -p tcp $(factor $ss_acl_default_port "-m multiport --dport") -j $(get_action_chain $ss_acl_default_mode)
 	

@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.5.8 （尚未推送）
+   - fix	修复当主模式为游戏模式，acl主机为其它模式时，acl主机udp仍然走ss的bug
+
 3.5.7
    - fix	修复节点面板字体超出边界的问题；
    - fix 	修复nat-start在开机时候被触发多次造成nat规则重复；
