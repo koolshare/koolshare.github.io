@@ -414,6 +414,8 @@ append_white_black_conf(){
 		echo "ipset=/.raw.githubusercontent.com/router" >> /tmp/wblist.conf
 		echo "server=/.adblockplus.org/127.0.0.1#7913" >> /tmp/wblist.conf
 		echo "ipset=/.adblockplus.org/router" >> /tmp/wblist.conf
+		echo "server=/.entware.net/127.0.0.1#7913" >> /tmp/wblist.conf
+		echo "ipset=/.entware.net/router" >> /tmp/wblist.conf
 	fi
 	# append white domain list,not through ss
 	wanwhitedomain=$(echo $ss_wan_white_domain | base64_decode)
