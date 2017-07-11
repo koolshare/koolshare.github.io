@@ -12,9 +12,9 @@ kill `ps | grep ss-local | grep -v "grep" | grep -v "23456"|awk '{print $1}'`  >
 start_socks5(){
 	if [ "$ss_local_obfs_host" != "" ];then
 		if [ "$ss_local_obfs" == "http" ];then
-			ARG_OBFS="obfs=http;obfs-host=$ss_basic_ss_obfs_host"
+			ARG_OBFS="obfs=http;obfs-host=$ss_local_obfs_host"
 		elif [ "$ss_local_obfs" == "tls" ];then
-			ARG_OBFS="obfs=tls;obfs-host=$ss_basic_ss_obfs_host"
+			ARG_OBFS="obfs=tls;obfs-host=$ss_local_obfs_host"
 		else
 			ARG_OBFS=""
 		fi
