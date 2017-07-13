@@ -7,7 +7,7 @@ eval `dbus export ss`
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
 redsocks2=$(ps | grep "redsocks2" | grep -v "grep")
 dnscrypt=$(ps | grep "dnscrypt-proxy" | grep -v "grep")
-sokcs5=$(ps|grep ss-local|grep -vw rss-local|grep -v 23456|cut -d " " -f 1)
+sokcs5=$(ps|grep ss-local|grep -v grep|grep -vw rss-local|grep -v 23456|cut -d " " -f 1)
 ssredir=$(ps | grep "ss-redir" | grep -v "grep" | grep -vw "rss-redir")
 rssredir=$(ps | grep "rss-redir" | grep -v "grep" | grep -vw "ss-redir")
 sstunnel=$(ps | grep "ss-tunnel" | grep -v "grep" | grep -vw "rss-tunnel")
@@ -155,14 +155,14 @@ kill_process(){
 	fi
 	#--------------------------------------------------------------------------
 	# kill ss-local
-	sslocal=`ps | grep ss-local | grep -v "grep" | grep -w "23456" | awk '{print $1}'`
+	sslocal=`ps | grep -w ss-local | grep -v "grep" | grep -w "23456" | awk '{print $1}'`
 	if [ ! -z "$sslocal" ];then 
 		echo_date 关闭ss-local进程:23456端口...
 		kill $sslocal  >/dev/null 2>&1
 	fi
 
 
-	ssrlocal=`ps | grep rss-local | grep -v "grep" | grep -w "23456" | awk '{print $1}'`
+	ssrlocal=`ps | grep -w rss-local | grep -v "grep" | grep -w "23456" | awk '{print $1}'`
 	if [ ! -z "$ssrlocal" ];then 
 		echo_date 关闭ssr-local进程:23456端口...
 		kill $ssrlocal  >/dev/null 2>&1
@@ -221,8 +221,10 @@ kill_process(){
 		echo_date 关闭haproxy进程...
 		killall haproxy >/dev/null 2>&1
 	fi
-
+		
     [ -n "$obfsLocal" ] && echo_date 关闭obfs-local进程... && killall obfs-local >/dev/null 2>&1
+    # incase obfs enabled in socks5 page
+    [ "$ss_local_obfs" != "0" ] && sh /koolshare/ss/socks5/socks5config.sh restart
 }
 
 kill_cron_job(){
@@ -265,20 +267,6 @@ stop_all)
 	kill_cron_job
 	echo_date -------------------------- Shadowsocks已关闭 -----------------------------
 	;;
-#stop_part)
-#	#KCP_basic_action=1 应用DNS设置
-#	echo_date ================ 梅林固件 - shadowsocks by sadoneli\&Xiaobao ==============
-#	echo_date
-#	echo_date ----------------------------- 停止上个SS模式 -----------------------------
-#	restore_conf
-#	remove_conf_and_settings
-#	#bring_up_dnsmasq
-#	restore_nat
-#	destory_ipset
-#	restore_start_file
-#	kill_process
-#	#kill_cron_job
-#	;;
 *)
 	echo "Usage: $0 (stop_all|stop_part)"
 	exit 1
