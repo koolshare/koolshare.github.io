@@ -1,5 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.5.9
+   - update	ss启动脚本start.sh stop.sh nat-start.sh ssconfig.sh全部合并到ssconfig.sh一个脚本；
+   - fix	修复关闭ss可能会关闭socks5的bug；
+   - fix	修复一直以来存在的开机nat规则多次重复加载导致的开机性能问题；
+   说明：有人反馈3.5.8会导致进不去路由器界面，实际上是koolproxy插件的一个bug，请更新koolproxy插件到最新版本以修复此问题。
+
 3.5.8
    - update	更新shadowsocks-libev到3.0.7；
    - fix	修复当主模式为游戏模式，acl主机为其它模式时，acl主机udp仍然走ss的bug；
