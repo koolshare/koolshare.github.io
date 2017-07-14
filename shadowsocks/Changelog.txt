@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.6.0
+   - fix	修复游戏模式下trpoxy加载问题
+   
 3.5.9
    - update	ss启动脚本start.sh stop.sh nat-start.sh ssconfig.sh全部合并到ssconfig.sh一个脚本；
    - fix	修复关闭ss可能会关闭socks5的bug；
