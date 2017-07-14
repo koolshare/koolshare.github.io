@@ -942,7 +942,7 @@ load_tproxy(){
 	
 	for MODULE in $MODULES; do
 		if checkmoduleisloaded; then
-			modules_loaded=$(( i++ )); 
+			modules_loaded=$(( j++ )); 
 		fi
 	done
 	
