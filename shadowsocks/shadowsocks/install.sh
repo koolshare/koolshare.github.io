@@ -41,7 +41,7 @@ fi
 mkdir -p /koolshare/ss
 if [ "$ss_basic_enable" == "1" ];then
 	echo_date 先关闭ss，保证文件更新成功!
-	sh /koolshare/ss/stop.sh stop_all
+	[ -f "/koolshare/ss/stop.sh" ] && sh /koolshare/ss/stop.sh stop_all || sh /koolshare/ss/ssconfig.sh stop
 fi
 
 #升级前先删除无关文件
