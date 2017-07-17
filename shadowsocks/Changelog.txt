@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks_mips Changelog
 ===========================================
+
+shadowsocks merlin 插件于2017年07月17日下架软件中心，就此封版，以后不再更新。
+
+===========================================
 3.0.4
    - fix	fix layout of load Main_Ss_LoadBlance.asp and Main_SsLocal_Content.asp
 
