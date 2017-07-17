@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+
+shadowsocks merlin 插件于2017年07月17日下架软件中心，就此封版，以后不再更新。
+
+===========================================
 3.6.0
    - fix	修复游戏模式下trpoxy加载问题
    
