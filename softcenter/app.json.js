@@ -21,16 +21,6 @@
             "version": "1.6"
         }, 
         {
-            "build_date": "2016-11-25_21:41:36", 
-            "description": "SVPN让游戏更畅快", 
-            "home_url": "Module_shadowvpn.asp", 
-            "md5": "2f156357fb324562eda66410a6b2ad64", 
-            "name": "shadowvpn", 
-            "tar_url": "shadowvpn/shadowvpn.tar.gz", 
-            "title": "Shadowvpn", 
-            "version": "2.9"
-        }, 
-        {
             "build_date": "2017-01-15_19:54:28", 
             "description": "使用Dnspod的ddns服务", 
             "home_url": "Module_ddnspod.asp", 
@@ -101,16 +91,6 @@
             "version": "0.2"
         }, 
         {
-            "build_date": "2017-07-14_11:12:55", 
-            "description": "科学上网", 
-            "home_url": "Main_Ss_Content.asp", 
-            "md5": "820bac3c8cec9cec8fcf9db4ba894a6e", 
-            "name": "shadowsocks", 
-            "tar_url": "shadowsocks/shadowsocks.tar.gz", 
-            "title": "shadowsocks", 
-            "version": "3.6.0"
-        }, 
-        {
             "build_date": "2016-05-07_01:41:30", 
             "description": "点对点建立连接,下载更快", 
             "home_url": "", 
@@ -122,7 +102,7 @@
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "bbbb3a96ac575bef7d04c080a865da70", 
+    "md5": "0f8f59fba4dfbf47062b008f52105bf1", 
     "tar_url": "softcenter/softcenter.tar.gz", 
-    "version": "1.3.3"
+    "version": "1.3.4"
 }

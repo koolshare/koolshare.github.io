@@ -525,48 +525,6 @@ function softceterInitData(data) {
                     result[name] = app;
                 }
             });
-             //shadowsocks 将默认安装在软件中心
-             //刚刷机完成时，软件中心初始化情况下ss需要手动安装，默认安装2.9.1版本ss
-             //安装完毕后，ss显示在已安装面板，并且不能卸载，同时兼容了老的固件和新的固件
-			if(result["shadowsocks"].install == "0"){
-    			$.ajax({
-    			    url: 'https://koolshare.ngrok.wang/shadowsocks/config.json.js',
-    			    type: 'GET',
-    			    dataType: 'jsonp',
-                	    error: function() {
-            			result["shadowsocks"] = {};
-            			result["shadowsocks"].name = "shadowsocks";
-            			result["shadowsocks"].title = "shadowsocks";
-	        		result["shadowsocks"].install = "0";
-	        		result["shadowsocks"].md5 = "8cc2a6f7243a8ecdbef6a6eb91b462cf";
-            			result["shadowsocks"].home_url = "Main_Ss_Content.asp";
-            			result["shadowsocks"].tar_url = "shadowsocks/history/shadowsocks.tar.gz";
-            			result["shadowsocks"].description = "科学上网";
-            			result["shadowsocks"].version = "2.8.9";
-                	    },
-    			    success: function(res) {
-            			result["shadowsocks"] = {};
-            			result["shadowsocks"].name = "shadowsocks";
-            			result["shadowsocks"].title = "shadowsocks";
-	        		result["shadowsocks"].install = "0";
-	        		result["shadowsocks"].md5 = res.md5;
-            			result["shadowsocks"].home_url = "Main_Ss_Content.asp";
-            			result["shadowsocks"].tar_url = "shadowsocks/shadowsocks.tar.gz";
-            			result["shadowsocks"].description = "科学上网";
-            			result["shadowsocks"].version = res.version;
-    			     }
-    			});
-         	}else{
-	        	result["shadowsocks"] = {};
-            	result["shadowsocks"].name = "shadowsocks";
-            	result["shadowsocks"].title = "shadowsocks";
-	        result["shadowsocks"].install = "4";
-	        //result["shadowsocks"].md5 = "8cc2a6f7243a8ecdbef6a6eb91b462cf";
-            	result["shadowsocks"].home_url = "Main_Ss_Content.asp";
-            	result["shadowsocks"].description = "科学上网";
-            	//result["shadowsocks"].version = "2.9.9";
-         	}
-
             //设置默认值和设置icon的路径
             $.map(result, function (item, name) {
                 _setDefault(item, {
