@@ -37,6 +37,7 @@ sh /tmp/shadowsocks/install.sh
 <pre>
 cd /tmp
 wget --no-check-certificate https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks/history/shadowsocks_3.5.8.tar.gz
+mv shadowsocks_3.5.8.tar.gz shadowsocks.tar.gz
 tar -zxvf /tmp/shadowsocks.tar.gz
 chmod +x /tmp/shadowsocks/install.sh
 sh /tmp/shadowsocks/install.sh
