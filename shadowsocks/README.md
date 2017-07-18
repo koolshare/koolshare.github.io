@@ -26,17 +26,18 @@
 ## 如果你更新出现问题，请按照以下方式手动更新：
 <pre>
 cd /tmp
-wget --no-check-certificate --timeout=15 https://raw.githubusercontent.com/koolshare/koolshare.github.io/master/shadowsocks/shadowsocks.tar.gz
+wget --no-check-certificate --timeout=15 https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks/shadowsocks.tar.gz
 tar -zxvf /tmp/shadowsocks.tar.gz
 chmod +x /tmp/shadowsocks/install.sh
 sh /tmp/shadowsocks/install.sh
 </pre>
 
-## 如果你需要更新历史版本，这里以 1.5.0版本为例：(需要更新其它版本，只需要自行更改版本号，所有历史版本存档目录：https://github.com/koolshare/koolshare.github.io/tree/acelan_softcenter_ui/shadowsocks/history)
+## 如果你需要更新历史版本，这里以 3.5.8版本为例：(需要更新其它版本，只需要自行更改版本号，所有历史版本存档目录：https://github.com/koolshare/koolshare.github.io/tree/acelan_softcenter_ui/shadowsocks/history)
 
 <pre>
 cd /tmp
-wget --no-check-certificate https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks/history/shadowsocks_1.5.0.tar.gz
+wget --no-check-certificate https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks/history/shadowsocks_3.5.8.tar.gz
+mv shadowsocks_3.5.8.tar.gz shadowsocks.tar.gz
 tar -zxvf /tmp/shadowsocks.tar.gz
 chmod +x /tmp/shadowsocks/install.sh
 sh /tmp/shadowsocks/install.sh
