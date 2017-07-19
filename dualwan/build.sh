@@ -1,9 +1,9 @@
 #!/bin/sh
 
 MODULE=dualwan
-VERSION=1.7
+VERSION=1.8
 TITLE=策略路由
-DESCRIPTION=让分流更简单,version 1.7
+DESCRIPTION=让分流更简单,version 1.8
 HOME_URL=Module_policy_route.asp
 
 #old_version=`cat version | sed -n 1p`
