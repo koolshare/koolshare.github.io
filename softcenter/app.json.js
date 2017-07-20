@@ -11,14 +11,14 @@
             "version": "1.3"
         }, 
         {
-            "build_date": "2017-07-19_08:53:10", 
+            "build_date": "2017-07-21_00:41:00", 
             "description": "", 
             "home_url": "Module_policy_route.asp", 
-            "md5": "8c5cbfce0a2211988466e2778d3c0c50", 
+            "md5": "f9921e79a85d6348f34c0868d5573c94", 
             "name": "dualwan", 
             "tar_url": "dualwan/dualwan.tar.gz", 
             "title": "策略路由", 
-            "version": "1.8"
+            "version": "1.9"
         }, 
         {
             "build_date": "2017-01-15_19:54:28", 
@@ -59,16 +59,6 @@
             "tar_url": "swap/swap.tar.gz", 
             "title": "虚拟内存", 
             "version": "2.2"
-        }, 
-        {
-            "build_date": "2016-11-22_21:53:42", 
-            "description": "基于kcp协议的udp网络加速", 
-            "home_url": "Module_kcptun.asp", 
-            "md5": "7f103db8cdb9cd8a69a1d871006a6d3a", 
-            "name": "kcptun", 
-            "tar_url": "kcptun/kcptun.tar.gz", 
-            "title": "kcptun", 
-            "version": "2.2.6"
         }, 
         {
             "build_date": "2016-06-20_17:00:29", 
