@@ -169,3 +169,4 @@ updated = work_modules()
 if updated:
     refresh_gmodules()
     os.system("chown -R www:www %s/softcenter/app.json.js" % parent_path)
+    os.system("sh %s/softcenter/build.sh" % parent_path)
