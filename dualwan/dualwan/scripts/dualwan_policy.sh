@@ -18,6 +18,16 @@ ss_mode=`dbus get ss_basic_mode`
 start=$(dbus list __event__onssstart_)
 
 #-------------------------------------------module--------------------------------------------------------
+# detect if the router is arm or mips
+case $(uname -m) in
+  armv7l)
+    MATCH_SET='--match-set'
+    ;;
+  mips)
+    MATCH_SET='--set'
+    ;;
+esac
+
 ss_start(){
 if [ -z "start" ];then
 dbus event onssstart_policy_route /koolshare/scripts/dualwan_policy.sh
@@ -100,23 +110,23 @@ start_policy(){
 [ "$dualwanpolicy_wan2" == "4" ] && operators2_config="$CONFIG/crc.txt"
 [ "$dualwanpolicy_wan2" == "5" ] && operators2_config=$dualwanpolicy_wan2_custom
 if [ "$dualwanpolicy_wan2" == "1" ];then
-	use_wanoperators=$operators2_config
-	sed -e "s/^/-A wanoperators &/g" -e "1 i\-N wanoperators nethash --hashsize 91260" $use_wanoperators | awk '{print $0} END{print "COMMIT"}' | ipset -R
-	iptables -t mangle -A PREROUTING  -m set --match-set wanoperators dst  -j MARK --set-mark 8888
-	iptables -t mangle -A PREROUTING  -m set ! --match-set wanoperators dst -j MARK --set-mark 7777
-	iptables -t mangle -A OUTPUT  -m set --match-set wanoperators dst  -j MARK --set-mark 8888
-	iptables -t mangle -A OUTPUT  -m set ! --match-set wanoperators dst -j MARK --set-mark 7777
+	use_wan2operators=$operators2_config
+	sed -e "s/^/-A wan2operators &/g" -e "1 i\-N wan2operators nethash --hashsize 91260" $use_wan2operators | awk '{print $0} END{print "COMMIT"}' | ipset -R
+	iptables -t mangle -A PREROUTING  -m set $MATCH_SET wan2operators dst  -j MARK --set-mark 8888
+	iptables -t mangle -A PREROUTING  -m set ! $MATCH_SET wan2operators dst -j MARK --set-mark 7777
+	iptables -t mangle -A OUTPUT  -m set $MATCH_SET wan2operators dst  -j MARK --set-mark 8888
+	iptables -t mangle -A OUTPUT  -m set ! $MATCH_SET wan2operators dst -j MARK --set-mark 7777
 else
 	use_wan1operators=$operators1_config
 	sed -e "s/^/-A wan1operators &/g" -e "1 i\-N wan1operators nethash --hashsize 91260" $use_wan1operators | awk '{print $0} END{print "COMMIT"}' | ipset -R
 	use_wan2operators=$operators2_config
-	sed -e "s/^/-A wan2operators &/g" -e "1 i\-N wan2operators nethash --hashsize 4096" $use_wan2operators | awk '{print $0} END{print "COMMIT"}' | ipset -R
-	iptables -t mangle -A PREROUTING -m set --match-set wan1operators dst  -j MARK --set-mark 7777 >/dev/null 2>&1
-	iptables -t mangle -A PREROUTING -m set ! --match-set wan1operators dst -j MARK --set-mark $operators_foreign >/dev/null 2>&1
-	iptables -t mangle -A PREROUTING -m set --match-set wan2operators dst  -j MARK --set-mark 8888 >/dev/null 2>&1
-	iptables -t mangle -A OUTPUT -m set --match-set wan1operators dst  -j MARK --set-mark 7777 >/dev/null 2>&1
-	iptables -t mangle -A OUTPUT -m set ! --match-set wan1operators dst -j MARK --set-mark $operators_foreign >/dev/null 2>&1
-	iptables -t mangle -A OUTPUT -m set --match-set wan2operators dst  -j MARK --set-mark 8888 >/dev/null 2>&1
+	sed -e "s/^/-A wan2operators &/g" -e "1 i\-N wan2operators nethash --hashsize 16384" $use_wan2operators | awk '{print $0} END{print "COMMIT"}' | ipset -R
+	iptables -t mangle -A PREROUTING -m set ! $MATCH_SET wan1operators dst -j MARK --set-mark $operators_foreign >/dev/null 2>&1
+	iptables -t mangle -A PREROUTING -m set $MATCH_SET wan1operators dst  -j MARK --set-mark 7777 >/dev/null 2>&1
+	iptables -t mangle -A PREROUTING -m set $MATCH_SET wan2operators dst  -j MARK --set-mark 8888 >/dev/null 2>&1
+	iptables -t mangle -A OUTPUT -m set ! $MATCH_SET wan1operators dst -j MARK --set-mark $operators_foreign >/dev/null 2>&1
+	iptables -t mangle -A OUTPUT -m set $MATCH_SET wan1operators dst  -j MARK --set-mark 7777 >/dev/null 2>&1
+	iptables -t mangle -A OUTPUT -m set $MATCH_SET wan2operators dst  -j MARK --set-mark 8888 >/dev/null 2>&1
 fi
 if [ ! -z "$shadowsocks_server_ip" ] && [ "$ss_mode" != "0" ];then
 	ip rule add from $shadowsocks_server_ip table $sstable pref 123
@@ -137,7 +147,7 @@ for tun_number in $(ip route | grep "tun" | awk '{print $3}')
 done
 
 #Disable IP Route Cache
-#echo -1 > /proc/sys/net/ipv4/rt_cache_rebuild_count
+echo -1 > /proc/sys/net/ipv4/rt_cache_rebuild_count
 
 #Flush IP Route Cache
 ip route flush cache
