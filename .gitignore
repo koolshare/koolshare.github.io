@@ -1,3 +1,5 @@
 softcenter/to_remove.txt
 tunnel
 .lconfig.json.js
+.htaccess
+.user.ini
