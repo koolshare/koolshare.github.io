@@ -151,7 +151,7 @@ for tun_number in $(ip route | grep "tun" | awk '{print $3}')
 done
 
 #Disable IP Route Cache
-echo -1 > /proc/sys/net/ipv4/rt_cache_rebuild_count
+echo 4 > /proc/sys/net/ipv4/rt_cache_rebuild_count
 
 #Flush IP Route Cache
 ip route flush cache
