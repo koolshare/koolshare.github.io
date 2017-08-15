@@ -103,7 +103,7 @@ EOF
 EOF
    fi
 
-   writenat=$(cat /jffs/scripts/openvpn-event | grep "dualwan_policy")
+   writenat=$(cat /jffs/scripts/openvpn-event | grep "ip_route")
    if [ -z "$writenat" ];then
 	   sed -i '1a sleep 10' /jffs/scripts/openvpn-event
 	   sed -i '2a for tun_number in $(ip route | grep "tun" | awk '"'"'{print $3}'"'"')' /jffs/scripts/openvpn-event
@@ -121,9 +121,10 @@ auto_stop(){
    sed -i '/sleep 10/d' /jffs/scripts/firewall-start >/dev/null 2>&1
    sed -i '/dualwan_policy/d' /jffs/scripts/firewall-start >/dev/null 2>&1
    # clear start up command line in openvpn-event
-   sed -i 'do/d' /jffs/scripts/openvpn-event >/dev/null 2>&1
-   sed -i 'tun_number/d' /jffs/scripts/openvpn-event >/dev/null 2>&1
-   sed -i 'ip_route/d' /jffs/scripts/openvpn-event >/dev/null 2>&1
+   sed -i '/do/d' /jffs/scripts/openvpn-event >/dev/null 2>&1
+   sed -i '/sleep 10/d' /jffs/scripts/openvpn-event >/dev/null 2>&1
+   sed -i '/tun_number/d' /jffs/scripts/openvpn-event >/dev/null 2>&1
+   sed -i '/ip_route/d' /jffs/scripts/openvpn-event >/dev/null 2>&1
    echo $(date): ------------------ Custom operators rule runs stop!------------------  >> /tmp/syslog.log
 }
 
