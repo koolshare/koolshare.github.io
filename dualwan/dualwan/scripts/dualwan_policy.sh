@@ -63,15 +63,16 @@ ipset -X wan2operators >/dev/null 2>&1
 
 for tun_number in $(ip route list table 100 | grep "tun" | awk '{print $3}')
 	do
-		ip_route=$(ip route list table 100 | grep $tun_number)
-		ip route del $ip_route table 100 >/dev/null 2>&1
+        ip_route=$(ip route list table 100 | grep $tun_number)
+        ip route del $ip_route table 100 >/dev/null 2>&1
 done
 for tun_number in $(ip route list table 200 | grep "tun" | awk '{print $3}')
-	do
-		ip_route=$(ip route list table 200 | grep $tun_number)
-		ip route del $ip_route table 200 >/dev/null 2>&1
+        do
+        ip_route=$(ip route list table 200 | grep $tun_number)
+        ip route del $ip_route table 200 >/dev/null 2>&1
 done
 }
+
 auto_start(){
    # creating iptables rules to firewall-start
    if [ ! -d /jffs/scripts ]; then
@@ -86,15 +87,42 @@ EOF
 
    writenat=$(cat /jffs/scripts/firewall-start | grep "dualwan_policy")
    if [ -z "$writenat" ];then
-	   sed -i "1a sleep 10" /jffs/scripts/firewall-start
+	   sed -i '1a sleep 10' /jffs/scripts/firewall-start
 	   sed -i '2a /koolshare/scripts/dualwan_policy.sh' /jffs/scripts/firewall-start
 	   chmod +x /jffs/scripts/firewall-start
    fi
+
+   # creating iptables rules to openvpn-event
+   if [ ! -d /jffs/scripts ]; then
+      mkdir -p /jffs/scripts
+   fi
+
+   if [ ! -f /jffs/scripts/openvpn-event ]; then
+      cat > /jffs/scripts/openvpn-event <<EOF
+#!/bin/sh
+EOF
+   fi
+
+   writenat=$(cat /jffs/scripts/openvpn-event | grep "dualwan_policy")
+   if [ -z "$writenat" ];then
+	   sed -i '3a sleep 10' /jffs/scripts/openvpn-event
+	   sed -i '4a for tun_number in $(ip route | grep "tun" | awk '{print $3}')' /jffs/scripts/openvpn-event
+	   sed -i '5a do' /jffs/scripts/openvpn-event
+	   sed -i '6a ip_route=$(ip route | grep $tun_number)' /jffs/scripts/openvpn-event
+	   sed -i '7a ip route add $ip_route table 100 >/dev/null 2>&1' /jffs/scripts/openvpn-event
+	   sed -i '8a ip route add $ip_route table 200 >/dev/null 2>&1' /jffs/scripts/openvpn-event
+	   sed -i '9a done' /jffs/scripts/openvpn-event
+	   chmod +x /jffs/scripts/openvpn-event
+   fi
 }
+
 auto_stop(){
    # clear start up command line in firewall-start
    sed -i '/sleep 10/d' /jffs/scripts/firewall-start >/dev/null 2>&1
    sed -i '/dualwan_policy/d' /jffs/scripts/firewall-start >/dev/null 2>&1
+   # clear start up command line in openvpn-event
+   sed -i 'do/d' /jffs/scripts/openvpn-event >/dev/null 2>&1
+   sed -i 'ip route/d' /jffs/scripts/openvpn-event >/dev/null 2>&1
    echo $(date): ------------------ Custom operators rule runs stop!------------------  >> /tmp/syslog.log
 }
 start_policy(){
@@ -143,14 +171,9 @@ for tun_number in $(ip route | grep "tun" | awk '{print $3}')
 	do
 		ip_route=$(ip route | grep $tun_number)
 		ip route add $ip_route table 100 >/dev/null 2>&1
-done
-for tun_number in $(ip route | grep "tun" | awk '{print $3}')
-	do
-		ip_route=$(ip route | grep $tun_number)
 		ip route add $ip_route table 200 >/dev/null 2>&1
 done
 
-#Disable IP Route Cache
 echo 4 > /proc/sys/net/ipv4/rt_cache_rebuild_count
 
 #Flush IP Route Cache
