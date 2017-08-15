@@ -105,13 +105,13 @@ EOF
 
    writenat=$(cat /jffs/scripts/openvpn-event | grep "dualwan_policy")
    if [ -z "$writenat" ];then
-	   sed -i '3a sleep 10' /jffs/scripts/openvpn-event
-	   sed -i '4a for tun_number in $(ip route | grep "tun" | awk '{print $3}')' /jffs/scripts/openvpn-event
-	   sed -i '5a do' /jffs/scripts/openvpn-event
-	   sed -i '6a ip_route=$(ip route | grep $tun_number)' /jffs/scripts/openvpn-event
-	   sed -i '7a ip route add $ip_route table 100 >/dev/null 2>&1' /jffs/scripts/openvpn-event
-	   sed -i '8a ip route add $ip_route table 200 >/dev/null 2>&1' /jffs/scripts/openvpn-event
-	   sed -i '9a done' /jffs/scripts/openvpn-event
+	   sed -i '1a sleep 10' /jffs/scripts/openvpn-event
+	   sed -i '2a for tun_number in $(ip route | grep "tun" | awk '{print $3}')' /jffs/scripts/openvpn-event
+	   sed -i '3a do' /jffs/scripts/openvpn-event
+	   sed -i '4a ip_route=$(ip route | grep $tun_number)' /jffs/scripts/openvpn-event
+	   sed -i '5a ip route add $ip_route table 100 >/dev/null 2>&1' /jffs/scripts/openvpn-event
+	   sed -i '6a ip route add $ip_route table 200 >/dev/null 2>&1' /jffs/scripts/openvpn-event
+	   sed -i '7a done' /jffs/scripts/openvpn-event
 	   chmod +x /jffs/scripts/openvpn-event
    fi
 }
