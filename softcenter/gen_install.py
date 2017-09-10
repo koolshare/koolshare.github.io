@@ -31,7 +31,7 @@ def work_paths_by_walk():
             print os.path.join(root,sub)
 
 def work_parent():
-    ignore_paths = frozenset(["maintain_files", "softcenter", "appledns", "v2ray", "speedtest", "shadowsocks", "shadowvpn"])
+    ignore_paths = frozenset(["maintain_files", "softcenter", "shadowsocks"])
     for fname in os.listdir(parent_path):
 
         if fname[0] == "." or fname in ignore_paths:
@@ -92,6 +92,7 @@ if stage == "stage1":
     check_and_cp()
     to_remove.close()
 else:
+    check_and_cp()
     gmodules = None
     with codecs.open(os.path.join(curr_path, "app.template.json.js"), "r", "utf-8") as fg:
         gmodules = json.loads(fg.read())

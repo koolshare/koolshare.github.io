@@ -13,23 +13,6 @@ rm -f ${MODULE}.tar.gz
 rm -f $MODULE/.DS_Store
 rm -f $MODULE/*/.DS_Store
 
-tar -zcvf ${MODULE}.tar.gz $MODULE
-#md5value=`md5sum ${MODULE}.tar.gz|awk -F ' = ' '{print $2}'|sed -n 1p`
-md5value=`md5sum ${MODULE}.tar.gz|tr " " "\n"|sed -n 1p`
-cat > ./version <<EOF
-$VERSION
-$md5value
-EOF
-
-cat > ./config.json.js <<EOF
-{
-"version":"$VERSION",
-"md5":"$md5value"
-}
-EOF
-
-
-cat version
 rm -f ${MODULE}.tar.gz
 tar -zcvf ${MODULE}.tar.gz $MODULE
 md5value=`md5sum ${MODULE}.tar.gz|tr " " "\n"|sed -n 1p`
