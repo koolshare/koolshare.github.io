@@ -199,7 +199,7 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		} else if (field == "ss_basic_rss_protocol") {
-			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" && obj[field] != "auth_aes128_md5" && obj[field] != "auth_aes128_sha1" && obj[field] != "auth_chain_a" ) {
+			if (obj[field] != "origin" && obj[field] != "verify_simple" && obj[field] != "verify_sha1" && obj[field] != "auth_sha1" && obj[field] != "auth_sha1_v2" && obj[field] != "auth_sha1_v4" && obj[field] != "auth_aes128_md5" && obj[field] != "auth_aes128_sha1" && obj[field] != "auth_chain_a" && obj[field] != "auth_chain_b" ) {
 				$j("#ss_basic_rss_protocol").val("origin");
 			} else {
 				$j("#ss_basic_rss_protocol").val(obj.ss_basic_rss_protocol);
@@ -328,7 +328,7 @@ function update_visibility_main() {
 	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode != "4"));
 	showhide("ss_basic_rss_protocol_para_tr", (sur == "1" && ssmode != "4" && document.getElementById("ss_basic_rss_protocol_para").value != ""));
 	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode != "4"));
-	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode != "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple" || document.form.ss_basic_rss_obfs.value == "http_post" ));
+	showhide("ss_basic_ticket_tr", ((sur == "1" && ssmode != "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" ) || document.form.ss_basic_rss_obfs.value == "http_simple" || document.form.ss_basic_rss_obfs.value == "http_post" ));
 	showhide("ss_basic_kcp_port_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
 	showhide("ss_basic_kcp_parameter_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
 	var text = document.getElementById("ss_basic_kcp_parameter");
@@ -2627,6 +2627,7 @@ function write_proc_status(){
 																		<option value="auth_aes128_md5">auth_aes128_md5</option>
 																		<option value="auth_aes128_sha1">auth_aes128_sha1</option>
 																		<option value="auth_chain_a">auth_chain_a</option>
+																		<option value="auth_chain_b">auth_chain_b</option>
 																	</select>
 																</td>
 															</tr>
@@ -2804,6 +2805,7 @@ function write_proc_status(){
 															<option value="auth_aes128_md5">auth_aes128_md5</option>
 															<option value="auth_aes128_sha1">auth_aes128_sha1</option>
 															<option value="auth_chain_a">auth_chain_a</option>
+															<option value="auth_chain_b">auth_chain_b</option>
 														</select>
 														<span id="ss_basic_rss_protocol_alert" style="margin-left:5px;margin-top:-20px;margin-bottom:0px"></span>
 													</td>

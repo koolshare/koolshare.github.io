@@ -4,6 +4,11 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
 shadowsocks merlin 插件于2017年07月17日下架软件中心，就此封版，以后不再更新。
 
 ===========================================
+3.6.1
+   - update	更新shadowsocks-libev到3.1.0；
+   - update	更新simple-obfs 0.0.3, 添加c-ares支持；
+   - update	更新shadowsocksR-libev，支持auth_chain_b协议;
+
 3.6.0
    - fix	修复游戏模式下trpoxy加载问题
    
