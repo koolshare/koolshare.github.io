@@ -25,133 +25,147 @@
 <script type="text/javascript" src="/dbconf?p=dualwanpolicy_&v=<% uptime(); %>"></script>
 <script>
 var $j = jQuery.noConflict();
+
 function init() {
-show_menu();
-buildswitch();
-conf2obj();
-version_show();
-var ss_mode = '<% dbus_get_def("ss_basic_mode", "0"); %>';
-var ss_enable = '<% dbus_get_def("ss_basic_enable", "0"); %>';
-if(ss_enable != '0'){
-	if(ss_mode == '3'){
-		$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式下会和策略路由相冲突，不要同时开启</font></span>");
-	} else if (ss_mode == '4') {
-		$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式V2下会和策略路由相冲突，不要同时开启<</font></span>");
-	} else if (ss_mode == '2') {
-		$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS大陆白名单模式下国外线路默认全部走SS</font></span>");
-	} else if (ss_mode == '5') {
-		$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS全局模式下国内外线路默认全部走SS</font></span>");
-	} else if (ss_mode == '1') {
-		$j("#foreign_line1").html("<span class='software_action'><font color='#ffcc00'>当前gfwlsit模式下，gfwlsit以外的国外线路默认全部此端口</font></span>");
+	show_menu(menu_hook);
+	buildswitch();
+	conf2obj();
+	version_show();
+	var ss_mode = '<% dbus_get_def("ss_basic_mode", "0"); %>';
+	var ss_enable = '<% dbus_get_def("ss_basic_enable", "0"); %>';
+	if (ss_enable != '0') {
+		if (ss_mode == '3') {
+			$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式下会和策略路由相冲突，不要同时开启</font></span>");
+		} else if (ss_mode == '4') {
+			$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS游戏模式V2下会和策略路由相冲突，不要同时开启<</font></span>");
+		} else if (ss_mode == '2') {
+			$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS大陆白名单模式下国外线路默认全部走SS</font></span>");
+		} else if (ss_mode == '5') {
+			$j("#foreign_line").html("<span class='software_action'><font color='#ffcc00'>SS全局模式下国内外线路默认全部走SS</font></span>");
+		} else if (ss_mode == '1') {
+			$j("#foreign_line1").html("<span class='software_action'><font color='#ffcc00'>当前gfwlsit模式下，gfwlsit以外的国外线路默认全部此端口</font></span>");
+		}
+	} else {
+		$j("#ss_line").html("<span class='software_action'><font color='#ffcc00'>不可用，因为SS未启用</font></span>");
 	}
-}else{
-	$j("#ss_line").html("<span class='software_action'><font color='#ffcc00'>不可用，因为SS未启用</font></span>");
+
+	var lb_mode = '<% nvram_get("wans_mode"); %>';
+	if (lb_mode !== "lb") {
+		document.getElementById('Routing_rules_table').style.display = "none";
+		document.getElementById('Routing_rules_table1').style.display = "none";
+		document.getElementById('warn').style.display = "";
+		document.form.dualwanpolicy_enable.value = 0;
+		inputCtrl(document.form.switch, 0);
+		document.form.cmdBtn.disabled = true;
+	}
+	var rrt = document.getElementById("switch");
+	if (document.form.dualwanpolicy_enable.value != "1") {
+		rrt.checked = false;
+		document.getElementById('Routing_rules_table').style.display = "none";
+		document.getElementById('Routing_rules_table1').style.display = "none";
+	} else {
+		rrt.checked = true;
+		document.getElementById('Routing_rules_table').style.display = "";
+		document.getElementById('Routing_rules_table1').style.display = "";
+	}
 }
 
-var lb_mode = '<% nvram_get("wans_mode"); %>';
-if(lb_mode !== "lb"){
-document.getElementById('Routing_rules_table').style.display = "none";
-document.getElementById('Routing_rules_table1').style.display = "none";
-document.getElementById('warn').style.display = "";
-document.form.dualwanpolicy_enable.value = 0;
-inputCtrl(document.form.switch,0);
-document.form.cmdBtn.disabled = true;
+function menu_hook(title, tab) {
+	tabtitle[tabtitle.length -1] = new Array("", "策略路由");
+	tablink[tabtitle.length -1] = new Array("", "Module_policy_route.asp");
 }
-var rrt = document.getElementById("switch");
-if (document.form.dualwanpolicy_enable.value != "1") {
-rrt.checked = false;
-document.getElementById('Routing_rules_table').style.display = "none";
-document.getElementById('Routing_rules_table1').style.display = "none";
-} else {
-rrt.checked = true;
-document.getElementById('Routing_rules_table').style.display = "";
-document.getElementById('Routing_rules_table1').style.display = "";
-}
-}
+
 function done_validating() {
 	return true;
-//refreshpage(5);
+	//refreshpage(5);
 }
-function buildswitch(){
-$j("#switch").click(
-function(){
-if(document.getElementById('switch').checked){
-document.form.dualwanpolicy_enable.value = 1;
-document.getElementById('Routing_rules_table').style.display = "";
-document.getElementById('Routing_rules_table1').style.display = "";
-}else{
-document.form.dualwanpolicy_enable.value = 0;
-document.getElementById('Routing_rules_table').style.display = "none";
-document.getElementById('Routing_rules_table1').style.display = "none";
+
+function buildswitch() {
+	$j("#switch").click(
+		function() {
+			if (document.getElementById('switch').checked) {
+				document.form.dualwanpolicy_enable.value = 1;
+				document.getElementById('Routing_rules_table').style.display = "";
+				document.getElementById('Routing_rules_table1').style.display = "";
+			} else {
+				document.form.dualwanpolicy_enable.value = 0;
+				document.getElementById('Routing_rules_table').style.display = "none";
+				document.getElementById('Routing_rules_table1').style.display = "none";
+			}
+		});
 }
-});
-}
+
 function onSubmitCtrl(o, s) {
-document.form.action_mode.value = s;
-showLoading(3);
-document.form.submit();
+	document.form.action_mode.value = s;
+	showLoading(3);
+	document.form.submit();
 }
-function conf2obj(){
-$j.ajax({
-type: "get",
-url: "dbconf?p=dualwanpolicy_",
-dataType: "script",
-success: function(xhr) {
-var p = "dualwanpolicy_";
-var params = ["wan1", "wan2", "wan_foreign", "wan_ss", "wan1_custom", "wan2_custom"];
-for (var i = 0; i < params.length; i++) {
-        for (var i = 0; i < params.length; i++) {
-			if (typeof db_dualwanpolicy_[p + params[i]] !== "undefined") {
-				$j("#dualwanpolicy_"+params[i]).val(db_dualwanpolicy_[p + params[i]]);
+
+function conf2obj() {
+	$j.ajax({
+		type: "get",
+		url: "dbconf?p=dualwanpolicy_",
+		dataType: "script",
+		success: function(xhr) {
+			var p = "dualwanpolicy_";
+			var params = ["wan1", "wan2", "wan_foreign", "wan_ss", "wan1_custom", "wan2_custom"];
+			for (var i = 0; i < params.length; i++) {
+				for (var i = 0; i < params.length; i++) {
+					if (typeof db_dualwanpolicy_[p + params[i]] !== "undefined") {
+						$j("#dualwanpolicy_" + params[i]).val(db_dualwanpolicy_[p + params[i]]);
+					}
+					update_visibility();
 				}
-            update_visibility();
-        }
-	}
-	}
+			}
+		}
 	});
 }
+
 function update_visibility() {
-showhide("dualwanpolicy_wan1_custom", (document.form.dualwanpolicy_wan1.value == "2"));
-showhide("dualwanpolicy_wan2_custom", (document.form.dualwanpolicy_wan2.value == "5"));
+	showhide("dualwanpolicy_wan1_custom", (document.form.dualwanpolicy_wan1.value == "2"));
+	showhide("dualwanpolicy_wan2_custom", (document.form.dualwanpolicy_wan2.value == "5"));
 }
-function reload_Soft_Center(){
-location.href = "/Main_Soft_center.asp";
+
+function reload_Soft_Center() {
+	location.href = "/Main_Soft_center.asp";
 }
+
 function setIframeSrc() {
-    var s1 = "http://1212.ip138.com/ic.asp";
-    var s2 = "http://x302.rashost.com/ip.php";
-    var s3 = "http://ip111cn.appspot.com/";
-    var iframe1 = document.getElementById('iframe1');
-    var iframe2 = document.getElementById('iframe2');
-    var iframe3 = document.getElementById('iframe3');
-    if ( - 1 == navigator.userAgent.indexOf("MSIE")) {
-        iframe1.src = s1;
-        iframe2.src = s2;
-        iframe3.src = s3;
-    } else {
-        iframe1.location = s1;
-        iframe2.location = s2;
-        iframe3.location = s3;
-    }
+	var s1 = "http://1212.ip138.com/ic.asp";
+	var s2 = "http://x302.rashost.com/ip.php";
+	var s3 = "http://ip111cn.appspot.com/";
+	var iframe1 = document.getElementById('iframe1');
+	var iframe2 = document.getElementById('iframe2');
+	var iframe3 = document.getElementById('iframe3');
+	if (-1 == navigator.userAgent.indexOf("MSIE")) {
+		iframe1.src = s1;
+		iframe2.src = s2;
+		iframe3.src = s3;
+	} else {
+		iframe1.location = s1;
+		iframe2.location = s2;
+		iframe3.location = s3;
+	}
 }
-setTimeout(setIframeSrc, 5000);	
-function version_show(){
+setTimeout(setIframeSrc, 5000);
+
+function version_show() {
 	$j("#dualwan_version_status").html("<i>当前版本：" + db_dualwanpolicy_['dualwan_version']);
-    $j.ajax({
-        url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/dualwan/config.json.js',
-        type: 'GET',
-        success: function(res) {
-            var txt = $j(res.responseText).text();
-            if(typeof(txt) != "undefined" && txt.length > 0) {
-                //console.log(txt);
-                var obj = $j.parseJSON(txt.replace("'", "\""));
-		$j("#dualwan_version_status").html("<i>当前版本：" + obj.version);
-		if(obj.version != db_dualwanpolicy_["dualwan_version"]) {
-			$j("#dualwan_version_status").html("<i>有新版本：" + obj.version);
+	$j.ajax({
+		url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/dualwan/config.json.js',
+		type: 'GET',
+		success: function(res) {
+			var txt = $j(res.responseText).text();
+			if (typeof(txt) != "undefined" && txt.length > 0) {
+				//console.log(txt);
+				var obj = $j.parseJSON(txt.replace("'", "\""));
+				$j("#dualwan_version_status").html("<i>当前版本：" + obj.version);
+				if (obj.version != db_dualwanpolicy_["dualwan_version"]) {
+					$j("#dualwan_version_status").html("<i>有新版本：" + obj.version);
+				}
+			}
 		}
-            }
-        }
-    });
+	});
 }
 </script>
 </head>

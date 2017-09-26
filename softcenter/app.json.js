@@ -1,14 +1,14 @@
 {
     "apps": [
         {
-            "build_date": "2017-09-10_23:57:10", 
+            "build_date": "2017-09-26_09:26:12", 
             "description": "让分流更简单", 
             "home_url": "Module_policy_route.asp", 
-            "md5": "f250a9125b0f957fa8cc24f8d3a9b77b", 
+            "md5": "81539b2317b8f859724a84b400d2117a", 
             "name": "dualwan", 
             "tar_url": "dualwan/dualwan.tar.gz", 
             "title": "策略路由", 
-            "version": "2.0"
+            "version": "2.1"
         }, 
         {
             "build_date": "2017-09-11_00:02:54", 
@@ -19,6 +19,16 @@
             "tar_url": "shellinabox/shellinabox.tar.gz", 
             "title": "shellinabox", 
             "version": "1.7"
+        }, 
+        {
+            "build_date": "2017-09-11_00:03:48", 
+            "description": "让测速更简单", 
+            "home_url": "Module_speedtest.asp", 
+            "md5": "058291eb64c151a7f6201ecf476fae28", 
+            "name": "speedtest", 
+            "tar_url": "speedtest/speedtest.tar.gz", 
+            "title": "网络测速", 
+            "version": "0.2.2"
         }, 
         {
             "build_date": "2017-09-10_23:58:54", 
@@ -61,6 +71,16 @@
             "version": "0.2"
         }, 
         {
+            "build_date": "2017-09-10_23:56:38", 
+            "description": "加速apple服务", 
+            "home_url": "Module_appledns.asp", 
+            "md5": "6c7b670ef9451d3c1cb13e1e47b321ba", 
+            "name": "appledns", 
+            "tar_url": "appledns/appledns.tar.gz", 
+            "title": "AppleDNS", 
+            "version": "0.2"
+        }, 
+        {
             "build_date": "2017-09-10_23:56:45", 
             "description": "使用Dnspod的ddns服务", 
             "home_url": "Module_ddnspod.asp", 
@@ -79,6 +99,16 @@
             "tar_url": "swap/swap.tar.gz", 
             "title": "虚拟内存", 
             "version": "2.2"
+        }, 
+        {
+            "build_date": "2017-09-11_00:02:18", 
+            "description": "SVPN让游戏更畅快", 
+            "home_url": "Module_shadowvpn.asp", 
+            "md5": "327891df7ba6986b1363304af1f52151", 
+            "name": "shadowvpn", 
+            "tar_url": "shadowvpn/shadowvpn.tar.gz", 
+            "title": "Shadowvpn", 
+            "version": "2.9"
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 

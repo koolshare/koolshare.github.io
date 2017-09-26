@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=dualwan
-VERSION=2.0
+VERSION=2.1
 TITLE=策略路由
 DESCRIPTION="让分流更简单"
 HOME_URL=Module_policy_route.asp
