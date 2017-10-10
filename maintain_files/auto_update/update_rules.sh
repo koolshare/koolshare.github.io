@@ -32,7 +32,7 @@ fi
 echo =================
 # ======================================
 # get chnroute for shadowsocks chn and game mode
-wget -O- http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest > apnic.txt
+wget -4 -O- http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest > apnic.txt
 cat apnic.txt| awk -F\| '/CN\|ipv4/ { printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > chnroute1.txt
 
 md5sum3=$(md5sum chnroute1.txt | sed 's/ /\n/g'| sed -n 1p)
@@ -50,7 +50,7 @@ echo =================
 # ======================================
 # get cdn list for shadowsocks chn and game mode
 
-wget https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf
+wget -4 https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf
 
 cat accelerated-domains.china.conf | sed "s/server=\/\.//g" | sed "s/server=\///g" | sed -r "s/\/\S{1,30}//g" | sed -r "s/\/\S{1,30}//g" > cdn_download.txt
 cat cdn_koolshare.txt cdn_download.txt | sort -u > cdn1.txt
