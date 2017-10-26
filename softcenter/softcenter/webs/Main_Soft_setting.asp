@@ -24,43 +24,21 @@
 <script type="text/javascript" src="/dbconf?p=adm_&v=<% uptime(); %>"></script>
 <script type="text/javascript" src="/res/softcenter.js"></script>
 <script language="JavaScript" type="text/javascript" src="/client_function.js"></script>
-
-
 <script>
 function init(menu_hook) {
 	show_menu();
 }
 
 function onSubmitCtrl(o, s) {
-		document.form.action_mode.value = s;
-		showLoading(7);
-		document.form.submit();
+	document.form.action_mode.value = s;
+	showLoading(7);
+	document.form.submit();
 }
-
-function conf2obj(){
-	$j.ajax({
-	type: "get",
-	url: "dbconf?p=adm_",
-	dataType: "script",
-	success: function(xhr) {
-    var p = "adm_";
-        var params = ["user_txt"];
-        for (var i = 0; i < params.length; i++) {
-			if (typeof db_adm_[p + params[i]] !== "undefined") {
-				$j("#adm_"+params[i]).val(db_adm_[p + params[i]]);
-			}
-        }
-	}
-	});
-}
-
 
 function reload_Soft_Center(){
 location.href = "/Main_Soft_center.asp";
 }
 
-var enable_ss = "<% nvram_get("enable_ss"); %>";
-var enable_soft = "<% nvram_get("enable_soft"); %>";
 function menu_hook(title, tab) {
 	tabtitle[tabtitle.length -1] = new Array("", "软件中心", "离线安装");
 	tablink[tablink.length -1] = new Array("", "Main_Soft_center.asp", "Main_Soft_setting.asp");
@@ -84,20 +62,19 @@ function upload_software() {
 	document.form.submit();
 }
 
-
 function upload_ok(isok) {
 	var info = $G('file_info');
 	if(isok==1){
 		info.innerHTML="上传完成";
 		checkCmdRet();
-		setTimeout("start_install();", 1000);
+		setTimeout("start_install();", 100);
+		setTimeout("checkCmdRet();", 600);
 	} else {
 		info.innerHTML="上传失败";
 	}
 	info.style.display = "block";
 	$G('loadingicon').style.display = "none";
 }
-
 
 function start_install() {
 	document.form.action_mode.value = ' Refresh ';
@@ -108,11 +85,9 @@ function start_install() {
 	document.form.submit();
 }
 
-
 var _responseLen;
 var noChange = 0;
 function checkCmdRet(){
-
 	$j.ajax({
 		url: '/cmdRet_check.htm',
 		dataType: 'html',
@@ -124,9 +99,8 @@ function checkCmdRet(){
 			var retArea = $G("log_content1");
 			if(response.search("XU6J03M6") != -1){
 				retArea.value = response.replace("XU6J03M6", " ");
-				//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
 				retArea.scrollTop = retArea.scrollHeight;
-				//return false;
+				return false;
 			}
 			
 			if(_responseLen == response.length){
@@ -135,31 +109,27 @@ function checkCmdRet(){
 				noChange = 0;
 			}
 
-			if(noChange > 20){
-				//retArea.scrollTop = retArea.scrollHeight;
-				//setTimeout("checkCmdRet();", 2000);
+			if(noChange > 50){
 				return false;
 			}else{
-				setTimeout("checkCmdRet();", 500);
+				setTimeout("checkCmdRet();", 200);
 			}
 			
 			retArea.value = response;
-			//retArea.scrollTop = retArea.scrollHeight - retArea.clientHeight;
 			retArea.scrollTop = retArea.scrollHeight;
 			_responseLen = response.length;
 		}
 	});
 }
-
 </script>
 </head>
 <body onload="init();">
 	<div id="TopBanner"></div>
 	<div id="Loading" class="popup_bg"></div>
 	<iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
-	<form method="POST" name="form" action="/applydb.cgi?p=adm_" target="hidden_frame">
-	<input type="hidden" name="current_page" value="Module_adm_.asp"/>
-	<input type="hidden" name="next_page" value="Module_adm_.asp"/>
+	<form method="POST" name="form" action="" target="hidden_frame">
+	<input type="hidden" name="current_page" value="Main_Soft_setting.asp"/>
+	<input type="hidden" name="next_page" value="Main_Soft_setting.asp"/>
 	<input type="hidden" name="group_id" value=""/>
 	<input type="hidden" name="modified" value="0"/>
 	<input type="hidden" name="action_mode" value=""/>
@@ -191,41 +161,25 @@ function checkCmdRet(){
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 										<div class="formfontdesc" style="padding-top:5px;margin-top:0px;float: left;" id="cmdDesc"></div>
 										<div style="padding-top:5px;margin-top:0px;float: left;" id="NoteBox" >
-											<li>此页面功能需要在7.0及其以上的固件才能使用。 </li>
-											<li>通过本页面，你可以上传插件的离线安装包来安装插件； </li>
+											<li>通过本页面，你可以上传插件的离线安装包来安装插件,此功能需要在7.0及以上的固件才能使用; </li>
 											<li>离线安装会自动解压tar.gz后缀的压缩包，识别压缩包一级目录下的install.sh文件并执行； </li>
-											<li>建议开发者将插件版本号，md5等信息在install.sh文件内进行写入； </li>
-											<li>此页面也能用来安装SS离线安装包，方便用户进行回滚操作，上传前需要将历史文件包改名为shadowsocks.tar.gz，建议安装时关闭SS，安装后需要重新提交才能看到安装的版本号； </li>
 										</div>
-																	
 										<div class="formfontdesc" id="cmdDesc"></div>
 										<table style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" id="routing_table">
 											<thead>
-												<tr>
-													<td colspan="2">软件中心 - 高级设置</td>
-												</tr>
+											<tr>
+												<td colspan="2">软件中心 - 高级设置</td>
+											</tr>
 											</thead>
-
-												<tr>
-													<th>安装包版本号</th>
-													<td>
-														<input type="text" maxlength="64" id="soft_install_version" name="soft_install_version" value="" class="input_ss_table" style="width:160px;float:left;" autocomplete="off" autocorrect="off" autocapitalize="off"></input>
-													</td>
-												</tr>
-
-											
-												<tr>
-													<th><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(24)">离线安装插件</a></th>
-													<td>
-														<input type="button" id="upload_btn" class="button_gen" onclick="upload_software();" value="上传并安装">
-
-														<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file">
-														<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif">
-														<span id="file_info" style="display:none;">完成</span>
-													</td>
-												</tr>
-
-										
+											<tr>
+												<th><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(24)">离线安装插件</a></th>
+												<td>
+													<input type="button" id="upload_btn" class="button_gen" onclick="upload_software();" value="上传并安装"/>
+													<input style="color:#FFCC00;*color:#000;width: 200px;" id="ss_file" type="file" name="file"/>
+													<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif">
+													<span id="file_info" style="display:none;">完成</span>
+												</td>
+											</tr>
                                     	</table>
                                     	<div id="log_content" style="margin-top:10px;display: block;">
 											<textarea cols="63" rows="15" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Courier New', Courier, mono; font-size:11px;background:#475A5F;color:#FFFFFF;"></textarea>
@@ -236,7 +190,6 @@ function checkCmdRet(){
 											后台技术支持： <i>Xiaobao</i> <br/>
 											Shell, Web by： <i>Sadoneli</i><br/>
 										</div>
-
 									</td>
 								</tr>
 							</table>
