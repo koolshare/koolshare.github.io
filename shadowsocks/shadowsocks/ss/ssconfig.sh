@@ -406,7 +406,7 @@ creat_ss_json(){
 				    "password":"$ss_basic_password",
 				    "timeout":600,
 				    "protocol":"$ss_basic_rss_protocol",
-				    "protocol_param":"$ss_basic_rss_protocol_para",
+				    "protocol_param":"$ss_basic_rss_protocol_param",
 				    "obfs":"$ss_basic_rss_obfs",
 				    "obfs_param":"$ss_basic_rss_obfs_param",
 				    "method":"$ss_basic_method"
@@ -434,7 +434,7 @@ creat_ss_json(){
 				    "password":"$ss_basic_password",
 				    "timeout":600,
 				    "protocol":"$ss_basic_rss_protocol",
-				    "protocol_param":"$ss_basic_rss_protocol_para",
+				    "protocol_param":"$ss_basic_rss_protocol_param",
 				    "obfs":"$ss_basic_rss_obfs",
 				    "obfs_param":"$ss_basic_rss_obfs_param",
 				    "method":"$ss_basic_method"

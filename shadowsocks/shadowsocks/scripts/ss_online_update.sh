@@ -5,6 +5,16 @@ alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 eval `dbus export ss`
 LOCK_FILE=/tmp/online_update.lock
 
+# 检测版本号
+firmware_version=`nvram get extendno|cut -d "X" -f2|cut -d "-" -f1|cut -d "_" -f1`
+firmware_comp=`versioncmp $firmware_version 7.7`
+if [ "$firmware_comp" == "1" ];then
+	echo_date 订阅功能不支持X7.7以下的固件，当前固件版本$firmware_version，请更新固件！
+	exit 1
+else
+	echo_date 检测到X7.7固件，支持订阅！
+fi
+
 # ==============================
 # ssconf_basic_ping_
 # ssconf_basic_webtest_
@@ -34,7 +44,7 @@ prepare(){
 	touch /tmp/ss_conf.sh
 	chmod +x /tmp/ss_conf.sh
 	echo "#!/bin/sh" >> /tmp/ss_conf.sh
-	valid_nus=`dbus list ssconf_basic_password | cut -d "=" -f1|cut -d "_" -f4|sort -n`
+	valid_nus=`dbus list ssconf_basic_passwo | cut -d "=" -f1|cut -d "_" -f4|sort -n`
 	q=1
 	for nu in $valid_nus
 	do
@@ -74,8 +84,8 @@ prepare(){
 	# -----------------
 	# 3 清除之前提取的干净的ss配置
 	echo_date 检查完毕！节点信息备份在/koolshare/configs/ss_conf.sh
-	cp /tmp/ss_conf.sh /koolshare/configs
-	sh /tmp/ss_conf.sh
+	cat /tmp/ss_conf.sh | sed 's/=/=\"/' | sed 's/$/\"/g' > /koolshare/configs/ss_conf.sh
+	sh /koolshare/configs/ss_conf.sh
 	# ==============================
 }
 
@@ -95,7 +105,7 @@ decode_url_link(){
 }
 
 add_ssr_servers(){
-	ssrindex=$(($(dbus list ssconf_basic_password | cut -d "=" -f1|cut -d "_" -f4|sort -rn|head -n1)+1))
+	ssrindex=$(($(dbus list ssconf_basic_passwo | cut -d "=" -f1|cut -d "_" -f4|sort -rn|head -n1)+1))
 	dbus set ssconf_basic_name_$ssrindex=$remarks
 	[ -z "$1" ] && dbus set ssconf_basic_group_$ssrindex=$group
 	dbus set ssconf_basic_mode_$ssrindex=$ssr_subscribe_mode
@@ -105,6 +115,7 @@ add_ssr_servers(){
 	dbus set ssconf_basic_rss_protocol_param_$ssrindex=$protoparam
 	dbus set ssconf_basic_method_$ssrindex=$encrypt_method
 	dbus set ssconf_basic_rss_obfs_$ssrindex=$obfs
+	[ -n "$1" ] && dbus set ssconf_basic_rss_obfs_param_$ssrindex=$obfsparam
 	dbus set ssconf_basic_password_$ssrindex=$password
 	dbus set ssconf_basic_use_rss_$ssrindex="1"
 	dbus set ssconf_basic_use_rss_$ssrindex="1"
@@ -112,7 +123,7 @@ add_ssr_servers(){
 }
 
 add_ss_servers(){
-	ssindex=$(($(dbus list ssconf_basic_password | cut -d "=" -f1|cut -d "_" -f4|sort -rn|head -n1)+1))
+	ssindex=$(($(dbus list ssconf_basic_passwo | cut -d "=" -f1|cut -d "_" -f4|sort -rn|head -n1)+1))
 	echo_date 添加SS节点：$remarks
 	dbus set ssconf_basic_name_$ssindex=$remarks
 	dbus set ssconf_basic_mode_$ssindex="1"
@@ -152,6 +163,7 @@ get_remote_config(){
 	[ -n "$server" ] && server_md5=`echo $server | md5sum | sed 's/ -//g'`
 	##把全部服务器节点写入文件 /usr/share/shadowsocks/serverconfig/all_onlineservers
 	[ -n "$group" ] && [ -n "$server" ] && echo $server_md5 $group_md5 >> /tmp/all_onlineservers
+	#echo ------
 	#echo $server
 	#echo $server_port
 	#echo $protocol
@@ -162,6 +174,7 @@ get_remote_config(){
 	#echo $protoparam
 	#echo $remarks
 	#echo $group
+	#echo ------
 }
 
 update_config(){
@@ -296,11 +309,19 @@ get_oneline_rule_now(){
 		echo_date "使用常规网络下载..."
 		curl --connect-timeout 8 -s $ssr_subscribe_link > /tmp/ssr_subscribe_file.txt
 	fi
+	#if `grep -q -w '302 Found' /tmp/ssr_subscribe_file.txt`;then
+	#	cd .
+	#	echo 233334
+	#else
+	#	wget -qO /tmp/ssr_subscribe_file.txt $ssr_subscribe_link
+	#	echo 23335
+	#fi
 	if [ "$?" == "0" ];then
 		if [ -z "`cat /tmp/ssr_subscribe_file.txt|grep "{"`" ];then
 			echo_date 下载订阅成功...
 			echo_date 开始解析节点信息...
-			cat /tmp/ssr_subscribe_file.txt | base64 -d > /tmp/ssr_subscribe_file_temp1.txt
+			#cat /tmp/ssr_subscribe_file.txt | base64 -d > /tmp/ssr_subscribe_file_temp1.txt
+			decode_url_link `cat /tmp/ssr_subscribe_file.txt` 0 > /tmp/ssr_subscribe_file_temp1.txt
 			# 检测ss ssr
 			NODE_FORMAT1=`cat /tmp/ssr_subscribe_file_temp1.txt | grep -E "^ss://"`
 			NODE_FORMAT2=`cat /tmp/ssr_subscribe_file_temp1.txt | grep -E "^ssr://"`
@@ -312,11 +333,11 @@ get_oneline_rule_now(){
 				echo_date 检测到ssr节点格式，共计$NODE_NU个节点...
 
 				#判断格式
-				maxnum=$(cat /tmp/ssr_subscribe_file.txt | base64 -d | grep "MAX=" |awk -F"=" '{print $2}')
+				maxnum=$(decode_url_link `cat /tmp/ssr_subscribe_file.txt` 0 | grep "MAX=" |awk -F"=" '{print $2}')
 				if [ -n "$maxnum" ]; then
-					urllinks=$(cat /tmp/ssr_subscribe_file.txt | base64 -d | sed '/MAX=/d' | shuf -n${maxnum} | sed 's/ssr:\/\///g')
+					urllinks=$(decode_url_link `cat /tmp/ssr_subscribe_file.txt` 0 | sed '/MAX=/d' | shuf -n${maxnum} | sed 's/ssr:\/\///g')
 				else
-					urllinks=$(cat /tmp/ssr_subscribe_file.txt | base64 -d | sed 's/ssr:\/\///g')
+					urllinks=$(decode_url_link `cat /tmp/ssr_subscribe_file.txt` 0 | sed 's/ssr:\/\///g')
 				fi
 				[ -z "$urllinks" ] && continue
 				for link in $urllinks
@@ -331,15 +352,16 @@ get_oneline_rule_now(){
 				remove_node_gap
 				# 储存对应订阅链接的group信息
 				dbus set ss_online_group_$z=$group
+				HIDE_DETIAL=0
 			else
 				echo_date 该订阅链接不包含任何节点信息！请检查你的服务商是否更换了订阅链接！
 				HIDE_DETIAL=1
 			fi
 			sleep 1
-			if [ -z "$HIDE_DETIAL" ];then
+			echo $group >> /tmp/group_info.txt
+			if [ "$HIDE_DETIAL" == "0" ];then
 				USER_ADD=$(($(dbus list ssconf_basic_server|grep -v ssconf_basic_server_ip_|wc -l) - $(dbus list ssconf_basic_group|wc -l))) || 0
 				ONLINE_GET=$(dbus list ssconf_basic_group|wc -l) || 0
-				echo $group >> /tmp/group_info.txt
 				echo_date "本次更新订阅来源 【$group】， 新增节点 $addnum 个，修改 $updatenum 个，删除 $delnum 个；"
 				echo_date "现共有自添加SSR节点：$USER_ADD 个。"
 				echo_date "现共有订阅SSR节点：$ONLINE_GET 个。"
@@ -486,7 +508,7 @@ add() {
 	rm -rf /tmp/all_localservers >/dev/null 2>&1
 	rm -rf /tmp/all_onlineservers >/dev/null 2>&1
 	rm -rf /tmp/group_info.txt >/dev/null 2>&1
-	#echo_date 添加链接为：`dbus get ss_ssr_add_link`
+	echo_date 添加链接为：`dbus get ss_ssr_add_link`
 	ssrlinks=`dbus get ss_base64_links|sed 's/$/\n/'|sed '/^$/d'`
 	for ssrlink in $ssrlinks
 	do

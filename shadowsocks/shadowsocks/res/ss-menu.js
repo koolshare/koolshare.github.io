@@ -294,9 +294,7 @@ function hideSSLoadingBar(){
 	checkss = 0;
 	var action = document.form.ss_basic_action.value;
 	var oaction = document.form.ss_online_action.value;
-	if (action == 5 || action == 6 ||action == 7 ||action == 8 || action == 9){
-		refreshpage();
-	}else if (action == 10 && oaction == 2 || oaction == 4){
+	if (action == 5 || action == 6 ||action == 7 ||action == 8 || action == 9 || action == 10){
 		refreshpage();
 	}else{
 		htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
@@ -305,27 +303,6 @@ function hideSSLoadingBar(){
 		checkss = 0;
 		$G("ss_basic_password").value = Base64.decode($G("ss_basic_password").value);
 		setTimeout("get_ss_status_data();",2000);
-		if (action == 10 && oaction == 0 || oaction == 1 || oaction == 3){
-			$j('.show-btn1').removeClass('active');
-			$j('.show-btn1_1').addClass('active');
-			$j('.show-btn2').removeClass('active');
-			$j('.show-btn3').removeClass('active');
-			$j('.show-btn4').removeClass('active');
-			$j('.show-btn5').removeClass('active');
-			$j('.show-btn6').removeClass('active');
-			$j('.show-btn7').removeClass('active');
-			$G("tablet_1").style.display = "none";
-			$G("tablet_2").style.display = "none";
-			$G("tablet_3").style.display = "none";
-			$G("tablet_4").style.display = "none";
-			$G("tablet_5").style.display = "none";
-			$G("tablet_6").style.display = "none";
-			$G("tablet_7").style.display = "none";
-			$G("apply_button").style.display = "none";
-			$G("ss_node_list_table_td").style.display = "none";
-			$G("ss_node_list_table_btn").style.display = "none";
-			$G("line_image1").style.display = "none";
-		}
 	}
 }
 
