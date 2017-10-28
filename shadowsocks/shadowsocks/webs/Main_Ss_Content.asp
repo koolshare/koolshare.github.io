@@ -125,10 +125,8 @@ function browser_compatibility1(){
 	}
 	if((isChrome56) && document.getElementById("FormTitle") && fw_version < 7.5){
 		document.getElementById("FormTitle").className = "FormTitle_chrome56";
-		//console.log("fw_version", fw_version);
 	}else if((isChrome56) && document.getElementById("FormTitle") && fw_version >= 7.5){
 		document.getElementById("FormTitle").className = "FormTitle";
-		//console.log("chrome", fw_version);
 	}
 	//firefox
 	var isFirefox = navigator.userAgent.search("Firefox") > -1;
@@ -136,16 +134,13 @@ function browser_compatibility1(){
 		document.getElementById("FormTitle").className = "FormTitle_firefox";
 		if(current_url.indexOf("Main_Ss_Content.asp") == 0){
 			document.getElementById("FormTitle").style.marginTop = "-100px"
-			//console.log("firefox -100");
 		}
 
 	}else if((isFirefox) && document.getElementById("FormTitle") && fw_version >= 7.5){
 		document.getElementById("FormTitle").className = "FormTitle_firefox";
 		if(current_url.indexOf("Main_Ss_Content.asp") == 0){
 			document.getElementById("FormTitle").style.marginTop = "0px"		
-			//console.log("firefox 0");
 		}
-
 	}
 }
 
@@ -328,7 +323,6 @@ function update_visibility_main() {
 	sro = document.form.ss_basic_rss_obfs.value;
 	sur = document.form.hd_ss_basic_use_rss.value;
 	suk = document.form.hd_ss_basic_use_kcp.value;
-	//suk = document.getElementById("hd_ss_basic_use_kcp").value
 
 	if (ssmode == "2" || ssmode == "3" || ssmode == "4"){
 		document.form.ss_dns_plan_chn.value=document.form.ss_dns_plan.value;
@@ -372,7 +366,6 @@ function update_visibility_main() {
 		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
 		$j("#ss_title").html("shadowsocks - 账号信息配置");
 	}
-	//showhide("show_btn3", (ssmode == "1" || ssmode == "2" ));
 	showhide("ss_state1", (ssmode == "0"));
 	showhide("ss_state2", (ssmode != "0"));
 	showhide("ss_state3", (ssmode != "0"));
@@ -490,7 +483,6 @@ function update_visibility_tab2(){
 	}else if (document.form.ss_dns_plan.value == "2"){
 		$j("#ss_dns_plan_note").html("国内dns解析cdn名单内的国内域名，剩下的域名用国外dns解析。");
 	}
-
 }
 
 function generate_lan_list(){
@@ -603,28 +595,14 @@ function ssform2obj() {
 	return obj;
 }
 
-function getAllConfigs2(){
-	$j.ajax({
-		url: '/dbconf?p=ssconf',
-		dataType: 'html',
-		error: function(xhr) {},
-		success: function(response) {
-			console.log(response)
-			$j.globalEval(response);
-			console.log(db_ssconf.ssconf_basic_lbmode_37)
-		}
-	});	
-}
+
 var node_global_max = 0;
 function getAllConfigs() {
-	//getAllConfigs2();
 	var dic = {};
 	for (var field in db_ss) {
 		names = field.split("_");
 		dic[names[names.length - 1]] = 'ok';
 	}
-	//console.log(db_ss)
-	//console.log(dic)
 	confs = {};
 	var p = "ssconf_basic";
 	var params = ["name", "server", "port", "password", "method"];
@@ -735,7 +713,6 @@ function getAllConfigs() {
 			confs[field] = obj;
 		}
 	}
-	//console.log(confs);
 	return confs;
 }
 
@@ -942,7 +919,6 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 			ns[p + "_use_rss_" + node_global_max] = 0;
 		}
 	}
-	//console.log(ns);
 	$j.ajax({
 		url: '/applydb.cgi?p=ssconf_basic',
 		contentType: "application/x-www-form-urlencoded",
@@ -1655,8 +1631,8 @@ function get_ss_status_data() {
 									$G("ss_state2").innerHTML = "国外连接 - " + "Waiting for first refresh...";
 									$G("ss_state3").innerHTML = "国内连接 - " + "Waiting for first refresh...";
 								} else {
-									$G("ss_state2").innerHTML = "国外连接 - " + arr[0];
-									$G("ss_state3").innerHTML = "国内连接 - " + arr[1];
+									$G("ss_state2").innerHTML = arr[0];
+									$G("ss_state3").innerHTML = arr[1];
 								}
 							}
 						});
@@ -1722,7 +1698,7 @@ function buildswitch() {
 				update_visibility_main();
 			} else {
 				document.form.ss_basic_enable.value = 0;
-				showSSLoadingBar(5);
+				//showSSLoadingBar(5);
 				document.form.action_mode.value = ' Refresh ';
 				document.form.action = "/applydb.cgi?p=ss";
 				document.form.SystemCmd.value = "ss_config.sh";

@@ -322,11 +322,9 @@ function hideSSLoadingBar(){
 			$G("tablet_6").style.display = "none";
 			$G("tablet_7").style.display = "none";
 			$G("apply_button").style.display = "none";
-			$G("ss_node_list_table_td").style.display = "";
-			$G("ss_node_list_table_btn").style.display = "";
+			$G("ss_node_list_table_td").style.display = "none";
+			$G("ss_node_list_table_btn").style.display = "none";
 			$G("line_image1").style.display = "none";
-			refresh_table();
-			update_ping_method();
 		}
 	}
 }
