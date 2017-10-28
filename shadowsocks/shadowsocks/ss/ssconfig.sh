@@ -5,8 +5,8 @@ source helper.sh
 # Variable definitions
 ss_basic_version_local=`cat /koolshare/ss/version`
 dbus set ss_basic_version_local=$ss_basic_version_local
-backup_url="http://koolshare.ngrok.wang:5000/shadowsocks"
 main_url="https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks"
+backup_url="http://koolshare.ngrok.wang:5000/shadowsocks"
 CONFIG_FILE=/koolshare/ss/ss.json
 DNS_PORT=7913
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
@@ -16,6 +16,7 @@ game_on=`dbus list ss_acl_mode|cut -d "=" -f 2 | grep 3`
 [ -n "$game_on" ] || [ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && mangle=1
 ip_prefix_hex=`nvram get lan_ipaddr | awk -F "." '{printf ("0x%02x", $1)} {printf ("%02x", $2)} {printf ("%02x", $3)} {printf ("00/0xffffff00\n")}'`
 ss_basic_password=`echo $ss_basic_password|base64_decode`
+IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
 
 # creat dnsmasq.d folder
 creat_folder(){
@@ -27,33 +28,22 @@ creat_folder(){
 install_ss(){
 	echo_date 开始解压压缩包...
 	tar -zxf shadowsocks.tar.gz
-	dbus set ss_basic_install_status="2"
 	chmod a+x /tmp/shadowsocks/install.sh
 	echo_date 开始安装更新文件...
 	sh /tmp/shadowsocks/install.sh
 }
 
 update_ss(){
-	# ss_basic_install_status=	#
-	# ss_basic_install_status=0	#
-	# ss_basic_install_status=1	#正在下载更新......
-	# ss_basic_install_status=2	#正在安装更新...
-	# ss_basic_install_status=3	#安装更新成功，5秒后刷新本页！
-	# ss_basic_install_status=4	#下载文件校验不一致！
-	# ss_basic_install_status=5	#然而并没有更新！
-	# ss_basic_install_status=6	#正在检查是否有更新~
-	# ss_basic_install_status=7	#检测更新错误！
-	# ss_basic_install_status=8	#更换更新服务器
 	echo_date 更新过程中请不要做奇怪的事，不然可能导致问题！
-	dbus set ss_basic_install_status="6"
-	echo_date 开启SS检查更新：正在检测主服务器在线版本号...
+	
+	echo_date 开启SS检查更新：使用主服务器：$main_url...
+	echo_date 检测主服务器在线版本号...
 	ss_basic_version_web1=`curl --connect-timeout 5 -s "$main_url"/version | sed -n 1p`
 	if [ ! -z $ss_basic_version_web1 ];then
 		echo_date 检测到主服务器在线版本号：$ss_basic_version_web1
 		dbus set ss_basic_version_web=$ss_basic_version_web1
 		if [ "$ss_basic_version_local" != "$ss_basic_version_web1" ];then
 		echo_date 主服务器在线版本号："$ss_basic_version_web1" 和本地版本号："$ss_basic_version_local" 不同！
-			dbus set ss_basic_install_status="1"
 			cd /tmp
 			md5_web1=`curl -s "$main_url"/version | sed -n 2p`
 			echo_date 开启下载进程，从主服务器上下载更新包...
@@ -61,11 +51,9 @@ update_ss(){
 			md5sum_gz=`md5sum /tmp/shadowsocks.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web1" ]; then
 				echo_date 更新包md5校验不一致！估计是下载的时候出了什么状况，请等待一会儿再试...
-				dbus set ss_basic_install_status="4"
 				rm -rf /tmp/shadowsocks* >/dev/null 2>&1
 				sleep 1
-				echo_date 更换备用更新服务器1，请稍后...
-				dbus set ss_basic_install_status="8"
+				echo_date 更换备用备用更新地址，请稍后...
 				sleep 1
 				update_ss2
 			else
@@ -74,34 +62,28 @@ update_ss(){
 			fi
 		else
 			echo_date 主服务器在线版本号："$ss_basic_version_web1" 和本地版本号："$ss_basic_version_local" 相同！
-			dbus set ss_basic_install_status="5"
 			sleep 1
 			echo_date 那还更新个毛啊，关闭更新进程!
-			dbus set ss_basic_install_status="0"
 			exit
 		fi
 	else
 		echo_date 没有检测到主服务器在线版本号,访问github服务器有点问题哦~
-		dbus set ss_basic_install_status="7"
 		sleep 2
-		echo_date 更换备用更新服务器1，请稍后...
-		dbus set ss_basic_install_status="8"
+		echo_date 更换备用备用更新地址，请稍后...
 		sleep 1
 		update_ss2
 	fi
 }
 
-
 update_ss2(){
-	dbus set ss_basic_install_status="6"
-	echo_date 开启SS检查更新：正在检测备用服务器在线版本号...
+	echo_date 开启SS检查更新：使用备用服务器：$backup_url...
+	echo_date 检测备用服务器在线版本号...
 	ss_basic_version_web2=`curl --connect-timeout 5 -s "$backup_url"/version | sed -n 1p`
 	if [ ! -z $ss_basic_version_web2 ];then
 	echo_date 检测到备用服务器在线版本号：$ss_basic_version_web1
 		dbus set ss_basic_version_web=$ss_basic_version_web2
 		if [ "$ss_basic_version_local" != "$ss_basic_version_web2" ];then
 		echo_date 备用服务器在线版本号："$ss_basic_version_web1" 和本地版本号："$ss_basic_version_local" 不同！
-			dbus set ss_basic_install_status="1"
 			cd /tmp
 			md5_web2=`curl -s "$backup_url"/version | sed -n 2p`
 			echo_date 开启下载进程，从备用服务器上下载更新包...
@@ -109,11 +91,9 @@ update_ss2(){
 			md5sum_gz=`md5sum /tmp/shadowsocks.tar.gz | sed 's/ /\n/g'| sed -n 1p`
 			if [ "$md5sum_gz" != "$md5_web2" ]; then
 				echo_date 更新包md5校验不一致！估计是下载的时候除了什么状况，请等待一会儿再试...
-				dbus set ss_basic_install_status="4"
 				rm -rf /tmp/shadowsocks* >/dev/null 2>&1
 				sleep 2
 				echo_date 然而只有这一台备用更更新服务器，请尝试离线手动安装...
-				dbus set ss_basic_install_status="0"
 				exit
 			else
 				echo_date 更新包md5校验一致！ 开始安装！...
@@ -121,18 +101,14 @@ update_ss2(){
 			fi
 		else
 			echo_date 备用服务器在线版本号："$ss_basic_version_web1" 和本地版本号："$ss_basic_version_local" 相同！
-			dbus set ss_basic_install_status="5"
 			sleep 2
 			echo_date 那还更新个毛啊，关闭更新进程!
-			dbus set ss_basic_install_status="0"
-			exit
+			exit 0
 		fi
 	else
 		echo_date 没有检测到备用服务器在线版本号,访问备用服务器有点问题哦，你网络很差欸~
-		dbus set ss_basic_install_status="7"
 		sleep 2
 		echo_date 然而只有这一台备用更更新服务器，请尝试离线手动安装...
-		dbus set ss_basic_install_status="0"
 		exit
 	fi
 }
@@ -160,7 +136,6 @@ restore_conf(){
 restore_start_file(){
 	echo_date 清除nat-start, wan-start中相关的SS启动命令...
 	# restore nat-start file if any
-	sed -i '/source/,/warning/d' /jffs/scripts/nat-start >/dev/null 2>&1
 	sed -i '/nat-start/d' /jffs/scripts/nat-start >/dev/null 2>&1
 	sed -i '/koolshare/d' /jffs/scripts/wan-start >/dev/null 2>&1
 	sed -i '/koolshare/d' /jffs/scripts/nat-start >/dev/null 2>&1
@@ -354,7 +329,6 @@ ss_pre_start(){
 
 # try to resolv the ss server ip if it is domain...
 resolv_server_ip(){
-	IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
 	if [ -z "$IFIP" ];then
 		echo_date 使用nslookup方式解析SS服务器的ip地址,解析dns：$ss_basic_dnslookup_server
 		if [ "$ss_basic_dnslookup" == "1" ];then
@@ -504,11 +478,11 @@ start_sslocal(){
 }
 
 start_dns(){
+	# start ss-local on port 23456
+	echo_date 开启ss-local，提供socks5代理端口：23456
+	start_sslocal
 	# Start DNS2SOCKS
 	if [ "1" == "$ss_dns_foreign" ] || [ -z "$ss_dns_foreign" ]; then
-		# start ss-local on port 23456
-		echo_date 开启ss-local,为dns2socks提供socks5端口：23456
-		start_sslocal
 		echo_date 开启dns2socks，监听端口：23456
 		dns2socks 127.0.0.1:23456 "$ss_dns2socks_user" 127.0.0.1:$DNS_PORT > /dev/null 2>&1 &
 	fi
@@ -571,8 +545,8 @@ start_dns(){
 				EOF
 			if [ "$ss_pdnsd_udp_server" == "1" ];then
 				echo_date 开启dns2socks作为pdnsd的上游服务器.
-				echo_date 开启ss-local,为dns2socks提供socks5端口：23456
-				start_sslocal
+				#echo_date 开启ss-local,为dns2socks提供socks5端口：23456
+				#start_sslocal
 				dns2socks 127.0.0.1:23456 "$ss_pdnsd_udp_server_dns2socks" 127.0.0.1:1099 > /dev/null 2>&1 &
 			elif [ "$ss_pdnsd_udp_server" == "2" ];then
 				echo_date 开启dnscrypt-proxy作为pdnsd的上游服务器.
@@ -629,12 +603,14 @@ start_dns(){
 	
 		if ! test -f "$CACHE"; then
 			echo_date 创建pdnsd缓存文件.
-			dd if=/dev/zero of=/koolshare/ss/pdnsd/pdnsd.cache bs=1 count=4 2> /dev/null
+			#dd if=/dev/zero of=/koolshare/ss/pdnsd/pdnsd.cache bs=1 count=4 2> /dev/null
+			touch /koolshare/ss/pdnsd/pdnsd.cache
 			chown -R $USER.$GROUP $CACHEDIR 2> /dev/null
 		fi
 
 		echo_date 启动pdnsd进程...
-		pdnsd --daemon -c /koolshare/ss/pdnsd/pdnsd.conf -p /var/run/pdnsd.pid
+		#pdnsd --daemon -c /koolshare/ss/pdnsd/pdnsd.conf -p /var/run/pdnsd.pid
+		pdnsd -c /koolshare/ss/pdnsd/pdnsd.conf -p /var/run/pdnsd.pid >/dev/null 2>&1 &
 	fi
 
 	# Start chinadns
@@ -657,8 +633,8 @@ start_dns(){
 			[ "$ss_chinadns_foreign_dns2socks" == "2" ] && rcfd="8.8.8.8:53"
 			[ "$ss_chinadns_foreign_dns2socks" == "3" ] && rcfd="8.8.4.4:53"
 			[ "$ss_chinadns_foreign_dns2socks" == "4" ] && rcfd="$ss_chinadns_foreign_dns2socks_user"
-			echo_date ┣开启ss-local,为dns2socks提供socks5端口：23456
-			start_sslocal
+			#echo_date ┣开启ss-local,为dns2socks提供socks5端口：23456
+			#start_sslocal
 			echo_date ┣开启dns2socks，作为chinaDNS上游国外dns，转发dns：$rcfd
 			dns2socks 127.0.0.1:23456 "$rcfd" 127.0.0.1:1055 > /dev/null 2>&1 &
 		elif [ "$ss_chinadns_foreign_method" == "2" ];then
@@ -746,6 +722,8 @@ append_white_black_conf(){
 		echo "ipset=/.adblockplus.org/router" >> /tmp/wblist.conf
 		echo "server=/.entware.net/127.0.0.1#7913" >> /tmp/wblist.conf
 		echo "ipset=/.entware.net/router" >> /tmp/wblist.conf
+		echo "server=/.apnic.net/127.0.0.1#7913" >> /tmp/wblist.conf
+		echo "ipset=/.apnic.net/router" >> /tmp/wblist.conf
 	fi
 	# append white domain list,not through ss
 	wanwhitedomain=$(echo $ss_wan_white_domain | base64_decode)
@@ -907,19 +885,33 @@ start_koolgame(){
 }
 
 write_cron_job(){
+	sed -i '/ssupdate/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
 	if [ "1" == "$ss_basic_rule_update" ]; then
 		echo_date 添加ss规则定时更新任务，每天"$ss_basic_rule_update_time"自动检测更新规则.
 		cru a ssupdate "0 $ss_basic_rule_update_time * * * /bin/sh /koolshare/scripts/ss_rule_update.sh"
 	else
 		echo_date ss规则定时更新任务未启用！
 	fi
+	sed -i '/ssnodeupdate/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
+	if [ "$ss_basic_node_update" = "1" ];then
+		if [ "$ss_basic_node_update_day" = "7" ];then
+			cru a ssnodeupdate "0 $ss_basic_node_update_hr * * * /koolshare/scripts/ss_online_update.sh 3"
+			echo_date "设置订阅服务器自动更新订阅服务器在每天 $ss_basic_node_update_hr 点。"
+		else
+			cru a ssnodeupdate "0 $ss_basic_node_update_hr * * ss_basic_node_update_day /koolshare/scripts/ss_online_update.sh 3"
+			echo_date "设置订阅服务器自动更新订阅服务器在星期 $ss_basic_node_update_day 的 $ss_basic_node_update_hr 点。"
+		fi
+	fi
 }
 
 kill_cron_job(){
-	jobexist=`cru l|grep ssupdate`
-	if [ -n "$jobexist" ];then
+	if [ -n "`cru l|grep ssupdate`" ];then
 		echo_date 删除ss规则定时更新任务.
 		sed -i '/ssupdate/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
+	fi
+	if [ -n "`cru l|grep ssnodeupdate`" ];then
+		echo_date 删除SSR定时订阅任务.
+		sed -i '/ssnodeupdate/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
 	fi
 }
 #--------------------------------------nat part begin------------------------------------------------
@@ -1276,13 +1268,29 @@ apply_nat_rules(){
 chromecast(){
 	LOG1=开启chromecast功能（DNS劫持功能）
 	LOG2=chromecast功能未开启，建议开启~
+	kp_enable=`iptables -t nat -L PREROUTING | grep KOOLPROXY |wc -l`
+	kp_mode=`dbus get koolproxy_policy`
+	chromecast_nu=`iptables -t nat -L PREROUTING -v -n --line-numbers|grep "dpt:53"|awk '{print $1}'`
 	if [ "$ss_basic_chromecast" == "1" ];then
-		IPT_ACTION="-A"
-		echo_date $LOG1
+		if [ -z "$chromecast_nu" ]; then
+			IPT_ACTION="-A"
+			echo_date $LOG1
+		else
+			echo_date DNS劫持规则已经添加，跳过~
+		fi
 	else
-		IPT_ACTION="-D"
-		echo_date $LOG2
-	fi
+		if [ "$kp_mode" != 2 ] || [ "$kp_enable" -eq 0 ]; then
+			if [ -n "$chromecast_nu" ]; then
+				IPT_ACTION="-D"
+				echo_date $LOG2
+			fi
+		else
+			if [ -z "$chromecast_nu" ]; then
+				IPT_ACTION="-A"
+				echo_date $LOG1
+			fi
+		fi
+	fi	
 	iptables -t nat $IPT_ACTION PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 }
 # -----------------------------------nat part end--------------------------------------------------------
@@ -1296,16 +1304,6 @@ restart_dnsmasq(){
 remove_status(){
 	nvram set ss_foreign_state=""
 	nvram set ss_china_state=""
-}
-
-main_portal(){
-	if [ "$ss_main_portal" == "1" ];then
-		nvram set enable_ss=1
-		nvram commit
-	else
-		nvram set enable_ss=0
-		nvram commit
-	fi
 }
 
 load_module(){
@@ -1364,7 +1362,6 @@ restart_addon(){
 	
 	#remove_status
 	remove_status
-	main_portal
 	
 	if [ "$ss_basic_dnslookup" == "1" ];then
 		echo_date 设置使用nslookup方式解析SS服务器的ip地址.
@@ -1379,9 +1376,14 @@ write_numbers(){
 	nvram set update_ipset="$(cat /koolshare/ss/rules/version | sed -n 1p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set update_chnroute="$(cat /koolshare/ss/rules/version | sed -n 2p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set update_cdn="$(cat /koolshare/ss/rules/version | sed -n 4p | sed 's/#/\n/g'| sed -n 1p)"
+	nvram set update_Routing="$(cat /koolshare/ss/rules/version | sed -n 5p | sed 's/#/\n/g'| sed -n 1p)"
+	nvram set update_WhiteList="$(cat /koolshare/ss/rules/version | sed -n 6p | sed 's/#/\n/g'| sed -n 1p)"
+	
 	nvram set ipset_numbers=$(cat /koolshare/ss/rules/gfwlist.conf | grep -c ipset)
 	nvram set chnroute_numbers=$(cat /koolshare/ss/rules/chnroute.txt | grep -c .)
 	nvram set cdn_numbers=$(cat /koolshare/ss/rules/cdn.txt | grep -c .)
+	nvram set Routing_numbers=$(cat /koolshare/ss/dns/Routing.txt |grep -c /)
+	nvram set WhiteList_numbers=$(cat /koolshare/ss/dns/WhiteList.txt |grep -Ec "^\.\*")
 }
 
 set_ulimit(){
@@ -1434,6 +1436,9 @@ load_nat(){
 }
 
 apply_ss(){
+	# router is on boot
+	WAN_ACTION=`ps|grep /jffs/scripts/wan-start|grep -v grep`
+	# now stop first
 	echo_date =============== 梅林固件 - shadowsocks by sadoneli\&Xiaobao ===============
 	echo_date
 	echo_date -------------------------- 关闭Shadowsocks ------------------------------
@@ -1442,7 +1447,8 @@ apply_ss(){
 	nvram commit
 	restore_conf
 	remove_conf_and_settings
-	restart_dnsmasq
+	# restart dnsmasq when ss server is not ip or on router boot
+	[ -z "$IFIP" ] && [ -z "$WAN_ACTION" ] && restart_dnsmasq
 	flush_nat
 	flush_ipset
 	remove_redundant_rule
@@ -1452,13 +1458,20 @@ apply_ss(){
 	kill_cron_job
 	echo_date -------------------------- Shadowsocks已关闭 -----------------------------
 	
+	# pre-start
 	echo_date ----------------------- shadowsocks 启动前触发脚本 -----------------------
 	ss_pre_start
 	
+	# start
 	echo_date ------------------------- 梅林固件 shadowsocks --------------------------
 	detect_qos
 	resolv_server_ip
-	[ "$ss_basic_mode" != "4" ] && creat_ss_json || creat_game2_json
+	# do not re generate json on router start, use old one
+	if [ "$ss_basic_mode" != "4" ];then
+		[ -z "$WAN_ACTION" ] && creat_ss_json
+	else
+		[ -z "$WAN_ACTION" ] && creat_game2_json
+	fi
 	#creat_dnsmasq_basic_conf
 	load_cdn_site
 	custom_dnsmasq
@@ -1507,18 +1520,22 @@ restart)
 	apply_ss
 	write_numbers
 	echo_date
-	echo_date Enjoy surfing internet without "Great Fire Wall"!
+	echo_date "Across the Great Wall we can reach every corner in the world!"
 	echo_date
 	echo_date =============== 梅林固件 - shadowsocks by sadoneli\&Xiaobao ===============
 	dbus fire onssstart
-	dbus set ss_basic_install_status="0"
+	# creat nat locker
+	[ ! -f "/tmp/shadowsocks.nat_lock" ] && touch /tmp/shadowsocks.nat_lock
+	return 0
 	;;
 update)
 	update_ss
 	;;
 *)
 	WAN_ACTION=`ps|grep /jffs/scripts/wan-start|grep -v grep`
-	[ -n "$WAN_ACTION" ] && exit
+	[ -n "$WAN_ACTION" ] && exit 0
+	# detect nat locker,do not restart nat on reouter boot
+	[ ! -f "/tmp/shadowsocks.nat_lock" ] && exit 0
 	flush_nat
 	flush_ipset
 	remove_redundant_rule

@@ -9,14 +9,14 @@ HOME_URL=Main_Ss_Content.asp
 
 old_version=`cat version | sed -n 1p`
 old_md5sum=`cat version | sed -n 2p`
-
-# backup old package
-if [ "$old_version" != "$VERSION" ];then
-  echo old_version $old_version
-  echo VERSION $VERSION
-  mv ${MODULE}.tar.gz ./history/"${MODULE}"_"$old_version".tar.gz
+new_md5=`md5sum ${MODULE}.tar.gz`
+# backupz package
+#if [ "$old_version" != "$VERSION" ];then
+  #echo old_version $old_version
+  echo backup VERSION $VERSION
+  mv ${MODULE}.tar.gz ./history/"${MODULE}"_"$VERSION".tar.gz
   echo $old_version $old_md5sum >> ./history/version
-fi
+#fi
 
 # Check and include base
 DIR="$( cd "$( dirname "$BASH_SOURCE[0]" )" && pwd )"

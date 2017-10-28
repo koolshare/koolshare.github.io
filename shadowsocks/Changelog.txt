@@ -1,9 +1,25 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 
-shadowsocks merlin 插件于2017年07月17日下架软件中心，就此封版，以后不再更新。
+3.6.1
+   - fix	修复离线安装插件时卡住没进度，需要先更新软件中心1.3.5；
+   - add 	新增SSR节点订阅支持，新增SS/SSR链接添加服务器，均在【更新管理】标签页下；
+   - add	规则管理:新增Pcap规则Routing.txt和WhiteList.txt更新（需要提交后刷新页面才能看到状态）；
+   - add	添加ss_pcak.sh脚本，方便有自己修改插件后打包插件分享给别人
+   - update	离线安装现在会校验安装平台，避免N66U和AC66U用户乱装;
+   - update	更新shadowsocks-libev到最新3.1.0，simple-obfs更新到最新 （2017年10月26日 编译）；
+   - update	ssr-libev更换为ssrr-libev，版本3.5.1，3.5.2的chain_e/f因不稳定暂不跟进（2017年9月25日 编译）；
+   - update	修复web测试有时候出现问题，ping测试增加twitter和facebook检测，google.com更改为google.com.hk；
+   - update	界面：将chromecast和ss服务器解析设定移动到【DNS设定】标签页下；
+   - fix	界面：修复KCP参数输入框只有保存刷新后高度才显示正常的问题，修复使用黑科技按钮后表格错位的问题；
+   - fix	修复开启ss后高亮侧边栏在X7.7固件下错误的问题，同时移除开启侧边栏功能；修复X7.7下负载均衡和socks5不显示
+   - fix	修复pdnsd不能写缓存文件的问题；
+   - remove	取消帐号设置内的切换ssr勾选框，此处为以前ssr兼容ss方便切换而设置，现在没什么必要了；
+   - update	规范一些参数，更新后可能导致ssr节点的混淆参数丢失；
+   - update	为了方便订阅和规则更新的下载，现在ss-local/ssr-local在插件启用时会保持23456端口的开启；
+   - update chromecast和koolproxy配合部分进行优化；
+   - update	优化开机启动生成ss配置文件；
 
-===========================================
 3.6.0
    - fix	修复游戏模式下trpoxy加载问题
    

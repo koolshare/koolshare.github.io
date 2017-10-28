@@ -27,8 +27,6 @@ start_socks5(){
 			ARG_OBFS=""
 		fi
 	fi
-
-
 	
 	if [ "$ss_local_acl" == "0" ];then
 		ARG_ACL=""
