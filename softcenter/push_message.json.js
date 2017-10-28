@@ -1,7 +1,7 @@
 {
 "title":"<em>梅林改版固件&nbsp;-&nbsp;软件中心</em>",
-"content1":"<b>插件下架通知：（2017年7月17日）：</b>",
-"content2":"应有关部门通知要求，现对梅林固件软件中心内翻墙软件shadowsocks、shadowvpn进行下架处理;",
-"content3":"由于强制下架导致的软件中心出现错误不能加载插件列表的，请大家点击更新按钮更新软件中心",
-"content4":"祝好！"
+"content1":"<b>通知：</b>",
+"content2":"koolshare merlin改版固件X7.7已经发布。",
+"content3":"请前往<a href='http://koolshare.cn/forum-96-1.html' target='_blank'>论坛 - koolshare.cn</a>更新吧~",
+"content4":""
 }

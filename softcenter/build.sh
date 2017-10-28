@@ -1,5 +1,5 @@
 #! /bin/sh
-VERSION=1.3.4
+VERSION=1.3.5
 
 cat version
 rm -f softcenter.tar.gz
@@ -7,7 +7,7 @@ mkdir -p ./softcenter/res
 
 python ./gen_install.py stage1
 
-chmod 755 ./softcenter/scripts/app_install.sh
+chmod 755 ./softcenter/scripts/ks_app_install.sh
 
 tar -zcvf softcenter.tar.gz softcenter
 md5value=`md5sum softcenter.tar.gz|tr " " "\n"|sed -n 1p`

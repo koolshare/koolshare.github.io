@@ -39,15 +39,8 @@ function browser_compatibility1(){
 
 function menu_hook(title, tab) {
 	browser_compatibility1();
-	var enable_ss = "<% nvram_get("enable_ss"); %>";
-	var enable_soft = "<% nvram_get("enable_soft"); %>";
-	if(enable_ss == "1" && enable_soft == "1"){
-		tabtitle[tabtitle.length -2] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
-		tablink[tablink.length -2] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
-	}else{
-		tabtitle[tabtitle.length -1] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
-		tablink[tablink.length -1] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
-	}
+	tabtitle[tabtitle.length -1] = new Array("", "shadowsocks设置", "负载均衡设置", "Socks5设置");
+	tablink[tablink.length -1] = new Array("", "Main_Ss_Content.asp", "Main_Ss_LoadBlance.asp",  "Main_SsLocal_Content.asp");
 }
 
 var Base64;
@@ -215,9 +208,7 @@ function showSSLoadingBar(seconds){
 	} else {
 		LoadingSSProgress(seconds);
 	}
-	
 }
-
 
 function LoadingSSProgress(seconds){
 	action = document.form.ss_basic_action.value;
@@ -226,10 +217,14 @@ function LoadingSSProgress(seconds){
 		document.getElementById("loading_block3").innerHTML = "应用负载均衡设置 ..."
 		$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，应用负载均衡设置 ...</font></li>");
 		return true;
+	}else if (document.form.ss_basic_action.value == 10){
+		document.getElementById("loading_block3").innerHTML = "SSR节点订阅 ..."
+		$j("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，正在订阅中 ...</font></li>");
+		return true;
 	}
 	if (document.form.ss_basic_enable.value == 0){
 		document.getElementById("loading_block3").innerHTML = "SS服务关闭中 ..."
-		$j("#loading_block2").html("<li><font color='#ffcc00'><a href='http://www.koolshare.cn' target='_blank'></font>SS工作有问题？请来我们的<font color='#ffcc00'>论坛www.koolshare.cn</font>反应问题...</font></li>");
+		$j("#loading_block2").html("<li><font color='#ffcc00'><a href='https://github.com/koolshare/koolshare.github.io/tree/acelan_softcenter_ui/shadowsocks' target='_blank'></font>SS工作有问题？请到github提交issue...</font></li>");
 	} else {
 		if (action == 1 || action == 2 || action == 3 || action == 4){
 			if (document.form.ss_basic_mode.value == 6){
@@ -287,8 +282,8 @@ function LoadingLocalProgress(seconds){
 		else{
 			document.getElementById("proceeding_img_text").innerHTML = "完成";
 			y = 0;
-				setTimeout("hideSSLoadingBar();",1000);
-				refreshpage();
+			setTimeout("hideSSLoadingBar();",1000);
+			refreshpage();
 		}
 	}
 }
@@ -298,7 +293,8 @@ function hideSSLoadingBar(){
 	document.getElementById("LoadingBar").style.visibility = "hidden";
 	checkss = 0;
 	var action = document.form.ss_basic_action.value;
-	if (action == 5 || action == 6 ||action == 7 ||action == 8 || action == 9){
+	var oaction = document.form.ss_online_action.value;
+	if (action == 5 || action == 6 ||action == 7 ||action == 8 || action == 9 || action == 10){
 		refreshpage();
 	}else{
 		htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
@@ -308,7 +304,6 @@ function hideSSLoadingBar(){
 		$G("ss_basic_password").value = Base64.decode($G("ss_basic_password").value);
 		setTimeout("get_ss_status_data();",2000);
 	}
-
 }
 
 function pass_checked(obj){
@@ -579,7 +574,7 @@ function openssHint(itemNum){
 		_caption = "编辑节点";
 	}
 	else if(itemNum == 23){
-		statusmenu ="&nbsp;&nbsp;&nbsp;&nbsp;点击使用节点能快速的将该节点填入主面板，但是你需要在主面板点击提交，才能使用该节点。"
+		statusmenu ="&nbsp;&nbsp;&nbsp;&nbsp;点击使用节点能快速的将该节点填入主面板，但是你需要在主面板点击提交，才能使用该节点。</br>不同的颜色代表了不同的节点类型，SS：蓝色；SSR；粉色，V2：绿色"
 		_caption = "使用节点";
 	}
 	else if(itemNum == 24){

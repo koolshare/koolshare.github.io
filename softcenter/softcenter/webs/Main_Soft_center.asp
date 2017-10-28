@@ -617,10 +617,11 @@ function softceterInitData(data) {
     });
 var enable_ss = "<% nvram_get("enable_ss"); %>";
 var enable_soft = "<% nvram_get("enable_soft"); %>";
-function menu_hook(title, tab) {
+function menu_hook() {
 	tabtitle[tabtitle.length -1] = new Array("", "软件中心", "离线安装");
 	tablink[tablink.length -1] = new Array("", "Main_Soft_center.asp", "Main_Soft_setting.asp");
 }
+	
 function notice_show(){
     $.ajax({
         url: 'https://koolshare.ngrok.wang/softcenter/push_message.json.js',
