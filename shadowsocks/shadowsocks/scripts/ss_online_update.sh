@@ -4,6 +4,7 @@ source $KSROOT/scripts/base.sh
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 eval `dbus export ss`
 LOCK_FILE=/tmp/online_update.lock
+NO_DEL=1
 
 # 检测版本号
 firmware_version=`nvram get extendno|cut -d "X" -f2|cut -d "-" -f1|cut -d "_" -f1`
@@ -357,6 +358,7 @@ get_oneline_rule_now(){
 				echo_date 该订阅链接不包含任何节点信息！请检查你的服务商是否更换了订阅链接！
 				HIDE_DETIAL=1
 			fi
+			NO_DEL=0
 			sleep 1
 			echo $group >> /tmp/group_info.txt
 			if [ "$HIDE_DETIAL" == "0" ];then
@@ -393,6 +395,7 @@ start_update(){
 	rm -rf /tmp/all_localservers >/dev/null 2>&1
 	rm -rf /tmp/all_onlineservers >/dev/null 2>&1
 	rm -rf /tmp/group_info.txt >/dev/null 2>&1
+	sleep 1
 	#online_url_nu=`dbus list ss_online_link|wc -l`
 	#online_url_nu=`dbus list ss_online_link|cut -d "=" -f1 | cut -d "_" -f4|sort -rn|head -n1`
 	online_url_nu=`dbus get ss_online_links|base64_decode|sed 's/$/\n/'|sed '/^$/d'|wc -l`
@@ -423,54 +426,56 @@ start_update(){
 		delnum=0
 		get_oneline_rule_now "$url"
 	done
-	if [ -z "$NO_DEL" ];then
-		# 删除去掉的订阅链接对应的节点
+	if [ "$NO_DEL" == "0" ];then
+		# 尝试删除去掉的订阅链接对应的节点
 		local_groups=`dbus list ss|grep group|cut -d "=" -f2|sort -u`
-		for local_group in $local_groups
-		do
-			MATCH=`cat /tmp/group_info.txt | grep $local_group`
-			if [ -z "$MATCH" ];then
-				echo_date $local_group 节点已经不再订阅，将进行删除... 
-				confs_nu=`dbus list ssconf |grep "$local_group"| cut -d "=" -f 1|cut -d "_" -f 4`
-				for conf_nu in $confs_nu
-				do
-					dbus remove ssconf_basic_group_$conf_nu
-					dbus remove ssconf_basic_method_$conf_nu
-					dbus remove ssconf_basic_mode_$conf_nu
-					dbus remove ssconf_basic_name_$conf_nu
-					dbus remove ssconf_basic_password_$conf_nu
-					dbus remove ssconf_basic_port_$conf_nu
-					dbus remove ssconf_basic_rss_obfs_$conf_nu
-					dbus remove ssconf_basic_rss_obfs_param_$conf_nu
-					dbus remove ssconf_basic_rss_protocol_$conf_nu
-					dbus remove ssconf_basic_rss_protocol_param_$conf_nu
-					dbus remove ssconf_basic_server_$conf_nu
-					dbus remove ssconf_basic_server_ip_$conf_nu
-					dbus remove ssconf_basic_ss_obfs_$conf_nu
-					dbus remove ssconf_basic_ss_obfs_host_$conf_nu
-					dbus remove ssconf_basic_use_kcp_$conf_nu
-					dbus remove ssconf_basic_use_rss_$conf_nu
-					dbus remove ssconf_basic_use_lb_$conf_nu
-					dbus remove ssconf_basic_koolgame_udp_$conf_nu
-				done
-				# 删除不再鼎业节点的group信息
-				confs_nu_2=`dbus list ss_online_group_|grep "$local_group"| cut -d "=" -f 1|cut -d "_" -f 4`
-				if [ -n "$confs_nu_2" ];then
-					for conf_nu_2 in $confs_nu_2
+		if [ -f "/tmp/group_info.txt" ];then
+			for local_group in $local_groups
+			do
+				MATCH=`cat /tmp/group_info.txt | grep $local_group`
+				if [ -z "$MATCH" ];then
+					echo_date $local_group 节点已经不再订阅，将进行删除... 
+					confs_nu=`dbus list ssconf |grep "$local_group"| cut -d "=" -f 1|cut -d "_" -f 4`
+					for conf_nu in $confs_nu
 					do
-						dbus remove ss_online_group_$conf_nu_2
+						dbus remove ssconf_basic_group_$conf_nu
+						dbus remove ssconf_basic_method_$conf_nu
+						dbus remove ssconf_basic_mode_$conf_nu
+						dbus remove ssconf_basic_name_$conf_nu
+						dbus remove ssconf_basic_password_$conf_nu
+						dbus remove ssconf_basic_port_$conf_nu
+						dbus remove ssconf_basic_rss_obfs_$conf_nu
+						dbus remove ssconf_basic_rss_obfs_param_$conf_nu
+						dbus remove ssconf_basic_rss_protocol_$conf_nu
+						dbus remove ssconf_basic_rss_protocol_param_$conf_nu
+						dbus remove ssconf_basic_server_$conf_nu
+						dbus remove ssconf_basic_server_ip_$conf_nu
+						dbus remove ssconf_basic_ss_obfs_$conf_nu
+						dbus remove ssconf_basic_ss_obfs_host_$conf_nu
+						dbus remove ssconf_basic_use_kcp_$conf_nu
+						dbus remove ssconf_basic_use_rss_$conf_nu
+						dbus remove ssconf_basic_use_lb_$conf_nu
+						dbus remove ssconf_basic_koolgame_udp_$conf_nu
 					done
+					# 删除不再鼎业节点的group信息
+					confs_nu_2=`dbus list ss_online_group_|grep "$local_group"| cut -d "=" -f 1|cut -d "_" -f 4`
+					if [ -n "$confs_nu_2" ];then
+						for conf_nu_2 in $confs_nu_2
+						do
+							dbus remove ss_online_group_$conf_nu_2
+						done
+					fi
+					
+					echo_date 删除完成完成！
+					need_adjust=1
 				fi
-				
-				echo_date 删除完成完成！
-				need_adjust=1
+			done
+			sleep 1
+			# 再次排序
+			if [ "$need_adjust" == "1" ];then
+				echo_date 因为进行了删除订阅节点操作，需要对节点顺序进行检查！
+				remove_node_gap
 			fi
-		done
-		sleep 1
-		# 再次排序
-		if [ "$need_adjust" == "1" ];then
-			echo_date 因为进行了删除订阅节点操作，需要对节点顺序进行检查！
-			remove_node_gap
 		fi
 	else
 		echo_date "由于订阅过程失败，本次不检测需要删除的订阅，以免误伤；下次成功订阅后再进行检测。"
@@ -479,7 +484,7 @@ start_update(){
 	echo_date "==================================================================="
 	echo_date "所有订阅任务完成，请等待6秒，或者手动关闭本窗口！"
 	echo_date "==================================================================="
-	sleep 3
+	sleep 1
 	rm -rf /tmp/ssr_subscribe_file.txt >/dev/null 2>&1
 	rm -rf /tmp/ssr_subscribe_file_temp1.txt >/dev/null 2>&1
 	rm -rf /tmp/all_localservers >/dev/null 2>&1
