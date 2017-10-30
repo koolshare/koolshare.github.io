@@ -225,6 +225,61 @@ function updateOptions() {
     setTimeout("checkCmdRet2();", 500);
 }
 
+function checkpassword(v) {
+	var ascok = 0;
+	var ascbad = 0;
+	for (var i = 0; i < v.length; i++) {
+		var asciiNumber = v.substr(i, 1).charCodeAt();
+		if (asciiNumber >= 33 && asciiNumber <= 126) {
+			ascok += 1;
+		} else {
+			ascbad += 1;
+		}
+	}
+	if(ascbad != 0){
+		alert("你的密码不符合要求，可能出现了乱码，请检查");
+		return false;
+	}
+}
+
+
+function validForm() {
+	var ascok = 0;
+	var ascbad = 0;
+	var v = $G("ss_basic_password").value
+	var temp_ss = ["ss_basic_password", "ss_isp_website_web", "ss_dnsmasq", "ss_wan_white_ip", "ss_wan_white_domain", "ss_wan_black_ip", "ss_wan_black_domain", "ss_game2_black_lan", "ss_game2_white_lan", "ss_online_links"];
+	//check password
+	for (var i = 0; i < v.length; i++) {
+		var asciiNumber = v.substr(i, 1).charCodeAt();
+		if (asciiNumber >= 33 && asciiNumber <= 126) {
+			ascok += 1;
+		} else {
+			ascbad += 1;
+		}
+	}
+	if(ascbad != 0){
+		alert("你的密码不符合要求，可能出现了乱码，请检查");
+		return false;
+	}
+	//check other
+	for(var i = 1; i < temp_ss.length; i++) {
+		var temp_str = $G(temp_ss[i]).value;
+		if(temp_str.indexOf(".") == -1) {
+			//wrong format
+			$G(temp_ss[i]).value = "";
+		}
+	}
+	//transform to base64
+	for(var i = 0; i < temp_ss.length; i++) {
+		var temp_str = $G(temp_ss[i]).value;
+		if(temp_str == "") {
+			continue;
+		}
+		$G(temp_ss[i]).value = Base64.encode(temp_str);
+	}
+	return true;
+}
+
 function done_validating(action) {
 	return true;
 }
@@ -300,18 +355,6 @@ function update_ss_ui(obj) {
 	$j("#ss_basic_method").val(obj.ss_basic_method);
 	$G("ss_basic_password").value = Base64.decode($G("ss_basic_password").value);
 
-}
-
-function validForm() {
-	var temp_ss = ["ss_basic_password", "ss_isp_website_web", "ss_dnsmasq", "ss_wan_white_ip", "ss_wan_white_domain", "ss_wan_black_ip", "ss_wan_black_domain", "ss_game2_black_lan", "ss_game2_white_lan", "ss_online_links"];
-	for(var i = 0; i < temp_ss.length; i++) {
-		var temp_str = $G(temp_ss[i]).value;
-		if(temp_str == "") {
-			continue;
-		}
-		$G(temp_ss[i]).value = Base64.encode(temp_str);
-	}
-	return true;
 }
 
 function update_visibility_main() {
@@ -2753,7 +2796,7 @@ function get_online_nodes(action) {
 															<tr id="ssr_obfs_param_tr">
 																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md" target="_blank"><u>混淆参数 (SSR特性)</u></a></th>
 																<td>
-																	<input type="text" name="ss_node_table_rss_obfs_param" id="ss_node_table_rss_obfs_param" placeholder="cloudflare.com"  class="input_ss_table" style="width:342px;" maxlength="100" value=""/>
+																	<input type="text" name="ss_node_table_rss_obfs_param" id="ss_node_table_rss_obfs_param" placeholder="cloudflare.com"  class="input_ss_table" style="width:342px;" maxlength="300" value=""/>
 																</td>
 															</tr>
 															<tr id="gameV2_udp_tr" >
@@ -2814,7 +2857,7 @@ function get_online_nodes(action) {
 												<tr id="server_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(2)">服务器</a></th>
 													<td>
-														<input type="text" class="input_ss_table" id="ss_basic_server" name="ss_basic_server" maxlength="100" value="" onBlur="switchType(this, true);this.removeAttribute('readonly');" onFocus="switchType(this, false);"/>
+														<input type="text" class="input_ss_table" id="ss_basic_server" name="ss_basic_server" maxlength="100" value=""/>
 													</td>
 												</tr>
 												<tr id="port_tr">
@@ -2928,7 +2971,7 @@ function get_online_nodes(action) {
 												<tr id="ss_basic_ticket_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(11)">混淆参数 (SSR特性)</a></th>
 													<td>
-														<input type="text" name="ss_basic_rss_obfs_param" id="ss_basic_rss_obfs_param" placeholder="cloudflare.com"  class="ssconfig input_ss_table" maxlength="100" value=""/>
+														<input type="text" name="ss_basic_rss_obfs_param" id="ss_basic_rss_obfs_param" placeholder="cloudflare.com"  class="ssconfig input_ss_table" maxlength="300" value=""/>
 													</td>
 												</tr>
 												<tr id="ss_basic_kcp_port_tr" style="display: none;">
