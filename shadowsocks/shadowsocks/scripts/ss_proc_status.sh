@@ -61,17 +61,17 @@ get_dns_name() {
 }
 
 echo_version(){
-	echo ① 程序版本（插件版本：3.3.4）：
+	echo ① 程序版本（插件版本：3.6.1）：
 	echo -----------------------------------------------------------
 	echo "程序			版本		备注"
-	echo "ss-redir		3.0.7		2017年4月26日"
-	echo "ss-tunnel		3.0.7 		2017年4月26日"
-	echo "ss-local		3.0.7		2017年4月26日"
-	echo "obfs-local		0.0.3		2017年3月28日"
-	echo "ssr-redir		2.5.6 		with mbed TLS 2.4.0"
-	echo "ssr-tunnel		2.5.6 		with mbed TLS 2.4.0"
-	echo "ssr-local		2.5.6 		with mbed TLS 2.4.0"
-	echo "client_linux_arm5	20170525	kcptun"
+	echo "ss-redir		3.1.0		2017年9月25日编译"
+	echo "ss-tunnel		3.1.0 		2017年9月25日编译"
+	echo "ss-local		3.1.0		2017年9月25日编译"
+	echo "obfs-local		0.0.3		2017年9月25日编译"
+	echo "ssr-redir		2.5.6 		2017年9月25日编译"
+	echo "ssr-tunnel		2.5.6 		2017年9月25日编译"
+	echo "ssr-local		2.5.6 		2017年9月25日编译"
+	echo "client_linux_arm5	20171021	kcptun"
 	echo "haproxy			1.7.5	"
 	echo "dns2socks		V2.0 	"
 	echo "dnscrypt-proxy		1.7.0 	"
