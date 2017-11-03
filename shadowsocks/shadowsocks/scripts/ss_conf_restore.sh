@@ -12,6 +12,9 @@ if [ -z "$format" ];then
 	sh /tmp/ss_conf_backup_tmp.sh
 	sleep 1
 	backup_version=`dbus get ss_basic_version_local`
+	[  -z "$backup_version" ] && {
+		backup_version="3.1.6"
+	}
 	comp=`versioncmp $backup_version 3.0.6`
 	if [ "$comp" == "1" ];then
 		echo_date 检测到备份文件来自低于3.0.6版本，开始对部分数据进行base64转换，以适应新版本！

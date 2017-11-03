@@ -21,7 +21,7 @@ IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
 # creat dnsmasq.d folder
 creat_folder(){
 	if [ ! -d /koolshare/configs/dnsmasq.d ];then
-		mkdir /koolshare/configs/dnsmasq.d
+		mkdir -p /koolshare/configs/dnsmasq.d
 	fi
 }
 
@@ -962,7 +962,8 @@ flush_nat(){
 	iptables -t nat -D OUTPUT -p tcp -m set --match-set router dst -j REDIRECT --to-ports 3333 >/dev/null 2>&1
 	iptables -t nat -F OUTPUT > /dev/null 2>&1
 	iptables -t nat -X SHADOWSOCKS_EXT > /dev/null 2>&1
-	iptables -t nat -D PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
+	iptables -t nat -D PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1 
+	iptables -t mangle -D QOSO0 -m mark --mark "$ip_prefix_hex" -j RETURN >/dev/null 2>&1
 }
 
 flush_ipset(){
@@ -975,14 +976,14 @@ flush_ipset(){
 }
 
 remove_redundant_rule(){
-	ip_rule_exist=`/usr/sbin/ip rule show | grep "fwmark 0x1/0x1 lookup 310" | grep -c 310`
-	#ip_rule_exist=`ip rule show | grep "fwmark 0x1/0x1 lookup 310" | grep -c 300`
+	ip_rule_exist=`/usr/sbin/ip rule show | grep "lookup 310" | grep -c 310`
+	#ip_rule_exist=`ip rule show | grep "fwmark 0x07 lookup 310" | grep -c 300`
 	if [ ! -z "ip_rule_exist" ];then
 		echo_date 清除重复的ip rule规则.
 		until [ "$ip_rule_exist" = 0 ]
 		do 
-			#ip rule del fwmark 0x01 table 310
-			/usr/sbin/ip rule del fwmark 0x01 table 310
+			IP_ARG=`/usr/sbin/ip rule show | grep "lookup 310"|head -n 1|cut -d " " -f3,4,5,6`
+			/usr/sbin/ip rule del $IP_ARG
 			ip_rule_exist=`expr $ip_rule_exist - 1`
 		done
 	fi
@@ -1126,25 +1127,29 @@ gamev2_control(){
 			echo_date 你开启了局域网黑名单，但是未填写任何内容，跳过！
 		fi
 		iptables -t nat -A SHADOWSOCKS -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
-		iptables -t mangle -A SHADOWSOCKS -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01
+		iptables -t nat -A SHADOWSOCKS_EXT -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
+		iptables -t mangle -A SHADOWSOCKS -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x07
 	elif [ "$ss_game2_lan_control" == "2" ];then
 		if [ ! -z $ss_game2_white_lan ];then
 			echo_date 添加局域网白名单IP，添加的IP地址将会走游戏模式V2，其余的不走游戏模式V2。
 			for white_ip in $white
 			do
 				iptables -t nat -A SHADOWSOCKS -p tcp -s $white_ip -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
-				iptables -t mangle -A SHADOWSOCKS -p udp -s $white_ip -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01
+				iptables -t nat -A SHADOWSOCKS_EXT -p tcp -s $white_ip -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
+				iptables -t mangle -A SHADOWSOCKS -p udp -s $white_ip -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x07
 			done
 			ss_acl_default_mode=0
 		else
 			echo_date 你开启了局域网白名单，但是未填写任何内容，跳过！
 			iptables -t nat -A SHADOWSOCKS -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
-			iptables -t mangle -A SHADOWSOCKS -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01
+			iptables -t nat -A SHADOWSOCKS_EXT -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
+			iptables -t mangle -A SHADOWSOCKS -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x07
 		fi
 	else 
 		echo_date 局域网控制功能未启用！
 		iptables -t nat -A SHADOWSOCKS -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
-		iptables -t mangle -A SHADOWSOCKS -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01
+		iptables -t nat -A SHADOWSOCKS_EXT -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
+		iptables -t mangle -A SHADOWSOCKS -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x07
 	fi	
 }
 
@@ -1157,34 +1162,49 @@ lan_acess_control(){
 			ipaddr=`dbus get ss_acl_ip_$acl`
 			ipaddr_hex=`dbus get ss_acl_ip_$acl | awk -F "." '{printf ("0x%02x", $1)} {printf ("%02x", $2)} {printf ("%02x", $3)} {printf ("%02x\n", $4)}'`
 			ports=`dbus get ss_acl_port_$acl`
-			[ "$ports" == "all" ] && ports=""
 			proxy_mode=`dbus get ss_acl_mode_$acl`
 			proxy_name=`dbus get ss_acl_name_$acl`
-			[ "$ports" == "" ] && echo_date 加载ACL规则：$ipaddr:all模式为：$(get_mode_name $proxy_mode) || echo_date 加载ACL规则：$ipaddr:$ports模式为：$(get_mode_name $proxy_mode)
-			# normal acl
+			if [ "$ports" == "all" ];then
+				ports=""
+				echo_date 加载ACL规则：【$ipaddr】【全部端口】模式为：$(get_mode_name $proxy_mode)
+			else
+				echo_date 加载ACL规则：【$ipaddr】【$ports】模式为：$(get_mode_name $proxy_mode)
+			fi
+			# 1 acl in SHADOWSOCKS for nat
 			iptables -t nat -A SHADOWSOCKS $(factor $ipaddr "-s") -p tcp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
-			# acl in OUTPUT（used by koolproxy）
+			# 2 acl in OUTPUT（used by koolproxy）
 			iptables -t nat -A SHADOWSOCKS_EXT -p tcp  $(factor $ports "-m multiport --dport") -m mark --mark "$ipaddr_hex" -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
-			# 当主模式为游戏模式(3)，acl主机为其它模式（!3），则这些主机的udp默认不走ss
-			[ "$ss_basic_mode" == "3" ] && [ "$proxy_mode" != "3" ] && iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") -p udp -j RETURN
-			# acl主机为游戏模式(3)，这些主机的udp走ss
-			[ "$proxy_mode" == "3" ] && iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") -p udp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
+			# 3 acl in SHADOWSOCKS for mangle
+			if [ "$proxy_mode" == "3" ];then
+				iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") -p udp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
+			else
+				[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") -p udp -j RETURN
+			fi
 		done
-		
-		if [ -n "ss_acl_default_mode=" ];then
-			echo_date 加载ACL规则：其余主机模式为：$(get_mode_name $ss_acl_default_mode)
+
+		if [ "$ss_acl_default_port" == "all" ];then
+			ss_acl_default_port=""
+			[ -z "$ss_acl_default_mode" ] && dbus set ss_acl_default_mode="$ss_basic_mode" && ss_acl_default_mode="$ss_basic_mode"
+			echo_date 加载ACL规则：【剩余主机】【全部端口】模式为：$(get_mode_name $ss_acl_default_mode)
 		else
-			echo_date 加载ACL规则：其余主机模式为：$(get_mode_name $ss_basic_mode)
-			dbus set ss_acl_default_mode="$ss_basic_mode"
+			echo_date 加载ACL规则：【剩余主机】【$ss_acl_default_port】模式为：$(get_mode_name $ss_acl_default_mode)
 		fi
 	else
-		ss_acl_default_mode=$ss_basic_mode
-		echo_date 加载ACL规则：所有模式为：$(get_mode_name $ss_basic_mode)
+		ss_acl_default_mode="$ss_basic_mode"
+		if [ "$ss_acl_default_port" == "all" ];then
+			ss_acl_default_port="" 
+			echo_date 加载ACL规则：【全部主机】【全部端口】模式为：$(get_mode_name $ss_acl_default_mode)
+		else
+			echo_date 加载ACL规则：【全部主机】【$ss_acl_default_port】模式为：$(get_mode_name $ss_acl_default_mode)
+		fi
 	fi
+	dbus remove ss_acl_ip
+	dbus remove ss_acl_name
+	dbus remove ss_acl_mode
+	dbus remove ss_acl_port
 }
 
 apply_nat_rules(){
-	[ "$ss_acl_default_port" == "all" ] && ss_acl_default_port=""
 	#----------------------BASIC RULES---------------------
 	echo_date 写入iptables规则到nat表中...
 	# 创建SHADOWSOCKS nat rule
@@ -1228,7 +1248,7 @@ apply_nat_rules(){
 	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_HOM -p tcp -m set --match-set chnroute dst -j REDIRECT --to-ports 3333
 
 	[ "$mangle" == "1" ] && load_tproxy
-	[ "$mangle" == "1" ] && /usr/sbin/ip rule add fwmark 0x01 table 310
+	[ "$mangle" == "1" ] && /usr/sbin/ip rule add fwmark 0x07 table 310
 	[ "$mangle" == "1" ] && /usr/sbin/ip route add local 0.0.0.0/0 dev lo table 310
 	# 创建游戏模式udp rule
 	[ "$mangle" == "1" ] && iptables -t mangle -N SHADOWSOCKS
@@ -1237,9 +1257,9 @@ apply_nat_rules(){
 	# 创建游戏模式udp rule
 	[ "$mangle" == "1" ] && iptables -t mangle -N SHADOWSOCKS_GAM
 	# IP/CIDR/域名 黑名单控制（走ss）
-	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set --match-set black_list dst -j TPROXY --on-port 3333 --tproxy-mark 0x01
+	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set --match-set black_list dst -j TPROXY --on-port 3333 --tproxy-mark 0x07
 	# cidr黑名单控制-chnroute（走ss）
-	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x01
+	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x07
 	#-------------------------------------------------------
 	# 局域网黑名单（不走ss）/局域网黑名单（走ss）
 	[ "$ss_basic_mode" != "4" ] && lan_acess_control || gamev2_control
@@ -1254,15 +1274,23 @@ apply_nat_rules(){
 	
 	# 如果是主模式游戏模式，则把SHADOWSOCKS链中剩余udp流量转发给SHADOWSOCKS_GAM链
 	# 如果主模式不是游戏模式，则不需要把SHADOWSOCKS链中剩余udp流量转发给SHADOWSOCKS_GAM，不然会造成其他模式主机的udp也走游戏模式
-	[ "$mangle" == "1" ] && ss_acl_default_mode=3
+	###[ "$mangle" == "1" ] && ss_acl_default_mode=3
+	[ "$ss_acl_default_mode" != "0" ] && [ "$ss_acl_default_mode" != "3" ] && ss_acl_default_mode=0
 	[ "$ss_basic_mode" == "3" ] && iptables -t mangle -A SHADOWSOCKS -p udp -j $(get_action_chain $ss_acl_default_mode)
 	# 重定所有流量到 SHADOWSOCKS
-	KP_NU=`iptables -nvL PREROUTING -t nat |sed 1,2d | sed -n '/KOOLPROXY/='`
+	KP_NU=`iptables -nvL PREROUTING -t nat |sed 1,2d | sed -n '/KOOLPROXY/='|head -n1`
 	[ "$KP_NU" == "" ] && KP_NU=0
 	INSET_NU=`expr "$KP_NU" + 1`
 	iptables -t nat -I PREROUTING "$INSET_NU" -p tcp -j SHADOWSOCKS
 	#iptables -t nat -I PREROUTING 1 -p tcp -j SHADOWSOCKS
-	[ "$mangle" == "1" ] && iptables -t mangle -I PREROUTING 1 -p udp -j SHADOWSOCKS
+	[ "$mangle" == "1" ] && iptables -t mangle -A PREROUTING -p udp -j SHADOWSOCKS
+
+	# QOS开启的情况下
+	QOSO=`iptables -t mangle -S | grep -o QOSO | wc -l`
+	RRULE=`iptables -t mangle -S | grep "A QOSO" | head -n1 | grep RETURN`
+	if [ "$QOSO" -gt "1" ] && [ -z "$RRULE" ];then
+		iptables -t mangle -I QOSO0 -m mark --mark "$ip_prefix_hex" -j RETURN
+	fi
 }
 
 chromecast(){
@@ -1313,31 +1341,6 @@ load_module(){
 		echo_date "加载xt_set.ko内核模块！"
 		insmod /lib/modules/${OS}/kernel/net/netfilter/xt_set.ko
 	fi
-}
-
-qos_warning(){
-	echo_date 检测是否符合游戏模式启动条件...
-	QOSO=`iptables -t mangle -S | grep -o QOSO | wc -l`
-	if [ $QOSO -gt 1 ];then
-		printf "$(date +%Y年%m月%d日\ %X): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
-		printf "$(date +%Y年%m月%d日\ %X): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
-		printf "$(date +%Y年%m月%d日\ %X): !!! 发现你开启了 Adaptive Qos - 传统带宽管理,该Qos模式和游戏模式\(V2\)冲突！!!!\n"
-		printf "$(date +%Y年%m月%d日\ %X): !!! 即使主模式没有使用游戏模式\(V2\),访问控制内有主机使用的话，同样会出现冲突！!!!\n"
-		printf "$(date +%Y年%m月%d日\ %X): !!! 如果你仍然希望在游戏模式下使用Qos，可以使用Adaptive QoS网络监控家模式。  !!!\n"
-		printf "$(date +%Y年%m月%d日\ %X): !!! 但是该模式下走ss的流量不会有Qos效果！                                 !!!\n"
-		printf "$(date +%Y年%m月%d日\ %X): !!! 退出应用应用操作，关闭ss！请等待10秒！                                !!!\n"
-		printf "$(date +%Y年%m月%d日\ %X): !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
-		dbus set ss_basic_enable=0
-		sleep 10
-		exit
-	else
-		echo_date 未检测到系统设置冲突，符合启动条件！
-	fi
-}
-
-detect_qos(){
-	game_on=`dbus list ss_acl_mode|cut -d "=" -f 2 | grep 3`
-	[ -n "$game_on" ] || [ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && qos_warning
 }
 
 restart_addon(){
@@ -1464,7 +1467,6 @@ apply_ss(){
 	
 	# start
 	echo_date ------------------------- 梅林固件 shadowsocks --------------------------
-	detect_qos
 	resolv_server_ip
 	# do not re generate json on router start, use old one
 	if [ "$ss_basic_mode" != "4" ];then

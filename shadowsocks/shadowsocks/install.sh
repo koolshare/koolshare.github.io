@@ -78,7 +78,17 @@ rm -rf /koolshare/bin/dns2socks
 rm -rf /koolshare/bin/client_linux_arm5
 rm -rf /koolshare/bin/chinadns
 rm -rf /koolshare/bin/resolveip
-
+rm -rf /koolshare/res/layer
+rm -rf /koolshare/res/shadowsocks.css
+rm -rf /koolshare/res/icon-shadowsocks.png
+rm -rf /koolshare/res/ss-menu.js
+rm -rf /koolshare/res/all.png
+rm -rf /koolshare/res/gfwlist.png
+rm -rf /koolshare/res/chn.png
+rm -rf /koolshare/res/game.png
+rm -rf /koolshare/res/shadowsocks.css
+rm -rf /koolshare/res/gameV2.png
+rm -rf /koolshare/res/ss_proc_status.htm
 
 echo_date 开始复制文件！
 cd /tmp

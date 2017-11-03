@@ -294,16 +294,16 @@ function hideSSLoadingBar(){
 	checkss = 0;
 	var action = document.form.ss_basic_action.value;
 	var oaction = document.form.ss_online_action.value;
-	if (action == 5 || action == 6 ||action == 7 ||action == 8 || action == 9 || action == 10){
+	//if (action == 5 || action == 6 ||action == 7 ||action == 8 || action == 9 || action == 10){
 		refreshpage();
-	}else{
-		htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
-		htmlbodyforIE[0].style.overflowY = "visible";
-		decode_show();
-		checkss = 0;
-		$G("ss_basic_password").value = Base64.decode($G("ss_basic_password").value);
-		setTimeout("get_ss_status_data();",2000);
-	}
+	//}else{
+	//	htmlbodyforIE = document.getElementsByTagName("html");  //this both for IE&FF, use "html" but not "body" because <!DOCTYPE html PUBLIC.......>
+	//	htmlbodyforIE[0].style.overflowY = "visible";
+	//	decode_show();
+	//	checkss = 0;
+	//	$G("ss_basic_password").value = Base64.decode($G("ss_basic_password").value);
+	//	setTimeout("get_ss_status_data();",2000);
+	//}
 }
 
 function pass_checked(obj){

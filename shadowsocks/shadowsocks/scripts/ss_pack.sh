@@ -45,8 +45,8 @@ cp /koolshare/res/chn.png $TARGET_FOLDER/res/
 cp /koolshare/res/game.png $TARGET_FOLDER/res/
 cp /koolshare/res/gameV2.png $TARGET_FOLDER/res/
 cp /koolshare/res/shadowsocks.css $TARGET_FOLDER/res/
-cp /koolshare/res/gameV2.png $TARGET_FOLDER/res/
 cp /koolshare/res/ss_proc_status.htm $TARGET_FOLDER/res/
+cp -rf /koolshare/res/layer $TARGET_FOLDER/res/
 cp -r /koolshare/ss $TARGET_FOLDER/
 rm -rf $TARGET_FOLDER/ss/*.json
 

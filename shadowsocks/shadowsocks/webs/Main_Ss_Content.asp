@@ -14,6 +14,7 @@
 <link rel="stylesheet" type="text/css" href="css/element.css">
 <link rel="stylesheet" type="text/css" href="/device-map/device-map.css">
 <link rel="stylesheet" type="text/css" href="/res/shadowsocks.css">
+<link rel="stylesheet" type="text/css" href="/res/layer/theme/default/layer.css">
 <script type="text/javascript" src="/state.js"></script>
 <script type="text/javascript" src="/popup.js"></script>
 <script type="text/javascript" src="/validator.js"></script>
@@ -108,6 +109,7 @@ function init() {
 	update_visibility_main();
 	version_show();
 	conf_to_obj();
+	hook_event();
 	document.form.ss_basic_action.value = 1;
 }
 
@@ -178,6 +180,50 @@ function decode_show(){
 	}
 }
 
+function hook_event(){
+	$j("#mode_state").attr("cursor", "pointer");
+	$j("#mode_state").click(
+	function() {
+		pop_111();
+	});
+}
+
+function pop_111() {
+	require(['/res/layer/layer.js'], function(layer) {
+		layer.open({
+			type: 2,
+			shade: .7,
+			scrollbar: 0,
+			title: '国内外分流信息:ip111.cn',
+			area: ['750px', '550px'],
+			fixed: false, //不固定
+			maxmin: true,
+			shadeClose: 1,
+			id: 'LAY_layuipro',
+			btnAlign: 'c',
+			content: 'http://ip111.cn/',
+		});
+	});
+}
+
+function pop_changelog() {
+	require(['/res/layer/layer.js'], function(layer) {
+		layer.open({
+			type: 2,
+			shade: .7,
+			//scrollbar: 0,
+			title: '国内外分流信息:ip111.cn',
+			area: ['750px', '600px'],
+			fixed: false, //不固定
+			maxmin: true,
+			shadeClose: 1,
+			id: 'LAY_layuipro',
+			btnAlign: 'c',
+			content: 'https://koolshare.ngrok.wang/shadowsocks/Changelog.txt',
+		});
+	});
+}
+
 function detect_kcptun(){
     var kcptun_mode = '<% nvram_get("KCP_mode"); %>';
 	if(kcptun_mode != "0" && kcptun_mode != ''){
@@ -225,24 +271,6 @@ function updateOptions() {
     setTimeout("checkCmdRet2();", 500);
 }
 
-function checkpassword(v) {
-	var ascok = 0;
-	var ascbad = 0;
-	for (var i = 0; i < v.length; i++) {
-		var asciiNumber = v.substr(i, 1).charCodeAt();
-		if (asciiNumber >= 33 && asciiNumber <= 126) {
-			ascok += 1;
-		} else {
-			ascbad += 1;
-		}
-	}
-	if(ascbad != 0){
-		alert("你的密码不符合要求，可能出现了乱码，请检查");
-		return false;
-	}
-}
-
-
 function validForm() {
 	var ascok = 0;
 	var ascbad = 0;
@@ -259,6 +287,14 @@ function validForm() {
 	}
 	if(ascbad != 0){
 		alert("你的密码不符合要求，可能出现了乱码，请检查");
+		//require(['/res/layer/layer.js'], function(layer) {
+		//	layer.msg('你的密码不符合要求，可能出现了乱码，请检查!', {
+		//		shade: 0.35,
+		//		shadeClose: true,
+		//		scrollbar: false,
+		//		time: 0
+		//	});
+		//});
 		return false;
 	}
 	//check other
@@ -297,7 +333,7 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		} else if (field == "ss_basic_ss_obfs_host") {
-			if (obj[field] == "undefined") {
+			if (obj[field] == undefined) {
 				$j("#ss_basic_ss_obfs_host").val("");
 			} else {
 				$j("#ss_basic_ss_obfs_host").val(obj.ss_basic_ss_obfs_host);
@@ -311,7 +347,7 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		} else if (field == "ss_basic_rss_protocol_param") {
-			if (obj[field] == "undefined") {
+			if (obj[field] == undefined) {
 				$j("#ss_basic_rss_protocol_param").val("");
 			} else {
 				$j("#ss_basic_rss_protocol_param").val(obj.ss_basic_rss_protocol_param);
@@ -325,17 +361,29 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		} else if (field == "ss_basic_rss_obfs_param") {
-			if (obj[field] == "undefined") {
+			if (obj[field] == undefined) {
 				$j("#ss_basic_rss_obfs_param").val("");
 			} else {
 				$j("#ss_basic_rss_obfs_param").val(obj.ss_basic_rss_obfs_param);
 			}
 			continue;
 		} else if (field == "ss_basic_use_rss") {
-			if (obj[field] == "undefined") {
+			if (obj["ss_basic_use_rss"] == undefined || obj["ss_basic_use_rss"] == "0") {
 				$j("#hd_ss_basic_use_rss").val("0");
-			} else {
+				if(obj["ss_basic_koolgame_udp"] == 0 || obj["ss_basic_koolgame_udp"] == 1){
+					$G("ss_basic_soft_type_0").checked=false
+					$G("ss_basic_soft_type_1").checked=false
+					$G("ss_basic_soft_type_2").checked=true
+				}else{
+					$G("ss_basic_soft_type_0").checked=true
+					$G("ss_basic_soft_type_1").checked=false
+					$G("ss_basic_soft_type_2").checked=false
+				}
+			} else if (obj[field] == "1") {
 				$j("#hd_ss_basic_use_rss").val(obj.ss_basic_use_rss);
+					$G("ss_basic_soft_type_0").checked=false
+					$G("ss_basic_soft_type_1").checked=true
+					$G("ss_basic_soft_type_2").checked=false
 			}
 			continue;
 		} else if (el != null && el.getAttribute("type") == "checkbox") {
@@ -348,23 +396,39 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		}
+		
 		if (el != null) {
 			el.value = obj[field];
 		}
 	}
 	$j("#ss_basic_method").val(obj.ss_basic_method);
 	$G("ss_basic_password").value = Base64.decode($G("ss_basic_password").value);
-
 }
 
-function update_visibility_main() {
+function update_visibility_main(r) {
+	//console.log(r)
+	if (r == 0 || r == 1 || r == 2){
+		if(document.form.hd_ss_basic_use_rss.value == "2"){
+			$j("#ss_basic_mode").val(4);
+		}else{
+			$j("#ss_basic_mode").val(db_ss["ss_basic_mode"]);
+		}
+	}
+	//if(document.form.ss_basic_mode.value == "4"){
+	//	$j("#ss_basic_mode").attr("disabled", "true");
+	//	$j("#ss_basic_mode").attr("title", "游戏模式v2下不允许选择其它模式");
+	//}else{
+	//	$j("#ss_basic_mode").removeAttr("disabled");
+	//	$j("#ss_basic_mode").removeAttr("title");
+	//}
 	ssmode = document.form.ss_basic_mode.value;
 	ssenable = document.form.ss_basic_enable.value;
 	crst = document.form.ss_basic_chromecast.value;
 	sru = document.form.ss_basic_rule_update.value;
 	srp = document.form.ss_basic_rss_protocol.value;
 	sro = document.form.ss_basic_rss_obfs.value;
-	sur = document.form.hd_ss_basic_use_rss.value;
+	sur = document.form.hd_ss_basic_use_rss.value||"0";
+	console.log(sur)
 	suk = document.form.hd_ss_basic_use_kcp.value;
 
 	if (ssmode == "2" || ssmode == "3" || ssmode == "4"){
@@ -372,38 +436,38 @@ function update_visibility_main() {
 	}else {
 		document.form.ss_dns_plan_gfw.value=document.form.ss_dns_plan.value;;
 	}
-	
-	if (ssmode == "0"){
+
+	if ($j("#ss_basic_mode").val() == "0"){
 		$j("#mode_state").html("SS运行状态");
 		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
 		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
 		$j("#ss_title").html("shadowsocks - 账号信息配置");
-	} else if (ssmode == "1"){
+	} else if ($j("#ss_basic_mode").val() == "1"){
 		$j("#mode_state").html("SS运行状态【gfwlist模式】");
 		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
 		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
 		$j("#ss_title").html("shadowsocks - 账号信息配置");
-	} else if (ssmode == "2"){
+	} else if ($j("#ss_basic_mode").val() == "2"){
 		$j("#mode_state").html("SS运行状态【大陆白名单模式】");
 		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
 		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
 		$j("#ss_title").html("shadowsocks - 账号信息配置");
-	} else if (ssmode == "3"){
+	} else if ($j("#ss_basic_mode").val() == "3"){
 		$j("#mode_state").html("SS运行状态【游戏模式】");
 		$j("#head_illustrate").html("<i>说明：</i><a href='http://koolshare.cn/thread-4519-1-1.html' target='_blank'><i>&nbsp;使用游戏模式，账号必须需支持UDP转发&nbsp;&nbsp;<u>FAQ</u></i></a>");
 		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
 		$j("#ss_title").html("shadowsocks - 账号信息配置");
-	} else if (ssmode == "4"){
+	} else if ($j("#ss_basic_mode").val() == "4"){
 		$j("#mode_state").html("SS运行状态【游戏模式V2】");
 		$j("#head_illustrate").html("<i>说明：</i>游戏模式V2是koolshare小宝为游戏玩家专门开发的加速软件，并针对udp包专门优化。&nbsp;&nbsp;<a style='margin-left: 20px;' href='https://github.com/clangcn/game-server' target='_blank'><i><u>&nbsp;游戏模式v2服务器一键安装脚本</u></i></a>");
 		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>游戏模式V2 开关</a>");
 		$j("#ss_title").html("游戏模式V2 - 账号信息配置");
-	} else if (ssmode == "5"){
+	} else if ($j("#ss_basic_mode").val() == "5"){
 		$j("#mode_state").html("SS运行状态【全局模式】");
 		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
 		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
 		$j("#ss_title").html("shadowsocks - 账号信息配置");
-	} else if (ssmode == "6"){
+	} else if ($j("#ss_basic_mode").val() == "6"){
 		$j("#mode_state").html("SS运行状态【回国模式】");
 		$j("#head_illustrate").html("<i>说明：</i>请在下面的<em>账号设置</em>表格中填入你的shadowsocks账号信息，选择好一个模式，点击提交后就能使用代理服务。");
 		$j("#ss_switch").html("<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(10)'>shadowsocks 开关</a>");
@@ -413,27 +477,40 @@ function update_visibility_main() {
 	showhide("ss_state2", (ssmode != "0"));
 	showhide("ss_state3", (ssmode != "0"));
 	showhide("dns_plan_foreign", (ssmode != "4"));
-	showhide("dns_plan_foreign_game2", (ssmode == "4"));
-	showhide("ss_koolgame_udp_tr", (ssmode == "4"));
-	//开启ssr，开启游戏模式，游戏模式v2，开启kcp协议，都将不支持ss-libev的混淆，因此不予显示
-	showhide("ss_obfs", (sur != "1" && ssmode != "4" && suk !="1"));
-	showhide("ss_obfs_host", (sur != "1" && ssmode != "4" && suk !="1" && document.form.ss_basic_ss_obfs.value != "0"));
+	showhide("dns_plan_foreign_game2", sur == "2");
+	//---------
+	//ss-libev
+	showhide("ss_obfs", (sur == "0" && ssmode != "4" && suk !="1"));
+	showhide("ss_obfs_host", (sur == "0" && ssmode != "4" && suk !="1" && document.form.ss_basic_ss_obfs.value != "0"));
+	//ssr-libev
+	if(r == undefined){
+		showhide("ss_basic_rss_protocol_param_tr", (sur == "1" && ssmode != "4" && document.getElementById("ss_basic_rss_protocol_param").value != ""));
+	}else if (r == 0 || r == 1 || r == 2){
+		showhide("ss_basic_rss_protocol_param_tr", (sur == "1" && ssmode != "4"));
+	}
+	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode != "4"));
+	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode != "4"));
+	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode != "4"));
+	//游戏模式v2
+
+	showhide("ss_koolgame_udp_tr", sur == "2" || $j("#ss_basic_mode").val() == "4");
+	//showhide("mode_select", sur != "2" || ssmode == "4");
+	//---------
+	//游戏模式和游戏模式v2不支持kcp加速，不显示开启kcp加速的开关
+	showhide("KCP_name", (ssmode != "3" && ssmode != "4" && document.form.ss_basic_ss_obfs.value =="0"));
+	//节点新增编辑窗口
 	if (save_flag == "shadowsocks"){
 		showhide("ss_obfs_support", ($j("#ss_node_table_mode").val() != "3"));
 		showhide("ss_obfs_host_support", ($j("#ss_node_table_mode").val() != "3" && $j("#ss_node_table_ss_obfs").val() != "0"));
 	}
-	showhide("KCP_name", (ssmode != "3" && ssmode != "4" && document.form.ss_basic_ss_obfs.value =="0"));
-	showhide("ss_basic_rss_protocol_tr", (sur == "1" && ssmode != "4"));
-	showhide("ss_basic_rss_protocol_param_tr", (sur == "1" && ssmode != "4" && document.getElementById("ss_basic_rss_protocol_param").value != ""));
-	showhide("ss_basic_rss_obfs_tr", (sur == "1" && ssmode != "4"));
-	showhide("ss_basic_ticket_tr", (sur == "1" && ssmode != "4" && document.form.ss_basic_rss_obfs.value == "tls1.2_ticket_auth" || document.form.ss_basic_rss_obfs.value == "http_simple" || document.form.ss_basic_rss_obfs.value == "http_post" ));
-	showhide("ss_basic_kcp_port_tr", (suk == "1" && ssmode!== "4" && ssmode!== "3" ));
-
+	//勾选kcp加速开关后显示kcp端口和参数栏
 	if(suk == "1" && ssmode !== "4" && ssmode !== "3"){
+		document.getElementById("ss_basic_kcp_port_tr").style.display  = "";
 		document.getElementById("ss_basic_kcp_parameter_tr").style.display  = "";
 		autoTextarea(document.getElementById("ss_basic_kcp_parameter"));
 		document.getElementById("ss_basic_kcp_parameter_tr").style.visibility  = "";
 	}else{
+		document.getElementById("ss_basic_kcp_port_tr").style.display  = "none";
 		document.getElementById("ss_basic_kcp_parameter_tr").style.display  = "none";
 		document.getElementById("ss_basic_kcp_parameter_tr").style.visibility  = "hidden";
 	}
@@ -555,6 +632,11 @@ function oncheckclick(obj) {
 	} else {
 		document.form["hd_" + obj.id].value = "0";
 	}
+}
+
+function switch_soft_type(o) {
+	document.form["hd_ss_basic_use_rss"].value = o;
+	update_visibility_main(o);
 }
 
 function ssconf_node2obj(node_sel) {
@@ -1521,7 +1603,9 @@ function ping_test() {
 	document.form.SystemCmd.value = "ss_ping.sh";
 	document.form.action_mode.value = ' Refresh ';
 	document.form.action = "/applydb.cgi?p=ssconf_basic_ping";
-	document.form.submit();
+	if (validForm()) {
+		document.form.submit();
+	}
 	checkTime = 0;
 	refresh_ss_node_list_ping();
 	//$j(".ping").html('测试中...');
@@ -1532,7 +1616,9 @@ function remove_ping() {
 	checkTime = 2001; //停止可能在进行的刷新
 	document.form.SystemCmd.value = "ss_ping_remove.sh";
 	document.form.action_mode.value = ' Refresh ';
-	document.form.submit();
+	if (validForm()) {
+		document.form.submit();
+	}
 	setTimeout("refresh_table()", 3000);
 	alert("请等待片刻，如果结果未清空，请手动刷新页面!");
 }
@@ -1542,7 +1628,9 @@ function web_test() {
 	document.form.SystemCmd.value = "ss_webtest.sh";
 	document.form.action_mode.value = ' Refresh ';
 	document.form.action = "/applydb.cgi?p=ssconf_basic_test";
-	document.form.submit();
+	if (validForm()) {
+		document.form.submit();
+	}
 	checkTime = 0;
 	refresh_ss_node_list_webtest();
 	alert("请等待片刻，测试结果将自动显示在对应节点列表!");
@@ -1552,7 +1640,9 @@ function remove_test() {
 	checkTime = 2001; //停止可能在进行的刷新
 	document.form.SystemCmd.value = "ss_webtest_remove.sh";
 	document.form.action_mode.value = ' Refresh ';
-	document.form.submit();
+	if (validForm()) {
+		document.form.submit();
+	}
 	setTimeout("refresh_table()", 3000);
 	alert("请等待片刻，如果结果未清空，请手动刷新页面!");
 }
@@ -2490,10 +2580,23 @@ function write_proc_status(){
 
 function get_online_nodes(action) {
 	if (action == 0||action == 1){
-		if (!confirm("你确定删除吗？")) {
-			return false;
-		}
+		require(['/res/layer/layer.js'], function(layer) {
+			layer.confirm('你确定要删除吗？', {
+				shade: 0.8,
+			}, function(index) {
+				layer.close(index);
+				save_online_nodes(action);
+			}, function(index) {
+				layer.close(index);
+				return false;
+			});
+		});
+	}else{
+		save_online_nodes(action);
 	}
+}
+
+function save_online_nodes(action){
 	document.form.action = "/applydb.cgi?p=ss";
 	document.form.SystemCmd.value = "ss_online_update.sh";
 	document.form.action_mode.value = ' Refresh ';
@@ -2606,15 +2709,15 @@ function get_online_nodes(action) {
 																</div>
 															</label>
 														</div>
-														<div id="update_button" style="margin-left:90px;margin-top:0px;">
-															<button id="updateBtn" class="button_gen" onclick="update_ss();">检查并更新</button>
+														<div id="update_button" style="display:table-cell;float: left;position: absolute;margin-left:70px;padding: 5.5px 0px;">
+															<a id="updateBtn" type="button" class="ss_btn" style="cursor:pointer" onclick="update_ss(3)">检查并更新</a>
 														</div>
-														<div id="ss_version_show" style="margin-left:220px;margin-top:-28px;">
+														<div id="ss_version_show" style="display:table-cell;float: left;position: absolute;margin-left:170px;padding: 5.5px 0px;">
 															<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(12)">
 																<i>当前版本：<% dbus_get_def("ss_basic_version_local", "未知"); %></i>
 															</a>
 														</div>
-														<div style="margin-left:347px;margin-top:-21px;">
+														<div style="display:table-cell;float: left;margin-left:270px;position: absolute;padding: 5.5px 0px;">
 															<a type="button" class="kp_btn" target="_blank" href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt">更新日志</a>
 														</div>
 													</td>
@@ -2626,13 +2729,20 @@ function get_online_nodes(action) {
 												<tr id="ss_state">
 												<th id="mode_state" width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(0)">SS运行状态</a></th>
 													<td>
-														<input type="button" class="ss_btn" style="cursor:pointer;margin-left:347px;margin-top:8px;position: absolute;width:65.31px;height:27px" onclick="get_proc_status();" value="详细状态">
-														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(0)">
-															<span style="display: none" id="ss_state1">尚未启用! </span>
-															<span id="ss_state2">国外连接 - Waiting...</span>
-															<br/>
-															<span id="ss_state3">国内连接 - Waiting...</span>
-														</a>
+														<div style="display:table-cell;float: left;margin-left:0px;">
+															<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(0)">
+																<span style="display: none" id="ss_state1">尚未启用! </span>
+																<span id="ss_state2">国外连接 - Waiting...</span>
+																<br/>
+																<span id="ss_state3">国内连接 - Waiting...</span>
+															</a>
+														</div>
+														<div style="display:table-cell;float: left;margin-left:270px;position: absolute;padding: 10.5px 0px;">
+															<a type="button" class="ss_btn" style="cursor:pointer" onclick="pop_111(3)" href="javascript:void(0);">分流检测</a>
+														</div>
+														<div style="display:table-cell;float: left;margin-left:350px;position: absolute;padding: 10.5px 0px;">
+														<a type="button" class="ss_btn" style="cursor:pointer" onclick="get_proc_status(3)" href="javascript:void(0);">详细状态</a>
+														</div>
 													</td>
 												</tr>
 											</table>
@@ -2649,10 +2759,15 @@ function get_online_nodes(action) {
                                     	                <input id="show_btn5" class="show-btn5" style="cursor:pointer" type="button" value="访问控制"/>
                                     	                <input id="show_btn6" class="show-btn6" style="cursor:pointer" type="button" value="附加功能"/>
                                     	                <input id="show_btn7" class="show-btn7" style="cursor:pointer" type="button" value="查看日志"/>
-														<a style="margin-left:9px;" type="button" title="需要FQ才能访问" class="kp_btn" target="_blank" href="https://t.me/joinchat/AAAAAEC7pgV9vPdPcJ4dJw">电报交流</a>
-														<a style="margin-left:9px;" type="button" class="kp_btn" target="_blank" href="https://github.com/onekeyshell/kcptun_for_ss_ssr">一键脚本</a>
+
                                     	            </td>
                                     	        </tr>
+												<div style="display:table-cell;float: left;margin-left:542px;margin-top:-3px;position: absolute;padding: 10.5px 0px;">
+													<a type="button" title="需要FQ才能访问" class="kp_btn" target="_blank" href="https://t.me/joinchat/AAAAAEC7pgV9vPdPcJ4dJw">电报交流</a>
+												</div>
+												<div style="display:table-cell;float: left;margin-left:622px;margin-top:-3px;position: absolute;padding: 10.5px 0px;">
+													<a type="button" class="kp_btn" target="_blank" href="https://github.com/onekeyshell/kcptun_for_ss_ssr">一键脚本</a>
+												</div>
 											</table>
 										</div>
 
@@ -2826,18 +2941,22 @@ function get_online_nodes(action) {
 										<!--=====bacic show =====-->
 										<div id="tablet_1">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="0" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable" >
-
 												<tr id="node_select">
-													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(15)">节点选择</a></th>
+													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(15)">节点选择</a>
+
+													</th>
 													<td>
-														<div style="float:left; width:165px; height:25px">
-															<select id="ssconf_basic_node" name="ssconf_basic_node" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" onchange="ss_node_sel();update_visibility_main();" >
-															</select>
-														</div>
+														<select id="ssconf_basic_node" name="ssconf_basic_node" style="width:164px;margin:0px 0px 0px 2px;" class="input_option" onchange="ss_node_sel();update_visibility_main();" >
+														</select>
+														<input type="radio" name="ss_basic_soft_type" id="ss_basic_soft_type_0" onclick="switch_soft_type(0);" class="input" value="0" checked="">SS
+														<input type="radio" name="ss_basic_soft_type" id="ss_basic_soft_type_1"onclick="switch_soft_type(1);" class="input" value="1" >SSR
+														<input type="radio" name="ss_basic_soft_type" id="ss_basic_soft_type_2"onclick="switch_soft_type(2);" class="input" value="2">V2
 													</td>
 												</tr>
-												<tr>
-													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(1)">模式</a></th>
+												<tr id="mode_select">
+													<th width="35%">
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(1)">模式</a>
+														</th>
 													<td>
 														<select id="ss_basic_mode" name="ss_basic_mode" style="width:164px;margin:0px 0px 0px 2px;" class="ssconfig input_option" onchange="update_visibility_main();" >
 															<option value="1">【1】 gfwlist模式</option>
@@ -2847,10 +2966,11 @@ function get_online_nodes(action) {
 															<option value="5">【5】 全局代理模式</option>
 															<option value="6">【6】 回国模式</option>
 														</select>
-														<div id="KCP_name" style="margin-left:170px;margin-top:-20px;margin-bottom:0px;">
+														<div id="KCP_name" style="margin-left:170px;margin-top:-22px;margin-bottom:0px;">
 															<input type="checkbox" id="ss_basic_use_kcp" onclick="oncheckclick(this);update_visibility_main();" />
 															<input type="hidden" id="hd_ss_basic_use_kcp" name="ss_basic_use_kcp" value="" />
 															<a>启用KCP协议</a>
+
 														</div>
 													</td>
 												</tr>
