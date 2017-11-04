@@ -1,6 +1,6 @@
 #!/bin/sh
 LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")
-/usr/sbin/wget -4 --spider --quiet --tries=2 --timeout=2 www.google.com.tw
+env http_proxy=socks5://localhost:23456 /usr/sbin/curl  http://www.facebook.com
 
 if [ "$?" == "0" ]; then
 	log='<font color='#fc0'>国外连接 - [ '$LOGTIME' ] ✓</font>'
