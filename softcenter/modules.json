@@ -12,6 +12,7 @@
 {"module": "softether", "git_source": "https://github.com/koolshare/merlin-SoftEtherVPN.git"},
 {"module": "gdddns", "git_source": "https://github.com/mritd/koolshare-gdddns.git"},
 {"module": "ddnsto", "git_source": "https://github.com/koolshare/merlin_ddnsto.git"},
-{"module": "serverchan", "git_source": "https://github.com/koolshare/merlin_serverChan.git"}
+{"module": "serverchan", "git_source": "https://github.com/koolshare/merlin_serverChan.git"},
+{"module": "cloudxns", "git_source": "https://github.com/koolshare/merlin_cloudxns.git"}
 ]
 
