@@ -2,7 +2,7 @@
 
 MODULE=shadowsocks
 VERSION=`cat ./shadowsocks/ss/version|sed -n 1p`
-TITLE=shadowsocks
+TITLE=科学上网
 DESCRIPTION=科学上网
 HOME_URL=Main_Ss_Content.asp
 
