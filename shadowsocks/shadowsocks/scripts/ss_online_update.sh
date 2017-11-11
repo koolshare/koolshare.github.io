@@ -419,7 +419,7 @@ start_update(){
 	
 	z=0
 	online_url_nu=`dbus get ss_online_links|base64_decode|sed 's/$/\n/'|sed '/^$/d'|wc -l`
-	echo_date online_url_nu $online_url_nu
+	#echo_date online_url_nu $online_url_nu
 	until [ "$z" == "$online_url_nu" ]
 	do
 		z=$(($z+1))
@@ -436,6 +436,9 @@ start_update(){
 		get_oneline_rule_now "$url"
 
 		case $? in
+		0)
+			continue
+			;;
 		2)
 			echo_date "无法获取产品信息"
 			rm -rf /tmp/ssr_subscribe_file.txt >/dev/null 2>&1 &
