@@ -2426,8 +2426,8 @@ function refresh_acl_html() {
 }
 
 function setClientIP(ip, name, mac) {
-	E("ss_acl_ip") = ip;
-	E("ss_acl_name") = name;
+	E("ss_acl_ip").value = ip;
+	E("ss_acl_name").value = name;
 	hideClients_Block();
 }
 
