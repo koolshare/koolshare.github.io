@@ -11,7 +11,6 @@ upgrade_ss_conf(){
 			dbus remove ssconf_basic_ss_obfs_$node
 			dbus remove ssconf_basic_ss_obfs_host_$node
 			dbus remove ssconf_basic_koolgame_udp_$node
-			dbus remove dbus get ssconf_basic_use_rss_$node
 		else
 			if [ -n "`dbus get ssconf_basic_koolgame_udp_$node`" ];then
 				#koolgame
