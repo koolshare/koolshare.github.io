@@ -25,34 +25,80 @@ case $(uname -m) in
     ;;
 esac
 
-remove_conf(){
-	ipset_value=`dbus list ss_ipset | cut -d "=" -f 1`
-	redchn_value=`dbus list ss_redchn | cut -d "=" -f 1`
-	game_value=`dbus list ss_game_ | cut -d "=" -f 1`
-	overall_value=`dbus list ss_overall_ | cut -d "=" -f 1`
-	onetime_value=`dbus list ssconf_basic|grep onetime_auth | cut -d "=" -f 1`
-	for conf in $ipset_value $redchn_value $game_value $overall_value
+upgrade_ss_conf(){
+	nodes=`dbus list ssc|grep port|cut -d "=" -f1|cut -d "_" -f4|sort -n`
+	for node in $nodes
 	do
-		echo 移除$conf
-		dbus remove $conf
+		if [ "`dbus get ssconf_basic_use_rss_$node`" == "1" ];then
+			#ssr
+			dbus remove ssconf_basic_ss_obfs_$node
+			dbus remove ssconf_basic_ss_obfs_host_$node
+			dbus remove ssconf_basic_koolgame_udp_$node
+			dbus remove dbus get ssconf_basic_use_rss_$node
+		else
+			if [ -n "`dbus get ssconf_basic_koolgame_udp_$node`" ];then
+				#koolgame
+				dbus remove ssconf_basic_rss_protocol_$node
+				dbus remove ssconf_basic_rss_protocol_param_$node
+				dbus remove ssconf_basic_rss_obfs_$node
+				dbus remove ssconf_basic_rss_obfs_param_$node
+				dbus remove ssconf_basic_ss_obfs_$node
+				dbus remove ssconf_basic_ss_obfs_host_$node
+			else
+				#ss
+				dbus remove ssconf_basic_rss_protocol_$node
+				dbus remove ssconf_basic_rss_protocol_param_$node
+				dbus remove ssconf_basic_rss_obfs_$node
+				dbus remove ssconf_basic_rss_obfs_param_$node
+				dbus remove ssconf_basic_koolgame_udp_$node
+				[ -z "`dbus get ssconf_basic_ss_obfs_$node`" ] && dbus set ssconf_basic_ss_obfs_$node="0"
+			fi
+		fi
+		dbus remove ssconf_basic_use_rss_$node
 	done
+	
+	use_node=`dbus get ssconf_basic_node`
+	[ -z "$use_node" ] && use_node="1"
+	dbus remove ss_basic_server
+	dbus remove ss_basic_mode
+	dbus remove ss_basic_port
+	dbus remove ss_basic_method
+	dbus remove ss_basic_ss_obfs
+	dbus remove ss_basic_ss_obfs_host
+	dbus remove ss_basic_rss_protocol
+	dbus remove ss_basic_rss_protocol_param
+	dbus remove ss_basic_rss_obfs
+	dbus remove ss_basic_rss_obfs_param
+	dbus remove ss_basic_koolgame_udp
+	dbus remove ss_basic_use_rss
+	dbus remove ss_basic_use_kcp
+	sleep 1
+	[ -n "`dbus get ssconf_basic_server_$node`" ] && dbus set ss_basic_server=`dbus get ssconf_basic_server_$node`
+	[ -n "`dbus get ssconf_basic_mode_$node`" ] && dbus set ss_basic_mode=`dbus get ssconf_basic_mode_$node`
+	[ -n "`dbus get ssconf_basic_port_$node`" ] && dbus set ss_basic_port=`dbus get ssconf_basic_port_$node`
+	[ -n "`dbus get ssconf_basic_method_$node`" ] && dbus set ss_basic_method=`dbus get ssconf_basic_method_$node`
+	[ -n "`dbus get ssconf_basic_ss_obfs_$node`" ] && dbus set ss_basic_ss_obfs=`dbus get ssconf_basic_ss_obfs_$node`
+	[ -n "`dbus get ssconf_basic_ss_obfs_host_$node`" ] && dbus set ss_basic_ss_obfs_host=`dbus get ssconf_basic_ss_obfs_host_$node`
+	[ -n "`dbus get ssconf_basic_rss_protocol_$node`" ] && dbus set ss_basic_rss_protocol=`dbus get ssconf_basic_rss_protocol_$node`
+	[ -n "`dbus get ssconf_basic_rss_protocol_param_$node`" ] && dbus set ss_basic_rss_protocol_param=`dbus get ssconf_basic_rss_protocol_param_$node`
+	[ -n "`dbus get ssconf_basic_rss_obfs_$node`" ] && dbus set ss_basic_rss_obfs=`dbus get ssconf_basic_rss_obfs_$node`
+	[ -n "`dbus get ssconf_basic_rss_obfs_param_$node`" ] && dbus set ss_basic_rss_obfs_param=`dbus get ssconf_basic_rss_obfs_param_$node`
+	[ -n "`dbus get ssconf_basic_koolgame_udp_$node`" ] && dbus set ss_basic_koolgame_udp=`dbus get ssconf_basic_koolgame_udp_$node`
+	[ -n "`dbus get ssconf_basic_use_kcp_$node`" ] && dbus set ss_basic_koolgame_udp=`dbus get ssconf_basic_use_kcp_$node`
 }
 
-# 检测版本号
-firmware_version=`nvram get extendno|cut -d "X" -f2|cut -d "-" -f1|cut -d "_" -f1`
-firmware_comp=`versioncmp $firmware_version 7.1`
-echo_date 因为固件原因，从3.1.6版本开始，SS插件将只适用于X7.2及以后固件，X7.1及其以前固件不再支持!
-echo_date 开始检测是否符合升级条件！
-if [ "$firmware_comp" == "-1" ];then
-	echo_date 检测到固件版本X$firmware_version，符合升级条件！
-	echo_date 先清理旧版本SS的一些无用参数...
-	remove_conf
-else
-	echo_date 检测到固件版本X$firmware_version，不符合升级条件，请升级到最新固件并重新尝试！
-	echo_date 退出SS插件升级！
-	rm -rf /tmp/shadowsocks* >/dev/null 2>&1
-	dbus set ss_basic_install_status="0"
-	exit 1
+SS_VERSION_OLD=`dbus get ss_basic_version_local`
+ss_comp=`versioncmp $SS_VERSION_OLD 3.6.5`
+if [ -n "$SS_VERSION_OLD" ];then
+	if [ "$ss_comp" == "1" ];then
+		echo_date ！！！！！！！！！！！！！！！！！！！！！！！！！！!
+		echo_date 检测到SS版本号为 $SS_VERSION_OLD !
+		echo_date 从3.6.5开始，SS插件和之前版本的数据格式不完全兼容 !
+		echo_date 此次升级将会尝试升级原先的数据 !
+		echo_date 如果你安装此版本后仍然有问题，请尝试清空ss数据后重新录入 !
+		echo_date ！！！！！！！！！！！！！！！！！！！！！！！！！！!
+		upgrade_ss_conf
+	fi
 fi
 
 # 先关闭ss
@@ -126,36 +172,6 @@ chmod 755 /koolshare/ss/*
 chmod 755 /koolshare/scripts/ss*
 chmod 755 /koolshare/bin/*
 
-# transform data in skipd when ss version below 3.0.6
-curr_version=`dbus get ss_basic_version_local`
-comp=`/usr/bin/versioncmp $curr_version 3.0.6`
-if [ -n "$curr_version" ] && [ "$comp" == "1" ];then
-	echo_date 从ss3.0.6版本开始，将对界面内textarea内的值和ss的密码进行base64加密，方便储存！
-	echo_date 生成当前SS版本：$curr_version的配置文件到/jffs根目录！
-	dbus list ss > /jffs/ss_conf_backup_$curr_version.txt
-	echo_date 对部分ss数据进行base64加密数据！
-	node_pass=`dbus list ssconf_basic_password |cut -d "=" -f 1|cut -d "_" -f4|sort -n`
-	for node in $node_pass
-	do
-		dbus set ssconf_basic_password_$node=`dbus get ssconf_basic_password_$node|base64_encode`
-	done
-	dbus set ss_basic_password=`dbus get ss_basic_password|base64_encode`
-	dbus set ss_basic_black_lan=`dbus get ss_basic_black_lan | base64_encode`
-	dbus set ss_basic_white_lan=`dbus get ss_basic_white_lan | base64_encode`
-	dbus set ss_ipset_black_domain_web=`dbus get ss_ipset_black_domain_web | base64_encode`
-	dbus set ss_ipset_white_domain_web=`dbus get ss_ipset_white_domain_web | base64_encode`
-	dbus set ss_ipset_dnsmasq=`dbus get ss_ipset_dnsmasq | base64_encode`
-	dbus set ss_ipset_black_ip=`dbus get ss_ipset_black_ip | base64_encode`
-	dbus set ss_redchn_isp_website_web=`dbus get ss_redchn_isp_website_web | base64_encode`
-	dbus set ss_redchn_dnsmasq=`dbus get ss_redchn_dnsmasq | base64_encode`
-	dbus set ss_redchn_wan_white_ip=`dbus get ss_redchn_wan_white_ip | base64_encode`
-	dbus set ss_redchn_wan_white_domain=`dbus get ss_redchn_wan_white_domain | base64_encode`
-	dbus set ss_redchn_wan_black_ip=`dbus get ss_redchn_wan_black_ip | base64_encode`
-	dbus set ss_redchn_wan_black_domain=`dbus get ss_redchn_wan_black_domain | base64_encode`
-	dbus set ss_game_dnsmasq=`dbus get ss_game_dnsmasq | base64_encode`
-	dbus set ss_gameV2_dnsmasq=`dbus get ss_gameV2_dnsmasq | base64_encode`
-fi
-
 # 设置一些默认值
 echo_date 设置一些默认值
 [ -z "$ss_dns_china" ] && dbus set ss_dns_china=11
@@ -165,12 +181,12 @@ echo_date 设置一些默认值
 [ -z "$ss_acl_default_mode" ] && [ -z "$ss_basic_mode" ] && dbus set ss_acl_default_mode=1
 [ -z "$ss_acl_default_port" ] && dbus set ss_acl_default_port=all
 [ -z "$ss_dns_plan" ] && dbus set ss_dns_china=1
-[ -z "$ss_dns_plan_chn" ] && dbus set ss_dns_china=2
-[ -z "$ss_dns_plan_gfw" ] && dbus set ss_dns_china=1
 
 # 离线安装时设置软件中心内储存的版本号和连接
 dbus set softcenter_module_shadowsocks_install=1
-dbus set softcenter_module_shadowsocks_version=3.6.1
+dbus set softcenter_module_shadowsocks_version=3.6.5
+dbus set softcenter_module_shadowsocks_title="科学上网"
+dbus set softcenter_module_shadowsocks_description="科学上网"
 dbus set softcenter_module_shadowsocks_home_url=Main_Ss_Content.asp
 
 new_version=`cat /koolshare/ss/version`
@@ -188,10 +204,3 @@ if [ "$ss_basic_enable" == "1" ];then
 	. /koolshare/ss/ssconfig.sh restart
 fi
 echo_date 更新完毕，请等待网页自动刷新！
-
-
-
-
-
-
-

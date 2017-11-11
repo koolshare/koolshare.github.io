@@ -2,6 +2,69 @@
 source /koolshare/scripts/base.sh
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
 
+upgrade_ss_conf(){
+	nodes=`dbus list ssc|grep port|cut -d "=" -f1|cut -d "_" -f4|sort -n`
+	for node in $nodes
+	do
+		if [ "`dbus get ssconf_basic_use_rss_$node`" == "1" ];then
+			#ssr
+			dbus remove ssconf_basic_ss_obfs_$node
+			dbus remove ssconf_basic_ss_obfs_host_$node
+			dbus remove ssconf_basic_koolgame_udp_$node
+			dbus remove dbus get ssconf_basic_use_rss_$node
+		else
+			if [ -n "`dbus get ssconf_basic_koolgame_udp_$node`" ];then
+				#koolgame
+				dbus remove ssconf_basic_rss_protocol_$node
+				dbus remove ssconf_basic_rss_protocol_param_$node
+				dbus remove ssconf_basic_rss_obfs_$node
+				dbus remove ssconf_basic_rss_obfs_param_$node
+				dbus remove ssconf_basic_ss_obfs_$node
+				dbus remove ssconf_basic_ss_obfs_host_$node
+			else
+				#ss
+				dbus remove ssconf_basic_rss_protocol_$node
+				dbus remove ssconf_basic_rss_protocol_param_$node
+				dbus remove ssconf_basic_rss_obfs_$node
+				dbus remove ssconf_basic_rss_obfs_param_$node
+				dbus remove ssconf_basic_koolgame_udp_$node
+				[ -z "`dbus get ssconf_basic_ss_obfs_$node`" ] && dbus set ssconf_basic_ss_obfs_$node="0"
+			fi
+		fi
+		dbus remove ssconf_basic_use_rss_$node
+	done
+	
+	use_node=`dbus get ssconf_basic_node`
+	[ -z "$use_node" ] && use_node="1"
+	dbus remove ss_basic_server
+	dbus remove ss_basic_mode
+	dbus remove ss_basic_port
+	dbus remove ss_basic_method
+	dbus remove ss_basic_ss_obfs
+	dbus remove ss_basic_ss_obfs_host
+	dbus remove ss_basic_rss_protocol
+	dbus remove ss_basic_rss_protocol_param
+	dbus remove ss_basic_rss_obfs
+	dbus remove ss_basic_rss_obfs_param
+	dbus remove ss_basic_koolgame_udp
+	dbus remove ss_basic_use_rss
+	dbus remove ss_basic_use_kcp
+	sleep 1
+	[ -n "`dbus get ssconf_basic_server_$node`" ] && dbus set ss_basic_server=`dbus get ssconf_basic_server_$node`
+	[ -n "`dbus get ssconf_basic_mode_$node`" ] && dbus set ss_basic_mode=`dbus get ssconf_basic_mode_$node`
+	[ -n "`dbus get ssconf_basic_port_$node`" ] && dbus set ss_basic_port=`dbus get ssconf_basic_port_$node`
+	[ -n "`dbus get ssconf_basic_method_$node`" ] && dbus set ss_basic_method=`dbus get ssconf_basic_method_$node`
+	[ -n "`dbus get ssconf_basic_ss_obfs_$node`" ] && dbus set ss_basic_ss_obfs=`dbus get ssconf_basic_ss_obfs_$node`
+	[ -n "`dbus get ssconf_basic_ss_obfs_host_$node`" ] && dbus set ss_basic_ss_obfs_host=`dbus get ssconf_basic_ss_obfs_host_$node`
+	[ -n "`dbus get ssconf_basic_rss_protocol_$node`" ] && dbus set ss_basic_rss_protocol=`dbus get ssconf_basic_rss_protocol_$node`
+	[ -n "`dbus get ssconf_basic_rss_protocol_param_$node`" ] && dbus set ss_basic_rss_protocol_param=`dbus get ssconf_basic_rss_protocol_param_$node`
+	[ -n "`dbus get ssconf_basic_rss_obfs_$node`" ] && dbus set ss_basic_rss_obfs=`dbus get ssconf_basic_rss_obfs_$node`
+	[ -n "`dbus get ssconf_basic_rss_obfs_param_$node`" ] && dbus set ss_basic_rss_obfs_param=`dbus get ssconf_basic_rss_obfs_param_$node`
+	[ -n "`dbus get ssconf_basic_koolgame_udp_$node`" ] && dbus set ss_basic_koolgame_udp=`dbus get ssconf_basic_koolgame_udp_$node`
+	[ -n "`dbus get ssconf_basic_use_kcp_$node`" ] && dbus set ss_basic_koolgame_udp=`dbus get ssconf_basic_use_kcp_$node`
+}
+
+
 confs=`cat /tmp/ss_conf_backup.txt`
 format=`echo $confs|grep "{"`
 if [ -z "$format" ];then
@@ -15,36 +78,15 @@ if [ -z "$format" ];then
 	[  -z "$backup_version" ] && {
 		backup_version="3.1.6"
 	}
-	comp=`versioncmp $backup_version 3.0.6`
+	comp=`versioncmp $backup_version 3.6.5`
 	if [ "$comp" == "1" ];then
-		echo_date 检测到备份文件来自低于3.0.6版本，开始对部分数据进行base64转换，以适应新版本！
-		node_pass=`dbus list ssconf_basic_password |cut -d "=" -f 1|cut -d "_" -f4|sort -n`
-		for node in $node_pass
-		do
-			dbus set ssconf_basic_password_$node=`dbus get ssconf_basic_password_$node|base64_encode`
-		done
-		dbus set ss_basic_password=`dbus get ss_basic_password|base64_encode`
-		dbus set ss_basic_black_lan=`dbus get ss_basic_black_lan | base64_encode`
-		dbus set ss_basic_white_lan=`dbus get ss_basic_white_lan | base64_encode`
-		dbus set ss_ipset_black_domain_web=`dbus get ss_ipset_black_domain_web | base64_encode`
-		dbus set ss_ipset_white_domain_web=`dbus get ss_ipset_white_domain_web | base64_encode`
-		dbus set ss_ipset_dnsmasq=`dbus get ss_ipset_dnsmasq | base64_encode`
-		dbus set ss_ipset_black_ip=`dbus get ss_ipset_black_ip | base64_encode`
-		dbus set ss_redchn_isp_website_web=`dbus get ss_redchn_isp_website_web | base64_encode`
-		dbus set ss_redchn_dnsmasq=`dbus get ss_redchn_dnsmasq | base64_encode`
-		dbus set ss_redchn_wan_white_ip=`dbus get ss_redchn_wan_white_ip | base64_encode`
-		dbus set ss_redchn_wan_white_domain=`dbus get ss_redchn_wan_white_domain | base64_encode`
-		dbus set ss_redchn_wan_black_ip=`dbus get ss_redchn_wan_black_ip | base64_encode`
-		dbus set ss_redchn_wan_black_domain=`dbus get ss_redchn_wan_black_domain | base64_encode`
-		dbus set ss_game_dnsmasq=`dbus get ss_game_dnsmasq | base64_encode`
-		dbus set ss_gameV2_dnsmasq=`dbus get ss_gameV2_dnsmasq | base64_encode`
+		echo_date 检测到备份文件来自低于3.6.5版本，开始对部分数据进行升级，以适应新版本！
+		upgrade_ss_conf
 	fi
 
 	dbus set ss_basic_enable="0"
 	dbus set ss_basic_version_local=`cat /koolshare/ss/version` 
-	
 	echo_date 配置恢复成功！
-	
 else
 	ss_formate=`echo $confs|grep "obfs"`
 	if [ -z "$ss_formate" ];then
@@ -104,7 +146,6 @@ else
 			dbus set ssconf_basic_password_"$k"=`echo "$password" | base64_encode`
 			dbus set ssconf_basic_method_"$k"="$method"
 			dbus set ssconf_basic_name_"$k"="$remark"
-			dbus set ssconf_basic_use_rss_"$k"=0
 			dbus set ssconf_basic_mode_"$k"=2
 		    min=`expr $min + 1`
 		    k=`expr $k + 1`
@@ -181,8 +222,7 @@ else
 			dbus set ssconf_basic_rss_obfs_"$k"="$obf"
 			dbus set ssconf_basic_rss_obfs_param_"$k"="$obfspara"
 			dbus set ssconf_basic_rss_protocol_"$k"="$protoco"
-			dbus set ssconf_basic_rss_protocol_para_"$k"="$protocolpara"
-			dbus set ssconf_basic_use_rss_"$k"=1
+			dbus set ssconf_basic_rss_protocol_param_"$k"="$protocolpara"
 			dbus set ssconf_basic_mode_"$k"=2
 		    min=`expr $min + 1`
 		    k=`expr $k + 1`

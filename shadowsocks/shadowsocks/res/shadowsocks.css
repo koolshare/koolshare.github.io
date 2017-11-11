@@ -44,7 +44,7 @@
 	border-radius: 5px 5px 5px 5px;
 	width:20%;
 }
-.show-btn1, .show-btn1_1, .show-btn2, .show-btn3, .show-btn4, .show-btn5, .show-btn6, .show-btn7 {
+.show-btn1, .show-btn1_1, .show-btn2, .show-btn3, .show-btn3_1, .show-btn3_2, .show-btn4, .show-btn5, .show-btn6, .show-btn7 {
 	border: 1px solid #222;
 	background: linear-gradient(to bottom, #76a0ba  0%, #688292 100%); /* W3C */
 	background: linear-gradient(to bottom, #919fa4  0%, #67767d 100%); /* W3C */
@@ -319,7 +319,6 @@ input[type=button]:focus {
 	margin-top:-100px;
 	line-height:160%;
 	font-size:12px;
-	font-family: Lucida Console;
 	border:1px solid #4D595D;
 	color:white;
 }

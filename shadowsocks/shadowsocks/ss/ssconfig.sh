@@ -12,11 +12,17 @@ DNS_PORT=7913
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
 ISP_DNS=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
 lan_ipaddr=$(nvram get lan_ipaddr)
+[ "$ss_basic_mode" == "4" ] && ss_basic_mode=3
 game_on=`dbus list ss_acl_mode|cut -d "=" -f 2 | grep 3`
-[ -n "$game_on" ] || [ "$ss_basic_mode" == "3" ] || [ "$ss_basic_mode" == "4" ] && mangle=1
+[ -n "$game_on" ] || [ "$ss_basic_mode" == "3" ] && mangle=1
 ip_prefix_hex=`nvram get lan_ipaddr | awk -F "." '{printf ("0x%02x", $1)} {printf ("%02x", $2)} {printf ("%02x", $3)} {printf ("00/0xffffff00\n")}'`
 ss_basic_password=`echo $ss_basic_password|base64_decode`
 IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
+if [  -n "$ss_basic_rss_protocol" ];then
+	ss_basic_type=1
+else
+	[ -n "$ss_basic_koolgame_udp" ] && ss_basic_type=2 || ss_basic_type=0
+fi
 
 # creat dnsmasq.d folder
 creat_folder(){
@@ -35,7 +41,6 @@ install_ss(){
 
 update_ss(){
 	echo_date 更新过程中请不要做奇怪的事，不然可能导致问题！
-	
 	echo_date 开启SS检查更新：使用主服务器：$main_url...
 	echo_date 检测主服务器在线版本号...
 	ss_basic_version_web1=`curl --connect-timeout 5 -s "$main_url"/version | sed -n 1p`
@@ -238,6 +243,12 @@ kill_process(){
 		echo_date 关闭koolgame进程...
 		killall koolgame >/dev/null 2>&1
 	fi
+
+	pdu=`pidof pdu`
+	if [ -n "$pdu" ];then 
+		echo_date 关闭koolgame进程...
+		kill -9 $pdu >/dev/null 2>&1
+	fi
 	
 	# kill kcp
 	client_linux_arm5=$(ps | grep "client_linux_arm5" | grep -v "grep")
@@ -384,91 +395,66 @@ creat_ss_json(){
 			ARG_OBFS=""
 		fi
 	fi
-	echo_date 创建SS配置文件到$CONFIG_FILE
 	if [ "$ss_basic_use_kcp" == "1" ];then
-		if [ "$ss_basic_use_rss" == "0" ];then
-			cat > $CONFIG_FILE <<-EOF
-				{
-				    "server":"127.0.0.1",
-				    "server_port":1091,
-				    "local_port":3333,
-				    "password":"$ss_basic_password",
-				    "timeout":600,
-				    "method":"$ss_basic_method"
-				}
-			EOF
-		elif [ "$ss_basic_use_rss" == "1" ];then
-			cat > $CONFIG_FILE <<-EOF
-				{
-				    "server":"127.0.0.1",
-				    "server_port":1091,
-				    "local_port":3333,
-				    "password":"$ss_basic_password",
-				    "timeout":600,
-				    "protocol":"$ss_basic_rss_protocol",
-				    "protocol_param":"$ss_basic_rss_protocol_param",
-				    "obfs":"$ss_basic_rss_obfs",
-				    "obfs_param":"$ss_basic_rss_obfs_param",
-				    "method":"$ss_basic_method"
-				}
-			EOF
-		fi
+		ss_basic_server_tmp="127.0.0.1"
+		ss_basic_port_tmp=1091
 	else
-		if [ "$ss_basic_use_rss" == "0" ];then
-			cat > $CONFIG_FILE <<-EOF
-				{
-				    "server":"$ss_basic_server",
-				    "server_port":$ss_basic_port,
-				    "local_port":3333,
-				    "password":"$ss_basic_password",
-				    "timeout":600,
-				    "method":"$ss_basic_method"
-				}
-			EOF
-		elif [ "$ss_basic_use_rss" == "1" ];then
-			cat > $CONFIG_FILE <<-EOF
-				{
-				    "server":"$ss_basic_server",
-				    "server_port":$ss_basic_port,
-				    "local_port":3333,
-				    "password":"$ss_basic_password",
-				    "timeout":600,
-				    "protocol":"$ss_basic_rss_protocol",
-				    "protocol_param":"$ss_basic_rss_protocol_param",
-				    "obfs":"$ss_basic_rss_obfs",
-				    "obfs_param":"$ss_basic_rss_obfs_param",
-				    "method":"$ss_basic_method"
-				}
-			EOF
-		fi
+		ss_basic_server_tmp="$ss_basic_server"
+		ss_basic_port_tmp=$ss_basic_port
+	fi
+	
+	if [ "$ss_basic_type" == "0" ];then
+		echo_date 创建SS配置文件到$CONFIG_FILE
+		cat > $CONFIG_FILE <<-EOF
+			{
+			    "server":"$ss_basic_server_tmp",
+			    "server_port":$ss_basic_port_tmp,
+			    "local_port":3333,
+			    "password":"$ss_basic_password",
+			    "timeout":600,
+			    "method":"$ss_basic_method"
+			}
+		EOF
+	elif [ "$ss_basic_type" == "1" ];then
+		echo_date 创建SSR配置文件到$CONFIG_FILE
+		cat > $CONFIG_FILE <<-EOF
+			{
+			    "server":"$ss_basic_server_tmp",
+			    "server_port":$ss_basic_port_tmp,
+			    "local_port":3333,
+			    "password":"$ss_basic_password",
+			    "timeout":600,
+			    "protocol":"$ss_basic_rss_protocol",
+			    "protocol_param":"$ss_basic_rss_protocol_param",
+			    "obfs":"$ss_basic_rss_obfs",
+			    "obfs_param":"$ss_basic_rss_obfs_param",
+			    "method":"$ss_basic_method"
+			}
+		EOF
+	elif [ "$ss_basic_type" == "2" ];then
+		echo_date 创建koolgame配置文件到$CONFIG_FILE
+		cat > $CONFIG_FILE <<-EOF
+			{
+			    "server":"$ss_basic_server",
+			    "server_port":$ss_basic_port,
+			    "local_port":3333,
+			    "sock5_port":23456,
+			    "dns2ss":7913,
+			    "adblock_addr":"",
+			    "dns_server":"$ss_dns2ss_user",
+			    "password":"$ss_basic_password",
+			    "timeout":600,
+			    "method":"$ss_basic_method",
+			    "use_tcp":$ss_basic_koolgame_udp
+			}
+		EOF
 	fi
 }
 
-creat_game2_json(){
-# create shadowsocks config file...
-	echo_date 创建SS配置文件到/koolshare/ss/koolgame/ss.json
-	cat > /koolshare/ss/koolgame/ss.json <<-EOF
-		{
-		    "server":"$ss_basic_server",
-		    "server_port":$ss_basic_port,
-		    "local_port":3333,
-		    "sock5_port":23456,
-		    "dns2ss":7913,
-		    "adblock_addr":"",
-		    "adblock_path":"/koolshare/ss/koolgame/xwhycadblock.txt",
-		    "dns_server":"$ss_dns2ss_user",
-		    "password":"$ss_basic_password",
-		    "timeout":600,
-		    "method":"$ss_basic_method",
-		    "use_tcp":$ss_basic_koolgame_udp
-		}
-	EOF
-}
-
 start_sslocal(){
-	if [ "$ss_basic_use_rss" == "1" ];then
+	if [ "$ss_basic_type" == "1" ];then
 		rss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
-	elif  [ "$ss_basic_use_rss" == "0" ];then
+	elif  [ "$ss_basic_type" == "0" ];then
 		if [ "$ss_basic_ss_obfs" == "0" ];then
 			ss-local -b 0.0.0.0 -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 		else
@@ -493,10 +479,10 @@ start_dns(){
 	[ "$ss_sstunnel" == "3" ] && gs="8.8.4.4:53"
 	[ "$ss_sstunnel" == "4" ] && gs="$ss_sstunnel_user"	
 	if [ "2" == "$ss_dns_foreign" ];then
-		if [ "$ss_basic_use_rss" == "1" ];then
+		if [ "$ss_basic_type" == "1" ];then
 			echo_date 开启ssr-tunnel...
 			rss-tunnel -b 0.0.0.0 -c /koolshare/ss/ss.json -l $DNS_PORT -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
-		elif  [ "$ss_basic_use_rss" == "0" ];then
+		elif  [ "$ss_basic_type" == "0" ];then
 			echo_date 开启ss-tunnel...
 			if [ "$ss_basic_ss_obfs" == "0" ];then
 				ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l $DNS_PORT -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
@@ -556,10 +542,10 @@ start_dns(){
 				[ "$ss_pdnsd_udp_server_ss_tunnel" == "2" ] && dns1="8.8.8.8:53"
 				[ "$ss_pdnsd_udp_server_ss_tunnel" == "3" ] && dns1="8.8.4.4:53"
 				[ "$ss_pdnsd_udp_server_ss_tunnel" == "4" ] && dns1="$ss_pdnsd_udp_server_ss_tunnel_user"
-				if [ "$ss_basic_use_rss" == "1" ];then
+				if [ "$ss_basic_type" == "1" ];then
 					echo_date 开启ssr-tunnel作为pdnsd的上游服务器.
 					rss-tunnel -b 0.0.0.0 -c /koolshare/ss/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
-				elif  [ "$ss_basic_use_rss" == "0" ];then
+				elif  [ "$ss_basic_type" == "0" ];then
 					echo_date 开启ss-tunnel作为pdnsd的上游服务器.
 					if [ "$ss_basic_ss_obfs" == "0" ];then
 						ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l $DNS_PORT -L "$dns1" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
@@ -645,10 +631,10 @@ start_dns(){
 			[ "$ss_chinadns_foreign_sstunnel" == "2" ] && rcfs="8.8.8.8:53"
 			[ "$ss_chinadns_foreign_sstunnel" == "3" ] && rcfs="8.8.4.4:53"
 			[ "$ss_chinadns_foreign_sstunnel" == "4" ] && rcfs="$ss_chinadns_foreign_sstunnel_user"
-			if [ "$ss_basic_use_rss" == "1" ];then
+			if [ "$ss_basic_type" == "1" ];then
 				echo_date ┣开启ssr-tunnel，作为chinaDNS上游国外dns，转发dns：$rcfs
 				rss-tunnel -b 127.0.0.1 -c /koolshare/ss/ss.json -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
-			elif  [ "$ss_basic_use_rss" == "0" ];then
+			elif  [ "$ss_basic_type" == "0" ];then
 				echo_date ┣开启ss-tunnel，作为chinaDNS上游国外dns，转发dns：$rcfs
 				if [ "$ss_basic_ss_obfs" == "0" ];then
 					ss-tunnel -b 0.0.0.0 -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid
@@ -664,7 +650,7 @@ start_dns(){
 	fi
 	
 	# Start Pcap_DNSProxy
-	if [ "6" == "$ss_dns_foreign"  ]; then
+	if [ "6" == "$ss_dns_foreign" ]; then
 			echo_date 开启Pcap_DNSProxy..
 			sed -i "/^Listen Port/c Listen Port = $DNS_PORT" /koolshare/ss/dns/Config.ini
 			#sed -i '/^Local Main/c Local Main = 0' /koolshare/ss/dns/Config.conf
@@ -676,7 +662,6 @@ start_dns(){
 load_cdn_site(){
 	# append china site
 	rm -rf /tmp/sscdn.conf
-
 
 	if [ "$ss_dns_plan" == "2" ] && [ "$ss_dns_foreign" != "5" ] && [ "$ss_dns_foreign" != "6" ];then
 		echo_date 生成cdn加速列表到/tmp/sscdn.conf，加速用的dns：$CDN
@@ -859,10 +844,10 @@ start_kcp(){
 
 start_ss_redir(){
 	# Start ss-redir
-	if [ "$ss_basic_use_rss" == "1" ];then
+	if [ "$ss_basic_type" == "1" ];then
 		echo_date 开启ssr-redir进程，用于透明代理.
 		rss-redir -b 0.0.0.0 -c $CONFIG_FILE -u -f /var/run/shadowsocks.pid >/dev/null 2>&1
-	elif  [ "$ss_basic_use_rss" == "0" ];then
+	elif  [ "$ss_basic_type" == "0" ];then
 		echo_date 开启ss-redir进程，用于透明代理.
 		if [ "$ss_basic_ss_obfs" == "0" ];then
 			ss-redir -b 0.0.0.0 -c $CONFIG_FILE -u -f /var/run/shadowsocks.pid >/dev/null 2>&1
@@ -881,7 +866,7 @@ start_koolgame(){
 		sleep 1
 	fi
 	echo_date 开启koolgame主进程...
-	start-stop-daemon -S -q -b -m -p /tmp/var/koolgame.pid -x /koolshare/ss/koolgame/koolgame -- -c /koolshare/ss/koolgame/ss.json
+	start-stop-daemon -S -q -b -m -p /tmp/var/koolgame.pid -x /koolshare/ss/koolgame/koolgame -- -c /koolshare/ss/ss.json
 }
 
 write_cron_job(){
@@ -1054,7 +1039,7 @@ get_action_chain() {
 		2)
 			echo "SHADOWSOCKS_CHN"
 		;;
-		3 | 4)
+		3)
 			echo "SHADOWSOCKS_GAM"
 		;;
 		5)
@@ -1079,9 +1064,6 @@ get_mode_name() {
 		;;
 		3)
 			echo "游戏模式"
-		;;
-		4)
-			echo "游戏模式V2"
 		;;
 		5)
 			echo "全局模式"
@@ -1111,51 +1093,9 @@ get_jump_mode(){
 	esac
 }
 
-gamev2_control(){
-	# lan control
-	black=$(echo $ss_game2_black_lan | base64_decode | sed "s/,/ /g")
-	white=$(echo $ss_game2_white_lan | base64_decode | sed "s/,/ /g")
-	if [ "$ss_game2_lan_control" == "1" ];then
-		if [ ! -z $ss_game2_black_lan ];then
-			echo_date 添加局域网黑名单IP，添加的IP地址将不会走游戏模式V2，其余的走游戏模式V2。
-			for balck_ip in $black
-			do
-				iptables -t nat -A SHADOWSOCKS -p tcp -s $balck_ip -j RETURN
-				iptables -t mangle -A SHADOWSOCKS -p udp -s $balck_ip -j RETURN
-			done
-		else
-			echo_date 你开启了局域网黑名单，但是未填写任何内容，跳过！
-		fi
-		iptables -t nat -A SHADOWSOCKS -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
-		iptables -t nat -A SHADOWSOCKS_EXT -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
-		iptables -t mangle -A SHADOWSOCKS -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x07
-	elif [ "$ss_game2_lan_control" == "2" ];then
-		if [ ! -z $ss_game2_white_lan ];then
-			echo_date 添加局域网白名单IP，添加的IP地址将会走游戏模式V2，其余的不走游戏模式V2。
-			for white_ip in $white
-			do
-				iptables -t nat -A SHADOWSOCKS -p tcp -s $white_ip -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
-				iptables -t nat -A SHADOWSOCKS_EXT -p tcp -s $white_ip -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
-				iptables -t mangle -A SHADOWSOCKS -p udp -s $white_ip -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x07
-			done
-			ss_acl_default_mode=0
-		else
-			echo_date 你开启了局域网白名单，但是未填写任何内容，跳过！
-			iptables -t nat -A SHADOWSOCKS -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
-			iptables -t nat -A SHADOWSOCKS_EXT -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
-			iptables -t mangle -A SHADOWSOCKS -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x07
-		fi
-	else 
-		echo_date 局域网控制功能未启用！
-		iptables -t nat -A SHADOWSOCKS -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
-		iptables -t nat -A SHADOWSOCKS_EXT -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
-		iptables -t mangle -A SHADOWSOCKS -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x07
-	fi	
-}
-
 lan_acess_control(){
 	# lan access control
-	acl_nu=`dbus list ss_acl_mode|sed 1d|sort -n -t "=" -k 2|cut -d "=" -f 1 | cut -d "_" -f 4`
+	acl_nu=`dbus list ss_acl_mode_|cut -d "=" -f 1 | cut -d "_" -f 4 | sort -n`
 	if [ -n "$acl_nu" ]; then
 		for acl in $acl_nu
 		do
@@ -1176,7 +1116,7 @@ lan_acess_control(){
 			iptables -t nat -A SHADOWSOCKS_EXT -p tcp  $(factor $ports "-m multiport --dport") -m mark --mark "$ipaddr_hex" -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
 			# 3 acl in SHADOWSOCKS for mangle
 			if [ "$proxy_mode" == "3" ];then
-				iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") -p udp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_action_chain $proxy_mode)
+				iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") -p udp $(factor $ports "-m multiport --dport") -$(get_jump_mode $proxy_mode) $(get_ss_chain $proxy_mode)
 			else
 				[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS $(factor $ipaddr "-s") -p udp -j RETURN
 			fi
@@ -1215,37 +1155,37 @@ apply_nat_rules(){
 	iptables -t nat -A SHADOWSOCKS -p tcp -m set --match-set white_list dst -j RETURN
 	#-----------------------FOR GLOABLE---------------------
 	# 创建gfwlist模式nat rule
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -N SHADOWSOCKS_GLO
+	iptables -t nat -N SHADOWSOCKS_GLO
 	# IP黑名单控制-gfwlist（走ss）
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_GLO -p tcp -j REDIRECT --to-ports 3333
+	iptables -t nat -A SHADOWSOCKS_GLO -p tcp -j REDIRECT --to-ports 3333
 	#-----------------------FOR GFWLIST---------------------
 	# 创建gfwlist模式nat rule
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -N SHADOWSOCKS_GFW
+	iptables -t nat -N SHADOWSOCKS_GFW
 	# IP/CIDR/黑域名 黑名单控制（走ss）
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_GFW -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
+	iptables -t nat -A SHADOWSOCKS_GFW -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
 	# IP黑名单控制-gfwlist（走ss）
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_GFW -p tcp -m set --match-set gfwlist dst -j REDIRECT --to-ports 3333
+	iptables -t nat -A SHADOWSOCKS_GFW -p tcp -m set --match-set gfwlist dst -j REDIRECT --to-ports 3333
 	#-----------------------FOR CHNMODE---------------------
 	# 创建大陆白名单模式nat rule
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -N SHADOWSOCKS_CHN
+	iptables -t nat -N SHADOWSOCKS_CHN
 	# IP/CIDR/域名 黑名单控制（走ss）
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_CHN -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
+	iptables -t nat -A SHADOWSOCKS_CHN -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
 	# cidr黑名单控制-chnroute（走ss）
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_CHN -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
+	iptables -t nat -A SHADOWSOCKS_CHN -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
 	#-----------------------FOR GAMEMODE---------------------
 	# 创建游戏模式nat rule
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -N SHADOWSOCKS_GAM
+	iptables -t nat -N SHADOWSOCKS_GAM
 	# IP/CIDR/域名 黑名单控制（走ss）
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_GAM -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
+	iptables -t nat -A SHADOWSOCKS_GAM -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
 	# cidr黑名单控制-chnroute（走ss）
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_GAM -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
+	iptables -t nat -A SHADOWSOCKS_GAM -p tcp -m set ! --match-set chnroute dst -j REDIRECT --to-ports 3333
 	#-----------------------FOR HOMEMODE---------------------
 	# 创建回国模式nat rule
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -N SHADOWSOCKS_HOM
+	 iptables -t nat -N SHADOWSOCKS_HOM
 	# IP/CIDR/域名 黑名单控制（走ss）
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_HOM -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
+	iptables -t nat -A SHADOWSOCKS_HOM -p tcp -m set --match-set black_list dst -j REDIRECT --to-ports 3333
 	# cidr黑名单控制-chnroute（走ss）
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_HOM -p tcp -m set --match-set chnroute dst -j REDIRECT --to-ports 3333
+	iptables -t nat -A SHADOWSOCKS_HOM -p tcp -m set --match-set chnroute dst -j REDIRECT --to-ports 3333
 
 	[ "$mangle" == "1" ] && load_tproxy
 	[ "$mangle" == "1" ] && /usr/sbin/ip rule add fwmark 0x07 table 310
@@ -1262,15 +1202,15 @@ apply_nat_rules(){
 	[ "$mangle" == "1" ] && iptables -t mangle -A SHADOWSOCKS_GAM -p udp -m set ! --match-set chnroute dst -j TPROXY --on-port 3333 --tproxy-mark 0x07
 	#-------------------------------------------------------
 	# 局域网黑名单（不走ss）/局域网黑名单（走ss）
-	[ "$ss_basic_mode" != "4" ] && lan_acess_control || gamev2_control
+	lan_acess_control
 	#-----------------------FOR ROUTER---------------------
 	# router itself
 	[ "$ss_basic_mode" != "6" ] && iptables -t nat -A OUTPUT -p tcp -m set --match-set router dst -j REDIRECT --to-ports 3333
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A OUTPUT -p tcp -m mark --mark "$ip_prefix_hex" -j SHADOWSOCKS_EXT
+	iptables -t nat -A OUTPUT -p tcp -m mark --mark "$ip_prefix_hex" -j SHADOWSOCKS_EXT
 	
 	# 把最后剩余流量重定向到相应模式的nat表中对应的主模式的链
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS -p tcp $(factor $ss_acl_default_port "-m multiport --dport") -j $(get_action_chain $ss_acl_default_mode)
-	[ "$ss_basic_mode" != "4" ] && iptables -t nat -A SHADOWSOCKS_EXT -p tcp $(factor $ss_acl_default_port "-m multiport --dport") -j $(get_action_chain $ss_acl_default_mode)
+	iptables -t nat -A SHADOWSOCKS -p tcp $(factor $ss_acl_default_port "-m multiport --dport") -j $(get_action_chain $ss_acl_default_mode)
+	iptables -t nat -A SHADOWSOCKS_EXT -p tcp $(factor $ss_acl_default_port "-m multiport --dport") -j $(get_action_chain $ss_acl_default_mode)
 	
 	# 如果是主模式游戏模式，则把SHADOWSOCKS链中剩余udp流量转发给SHADOWSOCKS_GAM链
 	# 如果主模式不是游戏模式，则不需要把SHADOWSOCKS链中剩余udp流量转发给SHADOWSOCKS_GAM，不然会造成其他模式主机的udp也走游戏模式
@@ -1284,7 +1224,6 @@ apply_nat_rules(){
 	iptables -t nat -I PREROUTING "$INSET_NU" -p tcp -j SHADOWSOCKS
 	#iptables -t nat -I PREROUTING 1 -p tcp -j SHADOWSOCKS
 	[ "$mangle" == "1" ] && iptables -t mangle -A PREROUTING -p udp -j SHADOWSOCKS
-
 	# QOS开启的情况下
 	QOSO=`iptables -t mangle -S | grep -o QOSO | wc -l`
 	RRULE=`iptables -t mangle -S | grep "A QOSO" | head -n1 | grep RETURN`
@@ -1329,11 +1268,6 @@ restart_dnsmasq(){
 	service restart_dnsmasq >/dev/null 2>&1
 }
 
-remove_status(){
-	nvram set ss_foreign_state=""
-	nvram set ss_china_state=""
-}
-
 load_module(){
 	xt=`lsmod | grep xt_set`
 	OS=$(uname -r)
@@ -1344,8 +1278,6 @@ load_module(){
 }
 
 restart_addon(){
-	#ss_basic_action=4
-	echo_date ----------------------------- 重启附加功能 -----------------------------
 	# for sleep walue in start up files
 	old_sleep=`cat /jffs/scripts/nat-start | grep sleep | awk '{print $2}'`
 	new_sleep="$ss_basic_sleep"
@@ -1363,15 +1295,11 @@ restart_addon(){
 		wan_auto_start >/dev/null 2>&1
 	fi
 	
-	#remove_status
-	remove_status
-	
 	if [ "$ss_basic_dnslookup" == "1" ];then
 		echo_date 设置使用nslookup方式解析SS服务器的ip地址.
 	else
 		echo_date 设置使用resolveip方式解析SS服务器的ip地址.
 	fi
-	echo_date -------------------------- 附加功能重启完毕！ ---------------------------
 }
 
 # write number into nvram with no commit
@@ -1381,7 +1309,6 @@ write_numbers(){
 	nvram set update_cdn="$(cat /koolshare/ss/rules/version | sed -n 4p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set update_Routing="$(cat /koolshare/ss/rules/version | sed -n 5p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set update_WhiteList="$(cat /koolshare/ss/rules/version | sed -n 6p | sed 's/#/\n/g'| sed -n 1p)"
-	
 	nvram set ipset_numbers=$(cat /koolshare/ss/rules/gfwlist.conf | grep -c ipset)
 	nvram set chnroute_numbers=$(cat /koolshare/ss/rules/chnroute.txt | grep -c .)
 	nvram set cdn_numbers=$(cat /koolshare/ss/rules/cdn.txt | grep -c .)
@@ -1411,7 +1338,6 @@ disable_ss(){
 	kill_process
 	kill_cron_job
 	echo_date -------------------------- Shadowsocks已关闭 -----------------------------
-	dbus set ss_basic_action="1"
 }
 
 load_nat(){
@@ -1460,20 +1386,14 @@ apply_ss(){
 	kill_process
 	kill_cron_job
 	echo_date -------------------------- Shadowsocks已关闭 -----------------------------
-	
 	# pre-start
 	echo_date ----------------------- shadowsocks 启动前触发脚本 -----------------------
 	ss_pre_start
-	
 	# start
 	echo_date ------------------------- 梅林固件 shadowsocks --------------------------
 	resolv_server_ip
 	# do not re generate json on router start, use old one
-	if [ "$ss_basic_mode" != "4" ];then
-		[ -z "$WAN_ACTION" ] && creat_ss_json
-	else
-		[ -z "$WAN_ACTION" ] && creat_game2_json
-	fi
+	[ -z "$WAN_ACTION" ] && creat_ss_json
 	#creat_dnsmasq_basic_conf
 	load_cdn_site
 	custom_dnsmasq
@@ -1481,19 +1401,16 @@ apply_ss(){
 	nat_auto_start
 	wan_auto_start
 	write_cron_job
-	[ "$ss_basic_mode" != "4" ] && start_dns
-	[ "$ss_basic_mode" != "4" ] && start_ss_redir || start_koolgame
-	[ "$ss_basic_mode" != "4" ] && start_kcp
+	[ "$ss_basic_type" != "2" ] && start_dns
+	[ "$ss_basic_type" != "2" ] && start_ss_redir || start_koolgame
+	[ "$ss_basic_type" != "2" ] && start_kcp
 	load_module
 	#===load nat start===
 	load_nat
 	#===load nat end===
+	restart_addon
 	restart_dnsmasq
-	remove_status
-	nvram set ss_mode=2
-	nvram commit
 	echo_date ------------------------- shadowsocks 启动完毕 -------------------------
-	[ "$ss_basic_action" == "4" ] && restart_addon
 }
 # =========================================================================
 

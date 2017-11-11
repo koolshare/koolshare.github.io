@@ -34,11 +34,20 @@ fi
 # ssconf_basic_ss_obfs_
 # ssconf_basic_ss_obfs_host_
 # ssconf_basic_use_kcp_
-# ssconf_basic_use_rss_
 # ssconf_basic_use_lb_
+# ssconf_basic_lbmode_
+# ssconf_basic_weight_
 # onetime_auth
 # ==============================
 prepare(){
+	# 0 检测排序
+	seq_nu=`dbus list ssconf_basic_passwo | cut -d "=" -f1|cut -d "_" -f4|sort -n|wc -l`
+	seq_max_nu=`dbus list ssconf_basic_passwo | cut -d "=" -f1|cut -d "_" -f4|sort -rn|head -n1`
+	[ "$seq_nu" == "$seq_max_nu" ] && return
+	if [ "$seq_nu" == "$seq_max_nu" ];then
+		echo_date "节点顺序正确，无需调整!"
+		return 0
+	fi 
 	# 1 提取干净的节点配置，并重新排序
 	echo_date 备份shadowsocks节点信息...
 	rm -rf /tmp/ss_conf.sh
@@ -63,8 +72,9 @@ prepare(){
 		[ -n "$(dbus get ssconf_basic_ss_obfs_$nu)" ] && echo dbus set ssconf_basic_ss_obfs_$q=$(dbus get ssconf_basic_ss_obfs_$nu) >> /tmp/ss_conf.sh
 		[ -n "$(dbus get ssconf_basic_ss_obfs_host_$nu)" ] && echo dbus set ssconf_basic_ss_obfs_host_$q=$(dbus get ssconf_basic_ss_obfs_host_$nu) >> /tmp/ss_conf.sh
 		[ -n "$(dbus get ssconf_basic_use_kcp_$nu)" ] && echo dbus set ssconf_basic_use_kcp_$q=$(dbus get ssconf_basic_use_kcp_$nu) >> /tmp/ss_conf.sh
-		[ -n "$(dbus get ssconf_basic_use_rss_$nu)" ] && echo dbus set ssconf_basic_use_rss_$q=$(dbus get ssconf_basic_use_rss_$nu) >> /tmp/ss_conf.sh
 		[ -n "$(dbus get ssconf_basic_use_lb_$nu)" ] && echo dbus set ssconf_basic_use_lb_$q=$(dbus get ssconf_basic_use_lb_$nu) >> /tmp/ss_conf.sh
+		[ -n "$(dbus get ssconf_basic_lbmode_$nu)" ] && echo dbus set ssconf_basic_lbmode_$q=$(dbus get ssconf_basic_lbmode_$nu) >> /tmp/ss_conf.sh
+		[ -n "$(dbus get ssconf_basic_weight_$nu)" ] && echo dbus set ssconf_basic_weight_$q=$(dbus get ssconf_basic_weight_$nu) >> /tmp/ss_conf.sh
 		[ -n "$(dbus get ssconf_basic_group_$nu)" ] && echo dbus set ssconf_basic_group_$q=$(dbus get ssconf_basic_group_$nu) >> /tmp/ss_conf.sh
 		echo "#------------------------" >> /tmp/ss_conf.sh
 		if [ "$nu" == "$ssconf_basic_node" ];then
@@ -118,8 +128,6 @@ add_ssr_servers(){
 	dbus set ssconf_basic_rss_obfs_$ssrindex=$obfs
 	[ -n "$1" ] && dbus set ssconf_basic_rss_obfs_param_$ssrindex=$obfsparam
 	dbus set ssconf_basic_password_$ssrindex=$password
-	dbus set ssconf_basic_use_rss_$ssrindex="1"
-	dbus set ssconf_basic_use_rss_$ssrindex="1"
 	echo_date 成功添加了添加SSR节点：$remarks 到节点列表第 $ssrindex 位。
 }
 
@@ -132,7 +140,6 @@ add_ss_servers(){
 	dbus set ssconf_basic_port_$ssindex=$server_port
 	dbus set ssconf_basic_method_$ssindex=$encrypt_method
 	dbus set ssconf_basic_password_$ssindex=$password
-	dbus set ssconf_basic_use_rss_$ssindex="0"
 	echo_date 成功添加了添加SS节点：$remarks 到节点列表第 $ssindex 位。
 }
 
@@ -180,7 +187,7 @@ get_remote_config(){
 
 update_config(){
 	#isadded_server=$(uci show shadowsocks | grep -c "server=\'$server\'")
-	isadded_server=$(cat /tmp/all_localservers | grep $group_md5 | awk '{print $1}' | grep -c $server_md5)
+	isadded_server=$(cat /tmp/all_localservers | grep $group_md5 | awk '{print $1}' | grep -c $server_md5|head -n1)
 	if [ "$isadded_server" == "0" ]; then
 		add_ssr_servers
 		[ "$ssr_subscribe_obfspara" == "0" ] && dbus set ssconf_basic_rss_obfs_param_$ssrindex=""
@@ -189,7 +196,7 @@ update_config(){
 		let addnum+=1
 	else
 		# 如果在本地的订阅节点中没找到该节点，检测下配置是否更改，如果更改，则更新配置
-		index=$(cat /tmp/all_localservers| grep $group_md5 | grep $server_md5 |awk '{print $3}')
+		index=$(cat /tmp/all_localservers| grep $group_md5 | grep $server_md5 |awk '{print $3}'|head -n1)
 		local_server_port=$(dbus get ssconf_basic_port_$index)
 		local_protocol=$(dbus get ssconf_basic_rss_protocol_$index)
 		local_encrypt_method=$(dbus get ssconf_basic_method_$index)
@@ -199,7 +206,7 @@ update_config(){
 		local_group=$(dbus get ssconf_basic_group_$index)
 		#echo update $index
 		local i=0
-		[ "$ssr_subscribe_obfspara" == "0" ] && dbus set ssconf_basic_rss_obfs_param_$index=""
+		[ "$ssr_subscribe_obfspara" == "0" ] && dbus remove ssconf_basic_rss_obfs_param_$index
 		[ "$ssr_subscribe_obfspara" == "1" ] && dbus set ssconf_basic_rss_obfs_param_$index="$obfsparam"
 		[ "$ssr_subscribe_obfspara" == "2" ] && dbus set ssconf_basic_rss_obfs_param_$index="$ssr_subscribe_obfspara_val"
 		dbus set ssconf_basic_mode_$index="$ssr_subscribe_mode"
@@ -238,8 +245,9 @@ del_none_exist(){
 				dbus remove ssconf_basic_ss_obfs_$localindex
 				dbus remove ssconf_basic_ss_obfs_host_$localindex
 				dbus remove ssconf_basic_use_kcp_$localindex
-				dbus remove ssconf_basic_use_rss_$localindex
 				dbus remove ssconf_basic_use_lb_$localindex
+				dbus remove ssconf_basic_lbmode_$localindex
+				dbus remove ssconf_basic_weight_$localindex
 				dbus remove ssconf_basic_koolgame_udp_$localindex
 				let delnum+=1
 			done
@@ -280,8 +288,9 @@ remove_node_gap(){
 				[ -n "$(dbus get ssconf_basic_server_ip_$nu)" ] && dbus set ssconf_basic_server_ip_"$y"="$(dbus get ssconf_basic_server_ip_$nu)" && dbus remove ssconf_basic_server_ip_$nu
 				[ -n "$(dbus get ssconf_basic_ss_obfs_host_$nu)" ] && dbus set ssconf_basic_ss_obfs_host_"$y"="$(dbus get ssconf_basic_ss_obfs_host_$nu)" && dbus remove ssconf_basic_ss_obfs_host_$nu
 				[ -n "$(dbus get ssconf_basic_use_kcp_$nu)" ] && dbus set ssconf_basic_use_kcp_"$y"="$(dbus get ssconf_basic_use_kcp_$nu)" && dbus remove ssconf_basic_use_kcp_$nu
-				[ -n "$(dbus get ssconf_basic_use_rss_$nu)" ] && dbus set ssconf_basic_use_rss_"$y"="$(dbus get ssconf_basic_use_rss_$nu)" && dbus remove ssconf_basic_use_rss_$nu
 				[ -n "$(dbus get ssconf_basic_use_lb_$nu)" ] && dbus set ssconf_basic_use_lb_"$y"="$(dbus get ssconf_basic_use_lb_$nu)" && dbus remove ssconf_basic_use_lb_$nu
+				[ -n "$(dbus get ssconf_basic_lbmode_$nu)" ] && dbus set ssconf_basic_lbmode_"$y"="$(dbus get ssconf_basic_lbmode_$nu)" && dbus remove ssconf_basic_lbmode_$nu
+				[ -n "$(dbus get ssconf_basic_weight_$nu)" ] && dbus set ssconf_basic_weight_"$y"="$(dbus get ssconf_basic_weight_$nu)" && dbus remove ssconf_basic_weight_$nu
 				[ -n "$(dbus get ssconf_basic_koolgame_udp_$nu)" ] && dbus set ssconf_basic_koolgame_udp_"$y"="$(dbus get ssconf_basic_koolgame_udp_$nu)" && dbus remove ssconf_basic_koolgame_udp_$nu
 				# change node nu
 				if [ "$nu" == "$ssconf_basic_node" ];then
@@ -310,78 +319,79 @@ get_oneline_rule_now(){
 		echo_date "使用常规网络下载..."
 		curl --connect-timeout 8 -s $ssr_subscribe_link > /tmp/ssr_subscribe_file.txt
 	fi
-	#if `grep -q -w '302 Found' /tmp/ssr_subscribe_file.txt`;then
-	#	cd .
-	#	echo 233334
-	#else
-	#	wget -qO /tmp/ssr_subscribe_file.txt $ssr_subscribe_link
-	#	echo 23335
-	#fi
 	if [ "$?" == "0" ];then
-		if [ -z "`cat /tmp/ssr_subscribe_file.txt|grep "{"`" ];then
-			echo_date 下载订阅成功...
-			echo_date 开始解析节点信息...
-			#cat /tmp/ssr_subscribe_file.txt | base64 -d > /tmp/ssr_subscribe_file_temp1.txt
-			decode_url_link `cat /tmp/ssr_subscribe_file.txt` 0 > /tmp/ssr_subscribe_file_temp1.txt
-			# 检测ss ssr
-			NODE_FORMAT1=`cat /tmp/ssr_subscribe_file_temp1.txt | grep -E "^ss://"`
-			NODE_FORMAT2=`cat /tmp/ssr_subscribe_file_temp1.txt | grep -E "^ssr://"`
-			if [ -n "$NODE_FORMAT1" ];then
-				echo_date 暂时不支持ss节点订阅...
-				echo_date 退出订阅程序...
-			elif [ -n "$NODE_FORMAT2" ];then
-				NODE_NU=`cat /tmp/ssr_subscribe_file_temp1.txt | grep -c "ssr://"`
-				echo_date 检测到ssr节点格式，共计$NODE_NU个节点...
-
-				#判断格式
-				maxnum=$(decode_url_link `cat /tmp/ssr_subscribe_file.txt` 0 | grep "MAX=" |awk -F"=" '{print $2}')
-				if [ -n "$maxnum" ]; then
-					urllinks=$(decode_url_link `cat /tmp/ssr_subscribe_file.txt` 0 | sed '/MAX=/d' | shuf -n${maxnum} | sed 's/ssr:\/\///g')
-				else
-					urllinks=$(decode_url_link `cat /tmp/ssr_subscribe_file.txt` 0 | sed 's/ssr:\/\///g')
-				fi
-				[ -z "$urllinks" ] && continue
-				for link in $urllinks
-				do
-					decode_link=$(decode_url_link $link 0)
-					get_remote_config $decode_link
-					update_config
-				done
-				# 去除订阅服务器上已经删除的节点
-				del_none_exist
-				# 节点重新排序
-				remove_node_gap
-				# 储存对应订阅链接的group信息
-				dbus set ss_online_group_$z=$group
-				HIDE_DETIAL=0
-			else
-				echo_date 该订阅链接不包含任何节点信息！请检查你的服务商是否更换了订阅链接！
-				HIDE_DETIAL=1
-			fi
-			NO_DEL=0
-			sleep 1
-			echo $group >> /tmp/group_info.txt
-			if [ "$HIDE_DETIAL" == "0" ];then
-				USER_ADD=$(($(dbus list ssconf_basic_server|grep -v ssconf_basic_server_ip_|wc -l) - $(dbus list ssconf_basic_group|wc -l))) || 0
-				ONLINE_GET=$(dbus list ssconf_basic_group|wc -l) || 0
-				echo_date "本次更新订阅来源 【$group】， 新增节点 $addnum 个，修改 $updatenum 个，删除 $delnum 个；"
-				echo_date "现共有自添加SSR节点：$USER_ADD 个。"
-				echo_date "现共有订阅SSR节点：$ONLINE_GET 个。"
-				echo_date "在线订阅列表更新完成!"
-			fi
-		else
-			echo_date "无法获取产品信息"
-			rm -rf /tmp/ssr_subscribe_file.txt >/dev/null 2>&1 &
-			NO_DEL=1
-			sleep 2
-			echo_date 退出订阅程序...
+		if [ -z "`cat /tmp/ssr_subscribe_file.txt`" ];then
+			echo_date 下载为空...
+			return 3
+		fi
+		#产品信息错误
+		wrong=`cat /tmp/ssr_subscribe_file.txt|grep "{"`
+		if [ -n "$wrong" ];then
+			return 2
+		fi
+		#订阅地址有跳转
+		blank=`cat /tmp/ssr_subscribe_file.txt|grep -E " |Redirecting|301"`
+		if [ -n "$blank" ];then
+			echo_date 订阅链接有跳转，尝试更换wget进行下载...
+			rm /tmp/ssr_subscribe_file.txt
+			wget -qO /tmp/ssr_subscribe_file.txt $ssr_subscribe_link
 		fi
 	else
-		echo_date 下载订阅失败...请检查你的网络...
-		rm -rf /tmp/ssr_subscribe_file.txt >/dev/null 2>&1 &
-		NO_DEL=1
-		sleep 2
-		echo_date 退出订阅程序...
+		return 1
+	fi
+
+	if [ "$?" == "0" ];then
+		echo_date 下载订阅成功...
+		echo_date 开始解析节点信息...
+		#cat /tmp/ssr_subscribe_file.txt | base64 -d > /tmp/ssr_subscribe_file_temp1.txt
+		decode_url_link `cat /tmp/ssr_subscribe_file.txt` 0 > /tmp/ssr_subscribe_file_temp1.txt
+		# 检测ss ssr
+		NODE_FORMAT1=`cat /tmp/ssr_subscribe_file_temp1.txt | grep -E "^ss://"`
+		NODE_FORMAT2=`cat /tmp/ssr_subscribe_file_temp1.txt | grep -E "^ssr://"`
+		if [ -n "$NODE_FORMAT1" ];then
+			echo_date 暂时不支持ss节点订阅...
+			echo_date 退出订阅程序...
+		elif [ -n "$NODE_FORMAT2" ];then
+			NODE_NU=`cat /tmp/ssr_subscribe_file_temp1.txt | grep -c "ssr://"`
+			echo_date 检测到ssr节点格式，共计$NODE_NU个节点...
+			#判断格式
+			maxnum=$(decode_url_link `cat /tmp/ssr_subscribe_file.txt` 0 | grep "MAX=" |awk -F"=" '{print $2}')
+			if [ -n "$maxnum" ]; then
+				urllinks=$(decode_url_link `cat /tmp/ssr_subscribe_file.txt` 0 | sed '/MAX=/d' | shuf -n${maxnum} | sed 's/ssr:\/\///g')
+			else
+				urllinks=$(decode_url_link `cat /tmp/ssr_subscribe_file.txt` 0 | sed 's/ssr:\/\///g')
+			fi
+			[ -z "$urllinks" ] && continue
+			for link in $urllinks
+			do
+				decode_link=$(decode_url_link $link 0)
+				get_remote_config $decode_link
+				update_config
+			done
+			# 去除订阅服务器上已经删除的节点
+			del_none_exist
+			# 节点重新排序
+			remove_node_gap
+			# 储存对应订阅链接的group信息
+			dbus set ss_online_group_$z=$group
+			HIDE_DETIAL=0
+		else
+			echo_date 该订阅链接不包含任何节点信息！请检查你的服务商是否更换了订阅链接！
+			HIDE_DETIAL=1
+		fi
+		NO_DEL=0
+		sleep 1
+		echo $group >> /tmp/group_info.txt
+		if [ "$HIDE_DETIAL" == "0" ];then
+			USER_ADD=$(($(dbus list ssconf_basic_server|grep -v ssconf_basic_server_ip_|wc -l) - $(dbus list ssconf_basic_group|wc -l))) || 0
+			ONLINE_GET=$(dbus list ssconf_basic_group|wc -l) || 0
+			echo_date "本次更新订阅来源 【$group】， 新增节点 $addnum 个，修改 $updatenum 个，删除 $delnum 个；"
+			echo_date "现共有自添加SSR节点：$USER_ADD 个。"
+			echo_date "现共有订阅SSR节点：$ONLINE_GET 个。"
+			echo_date "在线订阅列表更新完成!"
+		fi
+	else
+		return 1
 	fi
 }
 
@@ -396,11 +406,8 @@ start_update(){
 	rm -rf /tmp/all_onlineservers >/dev/null 2>&1
 	rm -rf /tmp/group_info.txt >/dev/null 2>&1
 	sleep 1
-	#online_url_nu=`dbus list ss_online_link|wc -l`
-	#online_url_nu=`dbus list ss_online_link|cut -d "=" -f1 | cut -d "_" -f4|sort -rn|head -n1`
-	online_url_nu=`dbus get ss_online_links|base64_decode|sed 's/$/\n/'|sed '/^$/d'|wc -l`
 	# 收集本地节点名到文件
-	LOCAL_NODES=`dbus list ssconf_basic_group|cut -d "_" -f 4|cut -d "=" -f 1`
+	LOCAL_NODES=`dbus list ssconf_basic_group|cut -d "_" -f 4|cut -d "=" -f 1|sort -n`
 	if [ -n "$LOCAL_NODES" ];then
 		for LOCAL_NODE in $LOCAL_NODES
 		do
@@ -411,6 +418,8 @@ start_update(){
 	fi
 	
 	z=0
+	online_url_nu=`dbus get ss_online_links|base64_decode|sed 's/$/\n/'|sed '/^$/d'|wc -l`
+	echo_date online_url_nu $online_url_nu
 	until [ "$z" == "$online_url_nu" ]
 	do
 		z=$(($z+1))
@@ -425,7 +434,32 @@ start_update(){
 		updatenum=0
 		delnum=0
 		get_oneline_rule_now "$url"
+
+		case $? in
+		2)
+			echo_date "无法获取产品信息"
+			rm -rf /tmp/ssr_subscribe_file.txt >/dev/null 2>&1 &
+			NO_DEL=1
+			sleep 2
+			echo_date 退出订阅程序...
+			;;
+		3)
+			echo_date "该订阅链接不包含任何节点信息！请检查你的服务商是否更换了订阅链接！"
+			rm -rf /tmp/ssr_subscribe_file.txt >/dev/null 2>&1 &
+			NO_DEL=1
+			sleep 2
+			echo_date 退出订阅程序...
+			;;
+		1|*)
+			echo_date "下载订阅失败...请检查你的网络..."
+			rm -rf /tmp/ssr_subscribe_file.txt >/dev/null 2>&1 &
+			NO_DEL=1
+			sleep 2
+			echo_date 退出订阅程序...
+			;;
+		esac
 	done
+
 	if [ "$NO_DEL" == "0" ];then
 		# 尝试删除去掉的订阅链接对应的节点
 		local_groups=`dbus list ss|grep group|cut -d "=" -f2|sort -u`
@@ -453,8 +487,9 @@ start_update(){
 						dbus remove ssconf_basic_ss_obfs_$conf_nu
 						dbus remove ssconf_basic_ss_obfs_host_$conf_nu
 						dbus remove ssconf_basic_use_kcp_$conf_nu
-						dbus remove ssconf_basic_use_rss_$conf_nu
 						dbus remove ssconf_basic_use_lb_$conf_nu
+						dbus remove ssconf_basic_lbmode_$conf_nu
+						dbus remove ssconf_basic_weight_$conf_nu
 						dbus remove ssconf_basic_koolgame_udp_$conf_nu
 					done
 					# 删除不再鼎业节点的group信息
@@ -577,12 +612,12 @@ remove_online(){
 		dbus remove ssconf_basic_ss_obfs_$remove_nu
 		dbus remove ssconf_basic_ss_obfs_host_$remove_nu
 		dbus remove ssconf_basic_use_kcp_$remove_nu
-		dbus remove ssconf_basic_use_rss_$remove_nu
 		dbus remove ssconf_basic_use_lb_$remove_nu
+		dbus remove ssconf_basic_lbmode_$remove_nu
+		dbus remove ssconf_basic_weight_$remove_nu
 		dbus remove ssconf_basic_koolgame_udp_$remove_nu
 	done
 }
-
 
 case $ss_online_action in
 0)
@@ -595,7 +630,6 @@ case $ss_online_action in
 	local_groups=`dbus list ssconf_basic_|grep group|cut -d "=" -f2|sort -u|wc -l`
 	online_group=`dbus get ss_online_links|base64_decode|sed 's/$/\n/'|sed '/^$/d'|wc -l`
 	echo_date "保存订阅节点成功，现共有 $online_group 组订阅来源，当前节点列表内已经订阅了 $local_groups 组..."
-	
 	sed -i '/ssnodeupdate/d' /var/spool/cron/crontabs/* >/dev/null 2>&1
 	if [ "$ss_basic_node_update" = "1" ];then
 		if [ "$ss_basic_node_update_day" = "7" ];then
@@ -612,6 +646,7 @@ case $ss_online_action in
 	sleep 1
 	;;
 3)
+	echo_date "开始订阅"
 	start_update
 	;;
 4)

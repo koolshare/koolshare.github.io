@@ -11,137 +11,79 @@
 <link rel="stylesheet" type="text/css" href="index_style.css">
 <link rel="stylesheet" type="text/css" href="form_style.css">
 <link rel="stylesheet" type="text/css" href="css/element.css">
-<script language="JavaScript" type="text/javascript" src="/state.js"></script>
-<script language="JavaScript" type="text/javascript" src="/help.js"></script>
-<script language="JavaScript" type="text/javascript" src="/general.js"></script>
-<script language="JavaScript" type="text/javascript" src="/popup.js"></script>
-<script language="JavaScript" type="text/javascript" src="/client_function.js"></script>
-<script language="JavaScript" type="text/javascript" src="/validator.js"></script>
+<link rel="stylesheet" type="text/css" href="/res/shadowsocks.css">
+<script type="text/javascript" src="/state.js"></script>
+<script type="text/javascript" src="/popup.js"></script>
+<script type="text/javascript" src="/help.js"></script>
+<script type="text/javascript" src="/validator.js"></script>
 <script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/general.js"></script>
 <script type="text/javascript" src="/switcherplugin/jquery.iphone-switch.js"></script>
 <script type="text/javascript" src="/dbconf?p=ss&v=<% uptime(); %>"></script>
+<script language="JavaScript" type="text/javascript" src="/client_function.js"></script>
 <script type="text/javascript" src="/res/ss-menu.js"></script>
 <style>
-.Bar_container{
-width:85%;
-height:20px;
-border:1px inset #999;
-margin:0 auto;
-margin-top:20px \9;
-background-color:#FFFFFF;
-z-index:100;
+.Bar_container {
+	width:85%;
+	height:20px;
+	border:1px inset #999;
+	margin:0 auto;
+	margin-top:20px \9;
+	background-color:#FFFFFF;
+	z-index:100;
 }
-#proceeding_img_text{
-position:absolute;
-z-index:101;
-font-size:11px; color:#000000;
-line-height:21px;
-width: 83%;
+#proceeding_img_text {
+	position:absolute;
+	z-index:101;
+	font-size:11px;
+	color:#000000;
+	line-height:21px;
+	width: 83%;
 }
-#proceeding_img{
-height:21px;
-background:#C0D1D3 url(/images/ss_proceding.gif);
-}
-#ClientList_Block_PC {
-border: 1px outset #999;
-background-color: #576D73;
-position: absolute;
-*margin-top:26px;
-margin-left: 3px;
-*margin-left:-129px;
-width: 255px;
-text-align: left;
-height: auto;
-overflow-y: auto;
-z-index: 200;
-padding: 1px;
-display: none;
-}
-#ClientList_Block_PC div {
-background-color: #576D73;
-height: auto;
-*height:20px;
-line-height: 20px;
-text-decoration: none;
-font-family: Lucida Console;
-padding-left: 2px;
-}
-#ClientList_Block_PC a {
-background-color: #EFEFEF;
-color: #FFF;
-font-size: 12px;
-font-family: Lucida Console;
-text-decoration: none;
-}
-#ClientList_Block_PC div:hover, #ClientList_Block a:hover {
-background-color: #3366FF;
-color: #FFFFFF;
-cursor: default;
+#proceeding_img {
+	height:21px;
+	background:#C0D1D3 url(/images/ss_proceding.gif);
 }
 </style>
 <script>
 var socks5 = 1
-var $j = jQuery.noConflict();
-var $G = function (id) {
-return document.getElementById(id);
-};
-
-function init(){
+function init() {
 	show_menu(menu_hook);
 	conf_to_obj();
-    buildswitch();
-    toggle_switch();
-    update_visibility();
+	buildswitch();
+	update_visibility();
 }
 
-function toggle_switch(){
-    var rrt = document.getElementById("switch");
-    if (document.form.ss_local_enable.value != "1") {
-        rrt.checked = false;
-    } else {
-        rrt.checked = true;
-    }
-}
-
-function buildswitch(){
-    $j("#switch").click(
-    function(){
-        if(document.getElementById('switch').checked){
-            document.form.ss_local_enable.value = 1;
-            
-        }else{
-            document.form.ss_local_enable.value = 0;
-        }
-    });
-}
-
-function conf_to_obj(){
-	if(typeof db_ss != "undefined") {
-		for(var field in db_ss) {
-			var el = document.getElementById(field);
-			if(el != null) {
-				el.value = db_ss[field];
-			}
+function buildswitch() {
+	$("#switch").click(
+	function() {
+		if (E("switch").checked) {
+			document.form.ss_local_enable.value = 1;
+		} else {
+			document.form.ss_local_enable.value = 0;
 		}
+	});
+}
+
+function conf_to_obj() {
+	for (var field in db_ss) {
+		var el = E(field);
+		if (el != null) {
+			el.value = db_ss[field];
+		}
+	}
+	
+	var rrt = E("switch");
+	if (document.form.ss_local_enable.value != "1") {
+		rrt.checked = false;
 	} else {
-		document.getElementById("logArea").innerHTML = "无法读取配置,jffs为空或配置文件不存在?";
-		return;
+		rrt.checked = true;
 	}
 }
 
-function onSubmitCtrl(o, s) {
-	if(validForm()){
-		showSSLoadingBar(5);
-		document.form.action_mode.value = s;
-		updateOptions();
-	}
-}
-
-function done_validating(action){
-	return true;
-}
-
-function updateOptions(){
+function onSubmitCtrl() {
+	showSSLoadingBar(5);
+	document.form.action_mode.value = ' Refresh ';
 	document.form.enctype = "";
 	document.form.encoding = "";
 	document.form.action = "/applydb.cgi?p=ss_local_";
@@ -149,15 +91,13 @@ function updateOptions(){
 	document.form.submit();
 }
 
-function validForm(){
-	var is_ok = true;
-	return is_ok;
+function done_validating(action) {
+	return true;
 }
 
-function update_visibility(){
-	showhide("ss_obfs_host", (document.form.ss_local_obfs.value !== "0" ));
+function update_visibility() {
+	showhide("ss_obfs_host", (document.form.ss_local_obfs.value !== "0"));
 }
-
 </script>
 </head>
 <body onload="init();">
@@ -172,7 +112,7 @@ function update_visibility(){
 						<span id="proceeding_img_text"></span>
 						<div id="proceeding_img"></div>
 					</div>
-					<div id="loading_block2" style="margin:10px auto; width:85%;">此期间请勿访问屏蔽网址，以免污染DNS进入缓存</div>
+					<div id="loading_block2" style="margin:10px auto; width:85%;"></div>
 				</td>
 			</tr>
 		</table>
@@ -188,7 +128,7 @@ function update_visibility(){
 	<input type="hidden" name="action_wait" value="8">
 	<input type="hidden" name="first_time" value="">
 	<input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>">
-	<input type="hidden" name="SystemCmd" onkeydown="onSubmitCtrl(this, ' Refresh ')" value="">
+	<input type="hidden" name="SystemCmd" value="">
 	<input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>">
 	<input type="hidden" id="ss_local_enable" name="ss_local_enable" value='<% dbus_get_def("ss_local_enable", "0"); %>'/>
 	<table class="content" align="center" cellpadding="0" cellspacing="0">
@@ -218,7 +158,7 @@ function update_visibility(){
 													<td colspan="2">Shadowsocks - ss-local - 高级设置</td>
 												</tr>
 											</thead>
-                                        	<tr id="switch_tr">
+                                        	<tr>
                                         	    <th>
                                         	        <label>开关</label>
                                         	    </th>
@@ -239,19 +179,19 @@ function update_visibility(){
 											<tr>
 												<th width="20%">服务器(建议填写IP地址)</th>
 												<td>
-													<input style="background-image: none;background-color: #576d73;border:1px solid gray" type="text" class="ssconfig input_ss_table" id="ss_local_server" name="ss_local_server" maxlength="100" value="">
+													<input style="background-image: none;background-color: #576d73;border:1px solid gray" type="text" class="input_ss_table" id="ss_local_server" name="ss_local_server" maxlength="100" value="">
 												</td>
 											</tr>
 											<tr>
 												<th width="20%">服务器端口</th>
 												<td>
-													<input type="text" class="ssconfig input_ss_table" id="ss_local_port" name="ss_local_port" maxlength="100" value="">
+													<input type="text" class="input_ss_table" id="ss_local_port" name="ss_local_port" maxlength="100" value="">
 												</td>
 											</tr>
 											<tr>
 												<th width="20%">密码</th>
 													<td>
-														<input type="password" class="ssconfig input_ss_table" id="ss_local_password" name="ss_local_password" maxlength="100" value="" onBlur="switchType(this, false);" onFocus="switchType(this, true);">
+														<input type="password" class="input_ss_table" id="ss_local_password" name="ss_local_password" maxlength="100" value="" onBlur="switchType(this, false);" onFocus="switchType(this, true);">
 												</td>
 											</tr>
 											<tr>
@@ -283,13 +223,13 @@ function update_visibility(){
 											<tr>
 												<th width="20%">超时时间</th>
 												<td>
-													<input type="text" class="ssconfig input_ss_table" id="ss_local_timeout" name="ss_local_timeout" maxlength="100" value="600">
+													<input type="text" class="input_ss_table" id="ss_local_timeout" name="ss_local_timeout" maxlength="100" value="600">
 												</td>
 											</tr>
 											<tr>
 												<th width="20%">本地代理端口</th>
 												<td>
-													<input type="text" class="ssconfig input_ss_table" id="ss_local_proxyport" name="ss_local_proxyport" maxlength="100" value="1082">												
+													<input type="text" class="input_ss_table" id="ss_local_proxyport" name="ss_local_proxyport" maxlength="100" value="1082">												
 												</td>
 											</tr>
 											<tr id="ss_obfs">
@@ -305,7 +245,7 @@ function update_visibility(){
 											<tr id="ss_obfs_host">
 												<th width="35%">混淆主机名 (obfs_host)</th>
 												<td>
-													<input type="text" name="ss_local_obfs_host" id="ss_local_obfs_host" placeholder="bing.com"  class="ssconfig input_ss_table" maxlength="100" value=""></input>
+													<input type="text" name="ss_local_obfs_host" id="ss_local_obfs_host" placeholder="bing.com"  class="input_ss_table" maxlength="100" value=""></input>
 												</td>
 											</tr>
 											<tr id="acl_support">
@@ -321,7 +261,7 @@ function update_visibility(){
 										</table>
 										<div id="warning" style="font-size:14px;margin:20px auto;"></div>
 										<div class="apply_gen">
-											<input class="button_gen" id="cmdBtn" onClick="onSubmitCtrl(this, ' Refresh ')" type="button" value="提交" />
+											<input class="button_gen" id="cmdBtn" onClick="onSubmitCtrl()" type="button" value="提交" />
 										</div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 										<div class="KoolshareBottom">论坛技术支持： <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a> <br/>
@@ -341,13 +281,5 @@ function update_visibility(){
 </form>
 <div id="footer"></div>
 </body>
-<script type="text/javascript">
-<!--[if !IE]>-->
-jQuery.noConflict();
-(function($){
-var i = 0;
-})(jQuery);
-<!--<![endif]-->
-</script>
 </html>
 
