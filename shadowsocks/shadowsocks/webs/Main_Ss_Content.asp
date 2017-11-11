@@ -223,7 +223,7 @@ function save() {
 		if (!E(params_base64[i]).value) {
 			dbus[params_base64[i]] = "";
 		} else {
-			if (temp_str.indexOf(".") != -1) {
+			if (E(params_base64[i]).value.indexOf(".") != -1) {
 				dbus[params_base64[i]] = Base64.encode(E(params_base64[i]).value);
 			} else {
 				//乱码了
@@ -2330,13 +2330,7 @@ function refresh_acl_html() {
 	for (var field in acl_confs) {
 		var ac = acl_confs[field];
 		code = code + '<tr>';
-		//generate_lan_list();
-		//$("#ss_acl_ip option[value='" + ac["ip"] + "']").remove();
-		if (ac["mode"] == "3" && db_ss["ss_basic_use_kcp"] == "1" || db_ss["ss_basic_server"] == "127.0.0.1" || db_ss["ss_basic_ss_obfs"]) {
-			code = code + '<td><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(52)">' + ac["ip"] + ' (UDP不通)</a></td>';
-		} else {
-			code = code + '<td>' + ac["ip"] + '</td>';
-		}
+		code = code + '<td>' + ac["ip"] + '</td>';
 		code = code + '<td>';
 		code = code + '<input type="text" placeholder="' + ac["acl_node"] + '号机" id="ss_acl_name_' + ac["acl_node"] + '" name="ss_acl_name_' + ac["acl_node"] + '" class="input_option_2" maxlength="50" style="width:140px;" placeholder="" />';
 		code = code + '</td>';
