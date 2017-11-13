@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.6.9
+   - fix 修复ssr下速度过慢；
+   - fix 修复订阅中自定义混淆参数无效的问题；
+   - fix 修复ss:// ssr:// 链接无法添加节点的问题；
+
 3.6.8
    - update	经测试，使用mbedtls 2.6.0依赖，速度不如mbedtls 2.5.1，因此重新编译相关二进制文件。
    		更新ss-libev, simple-obfs, ssrr-libev, mbedtls依赖更换为2.5.1版本，libsodium版为1.0.13版本。

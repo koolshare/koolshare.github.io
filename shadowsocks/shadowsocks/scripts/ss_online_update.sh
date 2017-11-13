@@ -551,7 +551,7 @@ add() {
 	rm -rf /tmp/all_localservers >/dev/null 2>&1
 	rm -rf /tmp/all_onlineservers >/dev/null 2>&1
 	rm -rf /tmp/group_info.txt >/dev/null 2>&1
-	echo_date 添加链接为：`dbus get ss_ssr_add_link`
+	echo_date 添加链接为：`dbus get ss_base64_links`
 	ssrlinks=`dbus get ss_base64_links|sed 's/$/\n/'|sed '/^$/d'`
 	for ssrlink in $ssrlinks
 	do
