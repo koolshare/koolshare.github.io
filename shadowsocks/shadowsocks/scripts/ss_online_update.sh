@@ -314,10 +314,10 @@ get_oneline_rule_now(){
 	socksopen=`ps|grep "\-local"|grep 23456`
 	if [ "$ss_basic_online_links_goss" == "1" ] && [ -n "$socksopen" ];then
 		echo_date "使用SS网络下载..."
-		curl --connect-timeout 8 -s --socks5-hostname 127.0.0.1:23456 $ssr_subscribe_link > /tmp/ssr_subscribe_file.txt
+		curl --connect-timeout 8 -s -L --socks5-hostname 127.0.0.1:23456 $ssr_subscribe_link > /tmp/ssr_subscribe_file.txt
 	else
 		echo_date "使用常规网络下载..."
-		curl --connect-timeout 8 -s $ssr_subscribe_link > /tmp/ssr_subscribe_file.txt
+		curl --connect-timeout 8 -s -L $ssr_subscribe_link > /tmp/ssr_subscribe_file.txt
 	fi
 	if [ "$?" == "0" ];then
 		if [ -z "`cat /tmp/ssr_subscribe_file.txt`" ];then
