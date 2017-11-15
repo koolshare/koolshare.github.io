@@ -68,7 +68,7 @@ confs=`cat /tmp/ss_conf_backup.txt`
 format=`echo $confs|grep "{"`
 if [ -z "$format" ];then
 	echo_date 检测到ss备份文件...
-	cat /koolshare/ss_conf_backup.txt | grep -E "^ss"| sed '/webtest/d' | sed '/ssid_/d' | sed '/ssserver_/d' | sed '/ping/d' |sed '/ss_node_table/d' | sed '/_state_/d' |	sed 's/=/=\"/' | sed 's/$/\"/g'|sed 's/^/dbus set /' | sed '1 i\\n' | sed '1 isource /koolshare/scripts/base.sh' | sed '1 i#!/bin/sh' > /tmp/ss_conf_backup_tmp.sh
+	cat /tmp/ss_conf_backup.txt | grep -E "^ss"| sed '/webtest/d' | sed '/ssid_/d' | sed '/ssserver_/d' | sed '/ping/d' |sed '/ss_node_table/d' | sed '/_state_/d' |	sed 's/=/=\"/' | sed 's/$/\"/g'|sed 's/^/dbus set /' | sed '1 i\\n' | sed '1 isource /koolshare/scripts/base.sh' | sed '1 i#!/bin/sh' > /tmp/ss_conf_backup_tmp.sh
 	echo_date 开始恢复配置...
 	chmod +x /tmp/ss_conf_backup_tmp.sh
 	sh /tmp/ss_conf_backup_tmp.sh
