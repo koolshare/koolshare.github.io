@@ -34,7 +34,6 @@ upgrade_ss_conf(){
 			dbus remove ssconf_basic_ss_obfs_$node
 			dbus remove ssconf_basic_ss_obfs_host_$node
 			dbus remove ssconf_basic_koolgame_udp_$node
-			dbus remove dbus get ssconf_basic_use_rss_$node
 		else
 			if [ -n "`dbus get ssconf_basic_koolgame_udp_$node`" ];then
 				#koolgame
@@ -88,6 +87,7 @@ upgrade_ss_conf(){
 }
 
 SS_VERSION_OLD=`dbus get ss_basic_version_local`
+[ -z "$SS_VERSION_OLD" ] && SS_VERSION_OLD=3.6.5
 ss_comp=`versioncmp $SS_VERSION_OLD 3.6.5`
 if [ -n "$SS_VERSION_OLD" ];then
 	if [ "$ss_comp" == "1" ];then
@@ -153,6 +153,7 @@ echo_date 创建一些二进制文件的软链接！
 echo_date 复制ss的脚本文件！
 cp -rf /tmp/shadowsocks/ss/* /koolshare/ss/
 cp -rf /tmp/shadowsocks/scripts/* /koolshare/scripts/
+cp -rf /tmp/shadowsocks/install.sh /koolshare/scripts/ss_install.sh
 cp -rf /tmp/shadowsocks/init.d/* /koolshare/init.d/
 
 echo_date 复制网页文件！

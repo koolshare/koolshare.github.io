@@ -621,7 +621,6 @@ function ssconf_node2obj(node_sel) {
 		obj["ss_basic_" + params[i]] = db_ss[p + "_" + params[i] + "_" + node_sel] || "";
 	}
 	obj["ssconf_basic_node"] = node_sel;
-	console.log(obj)
 	return obj;
 }
 
@@ -746,21 +745,21 @@ function getAllConfigs() {
 			obj[params[i]] = db_ss[ofield];
 		}
 		// for brook show
-		if (typeof db_ss[p + "_brook_server_" + field] != "undefined" ) {
-			//showed in table
-			obj["mode"] = db_ss[p + "_mode_" + field];
-			obj["name"] = db_ss[p + "_name_" + field];
-			obj["server"] = db_ss[p + "_brook_server_" + field];
-			obj["method"] = "brook";
-			//not showe in table
-			obj["port"] = db_ss[p + "_brook_port_" + field];
-			obj["password"] = db_ss[p + "_password_" + field];
-			obj["brook_mode"] = db_ss[p + "_brook_mode_" + field];
-			obj["brook_tcpDeadline"] = db_ss[p + "_brook_tcpDeadline_" + field];
-			obj["brook_tcpTimeout"] = db_ss[p + "_brook_tcpTimeout_" + field];
-			obj["brook_udpDeadline"] = db_ss[p + "_brook_udpDeadline_" + field];
-			obj["brook_udpSessionTime"] = db_ss[p + "_brook_udpSessionTime_" + field];
-		}
+		// if (typeof db_ss[p + "_brook_server_" + field] != "undefined" ) {
+		// 	//showed in table
+		// 	obj["mode"] = db_ss[p + "_mode_" + field];
+		// 	obj["name"] = db_ss[p + "_name_" + field];
+		// 	obj["server"] = db_ss[p + "_brook_server_" + field];
+		// 	obj["method"] = "brook";
+		// 	//not showe in table
+		// 	obj["port"] = db_ss[p + "_brook_port_" + field];
+		// 	obj["password"] = db_ss[p + "_password_" + field];
+		// 	obj["brook_mode"] = db_ss[p + "_brook_mode_" + field];
+		// 	obj["brook_tcpDeadline"] = db_ss[p + "_brook_tcpDeadline_" + field];
+		// 	obj["brook_tcpTimeout"] = db_ss[p + "_brook_tcpTimeout_" + field];
+		// 	obj["brook_udpDeadline"] = db_ss[p + "_brook_udpDeadline_" + field];
+		// 	obj["brook_udpSessionTime"] = db_ss[p + "_brook_udpSessionTime_" + field];
+		// }
 
 		if (obj != null) {
 			var node_i = parseInt(field);
@@ -814,12 +813,14 @@ function loadBasicOptions(confs) {
 					value: field,
 					text: c.use_kcp == "1" ? "【koolgame+KCP】" + c.name : "【koolgame】" + c.name
 				}));
-			} else if (c.brook_tcpDeadline){
-				option.append($("<option>", {
-					value: field,
-					text: c.use_kcp == "1" ? "【BROOK+KCP】" + c.name : "【BROOK】" + c.name
-				}));
-			} else {
+			} 
+			//else if (c.brook_tcpDeadline){
+			//	option.append($("<option>", {
+			//		value: field,
+			//		text: c.use_kcp == "1" ? "【BROOK+KCP】" + c.name : "【BROOK】" + c.name
+			//	}));
+			//} 
+			else {
 				option.append($("<option>", {
 					value: field,
 					text: c.use_kcp == "1" ? "【SS+KCP】" + c.name : "【SS】" + c.name
@@ -934,14 +935,14 @@ function tabclickhandler(_type) {
 		E('ssr_obfs_tr').style.display = "none";
 		E('ssr_obfs_param_tr').style.display = "none";
 		E('gameV2_udp_tr').style.display = "none";
-		E('ss_brook_mode_tr').style.display = "none";
-		E('ss_brook_server_tr').style.display = "none";
-		E('ss_brook_port_tr').style.display = "none";
-		E('ss_brook_passwd_tr').style.display = "none";
-		E('ss_brook_tcpTimeout_tr').style.display = "none";
-		E('ss_brook_tcpDeadline_tr').style.display = "none";
-		E('ss_brook_udpDeadline_tr').style.display = "none";
-		E('ss_brook_udpSessionTime_tr').style.display = "none";
+		//E('ss_brook_mode_tr').style.display = "none";
+		//E('ss_brook_server_tr').style.display = "none";
+		//E('ss_brook_port_tr').style.display = "none";
+		//E('ss_brook_passwd_tr').style.display = "none";
+		//E('ss_brook_tcpTimeout_tr').style.display = "none";
+		//E('ss_brook_tcpDeadline_tr').style.display = "none";
+		//E('ss_brook_udpDeadline_tr').style.display = "none";
+		//E('ss_brook_udpSessionTime_tr').style.display = "none";
 	} else if (_type == 1) {
 		save_flag = "shadowsocksR";
 		E("vpnc_type").value = "shadowsocksR";
@@ -958,14 +959,14 @@ function tabclickhandler(_type) {
 		E('ssr_obfs_tr').style.display = "";
 		E('ssr_obfs_param_tr').style.display = "";
 		E('gameV2_udp_tr').style.display = "none";
-		E('ss_brook_mode_tr').style.display = "none";
-		E('ss_brook_server_tr').style.display = "none";
-		E('ss_brook_port_tr').style.display = "none";
-		E('ss_brook_passwd_tr').style.display = "none";
-		E('ss_brook_tcpTimeout_tr').style.display = "none";
-		E('ss_brook_tcpDeadline_tr').style.display = "none";
-		E('ss_brook_udpDeadline_tr').style.display = "none";
-		E('ss_brook_udpSessionTime_tr').style.display = "none";
+		//E('ss_brook_mode_tr').style.display = "none";
+		//E('ss_brook_server_tr').style.display = "none";
+		//E('ss_brook_port_tr').style.display = "none";
+		//E('ss_brook_passwd_tr').style.display = "none";
+		//E('ss_brook_tcpTimeout_tr').style.display = "none";
+		//E('ss_brook_tcpDeadline_tr').style.display = "none";
+		//E('ss_brook_udpDeadline_tr').style.display = "none";
+		//E('ss_brook_udpSessionTime_tr').style.display = "none";
 	} else if (_type == 2) {
 		save_flag = "gameV2";
 		E("vpnc_type").value = "gameV2";
@@ -982,39 +983,40 @@ function tabclickhandler(_type) {
 		E('ssr_obfs_tr').style.display = "none";
 		E('ssr_obfs_param_tr').style.display = "none";
 		E('gameV2_udp_tr').style.display = "";
-		E('ss_brook_mode_tr').style.display = "none";
-		E('ss_brook_server_tr').style.display = "none";
-		E('ss_brook_port_tr').style.display = "none";
-		E('ss_brook_passwd_tr').style.display = "none";
-		E('ss_brook_tcpTimeout_tr').style.display = "none";
-		E('ss_brook_tcpDeadline_tr').style.display = "none";
-		E('ss_brook_udpDeadline_tr').style.display = "none";
-		E('ss_brook_udpSessionTime_tr').style.display = "none";
-	} else if (_type == 3) {
-		save_flag = "brook";
-		E("vpnc_type").value = "brook";
-		E('brookTitle').className = "vpnClientTitle_td_click";
-		E('ss_name_support_tr').style.display = "";
-		E('ss_server_support_tr').style.display = "none";
-		E('ss_port_support_tr').style.display = "none";
-		E('ss_passwd_support_tr').style.display = "none";
-		E('ss_method_support_tr').style.display = "none";
-		E('ss_obfs_support').style.display = "none";
-		E('ss_obfs_host_support').style.display = "none";
-		E('ssr_protocol_tr').style.display = "none";
-		E('ssr_protocol_param_tr').style.display = "none";
-		E('ssr_obfs_tr').style.display = "none";
-		E('ssr_obfs_param_tr').style.display = "none";
-		E('gameV2_udp_tr').style.display = "none";
-		E('ss_brook_mode_tr').style.display = "";
-		E('ss_brook_server_tr').style.display = "";
-		E('ss_brook_port_tr').style.display = "";
-		E('ss_brook_passwd_tr').style.display = "";
-		E('ss_brook_tcpTimeout_tr').style.display = "";
-		E('ss_brook_tcpDeadline_tr').style.display = "";
-		E('ss_brook_udpDeadline_tr').style.display = "";
-		E('ss_brook_udpSessionTime_tr').style.display = "";
-	}
+		//E('ss_brook_mode_tr').style.display = "none";
+		//E('ss_brook_server_tr').style.display = "none";
+		//E('ss_brook_port_tr').style.display = "none";
+		//E('ss_brook_passwd_tr').style.display = "none";
+		//E('ss_brook_tcpTimeout_tr').style.display = "none";
+		//E('ss_brook_tcpDeadline_tr').style.display = "none";
+		//E('ss_brook_udpDeadline_tr').style.display = "none";
+		//E('ss_brook_udpSessionTime_tr').style.display = "none";
+	} 
+	//else if (_type == 3) {
+	//	save_flag = "brook";
+	//	E("vpnc_type").value = "brook";
+	//	E('brookTitle').className = "vpnClientTitle_td_click";
+	//	E('ss_name_support_tr').style.display = "";
+	//	E('ss_server_support_tr').style.display = "none";
+	//	E('ss_port_support_tr').style.display = "none";
+	//	E('ss_passwd_support_tr').style.display = "none";
+	//	E('ss_method_support_tr').style.display = "none";
+	//	E('ss_obfs_support').style.display = "none";
+	//	E('ss_obfs_host_support').style.display = "none";
+	//	E('ssr_protocol_tr').style.display = "none";
+	//	E('ssr_protocol_param_tr').style.display = "none";
+	//	E('ssr_obfs_tr').style.display = "none";
+	//	E('ssr_obfs_param_tr').style.display = "none";
+	//	E('gameV2_udp_tr').style.display = "none";
+	//	E('ss_brook_mode_tr').style.display = "";
+	//	E('ss_brook_server_tr').style.display = "";
+	//	E('ss_brook_port_tr').style.display = "";
+	//	E('ss_brook_passwd_tr').style.display = "";
+	//	E('ss_brook_tcpTimeout_tr').style.display = "";
+	//	E('ss_brook_tcpDeadline_tr').style.display = "";
+	//	E('ss_brook_udpDeadline_tr').style.display = "";
+	//	E('ss_brook_udpSessionTime_tr').style.display = "";
+	//}
 	return save_flag;
 }
 
@@ -1025,7 +1027,7 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 	var params1 = ["name", "server", "mode", "port", "method", "ss_obfs", "ss_obfs_host"]; //for ss
 	var params2 = ["name", "server", "mode", "port", "method", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param"]; //for ssr
 	var params3 = ["name", "server", "mode", "port", "method", "koolgame_udp"]; //for ssr
-	var params4 = ["name", "mode", "brook_mode", "brook_server", "brook_port", "brook_tcpTimeout", "brook_tcpDeadline", "brook_udpDeadline", "brook_udpSessionTime"]; //for ssr
+	//var params4 = ["name", "mode", "brook_mode", "brook_server", "brook_port", "brook_tcpTimeout", "brook_tcpDeadline", "brook_udpDeadline", "brook_udpSessionTime"]; //for ssr
 	if (flag == 'shadowsocks') {
 		for (var i = 0; i < params1.length; i++) {
 			ns[p + "_" + params1[i] + "_" + node_global_max] = $.trim($('#ss_node_table' + "_" + params1[i]).val());
@@ -1041,12 +1043,13 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 			ns[p + "_" + params3[i] + "_" + node_global_max] = $.trim($('#ss_node_table' + "_" + params3[i]).val());
 			ns[p + "_password_" + node_global_max] = Base64.encode($.trim($("#ss_node_table_password").val()));
 		}
-	} else if (flag == 'brook') {
-		for (var i = 0; i < params4.length; i++) {
-			ns[p + "_" + params4[i] + "_" + node_global_max] = $.trim($('#ss_node_table' + "_" + params4[i]).val());
-			ns[p + "_password_" + node_global_max] = Base64.encode($.trim($("#ss_node_table_brook_password").val()));
-		}
-	}
+	} 
+	//else if (flag == 'brook') {
+	//	for (var i = 0; i < params4.length; i++) {
+	//		ns[p + "_" + params4[i] + "_" + node_global_max] = $.trim($('#ss_node_table' + "_" + params4[i]).val());
+	//		ns[p + "_password_" + node_global_max] = Base64.encode($.trim($("#ss_node_table_brook_password").val()));
+	//	}
+	//}
 	$.ajax({
 		url: '/applydb.cgi?p=ssconf_basic',
 		contentType: "application/x-www-form-urlencoded",
@@ -1057,7 +1060,7 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 			//尝试将table拉动到最下方
 			setTimeout("scroll_bottoom()", 500);
 				E("ss_node_table_server").value = "";
-				E("ss_node_table_brook_server").value = "";
+				//E("ss_node_table_brook_server").value = "";
 			if ((E("continue_add_box").checked) == false) { //不选择连续添加的时候，清空其他数据
 				E("ss_node_table_name").value = "";
 				E("ss_node_table_port").value = "";
@@ -1071,14 +1074,14 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 				E("ss_node_table_rss_obfs").value = "plain";
 				E("ss_node_table_rss_obfs_param").value = "";
 				E("ss_node_table_koolgame_udp").value = "0";
-				E("ss_node_table_brook_mode").value = "client";
-				E("ss_node_table_brook_server").value = "";
-				E("ss_node_table_brook_port").value = "";
-				E("ss_node_table_brook_password").value = "";
-				E("ss_node_table_brook_tcpTimeout").value = "60";
-				E("ss_node_table_brook_tcpDeadline").value = "0";
-				E("ss_node_table_brook_udpDeadline").value = "60";
-				E("ss_node_table_brook_udpSessionTime").value = "60";
+				//E("ss_node_table_brook_mode").value = "client";
+				//E("ss_node_table_brook_server").value = "";
+				//E("ss_node_table_brook_port").value = "";
+				//E("ss_node_table_brook_password").value = "";
+				//E("ss_node_table_brook_tcpTimeout").value = "60";
+				//E("ss_node_table_brook_tcpDeadline").value = "0";
+				//E("ss_node_table_brook_udpDeadline").value = "60";
+				//E("ss_node_table_brook_udpSessionTime").value = "60";
 				cancel_add_rule();
 			}
 		}
@@ -1249,12 +1252,14 @@ function apply_this_ss_node(s) { //应用此节点
 					value: field,
 					text: "【koolgame】" + c.name
 				}));
-			} else if (c.brook_tcpDeadline){
-				option.append($("<option>", {
-					value: field,
-					text: "【BROOK】" + c.name
-				}));
-			} else {
+			} 
+			//else if (c.brook_tcpDeadline){
+			//	option.append($("<option>", {
+			//		value: field,
+			//		text: "【BROOK】" + c.name
+			//	}));
+			//} 
+			else {
 				option.append($("<option>", {
 					value: field,
 					text: "【SS】" + c.name
@@ -1416,7 +1421,8 @@ function remove_conf_table(o) { //删除节点功能
 	var p = "ssconf_basic";
 	id = ids[ids.length - 1];
 	var ns = {};
-	var params = ["name", "server", "server_ip", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "use_kcp", "ss_obfs", "ss_obfs_host", "koolgame_udp", "ping", "web_test", "lbmode", "weight", "use_kcp", "group", "brook_mode", "brook_port", "brook_server", "brook_tcpDeadline", "brook_tcpTimeout", "brook_udpDeadline", "brook_udpSessionTime" ];
+	//var params = ["name", "server", "server_ip", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "use_kcp", "ss_obfs", "ss_obfs_host", "koolgame_udp", "ping", "web_test", "lbmode", "weight", "use_kcp", "group", "brook_mode", "brook_port", "brook_server", "brook_tcpDeadline", "brook_tcpTimeout", "brook_udpDeadline", "brook_udpSessionTime" ];
+	var params = ["name", "server", "server_ip", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "use_kcp", "ss_obfs", "ss_obfs_host", "koolgame_udp", "ping", "web_test", "lbmode", "weight", "use_kcp", "group" ];
 	for (var i = 0; i < params.length; i++) {
 		ns[p + "_" + params[i] + "_" + id] = "";
 	}
@@ -1457,14 +1463,14 @@ function edit_conf_table(o) { //编辑节点功能，显示编辑面板
 	E("ss_node_table_rss_protocol_param").value = c["rss_protocol_param"];
 	E("ss_node_table_rss_obfs").value = c["rss_obfs"];
 	E("ss_node_table_koolgame_udp").value = c["koolgame_udp"];
-	E("ss_node_table_brook_mode").value = c["brook_mode"];
-	E("ss_node_table_brook_server").value = c["server"];
-	E("ss_node_table_brook_port").value = c["port"];
-	E("ss_node_table_brook_password").value = Base64.decode(c["password"]);
-	E("ss_node_table_brook_tcpTimeout").value = c["brook_tcpTimeout"];
-	E("ss_node_table_brook_tcpDeadline").value = c["brook_tcpDeadline"];
-	E("ss_node_table_brook_udpDeadline").value = c["brook_udpDeadline"];
-	E("ss_node_table_brook_udpSessionTime").value = c["brook_udpSessionTime"];
+	//E("ss_node_table_brook_mode").value = c["brook_mode"];
+	//E("ss_node_table_brook_server").value = c["server"];
+	//E("ss_node_table_brook_port").value = c["port"];
+	//E("ss_node_table_brook_password").value = Base64.decode(c["password"]);
+	//E("ss_node_table_brook_tcpTimeout").value = c["brook_tcpTimeout"];
+	//E("ss_node_table_brook_tcpDeadline").value = c["brook_tcpDeadline"];
+	//E("ss_node_table_brook_udpDeadline").value = c["brook_udpDeadline"];
+	//E("ss_node_table_brook_udpSessionTime").value = c["brook_udpSessionTime"];
 
 	E("cancelBtn").style.display = "";
 	E("add_node").style.display = "none";
@@ -1476,7 +1482,7 @@ function edit_conf_table(o) { //编辑节点功能，显示编辑面板
 		E("ssTitle").style.display = "none";
 		E("ssrTitle").style.display = "";
 		E("gamev2Title").style.display = "none";
-		E("brookTitle").style.display = "none";
+		//E("brookTitle").style.display = "none";
 		$("#ssrTitle").html("编辑SSR账号");
 		tabclickhandler(1);
 		E("ss_node_table_mode").value = c["mode"];
@@ -1486,25 +1492,27 @@ function edit_conf_table(o) { //编辑节点功能，显示编辑面板
 			E("ssTitle").style.display = "none";
 			E("ssrTitle").style.display = "none";
 			E("gamev2Title").style.display = "";
-			E("brookTitle").style.display = "none";
+			//E("brookTitle").style.display = "none";
 			$("#gamev2Title").html("编辑koolgame账号");
 			tabclickhandler(2);
 			E("ss_node_table_mode").value = c["mode"];
-		} else if (c["brook_tcpDeadline"]) { //判断节点为SS
-			$("#vpnc_settings").fadeIn(200);
-			E("ssTitle").style.display = "none";
-			E("ssrTitle").style.display = "none";
-			E("gamev2Title").style.display = "none";
-			E("brookTitle").style.display = "";
-			$("#brookTitle").html("编辑brook账号");
-			tabclickhandler(3);
-			E("ss_node_table_mode").value = c["mode"];
-		} else { //判断节点为SS
+		} 
+		//else if (c["brook_tcpDeadline"]) { //判断节点为SS
+		//	$("#vpnc_settings").fadeIn(200);
+		//	E("ssTitle").style.display = "none";
+		//	E("ssrTitle").style.display = "none";
+		//	E("gamev2Title").style.display = "none";
+		//	E("brookTitle").style.display = "";
+		//	$("#brookTitle").html("编辑brook账号");
+		//	tabclickhandler(3);
+		//	E("ss_node_table_mode").value = c["mode"];
+		//} 
+		else { //判断节点为SS
 			$("#vpnc_settings").fadeIn(200);
 			E("ssTitle").style.display = "";
 			E("ssrTitle").style.display = "none";
 			E("gamev2Title").style.display = "none";
-			E("brookTitle").style.display = "none";
+			//E("brookTitle").style.display = "none";
 			$("#ssTitle").html("编辑SS账号");
 			tabclickhandler(0);
 			E("ss_node_table_mode").value = c["mode"];
@@ -1520,7 +1528,7 @@ function edit_ss_node_conf(flag) { //编辑节点功能，数据重写
 	var params1 = ["name", "server", "mode", "port", "method", "ss_obfs", "ss_obfs_host"]; //for ss
 	var params2 = ["name", "server", "mode", "port", "method", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param"]; //for ssr
 	var params3 = ["name", "server", "mode", "port", "method", "koolgame_udp"]; //for ssr
-	var params4 = ["name", "mode", "brook_mode", "brook_server", "brook_port", "brook_tcpTimeout", "brook_tcpDeadline", "brook_udpDeadline", "brook_udpSessionTime"]; //for ssr
+	//var params4 = ["name", "mode", "brook_mode", "brook_server", "brook_port", "brook_tcpTimeout", "brook_tcpDeadline", "brook_udpDeadline", "brook_udpSessionTime"]; //for ssr
 	if (flag == 'shadowsocks') {
 		for (var i = 0; i < params1.length; i++) {
 			ns[p + "_" + params1[i] + "_" + myid] = $('#ss_node_table' + "_" + params1[i]).val();
@@ -1536,12 +1544,13 @@ function edit_ss_node_conf(flag) { //编辑节点功能，数据重写
 			ns[p + "_" + params3[i] + "_" + myid] = $('#ss_node_table' + "_" + params3[i]).val();
 			ns[p + "_password_" + myid] = Base64.encode($("#ss_node_table_password").val());
 		}
-	} else if (flag == 'brook') {
-		for (var i = 0; i < params4.length; i++) {
-			ns[p + "_" + params4[i] + "_" + node_global_max] = $.trim($('#ss_node_table' + "_" + params4[i]).val());
-			ns[p + "_password_" + node_global_max] = Base64.encode($.trim($("#ss_node_table_brook_password").val()));
-		}
-	}
+	} 
+	//else if (flag == 'brook') {
+	//	for (var i = 0; i < params4.length; i++) {
+	//		ns[p + "_" + params4[i] + "_" + node_global_max] = $.trim($('#ss_node_table' + "_" + params4[i]).val());
+	//		ns[p + "_password_" + node_global_max] = Base64.encode($.trim($("#ss_node_table_brook_password").val()));
+	//	}
+	//}
 	$.ajax({
 		url: '/applydb.cgi?p=ssconf_basic',
 		contentType: "application/x-www-form-urlencoded",
@@ -2742,7 +2751,7 @@ function save_online_nodes(action) {
 											<img id="return_btn" onclick="reload_Soft_Center();" align="right" style="cursor:pointer;position:absolute;margin-left:-30px;margin-top:-25px;" title="返回软件中心" src="/images/backprev.png" onMouseOver="this.src='/images/backprevclick.png'" onMouseOut="this.src='/images/backprev.png'"></img>
 										</div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
-										<div class="SimpleNote"  id="head_illustrate">本插件是支持SS、SSR、koolgame、Brook四种客户端的科学上网、游戏加速工具。</div>
+										<div class="SimpleNote"  id="head_illustrate">本插件是支持SS、SSR、koolgame三种客户端的科学上网、游戏加速工具。</div>
 										<div style="margin-top: 0px;text-align: center;font-size: 18px;margin-bottom: 0px;" class="formfontdesc" id="cmdDesc"></div>
 										<!-- this is the popup area for status -->
 										<div id="detail_status"  class="content_status" style="box-shadow: 3px 3px 10px #000;margin-top: 0px;display: none;">
@@ -2786,7 +2795,7 @@ function save_online_nodes(action) {
 															</a>
 														</div>
 														<div style="display:table-cell;float: left;margin-left:270px;position: absolute;padding: 5.5px 0px;">
-															<a type="button" class="kp_btn" target="_blank" href="javascript:void(0);" onclick="pop_changelog()">更新日志</a>
+															<a type="button" class="kp_btn" target="_blank" href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt">更新日志</a>
 														</div>
 														<div style="display:table-cell;float: left;margin-left:350px;position: absolute;padding: 5.5px 0px;">
 															<a type="button" class="kp_btn" href="javascript:void(0);" onclick="pop_help()">插件帮助</a>
@@ -2994,7 +3003,7 @@ function save_online_nodes(action) {
 																</td>
 															</tr>
 															<!--brook-->
-															<tr id="ss_brook_mode_tr" style="display: none;">
+															<!--<tr id="ss_brook_mode_tr" style="display: none;">
 																<th>brook mode</th>
 																<td>
 																	<select id="ss_node_table_brook_mode" name="ss_node_table_brook_mode" class="input_option" style="width:350px;margin:0px 0px 0px 2px;" onchange="verifyFields(this, 1);">
@@ -3045,11 +3054,10 @@ function save_online_nodes(action) {
 																<td>
 																	<input type="text" maxlength="64" id="ss_node_table_brook_udpSessionTime" name="ss_node_table_brook_udpSessionTime" value="60" class="input_ss_table" style="width:342px;float:left;" autocomplete="off" autocorrect="off" autocapitalize="off"/>
 																</td>
-															</tr>
+															</tr>-->
 															
 															</table>
 												 		</div>
-												 		<!-- vpnc_pptp/l2tp end  -->		 			 	
 													</td>
 												</tr>
 											</table>
@@ -4192,7 +4200,6 @@ taobao.com
 												</tr>
 											</table>
 										</div>
-
 										<!--log_content-->
 										<div id="tablet_7" style="display: none;">
 												<div id="log_content" style="margin-top:-1px;display:none">

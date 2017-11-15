@@ -1,6 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 
+3.7.1
+   - fix	修复节点添加、编辑功能
+   - fix	修复kcp启动后实际未加速的问题
+   - fix	其它一些小问题
+
 3.7.0
    - update	现在点击科学上网开关不再隐藏相关页面元素
    - add	订阅链接支持注释如：（#https//ssr.com/xxx #订阅1）订阅1将不会订阅
@@ -8,8 +13,8 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    - update	游戏模式现在也能使用kcp加速（tcp部分走kcp协议，udp部分走原ss协议）
    - update	现在SS AEAD下也能使用游戏模式
    - add	增加udp加速功能，能使用UDPspeederV1和UDPspeederV2对游戏模式udp进行加速
-   			目前不支持UDPspeeder和kcp串联使用（ss流量的tcp走kcp，kcp走UDPspeeder），
-   			但是可以并联使用（ss流量的tcp走kcp，udp走UDPspeeder）
+   		目前不支持UDPspeeder和kcp串联使用（ss流量的tcp走kcp，kcp走UDPspeeder），
+   		但是可以并联使用（ss流量的tcp走kcp，udp走UDPspeeder）
 
 
 3.6.9

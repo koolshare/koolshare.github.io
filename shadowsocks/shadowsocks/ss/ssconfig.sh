@@ -21,7 +21,11 @@ IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
 if [  -n "$ss_basic_rss_protocol" ];then
 	ss_basic_type=1
 else
-	[ -n "$ss_basic_koolgame_udp" ] && ss_basic_type=2 || ss_basic_type=0
+	if [ -n "$ss_basic_koolgame_udp" ];then
+		ss_basic_type=2
+	else
+		ss_basic_type=0
+	fi
 fi
 
 # creat dnsmasq.d folder
@@ -413,31 +417,24 @@ resolv_server_ip(){
 # create shadowsocks config file...
 creat_ss_json(){
 	# simple obfs
-	if [ "$ss_basic_ss_obfs_host" != "" ];then
+	ARG_OBFS=""
+	if [ -n "$ss_basic_ss_obfs_host" ];then
 		if [ "$ss_basic_ss_obfs" == "http" ];then
-			ARG_OBFS="obfs=http;obfs-host=$ss_basic_ss_obfs_host"
+			ARG_OBFS="--plugin obfs-local --plugin-opts obfs=http;obfs-host=$ss_basic_ss_obfs_host"
 		elif [ "$ss_basic_ss_obfs" == "tls" ];then
-			ARG_OBFS="obfs=tls;obfs-host=$ss_basic_ss_obfs_host"
+			ARG_OBFS="--plugin obfs-local --plugin-opts obfs=tls;obfs-host=$ss_basic_ss_obfs_host"
 		else
 			ARG_OBFS=""
 		fi
 	else
 		if [ "$ss_basic_ss_obfs" == "http" ];then
-			ARG_OBFS="obfs=http"
+			ARG_OBFS="--plugin obfs-local --plugin-opts obfs=http"
 		elif [ "$ss_basic_ss_obfs" == "tls" ];then
-			ARG_OBFS="obfs=tls"
+			ARG_OBFS="--plugin obfs-local --plugin-opts obfs=tls"
 		else
 			ARG_OBFS=""
 		fi
 	fi
-	# kcp
-	# if [ "$ss_basic_use_kcp" == "1" ];then
-	# 	ss_basic_server_tmp="127.0.0.1"
-	# 	ss_basic_port_tmp=1091
-	# else
-	# 	ss_basic_server_tmp="$ss_basic_server"
-	# 	ss_basic_port_tmp=$ss_basic_port
-	# fi
 	
 	if [ "$ss_basic_type" == "0" ];then
 		echo_date 创建SS配置文件到$CONFIG_FILE
@@ -496,7 +493,7 @@ start_sslocal(){
 		if [ "$ss_basic_ss_obfs" == "0" ];then
 			ss-local -l 23456 -c $CONFIG_FILE -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 		else
-			ss-local -l 23456 -c $CONFIG_FILE -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sslocal1.pid >/dev/null 2>&1
+			ss-local -l 23456 -c $CONFIG_FILE $ARG_OBFS -u -f /var/run/sslocal1.pid >/dev/null 2>&1
 		fi
 	fi
 }
@@ -519,13 +516,13 @@ start_dns(){
 	if [ "2" == "$ss_dns_foreign" ];then
 		if [ "$ss_basic_type" == "1" ];then
 			echo_date 开启ssr-tunnel...
-			rss-tunnel -c /koolshare/ss/ss.json -l $DNS_PORT -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+			rss-tunnel -c $CONFIG_FILE -l $DNS_PORT -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 		elif  [ "$ss_basic_type" == "0" ];then
 			echo_date 开启ss-tunnel...
 			if [ "$ss_basic_ss_obfs" == "0" ];then
-				ss-tunnel -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l $DNS_PORT -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+				ss-tunnel -c $CONFIG_FILE -l $DNS_PORT -L "$gs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 			else
-				ss-tunnel -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l $DNS_PORT -L "$gs" -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sstunnel.pid >/dev/null 2>&1
+				ss-tunnel -c $CONFIG_FILE -l $DNS_PORT -L "$gs" $ARG_OBFS -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 			fi
 		fi
 	fi
@@ -582,13 +579,13 @@ start_dns(){
 				[ "$ss_pdnsd_udp_server_ss_tunnel" == "4" ] && dns1="$ss_pdnsd_udp_server_ss_tunnel_user"
 				if [ "$ss_basic_type" == "1" ];then
 					echo_date 开启ssr-tunnel作为pdnsd的上游服务器.
-					rss-tunnel -c /koolshare/ss/ss.json -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+					rss-tunnel -c $CONFIG_FILE -l 1099 -L "$dns1" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 				elif  [ "$ss_basic_type" == "0" ];then
 					echo_date 开启ss-tunnel作为pdnsd的上游服务器.
 					if [ "$ss_basic_ss_obfs" == "0" ];then
 						ss-tunnel -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l $DNS_PORT -L "$dns1" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 					else
-						ss-tunnel -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l $DNS_PORT -L "$dns1" -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sstunnel.pid >/dev/null 2>&1
+						ss-tunnel -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l $DNS_PORT -L "$dns1" $ARG_OBFS -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 					fi
 				fi
 			fi
@@ -671,13 +668,13 @@ start_dns(){
 			[ "$ss_chinadns_foreign_sstunnel" == "4" ] && rcfs="$ss_chinadns_foreign_sstunnel_user"
 			if [ "$ss_basic_type" == "1" ];then
 				echo_date ┣开启ssr-tunnel，作为chinaDNS上游国外dns，转发dns：$rcfs
-				rss-tunnel -b 127.0.0.1 -c /koolshare/ss/ss.json -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
+				rss-tunnel -b 127.0.0.1 -c $CONFIG_FILE -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 			elif  [ "$ss_basic_type" == "0" ];then
 				echo_date ┣开启ss-tunnel，作为chinaDNS上游国外dns，转发dns：$rcfs
 				if [ "$ss_basic_ss_obfs" == "0" ];then
 					ss-tunnel -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l 1055 -L "$rcfs" -u -f /var/run/sstunnel.pid
 				else
-					ss-tunnel -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l 1055 -L "$rcfs" -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/sstunnel.pid >/dev/null 2>&1
+					ss-tunnel -s $ss_basic_server -p $ss_basic_port -m $ss_basic_method -k $ss_basic_password -l 1055 -L "$rcfs" $ARG_OBFS -u -f /var/run/sstunnel.pid >/dev/null 2>&1
 				fi
 			fi
 		elif [ "$ss_chinadns_foreign_method" == "4" ];then
@@ -925,82 +922,51 @@ start_speeder(){
 }
 
 start_ss_redir(){
-	# Start ss-redir
 	if [ "$ss_basic_type" == "1" ];then
 		echo_date 开启ssr-redir进程，用于透明代理.
-		if [ "$ss_basic_mode" == "3" ] && [ "$ss_basic_use_kcp" == "1" ];then
-			if [ "$ss_basic_mode" == "3" ] && [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
-				# tcp go kcp
-				rss-redir -s 127.0.0.1 -p 1091 -c $CONFIG_FILE -f /var/run/shadowsocks.pid >/dev/null 2>&1
-				# udp go udpspeeder
-				rss-redir -s 127.0.0.1 -p 1092 -c $CONFIG_FILE -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
-			else
-				# tcp go kcp
-				rss-redir -s 127.0.0.1 -p 1091 -c $CONFIG_FILE -f /var/run/shadowsocks.pid >/dev/null 2>&1
-				# udp go ss
-				rss-redir -c $CONFIG_FILE -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
-			fi
-		else
-			if [ "$ss_basic_mode" == "3" ] && [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
-				# tcp go ss
-				rss-redir -c $CONFIG_FILE -f /var/run/shadowsocks.pid >/dev/null 2>&1
-				# udp go udpspeeder
-				rss-redir -s 127.0.0.1 -p 1092 -c $CONFIG_FILE -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
-			else
-				# tcp & udp go ss
-				rss-redir -c $CONFIG_FILE -u -f /var/run/shadowsocks.pid >/dev/null 2>&1
-			fi
-		fi
+		BIN=rss-redir
+		ARG_OBFS=""
 	elif  [ "$ss_basic_type" == "0" ];then
-		echo_date 开启ss-redir进程，用于透明代理.
+		echo_date 开启ss-redir进程，用于透明c代理.
 		if [ "$ss_basic_ss_obfs" == "0" ];then
-			if [ "$ss_basic_mode" == "3" ] && [ "$ss_basic_use_kcp" == "1" ];then
-				if [ "$ss_basic_mode" == "3" ] && [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
-					# tcp go kcp
-					ss-redir -s 127.0.0.1 -p 1091 -c $CONFIG_FILE -f /var/run/shadowsocks.pid >/dev/null 2>&1
-					# udp go udpspeeder
-					ss-redir -s 127.0.0.1 -p 1092 -c $CONFIG_FILE -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
-				else
-					# tcp go kcp
-					ss-redir -s 127.0.0.1 -p 1091 -c $CONFIG_FILE -f /var/run/shadowsocks.pid >/dev/null 2>&1
-					# udp go ss
-					ss-redir -s -c $CONFIG_FILE -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
-				fi
+			BIN=ss-redir
+			ARG_OBFS=""
+		else
+			BIN=ss-redir
+		fi
+	fi
+	# Start ss-redir
+	if [ "$ss_basic_use_kcp" == "1" ];then
+		if [ "$ss_basic_mode" == "3" ];then
+			if [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
+				# tcp go kcp
+				$BIN -s 127.0.0.1 -p 1091 -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
+				# udp go udpspeeder
+				$BIN -s 127.0.0.1 -p 1092 -c $CONFIG_FILE $ARG_OBFS -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
 			else
-				if [ "$ss_basic_mode" == "3" ] && [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
-					# tcp go ss
-					ss-redir -c $CONFIG_FILE -f /var/run/shadowsocks.pid >/dev/null 2>&1
-					# udp go udpspeeder
-					ss-redir -s 127.0.0.1 -p 1092 -c $CONFIG_FILE -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
-				else
-					# tcp & udp go ss
-					ss-redir -c $CONFIG_FILE -u -f /var/run/shadowsocks.pid >/dev/null 2>&1
-				fi
+				# tcp go kcp
+				$BIN -s 127.0.0.1 -p 1091 -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
+				# udp go ss
+				$BIN -c $CONFIG_FILE $ARG_OBFS -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
 			fi
 		else
-			if [ "$ss_basic_mode" == "3" ] && [ "$ss_basic_use_kcp" == "1" ];then
-				if [ "$ss_basic_mode" == "3" ] && [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
-					# tcp go kcp
-					ss-redir -s 127.0.0.1 -p 1091 -c $CONFIG_FILE --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/shadowsocks.pid >/dev/null 2>&1
-					# udp go udpspeeder
-					ss-redir -s 127.0.0.1 -p 1092 -c $CONFIG_FILE -U --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/shadowsocks.pid >/dev/null 2>&1
-				else
-					# tcp go kcp
-					ss-redir -s 127.0.0.1 -p 1091 -c $CONFIG_FILE --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/shadowsocks.pid >/dev/null 2>&1
-					# udp go ss
-					ss-redir -c $CONFIG_FILE -U --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/shadowsocks.pid >/dev/null 2>&1
-				fi
+			# tcp only go kcp
+			$BIN -s 127.0.0.1 -p 1091 -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
+		fi
+	else
+		if [ "$ss_basic_mode" == "3" ];then
+			if [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
+				# tcp go ss
+				$BIN -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
+				# udp go udpspeeder
+				$BIN -s 127.0.0.1 -p 1092 -c $CONFIG_FILE $ARG_OBFS -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
 			else
-				if [ "$ss_basic_mode" == "3" ] && [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
-					# tcp go ss
-					ss-redir -c $CONFIG_FILE --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/shadowsocks.pid >/dev/null 2>&1
-					# udp go udpspeeder
-					ss-redir -s 127.0.0.1 -p 1092 -c $CONFIG_FILE -U --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/shadowsocks.pid >/dev/null 2>&1
-				else
-					# tcp & udp go ss
-					ss-redir -c $CONFIG_FILE -u --plugin obfs-local --plugin-opts "$ARG_OBFS" -f /var/run/shadowsocks.pid >/dev/null 2>&1
-				fi
+				# tcp udp go ss
+				$BIN -c $CONFIG_FILE $ARG_OBFS -u -f /var/run/shadowsocks.pid >/dev/null 2>&1
 			fi
+		else
+			# tcp only go ss
+			$BIN -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1		
 		fi
 	fi
 	start_speeder
@@ -1015,7 +981,7 @@ start_koolgame(){
 		sleep 1
 	fi
 	echo_date 开启koolgame主进程...
-	start-stop-daemon -S -q -b -m -p /tmp/var/koolgame.pid -x /koolshare/ss/koolgame/koolgame -- -c /koolshare/ss/ss.json
+	start-stop-daemon -S -q -b -m -p /tmp/var/koolgame.pid -x /koolshare/ss/koolgame/koolgame -- -c $CONFIG_FILE
 }
 
 write_cron_job(){
