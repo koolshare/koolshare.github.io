@@ -424,7 +424,7 @@ start_update(){
 	do
 		z=$(($z+1))
 		#url=`dbus get ss_online_link_$z`
-		url=`dbus get ss_online_links|base64_decode|awk '{print $1}'|sed -n "$z p"`
+		url=`dbus get ss_online_links|base64_decode|awk '{print $1}'|sed -n "$z p"|sed '/^#/d'`
 		[ -z "$url" ] && continue
 		echo_date "==================================================================="
     	echo_date "                服务器订阅程序(Shell by stones & sadog)"

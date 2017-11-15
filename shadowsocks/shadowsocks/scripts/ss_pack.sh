@@ -32,6 +32,9 @@ cp /koolshare/bin/haproxy $TARGET_FOLDER/bin/
 cp /koolshare/bin/client_linux_arm5 $TARGET_FOLDER/bin/
 cp /koolshare/bin/base64_encode $TARGET_FOLDER/bin/
 cp /koolshare/bin/koolbox $TARGET_FOLDER/bin/
+#cp /koolshare/bin/brook* $TARGET_FOLDER/bin/
+#cp /koolshare/bin/redsocks2 $TARGET_FOLDER/bin/
+cp /koolshare/bin/speeder* $TARGET_FOLDER/bin/
 #cp /koolshare/init.d/S99shadowsocks.sh $TARGET_FOLDER/init.d
 cp /koolshare/init.d/S89Socks5.sh $TARGET_FOLDER/init.d
 cp /koolshare/webs/Main_Ss_Content.asp $TARGET_FOLDER/webs/
@@ -46,6 +49,7 @@ cp /koolshare/res/game.png $TARGET_FOLDER/res/
 cp /koolshare/res/gameV2.png $TARGET_FOLDER/res/
 cp /koolshare/res/shadowsocks.css $TARGET_FOLDER/res/
 cp /koolshare/res/ss_proc_status.htm $TARGET_FOLDER/res/
+cp /koolshare/res/ss_udp_status.htm $TARGET_FOLDER/res/
 cp -rf /koolshare/res/layer $TARGET_FOLDER/res/
 cp -r /koolshare/ss $TARGET_FOLDER/
 rm -rf $TARGET_FOLDER/ss/*.json
