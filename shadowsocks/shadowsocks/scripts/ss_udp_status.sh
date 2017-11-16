@@ -3,10 +3,13 @@
 eval `dbus export ss`
 source /koolshare/scripts/base.sh
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
+game_on=`dbus list ss_acl_mode|cut -d "=" -f 2 | grep 3`
+[ -n "$game_on" ] || [ "$ss_basic_mode" == "3" ] && mangle=1
+
 
 check_status(){
 	if [ "$ss_basic_udp_boost_enable" == "1" ];then
-		if [ "$ss_basic_mode" == "3" ];then
+		if [ "$mangle" == "1" ];then
 			if [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
 				if [ "$ss_basic_udp_software" == "1" ];then
 					v1=`pidof speederv1`
@@ -34,7 +37,7 @@ check_status(){
 				echo 加速节点和正在使用的节点不一致，udp加速未运行！
 			fi
 		else
-			echo 当前非游戏模式，udp加速未运行！
+			echo 当前非游戏模式，或者访问控制中无游戏模式主机，udp加速未运行！
 		fi
 	else
 		echo udp加速开关未启用，udp加速未运行！

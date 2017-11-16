@@ -133,27 +133,9 @@ input[type=button]:focus {
 	border: 1px solid #222;
 }
 
-#ss_node_list_table_td { -ms-overflow-style: none; overflow: auto; } /* for IE hide scrollbar on ss node ta */
-#ss_node_list_table_td::-webkit-scrollbar {
-    width: 0px;  /* remove scrollbar space */
-    background: transparent;  /* optional: just make scrollbar invisible */
-}
-
-#log_content3, #log_content1, #proc_status { -ms-overflow-style: none; overflow: auto; } /* for IE hide scrollbar on ss node ta */
-#log_content3::-webkit-scrollbar, #log_content1::-webkit-scrollbar, #proc_status::-webkit-scrollbar {
-    width: 0px;  /* remove scrollbar space */
-    background: transparent;  /* optional: just make scrollbar invisible */
-}
-#log_content3:focus, #log_content1:focus, #proc_status:focus {
-	outline: none;
-}
-
-#log_content3, #log_content1, #proc_status {overflow: -moz-scrollbars-none;}
-
-
 .FormTable1{
 	table-layout:fixed;
-	width:748px;
+	width:749.71px;
 	font-size:12px;
 	font-family: Arial, Helvetica, sans-serif;
 	border: 1px solid #000000;
@@ -255,24 +237,6 @@ input[type=button]:focus {
 	border-radius: 5px 5px 5px 5px;
 	width:14%;
 }
-.kp_btn {
-	border: 1px solid #222;
-	background: linear-gradient(to bottom, #003333  0%, #000000 100%); /* W3C */
-	font-size:10pt;
-	color: #fff;
-	padding: 5px 5px;
-	border-radius: 5px 5px 5px 5px;
-	width:14%;
-}
-.kp_btn:hover {
-	border: 1px solid #222;
-	background: linear-gradient(to bottom, #27c9c9  0%, #279fd9 100%); /* W3C */
-	font-size:10pt;
-	color: #fff;
-	padding: 5px 5px;
-	border-radius: 5px 5px 5px 5px;
-	width:14%;
-}
 .FormTitle_chrome56{
 	margin-top:-100px;
 	line-height:160%;
@@ -359,3 +323,13 @@ input[type=button]:focus {
 	border:1px solid gray;
 	color:#FFFFFF;
 }
+
+/*select {
+  border: solid 1px #000;
+  appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAJCAYAAAAGuM1UAAAAH0lEQVR42mNgoDnQ13f7TwiTpIkkm0hyHkl+YhhQAABcfyjsqSyTLgAAAABJRU5ErkJggg==) no-repeat scroll right center transparent;
+  padding-right: 14px;
+}
+select::-ms-expand { display: none; }*/

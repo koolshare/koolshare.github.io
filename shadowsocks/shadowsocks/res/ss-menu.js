@@ -85,14 +85,15 @@ function browser_compatibility1(){
 	var isFirefox = navigator.userAgent.search("Firefox") > -1;
 	if((isFirefox) && document.getElementById("FormTitle") && fw_version < 7.5){
 		document.getElementById("FormTitle").className = "FormTitle_firefox";
-		if(current_url.indexOf("Main_Ss_Content.asp") == 0){
+		if(current_url.indexOf("Main_Ss") == 0){
 			document.getElementById("FormTitle").style.marginTop = "-100px"
 		}
 
 	}else if((isFirefox) && document.getElementById("FormTitle") && fw_version >= 7.5){
 		document.getElementById("FormTitle").className = "FormTitle_firefox";
-		if(current_url.indexOf("Main_Ss_Content.asp") == 0){
-			document.getElementById("FormTitle").style.marginTop = "0px"		
+		if(current_url.indexOf("Main_Ss") == 0){
+			document.getElementById("FormTitle").style.marginTop = "0px"	
+			E("FormTitle").style.height = "969px";
 		}
 	}
 }

@@ -153,6 +153,7 @@ echo_date 创建一些二进制文件的软链接！
 echo_date 复制ss的脚本文件！
 cp -rf /tmp/shadowsocks/ss/* /koolshare/ss/
 cp -rf /tmp/shadowsocks/scripts/* /koolshare/scripts/
+cp -rf /tmp/shadowsocks/install.sh /koolshare/scripts/ss_install.sh
 cp -rf /tmp/shadowsocks/init.d/* /koolshare/init.d/
 
 echo_date 复制网页文件！

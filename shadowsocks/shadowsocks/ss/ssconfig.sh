@@ -899,7 +899,7 @@ start_kcp(){
 }
 
 start_speeder(){
-	if [ "$ss_basic_mode" == "3" ] && [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
+	if [ "$mangle" == "1" ] && [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
 		if [ "$ss_basic_udp_software" == "1" ];then
 			[ -n "$ss_basic_udpv1_duplicate_time" ] && duplicate_time="-t $ss_basic_udpv1_duplicate_time" || duplicate_time=""
 			[ -n "$ss_basic_udpv1_jitter" ] && jitter="-j $ss_basic_udpv1_jitter" || jitter=""
@@ -937,7 +937,7 @@ start_ss_redir(){
 	fi
 	# Start ss-redir
 	if [ "$ss_basic_use_kcp" == "1" ];then
-		if [ "$ss_basic_mode" == "3" ];then
+		if [ "$mangle" == "1" ];then
 			if [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
 				# tcp go kcp
 				$BIN -s 127.0.0.1 -p 1091 -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
@@ -954,7 +954,7 @@ start_ss_redir(){
 			$BIN -s 127.0.0.1 -p 1091 -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
 		fi
 	else
-		if [ "$ss_basic_mode" == "3" ];then
+		if [ "$mangle" == "1" ];then
 			if [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
 				# tcp go ss
 				$BIN -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1

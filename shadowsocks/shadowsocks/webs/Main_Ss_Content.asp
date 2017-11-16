@@ -314,9 +314,6 @@ function push_data(obj) {
 		contentType: "application/x-www-form-urlencoded",
 		dataType: 'text',
 		data: $.param(obj),
-		error: function(xhr) {
-			console.log("error");
-		},
 		success: function(response) {
 			showSSLoadingBar();
 			noChange2 = 0;
@@ -336,7 +333,6 @@ function decode_show() {
 function update_ss_ui(obj) {
 	//console.log("update_ss_ui");
 	var node_sel = obj["ssconf_basic_node"];
-	//console.log(node_sel);
 	for (var field in obj) {
 		var el = E(field);
 		if (field == "ss_basic_server" || field == "ss_basic_mode" || field == "ss_basic_port" || field == "ss_basic_password" || field == "ss_basic_method" || field == "ss_basic_ss_obfs" || field == "ss_basic_ss_obfs_host" || field == "ss_basic_koolgame_udp" || field == "ss_basic_rss_protocol" || field == "ss_basic_rss_protocol_param" || field == "ss_basic_rss_obfs" || field == "ss_basic_rss_obfs_param" || field == "ss_basic_rss_use_kcp") {
@@ -350,7 +346,6 @@ function update_ss_ui(obj) {
 			}
 			continue;
 		} else if (el != null && el.getAttribute("type") == "checkbox") {
-			//console.log(field)
 			if (obj[field] != "1") {
 				el.checked = false;
 			} else {
@@ -366,7 +361,7 @@ function update_ss_ui(obj) {
 }
 
 function verifyFields(r) {
-	console.log("verifyFields")
+	//console.log("verifyFields")
 	if (node_global_max == 0) {
 		pop_node_add();
 	}
@@ -1120,36 +1115,45 @@ function refresh_html() {
 	} //获取节点的数目
 	if (eval(n) > "13.5") { //当节点数目大于13个的时候，显示为overflow，节点可以滚动
 		if (isFirefox = navigator.userAgent.indexOf("Firefox") > 0) {
-			E("ss_node_list_table_th").style.top = "396px";
-			E("ss_node_list_table_td").style.top = "436px";
-			E("ss_node_list_table_td").style.height = "521px";
-			E("ss_node_list_table_btn").style.top = "961px";
+			E("ss_node_list_table_th").style.top = "426px";
+			E("ss_node_list_table_td").style.top = "466px";
+			E("ss_node_list_table_btn").style.top = "991px";
 		} else {
 			E("ss_node_list_table_th").style.top = "272px";
 			E("ss_node_list_table_td").style.top = "312px";
-			E("ss_node_list_table_td").style.height = "521px";
 			E("ss_node_list_table_btn").style.top = "837px";
 		}
-		E("ss_node_list_table_th").style.display = "";
-		E("ss_node_list_table_td").style.overflow = "auto";
-		E("ss_node_list_table_td").style.position = "absolute";
-		$('#ss_node_list_table_btn').css('margin', '');
-		E("ss_node_list_table_btn").style.position = "absolute";
-		E("ss_node_list_table_btn").style.bottom = "13px";
-		E("hide_when_folw").style.display = "none";
+		$("#ss_node_list_table_th")[0].style.display = '';
+		$("#ss_node_list_table_th")[0].style.width = '749.71px';
+		$("#ss_node_list_table_td")[0].style.width = '749.71px';
+		$("#ss_node_list_table_td")[0].style.height = '520px';
+		$("#ss_node_list_table_td")[0].style.overflow = 'hidden';
+		$("#ss_node_list_table_td")[0].style.position = 'absolute';
+		$("#hide_when_folw")[0].style.display = 'none'
+		$("#ss_node_list_table_main")[0].style["width"] = '749.71px';
+		$("#ss_node_list_table_main")[0].style["height"] = '520px';
+		$("#ss_node_list_table_main")[0].style["overflow-x"] = 'hidden';
+		$("#ss_node_list_table_main")[0].style["overflow-y"] = 'scroll';
+		$("#ss_node_list_table_main")[0].style["padding-right"] = '30px';
+		$("#ss_node_list_table_btn")[0].style.width = '749.71px';
+		$("#ss_node_list_table_btn")[0].style.position = 'absolute';
+		$("#ss_node_list_table_btn")[0].style.margin = '';
 	} else { //当节点数量小于等于13个的是否，显示为absolute，节点不可滚动
-		E("ss_node_list_table_th").style.display = "none";
-		E("ss_node_list_table_th").style.top = "242px";
-		$('#ss_node_list_table_td').css('height', '');
-		E("ss_node_list_table_td").style.top = "282px";
-		E("ss_node_list_table_td").style.margin = "-1px 0px 0px 0px";
-		E("ss_node_list_table_td").style.overflow = "visible";
-		E("ss_node_list_table_td").style.position = "static";
-		$('#ss_node_list_table_btn').css('bottom', '');
-		$('#ss_node_list_table_btn').css('top', '');
-		E("ss_node_list_table_btn").style.position = "static";
-		E("ss_node_list_table_btn").style.margin = "4px 0px 0px 0px";
-		E("hide_when_folw").style.display = "";
+		$("#ss_node_list_table_th")[0].style.top = '';
+		$("#ss_node_list_table_td")[0].style.top = '';
+		$("#ss_node_list_table_btn")[0].style.top = '';
+		$("#ss_node_list_table_th")[0].style.display = 'none';
+		$("#ss_node_list_table_td")[0].style.height = '';
+		$("#ss_node_list_table_td")[0].style.overflow = '';
+		$("#ss_node_list_table_td")[0].style.position = '';
+		$("#ss_node_list_table_main")[0].style["height"] = '';
+		$("#ss_node_list_table_main")[0].style["overflow-x"] = '';
+		$("#ss_node_list_table_main")[0].style["overflow-y"] = '';
+		$("#ss_node_list_table_main")[0].style["padding-right"] = '';
+		$("#hide_when_folw")[0].style.display = ''
+		$("#ss_node_list_table_btn")[0].style.display = '';
+		$("#ss_node_list_table_btn")[0].style.position = '';
+		$("#ss_node_list_table_btn")[0].style.margin = '5px 0px 0px 0px';
 	}
 	var html = '';
 	for (var field in confs) {
@@ -1319,36 +1323,45 @@ function refresh_html_dummy() {
 	var phrase = ["koolshare", "你猜", "假节点", "我是马赛克", "我是节点", "引力波节点"];
 	if (eval(n) > "13.5") { //当节点数目大于13个的时候，显示为overflow，节点可以滚动
 		if (isFirefox = navigator.userAgent.indexOf("Firefox") > 0) {
-			E("ss_node_list_table_th").style.top = "396px";
-			E("ss_node_list_table_td").style.top = "436px";
-			E("ss_node_list_table_td").style.height = "521px";
-			E("ss_node_list_table_btn").style.top = "961px";
+			E("ss_node_list_table_th").style.top = "426px";
+			E("ss_node_list_table_td").style.top = "466px";
+			E("ss_node_list_table_btn").style.top = "991px";
 		} else {
 			E("ss_node_list_table_th").style.top = "272px";
 			E("ss_node_list_table_td").style.top = "312px";
-			E("ss_node_list_table_td").style.height = "521px";
 			E("ss_node_list_table_btn").style.top = "837px";
 		}
-		E("ss_node_list_table_th").style.display = "";
-		E("ss_node_list_table_td").style.overflow = "auto";
-		E("ss_node_list_table_td").style.position = "absolute";
-		$('#ss_node_list_table_btn').css('margin', '');
-		E("ss_node_list_table_btn").style.position = "absolute";
-		E("ss_node_list_table_btn").style.bottom = "13px";
-		E("hide_when_folw").style.display = "none";
+		$("#ss_node_list_table_th")[0].style.display = '';
+		$("#ss_node_list_table_th")[0].style.width = '749.71px';
+		$("#ss_node_list_table_td")[0].style.width = '749.71px';
+		$("#ss_node_list_table_td")[0].style.height = '520px';
+		$("#ss_node_list_table_td")[0].style.overflow = 'hidden';
+		$("#ss_node_list_table_td")[0].style.position = 'absolute';
+		$("#hide_when_folw")[0].style.display = 'none'
+		$("#ss_node_list_table_main")[0].style["width"] = '749.71px';
+		$("#ss_node_list_table_main")[0].style["height"] = '520px';
+		$("#ss_node_list_table_main")[0].style["overflow-x"] = 'hidden';
+		$("#ss_node_list_table_main")[0].style["overflow-y"] = 'scroll';
+		$("#ss_node_list_table_main")[0].style["padding-right"] = '30px';
+		$("#ss_node_list_table_btn")[0].style.width = '749.71px';
+		$("#ss_node_list_table_btn")[0].style.position = 'absolute';
+		$("#ss_node_list_table_btn")[0].style.margin = '';
 	} else { //当节点数量小于等于13个的是否，显示为absolute，节点不可滚动
-		E("ss_node_list_table_th").style.display = "none";
-		E("ss_node_list_table_th").style.top = "242px";
-		$('#ss_node_list_table_td').css('height', '');
-		E("ss_node_list_table_td").style.top = "282px";
-		E("ss_node_list_table_td").style.margin = "-1px 0px 0px 0px";
-		E("ss_node_list_table_td").style.overflow = "visible";
-		E("ss_node_list_table_td").style.position = "static";
-		$('#ss_node_list_table_btn').css('bottom', '');
-		$('#ss_node_list_table_btn').css('top', '');
-		E("ss_node_list_table_btn").style.position = "static";
-		E("ss_node_list_table_btn").style.margin = "4px 0px 0px 0px";
-		E("hide_when_folw").style.display = "";
+		$("#ss_node_list_table_th")[0].style.top = '';
+		$("#ss_node_list_table_td")[0].style.top = '';
+		$("#ss_node_list_table_btn")[0].style.top = '';
+		$("#ss_node_list_table_th")[0].style.display = 'none';
+		$("#ss_node_list_table_td")[0].style.height = '';
+		$("#ss_node_list_table_td")[0].style.overflow = '';
+		$("#ss_node_list_table_td")[0].style.position = '';
+		$("#ss_node_list_table_main")[0].style["height"] = '';
+		$("#ss_node_list_table_main")[0].style["overflow-x"] = '';
+		$("#ss_node_list_table_main")[0].style["overflow-y"] = '';
+		$("#ss_node_list_table_main")[0].style["padding-right"] = '';
+		$("#hide_when_folw")[0].style.display = ''
+		$("#ss_node_list_table_btn")[0].style.display = '';
+		$("#ss_node_list_table_btn")[0].style.position = '';
+		$("#ss_node_list_table_btn")[0].style.margin = '5px 0px 0px 0px';
 	}
 	var html = '';
 	for (var field in confs) {
@@ -1857,13 +1870,7 @@ function get_ss_status_data() {
 function get_udp_status() {
 	$.ajax({
 		url: 'apply.cgi?current_page=Main_Ss_Content.asp.asp&next_page=Main_Ss_Content.asp.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=ss_udp_status.sh&firmver=3.0.0.4',
-		dataType: 'html',
-		error: function(xhr) {
-			console.log("start failed" + response);
-		},
-		success: function(response) {
-			console.log("start ok" + response);
-		}
+		dataType: 'html'
 	});
 }
 
@@ -2349,9 +2356,6 @@ function addTr() {
 		contentType: "application/x-www-form-urlencoded",
 		dataType: 'text',
 		data: $.param(acls),
-		error: function(xhr) {
-			console.log("error in posting config of table");
-		},
 		success: function(response) {
 			confs = getAllConfigs();
 			refresh_acl_table();
@@ -2377,9 +2381,6 @@ function delTr(o) {
 		contentType: "application/x-www-form-urlencoded",
 		dataType: 'text',
 		data: $.param(acls),
-		error: function(xhr) {
-			console.log("error in posting config of table");
-		},
 		success: function(response) {
 			refresh_acl_table();
 		}
@@ -2611,13 +2612,7 @@ function close_proc_status() {
 function now_get_status() {
 	$.ajax({
 		url: 'apply.cgi?current_page=Main_Ss_Content.asp.asp&next_page=Main_Ss_Content.asp.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=ss_proc_status.sh&firmver=3.0.0.4',
-		dataType: 'html',
-		error: function(xhr) {
-			console.log("start failed" + response);
-		},
-		success: function(response) {
-			console.log("start ok" + response);
-		}
+		dataType: 'html'
 	});
 }
 
@@ -2703,7 +2698,7 @@ function save_online_nodes(action) {
 		<div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
 		<div id="loading_block2" style="margin:10px auto;width:95%;"></div>
 		<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;overflow:hidden">
-			<textarea cols="63" rows="21" wrap="on" readonly="readonly" id="log_content3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="border:1px solid #000;width:99%; font-family:'Lucida Console'; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
+			<textarea cols="63" rows="21" wrap="on" readonly="readonly" id="log_content3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="border:1px solid #000;width:99%; font-family:'Lucida Console'; font-size:11px;background:#000;color:#FFFFFF;outline: none;padding-left:3px;padding-right:22px;overflow-x:hidden"></textarea>
 		</div>
 		<div id="ok_button" class="apply_gen" style="background: #000;display: none;">
 			<input id="ok_button1" class="button_gen" type="button" onclick="hideSSLoadingBar()" value="确定">
@@ -2744,7 +2739,7 @@ function save_online_nodes(action) {
 						<div>
 							<table width="760px" border="0" cellpadding="5" cellspacing="0" bordercolor="#6b8fa3" class="FormTitle" id="FormTitle">
 								<tr>
-									<td bgcolor="#4D595D" colspan="3" valign="top">									
+									<td bgcolor="#4D595D" colspan="3" valign="top">
 										<div>&nbsp;</div>
 										<div class="formfonttitle">梅林固件 - 科学上网插件</div>
 										<div style="float:right; width:15px; height:25px;margin-top:-20px">
@@ -2757,8 +2752,8 @@ function save_online_nodes(action) {
 										<div id="detail_status"  class="content_status" style="box-shadow: 3px 3px 10px #000;margin-top: 0px;display: none;">
 											<div class="user_title">shadowsocks状态检测</div>
 											<div style="margin-left:15px"><i>&nbsp;&nbsp;目前本功能支持ss相关进程状态和iptables表状态检测。</i></div>
-											<div id="user_tr" style="margin: 10px 10px 10px 10px;width:98%;text-align:center;">
-												<textarea cols="63" rows="36" wrap="off" id="proc_status" style="width:97%;padding-left:10px;padding-right:10px;border:0px solid #222;font-family:'Lucida Console'; font-size:11px;background: transparent;color:#FFFFFF;outline: none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+											<div id="user_tr" style="margin: 10px 10px 10px 10px;width:98%;text-align:center;overflow:hidden">
+												<textarea cols="63" rows="36" wrap="off" id="proc_status" style="width:98%;padding-left:13px;padding-right:33px;border:0px solid #222;font-family:'Lucida Console'; font-size:11px;background: transparent;color:#FFFFFF;outline: none;overflow-x:hidden;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
 											</div>
 											<div style="margin-top:5px;padding-bottom:10px;width:100%;text-align:center;">
 												<input class="button_gen" type="button" onclick="close_proc_status();" value="返回主界面">	
@@ -2795,10 +2790,10 @@ function save_online_nodes(action) {
 															</a>
 														</div>
 														<div style="display:table-cell;float: left;margin-left:270px;position: absolute;padding: 5.5px 0px;">
-															<a type="button" class="kp_btn" target="_blank" href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt">更新日志</a>
+															<a type="button" class="ss_btn" target="_blank" href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/shadowsocks/Changelog.txt">更新日志</a>
 														</div>
 														<div style="display:table-cell;float: left;margin-left:350px;position: absolute;padding: 5.5px 0px;">
-															<a type="button" class="kp_btn" href="javascript:void(0);" onclick="pop_help()">插件帮助</a>
+															<a type="button" class="ss_btn" href="javascript:void(0);" onclick="pop_help()">插件帮助</a>
 														</div>
 													</td>
 												</tr>
@@ -3219,8 +3214,8 @@ function save_online_nodes(action) {
 											</table>
 										</div>
 										<!-- 节点面板 -->
-										<div id="ss_node_list_table_th" style="display: none; height:40px; position: absolute; top: 242px; width: 98.8%;">
-											<table style="margin:0px 0px 0px 0px;table-layout:fixed;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable1">
+										<div id="ss_node_list_table_th" style="display: none; height:40px;">
+											<table style="margin:-1px 0px 0px 0px;table-layout:fixed;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable1">
 												<tr height="40px">
 													<th style="width:40px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(16)">模式</a></th>
 													<th style="width:90px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(17)">节点名称</a></th>
@@ -3235,23 +3230,25 @@ function save_online_nodes(action) {
 												</tr>
 											</table>
 										</div>
-										<div id="ss_node_list_table_td"  style="display: none; position: static; top: 282px; bottom: 190px; width: 98.8%; overflow: visible";>
-											<table id="ss_node_list_table_main" style="margin:0px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable1">
-												<tr id="hide_when_folw" height="40px" style="display: none;">
-													<th style="width:40px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(16)">模式</a></th>
-													<th style="width:90px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(17)">节点名称</a></th>
-													<th style="width:90px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(18)">服务器地址</a></th>
-													<th style="width:37px;">端口</th>
-													<th style="width:90px;">加密方式</th>
-													<th style="width:78px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(19)">ping/丢包</a></th>
-													<th style="width:36px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(20)">延迟</a></th>
-													<th style="width:33px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(21)">编辑</a></th>
-													<th style="width:33px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(22)">删除</a></th>
-													<th style="width:65px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(23)">使用</a></th>
-												</tr>
-											</table>
+										<div id="ss_node_list_table_td" style="display: none;">
+											<div id="ss_node_list_table_main" style="width:749.71px;">
+												<table id="ss_node_list_table" style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable1">
+													<tr id="hide_when_folw" height="40px" style="display: none;">
+														<th style="width:40px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(16)">模式</a></th>
+														<th style="width:90px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(17)">节点名称</a></th>
+														<th style="width:90px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(18)">服务器地址</a></th>
+														<th style="width:37px;">端口</th>
+														<th style="width:90px;">加密方式</th>
+														<th style="width:78px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(19)">ping/丢包</a></th>
+														<th style="width:36px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(20)">延迟</a></th>
+														<th style="width:33px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(21)">编辑</a></th>
+														<th style="width:33px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(22)">删除</a></th>
+														<th style="width:65px;"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(23)">使用</a></th>
+													</tr>
+												</table>
+											</div>
 										</div>
-										<div id="ss_node_list_table_btn" style="display: none;position: static;width: 747px;">
+										<div id="ss_node_list_table_btn" style="display: none;width: 100%;">
 											<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
 													<th style="width:20%;">ping测试</th>
@@ -4202,8 +4199,8 @@ taobao.com
 										</div>
 										<!--log_content-->
 										<div id="tablet_7" style="display: none;">
-												<div id="log_content" style="margin-top:-1px;display:none">
-													<textarea cols="63" rows="36" wrap="on" readonly="readonly" id="log_content1" style="width:97%; padding-left:10px; padding-right:10px; border:1px solid #222; font-family:'Lucida Console'; font-size:11px; background:#475A5F; color:#FFFFFF; outline:none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+												<div id="log_content" style="margin-top:-1px;display:none;overflow:hidden;outline: 1px solid #222;">
+													<textarea cols="63" rows="36" wrap="on" readonly="readonly" id="log_content1" style="width:97%; padding-left:4px; padding-right:37px; border:0px solid #222; font-family:'Lucida Console'; font-size:11px; background:#475A5F; color:#FFFFFF;outline:none;overflow-x:hidden;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
 												</div>
 										</div>		
 
