@@ -1,8 +1,8 @@
 {
-"version":"2.9",
-"md5":"327891df7ba6986b1363304af1f52151",
+"version":"3.0",
+"md5":"9c833f6df2fda45a3918fa43ac60e3ac",
 "home_url":"Module_shadowvpn.asp",
 "title":"Shadowvpn",
 "description":"SVPN让游戏更畅快",
-"build_date":"2017-09-11_00:02:18"
+"build_date":"2017-11-17_12:03:02"
 }
