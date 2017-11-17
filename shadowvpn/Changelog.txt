@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin ShaowVpn Changelog
 ===========================================
+3.0
+   - add	增加UDPspeederV2支持
+   - update	优化web代码
+
 2.5 ( 26/02/2016 15:03:28 )
    - fix erro
 
