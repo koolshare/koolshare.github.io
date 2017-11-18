@@ -467,9 +467,9 @@ function openssHint(itemNum) {
 		ss_basic_version_local ", "
 		未知 "); %>,如果需要回滚SS版本，请参考以下操作步骤：";
 		statusmenu += "</br></br><font color='#CC0066'>1&nbsp;&nbsp;</font>进入<a href='Tools_Shell.asp' target='_blank'><u><font color='#00F'>webshell</font></u></a>或者其他telnet,ssh等能输入命令的工具";
-		statusmenu += "</br><font color='#CC0066'>2&nbsp;&nbsp;</font>请依次输入以下命令，等待上一条命令执行完后再运行下一条(这里以回滚2.2为例)：";
+		statusmenu += "</br><font color='#CC0066'>2&nbsp;&nbsp;</font>请依次输入以下命令，等待上一条命令执行完后再运行下一条(这里以回滚3.6.4为例)：";
 		statusmenu += "</br></br>&nbsp;&nbsp;&nbsp;&nbsp;cd /tmp";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;wget --no-check-certificate https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks/history/shadowsocks_2.2.tar.gz";
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;wget --no-check-certificate https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks/history/shadowsocks_3.6.4.tar.gz";
 		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;tar -zxvf /tmp/shadowsocks.tar.gz";
 		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;chmod +x /tmp/shadowsocks/install.sh";
 		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;sh /tmp/shadowsocks/install.sh";
@@ -665,6 +665,36 @@ function openssHint(itemNum) {
 	} else if (itemNum == 54) {
 		statusmenu = "更多信息，请参考<a href='https://breakwa11.blogspot.jp/2017/01/shadowsocksr-mu.html' target='_blank'><u><font color='#00F'>ShadowsocksR 协议参数文档</font></u></a>"
 		_caption = "协议参数（protocol）";
+	} else if (itemNum == 97) {
+		width = "600px";
+		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;UDPspeeder(V1/V2)针对udp传输进行优化，能加速udp，降低udp的丢包，特别适合游戏。<br />&nbsp;&nbsp;&nbsp;&nbsp;UDP2raw可以将udp协议转为tcp，这对一些对udp有限制或者qos的情况特别好用，UDP2raw不是一个udp加速工具，如果需要udp加速，还需要配合UDPspeeder(V1/V2)串联使用。<br />&nbsp;&nbsp;&nbsp;&nbsp;正确开启的姿势是需要在服务器端配置UDPspeeder(V1/V2)/UDP2raw的服务器端程序，然后在路由器下，需要以下条件才能正常开启：<b><br />1. 当前正在使用游戏模式或者访问控制主机中有游戏模式主机；<br />2. 此处加速的节点和正在使用的节点一致；<br />3. 正确配置并开启UDPspeeder(V1/V2)或UDP2raw，或者两者都开启（串联模式）。</b>	 "
+		_caption = "说明：";
+	} else if (itemNum == 98) {
+		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;此处设定的MTU值将用于ss-redir/ssr-redir。<br />&nbsp;&nbsp;&nbsp;&nbsp;因为UDPspeeder(V1/V2)和UDP2raw对上游软件的MTU有要求，此处方便高级用户对其进行设定，以达到更好的UDP加速效果。不知道如何设定的请选择不设定，以免造成不必要的问题<br />&nbsp;&nbsp;&nbsp;&nbsp;此处的设定只有在UDPspeeder(V1/V2)/UDP2raw开启或者两者都开启的情况下才会生效。"
+		_caption = "说明：";
+	} else if (itemNum == 99) {
+		statusmenu = "此处设定为预设不可更改。<br />&nbsp;&nbsp;&nbsp;&nbsp;1. 单开UDPspeeder(V1/V2)模式或者UDPspeeder(V1/V2)和UDP2raw双开（串联模式下），ss-redir的UDP流量都会转发到此；<br />&nbsp;&nbsp;&nbsp;&nbsp;2. 只有UDPepeeder未开启且UDP2raw开启的情况下，ss-redir的UDP流量才会转发到UDP2raw；"
+		_caption = "说明：";
+	} else if (itemNum == 100) {
+		width = "600px";
+		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;1.单开UDPspeeder(V1/V2)模式下，ss-redir的udp流量经过UDPspeeder(V1/V2)加速后的UDP流量会转发到服务器，此处应按填写服务器的ip和服务器端UDPspeeder(V1/V2)的监听端口；<br />&nbsp;&nbsp;&nbsp;&nbsp;2.UDPspeeder(V1/V2)和UDP2raw双开（串联模式下），ss-redir的udp流量经过UDPspeeder(V1/V2)加速后的UDP流量会先转发给本地的UDP2raw程序，然后由UDP2raw和服务器的UDP2raw之间利用TCP（faketcp模式）协议进行通讯，然后服务器的UDP2raw收到TCP（faketcp模式）后还原为UDPspeeder(V1/V2)加速后的流量转发给服务器的UDPspeeder(V1/V2)，然后服务器的UDPspeeder(V1/V2)将此流量继续还原为ss-redir的UDP流量，转发给服务器的ss服务器程序。 所以路由器下UDPspeeder(V1/V2)和UDP2raw的串联也需要服务器端UDPspeeder(V1/V2)和UDP2raw的串联。"
+		_caption = "说明：";
+	} else if (itemNum == 101) {
+		width = "600px";
+		statusmenu = "此处设定为预设不可更改。<br />&nbsp;&nbsp;&nbsp;&nbsp;1.单开UDP2raw模式下，ss-redir的UDP流量会转发到此；<br />&nbsp;&nbsp;&nbsp;&nbsp;2.UDPspeeder(V1/V2)和UDP2raw双开（串联模式下），ss-redir的UDP流量会转发到UDPspeeder(V1/V2)，经过UDPspeeder(V1/V2)加速后的udp流量流量会转发到此（即转发到UDP2raw），形成UDPspeeder(V1/V2)和UDP2raw的串联。"
+		_caption = "说明";
+	} else if (itemNum == 102) {
+		width = "600px";
+		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;1.单开udp2raw模式下，ss-redir的udp流量经过udp2raw转换为tcp后的流量会转发此处设置的到服务器端口，此处应按填写服务器的ip和服务器端UDPspeeder(V1/V2)的监听端口；<br />&nbsp;&nbsp;&nbsp;&nbsp;2.在UDPspeeder(V1/V2)和UDP2raw双开（串联模式下），ss-redir的udp流量经过UDPspeeder(V1/V2)加速后的UDP流量，经过udp2raw转换为tcp后的流量会转发此处设置的到服务器端口，此处应按填写服务器的ip和服务器端UDPspeeder(V1/V2)的监听端口；"
+		_caption = "说明：";
+	} else if (itemNum == 103) {
+		width = "600px";
+		statusmenu = "梅林固件推荐使用auto.<br />&nbsp;&nbsp;&nbsp;&nbsp;大部分udp2raw不能连通的情况都是设置了不兼容的iptables造成的。--lower-level选项允许绕过本地iptables。<br />&nbsp;&nbsp;&nbsp;&nbsp;虽然作者推荐merlin固件使用auto，但是merlin固件在某些拨号网络下可能无法通过--lower-level auto自动获取参数，而导致udp2raw启动失败，此时可以手动填写此处或者留空（实测留空也是可以工作的）"
+		_caption = "说明：";
+	} else if (itemNum == 103) {
+		width = "600px";
+		statusmenu = "<br />&nbsp;&nbsp;&nbsp;&nbsp;UDPspeeder有两个版本，V2是V1的升级版本，只有V2版才支持FEC；V1和V2版都支持多倍发包，V2通过配置FEC比例就能达到V1的多倍发包效果。<br />如果你只需要多倍发包，可以直接用V1版，V1版配置更简单，占用内存更小，而且经过了几个月的考验，很稳定。V2版在梅林固件下的消耗更高一些。"
+		_caption = "说明：";
 	}
 	return overlib(statusmenu, OFFSETX, -160, LEFT, STICKY, WIDTH, 'width', CAPTION, _caption, CLOSETITLE, '');
 

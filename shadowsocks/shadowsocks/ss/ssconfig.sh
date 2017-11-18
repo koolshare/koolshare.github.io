@@ -242,42 +242,48 @@ kill_process(){
 	fi
 	
 	# kill all koolgame
-	koolgame=$(ps | grep "koolgame" | grep -v "grep"|grep -v "pdu")
-	if [ ! -z "$koolgame" ];then 
+	koolgame_process=$(ps | grep "koolgame" | grep -v "grep"|grep -v "pdu")
+	if [ ! -z "$koolgame_process" ];then 
 		echo_date 关闭koolgame进程...
 		killall koolgame >/dev/null 2>&1
 	fi
 
-	pdu=`pidof pdu`
-	if [ -n "$pdu" ];then 
+	pdu_process=`pidof pdu`
+	if [ -n "$pdu_process" ];then 
 		echo_date 关闭koolgame进程...
 		kill -9 $pdu >/dev/null 2>&1
 	fi
 	
 	# kill kcp
-	client_linux_arm5=$(ps | grep "client_linux_arm5" | grep -v "grep")
-	if [ ! -z "$client_linux_arm5" ];then 
+	client_linux_arm5_process=$(ps | grep "client_linux_arm5" | grep -v "grep")
+	if [ ! -z "$client_linux_arm5_process" ];then 
 		echo_date 关闭kcp协议进程...
 		killall client_linux_arm5 >/dev/null 2>&1
 	fi
 	
 	# kill load balance
-	haproxy=$(ps | grep "haproxy" | grep -v "grep")
-	if [ ! -z "$haproxy" ];then 
+	haproxy_process=$(ps | grep "haproxy" | grep -v "grep")
+	if [ -n "$haproxy_process" ];then 
 		echo_date 关闭haproxy进程...
 		killall haproxy >/dev/null 2>&1
 	fi
 
-	speederv1=$(pidof speederv1)
-	if [ -n "$speederv1" ];then 
+	speederv1_process=$(pidof speederv1)
+	if [ -n "$speederv1_process" ];then 
 		echo_date 关闭speederv1进程...
 		killall speederv1 >/dev/null 2>&1
 	fi
 
-	speederv2=$(pidof speederv2)
-	if [ -n "$speederv2" ];then 
+	speederv2_process=$(pidof speederv2)
+	if [ -n "$speederv2_process" ];then 
 		echo_date 关闭speederv2进程...
 		killall speederv2 >/dev/null 2>&1
+	fi
+
+	ud2raw_process=$(pidof udp2raw)
+	if [ -n "$ud2raw_process" ];then 
+		echo_date 关闭speederv2进程...
+		killall udp2raw >/dev/null 2>&1
 	fi
 	## kill simple obfs
 	#obfsLocal=$(ps | grep "obfs-local" | grep -v "grep")
@@ -435,6 +441,11 @@ creat_ss_json(){
 			ARG_OBFS=""
 		fi
 	fi
+
+	#if [ "$ss_basic_udp2raw_boost_enable" == "1" ] || [ "$ss_basic_udp2_boost_enable" == "1" ];then
+	#	MYTUN="\"MTU\":1200,"
+	#	MYTUN=""
+	#fi
 	
 	if [ "$ss_basic_type" == "0" ];then
 		echo_date 创建SS配置文件到$CONFIG_FILE
@@ -483,6 +494,13 @@ creat_ss_json(){
 			    "use_tcp":$ss_basic_koolgame_udp
 			}
 		EOF
+	fi
+	
+	if [ "$ss_basic_udp2raw_boost_enable" == "1" ] || [ "$ss_basic_udp2_boost_enable" == "1" ];then
+		if [ "$ss_basic_udp_upstream_mtu" == "1" ];then
+			cat /koolshare/ss/ss.json | jq --argjson MTU $ss_basic_udp_upstream_mtu_value '. + {MTU: $MTU}' > /koolshare/ss/ss_tmp.json
+			mv /koolshare/ss/ss_tmp.json /koolshare/ss/ss.json
+		fi
 	fi
 }
 
@@ -686,10 +704,10 @@ start_dns(){
 	
 	# Start Pcap_DNSProxy
 	if [ "6" == "$ss_dns_foreign" ]; then
-			echo_date 开启Pcap_DNSProxy..
-			sed -i "/^Listen Port/c Listen Port = $DNS_PORT" /koolshare/ss/dns/Config.ini
-			#sed -i '/^Local Main/c Local Main = 0' /koolshare/ss/dns/Config.conf
-			sh /koolshare/ss/dns/dns.sh > /dev/null 2>&1 &
+		echo_date 开启Pcap_DNSProxy..
+		sed -i "/^Listen Port/c Listen Port = $DNS_PORT" /koolshare/ss/dns/Config.ini
+		#sed -i '/^Local Main/c Local Main = 0' /koolshare/ss/dns/Config.conf
+		sh /koolshare/ss/dns/dns.sh > /dev/null 2>&1 &
 	fi
 }
 #--------------------------------------------------------------------------------------
@@ -752,7 +770,7 @@ append_white_black_conf(){
 		echo "#for white_domain" >> /tmp/wblist.conf
 		for wan_white_domain in $wanwhitedomain
 		do 
-			echo "$wan_white_domain" | sed "s/^/server=&\/./g" | sed "s/$/\/127.0.0.1#7913/g" >> /tmp/wblist.conf
+			echo "$wan_white_domain" | sed "s/^/server=&\/./g" | sed "s/$/\/$CDN#53/g" >> /tmp/wblist.conf
 			echo "$wan_white_domain" | sed "s/^/ipset=&\/./g" | sed "s/$/\/white_list/g" >> /tmp/wblist.conf
 		done
 	fi
@@ -795,7 +813,7 @@ ln_conf(){
 	rm -rf /jffs/configs/dnsmasq.d/cdn.conf
 	if [ -f /tmp/sscdn.conf ];then
 		#echo_date 创建cdn加速列表软链接/jffs/configs/dnsmasq.d/cdn.conf
-		mv -f /tmp/sscdn.conf /jffs/configs/dnsmasq.d/zzcdn.conf
+		mv -f /tmp/sscdn.conf /jffs/configs/dnsmasq.d/cdn.conf
 	fi
 
 	gfw_on=`dbus list ss_acl_mode_|cut -d "=" -f 2 | grep 1`
@@ -899,24 +917,65 @@ start_kcp(){
 }
 
 start_speeder(){
-	if [ "$mangle" == "1" ] && [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
-		if [ "$ss_basic_udp_software" == "1" ];then
-			[ -n "$ss_basic_udpv1_duplicate_time" ] && duplicate_time="-t $ss_basic_udpv1_duplicate_time" || duplicate_time=""
-			[ -n "$ss_basic_udpv1_jitter" ] && jitter="-j $ss_basic_udpv1_jitter" || jitter=""
-			[ -n "$ss_basic_udpv1_report" ] && report="--report $ss_basic_udpv1_report" || report=""
-			[ -n "$ss_basic_udpv1_drop" ] && drop="--random-drop $ss_basic_udpv1_drop" || drop=""
-			[ "$ss_basic_udpv1_disable_filter" == "1" ] && filter="--disable-filter" || filter=""
-			speederv1 -l 0.0.0.0:1092 -r $ss_basic_udpv1_rserver:$ss_basic_udpv1_rport -c $duplicate_time $jitter $report $drop $filter -d $ss_basic_udpv1_duplicate_nu -k $ss_basic_udpv1_password >/dev/null 2>&1 &
-		elif [ "$ss_basic_udp_software" == "2" ];then
-			[ "$ss_basic_udpv2_disableobscure" == "1" ] && disable_obscure="--disable-obscure" || disable_obscure=""
-			[ -n "$ss_basic_udpv2_timeout" ] && timeout="--timeout $ss_basic_udpv2_timeout" || timeout=""
-			[ -n "$ss_basic_udpv2_mode" ] && mode="--mode $ss_basic_udpv2_mode" || mode=""
-			[ -n "$ss_basic_udpv2_report" ] && report="--report $ss_basic_udpv2_report" || report=""
-			[ -n "$ss_basic_udpv2_mtu" ] && mtu="--mtu $ss_basic_udpv2_mtu" || mtu=""
-			[ -n "$ss_basic_udpv2_jitter" ] && jitter="--jitter $ss_basic_udpv2_jitter" || jitter=""
-			[ -n "$ss_basic_udpv2_interval" ] && interval="-interval $ss_basic_udpv2_interval" || interval=""
-			[ -n "$ss_basic_udpv2_drop" ] && drop="-random-drop $ss_basic_udpv2_drop" || drop=""
-			speederv2 -c -l 0.0.0.0:1092 -r $ss_basic_udpv2_rserver:$ss_basic_udpv2_rport -k $ss_basic_udpv2_password -f $ss_basic_udpv2_fec $timeout $mode $report $mtu $jitter $interval $drop $disable_obscure --fifo /tmp/fifo.file >/dev/null 2>&1 &
+	#只有游戏模式下或者访问控制中有游戏模式主机，且udp加速节点和当前使用节点一致
+	if [ "$mangle" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
+		#开启udpspeeder
+		if [ "$ss_basic_udp_boost_enable" == "1" ];then
+			if [ "$ss_basic_udp_software" == "1" ];then
+				echo_date 开启UDPspeederV1进程.
+				[ -n "$ss_basic_udpv1_duplicate_time" ] && duplicate_time="-t $ss_basic_udpv1_duplicate_time" || duplicate_time=""
+				[ -n "$ss_basic_udpv1_jitter" ] && jitter="-j $ss_basic_udpv1_jitter" || jitter=""
+				[ -n "$ss_basic_udpv1_report" ] && report="--report $ss_basic_udpv1_report" || report=""
+				[ -n "$ss_basic_udpv1_drop" ] && drop="--random-drop $ss_basic_udpv1_drop" || drop=""
+				[ -n "$ss_basic_udpv1_duplicate_nu" ] && duplicate="-d $ss_basic_udpv1_duplicate_nu" || duplicate=""
+				[ -n "$ss_basic_udpv1_password" ] && key1="-k $ss_basic_udpv1_password" || key1=""
+				[ "$ss_basic_udpv1_disable_filter" == "1" ] && filter="--disable-filter" || filter=""
+
+				if [ "$ss_basic_udp2raw_boost_enable" == "1" ];then
+					#串联：如果两者都开启了，则把udpspeeder的流udp量转发给udp2raw
+					speederv1 -c -l 0.0.0.0:1092 -r 127.0.0.1:1093 $key1 $ss_basic_udpv1_password \
+					$duplicate_time $jitter $report $drop $filter $duplicate $ss_basic_udpv1_duplicate_nu >/dev/null 2>&1 &
+					#如果只开启了udpspeeder，则把udpspeeder的流udp量转发给服务器
+				else
+					speederv1 -c -l 0.0.0.0:1092 -r $ss_basic_udpv1_rserver:$ss_basic_udpv1_rport $key1 \
+					$duplicate_time $jitter $report $drop $filter $duplicate $ss_basic_udpv1_duplicate_nu >/dev/null 2>&1 &
+				fi
+			elif [ "$ss_basic_udp_software" == "2" ];then
+				echo_date 开启UDPspeederV2进程.
+				[ "$ss_basic_udpv2_disableobscure" == "1" ] && disable_obscure="--disable-obscure" || disable_obscure=""
+				[ -n "$ss_basic_udpv2_timeout" ] && timeout="--timeout $ss_basic_udpv2_timeout" || timeout=""
+				[ -n "$ss_basic_udpv2_mode" ] && mode="--mode $ss_basic_udpv2_mode" || mode=""
+				[ -n "$ss_basic_udpv2_report" ] && report="--report $ss_basic_udpv2_report" || report=""
+				[ -n "$ss_basic_udpv2_mtu" ] && mtu="--mtu $ss_basic_udpv2_mtu" || mtu=""
+				[ -n "$ss_basic_udpv2_jitter" ] && jitter="--jitter $ss_basic_udpv2_jitter" || jitter=""
+				[ -n "$ss_basic_udpv2_interval" ] && interval="-interval $ss_basic_udpv2_interval" || interval=""
+				[ -n "$ss_basic_udpv2_drop" ] && drop="-random-drop $ss_basic_udpv2_drop" || drop=""
+				[ -n "$ss_basic_udpv2_password" ] && key2="-k $ss_basic_udpv2_password" || key2=""
+				[ -n "$ss_basic_udpv2_fec" ] && fec="-f $ss_basic_udpv2_fec" || fec=""
+
+				if [ "$ss_basic_udp2raw_boost_enable" == "1" ];then
+					#串联：如果两者都开启了，则把udpspeeder的流udp量转发给udp2raw
+					speederv2 -c -l 0.0.0.0:1092 -r 127.0.0.1:1093 $key2 \
+					$fec $timeout $mode $report $mtu $jitter $interval $drop $disable_obscure $ss_basic_udpv2_other --fifo /tmp/fifo.file >/dev/null 2>&1 &
+					#如果只开启了udpspeeder，则把udpspeeder的流udp量转发给服务器
+				else
+					speederv2 -c -l 0.0.0.0:1092 -r $ss_basic_udpv2_rserver:$ss_basic_udpv2_rport $key2 \
+					$fec $timeout $mode $report $mtu $jitter $interval $drop $disable_obscure $ss_basic_udpv2_other --fifo /tmp/fifo.file >/dev/null 2>&1 &
+				fi
+			fi
+		fi
+		
+		#开启udp2raw
+		if [ "$ss_basic_udp2raw_boost_enable" == "1" ];then
+			echo_date 开启UDP2raw进程.
+			[ "$ss_basic_udp2raw_a" == "1" ] && UD2RAW_EX1="-a" || UD2RAW_EX1=""
+			[ "$ss_basic_udp2raw_keeprule" == "1" ] && UD2RAW_EX2="--keep-rule" || UD2RAW_EX2=""
+			[ -n "$ss_basic_udp2raw_lowerlevel" ] && UD2RAW_LOW="--lower-level $ss_basic_udp2raw_lowerlevel" || UD2RAW_LOW=""
+			[ -n "$ss_basic_udp2raw_password" ] && key3="-k $ss_basic_udp2raw_password" || key3=""
+			
+			udp2raw -c -l 0.0.0.0:1093 -r $ss_basic_udp2raw_rserver:$ss_basic_udp2raw_rport $key3 $UD2RAW_EX1 $UD2RAW_EX2\
+			--raw-mode $ss_basic_udp2raw_rawmode --cipher-mode $ss_basic_udp2raw_ciphermode --auth-mode $ss_basic_udp2raw_authmode \
+			$UD2RAW_LOW $ss_basic_udp2raw_other >/dev/null 2>&1 &
 		fi
 	fi
 }
@@ -927,7 +986,7 @@ start_ss_redir(){
 		BIN=rss-redir
 		ARG_OBFS=""
 	elif  [ "$ss_basic_type" == "0" ];then
-		echo_date 开启ss-redir进程，用于透明c代理.
+		echo_date 开启ss-redir进程，用于透明代理.
 		if [ "$ss_basic_ss_obfs" == "0" ];then
 			BIN=ss-redir
 			ARG_OBFS=""
@@ -935,40 +994,67 @@ start_ss_redir(){
 			BIN=ss-redir
 		fi
 	fi
+
+	if [ "$ss_basic_udp2_boost_enable" == "1" ];then
+		#只要udpspeeder开启，不管udp2raw是否开启，均设置为1092,
+		SPEED_PORT=1092
+	else
+		SPEED_PORT=1092
+	fi
+
+	if [ "$ss_basic_udp2raw_boost_enable" == "1" ] || [ "$ss_basic_udp2_boost_enable" == "1" ];then
+		#udp2raw开启，udpspeeder未开启则ss-redir的udp流量应该转发到1093
+		SPEED_UDP=1
+	fi
+	
 	# Start ss-redir
 	if [ "$ss_basic_use_kcp" == "1" ];then
 		if [ "$mangle" == "1" ];then
-			if [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
+			if [ "$SPEED_UDP" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
 				# tcp go kcp
+				echo_date $BIN的 tcp 走kcptun.
 				$BIN -s 127.0.0.1 -p 1091 -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
 				# udp go udpspeeder
-				$BIN -s 127.0.0.1 -p 1092 -c $CONFIG_FILE $ARG_OBFS -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
+				[ "$ss_basic_udp2raw_boost_enable" == "1" ]  && echo_date $BIN的 udp 走udpspeeder, udpspeeder的 udp 走 udpraw || echo_date $BIN的 udp 走udpspeeder. 
+				$BIN -s 127.0.0.1 -p $SPEED_PORT -c $CONFIG_FILE $ARG_OBFS -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
 			else
 				# tcp go kcp
+				echo_date $BIN的 tcp 走kcptun.
 				$BIN -s 127.0.0.1 -p 1091 -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
 				# udp go ss
+				echo_date $BIN的 udp 走$BIN.
 				$BIN -c $CONFIG_FILE $ARG_OBFS -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
 			fi
 		else
 			# tcp only go kcp
+			echo_date $BIN的 tcp 走kcptun.
+			echo_date $BIN的 udp 未开启.
 			$BIN -s 127.0.0.1 -p 1091 -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
 		fi
 	else
 		if [ "$mangle" == "1" ];then
-			if [ "$ss_basic_udp_boost_enable" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
+			if [ "$SPEED_UDP" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
 				# tcp go ss
+				echo_date $BIN的 tcp 走$BIN.
 				$BIN -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
 				# udp go udpspeeder
-				$BIN -s 127.0.0.1 -p 1092 -c $CONFIG_FILE $ARG_OBFS -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
+				[ "$ss_basic_udp2raw_boost_enable" == "1" ]  && echo_date $BIN的 udp 走udpspeeder, udpspeeder的 udp 走 udpraw || echo_date $BIN的 udp 走udpspeeder. 
+				$BIN -s 127.0.0.1 -p $SPEED_PORT -c $CONFIG_FILE $ARG_OBFS -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
 			else
 				# tcp udp go ss
+				echo_date $BIN的 tcp 走$BIN.
+				echo_date $BIN的 udp 走$BIN.
 				$BIN -c $CONFIG_FILE $ARG_OBFS -u -f /var/run/shadowsocks.pid >/dev/null 2>&1
 			fi
 		else
 			# tcp only go ss
+			echo_date $BIN的 tcp 走$BIN.
+			echo_date $BIN的 udp 未开启.
 			$BIN -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1		
 		fi
 	fi
+	echo_date $BIN 启动完毕！.
+	
 	start_speeder
 }
 
@@ -982,6 +1068,22 @@ start_koolgame(){
 	fi
 	echo_date 开启koolgame主进程...
 	start-stop-daemon -S -q -b -m -p /tmp/var/koolgame.pid -x /koolshare/ss/koolgame/koolgame -- -c $CONFIG_FILE
+	
+	if [ "$mangle" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
+		if [ "$ss_basic_udp_boost_enable" == "1" ];then
+			if [ "$ss_basic_udp_software" == "1" ];then
+				echo_date 检测到你启用了UDPspeederV1，但是koolgame下不支持UDPspeederV1加速，不启用！
+				dbus set ss_basic_udp_boost_enable=0
+			elif [ "$ss_basic_udp_software" == "2" ];then
+				echo_date 检测到你启用了UDPspeederV2，但是koolgame下不支持UDPspeederV1加速，不启用！
+				dbus set ss_basic_udp_boost_enable=0
+			fi
+		fi
+		if [ "$ss_basic_udp2raw_boost_enable" == "1" ];then
+			echo_date 检测到你启用了UDP2raw，但是koolgame下不支持UDP2raw，不启用！
+			dbus set ss_basic_udp2raw_boost_enable=0
+		fi
+	fi
 }
 
 write_cron_job(){
@@ -1268,6 +1370,7 @@ apply_nat_rules(){
 	iptables -t nat -N SHADOWSOCKS_EXT
 	# IP/cidr/白域名 白名单控制（不走ss）
 	iptables -t nat -A SHADOWSOCKS -p tcp -m set --match-set white_list dst -j RETURN
+	iptables -t nat -A SHADOWSOCKS_EXT -p tcp -m set --match-set white_list dst -j RETURN
 	#-----------------------FOR GLOABLE---------------------
 	# 创建gfwlist模式nat rule
 	iptables -t nat -N SHADOWSOCKS_GLO

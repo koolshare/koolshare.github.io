@@ -324,6 +324,20 @@ input[type=button]:focus {
 	color:#FFFFFF;
 }
 
+.sub-btn1, .sub-btn2, .sub-btn3 {
+	border: 1px solid #222;
+	border-bottom:none;
+	background: linear-gradient(to bottom, #919fa4  0%, #67767d 100%); /* W3C */
+	font-size:10pt;
+	color: #fff;
+	padding: 10px 3.75px;
+	border-radius: 5px 5px 0px 0px;
+	width:16%;
+}
+.sub-btn1:hover, .sub-btn2:hover, .sub-btn3:hover, .active2 {
+	background: #2f3a3e;
+}
+
 /*select {
   border: solid 1px #000;
   appearance:none;

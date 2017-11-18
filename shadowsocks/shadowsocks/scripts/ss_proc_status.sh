@@ -72,7 +72,7 @@ echo_version(){
 	echo "ssrr-redir		3.5.2 		2017年11月13日编译"
 	echo "ssrr-tunnel		3.5.2 		2017年11月13日编译"
 	echo "ssrr-local		3.5.2 		2017年11月13日编译"
-	echo "client_linux_arm5	20171021	kcptun"
+	echo "client_linux_arm5	20171113	kcptun"
 	echo "haproxy			1.7.5	"
 	echo "dns2socks		V2.0 	"
 	echo "dnscrypt-proxy		1.7.0 	"

@@ -1,5 +1,40 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.7.3
+   - add	增加UDP2raw的支持（感谢wangyu-的开源项目），支持单独使用UDP2raw，将ss-redir的UDP流量直接转成tcp流量，应对UDP屏蔽或QoS，或在UDP不稳定的环境下提升稳定性。，
+		也可以将UDPspeeder(V1/V2)与UDP2raw串联，将ss-redir的UDP经过UDPspeeder加速后，通过UDP2raw转成TCP流量。
+		UDPspeeder(V1/V2)与UDP2raw简要的使用说明：
+		正确开启的姿势：
+		 0. 服务器端：配置并UDPspeeder(V1/V2)/UDP2raw的服务器端程序
+		 1. 路由器下：当前正在使用游戏模式或者访问控制主机中有游戏模式主机；
+		 2. 路由器下：UDP加速的节点和正在使用的节点一致；
+		 3. 路由器下：正确配置并开启UDPspeeder(V1/V2)或UDP2raw，或者两者都开启（串联模式）。
+		使用情形：
+		 1. 单独使用UDPspeeder(V1或V2)：ss-redir(UDP) -- UDPspeeder(UDP) ------ UDPspeeder(UDP) -- ssserver(UDP)，即udp in udp模式
+		 2. 单独使用UDP2raw：ss-redir(UDP) -- UDP2raw(TCP) ------ UDP2raw(TCP) -- ssserver(UDP)，即udp in tcp模式
+		 3. UDPspeeder(V1或V2)和UDP2raw一起使用（串联）：ss-redir(UDP) -- UDPspeeder(UDP) -- UDP2raw(TCP) ------ UDP2raw(TCP) -- UDPspeeder(UDP) -- ssserver(UDP)，即udp in tcp模式
+		UDPspeeder(V1/V2)针对udp传输进行优化，能加速udp，降低udp的丢包，特别适合游戏。
+		UDP2raw可以将udp协议转为tcp，准确的说UDP2raw不是一个udp加速工具，而是应对UDP屏蔽或QoS，或在UDP不稳定的环境下提升稳定性的工具。
+		如果你的运营商屏蔽了UDP，或者UDP及其不稳定，可以使用UDP2raw配合UDPspeeder(V1/V2)串联使用来绕过屏蔽，并且实现udp加速。
+		其它：   		
+		KCPTUN的TCP加速是把ss-redir的TCP流量转为UDP流量，相当于tcp in udp，虽然此udp也能和UDPspeeder/UDP2raw串联，甚至三者一起串联使用，
+		但是为了不增加插件复杂度，同时考虑到merlin arm路由器着急的性能，目前暂时不支持KCP和UDPspeeder/UDP2raw的串联配置，未来会考虑开放该配置。
+		目前使用UDPspeeder/UDP2raw均需要在服务器上配置运行相应的程序，在路由器下运行UDPspeeder和UDP2raw的串联，同时需要服务端两者的串联配置，
+		简单的来讲，UDPspeeder的运行不需要特殊的更改就能用于单独使用和串联使用，而UDP2raw单独使用的时候其远程端口（-r）应该配置为服务器上ss程序的监听端口
+		而串联使用下，UDP2raw的远程端口（-r）应该配置为服务器上UDPspeeder程序的监听端口。
+		例如：服务器上配置了ssserver监听在0.0.0.0:8083
+		 1. 单独使用UDPspeeder的话，服务器UDPspeeder上配置 -l 0.0.0.0:8855 -r127.0.0.1:8083；路由器下UDPspeeder服务器填写 vpsip:8855
+		 2. 单独使用UDP2raw的话，服务器UDP2raw上配置 -l 0.0.0.0:8866 -r127.0.0.1:8083；路由器下UDP2raw服务器填写 vpsip:8866
+		 3. UDPspeeder和UDP2raw串联的话，服务器UDP2raw上配置 -l 0.0.0.0:8877 -r127.0.0.1:8855，服务器UDPspeeder配置不变；路由器下UDP2raw服务器填写 vpsip:8877，路由器UDPspeeder配置不变.
+		以上只说明了端口的配置情形，其它参数请参考UDPspeeder(V1/V2)与UDP2raw的官方文档。
+   - add	因为UDPspeeder(V1/V2)和UDP2raw对上游软件的MTU有要求，增加ss/ssr-redir MTU，以达到更好的UDP加速效果。不知道如何设定的请选择不设定，以免造成不必要的问题
+   - fix	修复开启koolproxy后，科学上网插件的白名单失效的问题。
+   - fix	修复udpspeeder某些值配置为空的情况下开启失败。
+   - add	udpspeederv2增加其他参数，方便填写一些没有列出来的高级参数。
+   - fix	修复界面的一些小问题。
+   - add	在一些必要的地方增加帮助链接，点击可以直接查看简要帮助信息。
+   - update	现在规则更新不开启自动更新或者不勾选更新项目也能在页面点击更新了。
+
 3.7.2
    - fix	修复firefox下日志不能滚动的问题，负载均衡和socks5页面错位的问题
    - fix	修复主模式不为游戏模式，访问控制中有游戏模式主机的时候udp不通的问题

@@ -32,10 +32,11 @@ cp /koolshare/bin/haproxy $TARGET_FOLDER/bin/
 cp /koolshare/bin/client_linux_arm5 $TARGET_FOLDER/bin/
 cp /koolshare/bin/base64_encode $TARGET_FOLDER/bin/
 cp /koolshare/bin/koolbox $TARGET_FOLDER/bin/
+cp /koolshare/bin/jq $TARGET_FOLDER/bin/
 #cp /koolshare/bin/brook* $TARGET_FOLDER/bin/
 #cp /koolshare/bin/redsocks2 $TARGET_FOLDER/bin/
 cp /koolshare/bin/speeder* $TARGET_FOLDER/bin/
-#cp /koolshare/init.d/S99shadowsocks.sh $TARGET_FOLDER/init.d
+cp /koolshare/bin/udp2raw $TARGET_FOLDER/bin/
 cp /koolshare/init.d/S89Socks5.sh $TARGET_FOLDER/init.d
 cp /koolshare/webs/Main_Ss_Content.asp $TARGET_FOLDER/webs/
 cp /koolshare/webs/Main_Ss_LoadBlance.asp $TARGET_FOLDER/webs/

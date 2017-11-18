@@ -33,6 +33,7 @@ var noChange = 0;
 var noChange2 = 0;
 var node_global_max = 0;
 var myid;
+var poped = 0;
 
 function init() {
 	show_menu(menu_hook);
@@ -58,6 +59,20 @@ function hook_event() {
 		if (!E("ss_basic_enable").checked && db_ss["ss_basic_enable"] == 1) {
 			save();
 		}
+	});
+	//for udp tables
+	//$('.sub-btn1').addClass('active2');
+	$(".sub-btn1").click(
+	function() {
+		$('.sub-btn1').addClass('active2');
+		$('.sub-btn2').removeClass('active2');
+		verifyFields()
+	});
+	$(".sub-btn2").click(
+	function() {
+		$('.sub-btn1').removeClass('active2');
+		$('.sub-btn2').addClass('active2');
+		verifyFields()
 	});
 }
 
@@ -174,7 +189,7 @@ function pop_node_add() {
 				$("#show_btn6").trigger("click");
 			},
 		});
-
+		poped = 1;
 	});
 }
 
@@ -208,8 +223,8 @@ function save(s) {
 	dbus["action_mode"] = " Refresh ";
 	dbus["current_page"] = "Main_Ss_Content.asp";
 	//key define
-	var params_input = ["ssconf_basic_node", "ss_basic_mode", "ss_basic_server", "ss_basic_port", "ss_basic_method", "ss_basic_koolgame_udp", "ss_basic_ss_obfs", "ss_basic_ss_obfs_host", "ss_basic_rss_protocol", "ss_basic_rss_protocol_param", "ss_basic_rss_obfs", "ss_basic_rss_obfs_param", "ssconf_basic_ping_node", "ssconf_basic_ping_method", "ssconf_basic_test_node", "ssconf_basic_test_domain", "ss_dns_plan", "ss_dns_china", "ss_dns_china_user", "ss_dns_foreign", "ss_opendns", "ss_dns2socks_user", "ss_sstunnel", "ss_sstunnel_user", "ss_game2_dns_foreign", "ss_game2_dns2ss_user", "ss_chinadns_china", "ss_chinadns_china_user", "ss_chinadns_foreign_method", "ss_chinadns_foreign_method_user", "ss_chinadns_foreign_dns2socks", "ss_chinadns_foreign_dns2socks_user", "ss_chinadns_foreign_dnscrypt", "ss_chinadns_foreign_sstunnel", "ss_chinadns_foreign_sstunnel_user", "ss_pdnsd_method", "ss_pdnsd_server_ip", "ss_pdnsd_server_port", "ss_pdnsd_udp_server", "ss_pdnsd_udp_server_dns2socks", "ss_pdnsd_udp_server_dnscrypt", "ss_pdnsd_udp_server_ss_tunnel", "ss_pdnsd_udp_server_ss_tunnel_user", "ss_pdnsd_server_cache_min", "ss_pdnsd_server_cache_max", "ss_basic_chromecast", "ss_basic_dnslookup", "ss_basic_dnslookup_server", "ss_basic_kcp_port", "ss_basic_kcp_parameter", "ss_basic_rule_update", "ss_basic_rule_update_time", "ssr_subscribe_mode", "ssr_subscribe_obfspara", "ssr_subscribe_obfspara_val", "ss_basic_online_links_goss", "ss_basic_node_update", "ss_basic_node_update_day", "ss_basic_node_update_hr", "ss_base64_links", "ss_basic_refreshrate", "ss_basic_sleep", "ss_acl_default_port", "ss_online_action", "ss_acl_default_mode", "ss_basic_kcp_method", "ss_basic_kcp_password", "ss_basic_kcp_mode", "ss_basic_kcp_encrypt", "ss_basic_kcp_mtu", "ss_basic_kcp_sndwnd", "ss_basic_kcp_rcvwnd", "ss_basic_kcp_conn", "ss_basic_kcp_extra", "ss_basic_udp_software", "ss_basic_udp_node", "ss_basic_udpv1_lserver", "ss_basic_udpv1_lport", "ss_basic_udpv1_rserver", "ss_basic_udpv1_rport", "ss_basic_udpv1_password", "ss_basic_udpv1_mode", "ss_basic_udpv1_duplicate_nu", "ss_basic_udpv1_duplicate_time", "ss_basic_udpv1_jitter", "ss_basic_udpv1_report", "ss_basic_udpv1_drop", "ss_basic_udpv2_lserver", "ss_basic_udpv2_lport", "ss_basic_udpv2_rserver", "ss_basic_udpv2_rport", "ss_basic_udpv2_password", "ss_basic_udpv2_fec", "ss_basic_udpv2_timeout", "ss_basic_udpv2_mode", "ss_basic_udpv2_report", "ss_basic_udpv2_mtu", "ss_basic_udpv2_jitter", "ss_basic_udpv2_interval", "ss_basic_udpv2_drop"];
-	var params_check = ["ss_basic_enable", "ss_basic_use_kcp", "ss_basic_gfwlist_update", "ss_basic_chnroute_update", "ss_basic_cdn_update", "ss_basic_pcap_update", "ss_basic_kcp_nocomp", "ss_basic_udp_boost_enable", "ss_basic_udpv1_disable_filter", "ss_basic_udpv2_disableobscure"];
+	var params_input = ["ssconf_basic_node", "ss_basic_mode", "ss_basic_server", "ss_basic_port", "ss_basic_method", "ss_basic_koolgame_udp", "ss_basic_ss_obfs", "ss_basic_ss_obfs_host", "ss_basic_rss_protocol", "ss_basic_rss_protocol_param", "ss_basic_rss_obfs", "ss_basic_rss_obfs_param", "ssconf_basic_ping_node", "ssconf_basic_ping_method", "ssconf_basic_test_node", "ssconf_basic_test_domain", "ss_dns_plan", "ss_dns_china", "ss_dns_china_user", "ss_dns_foreign", "ss_opendns", "ss_dns2socks_user", "ss_sstunnel", "ss_sstunnel_user", "ss_game2_dns_foreign", "ss_game2_dns2ss_user", "ss_chinadns_china", "ss_chinadns_china_user", "ss_chinadns_foreign_method", "ss_chinadns_foreign_method_user", "ss_chinadns_foreign_dns2socks", "ss_chinadns_foreign_dns2socks_user", "ss_chinadns_foreign_dnscrypt", "ss_chinadns_foreign_sstunnel", "ss_chinadns_foreign_sstunnel_user", "ss_pdnsd_method", "ss_pdnsd_server_ip", "ss_pdnsd_server_port", "ss_pdnsd_udp_server", "ss_pdnsd_udp_server_dns2socks", "ss_pdnsd_udp_server_dnscrypt", "ss_pdnsd_udp_server_ss_tunnel", "ss_pdnsd_udp_server_ss_tunnel_user", "ss_pdnsd_server_cache_min", "ss_pdnsd_server_cache_max", "ss_basic_chromecast", "ss_basic_dnslookup", "ss_basic_dnslookup_server", "ss_basic_kcp_port", "ss_basic_kcp_parameter", "ss_basic_rule_update", "ss_basic_rule_update_time", "ssr_subscribe_mode", "ssr_subscribe_obfspara", "ssr_subscribe_obfspara_val", "ss_basic_online_links_goss", "ss_basic_node_update", "ss_basic_node_update_day", "ss_basic_node_update_hr", "ss_base64_links", "ss_basic_refreshrate", "ss_basic_sleep", "ss_acl_default_port", "ss_online_action", "ss_acl_default_mode", "ss_basic_kcp_method", "ss_basic_kcp_password", "ss_basic_kcp_mode", "ss_basic_kcp_encrypt", "ss_basic_kcp_mtu", "ss_basic_kcp_sndwnd", "ss_basic_kcp_rcvwnd", "ss_basic_kcp_conn", "ss_basic_kcp_extra", "ss_basic_udp_software", "ss_basic_udp_node", "ss_basic_udpv1_lserver", "ss_basic_udpv1_lport", "ss_basic_udpv1_rserver", "ss_basic_udpv1_rport", "ss_basic_udpv1_password", "ss_basic_udpv1_mode", "ss_basic_udpv1_duplicate_nu", "ss_basic_udpv1_duplicate_time", "ss_basic_udpv1_jitter", "ss_basic_udpv1_report", "ss_basic_udpv1_drop", "ss_basic_udpv2_lserver", "ss_basic_udpv2_lport", "ss_basic_udpv2_rserver", "ss_basic_udpv2_rport", "ss_basic_udpv2_password", "ss_basic_udpv2_fec", "ss_basic_udpv2_timeout", "ss_basic_udpv2_mode", "ss_basic_udpv2_report", "ss_basic_udpv2_mtu", "ss_basic_udpv2_jitter", "ss_basic_udpv2_interval", "ss_basic_udpv2_drop", "ss_basic_udpv2_other", "ss_basic_udp2raw_lserver", "ss_basic_udp2raw_lport", "ss_basic_udp2raw_rserver", "ss_basic_udp2raw_rport", "ss_basic_udp2raw_password", "ss_basic_udp2raw_rawmode", "ss_basic_udp2raw_ciphermode", "ss_basic_udp2raw_authmode", "ss_basic_udp2raw_lowerlevel", "ss_basic_udp2raw_other", "ss_basic_udp_upstream_mtu", "ss_basic_udp_upstream_mtu_value"];
+	var params_check = ["ss_basic_enable", "ss_basic_use_kcp", "ss_basic_gfwlist_update", "ss_basic_chnroute_update", "ss_basic_cdn_update", "ss_basic_pcap_update", "ss_basic_kcp_nocomp", "ss_basic_udp_boost_enable", "ss_basic_udpv1_disable_filter", "ss_basic_udpv2_disableobscure", "ss_basic_udp2raw_boost_enable", "ss_basic_udp2raw_a", "ss_basic_udp2raw_keeprule"];
 	var params_base64 = ["ss_basic_password", "ss_isp_website_web", "ss_dnsmasq", "ss_wan_white_ip", "ss_wan_white_domain", "ss_wan_black_ip", "ss_wan_black_domain", "ss_online_links"];
 	// collect data from input
 	for (var i = 0; i < params_input.length; i++) {
@@ -362,7 +377,7 @@ function update_ss_ui(obj) {
 
 function verifyFields(r) {
 	//console.log("verifyFields")
-	if (node_global_max == 0) {
+	if (node_global_max == 0 && poped == 0) {
 		pop_node_add();
 	}
 	var node_sel = E("ssconf_basic_node").value;
@@ -426,26 +441,34 @@ function verifyFields(r) {
 	}
 
 	//udp pannel
-	showhide("UDPspeederV1_table", E("ss_basic_udp_software").value == "1");
-	showhide("UDPspeederV2_table", E("ss_basic_udp_software").value == "2");
-	
+	if($('.sub-btn1').hasClass("active2")){
+		E("UDPspeeder_table").style.display = "";
+		E("UDP2raw_table").style.display = "none";
+		showhide("UDPspeederV1_table", E("ss_basic_udp_software").value == "1");
+		showhide("UDPspeederV2_table", E("ss_basic_udp_software").value == "2");
+	}else if($('.sub-btn2').hasClass("active2")){
+		E("UDPspeeder_table").style.display = "none";
+		E("UDPspeederV1_table").style.display = "none";
+		E("UDPspeederV2_table").style.display = "none";
+		E("UDP2raw_table").style.display = "";
+	}else{
+		$('.sub-btn1').addClass('active2');
+		$('.sub-btn1').addClass('active2');
+		$('.sub-btn2').removeClass('active2');
+		E("UDPspeeder_table").style.display = "";
+		E("UDPspeederV1_table").style.display = "";
+		E("UDPspeederV2_table").style.display = "";
+		E("UDP2raw_table").style.display = "none";
+	}
 	refresh_acl_table();
 }
 
-function update_visibility_tab4() {
+function update_visibility() {
 	var a = E("ss_basic_rule_update").value == "1";
 	var b = E("ss_basic_dnslookup").value == "1";
 	var c = E("ss_basic_node_update").value == "1";
 	var d = E("ssr_subscribe_obfspara").value == "2";
-	showhide("ss_basic_rule_update_time", a);
-	showhide("update_choose", a);
-	showhide("ss_basic_dnslookup_server", b);
-	showhide("ss_basic_node_update_day", c);
-	showhide("ss_basic_node_update_hr", c);
-	showhide("ssr_subscribe_obfspara_val", d);
-}
-
-function update_visibility_tab2() {
+	var e = E("ss_basic_udp_upstream_mtu").value == "1";
 	var ssmode = E("ss_basic_mode").value;
 	var rdc = E("ss_dns_china").value;
 	var rdf = E("ss_dns_foreign").value;
@@ -454,6 +477,13 @@ function update_visibility_tab2() {
 	var rcfm = E("ss_chinadns_foreign_method").value;
 	var srpm = E("ss_pdnsd_method").value;
 	
+	showhide("ss_basic_rule_update_time", a);
+	showhide("update_choose", a);
+	showhide("ss_basic_dnslookup_server", b);
+	showhide("ss_basic_node_update_day", c);
+	showhide("ss_basic_node_update_hr", c);
+	showhide("ssr_subscribe_obfspara_val", d);
+	showhide("ss_basic_udp_upstream_mtu_value", e);
 	showhide("show_isp_dns", (rdc == "1"));
 	showhide("ss_dns_china_user", (rdc == "12"));
 	showhide("ss_dns2socks_user", (rdf == "1"));
@@ -1856,7 +1886,7 @@ function get_ss_status_data() {
 					$('#SS_IP').html("<font color='#66FF66'>服务器IP地址解析异常！</font><a class='hintstyle' href='javascript:void(0);' onclick='openssHint(51)'><font color='#ffcc00'><u>查看帮助</u></font></a>");
 				} else if (db_ss_basic_dns_success['ss_basic_dns_success'] == "1") {
 					E('SS_IP').style.display = "";
-					$('#SS_IP').html("<font color='#66FF66'>服务器IP地址解析正常！</font><a class='hintstyle' href='javascript:void(0);' onclick='openssHint(51)'><font color='#ffcc00'><u>查看说明</u></font></a>");
+					$('#SS_IP').html("<font color='#66FF66'>服务器IP地址解析正常！</font><a class='hintstyle' href='javascript:void(0);' onclick='openssHint(51)'><font color='#ffcc00'><u>帮助</u></font></a>");
 				}
 				if (refreshRate > 0) {
 					setTimeout("get_ss_status_data();", refreshRate * 1000);
@@ -1904,7 +1934,6 @@ function write_udp_status() {
 		}
 	});
 }
-
 
 function update_ss() {
 	db_ss["ss_basic_action"] = "7";
@@ -1994,7 +2023,7 @@ function toggle_func() {
 			E("tablet_6").style.display = "none";
 			E("tablet_7").style.display = "none";
 			E("apply_button").style.display = "";
-			update_visibility_tab2();
+			update_visibility();
 			ss_node_info_return();
 		});
 	$(".show-btn3").click(
@@ -2074,6 +2103,7 @@ function toggle_func() {
 			E("tablet_7").style.display = "none";
 			E("apply_button").style.display = "";
 			ss_node_info_return();
+			update_visibility();
 			get_udp_status();
 			setTimeout("write_udp_status();", 500);
 		});
@@ -2100,7 +2130,7 @@ function toggle_func() {
 			E("tablet_6").style.display = "none";
 			E("tablet_7").style.display = "none";
 			E("apply_button").style.display = "none";
-			update_visibility_tab4();
+			update_visibility();
 			ss_node_info_return();
 		});
 	$(".show-btn5").click(
@@ -2128,7 +2158,7 @@ function toggle_func() {
 			ss_node_info_return();
 			setTimeout("showDropdownClientList('setClientIP', 'ip', 'all', 'ClientList_Block', 'pull_arrow', 'online');", 1000);
 			refresh_acl_table();
-			update_visibility_tab4();
+			update_visibility();
 		});
 	$(".show-btn6").click(
 		function() {
@@ -2152,7 +2182,7 @@ function toggle_func() {
 			E("tablet_6").style.display = "";
 			E("tablet_7").style.display = "none";
 			E("apply_button").style.display = "";
-			update_visibility_tab4();
+			update_visibility();
 			ss_node_info_return();
 		});
 	$(".show-btn7").click(
@@ -3292,7 +3322,7 @@ function save_online_nodes(action) {
 												<tr>
 												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(53)">选择DNS解析偏好</a></th>
 													<td>
-														<select id="ss_dns_plan" name="ss_dns_plan" class="input_option" onclick="update_visibility_tab2();" >
+														<select id="ss_dns_plan" name="ss_dns_plan" class="input_option" onclick="update_visibility();" >
 															<option value="1" selected="">国内优先</option>
 															<option value="2">国外优先</option>
 														</select>
@@ -3302,7 +3332,7 @@ function save_online_nodes(action) {
 												<tr id="dns_plan_china">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(25)">选择国内DNS</a></th>
 													<td id="dns_plan_china_td">
-														<select id="ss_dns_china" name="ss_dns_china" class="input_option" onclick="update_visibility_tab2();" >
+														<select id="ss_dns_china" name="ss_dns_china" class="input_option" onclick="update_visibility();" >
 															<option value="1" selected>运营商DNS【自动获取】</option>
 															<option value="2">阿里DNS1【223.5.5.5】</option>
 															<option value="3">阿里DNS2【223.6.6.6】</option>
@@ -3323,7 +3353,7 @@ function save_online_nodes(action) {
 												<tr id="dns_plan_foreign">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(26)">选择国外DNS</a></th>
 													<td>
-														<select id="ss_dns_foreign" name="ss_dns_foreign" class="input_option" onclick="update_visibility_tab2();" >
+														<select id="ss_dns_foreign" name="ss_dns_foreign" class="input_option" onclick="update_visibility();" >
 															<option value="1" selected="">dns2socks</option>
 															<option value="2">ss-tunnel</option>
 															<option value="3">dnscrypt-proxy</option>
@@ -3333,7 +3363,7 @@ function save_online_nodes(action) {
 														</select>
 														<select id="ss_opendns" name="ss_opendns" class="input_option" style="width:320px"></select>
 														<input type="text" class="input_ss_table" id="ss_dns2socks_user" name="ss_dns2socks_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
-														<select id="ss_sstunnel" name="ss_sstunnel" class="input_option" style="width:200px" onclick="update_visibility_tab2();" >
+														<select id="ss_sstunnel" name="ss_sstunnel" class="input_option" style="width:200px" onclick="update_visibility();" >
 															<option value="2" selected>google dns[8.8.8.8]</option>
 															<option value="3">google dns[8.8.4.4]</option>
 															<option value="1">OpenDNS[208.67.220.220]</option>
@@ -3345,7 +3375,7 @@ function save_online_nodes(action) {
 												<tr id="dns_plan_foreign_game2" style="display: none;">
 												<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(47)">选择国外DNS</a></th>
 													<td>
-														<select id="ss_game2_dns_foreign" name="ss_game2_dns_foreign" class="input_option" onclick="update_visibility_tab2();" disabled="disabled" >
+														<select id="ss_game2_dns_foreign" name="ss_game2_dns_foreign" class="input_option" onclick="update_visibility();" disabled="disabled" >
 															<option value="1" selected>koolgame内置</option>
 														</select>
 														<input type="text" class="input_ss_table" id="ss_game2_dns2ss_user" name="ss_game2_dns2ss_user" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
@@ -3356,7 +3386,7 @@ function save_online_nodes(action) {
 												<tr id="chinadns_china">
 													<th width="20%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(27)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*ChinaDNS国内DNS</font></a></th>
 													<td>
-														<select id="ss_chinadns_china" name="ss_chinadns_china" class="input_option" onclick="update_visibility_tab2();" >
+														<select id="ss_chinadns_china" name="ss_chinadns_china" class="input_option" onclick="update_visibility();" >
 															<option value="1">阿里DNS1【223.5.5.5】</option>
 															<option value="2">阿里DNS2【223.6.6.6】</option>
 															<option value="3">114DNS1【114.114.114.114】</option>
@@ -3379,7 +3409,7 @@ function save_online_nodes(action) {
 														</a>
 													</th>
 													<td>
-														<select id="ss_chinadns_foreign_method" name="ss_chinadns_foreign_method" class="input_option" style="width:100px" onclick="update_visibility_tab2();" >
+														<select id="ss_chinadns_foreign_method" name="ss_chinadns_foreign_method" class="input_option" style="width:100px" onclick="update_visibility();" >
 															<option value="1" selected>DNS2SOCKS</option>
 															<option value="2">dnscrypt-proxy</option>
 															<option value="3">ss-tunnel</option>
@@ -3387,7 +3417,7 @@ function save_online_nodes(action) {
 														</select>
 														<input type="text" class="input_ss_table" id="ss_chinadns_foreign_method_user" name="ss_chinadns_foreign_method_user" style="width:150px" maxlength="100" value="">
 														<span id="ss_chinadns_foreign_method_user_txt">自定义直连的chinaDNS国外dns。</span>
-														<select id="ss_chinadns_foreign_dns2socks" name="ss_chinadns_foreign_dns2socks" class="input_option" style="width:200px" onclick="update_visibility_tab2();" >
+														<select id="ss_chinadns_foreign_dns2socks" name="ss_chinadns_foreign_dns2socks" class="input_option" style="width:200px" onclick="update_visibility();" >
 															<option value="2" selected>Google dns [8.8.8.8]</option>
 															<option value="3">Google dns [8.8.4.4]</option>
 															<option value="1">OpenDNS [208.67.220.220]</option>
@@ -3398,7 +3428,7 @@ function save_online_nodes(action) {
 														<select id="ss_chinadns_foreign_dnscrypt" name="ss_chinadns_foreign_dnscrypt" class="input_option" style="width:320px"></select>
 
 														
-														<select id="ss_chinadns_foreign_sstunnel" name="ss_chinadns_foreign_sstunnel" class="input_option" style="width:200px" onclick="update_visibility_tab2();" >
+														<select id="ss_chinadns_foreign_sstunnel" name="ss_chinadns_foreign_sstunnel" class="input_option" style="width:200px" onclick="update_visibility();" >
 															<option value="2" selected>Google dns [8.8.8.8]</option>
 															<option value="3">Google dns [8.8.4.4]</option>
 															<option value="1">OpenDNS [208.67.220.220]</option>
@@ -3414,7 +3444,7 @@ function save_online_nodes(action) {
 														</a>
 													</th>
 													<td>
-														<select id="ss_pdnsd_method" name="ss_pdnsd_method" class="input_option" onclick="update_visibility_tab2();" >
+														<select id="ss_pdnsd_method" name="ss_pdnsd_method" class="input_option" onclick="update_visibility();" >
 															<option value="1" selected >仅udp查询</option>
 															<option value="2">仅tcp查询</option>
 														</select>
@@ -3433,14 +3463,14 @@ function save_online_nodes(action) {
 												<tr id="pdnsd_up_stream_udp">
 													<th width="20%" ><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(31)"><font color="#66FF66">&nbsp;&nbsp;&nbsp;&nbsp;*pdnsd上游服务器（UDP）</font></a></th>
 													<td>
-														<select id="ss_pdnsd_udp_server" name="ss_pdnsd_udp_server" class="input_option" onclick="update_visibility_tab2();" >
+														<select id="ss_pdnsd_udp_server" name="ss_pdnsd_udp_server" class="input_option" onclick="update_visibility();" >
 															<option value="1" selected>DNS2SOCKS</option>
 															<option value="2">dnscrypt-proxy</option>
 															<option value="3">ss-tunnel</option>
 														</select>
 														<input type="text" class="input_ss_table" id="ss_pdnsd_udp_server_dns2socks" name="ss_pdnsd_udp_server_dns2socks" style="width:128px;" maxlength="100" placeholder="需端口号如：8.8.8.8:53" value="8.8.8.8:53">
 														<select id="ss_pdnsd_udp_server_dnscrypt" name="ss_pdnsd_udp_server_dnscrypt" class="input_option" style="width:320px"></select>
-														<select id="ss_pdnsd_udp_server_ss_tunnel" name="ss_pdnsd_udp_server_ss_tunnel" class="input_option" onclick="update_visibility_tab2();" >
+														<select id="ss_pdnsd_udp_server_ss_tunnel" name="ss_pdnsd_udp_server_ss_tunnel" class="input_option" onclick="update_visibility();" >
 															<option value="2" selected>google DNS1 [8.8.8.8]</option>
 															<option value="3">google DNS2 [8.8.4.4]</option>
 															<option value="1">OpenDNS [208.67.220.220]</option>
@@ -3462,7 +3492,7 @@ function save_online_nodes(action) {
 												<tr id="chromecast">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(43)">Chromecast支持</a></th>
 													<td>
-														<select id="ss_basic_chromecast" name="ss_basic_chromecast" class="input_option" onchange="update_visibility_tab4();" >
+														<select id="ss_basic_chromecast" name="ss_basic_chromecast" class="input_option" onchange="update_visibility();" >
 															<option value="0">禁用</option>
 															<option value="1" selected>开启</option>
 														</select>
@@ -3472,7 +3502,7 @@ function save_online_nodes(action) {
 												<tr id="ss_basic_dnslookup_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(51)">SS服务器地址解析</a></th>
 													<td>
-														<select id="ss_basic_dnslookup" name="ss_basic_dnslookup" class="input_option" onchange="update_visibility_tab4();" >
+														<select id="ss_basic_dnslookup" name="ss_basic_dnslookup" class="input_option" onchange="update_visibility();" >
 															<option value="0">resolveip方式</option>
 															<option value="1" selected>nslookup方式</option>
 														</select>
@@ -3669,55 +3699,89 @@ taobao.com
 										<div id="tablet_3_2" style="display: none;">
 											<table style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
-													<th width="35%">UDP加速开关</th>
-													<td>
-														<input type="checkbox" id="ss_basic_udp_boost_enable" onclick="verifyFields(this, 1);" />
-													</td>
-												</tr>
-												<tr>
-													<th width="35%">UDP加速软件选择</th>
-													<td>
-														<select id="ss_basic_udp_software" name="ss_basic_udp_software" class="input_option" style="width:130px" onchange="verifyFields(this, 1);" >
-															<option value="1" selected>UDPspeederV1</option>
-															<option value="2">UDPspeederV2</option>
-															<!--<option value="2">udp2raw-tunnel</option>-->
-														</select>	
-													</td>
-												</tr>
-												<tr>
 													<th width="35%">UDP加速节点选择</th>
 													<td>
-														<select id="ss_basic_udp_node" name="ss_basic_udp_node" style="width:auto;min-width:130px;max-width:130px;margin:0px 0px 0px 2px;" class="input_option" onchange="ss_node_sel();" ></select>
+														<select id="ss_basic_udp_node" name="ss_basic_udp_node" style="width:auto;min-width:130px;max-width:130px;margin:0px 0px 0px 2px;" class="input_option"></select>
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(97)"><font color="#ffcc00"><u>帮助</u></font></a>
+													</td>
+												</tr>
+												<tr>
+													<th width="35%">设置ss/ssr-redir MTU</th>
+													<td>
+														<select id="ss_basic_udp_upstream_mtu" name="ss_basic_udp_upstream_mtu" style="width:auto;margin:0px 0px 0px 2px;" class="input_option" onchange="update_visibility();" >
+																<option value="0">不设定</option>
+																<option value="1">手动指定</option>
+														</select>
+														<input type="text" name="ss_basic_udp_upstream_mtu_value" id="ss_basic_udp_upstream_mtu_value" class="input_ss_table" style="width:40px;" value="1200"/>
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(98)"><font color="#ffcc00"><u>帮助</u></font></a>
 													</td>
 												</tr>
 												<tr>
 													<th width="35%">帮助信息</th>
 													<td>
-														<a type="button" class="ss_btn" style="cursor:pointer" target="_blank" href="https://github.com/wangyu-/UDPspeeder/blob/master/doc/README.zh-cn.v1.md">UDPspeederV1</a>
-														<a type="button" class="ss_btn" style="cursor:pointer" target="_blank" href="https://github.com/wangyu-/UDPspeeder/blob/master/doc/README.zh-cn.md">UDPspeederV2</a>
-														<!--<a type="button" class="ss_btn" style="cursor:pointer" target="_blank" href="https://github.com/wangyu-/udp2raw-tunnel/blob/master/doc/README.zh-cn.md">udp2raw-tunnel</a>-->
+														<ul>
+															<li>你可以只开启UDPspeeder加速udp，或者只开启UDP2raw将udp转为tcp；</li>
+															<li>你也可以将UDPspeeder和UDP2raw都开启，并配置它们串联工作；</li>
+															<li>
+																帮助文档：												
+																<a type="button" style="cursor:pointer" target="_blank" href="https://github.com/wangyu-/UDPspeeder/blob/master/doc/README.zh-cn.v1.md"><em><u>UDPspeederV1</u></em></a>
+																&nbsp;
+																<a type="button" style="cursor:pointer" target="_blank" href="https://github.com/wangyu-/UDPspeeder/blob/master/doc/README.zh-cn.md"><em><u>UDPspeederV2</u></em></a>
+																&nbsp;
+																<a type="button" style="cursor:pointer" target="_blank" href="https://github.com/wangyu-/udp2raw-tunnel/blob/master/doc/README.zh-cn.md"><em><u>udp2raw-tunnel</u></em></a>
+															</li>
+														</ul>
 													</td>
 												</tr>
 												<tr>
-													<th>UDP加速运行状态</th>
+													<th>UDPspeeder运行状态</th>
 													<td>
 														<span id="udp_status">获取中...</span>
 													</td>
 												</tr>
 											</table>
-											<table id="UDPspeederV1_table" style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
-												<thead>
+											<div id="sub_tablets">
+												<table style="margin:10px 0px 0px 0px;border-collapse:collapse" width="100%" height="37px">
+													<tr width="235px">
+														<td colspan="4" cellpadding="0" cellspacing="0" style="padding:0" border="1" bordercolor="#000">
+															<input id="sub_btn1" class="sub-btn1 active2" style="cursor:pointer" type="button" value="UDPspeeder" />
+															<input id="sub_btn2" class="sub-btn2" style="cursor:pointer" type="button" value="UDP2raw-tunnel" />
+														</td>
+													</tr>
+												</table>
+											</div>
+											<table id="UDPspeeder_table" style="margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
-													<td colspan="2">UDPspeederV1 设置</td>
+													<th colspan="2"><em>UDPspeeder 设置</em></th>
 												</tr>
-												</thead>
+												<tr>
+													<th width="35%">UDPspeeder开关</th>
+													<td>
+														<input type="checkbox" id="ss_basic_udp_boost_enable"/>
+													</td>
+												</tr>
+												<tr>
+													<th width="35%">UDPspeeder版本</th>
+													<td>
+														<select id="ss_basic_udp_software" name="ss_basic_udp_software" class="input_option" style="width:130px" onchange="verifyFields(this, 1);" >
+															<option value="1" selected>UDPspeederV1</option>
+															<option value="2">UDPspeederV2</option>
+														</select>	
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(99)"><font color="#ffcc00"><u>帮助</u></font></a>
+													</td>
+												</tr>
+											</table>
+											<table id="UDPspeederV1_table" style="display:none;margin:0px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
+												<tr>
+													<th colspan="2"><em>UDPspeederV1 参数设置</em></th>
+												</tr>
 												<tr id="ss_basic_udpv1_l_server_port_tr">
 													<th width="35%">* 本地监听地址：端口 （-l）</th>
 													<td>
 														<input type="text" name="ss_basic_udpv1_lserver" id="ss_basic_udpv1_lserver" class="input_ss_table" style="width:120px;" maxlength="200" value="0.0.0.0" readonly/>
 														:
 														<input type="text" name="ss_basic_udpv1_lport" id="ss_basic_udpv1_lport" class="input_ss_table" style="width:44px;" maxlength="200" value="1092" readonly/>
-														<a>预设不可更改，ss-redir的UDP流量会转发到此</a>
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(99)"><font color="#ffcc00"><u>帮助</u></font></a>
 													</td>
 												</tr>
 												<tr id="ss_basic_udpv1_r_server_port_tr">
@@ -3726,6 +3790,7 @@ taobao.com
 														<input type="text" name="ss_basic_udpv1_rserver" id="ss_basic_udpv1_rserver" class="input_ss_table" style="width:120px;" maxlength="200" value=""/>
 														:
 														<input type="text" name="ss_basic_udpv1_rport" id="ss_basic_udpv1_rport" class="input_ss_table" style="width:44px;" maxlength="200" value=""/>
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(100)"><font color="#ffcc00"><u>帮助</u></font></a>
 													</td>
 												</tr>
 												<tr id="ss_basic_udpv1_password_tr">
@@ -3782,24 +3847,21 @@ taobao.com
 												<tr id="ss_basic_udpv1_disable_filter_tr">
 													<th width="35%">* 关闭重复包过滤器 （--disable-filter）</th>
 													<td>
-														<input type="checkbox" id="ss_basic_udpv1_disable_filter" onclick="verifyFields(this, 1);" />
+														<input type="checkbox" id="ss_basic_udpv1_disable_filter"/>
 													</td>
 												</tr>
 											</table>
-
-											<table id="UDPspeederV2_table" style="margin:10px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
-												<thead>
+											<table id="UDPspeederV2_table" style="display:none;margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
 												<tr>
-													<td colspan="2">UDPspeederV2 设置</td>
+													<th colspan="2"><em>UDPspeederV2 参数设置</em></th>
 												</tr>
-												</thead>
 												<tr id="ss_basic_udpv2_l_server_port_tr">
 													<th width="35%">* 本地监听地址：端口 （-l）</th>
 													<td>
 														<input type="text" name="ss_basic_udpv2_lserver" id="ss_basic_udpv2_lserver" class="input_ss_table" style="width:120px;" maxlength="200" value="0.0.0.0" readonly/>
 														:
 														<input type="text" name="ss_basic_udpv2_lport" id="ss_basic_udpv2_lport" class="input_ss_table" style="width:44px;" maxlength="200" value="1092" readonly/>
-														<a>预设不可更改，ss-redir的UDP流量会转发到此</a>
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(99)"><font color="#ffcc00"><u>帮助</u></font></a>
 													</td>
 												</tr>
 												<tr id="ss_basic_udpv2_r_server_port_tr">
@@ -3808,6 +3870,7 @@ taobao.com
 														<input type="text" name="ss_basic_udpv2_rserver" id="ss_basic_udpv2_rserver" class="input_ss_table" style="width:120px;" maxlength="200" value=""/>
 														:
 														<input type="text" name="ss_basic_udpv2_rport" id="ss_basic_udpv2_rport" class="input_ss_table" style="width:44px;" maxlength="200" value=""/>
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(100)"><font color="#ffcc00"><u>帮助</u></font></a>
 													</td>
 												</tr>
 												<tr id="ss_basic_udpv2_password_tr">
@@ -3887,11 +3950,124 @@ taobao.com
 												<tr id="ss_basic_udpv2_disableobscure_tr">
 													<th width="35%">* 关闭数据包随机填充（--disable-obscure）</th>
 													<td>
-														<input type="checkbox" id="ss_basic_udpv2_disableobscure" onclick="verifyFields(this, 1);" />
+														<input type="checkbox" id="ss_basic_udpv2_disableobscure"/>
 														<a>关闭可节省一点带宽和cpu。</a>
 													</td>
-												</tr>												
+												</tr>
+												<tr id="ss_basic_udpv2_middle">
+													<th colspan="2">
+														其它参数
+													</th>
+												</tr>
+												<tr id="ss_basic_udpv2_other_tr">
+													<th width="35%">* 其它参数</th>
+													<td>
+														<input type="text" name="ss_basic_udp2raw_other" id="ss_basic_udp2raw_other" class="input_ss_table" style="width:200px;" value="" />
+														<br /><a>其它高级参数，请手动输入，如 -q1 等。</a>
+													</td>
+												</tr>										
+											</table>
 
+											<table id="UDP2raw_table" style="display:none;margin:-1px 0px 0px 0px;" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
+												<tr>
+													<th colspan="2"><em>UDP2raw 设置</em></th>
+												</tr>
+												<tr>
+													<th width="35%">UDP2raw开关</th>
+													<td>
+														<input type="checkbox" id="ss_basic_udp2raw_boost_enable"/>
+													</td>
+												</tr>
+												<tr>
+													<th colspan="2"><em>UDP2raw 参数设置</em></th>
+												</tr>
+												<tr id="ss_basic_udp2raw_l_server_port_tr">
+													<th width="35%">* 本地监听地址：端口 （-l）</th>
+													<td>
+														<input type="text" name="ss_basic_udp2raw_lserver" id="ss_basic_udp2raw_lserver" class="input_ss_table" style="width:120px;" maxlength="200" value="0.0.0.0" readonly/>
+														:
+														<input type="text" name="ss_basic_udp2raw_lport" id="ss_basic_udp2raw_lport" class="input_ss_table" style="width:44px;" maxlength="200" value="1093" readonly/>
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(101)"><font color="#ffcc00"><u>帮助</u></font></a>
+													</td>
+												</tr>
+												<tr id="ss_basic_udp2raw_r_server_port_tr">
+													<th width="35%">* 服务器地址：端口 （-r）</th>
+													<td>
+														<input type="text" name="ss_basic_udp2raw_rserver" id="ss_basic_udp2raw_rserver" class="input_ss_table" style="width:120px;" maxlength="200" value=""/>
+														:
+														<input type="text" name="ss_basic_udp2raw_rport" id="ss_basic_udp2raw_rport" class="input_ss_table" style="width:44px;" maxlength="200" value=""/>
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(102)"><font color="#ffcc00"><u>帮助</u></font></a>
+													</td>
+												</tr>
+												<tr id="ss_basic_udp2raw_password_tr">
+													<th width="35%">* 密码 （-k,--key）</th>
+													<td>
+														<input type="text" name="ss_basic_udp2raw_password" id="ss_basic_udp2raw_password"  class="input_ss_table" maxlength="200" value="" style="width:120px;" readonly onBlur="switchType(this, false);" onFocus="switchType(this, true);this.removeAttribute('readonly');"/>
+													</td>
+												</tr>
+												<tr id="ss_basic_udp2raw_rawmode_tr">
+													<th width="35%">* 模式（--raw-mode）</th>
+													<td>
+														<select id="ss_basic_udp2raw_rawmode" name="ss_basic_udp2raw_rawmode" class="input_option" style="width:130px">
+															<option value="faketcp" selected="">faketcp</option>
+															<option value="udp">udp</option>
+															<option value="icmp">icmp</option>
+														</select>	
+														<a>默认:faketcp</a>
+													</td>
+												</tr>
+												<tr id="ss_basic_udp2raw_ciphermode_tr">
+													<th width="35%">* 加密模式 （--cipher-mode）</th>
+													<td>
+														<select id="ss_basic_udp2raw_ciphermode" name="ss_basic_udp2raw_ciphermode" class="input_option" style="width:130px">
+															<option value="aes128cbc" selected="">aes128cbc</option>
+															<option value="xor">xor</option>
+															<option value="none">无</option>
+														</select>	
+														<a>默认:aes128cbc</a>
+													</td>
+												</tr>
+												<tr id="ss_basic_udp2raw_authmode_tr">
+													<th width="35%">* 校验模式 （--auth-mode）</th>
+													<td>
+														<select id="ss_basic_udp2raw_authmode" name="ss_basic_udp2raw_authmode" class="input_option" style="width:130px">
+															<option value="md5" selected="">md5</option>
+															<option value="crc32">crc32</option>
+															<option value="icmp">icmp</option>
+															<option value="simple">simple</option>
+															<option value="none">none</option>
+														</select>	
+														<a>默认:md5</a>
+													</td>
+												</tr>
+												<tr id="ss_basic_udp2raw_a_tr">
+													<th width="35%">* 自动添加/删除iptables（-a,--auto-rule）</th>
+													<td>
+														<input type="checkbox" checked="" id="ss_basic_udp2raw_a"/>
+														<a>梅林固件请勾选此选项</a>
+													</td>
+												</tr>
+												<tr id="ss_basic_udp2raw_keeprule_tr">
+													<th width="35%">* 定期检查iptables（--keep-rule）</th>
+													<td>
+														<input type="checkbox" checked="" id="ss_basic_udp2raw_keeprule"/>
+														<a>梅林固件请勾选此选项</a>
+													</td>
+												</tr>
+												<tr id="ss_basic_udp2raw_lowerlevel_tr">
+													<th width="35%">* 绕过本地iptables（--lower-level）</th>
+													<td>
+														<input type="text" name="ss_basic_udp2raw_lowerlevel" id="ss_basic_udp2raw_lowerlevel" class="input_ss_table" style="width:120px;" value=""/>
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(103)"><font color="#ffcc00"><u>帮助</u></font></a>
+													</td>
+												</tr>
+												<tr id="ss_basic_udp2raw_other_tr">
+													<th width="35%">* 其它参数</th>
+													<td>
+														<input type="text" name="ss_basic_udp2raw_other" id="ss_basic_udp2raw_other" class="input_ss_table" style="width:98%;" value="" />
+														<br /><a>其它未列出来的参数，请手动输入，如 --force-sock-buf --seq-mode 1 等。</a>
+													</td>
+												</tr>	
 											</table>
 										</div>	
 										<div id="tablet_4" style="display: none;">
@@ -3952,11 +4128,11 @@ taobao.com
 												<tr id="update_rules">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(44)">shadowsocks规则自动更新</a></th>
 													<td>
-														<select id="ss_basic_rule_update" name="ss_basic_rule_update" class="input_option" onchange="update_visibility_tab4();" >
+														<select id="ss_basic_rule_update" name="ss_basic_rule_update" class="input_option" onchange="update_visibility();" >
 															<option value="0">禁用</option>
 															<option value="1">开启</option>
 														</select>
-														<select id="ss_basic_rule_update_time" name="ss_basic_rule_update_time" class="input_option" title="选择规则列表自动更新时间，更新后将自动重启SS" onchange="update_visibility_tab4();" >
+														<select id="ss_basic_rule_update_time" name="ss_basic_rule_update_time" class="input_option" title="选择规则列表自动更新时间，更新后将自动重启SS" onchange="update_visibility();" >
 															<option value="0">00:00点</option>
 															<option value="1">01:00点</option>
 															<option value="2">02:00点</option>
@@ -4015,7 +4191,7 @@ taobao.com
 												<tr>
 													<th width="35%">订阅节点模式设定</th>
 													<td>
-														<select id="ssr_subscribe_mode" name="ssr_subscribe_mode" class="input_option" onchange="update_visibility_tab4();" >
+														<select id="ssr_subscribe_mode" name="ssr_subscribe_mode" class="input_option" onchange="update_visibility();" >
 															<option value="1">【1】 gfwlist模式</option>
 															<option value="2">【2】 大陆白名单模式</option>
 															<option value="3">【3】 游戏模式</option>
@@ -4027,7 +4203,7 @@ taobao.com
 												<tr>
 													<th width="35%">订阅节点混淆参数设定</th>
 													<td>
-														<select id="ssr_subscribe_obfspara" name="ssr_subscribe_obfspara" class="input_option" onchange="update_visibility_tab4();" >
+														<select id="ssr_subscribe_obfspara" name="ssr_subscribe_obfspara" class="input_option" onchange="update_visibility();" >
 															<option value="0">留空</option>
 															<option value="1" selected="">使用订阅设定</option>
 															<option value="2">自定义</option>
@@ -4038,7 +4214,7 @@ taobao.com
 												<tr>
 													<th width="35%">下载订阅时走SS网络</th>
 													<td>
-														<select id="ss_basic_online_links_goss" name="ss_basic_online_links_goss" class="input_option" onchange="update_visibility_tab4();" >
+														<select id="ss_basic_online_links_goss" name="ss_basic_online_links_goss" class="input_option" onchange="update_visibility();" >
 															<option value="0">不走SS</option>
 															<option value="1" selected="">走SS</option>
 														</select>
@@ -4047,11 +4223,11 @@ taobao.com
 												<tr>
 													<th width="35%">订阅计划任务</th>
 													<td>
-														<select id="ss_basic_node_update" name="ss_basic_node_update" class="input_option" onchange="update_visibility_tab4();" >
+														<select id="ss_basic_node_update" name="ss_basic_node_update" class="input_option" onchange="update_visibility();" >
 															<option value="0">禁用</option>
 															<option value="1" selected="">开启</option>
 														</select>
-														<select id="ss_basic_node_update_day" name="ss_basic_node_update_day" class="input_option" onchange="update_visibility_tab4();" >
+														<select id="ss_basic_node_update_day" name="ss_basic_node_update_day" class="input_option" onchange="update_visibility();" >
 															<option value="7" selected="">每天</option>
 															<option value="1">周一</option>
 															<option value="2">周二</option>
@@ -4061,7 +4237,7 @@ taobao.com
 															<option value="6">周六</option>
 															<option value="0">周日</option>
 														</select>
-														<select id="ss_basic_node_update_hr" name="ss_basic_node_update_hr" class="input_option" onchange="update_visibility_tab4();" >
+														<select id="ss_basic_node_update_hr" name="ss_basic_node_update_hr" class="input_option" onchange="update_visibility();" >
 															<option value="0">0点</option><option value="1">1点</option><option value="2">2点</option><option value="3" selected="">3点</option><option value="4">4点</option><option value="5">5点</option><option value="6">6点</option><option value="7">7点</option><option value="8">8点</option><option value="9">9点</option><option value="10">10点</option><option value="11">11点</option><option value="12">12点</option><option value="13">13点</option><option value="14">14点</option><option value="15">15点</option><option value="16">16点</option><option value="17">17点</option><option value="18">18点</option><option value="19">19点</option><option value="20">20点</option><option value="21">21点</option><option value="22">22点</option><option value="23">23点</option>
 														</select>
 													</td>
@@ -4168,7 +4344,7 @@ taobao.com
 												<tr id="ss_sleep_tr">
 													<th width="35%"><a class="hintstyle" href="javascript:void(0);" onclick="openssHint(46)">开机启动延时</a></th>
 													<td>
-														<select id="ss_basic_sleep" name="ss_basic_sleep" class="input_option" onchange="update_visibility_tab4();" >
+														<select id="ss_basic_sleep" name="ss_basic_sleep" class="input_option" onchange="update_visibility();" >
 															<option value="0" selected>0s</option>
 															<option value="5">5s</option>
 															<option value="10">10s</option>

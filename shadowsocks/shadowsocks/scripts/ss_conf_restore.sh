@@ -2,6 +2,16 @@
 source /koolshare/scripts/base.sh
 alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
 
+remove_first(){
+	confs2=`dbus list ss | cut -d "=" -f 1 | grep -v "version" | grep -v "ssserver_" | grep -v "ssid_" |grep -v "ss_basic_state_china" | grep -v "ss_basic_state_foreign"`
+	for conf in $confs2
+	do
+		echo_date 移除$conf
+		dbus remove $conf
+	done
+}
+
+
 upgrade_ss_conf(){
 	nodes=`dbus list ssc|grep port|cut -d "=" -f1|cut -d "_" -f4|sort -n`
 	for node in $nodes
@@ -63,6 +73,7 @@ upgrade_ss_conf(){
 	[ -n "`dbus get ssconf_basic_use_kcp_$node`" ] && dbus set ss_basic_koolgame_udp=`dbus get ssconf_basic_use_kcp_$node`
 }
 
+remove_first
 
 confs=`cat /tmp/ss_conf_backup.txt`
 format=`echo $confs|grep "{"`
@@ -227,7 +238,9 @@ else
 		echo_date 导入配置成功！
 	fi
 fi
-	echo_date 一点点清理工作...
-	sleep 2
-	rm -rf /tmp/ss_conf_*
-	echo_date 完成！
+
+
+echo_date 一点点清理工作...
+sleep 2
+rm -rf /tmp/ss_conf_*
+echo_date 完成！

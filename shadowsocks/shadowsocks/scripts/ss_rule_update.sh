@@ -244,10 +244,23 @@ case $ss_basic_update_action in
 1)
 	#svae only
 	change_cru
+	# incase next time auto update failed
+	dbus remove ss_basic_update_action
 	;;
 2)
-	#save and apply
+	#save and apply form we action
+	ss_basic_gfwlist_update=1
+	ss_basic_chnroute_update=1
+	ss_basic_cdn_update=1
+	ss_basic_pcap_update=1
 	change_cru
 	start_update
+	dbus remove ss_basic_update_action
+	;;
+*)
+	#this is for autoupdate
+	change_cru
+	start_update
+	dbus remove ss_basic_update_action
 	;;
 esac
