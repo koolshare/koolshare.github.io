@@ -1,7 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 3.7.3
-   - add	增加UDP2raw的支持（感谢wangyu-的开源项目），支持单独使用UDP2raw，将ss-redir的UDP流量直接转成tcp流量，应对UDP屏蔽或QoS，或在UDP不稳定的环境下提升稳定性。，
+
+   - 说明		1. UDP加速，包括UDPspeeder和UDP2raw，都只能支持ss和ssr的udp，不支持koolgame，koolgame已经自带了udp优化。
+     		2. UDP加速需要自己配置服务器端的UDPspeeder或者UDP2raw程序，从飞机场购买SS帐号的不能使用。
+   - add	增加UDP2raw的支持（感谢wangyu-的开源项目），支持单独使用UDP2raw，将ss-redir的UDP流量直接转成tcp流量，应对UDP屏蔽或QoS，或在UDP不稳定的环境下提升稳定性。，
 		也可以将UDPspeeder(V1/V2)与UDP2raw串联，将ss-redir的UDP经过UDPspeeder加速后，通过UDP2raw转成TCP流量。
 		UDPspeeder(V1/V2)与UDP2raw简要的使用说明：
 		正确开启的姿势：
