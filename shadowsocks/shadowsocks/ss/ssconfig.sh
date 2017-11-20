@@ -896,7 +896,7 @@ start_kcp(){
 			-p /tmp/var/kcp.pid \
 			-x /koolshare/bin/client_linux_arm5 \
 			-- -l 127.0.0.1:1091 \
-			-r $ss_basic_server:$ss_basic_kcp_port \
+			-r [$ss_basic_server]:$ss_basic_kcp_port \
 			--crypt $ss_basic_kcp_encrypt \
 			--key $ss_basic_kcp_password \
 			--sndwnd $ss_basic_kcp_sndwnd \
@@ -910,7 +910,7 @@ start_kcp(){
 			-p /tmp/var/kcp.pid \
 			-x /koolshare/bin/client_linux_arm5 \
 			-- -l 127.0.0.1:1091 \
-			-r $ss_basic_server:$ss_basic_kcp_port \
+			-r [$ss_basic_server]:$ss_basic_kcp_port \
 			$ss_basic_kcp_parameter
 		fi
 	fi
