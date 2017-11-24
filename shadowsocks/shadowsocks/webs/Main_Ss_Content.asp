@@ -223,7 +223,7 @@ function save(s) {
 	dbus["action_mode"] = " Refresh ";
 	dbus["current_page"] = "Main_Ss_Content.asp";
 	//key define
-	var params_input = ["ssconf_basic_node", "ss_basic_mode", "ss_basic_server", "ss_basic_port", "ss_basic_method", "ss_basic_koolgame_udp", "ss_basic_ss_obfs", "ss_basic_ss_obfs_host", "ss_basic_rss_protocol", "ss_basic_rss_protocol_param", "ss_basic_rss_obfs", "ss_basic_rss_obfs_param", "ssconf_basic_ping_node", "ssconf_basic_ping_method", "ssconf_basic_test_node", "ssconf_basic_test_domain", "ss_dns_plan", "ss_dns_china", "ss_dns_china_user", "ss_dns_foreign", "ss_opendns", "ss_dns2socks_user", "ss_sstunnel", "ss_sstunnel_user", "ss_game2_dns_foreign", "ss_game2_dns2ss_user", "ss_chinadns_china", "ss_chinadns_china_user", "ss_chinadns_foreign_method", "ss_chinadns_foreign_method_user", "ss_chinadns_foreign_dns2socks", "ss_chinadns_foreign_dns2socks_user", "ss_chinadns_foreign_dnscrypt", "ss_chinadns_foreign_sstunnel", "ss_chinadns_foreign_sstunnel_user", "ss_pdnsd_method", "ss_pdnsd_server_ip", "ss_pdnsd_server_port", "ss_pdnsd_udp_server", "ss_pdnsd_udp_server_dns2socks", "ss_pdnsd_udp_server_dnscrypt", "ss_pdnsd_udp_server_ss_tunnel", "ss_pdnsd_udp_server_ss_tunnel_user", "ss_pdnsd_server_cache_min", "ss_pdnsd_server_cache_max", "ss_basic_chromecast", "ss_basic_dnslookup", "ss_basic_dnslookup_server", "ss_basic_kcp_port", "ss_basic_kcp_parameter", "ss_basic_rule_update", "ss_basic_rule_update_time", "ssr_subscribe_mode", "ssr_subscribe_obfspara", "ssr_subscribe_obfspara_val", "ss_basic_online_links_goss", "ss_basic_node_update", "ss_basic_node_update_day", "ss_basic_node_update_hr", "ss_base64_links", "ss_basic_refreshrate", "ss_basic_sleep", "ss_acl_default_port", "ss_online_action", "ss_acl_default_mode", "ss_basic_kcp_method", "ss_basic_kcp_password", "ss_basic_kcp_mode", "ss_basic_kcp_encrypt", "ss_basic_kcp_mtu", "ss_basic_kcp_sndwnd", "ss_basic_kcp_rcvwnd", "ss_basic_kcp_conn", "ss_basic_kcp_extra", "ss_basic_udp_software", "ss_basic_udp_node", "ss_basic_udpv1_lserver", "ss_basic_udpv1_lport", "ss_basic_udpv1_rserver", "ss_basic_udpv1_rport", "ss_basic_udpv1_password", "ss_basic_udpv1_mode", "ss_basic_udpv1_duplicate_nu", "ss_basic_udpv1_duplicate_time", "ss_basic_udpv1_jitter", "ss_basic_udpv1_report", "ss_basic_udpv1_drop", "ss_basic_udpv2_lserver", "ss_basic_udpv2_lport", "ss_basic_udpv2_rserver", "ss_basic_udpv2_rport", "ss_basic_udpv2_password", "ss_basic_udpv2_fec", "ss_basic_udpv2_timeout", "ss_basic_udpv2_mode", "ss_basic_udpv2_report", "ss_basic_udpv2_mtu", "ss_basic_udpv2_jitter", "ss_basic_udpv2_interval", "ss_basic_udpv2_drop", "ss_basic_udpv2_other", "ss_basic_udp2raw_lserver", "ss_basic_udp2raw_lport", "ss_basic_udp2raw_rserver", "ss_basic_udp2raw_rport", "ss_basic_udp2raw_password", "ss_basic_udp2raw_rawmode", "ss_basic_udp2raw_ciphermode", "ss_basic_udp2raw_authmode", "ss_basic_udp2raw_lowerlevel", "ss_basic_udp2raw_other", "ss_basic_udp_upstream_mtu", "ss_basic_udp_upstream_mtu_value"];
+	var params_input = ["ssconf_basic_node", "ss_basic_mode", "ss_basic_server", "ss_basic_port", "ss_basic_method", "ss_basic_koolgame_udp", "ss_basic_ss_obfs", "ss_basic_ss_obfs_host", "ss_basic_rss_protocol", "ss_basic_rss_protocol_param", "ss_basic_rss_obfs", "ss_basic_rss_obfs_param", "ssconf_basic_ping_node", "ssconf_basic_ping_method", "ssconf_basic_test_node", "ssconf_basic_test_domain", "ss_dns_plan", "ss_dns_china", "ss_dns_china_user", "ss_dns_foreign", "ss_opendns", "ss_dns2socks_user", "ss_sstunnel", "ss_sstunnel_user", "ss_game2_dns_foreign", "ss_game2_dns2ss_user", "ss_chinadns_china", "ss_chinadns_china_user", "ss_chinadns_foreign_method", "ss_chinadns_foreign_method_user", "ss_chinadns_foreign_dns2socks", "ss_chinadns_foreign_dns2socks_user", "ss_chinadns_foreign_dnscrypt", "ss_chinadns_foreign_sstunnel", "ss_chinadns_foreign_sstunnel_user", "ss_pdnsd_method", "ss_pdnsd_server_ip", "ss_pdnsd_server_port", "ss_pdnsd_udp_server", "ss_pdnsd_udp_server_dns2socks", "ss_pdnsd_udp_server_dnscrypt", "ss_pdnsd_udp_server_ss_tunnel", "ss_pdnsd_udp_server_ss_tunnel_user", "ss_pdnsd_server_cache_min", "ss_pdnsd_server_cache_max", "ss_basic_chromecast", "ss_basic_dnslookup", "ss_basic_dnslookup_server", "$ss_basic_kcp_lserver", "ss_basic_kcp_lport", "ss_basic_kcp_server", "ss_basic_kcp_port", "ss_basic_kcp_parameter", "ss_basic_rule_update", "ss_basic_rule_update_time", "ssr_subscribe_mode", "ssr_subscribe_obfspara", "ssr_subscribe_obfspara_val", "ss_basic_online_links_goss", "ss_basic_node_update", "ss_basic_node_update_day", "ss_basic_node_update_hr", "ss_base64_links", "ss_basic_refreshrate", "ss_basic_sleep", "ss_acl_default_port", "ss_online_action", "ss_acl_default_mode", "ss_basic_kcp_method", "ss_basic_kcp_password", "ss_basic_kcp_mode", "ss_basic_kcp_encrypt", "ss_basic_kcp_mtu", "ss_basic_kcp_sndwnd", "ss_basic_kcp_rcvwnd", "ss_basic_kcp_conn", "ss_basic_kcp_extra", "ss_basic_udp_software", "ss_basic_udp_node", "ss_basic_udpv1_lserver", "ss_basic_udpv1_lport", "ss_basic_udpv1_rserver", "ss_basic_udpv1_rport", "ss_basic_udpv1_password", "ss_basic_udpv1_mode", "ss_basic_udpv1_duplicate_nu", "ss_basic_udpv1_duplicate_time", "ss_basic_udpv1_jitter", "ss_basic_udpv1_report", "ss_basic_udpv1_drop", "ss_basic_udpv2_lserver", "ss_basic_udpv2_lport", "ss_basic_udpv2_rserver", "ss_basic_udpv2_rport", "ss_basic_udpv2_password", "ss_basic_udpv2_fec", "ss_basic_udpv2_timeout", "ss_basic_udpv2_mode", "ss_basic_udpv2_report", "ss_basic_udpv2_mtu", "ss_basic_udpv2_jitter", "ss_basic_udpv2_interval", "ss_basic_udpv2_drop", "ss_basic_udpv2_other", "ss_basic_udp2raw_lserver", "ss_basic_udp2raw_lport", "ss_basic_udp2raw_rserver", "ss_basic_udp2raw_rport", "ss_basic_udp2raw_password", "ss_basic_udp2raw_rawmode", "ss_basic_udp2raw_ciphermode", "ss_basic_udp2raw_authmode", "ss_basic_udp2raw_lowerlevel", "ss_basic_udp2raw_other", "ss_basic_udp_upstream_mtu", "ss_basic_udp_upstream_mtu_value"];
 	var params_check = ["ss_basic_enable", "ss_basic_use_kcp", "ss_basic_gfwlist_update", "ss_basic_chnroute_update", "ss_basic_cdn_update", "ss_basic_pcap_update", "ss_basic_kcp_nocomp", "ss_basic_udp_boost_enable", "ss_basic_udpv1_disable_filter", "ss_basic_udpv2_disableobscure", "ss_basic_udp2raw_boost_enable", "ss_basic_udp2raw_a", "ss_basic_udp2raw_keeprule"];
 	var params_base64 = ["ss_basic_password", "ss_isp_website_web", "ss_dnsmasq", "ss_wan_white_ip", "ss_wan_white_domain", "ss_wan_black_ip", "ss_wan_black_domain", "ss_online_links"];
 	// collect data from input
@@ -1900,7 +1900,11 @@ function get_ss_status_data() {
 function get_udp_status() {
 	$.ajax({
 		url: 'apply.cgi?current_page=Main_Ss_Content.asp.asp&next_page=Main_Ss_Content.asp.asp&group_id=&modified=0&action_mode=+Refresh+&action_script=&action_wait=&first_time=&preferred_lang=CN&SystemCmd=ss_udp_status.sh&firmver=3.0.0.4',
-		dataType: 'html'
+		dataType: 'html',
+		success: function (response) {
+			setTimeout("write_udp_status();", 1000);
+			return true;
+		}
 	});
 }
 
@@ -2105,7 +2109,6 @@ function toggle_func() {
 			ss_node_info_return();
 			update_visibility();
 			get_udp_status();
-			setTimeout("write_udp_status();", 500);
 		});
 	$(".show-btn4").click(
 		//rule manage
@@ -3608,12 +3611,31 @@ taobao.com
 														</select>		
 													</td>
 												</tr>
-												<tr id="ss_basic_kcp_port_tr">
+
+												<tr id="ss_kcp_l_server_port_tr">
+													<th width="35%">kcp本地监听地址：端口 （-l）</th>
+													<td>
+														<input type="text" name="ss_basic_kcp_lserver" id="ss_basic_kcp_lserver" class="input_ss_table" style="width:120px;" maxlength="200" value="0.0.0.0" readonly/>
+														:
+														<input type="text" name="ss_basic_kcp_lport" id="ss_basic_kcp_lport" class="input_ss_table" style="width:44px;" maxlength="200" value="1091" readonly/>
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(90)"><font color="#ffcc00"><u>帮助</u></font></a>
+													</td>
+												</tr>
+												<tr id="ss_kcp_r_server_port_tr">
+													<th width="35%">kcp服务器地址：端口 （-r）</th>
+													<td>
+														<input type="text" name="ss_basic_kcp_server" id="ss_basic_kcp_server" class="input_ss_table" style="width:120px;" maxlength="200" value=""/>
+														:
+														<input type="text" name="ss_basic_kcp_port" id="ss_basic_kcp_port" class="input_ss_table" style="width:44px;" maxlength="200" value=""/>
+														<a class="hintstyle" href="javascript:void(0);" onclick="openssHint(91)"><font color="#ffcc00"><u>帮助</u></font></a>
+													</td>
+												</tr>
+												<!--<tr id="ss_basic_kcp_port_tr">
 													<th width="35%">KCP 端口</th>
 													<td>
 														<input type="text" name="ss_basic_kcp_port" id="ss_basic_kcp_port"  class="input_ss_table" maxlength="200" value=""/>
 													</td>
-												</tr>
+												</tr>-->
 												<tr id="ss_basic_kcp_password_tr" style="display: none;">
 													<th width="35%">密码 (--key)</th>
 													<td>
@@ -3896,14 +3918,14 @@ taobao.com
 													<th width="35%">* timeout参数 （--timeout）</th>
 													<td>
 														<input type="text" name="ss_basic_udpv2_timeout" id="ss_basic_udpv2_timeout" class="input_ss_table" style="width:120px;" maxlength="200" value="" />
-														<a>单位：ms，默认8，留空则使用默认值，仅在--mode 0下起作用</a>
+														<a>单位：ms，默认8，留空则使用默认值</a>
 													</td>
 												</tr>
 												<tr id="ss_basic_udpv2_mode_tr">
 													<th width="35%">* mode参数 （--mode）</th>
 													<td>
 														<input type="text" name="ss_basic_udpv2_mode" id="ss_basic_udpv2_mode" class="input_ss_table" style="width:120px;" maxlength="200" value="" />
-														<a>默认1，留空则使用默认值</a>
+														<a>默认0，留空则使用默认值</a>
 													</td>
 												</tr>
 												<tr id="ss_basic_udpv2_report_tr">

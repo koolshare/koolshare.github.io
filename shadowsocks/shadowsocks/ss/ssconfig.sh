@@ -336,7 +336,6 @@ ss_pre_start(){
 						else
 							COMP=""
 						fi
-						
 						start-stop-daemon -S -q -b -m \
 						-p /tmp/var/kcp.pid \
 						-x /koolshare/bin/client_linux_arm5 \
@@ -442,7 +441,7 @@ creat_ss_json(){
 		fi
 	fi
 
-	#if [ "$ss_basic_udp2raw_boost_enable" == "1" ] || [ "$ss_basic_udp2_boost_enable" == "1" ];then
+	#if [ "$ss_basic_udp2raw_boost_enable" == "1" ] || [ "$ss_basic_udp_boost_enable" == "1" ];then
 	#	MYTUN="\"MTU\":1200,"
 	#	MYTUN=""
 	#fi
@@ -496,8 +495,9 @@ creat_ss_json(){
 		EOF
 	fi
 	
-	if [ "$ss_basic_udp2raw_boost_enable" == "1" ] || [ "$ss_basic_udp2_boost_enable" == "1" ];then
-		if [ "$ss_basic_udp_upstream_mtu" == "1" ];then
+	if [ "$ss_basic_udp2raw_boost_enable" == "1" ] || [ "$ss_basic_udp_boost_enable" == "1" ];then
+		if [ "$ss_basic_udp_upstream_mtu" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
+			echo_date 设定UDP为 $ss_basic_udp_upstream_mtu_value
 			cat /koolshare/ss/ss.json | jq --argjson MTU $ss_basic_udp_upstream_mtu_value '. + {MTU: $MTU}' > /koolshare/ss/ss_tmp.json
 			mv /koolshare/ss/ss_tmp.json /koolshare/ss/ss.json
 		fi
@@ -892,11 +892,14 @@ start_kcp(){
 			else
 				COMP=""
 			fi
+
+			[ -n "$ss_basic_kcp_server" ] && ss_basic_kcp_server="$ss_basic_server"
+			
 			start-stop-daemon -S -q -b -m \
 			-p /tmp/var/kcp.pid \
 			-x /koolshare/bin/client_linux_arm5 \
 			-- -l 127.0.0.1:1091 \
-			-r $ss_basic_server:$ss_basic_kcp_port \
+			-r $ss_basic_kcp_server:$ss_basic_kcp_port \
 			--crypt $ss_basic_kcp_encrypt \
 			--key $ss_basic_kcp_password \
 			--sndwnd $ss_basic_kcp_sndwnd \
@@ -910,7 +913,7 @@ start_kcp(){
 			-p /tmp/var/kcp.pid \
 			-x /koolshare/bin/client_linux_arm5 \
 			-- -l 127.0.0.1:1091 \
-			-r $ss_basic_server:$ss_basic_kcp_port \
+			-r $ss_basic_kcp_server:$ss_basic_kcp_port \
 			$ss_basic_kcp_parameter
 		fi
 	fi
@@ -995,14 +998,15 @@ start_ss_redir(){
 		fi
 	fi
 
-	if [ "$ss_basic_udp2_boost_enable" == "1" ];then
+	if [ "$ss_basic_udp_boost_enable" == "1" ];then
 		#只要udpspeeder开启，不管udp2raw是否开启，均设置为1092,
 		SPEED_PORT=1092
 	else
-		SPEED_PORT=1092
+		# 如果只开了udp2raw，则需要吧udp转发到1093
+		SPEED_PORT=1093
 	fi
 
-	if [ "$ss_basic_udp2raw_boost_enable" == "1" ] || [ "$ss_basic_udp2_boost_enable" == "1" ];then
+	if [ "$ss_basic_udp2raw_boost_enable" == "1" ] || [ "$ss_basic_udp_boost_enable" == "1" ];then
 		#udp2raw开启，udpspeeder未开启则ss-redir的udp流量应该转发到1093
 		SPEED_UDP=1
 	fi

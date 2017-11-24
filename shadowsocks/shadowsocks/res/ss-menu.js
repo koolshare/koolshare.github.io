@@ -665,6 +665,12 @@ function openssHint(itemNum) {
 	} else if (itemNum == 54) {
 		statusmenu = "更多信息，请参考<a href='https://breakwa11.blogspot.jp/2017/01/shadowsocksr-mu.html' target='_blank'><u><font color='#00F'>ShadowsocksR 协议参数文档</font></u></a>"
 		_caption = "协议参数（protocol）";
+	} else if (itemNum == 90) {
+		statusmenu = "此处设定为预设不可更改。<br />&nbsp;&nbsp;&nbsp;&nbsp;1. 单开KCPTUN的情况下，ss-redir的TCP流量都会转发到此；<br />&nbsp;&nbsp;&nbsp;&nbsp;2. KCPTUN和UDP2raw串联的模式下，ss-redir的TCP流量才会转发到UDP2raw；"
+		_caption = "说明：";
+	} else if (itemNum == 91) {
+		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;1. <b>单独加速：</b>此处配置为服务器ip+服务器端口(或者留空+服务器端口)，KCPTUN的UDP流量会转发给服务器；<br />&nbsp;&nbsp;&nbsp;&nbsp;2.  <b>串联1：</b>此处配置为127.0.0.1:udpspeeder监听端口时（串联），KCPTUN的UDP流量会转发给udpspeeder，然后转为tcp，并转发给服务器的UDP2raw。所以你需要在服务器端配置KCPTUN和UDP2raw的串联<br />&nbsp;&nbsp;&nbsp;&nbsp;2.  <b>串联3：</b>此处配置为127.0.0.1:udp2raw监听端口时（串联），KCPTUN的UDP流量会转发给UDP2raw，然后转为tcp，并转发给服务器的UDP2raw。所以你需要在服务器端配置KCPTUN和UDP2raw的串联"
+		_caption = "说明：";
 	} else if (itemNum == 97) {
 		width = "600px";
 		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;UDPspeeder(V1/V2)针对udp传输进行优化，能加速udp，降低udp的丢包，特别适合游戏。<br />&nbsp;&nbsp;&nbsp;&nbsp;UDP2raw可以将udp协议转为tcp，这对一些对udp有限制或者qos的情况特别好用，UDP2raw不是一个udp加速工具，如果需要udp加速，还需要配合UDPspeeder(V1/V2)串联使用。<br />&nbsp;&nbsp;&nbsp;&nbsp;正确开启的姿势是需要在服务器端配置UDPspeeder(V1/V2)/UDP2raw的服务器端程序，然后在路由器下，需要以下条件才能正常开启：<b><br />1. 当前正在使用游戏模式或者访问控制主机中有游戏模式主机；<br />2. 此处加速的节点和正在使用的节点一致；<br />3. 正确配置并开启UDPspeeder(V1/V2)或UDP2raw，或者两者都开启（串联模式）。</b>	 "
