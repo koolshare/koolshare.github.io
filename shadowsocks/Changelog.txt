@@ -11,7 +11,7 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    - fix	修复单开UDPspeeder(V1/V2)，udp加速无效的bug；
    - fix	修复单开UDPspeeder(V1/V2)，MTU设置无效的bug；
    - add	KCPTUN的绑定端口现在可以设置了，现在你可以像原来一样单独使用KCP加速，也能配置KCPTUN和UDPspeeder的串联、KCPTUN和UDP2raw的串联、
-   		KCPTUN先串脸UDPspeeder，再串联UDP2raw、甚至UDP2raw串KCPTUN。我知道这很绕，不过只要知道下面的关系，相信如何配置，就难不到你~
+   		KCPTUN先串联UDPspeeder，再串联UDP2raw、甚至UDP2raw串KCPTUN。我知道这很绕，不过只要知道下面的关系，相信如何配置，就难不倒你~
    		tcp in udp：KCPTUN
    		udp in udp：UDPspeeder
    		udp in tcp：UDP2raw
