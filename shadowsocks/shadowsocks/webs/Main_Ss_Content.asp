@@ -217,9 +217,6 @@ function save(s) {
 	//define dbus obkect to save
 	var dbus = {};
 	dbus["SystemCmd"] = "ss_config.sh";
-	//if(s == 1){
-	//	dbus["SystemCmd"] = "ss_dummy.sh";
-	//}
 	dbus["action_mode"] = " Refresh ";
 	dbus["current_page"] = "Main_Ss_Content.asp";
 	//key define
@@ -3984,7 +3981,7 @@ taobao.com
 												<tr id="ss_basic_udpv2_other_tr">
 													<th width="35%">* 其它参数</th>
 													<td>
-														<input type="text" name="ss_basic_udp2raw_other" id="ss_basic_udp2raw_other" class="input_ss_table" style="width:200px;" value="" />
+														<input type="text" name="ss_basic_udpv2_other" id="ss_basic_udpv2_other" class="input_ss_table" style="width:200px;" value="" />
 														<br /><a>其它高级参数，请手动输入，如 -q1 等。</a>
 													</td>
 												</tr>										

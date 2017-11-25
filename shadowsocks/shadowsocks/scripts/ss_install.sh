@@ -192,9 +192,6 @@ dbus set softcenter_module_shadowsocks_title="科学上网"
 dbus set softcenter_module_shadowsocks_description="科学上网"
 dbus set softcenter_module_shadowsocks_home_url=Main_Ss_Content.asp
 
-new_version=`cat /koolshare/ss/version`
-dbus set ss_basic_version_local=$new_version
-
 sleep 2
 echo_date 一点点清理工作...
 rm -rf /tmp/shadowsocks* >/dev/null 2>&1

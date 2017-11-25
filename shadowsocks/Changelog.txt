@@ -1,6 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
 
+3.7.5
+   - update	更新ss-libev到3.1.1
+   - fix	修复UDPspeeder其它参数设置无效的问题
+   - fix	修复UDP2raw某些时候进程启动失败的问题
+
 3.7.4
    - update	更新UDPspeederv1、UDPspeederv2、UDP2raw二进制到最新
    - fix	修复单开UDPspeeder(V1/V2)，udp加速无效的bug；

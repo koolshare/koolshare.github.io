@@ -1019,7 +1019,10 @@ start_ss_redir(){
 				echo_date $BIN的 tcp 走kcptun.
 				$BIN -s 127.0.0.1 -p 1091 -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
 				# udp go udpspeeder
-				[ "$ss_basic_udp2raw_boost_enable" == "1" ]  && echo_date $BIN的 udp 走udpspeeder, udpspeeder的 udp 走 udpraw || echo_date $BIN的 udp 走udpspeeder. 
+				[ "$ss_basic_udp2raw_boost_enable" == "1" ]  && [ "$ss_basic_udp_boost_enable" == "1" ] && echo_date $BIN的 udp 走udpspeeder, udpspeeder的 udp 走 udpraw
+				[ "$ss_basic_udp2raw_boost_enable" == "1" ]  && [ "$ss_basic_udp_boost_enable" != "1" ] && echo_date $BIN的 udp 走udpraw.
+				[ "$ss_basic_udp2raw_boost_enable" != "1" ]  && [ "$ss_basic_udp_boost_enable" == "1" ] && echo_date $BIN的 udp 走udpspeeder.
+				[ "$ss_basic_udp2raw_boost_enable" != "1" ]  && [ "$ss_basic_udp_boost_enable" != "1" ] && echo_date $BIN的 udp 走$BIN.
 				$BIN -s 127.0.0.1 -p $SPEED_PORT -c $CONFIG_FILE $ARG_OBFS -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
 			else
 				# tcp go kcp
@@ -1042,7 +1045,10 @@ start_ss_redir(){
 				echo_date $BIN的 tcp 走$BIN.
 				$BIN -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
 				# udp go udpspeeder
-				[ "$ss_basic_udp2raw_boost_enable" == "1" ]  && echo_date $BIN的 udp 走udpspeeder, udpspeeder的 udp 走 udpraw || echo_date $BIN的 udp 走udpspeeder. 
+				[ "$ss_basic_udp2raw_boost_enable" == "1" ]  && [ "$ss_basic_udp_boost_enable" == "1" ] && echo_date $BIN的 udp 走udpspeeder, udpspeeder的 udp 走 udpraw
+				[ "$ss_basic_udp2raw_boost_enable" == "1" ]  && [ "$ss_basic_udp_boost_enable" != "1" ] && echo_date $BIN的 udp 走udpraw.
+				[ "$ss_basic_udp2raw_boost_enable" != "1" ]  && [ "$ss_basic_udp_boost_enable" == "1" ] && echo_date $BIN的 udp 走udpspeeder.
+				[ "$ss_basic_udp2raw_boost_enable" != "1" ]  && [ "$ss_basic_udp_boost_enable" != "1" ] && echo_date $BIN的 udp 走$BIN.
 				$BIN -s 127.0.0.1 -p $SPEED_PORT -c $CONFIG_FILE $ARG_OBFS -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
 			else
 				# tcp udp go ss
