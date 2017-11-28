@@ -1,5 +1,8 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.7.6
+   - fix	修复某些情况下kcptun无法启动的问题；
+   - update	同步最新规则；
 
 3.7.5
    - update	更新ss-libev到3.1.1

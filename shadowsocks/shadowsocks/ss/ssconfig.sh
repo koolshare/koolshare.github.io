@@ -282,14 +282,9 @@ kill_process(){
 
 	ud2raw_process=$(pidof udp2raw)
 	if [ -n "$ud2raw_process" ];then 
-		echo_date 关闭speederv2进程...
+		echo_date 关闭ud2raw进程...
 		killall udp2raw >/dev/null 2>&1
 	fi
-	## kill simple obfs
-	#obfsLocal=$(ps | grep "obfs-local" | grep -v "grep")
-    #[ -n "$obfsLocal" ] && echo_date 关闭obfs-local进程... && killall obfs-local >/dev/null 2>&1
-    ## incase obfs enabled in socks5 page
-    #[ "$ss_local_obfs" != "0" ] && sh /koolshare/ss/socks5/socks5config.sh restart >/dev/null 2>&1
 }
 
 remove_conf_and_settings(){
@@ -885,15 +880,14 @@ start_kcp(){
 	# Start kcp
 	if [ "$ss_basic_use_kcp" == "1" ];then
 		echo_date 启动KCP协议进程，为了更好的体验，建议在路由器上创建虚拟内存.
-		export GOGC=40
+		export GOGC=30
+		[ -z "$ss_basic_kcp_server" ] && ss_basic_kcp_server="$ss_basic_server"
 		if [ "$ss_basic_kcp_method" == "1" ];then
 			if [ "$ss_basic_kcp_nocomp" == "1" ];then
 				COMP="--nocomp"
 			else
 				COMP=""
 			fi
-
-			[ -n "$ss_basic_kcp_server" ] && ss_basic_kcp_server="$ss_basic_server"
 			
 			start-stop-daemon -S -q -b -m \
 			-p /tmp/var/kcp.pid \

@@ -62,12 +62,13 @@ get_dns_name() {
 
 echo_version(){
 	echo_date
-	echo ① 程序版本（插件版本：3.6.5）：
+	SOFVERSION=`cat /koolshare/ss/version`
+	echo ① 程序版本（插件版本：$SOFVERSION）：
 	echo -----------------------------------------------------------
 	echo "程序			版本		备注"
-	echo "ss-redir		3.1.0		2017年11月13日编译"
-	echo "ss-tunnel		3.1.0 		2017年11月13日编译"
-	echo "ss-local		3.1.0		2017年11月13日编译"
+	echo "ss-redir		3.1.1		2017年11月25日编译"
+	echo "ss-tunnel		3.1.1 		2017年11月25日编译"
+	echo "ss-local		3.1.1		2017年11月25日编译"
 	echo "obfs-local		0.0.4		2017年11月13日编译"
 	echo "ssrr-redir		3.5.2 		2017年11月13日编译"
 	echo "ssrr-tunnel		3.5.2 		2017年11月13日编译"
