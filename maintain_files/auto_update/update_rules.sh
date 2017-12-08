@@ -1,5 +1,5 @@
 #!/bin/sh
-
+CurrentDate=`date +%Y-%m-%d`
 # ======================================
 # get gfwlist for shadowsocks ipset mode
 ./fwlist.py gfwlist_download.conf
@@ -69,22 +69,21 @@ fi
 echo =================
 # ======================================
 
-cat apnic.txt | grep ipv4 | grep CN | awk -F\| '{printf("%s/%d\n", $4, 32-log($5)/log(2))}' > Routing_IPv4.txt
+echo -e "[Local Routing]\n## China mainland routing blocks\n## Sources: https://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest" > Routing.txt
+echo -n "## Last update: " >> Routing.txt
+echo $CurrentDate >> Routing.txt
+echo -e "\n" >> Routing.txt
 
-echo '[Local Routing]' >> Routing_IPv4_tmp.txt
-echo '## China mainland routing blocks' >> Routing_IPv4_tmp.txt
-echo "## Last update: $DATE\n\n" >> Routing_IPv4_tmp.txt
-echo '## IPv4' >> Routing_IPv4_tmp.txt
-cat Routing_IPv4.txt >> Routing_IPv4_tmp.txt
+# IPv4
+echo "## IPv4" >> Routing.txt
+cat apnic.txt | grep ipv4 | grep CN | awk -F\| '{printf("%s/%d\n", $4, 32-log($5)/log(2))}' >> Routing.txt
+echo "\n" >> Routing.txt
 
-cat apnic.txt | grep ipv6 | grep CN | awk -F\| '{printf("%s/%d\n", $4, $5)}' > Routing_IPv6.txt
-echo -e '## IPv6' >> Routing_IPv6_tmp.txt
-cat Routing_IPv6.txt >> Routing_IPv6_tmp.txt
-cat Routing_IPv6_tmp.txt >> Routing_IPv4_tmp.txt
-touch Routing.txt
-cat Routing_IPv4_tmp.txt >> Routing.txt
+# IPv6
+echo "## IPv6" >> Routing.txt
+cat apnic.txt | grep ipv6 | grep CN | awk -F\| '{printf("%s/%d\n", $4, $5)}' >> Routing.txt
 
-[ ! -f "../Routing.txt" ] && mv WhiteList_tmp.txt >> WhiteList.txt
+[ ! -f "../Routing.txt" ] && cp Routing.txt ..
 
 md5sum9=$(md5sum Routing.txt | sed 's/ /\n/g'| sed -n 1p)
 md5sum10=$(md5sum ../Routing.txt | sed 's/ /\n/g'| sed -n 1p)
@@ -93,7 +92,7 @@ if [ "$md5sum9"x = "$md5sum10"x ];then
 	echo Routing same md5!
 else
 	echo update Routing!
-	cp -f Routing.txt ../Routing.txt
+	mv Routing.txt ../Routing.txt
 	sed -i "5c `date +%Y-%m-%d` # $md5sum9 Routing" ../version1
 fi
 echo =================
@@ -125,7 +124,38 @@ fi
 echo =================
 
 # ======================================
+echo -e "[Local Hosts]\n## China mainland domains\n## Source: https://github.com/felixonmars/dnsmasq-china-list" > WhiteList_new.txt
+echo -n "## Last update: " >> WhiteList_new.txt
+echo $CurrentDate >> WhiteList_new.txt
+echo -e "\n" >> WhiteList_new.txt
+sed -e "s|114.114.114.114$||" -e "s|^s|S|" accelerated-domains.china.conf >> WhiteList_new.txt
 
+# Download domain data of Google in Mainland China part.
+curl -O https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf
+sed -e "s|114.114.114.114$||" -e "s|^s|S|" google.china.conf >> WhiteList_new.txt
+
+# Download domain data of Apple in Mainland China part.
+curl -O https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf
+sed -e "s|114.114.114.114$||" -e "s|^s|S|" apple.china.conf >> WhiteList_new.txt
+
+# ok
+[ ! -f "../WhiteList_new.txt" ] && cp WhiteList_new.txt ..
+
+md5sum11=$(md5sum WhiteList_new.txt | sed 's/ /\n/g'| sed -n 1p)
+md5sum12=$(md5sum ../WhiteList_new.txt | sed 's/ /\n/g'| sed -n 1p)
+echo =================
+if [ "$md5sum11"x = "$md5sum12"x ];then
+	echo WhiteList_new same md5!
+else
+	echo update WhiteList_new!
+	mv -f WhiteList_new.txt ../WhiteList_new.txt
+	sed -i "7c `date +%Y-%m-%d` # $md5sum11 WhiteList_new" ../version1
+fi
+echo =================
+
+# ======================================
+rm -rf google.china.conf
+rm -rf apple.china.conf
 rm gfwlist1.conf gfwlist_download.conf chnroute1.txt
 rm cdn1.txt accelerated-domains.china.conf cdn_download.txt
-rm WhiteList.txt WhiteList_tmp.txt Routing_IPv4.txt Routing_IPv4_tmp.txt Routing_IPv6.txt Routing_IPv6_tmp.txt Routing.txt apnic.txt
+rm WhiteList.txt WhiteList_tmp.txt apnic.txt

@@ -3169,6 +3169,7 @@
 .*\b51dai\.com
 .*\b51daifu\.com
 .*\b51daiwei\.com
+.*\b51datakey\.com
 .*\b51dc\.com
 .*\b51ddlook\.com
 .*\b51devapp\.com
@@ -13562,6 +13563,7 @@
 .*\bdtlsw\.com
 .*\bdtqiufa\.com
 .*\bdts007\.com
+.*\bdtstack\.com
 .*\bdtstatic\.com
 .*\bdttt\.net
 .*\bdtvalue\.com
@@ -23005,6 +23007,7 @@
 .*\bliangyibang\.net
 .*\bliangzijie\.com
 .*\blianjia\.com
+.*\blianjixia\.com
 .*\blianle\.com
 .*\blianlianpay\.com
 .*\bliansuo\.com
@@ -26873,6 +26876,7 @@
 .*\bpeople-squared\.com
 .*\bpeopleapp\.com
 .*\bpeopleart\.tv
+.*\bpeoplenews\.eu
 .*\bpeoplerail\.com
 .*\bpeopleyuqing\.com
 .*\bpepperstone2\.cdnetworks\.net\.dna\.cdngd\.net
