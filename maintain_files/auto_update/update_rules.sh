@@ -92,7 +92,7 @@ if [ "$md5sum9"x = "$md5sum10"x ];then
 	echo Routing same md5!
 else
 	echo update Routing!
-	mv Routing.txt ../Routing.txt
+	cp Routing.txt ..
 	sed -i "5c `date +%Y-%m-%d` # $md5sum9 Routing" ../version1
 fi
 echo =================
@@ -148,7 +148,7 @@ if [ "$md5sum11"x = "$md5sum12"x ];then
 	echo WhiteList_new same md5!
 else
 	echo update WhiteList_new!
-	mv -f WhiteList_new.txt ../WhiteList_new.txt
+	cp WhiteList_new.txt ..
 	sed -i "7c `date +%Y-%m-%d` # $md5sum11 WhiteList_new" ../version1
 fi
 echo =================
@@ -158,4 +158,4 @@ rm -rf google.china.conf
 rm -rf apple.china.conf
 rm gfwlist1.conf gfwlist_download.conf chnroute1.txt
 rm cdn1.txt accelerated-domains.china.conf cdn_download.txt
-rm WhiteList.txt WhiteList_tmp.txt apnic.txt
+rm WhiteList.txt WhiteList_tmp.txt apnic.txt WhiteList_new.txt Routing.txt
