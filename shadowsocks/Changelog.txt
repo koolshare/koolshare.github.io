@@ -4,9 +4,9 @@ Koolshare Asuswrt-Merlin shadowsocks Changelog
    - update	Pcap_DNSpproxy更新到最新0.4.9.5
    - update	dnscrypt-proxy更新到最新1.9.5
    - update	haproxy更新到最新1.8.1
-   - update kcptun二进制更新到最新20171201
+   - update	kcptun二进制更新到最新20171201
    - update	更新socks5功能的gfwlist.acl
-   - update 同步最新ss规则和Pcap_DNSpproxy规则
+   - update	同步最新ss规则和Pcap_DNSpproxy规则
    - fix	现在kcptun串联UDPspeeder或者UDP2raw在非游戏模式下也能使用了，注意如果游戏模式下kcptun串联UDPspeeder或者UDP2raw
    		会导致udp blocked，因为在服务器端的串联链里有kcp，其不支持udp。要支持的话需要路由器端和服务器端双开UDPspeeder或者UDP2raw，
    		这个功能虽然可以实现但是web会显得更复杂，所以暂时不做这个。
