@@ -1,15 +1,19 @@
 #!/bin/sh
+
+# shadowsocks script for AM380 merlin firmware
+# by sadog (sadoneli@gmail.com) from koolshare.cn
+
 eval `dbus export ss`
 source /koolshare/scripts/base.sh
 source helper.sh
 # Variable definitions
+alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
 ss_basic_version_local=`cat /koolshare/ss/version`
 dbus set ss_basic_version_local=$ss_basic_version_local
 main_url="https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/shadowsocks"
 backup_url="http://koolshare.ngrok.wang:5000/shadowsocks"
 CONFIG_FILE=/koolshare/ss/ss.json
 DNS_PORT=7913
-alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
 ISP_DNS=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
 lan_ipaddr=$(nvram get lan_ipaddr)
 [ "$ss_basic_mode" == "4" ] && ss_basic_mode=3
@@ -18,7 +22,7 @@ game_on=`dbus list ss_acl_mode|cut -d "=" -f 2 | grep 3`
 ip_prefix_hex=`nvram get lan_ipaddr | awk -F "." '{printf ("0x%02x", $1)} {printf ("%02x", $2)} {printf ("%02x", $3)} {printf ("00/0xffffff00\n")}'`
 ss_basic_password=`echo $ss_basic_password|base64_decode`
 IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
-if [  -n "$ss_basic_rss_protocol" ];then
+if [ -n "$ss_basic_rss_protocol" ];then
 	ss_basic_type=1
 else
 	if [ -n "$ss_basic_koolgame_udp" ];then
@@ -28,19 +32,14 @@ else
 	fi
 fi
 
-# creat dnsmasq.d folder
-creat_folder(){
-	if [ ! -d /koolshare/configs/dnsmasq.d ];then
-		mkdir -p /koolshare/configs/dnsmasq.d
-	fi
-}
-
 install_ss(){
 	echo_date 开始解压压缩包...
 	tar -zxf shadowsocks.tar.gz
 	chmod a+x /tmp/shadowsocks/install.sh
 	echo_date 开始安装更新文件...
 	sh /tmp/shadowsocks/install.sh
+
+	rm -rf /tmp/shadowsocks*
 }
 
 update_ss(){
@@ -250,7 +249,7 @@ kill_process(){
 
 	pdu_process=`pidof pdu`
 	if [ -n "$pdu_process" ];then 
-		echo_date 关闭koolgame进程...
+		echo_date 关闭pdu进程...
 		kill -9 $pdu >/dev/null 2>&1
 	fi
 	
@@ -326,24 +325,21 @@ ss_pre_start(){
 				if [ "$kcp" == "1" ];then
 					export GOGC=40
 					if [ "$ss_basic_kcp_method" == "1" ];then
-						if [ "$ss_kcp_compon" == "1" ];then
-							COMP="--nocomp"
-						else
-							COMP=""
-						fi
+						[ -n "$ss_basic_kcp_encrypt" ] && KCP_CRYPT="--crypt $ss_basic_kcp_encrypt"
+						[ -n "$ss_basic_kcp_password" ] && KCP_KEY="--key $ss_basic_kcp_password" || KCP_KEY=""
+						[ -n "$ss_basic_kcp_sndwnd" ] && KCP_SNDWND="--sndwnd $ss_basic_kcp_sndwnd" || KCP_SNDWND=""
+						[ -n "$ss_basic_kcp_rcvwnd" ] && KCP_RNDWND="--rcvwnd $ss_basic_kcp_rcvwnd" || KCP_RNDWND=""
+						[ -n "$ss_basic_kcp_mtu" ] && KCP_MTU="--mtu $ss_basic_kcp_mtu" || KCP_MTU=""
+						[ -n "$ss_basic_kcp_conn" ] && KCP_CONN="--conn $ss_basic_kcp_conn" || KCP_CONN=""
+						[ "$ss_basic_kcp_nocomp" == "1" ] && COMP="--nocomp" || COMP=""
+						[ -n "$ss_basic_kcp_mode" ] && KCP_MODE="--mode $ss_basic_kcp_mode" || KCP_MODE=""
+
 						start-stop-daemon -S -q -b -m \
 						-p /tmp/var/kcp.pid \
 						-x /koolshare/bin/client_linux_arm5 \
 						-- -l 127.0.0.1:1091 \
 						-r $server_ip:$kcp_port \
-						--key $ss_basic_kcp_password \
-						--crypt $ss_basic_kcp_encrypt \
-						--mode $ss_basic_kcp_mode $ss_basic_kcp_extra \
-						--conn $ss_basic_kcp_conn \
-						--mtu $ss_basic_kcp_mtu \
-						--sndwnd $ss_basic_kcp_sndwnd \
-						--rcvwnd $ss_basic_kcp_rcvwnd \
-						$COMP
+						$KCP_CRYPT $KCP_KEY $KCP_SNDWND $KCP_RNDWND $KCP_MTU $KCP_CONN $COMP $KCP_MODE $ss_basic_kcp_extra
 					else
 						start-stop-daemon -S -q -b -m -p /tmp/var/kcp.pid -x /koolshare/bin/client_linux_arm5 -- -l 127.0.0.1:1091 -r $server_ip:$kcp_port $kcp_para
 					fi
@@ -435,11 +431,6 @@ creat_ss_json(){
 			ARG_OBFS=""
 		fi
 	fi
-
-	#if [ "$ss_basic_udp2raw_boost_enable" == "1" ] || [ "$ss_basic_udp_boost_enable" == "1" ];then
-	#	MYTUN="\"MTU\":1200,"
-	#	MYTUN=""
-	#fi
 	
 	if [ "$ss_basic_type" == "0" ];then
 		echo_date 创建SS配置文件到$CONFIG_FILE
@@ -696,13 +687,10 @@ start_dns(){
 		echo_date ┗开启chinadns进程！
 		chinadns -p $DNS_PORT -s "$rcc",127.0.0.1:1055 -m -d -c /koolshare/ss/rules/chnroute.txt  >/dev/null 2>&1 &
 	fi
-	
 	# Start Pcap_DNSProxy
 	if [ "6" == "$ss_dns_foreign" ]; then
 		echo_date 开启Pcap_DNSProxy..
-		sed -i "/^Listen Port/c Listen Port = $DNS_PORT" /koolshare/ss/dns/Config.ini
-		#sed -i '/^Local Main/c Local Main = 0' /koolshare/ss/dns/Config.conf
-		sh /koolshare/ss/dns/dns.sh > /dev/null 2>&1 &
+		Pcap_DNSProxy -c /koolshare/ss/dns
 	fi
 }
 #--------------------------------------------------------------------------------------
@@ -812,6 +800,7 @@ ln_conf(){
 	fi
 
 	gfw_on=`dbus list ss_acl_mode_|cut -d "=" -f 2 | grep 1`
+	chn_on=`dbus list ss_acl_mode_|cut -d "=" -f 2 | grep -E "2|3"`
 	rm -rf /jffs/configs/dnsmasq.d/gfwlist.conf
 	if [ "$ss_basic_mode" == "1" ];then
 		echo_date 创建gfwlist的软连接到/jffs/etc/dnsmasq.d/文件夹.
@@ -883,25 +872,21 @@ start_kcp(){
 		export GOGC=30
 		[ -z "$ss_basic_kcp_server" ] && ss_basic_kcp_server="$ss_basic_server"
 		if [ "$ss_basic_kcp_method" == "1" ];then
-			if [ "$ss_basic_kcp_nocomp" == "1" ];then
-				COMP="--nocomp"
-			else
-				COMP=""
-			fi
-			
+			[ -n "$ss_basic_kcp_encrypt" ] && KCP_CRYPT="--crypt $ss_basic_kcp_encrypt"
+			[ -n "$ss_basic_kcp_password" ] && KCP_KEY="--key $ss_basic_kcp_password" || KCP_KEY=""
+			[ -n "$ss_basic_kcp_sndwnd" ] && KCP_SNDWND="--sndwnd $ss_basic_kcp_sndwnd" || KCP_SNDWND=""
+			[ -n "$ss_basic_kcp_rcvwnd" ] && KCP_RNDWND="--rcvwnd $ss_basic_kcp_rcvwnd" || KCP_RNDWND=""
+			[ -n "$ss_basic_kcp_mtu" ] && KCP_MTU="--mtu $ss_basic_kcp_mtu" || KCP_MTU=""
+			[ -n "$ss_basic_kcp_conn" ] && KCP_CONN="--conn $ss_basic_kcp_conn" || KCP_CONN=""
+			[ "$ss_basic_kcp_nocomp" == "1" ] && COMP="--nocomp" || COMP=""
+			[ -n "$ss_basic_kcp_mode" ] && KCP_MODE="--mode $ss_basic_kcp_mode" || KCP_MODE=""
+
 			start-stop-daemon -S -q -b -m \
 			-p /tmp/var/kcp.pid \
 			-x /koolshare/bin/client_linux_arm5 \
 			-- -l 127.0.0.1:1091 \
 			-r $ss_basic_kcp_server:$ss_basic_kcp_port \
-			--crypt $ss_basic_kcp_encrypt \
-			--key $ss_basic_kcp_password \
-			--sndwnd $ss_basic_kcp_sndwnd \
-			--rcvwnd $ss_basic_kcp_rcvwnd \
-			--mtu $ss_basic_kcp_mtu \
-			--conn $ss_basic_kcp_conn \
-			$COMP \
-			--mode $ss_basic_kcp_mode $ss_basic_kcp_extra
+			$KCP_CRYPT $KCP_KEY $KCP_SNDWND $KCP_RNDWND $KCP_MTU $KCP_CONN $COMP $KCP_MODE $ss_basic_kcp_extra
 		else
 			start-stop-daemon -S -q -b -m \
 			-p /tmp/var/kcp.pid \
@@ -915,7 +900,17 @@ start_kcp(){
 
 start_speeder(){
 	#只有游戏模式下或者访问控制中有游戏模式主机，且udp加速节点和当前使用节点一致
-	if [ "$mangle" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
+	if [ "$ss_basic_use_kcp" == "1" ] && [ "$ss_basic_kcp_server" == "127.0.0.1" ] && [ "$ss_basic_kcp_port" == "1092" ];then
+		echo_date 检测到你配置了KCP与UDPspeeder串联.
+		SPEED_KCP=1
+	fi
+	
+	if [ "$ss_basic_use_kcp" == "1" ] && [ "$ss_basic_kcp_server" == "127.0.0.1" ] && [ "$ss_basic_kcp_port" == "1093" ];then
+		echo_date 检测到你配置了KCP与UDP2raw串联.
+		SPEED_KCP=2
+	fi
+		
+	if [ "$mangle" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ] || [ "$SPEED_KCP" == "1" ] || [ "$SPEED_KCP" == "2" ];then
 		#开启udpspeeder
 		if [ "$ss_basic_udp_boost_enable" == "1" ];then
 			if [ "$ss_basic_udp_software" == "1" ];then
@@ -961,7 +956,6 @@ start_speeder(){
 				fi
 			fi
 		fi
-		
 		#开启udp2raw
 		if [ "$ss_basic_udp2raw_boost_enable" == "1" ];then
 			echo_date 开启UDP2raw进程.
@@ -1005,12 +999,25 @@ start_ss_redir(){
 		SPEED_UDP=1
 	fi
 	
+	if [ "$ss_basic_use_kcp" == "1" ] && [ "$ss_basic_kcp_server" == "127.0.0.1" ] && [ "$ss_basic_kcp_port" == "1092" ];then
+		SPEED_KCP=1
+	fi
+	
+	if [ "$ss_basic_use_kcp" == "1" ] && [ "$ss_basic_kcp_server" == "127.0.0.1" ] && [ "$ss_basic_kcp_port" == "1093" ];then
+		SPEED_KCP=2
+	fi
 	# Start ss-redir
 	if [ "$ss_basic_use_kcp" == "1" ];then
 		if [ "$mangle" == "1" ];then
 			if [ "$SPEED_UDP" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
 				# tcp go kcp
-				echo_date $BIN的 tcp 走kcptun.
+				if [ "$SPEED_KCP" == "1" ];then
+					echo_date $BIN的 tcp 走kcptun, kcptun的 udp 走 udpspeeder
+				elif [ "$SPEED_KCP" == "2" ];then
+					echo_date $BIN的 tcp 走kcptun, kcptun的 udp 走 udpraw
+				else
+					echo_date $BIN的 tcp 走kcptun.
+				fi
 				$BIN -s 127.0.0.1 -p 1091 -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
 				# udp go udpspeeder
 				[ "$ss_basic_udp2raw_boost_enable" == "1" ]  && [ "$ss_basic_udp_boost_enable" == "1" ] && echo_date $BIN的 udp 走udpspeeder, udpspeeder的 udp 走 udpraw
@@ -1020,7 +1027,13 @@ start_ss_redir(){
 				$BIN -s 127.0.0.1 -p $SPEED_PORT -c $CONFIG_FILE $ARG_OBFS -U -f /var/run/shadowsocks.pid >/dev/null 2>&1
 			else
 				# tcp go kcp
-				echo_date $BIN的 tcp 走kcptun.
+				if [ "$SPEED_KCP" == "1" ];then
+					echo_date $BIN的 tcp 走kcptun, kcptun的 udp 走 udpspeeder
+				elif [ "$SPEED_KCP" == "2" ];then
+					echo_date $BIN的 tcp 走kcptun, kcptun的 udp 走 udpraw
+				else
+					echo_date $BIN的 tcp 走kcptun.
+				fi
 				$BIN -s 127.0.0.1 -p 1091 -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
 				# udp go ss
 				echo_date $BIN的 udp 走$BIN.
@@ -1028,7 +1041,13 @@ start_ss_redir(){
 			fi
 		else
 			# tcp only go kcp
-			echo_date $BIN的 tcp 走kcptun.
+			if [ "$SPEED_KCP" == "1" ];then
+				echo_date $BIN的 tcp 走kcptun, kcptun的 udp 走 udpspeeder
+			elif [ "$SPEED_KCP" == "2" ];then
+				echo_date $BIN的 tcp 走kcptun, kcptun的 udp 走 udpraw
+			else
+				echo_date $BIN的 tcp 走kcptun.
+			fi
 			echo_date $BIN的 udp 未开启.
 			$BIN -s 127.0.0.1 -p 1091 -c $CONFIG_FILE $ARG_OBFS -f /var/run/shadowsocks.pid >/dev/null 2>&1
 		fi
@@ -1067,11 +1086,11 @@ start_koolgame(){
 	pdu=`ps|grep pdu|grep -v grep`
 	if [ -z "$pdu" ]; then
 	echo_date 开启pdu进程，用于优化mtu...
-		/koolshare/ss/koolgame/pdu br0 /tmp/var/pdu.pid >/dev/null 2>&1
+		pdu br0 /tmp/var/pdu.pid >/dev/null 2>&1
 		sleep 1
 	fi
 	echo_date 开启koolgame主进程...
-	start-stop-daemon -S -q -b -m -p /tmp/var/koolgame.pid -x /koolshare/ss/koolgame/koolgame -- -c $CONFIG_FILE
+	start-stop-daemon -S -q -b -m -p /tmp/var/koolgame.pid -x /koolshare/bin/koolgame -- -c $CONFIG_FILE
 	
 	if [ "$mangle" == "1" ] && [ "$ss_basic_udp_node" == "$ssconf_basic_node" ];then
 		if [ "$ss_basic_udp_boost_enable" == "1" ];then
@@ -1182,14 +1201,14 @@ flush_ipset(){
 }
 
 remove_redundant_rule(){
-	ip_rule_exist=`/usr/sbin/ip rule show | grep "lookup 310" | grep -c 310`
+	ip_rule_exist=`ip rule show | grep "lookup 310" | grep -c 310`
 	#ip_rule_exist=`ip rule show | grep "fwmark 0x07 lookup 310" | grep -c 300`
 	if [ ! -z "ip_rule_exist" ];then
 		echo_date 清除重复的ip rule规则.
 		until [ "$ip_rule_exist" = 0 ]
 		do 
-			IP_ARG=`/usr/sbin/ip rule show | grep "lookup 310"|head -n 1|cut -d " " -f3,4,5,6`
-			/usr/sbin/ip rule del $IP_ARG
+			IP_ARG=`ip rule show | grep "lookup 310"|head -n 1|cut -d " " -f3,4,5,6`
+			ip rule del $IP_ARG
 			ip_rule_exist=`expr $ip_rule_exist - 1`
 		done
 	fi
@@ -1197,7 +1216,7 @@ remove_redundant_rule(){
 
 remove_route_table(){
 	echo_date 删除ip route规则.
-	/usr/sbin/ip route del local 0.0.0.0/0 dev lo table 310 >/dev/null 2>&1
+	ip route del local 0.0.0.0/0 dev lo table 310 >/dev/null 2>&1
 }
 
 # creat ipset rules
@@ -1410,8 +1429,8 @@ apply_nat_rules(){
 	iptables -t nat -A SHADOWSOCKS_HOM -p tcp -m set --match-set chnroute dst -j REDIRECT --to-ports 3333
 
 	[ "$mangle" == "1" ] && load_tproxy
-	[ "$mangle" == "1" ] && /usr/sbin/ip rule add fwmark 0x07 table 310
-	[ "$mangle" == "1" ] && /usr/sbin/ip route add local 0.0.0.0/0 dev lo table 310
+	[ "$mangle" == "1" ] && ip rule add fwmark 0x07 table 310
+	[ "$mangle" == "1" ] && ip route add local 0.0.0.0/0 dev lo table 310
 	# 创建游戏模式udp rule
 	[ "$mangle" == "1" ] && iptables -t mangle -N SHADOWSOCKS
 	# IP/cidr/白域名 白名单控制（不走ss）
@@ -1530,12 +1549,12 @@ write_numbers(){
 	nvram set update_chnroute="$(cat /koolshare/ss/rules/version | sed -n 2p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set update_cdn="$(cat /koolshare/ss/rules/version | sed -n 4p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set update_Routing="$(cat /koolshare/ss/rules/version | sed -n 5p | sed 's/#/\n/g'| sed -n 1p)"
-	nvram set update_WhiteList="$(cat /koolshare/ss/rules/version | sed -n 6p | sed 's/#/\n/g'| sed -n 1p)"
+	nvram set update_WhiteList="$(cat /koolshare/ss/rules/version | sed -n 7p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set ipset_numbers=$(cat /koolshare/ss/rules/gfwlist.conf | grep -c ipset)
 	nvram set chnroute_numbers=$(cat /koolshare/ss/rules/chnroute.txt | grep -c .)
 	nvram set cdn_numbers=$(cat /koolshare/ss/rules/cdn.txt | grep -c .)
 	nvram set Routing_numbers=$(cat /koolshare/ss/dns/Routing.txt |grep -c /)
-	nvram set WhiteList_numbers=$(cat /koolshare/ss/dns/WhiteList.txt |grep -Ec "^\.\*")
+	nvram set WhiteList_numbers=$(cat /koolshare/ss/dns/WhiteList.txt |grep -Ec "Server=")
 }
 
 set_ulimit(){
@@ -1639,15 +1658,16 @@ apply_ss(){
 case $ACTION in
 start)
 	if [ "$ss_basic_enable" == "1" ];then
-		creat_folder
+		logger "[软件中心]: 启动科学上网插件！"
 		set_ulimit
-		apply_ss
-    	write_numbers
+		set_ulimit >> /tmp/syslog.log
+		apply_ss >> /tmp/syslog.log
+    	write_numbers >> /tmp/syslog.log
 	else
-		echo ss not enabled
+		logger "[软件中心]: 科学上网插件未开启，不启动！"
 	fi
 	;;
-stop | kill )
+stop)
 	disable_ss
 	echo_date
 	echo_date 你已经成功关闭shadowsocks服务~
@@ -1656,7 +1676,6 @@ stop | kill )
 	echo_date =============== 梅林固件 - shadowsocks by sadoneli\&Xiaobao ===============
 	;;
 restart)
-	creat_folder
 	set_ulimit
 	apply_ss
 	write_numbers

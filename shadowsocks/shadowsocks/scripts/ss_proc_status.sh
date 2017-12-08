@@ -3,7 +3,7 @@
 eval `dbus export ss`
 source /koolshare/scripts/base.sh
 source helper.sh
-alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
+alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
 
 get_mode_name() {
 	case "$1" in
@@ -73,13 +73,13 @@ echo_version(){
 	echo "ssrr-redir		3.5.2 		2017年11月13日编译"
 	echo "ssrr-tunnel		3.5.2 		2017年11月13日编译"
 	echo "ssrr-local		3.5.2 		2017年11月13日编译"
-	echo "client_linux_arm5	20171113	kcptun"
-	echo "haproxy			1.7.5	"
+	echo "client_linux_arm5	20171201	kcptun"
+	echo "haproxy			1.8.1 		2017年11月13日编译"
 	echo "dns2socks		V2.0 	"
-	echo "dnscrypt-proxy		1.7.0 	"
+	echo "dnscrypt-proxy		1.9.5 		2017年12月08日编译"
 	echo "ChinaDNS		1.3.2 	"
 	echo "pndsd			1.2.9a-par 	"
-	echo "Pcap_DNSProxy		0.4.8.1"
+	echo "Pcap_DNSProxy		0.4.9.5 	2017年12月08日编译"
 	echo -----------------------------------------------------------
 }
 

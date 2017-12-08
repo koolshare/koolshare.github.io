@@ -1,8 +1,7 @@
 #!/bin/sh
 eval `dbus export ss`
 source /koolshare/scripts/base.sh
-LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")
-alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
+alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
 
 start_update(){
 	url_back="https://koolshare.ngrok.wang/maintain_files"
@@ -12,7 +11,7 @@ start_update(){
 	version_chnroute1=$(cat /koolshare/ss/rules/version | sed -n 2p | sed 's/ /\n/g'| sed -n 1p)
 	version_cdn1=$(cat /koolshare/ss/rules/version | sed -n 4p | sed 's/ /\n/g'| sed -n 1p)
 	version_Routing1=$(cat /koolshare/ss/rules/version | sed -n 5p | sed 's/ /\n/g'| sed -n 1p)
-	version_WhiteList1=$(cat /koolshare/ss/rules/version | sed -n 6p | sed 's/ /\n/g'| sed -n 1p)
+	version_WhiteList1=$(cat /koolshare/ss/rules/version | sed -n 7p | sed 's/ /\n/g'| sed -n 1p)
 	
 	echo ==================================================================================================
 	echo_date 开始更新shadowsocks规则，请等待...
@@ -34,19 +33,19 @@ start_update(){
 	git_line2=$(cat /tmp/version1 | sed -n 2p)
 	git_line4=$(cat /tmp/version1 | sed -n 4p)
 	git_line5=$(cat /tmp/version1 | sed -n 5p)
-	git_line6=$(cat /tmp/version1 | sed -n 6p)
+	git_line7=$(cat /tmp/version1 | sed -n 7p)
 	
 	version_gfwlist2=$(echo $git_line1 | sed 's/ /\n/g'| sed -n 1p)
 	version_chnroute2=$(echo $git_line2 | sed 's/ /\n/g'| sed -n 1p)
 	version_cdn2=$(echo $git_line4 | sed 's/ /\n/g'| sed -n 1p)
 	version_Routing2=$(echo $git_line5 | sed 's/ /\n/g'| sed -n 1p)
-	version_WhiteList2=$(echo $git_line6 | sed 's/ /\n/g'| sed -n 1p)
+	version_WhiteList2=$(echo $git_line7 | sed 's/ /\n/g'| sed -n 1p)
 	
 	md5sum_gfwlist2=$(echo $git_line1 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 	md5sum_chnroute2=$(echo $git_line2 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 	md5sum_cdn2=$(echo $git_line4 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 	md5sum_Routing2=$(echo $git_line5 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
-	md5sum_WhiteList2=$(echo $git_line6 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
+	md5sum_WhiteList2=$(echo $git_line7 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 	
 	# update gfwlist
 	if [ "$ss_basic_gfwlist_update" == "1" ];then
@@ -169,12 +168,12 @@ start_update(){
 			if [ "$version_WhiteList1" != "$version_WhiteList2" ];then
 				echo_date 检测到新版本pcap WhiteList名单，开始更新...
 				echo_date 下载pcap WhiteList名单到临时文件...
-				wget --no-check-certificate --timeout=8 -qO - $url_main/WhiteList.txt > /tmp/WhiteList.txt
+				wget --no-check-certificate --timeout=8 -qO - $url_main/WhiteList_new.txt > /tmp/WhiteList.txt
 				md5sum_WhiteList1=$(md5sum /tmp/WhiteList.txt | sed 's/ /\n/g'| sed -n 1p)
 				if [ "$md5sum_WhiteList1"x = "$md5sum_WhiteList2"x ];then
 					echo_date 下载完成，校验通过，将临时文件覆盖到原始WhiteList名单文件
 					mv /tmp/WhiteList.txt /koolshare/ss/rules/WhiteList.txt
-					sed -i "6s/.*/$git_line6/" /koolshare/ss/rules/version
+					sed -i "7s/.*/$git_line7/" /koolshare/ss/rules/version
 					reboot_pcap="1"
 					echo_date 【更新成功】你的pcap WhiteList名单刚才已经更新到最新了哦~
 				else
@@ -201,13 +200,13 @@ start_update(){
 	nvram set update_chnroute="$(cat /koolshare/ss/rules/version | sed -n 2p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set update_cdn="$(cat /koolshare/ss/rules/version | sed -n 4p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set update_Routing="$(cat /koolshare/ss/rules/version | sed -n 5p | sed 's/#/\n/g'| sed -n 1p)"
-	nvram set update_WhiteList="$(cat /koolshare/ss/rules/version | sed -n 6p | sed 's/#/\n/g'| sed -n 1p)"
+	nvram set update_WhiteList="$(cat /koolshare/ss/rules/version | sed -n 7p | sed 's/#/\n/g'| sed -n 1p)"
 	
 	nvram set ipset_numbers=$(cat /koolshare/ss/rules/gfwlist.conf | grep -c ipset)
 	nvram set chnroute_numbers=$(cat /koolshare/ss/rules/chnroute.txt | grep -c .)
 	nvram set cdn_numbers=$(cat /koolshare/ss/rules/cdn.txt | grep -c .)
 	nvram set Routing_numbers=$(cat /koolshare/ss/dns/Routing.txt |grep -c /)
-	nvram set WhiteList_numbers=$(cat /koolshare/ss/dns/WhiteList.txt |grep -Ec "^\.\*")
+	nvram set WhiteList_numbers=$(cat /koolshare/ss/dns/WhiteList.txt |grep -Ec "Server=")
 	
 	#======================================================================
 	

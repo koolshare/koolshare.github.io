@@ -22,6 +22,8 @@ cp /koolshare/bin/ss-tunnel $TARGET_FOLDER/bin/
 cp /koolshare/bin/obfs-local $TARGET_FOLDER/bin/
 cp /koolshare/bin/rss-local $TARGET_FOLDER/bin/
 cp /koolshare/bin/rss-redir $TARGET_FOLDER/bin/
+cp /koolshare/bin/koolgame $TARGET_FOLDER/bin/
+cp /koolshare/bin/pdu $TARGET_FOLDER/bin/
 cp /koolshare/bin/pdnsd $TARGET_FOLDER/bin/
 cp /koolshare/bin/Pcap_DNSProxy $TARGET_FOLDER/bin/
 cp /koolshare/bin/dns2socks $TARGET_FOLDER/bin/
@@ -33,8 +35,6 @@ cp /koolshare/bin/client_linux_arm5 $TARGET_FOLDER/bin/
 cp /koolshare/bin/base64_encode $TARGET_FOLDER/bin/
 cp /koolshare/bin/koolbox $TARGET_FOLDER/bin/
 cp /koolshare/bin/jq $TARGET_FOLDER/bin/
-#cp /koolshare/bin/brook* $TARGET_FOLDER/bin/
-#cp /koolshare/bin/redsocks2 $TARGET_FOLDER/bin/
 cp /koolshare/bin/speeder* $TARGET_FOLDER/bin/
 cp /koolshare/bin/udp2raw $TARGET_FOLDER/bin/
 cp /koolshare/init.d/S89Socks5.sh $TARGET_FOLDER/init.d

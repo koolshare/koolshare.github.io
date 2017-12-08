@@ -1,5 +1,5 @@
 #!/bin/sh
-alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
+alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
 
 echo_date 开始清理shadowsocks配置...
 confs=`dbus list ss | cut -d "=" -f 1 | grep -v "version" | grep -v "ssserver_" | grep -v "ssid_" |grep -v "ss_basic_state_china" | grep -v "ss_basic_state_foreign"`

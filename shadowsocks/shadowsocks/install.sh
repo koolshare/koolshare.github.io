@@ -1,7 +1,7 @@
 #! /bin/sh
 
 eval `dbus export ss`
-alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
+alias echo_date='echo 【$(TZ=UTC-8 date -R +%Y年%m月%d日\ %X)】:'
 mkdir -p /koolshare/ss
 
 # 判断路由架构和平台
@@ -112,11 +112,16 @@ echo_date 清理旧文件
 rm -rf /koolshare/ss/*
 rm -rf /koolshare/scripts/ss_*
 rm -rf /koolshare/webs/Main_Ss*
-rm -rf /koolshare/bin/ss-*
-rm -rf /koolshare/bin/rss-*
-rm -rf /koolshare/bin/obfs*
+rm -rf /koolshare/bin/ss-redir
+rm -rf /koolshare/bin/ss-tunnel
+rm -rf /koolshare/bin/ss-local
+rm -rf /koolshare/bin/rss-redir
+rm -rf /koolshare/bin/rss-tunnel
+rm -rf /koolshare/bin/rss-local
+rm -rf /koolshare/bin/obfs-local
+rm -rf /koolshare/bin/koolgame
+rm -rf /koolshare/bin/pdu
 rm -rf /koolshare/bin/haproxy
-rm -rf /koolshare/bin/redsocks2
 rm -rf /koolshare/bin/pdnsd
 rm -rf /koolshare/bin/Pcap_DNSProxy
 rm -rf /koolshare/bin/dnscrypt-proxy
@@ -143,13 +148,6 @@ echo_date 复制相关二进制文件！
 cp -rf /tmp/shadowsocks/bin/* /koolshare/bin/
 chmod 755 /koolshare/bin/*
 
-echo_date 创建一些二进制文件的软链接！
-[ ! -L "/koolshare/bin/rss-tunnel" ] && ln -sf /koolshare/bin/rss-local /koolshare/bin/rss-tunnel
-[ ! -L "/koolshare/bin/base64" ] && ln -sf /koolshare/bin/koolbox /koolshare/bin/base64
-[ ! -L "/koolshare/bin/shuf" ] && ln -sf /koolshare/bin/koolbox /koolshare/bin/shuf
-[ ! -L "/koolshare/bin/netstat" ] && ln -sf /koolshare/bin/koolbox /koolshare/bin/netstat
-[ ! -L "/koolshare/bin/base64_decode" ] && ln -s /koolshare/bin/base64_encode /koolshare/bin/base64_decode
-
 echo_date 复制ss的脚本文件！
 cp -rf /tmp/shadowsocks/ss/* /koolshare/ss/
 cp -rf /tmp/shadowsocks/scripts/* /koolshare/scripts/
@@ -173,6 +171,13 @@ chmod 755 /koolshare/ss/socks5/*
 chmod 755 /koolshare/ss/*
 chmod 755 /koolshare/scripts/ss*
 chmod 755 /koolshare/bin/*
+
+echo_date 创建一些二进制文件的软链接！
+[ ! -L "/koolshare/bin/rss-tunnel" ] && ln -sf /koolshare/bin/rss-local /koolshare/bin/rss-tunnel
+[ ! -L "/koolshare/bin/base64" ] && ln -sf /koolshare/bin/koolbox /koolshare/bin/base64
+[ ! -L "/koolshare/bin/shuf" ] && ln -sf /koolshare/bin/koolbox /koolshare/bin/shuf
+[ ! -L "/koolshare/bin/netstat" ] && ln -sf /koolshare/bin/koolbox /koolshare/bin/netstat
+[ ! -L "/koolshare/bin/base64_decode" ] && ln -s /koolshare/bin/base64_encode /koolshare/bin/base64_decode
 
 # 设置一些默认值
 echo_date 设置一些默认值

@@ -33,7 +33,9 @@ var noChange = 0;
 var noChange2 = 0;
 var node_global_max = 0;
 var myid;
+var checkss = 0;
 var poped = 0;
+var x = 5;
 
 function init() {
 	show_menu(menu_hook);
@@ -50,7 +52,7 @@ function init() {
 function hook_event() {
 	$("#mode_state").attr("cursor", "pointer");
 	$("#mode_state").click(
-		function() {
+	function() {
 		pop_111();
 	});
 	
@@ -61,7 +63,6 @@ function hook_event() {
 		}
 	});
 	//for udp tables
-	//$('.sub-btn1').addClass('active2');
 	$(".sub-btn1").click(
 	function() {
 		$('.sub-btn1').addClass('active2');
@@ -92,12 +93,6 @@ function pop_111() {
 			btnAlign: 'c',
 			content: ['http://ip111.cn/', 'no'],
 		});
-	});
-}
-
-function pop_loading() {
-	require(['/res/layer/layer.js'], function(layer) {
-		layer.load(1)
 	});
 }
 
@@ -137,6 +132,7 @@ function pop_help() {
 			content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">\
 				<b>梅林固件 - 科学上网插件 - ' + db_ss["ss_basic_version_local"] + '</b><br><br>\
 				本插件是支持SS、SSR、koolgame三种客户端的科学上网、游戏加速工具。<br>\
+				本插件仅支持Merlin AM380 2.6.36.4内核的固件，请不要用于其它固件安装。<br>\
 				使用本插件中有任何问题，可以前往<a style="color:#e7bd16" target="_blank" href="https://github.com/koolshare/koolshare.github.io/issues"><u>github的issue页面</u></a>反馈~<br><br>\
 				● SS/SSR一键脚本：<a style="color:#e7bd16" target="_blank" href="https://github.com/onekeyshell/kcptun_for_ss_ssr"><u>一键安装KCPTUN for SS/SSR on Linux</u></a><br>\
 				● koolgame一键脚本：<a style="color:#e7bd16" target="_blank" href="https://github.com/clangcn/game-server"><u>一键安装koolgame服务器端脚本，完美支持nat2</u></a><br>\
@@ -159,7 +155,7 @@ function pop_node_add() {
 			btn: ['手动添加', '订阅节点', '恢复配置'],
 			yes: function() {
 				$("#show_btn1_1").trigger("click");
-				setTimeout("pop_tip1()", 600);
+				setTimeout("pop_tip()", 600);
 				//layer.closeAll();
 				layer.msg('请选择需要添加的节点类型', {
 					shade: 0.2,
@@ -193,7 +189,7 @@ function pop_node_add() {
 	});
 }
 
-function pop_tip1() {
+function pop_tip(){
 	layer.tips('以后需要添加节点，可以点击此按钮！', '#add_ss_node', {
 		tips: [1, '#3595CC'],
 		time: 5000
@@ -413,16 +409,12 @@ function verifyFields(r) {
 	showhide("ss_basic_ticket_tr", (ssr_on == "1" && !koolgame_on));
 	//koolgame
 	showhide("ss_koolgame_udp_tr", koolgame_on);
-	//showhide("mode_select", !koolgame_on);
 	//---------
-	//游戏模式和koolgame不支持kcp加速，不显示开启kcp加速的开关
-	//showhide("show_btn3_1", (ssmode != "3" && E("ss_basic_ss_obfs").value == "0"));
 	//节点新增编辑窗口
 	if (save_flag == "shadowsocks") {
 		showhide("ss_obfs_support", ($("#ss_node_table_mode").val() != "3"));
 		showhide("ss_obfs_host_support", ($("#ss_node_table_mode").val() != "3" && $("#ss_node_table_ss_obfs").val() != "0"));
 	}
-
 	//kcp pannel
 	var kcp_trs = ["ss_basic_kcp_password_tr", "ss_basic_kcp_mode_tr", "ss_basic_kcp_encrypt_tr", "ss_basic_kcp_mtu_tr", "ss_basic_kcp_sndwnd_tr", "ss_basic_kcp_rcvwnd_tr", "ss_basic_kcp_conn_tr", "ss_basic_kcp_nocomp_tr", "ss_basic_kcp_extra_tr"]
 	if(E("ss_basic_kcp_method").value == "1"){
@@ -537,9 +529,8 @@ function update_visibility() {
 	}
 }
 
-function generate_lan_list() {
-	ipaddr = "<% nvram_get("
-	lan_ipaddr "); %>";
+function generate_lan_list(){
+	ipaddr="<% nvram_get("lan_ipaddr"); %>";
 	var ips = ipaddr.split(".");
 	ip = ips[0] + "." + ips[1] + "." + ips[2] + ".";
 	for (var i = 2; i < 255; i++) {
@@ -927,7 +918,6 @@ function Add_profile() { //点击节点页面内添加节点动作
 	E("add_node").style.display = "";
 	E("edit_node").style.display = "none";
 	E("continue_add").style.display = "";
-	scroll_bottoom();
 	$("#vpnc_settings").fadeIn(200);
 }
 
@@ -1080,7 +1070,6 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 		success: function(response) {
 			refresh_table();
 			//尝试将table拉动到最下方
-			setTimeout("scroll_bottoom()", 500);
 				E("ss_node_table_server").value = "";
 				//E("ss_node_table_brook_server").value = "";
 			if ((E("continue_add_box").checked) == false) { //不选择连续添加的时候，清空其他数据
@@ -1110,15 +1099,6 @@ function add_ss_node_conf(flag) { //点击添加按钮动作
 	});
 }
 
-function scroll_bottoom() {
-	var nodeaera = E('ss_node_list_table_td');
-	E('ss_node_list_table_td').scrollTop = nodeaera.scrollHeight;
-}
-
-function scroll_top() {
-	var nodeaera = E('ss_node_list_table_td');
-	E('ss_node_list_table_td').scrollTop = 0;
-}
 
 function refresh_table() {
 	$.ajax({
@@ -1143,12 +1123,12 @@ function refresh_html() {
 	if (eval(n) > "13.5") { //当节点数目大于13个的时候，显示为overflow，节点可以滚动
 		if (isFirefox = navigator.userAgent.indexOf("Firefox") > 0) {
 			E("ss_node_list_table_th").style.top = "426px";
-			E("ss_node_list_table_td").style.top = "466px";
-			E("ss_node_list_table_btn").style.top = "991px";
+			E("ss_node_list_table_td").style.top = "470px";
+			E("ss_node_list_table_btn").style.top = "995px";
 		} else {
 			E("ss_node_list_table_th").style.top = "272px";
-			E("ss_node_list_table_td").style.top = "312px";
-			E("ss_node_list_table_btn").style.top = "837px";
+			E("ss_node_list_table_td").style.top = "318px";
+			E("ss_node_list_table_btn").style.top = "843px";
 		}
 		$("#ss_node_list_table_th")[0].style.display = '';
 		$("#ss_node_list_table_th")[0].style.width = '749.71px';
@@ -1178,7 +1158,7 @@ function refresh_html() {
 		$("#ss_node_list_table_main")[0].style["overflow-y"] = '';
 		$("#ss_node_list_table_main")[0].style["padding-right"] = '';
 		$("#hide_when_folw")[0].style.display = ''
-		$("#ss_node_list_table_btn")[0].style.display = '';
+		//$("#ss_node_list_table_btn")[0].style.display = '';
 		$("#ss_node_list_table_btn")[0].style.position = '';
 		$("#ss_node_list_table_btn")[0].style.margin = '5px 0px 0px 0px';
 	}
@@ -1250,10 +1230,12 @@ var node_nu;
 
 function apply_Running_node() {
 	alert("这个节点正在运行，你要干嘛？")
+	return false;
 }
 
 function remove_running_node() {
 	alert("人家正在为你工作，你就要抛弃我？不干！")
+	return false;
 }
 
 function apply_this_ss_node(s) { //应用此节点
@@ -1386,7 +1368,7 @@ function refresh_html_dummy() {
 		$("#ss_node_list_table_main")[0].style["overflow-y"] = '';
 		$("#ss_node_list_table_main")[0].style["padding-right"] = '';
 		$("#hide_when_folw")[0].style.display = ''
-		$("#ss_node_list_table_btn")[0].style.display = '';
+		//$("#ss_node_list_table_btn")[0].style.display = '';
 		$("#ss_node_list_table_btn")[0].style.position = '';
 		$("#ss_node_list_table_btn")[0].style.margin = '5px 0px 0px 0px';
 	}
@@ -1481,7 +1463,6 @@ function remove_conf_table(o) { //删除节点功能
 }
 
 function edit_conf_table(o) { //编辑节点功能，显示编辑面板
-	checkTime = 2001; //编辑节点时停止可能在进行的刷新
 	var id = $(o).attr("id");
 	var ids = id.split("_");
 	var p = "ssconf_basic";
@@ -1846,7 +1827,6 @@ function version_show() {
 		}
 	});
 }
-var checkss = 0;
 
 function get_ss_status_data() {
 	if (checkss < 10000) {
@@ -2301,8 +2281,6 @@ function get_realtime_log() {
 		}
 	});
 }
-
-var x = 6;
 
 function count_down_close() {
 	if (x == "0") {
@@ -2974,7 +2952,7 @@ function save_online_nodes(action) {
 																</td>
 															</tr>
 															<tr id="ssr_protocol_tr" style="display: none;">
-																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>协议 (protocol)</u></a></th>
+																<th width="35%"><a href="https://github.com/koolshare/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>协议 (protocol)</u></a></th>
 																<td>
 																	<select id="ss_node_table_rss_protocol" name="ss_node_table_rss_protocol" style="width:350px;margin:0px 0px 0px 2px;" class="input_option">
 																		<option value="origin" selected>origin</option>
@@ -2995,14 +2973,14 @@ function save_online_nodes(action) {
 																</td>
 															</tr>
 															<tr id="ssr_protocol_param_tr" style="display: none;">
-																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>协议参数 (protocol_param)</u></a></th>
+																<th width="35%"><a href="https://github.com/koolshare/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>协议参数 (protocol_param)</u></a></th>
 																<td>
 																	<input type="text" maxlength="64" id="ss_node_table_rss_protocol_param" name="ss_node_table_rss_protocol_param" value="" class="input_ss_table" style="width:342px;float:left;" autocomplete="off" autocorrect="off" autocapitalize="off"/>
 																</td>
-															</tr>
+															</tr> 
 															
 															<tr id="ssr_obfs_tr" style="display: none;">
-																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>混淆 (obfs)</u></a></th>
+																<th width="35%"><a href="https://github.com/koolshare/shadowsocks-rss/wiki/Server-Setup" target="_blank"><u>混淆 (obfs)</u></a></th>
 																<td>
 																	<select id="ss_node_table_rss_obfs" name="ss_node_table_rss_obfs" style="width:350px;margin:0px 0px 0px 2px;" class="input_option">
 																		<option value="plain">plain</option>
@@ -3013,7 +2991,7 @@ function save_online_nodes(action) {
 																</td>
 															</tr>
 															<tr id="ssr_obfs_param_tr" style="display: none;">
-																<th width="35%"><a href="https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md" target="_blank"><u>混淆参数 (obfs_param)</u></a></th>
+																<th width="35%"><a href="https://github.com/koolshare/shadowsocks-rss/blob/master/ssr.md" target="_blank"><u>混淆参数 (obfs_param)</u></a></th>
 																<td>
 																	<input type="text" name="ss_node_table_rss_obfs_param" id="ss_node_table_rss_obfs_param" placeholder="cloudflare.com"  class="input_ss_table" style="width:342px;" maxlength="300" value=""/>
 																</td>
@@ -4138,7 +4116,7 @@ taobao.com
 													<td>		
 														<p>		
 														<% nvram_get("WhiteList_numbers"); %>&nbsp;条，最后更新版本：		
-															<a href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/WhiteList.txt" target="_blank">		
+															<a href="https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/WhiteList_new.txt" target="_blank">		
 																<i><% nvram_get("update_WhiteList"); %></i>		
 															</a>		
 														</p>		

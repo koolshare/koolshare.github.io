@@ -93,7 +93,7 @@ function browser_compatibility1(){
 		document.getElementById("FormTitle").className = "FormTitle_firefox";
 		if(current_url.indexOf("Main_Ss") == 0){
 			document.getElementById("FormTitle").style.marginTop = "0px"	
-			E("FormTitle").style.height = "969px";
+			E("FormTitle").style.height = "975px";
 		}
 	}
 }
@@ -449,16 +449,16 @@ function openssHint(itemNum) {
 		statusmenu += "</br>更多信息，请参考<a href='https://shadowsocks.org/en/spec/one-time-auth.html' target='_blank'><u><font color='#00F'>一次性验证(OTA)</font></u></a>";
 		_caption = "一次性验证(OTA)";
 	} else if (itemNum == 8) {
-		statusmenu = "更多信息，请参考<a href='https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
+		statusmenu = "更多信息，请参考<a href='https://github.com/koolshare/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
 		_caption = "协议插件（protocol）";
 	} else if (itemNum == 9) {
-		statusmenu = "更多信息，请参考<a href='https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
+		statusmenu = "更多信息，请参考<a href='https://github.com/koolshare/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
 		_caption = "混淆插件 (obfs)";
 
 	} else if (itemNum == 11) {
 		statusmenu = "如果不知道如何填写，请一定留空，不然可能带来副作用！"
 		statusmenu += "</br></br>请参考<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(8)'><font color='#00F'>协议插件（protocol）</font></a>和<a class='hintstyle' href='javascript:void(0);' onclick='openssHint(9)'><font color='#00F'>混淆插件 (obfs)</font></a>内说明。"
-		statusmenu += "</br></br>更多信息，请参考<a href='https://github.com/breakwa11/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
+		statusmenu += "</br></br>更多信息，请参考<a href='https://github.com/koolshare/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
 		_caption = "自定义参数 (obfs_param)";
 		//return overlib(statusmenu, OFFSETX, -860, OFFSETY, -290, LEFT, STICKY, WIDTH, 'width', CAPTION, " ", CLOSETITLE, '');
 	} else if (itemNum == 12) {
@@ -669,7 +669,8 @@ function openssHint(itemNum) {
 		statusmenu = "此处设定为预设不可更改。<br />&nbsp;&nbsp;&nbsp;&nbsp;1. 单开KCPTUN的情况下，ss-redir的TCP流量都会转发到此；<br />&nbsp;&nbsp;&nbsp;&nbsp;2. KCPTUN和UDP2raw串联的模式下，ss-redir的TCP流量才会转发到UDP2raw；"
 		_caption = "说明：";
 	} else if (itemNum == 91) {
-		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;1. <b>单独加速：</b>此处配置为服务器ip+服务器端口(或者留空+服务器端口)，KCPTUN的UDP流量会转发给服务器；<br />&nbsp;&nbsp;&nbsp;&nbsp;2.  <b>串联1：</b>此处配置为127.0.0.1:udpspeeder监听端口时（串联），KCPTUN的UDP流量会转发给udpspeeder，然后转为tcp，并转发给服务器的UDP2raw。所以你需要在服务器端配置KCPTUN和UDP2raw的串联<br />&nbsp;&nbsp;&nbsp;&nbsp;2.  <b>串联3：</b>此处配置为127.0.0.1:udp2raw监听端口时（串联），KCPTUN的UDP流量会转发给UDP2raw，然后转为tcp，并转发给服务器的UDP2raw。所以你需要在服务器端配置KCPTUN和UDP2raw的串联"
+		width = "600px";
+		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;1. <b>单独加速：</b>此处配置为服务器ip+服务器端口(或者留空+服务器端口)，KCPTUN的UDP流量会转发给服务器；<br />&nbsp;&nbsp;&nbsp;&nbsp;2.  <b>串联1：</b>此处配置为127.0.0.1:1092（即UDPspeeder监听端口）时，可配置kcptun和UDPspeeder串联，KCPTUN的UDP流量会转发给UDPspeeder，然后转为tcp，并转发给服务器的UDP2raw。同时你需要在服务器端配置KCPTUN和UDP2raw的串联。<br />&nbsp;&nbsp;&nbsp;&nbsp;2.  <b>串联3：</b>此处配置为127.0.0.1:1093（即UDP2raw监听端口）时，可配置kcptun和udp2raw串联，KCPTUN的UDP流量会转发给UDP2raw，然后转为tcp，并转发给服务器的UDP2raw。同时你需要在服务器端配置KCPTUN和UDP2raw的串联。"
 		_caption = "说明：";
 	} else if (itemNum == 97) {
 		width = "600px";
