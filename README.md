@@ -5,13 +5,16 @@
 
 插件支持列表
 ========
-* 穿透 DDNS
-* P2P 远程控制 [项目地址](https://github.com/jannson/koolnet)
+* 穿透 DDNS [查看介绍](http://koolshare.cn/thread-123567-1-1.html)
+* P2P 远程文件管理 + 流媒体支持 [查看介绍](http://koolshare.cn/thread-129199-1-1.html)
 * 讯雷下载
 * Aria2 下载
 * 讯雷快鸟
-* Adm 去广告
+* KoolProxy 去广告 [查看介绍](http://koolshare.cn/thread-64086-1-1.html)
 * 策略路由
+* WebShell
+* 远程消息通知
+* Alidns + ddnspod + gddns
 
 存储核心
 =======
