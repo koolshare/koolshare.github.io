@@ -20,6 +20,7 @@ rm -rf /koolshare/bin/pdnsd
 rm -rf /koolshare/bin/Pcap_DNSProxy
 rm -rf /koolshare/bin/dnscrypt-proxy
 rm -rf /koolshare/bin/dns2socks
+rm -rf /koolshare/bin/cdns
 rm -rf /koolshare/bin/client_linux_arm5
 rm -rf /koolshare/bin/chinadns
 rm -rf /koolshare/bin/resolveip
@@ -34,7 +35,6 @@ rm -rf /koolshare/res/game.png
 rm -rf /koolshare/res/shadowsocks.css
 rm -rf /koolshare/res/gameV2.png
 rm -rf /koolshare/res/ss_proc_status.htm
-
 
 dbus remove softcenter_module_shadowsocks_home_url
 dbus remove softcenter_module_shadowsocks_install

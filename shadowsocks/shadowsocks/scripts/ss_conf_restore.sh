@@ -239,8 +239,7 @@ else
 	fi
 fi
 
-
 echo_date 一点点清理工作...
-sleep 2
+sleep 1
 rm -rf /tmp/ss_conf_*
 echo_date 完成！

@@ -8,7 +8,6 @@ cd /tmp
 mkdir shadowsocks
 mkdir shadowsocks/bin
 mkdir shadowsocks/scripts
-mkdir shadowsocks/init.d
 mkdir shadowsocks/webs
 mkdir shadowsocks/res
 
@@ -24,10 +23,8 @@ cp /koolshare/bin/rss-local $TARGET_FOLDER/bin/
 cp /koolshare/bin/rss-redir $TARGET_FOLDER/bin/
 cp /koolshare/bin/koolgame $TARGET_FOLDER/bin/
 cp /koolshare/bin/pdu $TARGET_FOLDER/bin/
-cp /koolshare/bin/pdnsd $TARGET_FOLDER/bin/
-cp /koolshare/bin/Pcap_DNSProxy $TARGET_FOLDER/bin/
 cp /koolshare/bin/dns2socks $TARGET_FOLDER/bin/
-cp /koolshare/bin/dnscrypt-proxy $TARGET_FOLDER/bin/
+cp /koolshare/bin/cdns $TARGET_FOLDER/bin/
 cp /koolshare/bin/chinadns $TARGET_FOLDER/bin/
 cp /koolshare/bin/resolveip $TARGET_FOLDER/bin/
 cp /koolshare/bin/haproxy $TARGET_FOLDER/bin/
@@ -37,7 +34,6 @@ cp /koolshare/bin/koolbox $TARGET_FOLDER/bin/
 cp /koolshare/bin/jq $TARGET_FOLDER/bin/
 cp /koolshare/bin/speeder* $TARGET_FOLDER/bin/
 cp /koolshare/bin/udp2raw $TARGET_FOLDER/bin/
-cp /koolshare/init.d/S89Socks5.sh $TARGET_FOLDER/init.d
 cp /koolshare/webs/Main_Ss_Content.asp $TARGET_FOLDER/webs/
 cp /koolshare/webs/Main_Ss_LoadBlance.asp $TARGET_FOLDER/webs/
 cp /koolshare/webs/Main_SsLocal_Content.asp $TARGET_FOLDER/webs/

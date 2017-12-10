@@ -10,8 +10,6 @@ start_update(){
 	version_gfwlist1=$(cat /koolshare/ss/rules/version | sed -n 1p | sed 's/ /\n/g'| sed -n 1p)
 	version_chnroute1=$(cat /koolshare/ss/rules/version | sed -n 2p | sed 's/ /\n/g'| sed -n 1p)
 	version_cdn1=$(cat /koolshare/ss/rules/version | sed -n 4p | sed 's/ /\n/g'| sed -n 1p)
-	version_Routing1=$(cat /koolshare/ss/rules/version | sed -n 5p | sed 's/ /\n/g'| sed -n 1p)
-	version_WhiteList1=$(cat /koolshare/ss/rules/version | sed -n 7p | sed 's/ /\n/g'| sed -n 1p)
 	
 	echo ==================================================================================================
 	echo_date 开始更新shadowsocks规则，请等待...
@@ -32,20 +30,14 @@ start_update(){
 	git_line1=$(cat /tmp/version1 | sed -n 1p)
 	git_line2=$(cat /tmp/version1 | sed -n 2p)
 	git_line4=$(cat /tmp/version1 | sed -n 4p)
-	git_line5=$(cat /tmp/version1 | sed -n 5p)
-	git_line7=$(cat /tmp/version1 | sed -n 7p)
 	
 	version_gfwlist2=$(echo $git_line1 | sed 's/ /\n/g'| sed -n 1p)
 	version_chnroute2=$(echo $git_line2 | sed 's/ /\n/g'| sed -n 1p)
 	version_cdn2=$(echo $git_line4 | sed 's/ /\n/g'| sed -n 1p)
-	version_Routing2=$(echo $git_line5 | sed 's/ /\n/g'| sed -n 1p)
-	version_WhiteList2=$(echo $git_line7 | sed 's/ /\n/g'| sed -n 1p)
 	
 	md5sum_gfwlist2=$(echo $git_line1 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 	md5sum_chnroute2=$(echo $git_line2 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 	md5sum_cdn2=$(echo $git_line4 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
-	md5sum_Routing2=$(echo $git_line5 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
-	md5sum_WhiteList2=$(echo $git_line7 | sed 's/ /\n/g'| tail -n 2 | head -n 1)
 	
 	# update gfwlist
 	if [ "$ss_basic_gfwlist_update" == "1" ];then
@@ -131,63 +123,6 @@ start_update(){
 	else
 		echo_date 然而你并没有勾选cdn名单更新！
 	fi
-	
-	
-	# update pcap Routing file
-	if [ "$ss_basic_pcap_update" == "1" ];then
-		echo_date " ------------------------------------------------------------------------"
-		if [ ! -z "$version_Routing2" ];then
-			if [ "$version_Routing1" != "$version_Routing2" ];then
-				echo_date 检测到新版本pcap Routing列表，开始更新...
-				echo_date 下载pcap Routing名单到临时文件...
-				wget --no-check-certificate --timeout=8 -qO - $url_main/Routing.txt > /tmp/Routing.txt
-				md5sum_Routing1=$(md5sum /tmp/Routing.txt | sed 's/ /\n/g'| sed -n 1p)
-				if [ "$md5sum_Routing1"x = "$md5sum_Routing2"x ];then
-					echo_date 下载完成，校验通过，将临时文件覆盖到原始Routing名单文件
-					mv /tmp/Routing.txt /koolshare/ss/rules/Routing.txt
-					sed -i "5s/.*/$git_line5/" /koolshare/ss/rules/version
-					reboot_pcap="1"
-					echo_date 【更新成功】你的pcap Routing名单刚才已经更新到最新了哦~
-				else
-					echo_date 下载完成，但是校验没有通过！
-				fi
-			else
-				echo_date 检测到pcap Routing名单本地版本号和在线版本号相同，那还更新个毛啊!
-			fi
-		else
-			echo_date pcap Routing名单文件下载失败！
-		fi
-	else
-		echo_date 然而你并没有勾选Pcap_list名单更新！
-	fi
-	
-	# update pcap WhiteList file
-	if [ "$ss_basic_pcap_update" == "1" ];then
-		echo_date " ------------------------------------------------------------------------"
-		if [ ! -z "$version_WhiteList2" ];then
-			if [ "$version_WhiteList1" != "$version_WhiteList2" ];then
-				echo_date 检测到新版本pcap WhiteList名单，开始更新...
-				echo_date 下载pcap WhiteList名单到临时文件...
-				wget --no-check-certificate --timeout=8 -qO - $url_main/WhiteList_new.txt > /tmp/WhiteList.txt
-				md5sum_WhiteList1=$(md5sum /tmp/WhiteList.txt | sed 's/ /\n/g'| sed -n 1p)
-				if [ "$md5sum_WhiteList1"x = "$md5sum_WhiteList2"x ];then
-					echo_date 下载完成，校验通过，将临时文件覆盖到原始WhiteList名单文件
-					mv /tmp/WhiteList.txt /koolshare/ss/rules/WhiteList.txt
-					sed -i "7s/.*/$git_line7/" /koolshare/ss/rules/version
-					reboot_pcap="1"
-					echo_date 【更新成功】你的pcap WhiteList名单刚才已经更新到最新了哦~
-				else
-					echo_date 下载完成，但是校验没有通过！
-				fi
-			else
-				echo_date 检测到pcap WhiteList名单本地版本号和在线版本号相同，那还更新个毛啊!
-			fi
-		else
-			echo_date WhiteList名单文件下载失败！
-		fi
-	else
-		echo_date 然而你并没有勾选Pcap_list名单更新！
-	fi
 	echo_date " ------------------------------------------------------------------------"
 	rm -rf /tmp/gfwlist.conf1
 	rm -rf /tmp/chnroute.txt1
@@ -199,31 +134,16 @@ start_update(){
 	nvram set update_ipset="$(cat /koolshare/ss/rules/version | sed -n 1p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set update_chnroute="$(cat /koolshare/ss/rules/version | sed -n 2p | sed 's/#/\n/g'| sed -n 1p)"
 	nvram set update_cdn="$(cat /koolshare/ss/rules/version | sed -n 4p | sed 's/#/\n/g'| sed -n 1p)"
-	nvram set update_Routing="$(cat /koolshare/ss/rules/version | sed -n 5p | sed 's/#/\n/g'| sed -n 1p)"
-	nvram set update_WhiteList="$(cat /koolshare/ss/rules/version | sed -n 7p | sed 's/#/\n/g'| sed -n 1p)"
 	
 	nvram set ipset_numbers=$(cat /koolshare/ss/rules/gfwlist.conf | grep -c ipset)
 	nvram set chnroute_numbers=$(cat /koolshare/ss/rules/chnroute.txt | grep -c .)
 	nvram set cdn_numbers=$(cat /koolshare/ss/rules/cdn.txt | grep -c .)
-	nvram set Routing_numbers=$(cat /koolshare/ss/dns/Routing.txt |grep -c /)
-	nvram set WhiteList_numbers=$(cat /koolshare/ss/dns/WhiteList.txt |grep -Ec "Server=")
-	
 	#======================================================================
-	
-	# reboot ss
 	if [ "$reboot" == "1" ];then
 		echo_date 自动重启shadowsocks，以应用新的规则文件！请稍后！
 		dbus set ss_basic_action=1
 		sh /koolshare/ss/ssconfig.sh restart
 	fi
-	
-	pcap=`pidof Pcap_DNSProxy`
-	# reboot pcap
-	if [ -z "$reboot" ] && [ -n "$pcap" ] && [ "$reboot_pcap" == "1" ];then
-		echo_date 自动重启Pcap_DNSProxy，以应用新的规则文件！请稍后！
-		killall Pcap_DNSProxy >/dev/null 2>&1
-		Pcap_DNSProxy -c /koolshare/ss/dns
-	fi	
 	echo ==================================================================================================
 }
 
@@ -251,7 +171,6 @@ case $ss_basic_update_action in
 	ss_basic_gfwlist_update=1
 	ss_basic_chnroute_update=1
 	ss_basic_cdn_update=1
-	ss_basic_pcap_update=1
 	change_cru
 	start_update
 	dbus remove ss_basic_update_action

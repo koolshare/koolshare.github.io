@@ -267,11 +267,7 @@ function showSSLoadingBar(seconds) {
 	loadingSeconds = seconds;
 	progress = 100 / loadingSeconds;
 	y = 0;
-	if (socks5 == "1") {
-		LoadingLocalProgress(seconds);
-	} else {
-		LoadingSSProgress(seconds);
-	}
+	LoadingSSProgress(seconds);
 }
 
 function LoadingSSProgress(seconds) {
@@ -316,30 +312,9 @@ function LoadingSSProgress(seconds) {
 	} else if (action == 13) {
 		document.getElementById("loading_block3").innerHTML = "SSR节点订阅 ..."
 		$("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，正在订阅中 ...</font></li>");
-	}
-}
-
-function LoadingLocalProgress(seconds) {
-	document.getElementById("LoadingBar").style.visibility = "visible";
-	document.getElementById("loading_block3").innerHTML = "socks5启用中 ..."
-	y = y + progress;
-	if (typeof(seconds) == "number" && seconds >= 0) {
-		if (seconds != 0) {
-			document.getElementById("proceeding_img").style.width = Math.round(y) + "%";
-			document.getElementById("proceeding_img_text").innerHTML = Math.round(y) + "%";
-
-			if (document.getElementById("loading_block1")) {
-				document.getElementById("proceeding_img_text").style.width = document.getElementById("loading_block1").clientWidth;
-				document.getElementById("proceeding_img_text").style.marginLeft = "175px";
-			}
-			--seconds;
-			setTimeout("LoadingLocalProgress(" + seconds + ");", 1000);
-		} else {
-			document.getElementById("proceeding_img_text").innerHTML = "完成";
-			y = 0;
-			setTimeout("hideSSLoadingBar();", 1000);
-			refreshpage();
-		}
+	} else if (action == 14) {
+		document.getElementById("loading_block3").innerHTML = "socks5代理设置 ..."
+		$("#loading_block2").html("<li><font color='#ffcc00'>请勿刷新本页面，应用中 ...</font></li>");
 	}
 }
 
@@ -358,7 +333,6 @@ function openssHint(itemNum) {
 		statusmenu = "如果发现开关不能开启，那么请检查<a href='Advanced_System_Content.asp'><u><font color='#00F'>系统管理 -- 系统设置</font></u></a>页面内Enable JFFS custom scripts and configs是否开启。";
 		_caption = "服务器说明";
 	}
-
 	if (itemNum == 0) {
 		width = "750px";
 		bgcolor = "#CC0066",
@@ -389,7 +363,6 @@ function openssHint(itemNum) {
 		_caption = "状态检测";
 		return overlib(statusmenu, OFFSETX, -460, LEFT, STICKY, WIDTH, 'width', CAPTION, _caption, CLOSETITLE, '');
 	}
-
 	if (itemNum == 1) {
 		width = "700px";
 		bgcolor = "#CC0066",
@@ -403,31 +376,27 @@ function openssHint(itemNum) {
 		statusmenu += "<span><b><font color='#CC0066'>【2】大陆白名单模式:</font></b></br>"
 		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;该模式使用chnroute IP网段区分国内外流量，ss-redir将流量转发到Shadowsocks服务器，实现透明代理；</br>"
 		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;由于采用了预先定义的ip地址块(chnroute)，所以DNS解析就非常重要，如果一个国内有的网站被解析到了国外地址，那么这个国内网站是会走ss的；</br>"
-		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;因为使用了大量的cdn名单，能够保证常用的国内网站都获得国内的解析结果，但是即使如此还是不能完全保证国内的一些网站解析到国内地址，这个时候就推荐使用具备cdn解析能力的chinaDNS或者PcapDNSProxy。</br>"
+		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;因为使用了大量的cdn名单，能够保证常用的国内网站都获得国内的解析结果，但是即使如此还是不能完全保证国内的一些网站解析到国内地址，这个时候就推荐使用具备cdn解析能力的cdns或者chinadns2。</br>"
 		statusmenu += "<b><font color='#669900'>优点：</font></b>所有被墙国外网站均能通过代理访问，无需维护域名黑名单；主机玩家用此模式可以实现TCP代理UDP国内直连。</br>"
 		statusmenu += "<b><font color='#669900'>缺点：</font></b>消耗更多的Shadowsocks流量，迅雷下载和BT可能消耗SS流量。</span></br></br>"
 		//game
-		statusmenu += "<span><b><font color='#CC0066'>【3】游戏模式(NAT 2 ready):</font></b></br>"
+		statusmenu += "<span><b><font color='#CC0066'>【3】游戏模式:</font></b></br>"
 		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;游戏模式较于其它模式最大的特点就是支持UDP代理，能让游戏的UDP链接走SS，主机玩家用此模式可以实现TCP+UDP走SS代理；</br>"
 		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;由于采用了预先定义的ip地址块(chnroute)，所以DNS解析就非常重要，如果一个国内有的网站被解析到了国外地址，那么这个国内网站是会走ss的。</br>"
 		statusmenu += "<b><font color='#669900'>优点：</font></b>除了具有大陆白名单模式的优点外，还能代理UDP链接，并且实现主机游戏<b> NAT2!</b></br>"
 		statusmenu += "<b><font color='#669900'>缺点：</font></b>由于UDP链接也走SS，而迅雷等BT下载多为UDP链接，如果下载资源的P2P链接中有国外链接，这部分流量就会走SS！</span></br></br>"
-		//gameV2
-		statusmenu += "<span><b><font color='#CC0066'>【4】游戏模式V2:</font></b></br>"
-		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;游戏模式V2较于其它模式最大的特点就是支持UDP代理，能让游戏的UDP链接走SS，主机玩家用此模式可以实现TCP+UDP走SS代理；</br>"
-		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;和游戏模式想比较，游戏模式V2使用了小宝自己写的程序(koolgame)，针对UDP发包和PS4 nat类型检测都有优化，如果你的运营商或者VPS服务商封锁UDP，还能使用udp in tcp功能；</br>"
-		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;由于采用了预先定义的ip地址块(chnroute)，所以DNS解析就非常重要，如果一个国内有的网站被解析到了国外地址，那么这个国内网站是会走ss的。</br>"
-		statusmenu += "<b><font color='#669900'>优点：</font></b>专门的UDP发包优化，PS4 NAT2!</br>"
-		statusmenu += "<b><font color='#669900'>缺点：</font></b>需要配合良好的线路和自己搭建服务端。</span></br></br>"
 		//overall
-		statusmenu += "<span><b><font color='#CC0066'>【5】全局模式:</font></b></br>"
+		statusmenu += "<span><b><font color='#CC0066'>【4】全局模式:</font></b></br>"
 		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;除局域网和ss服务器等流量不走代理，其它都走代理(udp不走)，高级设置中提供了对代理协议的选择。</br>"
 		statusmenu += "<b><font color='#669900'>优点：</font></b>简单暴力，全部出国；可选仅web浏览走ss，还是全部tcp代理走ss，因为不需要区分国内外流量，因此性能最好。</br>"
 		statusmenu += "<b><font color='#669900'>缺点：</font></b>国内网站全部走ss，迅雷下载和BT全部走SS流量。</span></br></br>"
+		//overall
+		statusmenu += "<span><b><font color='#CC0066'>【5】回国模式:</font></b></br>"
+		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;提供给国外的朋友，通过在中间服务器翻回来，以享受一些视频、音乐等网络服务。</br>"
+		statusmenu += "<b><font color='#669900'>优点：</font></b>建议设置cdns或者chinadns2作为dns解析方案~</br>"
 		_caption = "模式说明";
 		return overlib(statusmenu, OFFSETX, -860, OFFSETY, -290, LEFT, STICKY, WIDTH, 'width', CAPTION, _caption, CLOSETITLE, '');
 	} else if (itemNum == 2) {
-
 		statusmenu = "此处填入你的SS服务器的地址。</br>建议优先填入<font color='#F46'>IP地址</font>。填入域名，特别是一些服务商给的复杂域名，有时遇到无法解析会导致Problem detected!";
 		_caption = "服务器";
 	} else if (itemNum == 3) {
@@ -440,14 +409,8 @@ function openssHint(itemNum) {
 		statusmenu = "此处填入你的SS服务器的加密方式。</br><font color='#F46'>建议</font>如果是自己搭建服务器，建议使用对路由器负担比较小的加密方式，例如chacha20,chacha20-ietf等。";
 		_caption = "服务器加密方式";
 	} else if (itemNum == 6) {
-		statusmenu = "此处选择你希望UDP的通道。</br>很多游戏都走udp，游戏模式V2的初衷就是加速udp连接。</br>如果你到vps的udp链接较快，可以选择udp in udp，如果你的运营商封锁了udp，可以选择udp in tcp。";
+		statusmenu = "此处选择你希望UDP的通道。</br>很多游戏都走udp的初衷就是加速udp连接。</br>如果你到vps的udp链接较快，可以选择udp in udp，如果你的运营商封锁了udp，可以选择udp in tcp。";
 		_caption = "游戏模式V2 UDP通道";
-	} else if (itemNum == 7) {
-		statusmenu = "此处选择一次性验证(OTA)选项。</br><font color='#F46'>注意：</font>一次性验证需要服务器端开启支持，才能选择！</br>一般自己搭建原生SS服务器，建议开启此选项，OTA有抗重放攻击的能力。"
-		statusmenu += "</br>shadowsocks-libev和最新的shadowsocks-python服务器端都能支持OTA选项的开启。"
-		statusmenu += "</br>shadowsocksR服务器端也兼容OTA，你需要在服务端配置协议为verify_sha1_compatible，混淆可选择任意一个，但必须是兼容版的。"
-		statusmenu += "</br>更多信息，请参考<a href='https://shadowsocks.org/en/spec/one-time-auth.html' target='_blank'><u><font color='#00F'>一次性验证(OTA)</font></u></a>";
-		_caption = "一次性验证(OTA)";
 	} else if (itemNum == 8) {
 		statusmenu = "更多信息，请参考<a href='https://github.com/koolshare/shadowsocks-rss/blob/master/ssr.md' target='_blank'><u><font color='#00F'>ShadowsocksR 协议插件文档</font></u></a>"
 		_caption = "协议插件（protocol）";
@@ -517,65 +480,30 @@ function openssHint(itemNum) {
 		_caption = "导出恢复";
 	} else if (itemNum == 25) {
 		statusmenu = "<font color='#CC0066'>1&nbsp;&nbsp;在gfwlist模式下：</font>";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;将用此处定义的国内DNS解析<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf' target='_blank'><u><font color='#00F'>gfwlist</font></u></a>以外的网址，包括全部国内网址和国外未被墙的网址。"
-		statusmenu += "</br></br><font color='#CC0066'>2&nbsp;&nbsp;在大陆白名单模式，游戏模式，游戏模式V2下：</font>";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;将用此处定义的国内DNS将解析国内<a href='https://github.com/koolshare/koolshare.github.io' target='_blank'><font color='#00F'>2W+个域名（CDN名单）</font></a> 参与维护这个列表。"
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;此处定义的国内DNS仅在dns2socks和ss-tunnel下有效，cdns和chinadns2因为自带了国内外cdn，所以不需要。"
 		_caption = "国内DNS";
 	} else if (itemNum == 26) {
 		width = "750px";
 		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;国外DNS为大家提供了丰富的选择，其目的有二，一是为了保证大家有能用的国外DNS服务；二十在有能用的基础上，能够选择多种DNS解析方案，达到最佳的解析效果；所以如果你切换某个DNS程序，导致国外连接Problem detected! 那么久更换能用的就好，不用纠结某个解析方案不能用。"
 		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;</br></br>下面我会就我的认知对几种国外DNS方案做一个简单介绍："
+		//cdns
+		statusmenu += "</br><font color='#CC0066'>1:cdns(推荐)：</font>"
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;DNS请求时将携带一个EDNS标签，解析成功后返回带该标签的解析结果，gfw投毒的解析结果则不会带该标签，以达到防dns污染的目的！";
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;EDNS标签携带了请求时本机的IP地址信息，dns服务器会根据此信息选择离你最近的解析结果返回给你，因此具有非常好的cdn效果！";
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;如果需要修改上游dns设定，请自行修改/koolshare/ss/rules/cdns.json文件，请确保修改的dns支持EDNS功能！";
+		//chinadns2
+		statusmenu += "</br><font color='#CC0066'>2:chinadns2(推荐)：</font>"
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;同cdns描述，两者效果应该几乎一致，区别在于cdns可以定义多组上游dns，chinadns2只能定义一个。";
 		//dns2socks
-		statusmenu += "</br><font color='#CC0066'>1:dns2socks：</font>"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;可以说是万金油方案,作用是将 DNS请求通过一个socks5隧道转发到DNS服务器，和下文中ss-tunnel类似，不过1dns2socks是利用了SOCK5隧道代理，ss-tunnel是利用了加密UDP；该DNS方案不受到ss服务是否支持udp限制，不受到运营商是否封Opendns限制，只要能建立socoks5链接，就能使用；";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;在gfwlist模式下，dns2socks用于针对性的解析gfwlist内的域名名单；在使用chnroute的模式（大陆白名单模式，游戏模式，游戏模式V2）dns2socks用于解析<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>以外的所有域名，所以一些没有包含在这份名单内的网站，而正好这个网站有部署国外地址的话，那么这个网站就会被解析为国外ip，然后由ipset判断流量走ss，当然这种情况是比较少的，因为一般常用的国内网站都包含在这份cdn名单内了。";
-		//dnscrypt-proxy
-		statusmenu += "</br><font color='#CC0066'>2:dnscrypt-proxy：</font>"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;原理是通过加密连接到支持该程序的国外DNS服务器，由这些DNS服务器解析出gfwlist中域名的IP地址，因为该解析不走ss服务器，所以解析出的IP地址离SS服务器的距离随机，国外CDN较弱。这里提供了很多支持dnscrypt-proxy解析的节点列表，通常最常用的就是cisco(opendns)，不过国内有些地区的运营商针对opendns有封锁，所以有时候选择dnscrypt-proxy + opendns的方案可能行不通；";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;在gfwlist模式下，dnscrypt-proxy用于针对性的解析gfwlist内的域名名单；在使用chnroute的模式（大陆白名单模式，游戏模式，游戏模式V2）dnscrypt-proxy用于解析<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>以外的所有域名，所以一些没有包含在这份名单内的网站，而正好这个网站有部署国外地址的话，那么这个网站就会被解析为国外ip，然后由ipset判断流量走ss，当然这种情况是比较少的，因为一般常用的国内网站都包含在这份cdn名单内了。";
+		statusmenu += "</br><font color='#CC0066'>3:dns2socks：</font>"
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;可以说是万金油方案,作用是将 DNS请求通过一个socks5隧道转发到DNS服务器，和下文中ss-tunnel类似，不过1dns2socks是利用了SOCK5隧道代理，ss-tunnel是利用了加密UDP；该DNS方案不受到ss服务是否支持udp限制，只要能建立socoks5链接，就能使用；";
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;在gfwlist模式下，dns2socks用于针对性的解析gfwlist内的域名名单；在使用chnroute的模式（大陆白名单模式，游戏模式）dns2socks用于解析<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>以外的所有域名，所以一些没有包含在这份名单内的网站，而正好这个网站有部署国外地址的话，那么这个网站就会被解析为国外ip，然后由ipset判断流量走ss，当然这种情况是比较少的，因为一般常用的国内网站都包含在这份cdn名单内了。";
 		//ss-tunnel
-		statusmenu += "</br><font color='#CC0066'>3:ss-tunnel：</font>"
+		statusmenu += "</br><font color='#CC0066'>4:ss-tunnel：</font>"
 		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;原理是将DNS请求，通过ss-tunnel利用UDP发送到ss服务器上，由ss服务器向你定义的DNS服务器发送解析请求，解析出gfwlist中域名的IP地址，这种方式解析出来的IP地址会距离ss服务器更近，具有较强的国外CDN效果;"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;在gfwlist模式下，ss-tunnel用于针对性的解析gfwlist内的域名名单；在使用chnroute的模式（大陆白名单模式，游戏模式，游戏模式V2）ss-tunnel用于解析<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>以外的所有域名，所以一些没有包含在这份名单内的网站，而正好这个网站有部署国外地址的话，那么这个网站就会被解析为国外ip，然后由ipset判断流量走ss，当然这种情况是比较少的，因为一般常用的国内网站都包含在这份cdn名单内了。";
-		//ChinaDNS
-		statusmenu += "</br><font color='#CC0066'>4:ChinaDNS：</font>"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;原理是通过ChinaDNS自身的DNS并发查询，同时将你要请求的域名同时向国内和国外DNS发起查询，然后用ChinaDNS内置的双向过滤+指针压缩功能来过滤掉污染ip，双向过滤保证了国内地址都用国内域名查询，因此使用ChinaDNS能够获得最佳的国内CDN效果，这里ChinaDNS国内服务器的选择是有要求的，这个DNS的ip地址必须在<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/chnroute.txt' target='_blank'><u><font color='#00F'>chnroute</font></u></a>定义的IP段内，同理你选择或者自定义的国外DNS必须在chnroute定义的IP段外，所以比如你在国内DNS处填写你的上级路由器的ip地址，类似192.168.1.1这种，会被ChinaDNS判断为国外IP地址,从而使得双向过滤功能失效，国外DNS解析的IP地址就会进入DNS缓存；";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;因为ChinaDNS自己具备cdn解析能力，所以没必要再使用<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>,因为使用这个名单会对dnsmasq造成很大的负担！"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;为了保证ChinaDNS国外解析的效果，这里我给出的ChinaDNS国外DNS都是又经过了一层软件（dns2socks，dnscrypt-proxy，ss-tunnel）的；同时你也可以自定义ChinaDNS国外dns去直接去请求国外DNS服务器，但是cdn效果就不会有经过上层软件后好。这里如果选择dns2socks或者ss-tunnel，ChinaDNS解析国外DNS会向上游软件去请求，而这两个上游软件都会经过SS服务器，可以说能达到良好的国外CDN效果；"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;因为gfwlist模式的原理，不需要用到这个软件，也有良好的cdn效果，所以并没有必要在gfwlist模式中集成该方案;"
-		//Pcap_DNSProxy
-		statusmenu += "</br><font color='#CC0066'>5:Pcap_DNSProxy：</font>"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;官方介绍：Pcap_DNSProxy 是一个基于 WinPcap/LibPcap 用于过滤 DNS 投毒污染的工具，提供支持正则表达式的 Hosts 提供更便捷和强大的修改 Hosts 的方法，以及对 DNSCurve/DNSCrypt 协议、并行和 TCP 协议请求的支持。多服务器并行请求功能，更可提高在恶劣网络环境下域名解析的可靠性。";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;简单的说，Pcap_DNSProxy用底层抓包的方法来进行过滤DNS 投毒污染，其功能强大到令其它几种工具都汗颜，不过我们在集成该工具时考虑到其复杂性，因此都是预先为大家定义好了Pcap_DNSProxy的配置文件，如果你需要修改，可以进入路由器内的/koolshare/ss/dns文件夹去修改配置，Pcap_DNSProxy因为各种依赖，导致在merlin下用自带的工具链编译无法通过，使用了新的交叉编译工具链才顺利编译，其在merlin固件下运行的稳定性已经逐渐提高，但是其在解析DNS时发出大量的并发包，还是为路由器带来的不小的挑战，因此该解析软件对系统cpu和内存的暂用都要比其它几个稍高一些；"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;Pcap_DNSProxy也是具备国内CDN解析效果的,不过在前面ChinaDNS部分提到过，已经由国内DNS解析国内cdn名单，Pcap_DNSProxy解析国内域名也是进行扫尾工作：对于一些没有定义在国内cdn名单内的域名，能发挥作用；而对于国外的解析，由于是通过路由器直接请求国外DNS服务器，并没有经过SS服务器，解析到的ip地址和ss服务器的距离比较随机，所以国外cdn效果是相对比较弱的。";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;Pcap_DNSProxy也是具备国内CDN解析效果的,所以没必要再使用<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>,因为使用这个名单会对dnsmasq造成很大的负担！";
-		//pdnsd
-		statusmenu += "</br><font color='#CC0066'>5:pdnsd：</font>"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;pdnsd是一个老牌的dns解析软件了它不仅可以用来做解析软件，还能用来自己搭建dns缓存服务器；早期pdnsd的流行，主要是其支持TCP解析，然而随着gfw对投毒范围的越来越广泛，tcp解析已经不能保证无毒了，但是其强大的dns缓存机制，让我仍然不肯放弃它；";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;pdnsd域名解析具备强大的dns缓存机制，通过修改最小ttl时间，可以让缓存进入电脑后很长时间才会失效，优点就是每次解析国外网站，仅需1ms的时间；";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;设置pdnsd的上有服务器，建议使用UDP方式，因为TCP方式，除非自己搭建支持TCP查询的DNS服务器，很难避免污染的情况，而UDP方式也是提供了（dns2socks，dnscrypt-proxy，ss-tunnel）三种上游软件，这里就不再赘述；";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;在gfwlist模式下，pdnsd用于针对性的解析gfwlist内的域名名单，因此pdnsd的DNS缓存也只针对这部分域名；在使用chnroute的模式（大陆白名单模式，游戏模式，游戏模式V2）dnscrypt-proxy用于解析<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>以外的所有域名，pdnsd的DNS缓存也针对这部分域名（但是范围比使用gfwlist要大得多了），所以一些没有包含在这份名单内的网站，而正好这个网站有部署国外地址的话，那么这个网站就会被解析为国外ip，然后由ipset判断流量走ss，当然这种情况是比较少的，因为一般常用的国内网站都包含在这份cdn名单内了。";
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;在gfwlist模式下，ss-tunnel用于针对性的解析gfwlist内的域名名单；在使用chnroute的模式（大陆白名单模式，游戏模式）ss-tunnel用于解析<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>以外的所有域名，所以一些没有包含在这份名单内的网站，而正好这个网站有部署国外地址的话，那么这个网站就会被解析为国外ip，然后由ipset判断流量走ss，当然这种情况是比较少的，因为一般常用的国内网站都包含在这份cdn名单内了。";
 		_caption = "国外DNS";
 		return overlib(statusmenu, OFFSETX, -860, OFFSETY, -290, LEFT, STICKY, WIDTH, 'width', CAPTION, _caption, CLOSETITLE, '');
-	} else if (itemNum == 27) {
-		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;ChinaDNS用于解析<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>以外的国内网址的DNS。"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;因为ChinaDNS会将你定义的国内DNS和<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/chnroute.txt' target='_blank'><u><font color='#00F'>chnroute</font></u></a>做匹配，如果你定义的国内DNS不在<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/chnroute.txt' target='_blank'><u><font color='#00F'>chnroute</font></u></a>内，那么就是无效的，比如你定义了上级路由器的192.168.1.1的DNS那么就是无效的！"
-		_caption = "ChinaDNS国内DNS";
-	} else if (itemNum == 28) {
-		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;ChinaDNS用于解析<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/chnroute.txt' target='_blank'><u><font color='#00F'>chnroute</font></u></a>以外的国外网址的DNS。"
-		_caption = "ChinaDNS国外DNS";
-	} else if (itemNum == 29) {
-		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;除非你知道你在做什么，这里还是建议大家使用udp查询方式。"
-		_caption = "pdnsd查询方式";
-	} else if (itemNum == 30) {
-		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;如果使用TCP查询，请一定确保查询结果没有污染。"
-		_caption = "pdnsd上游服务器（TCP）";
-	} else if (itemNum == 31) {
-		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;dns2socks和ss-tunnel是走ss服务器的查询方式（国外cdn较好），dnscrypt-proxy是本地直接请求的方式（国外cdn较弱）。"
-		_caption = "pdnsd上游服务器（UDP）";
-	} else if (itemNum == 32) {
-		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;默认给出了最小TTL 24小时，最长TTL1周。"
-		_caption = "pdnsd缓存设置";
 	} else if (itemNum == 33) {
 		statusmenu = "填入需要强制用国内DNS解析的域名，一行一个，格式如下：。"
 		statusmenu += "</br>注意：不支持通配符！"
@@ -623,13 +551,8 @@ function openssHint(itemNum) {
 	} else if (itemNum == 42) {
 		statusmenu = "此处定义ss状态检测更新时间间隔，默认5秒。"
 		_caption = "状态更新间隔";
-	} else if (itemNum == 43) {
-		statusmenu = "chromecast功能能将所有来自局域网的DNS请求强行劫持到路由器自己的53端口上。"
-		statusmenu += "</br>如果你不能防止局域网中的别人自定义DNS服务器，那么未必防止DNS污染，可以开启此选项；"
-		statusmenu += "</br>开启后不管在电脑上定义什么DNS，都将会被劫持到你在路由器定义的DNS。"
-		_caption = "chromecast";
 	} else if (itemNum == 44) {
-		statusmenu = "shadowsocks规则更新包括了gfwlist模式中用到的<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf' target='_blank'><font color='#00F'><u>gfwlist</u></font></a>，在大陆白名单模式和游戏模式，游戏模式V2中用到的<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/chnroute.txt' target='_blank'><u><font color='#00F'>chnroute</font></u></a>和<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>"
+		statusmenu = "shadowsocks规则更新包括了gfwlist模式中用到的<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf' target='_blank'><font color='#00F'><u>gfwlist</u></font></a>，在大陆白名单模式和游戏模式中用到的<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/chnroute.txt' target='_blank'><u><font color='#00F'>chnroute</font></u></a>和<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>"
 		statusmenu += "</br>建议更新时间在凌晨闲时进行，以避免更新时重启ss服务器造成网络访问问题。"
 		_caption = "shadowsocks规则自动更新";
 	} else if (itemNum == 45) {
@@ -642,25 +565,9 @@ function openssHint(itemNum) {
 		statusmenu = "通过此开关，你可以开启或者关闭侧边栏面板上的shadowsocks入口;"
 		statusmenu += "</br>该开关在固件版本6.6.1（不包括6.6.1）以上起作用。"
 		_caption = "侧边栏开关";
-	} else if (itemNum == 51) {
-		width = "600px";
-		statusmenu = "如果你的ss服务器填写了域名，可以通过此处的设置来定义域名的解析方式"
-		statusmenu += "</br></br><font color='#00F'>如果解析正确:</font>ip地址将用于ss的配置文件和iptables对vps ip的RETURN操作"
-		statusmenu += "</br></br><font color='#00F'>如果解析失败:</font>ss的配置文件将会使用域名，然后由ss-redir自己去解析；iptables对vps ip的RETURN将不会添加，就会造成两种情况："
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;1，如果ss-redir自己也解析失败，就会出现Problem detected!，然后你将不能访问自己的vps，除非关闭ss"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;2，如果ss-redir自己解析成功，就会出现working...，虽然你能访问你的vps，但是是vps自己（127.0.0.1）访问自己，此时切换节点、关闭ss等操作，会断开你访问你vps的链接！当然，这对普通用户和购买ss帐号的用户没什么影响。"
-		statusmenu += "</br></br>nslookup解析方式比较自由，能自定义dns解析服务器，解析成功率比较高，但是解析失败的时候可能导致脚本开在nslookup处，可能导致过早提交结束，从而导致fq的dns污染。"
-		statusmenu += "</br></br>resolveip解析方式不会卡住脚本，如果4秒内不能解析成功，将不再尝试，然后把域名交给ss-redir自己取解析，并且不添加vps ip的RETURN条目。"
-		statusmenu += "</br></br>如果你使用IP地址作为服务器地址，那么选择两者没有区别，如果你使用域名，建议优先使用resolveip方式，如果还是不行再使用nslookup方式，再不行，就更换nslookup方式的解析服务器"
-		_caption = "SS服务器解析";
 	} else if (itemNum == 52) {
 		statusmenu = "KCP协议，ss-libev混淆，负载均衡下均不支持UDP！"
 		statusmenu += "</br>请检查你是否启用了其中之一。"
-		_caption = "侧边栏开关";
-	} else if (itemNum == 53) {
-		statusmenu = "此处可以自定义你偏向使用的DNS解析方案"
-		statusmenu += "</br></br>国内优先：国外dns解析gfwlist名单内的国外域名，其余域名用国内dns解析，需要<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/gfwlist.conf' target='_blank'><u><font color='#00F'>gfwlist</font></u></a>，占用cpu较小，国内解析效果好。"
-		statusmenu += "</br></br>国外优先：国内dns解析cdn名单内的国内域名用，其余域名用国外dns解析，需要<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>，占用cpu较大，国外解析效果好。"
 		_caption = "侧边栏开关";
 	} else if (itemNum == 54) {
 		statusmenu = "更多信息，请参考<a href='https://breakwa11.blogspot.jp/2017/01/shadowsocksr-mu.html' target='_blank'><u><font color='#00F'>ShadowsocksR 协议参数文档</font></u></a>"

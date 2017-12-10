@@ -1,5 +1,22 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.7.8
+   - 说明	此次精简优化插件，为了提升DNS解析能力，移除了一些旧dns解析方案，
+		增加了更加科学好用的DNS解析方案，且设置上对小白非常友好。
+   - add	新增cdns解析方案，支持EDNS，自带国内外cdn（默认）；
+   - add	新增chinadns2解析方案，支持EDNS，自带国内外cdn；
+   - remove	移除dnscrypt-proxy解析方案;
+   - remove	移除pdnsd解析方案;
+   - remove	移除旧的chinadns解析方案;
+   - remove	移除Pcap_DNSproxy解析方案;
+   - remove	移除DNS偏好选择，改为后台自动判断优化;
+   - remove	移除chromecast设置，为了更好防dns污染，现在默认开启;
+   - remove	移除ss节点解析设置，改为后台自动判断优化;
+   - remove	移除国内cdn加速设置，因为现在dns方案具有cdn加速了;
+   - remove	移除黑科技按钮，以后需要截图请自行打码;
+   - remove	移除插件开机启动延迟;
+   - update	优化启动脚本，提升插件提交应用速度;
+
 3.7.7
    - update	Pcap_DNSpproxy更新到最新0.4.9.5
    - update	dnscrypt-proxy更新到最新1.9.5

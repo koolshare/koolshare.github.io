@@ -1,0 +1,23 @@
+{
+    "global": {
+    "daemon": true,
+    "log": "syslog:daemon",
+    "log_debug": false
+    },
+    "cdns": {
+        "listen_ip": "127.0.0.1",
+        "listen_port": 7913,
+        "timeout": 2,
+        "servers": [
+        {
+            "ip_port": "203.80.96.10"
+        },
+        {
+            "ip_port": "8.8.8.8:53"
+        },
+        {
+            "ip_port": "8.8.4.4"
+        }
+        ]
+    }
+}

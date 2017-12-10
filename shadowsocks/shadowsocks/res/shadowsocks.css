@@ -339,12 +339,7 @@ input[type=button]:focus {
 	background: #2f3a3e;
 }
 
-/*select {
-  border: solid 1px #000;
-  appearance:none;
-  -moz-appearance:none;
-  -webkit-appearance:none;
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAJCAYAAAAGuM1UAAAAH0lEQVR42mNgoDnQ13f7TwiTpIkkm0hyHkl+YhhQAABcfyjsqSyTLgAAAABJRU5ErkJggg==) no-repeat scroll right center transparent;
-  padding-right: 14px;
-}
-select::-ms-expand { display: none; }*/
+.cloud_main_radius h2 { border-bottom:1px #AAA dashed;}
+.cloud_main_radius h3 { font-size:12px;color:#FFF;font-weight:normal;font-style: normal;}
+.cloud_main_radius h4 { font-size:12px;color:#FC0;font-weight:normal;font-style: normal;}
+.cloud_main_radius h5 { color:#FFF;font-weight:normal;font-style: normal;}

@@ -200,5 +200,7 @@ if [ "$ss_lb_enable" == "1" ];then
 	start_haproxy
 	echo_date 成功！
 else
+	echo_date 关闭haproxy进程！
 	killall haproxy >/dev/null 2>&1
+	echo_date 成功！
 fi

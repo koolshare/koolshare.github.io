@@ -22,81 +22,110 @@
 <script type="text/javascript" src="/dbconf?p=ss&v=<% uptime(); %>"></script>
 <script language="JavaScript" type="text/javascript" src="/client_function.js"></script>
 <script type="text/javascript" src="/res/ss-menu.js"></script>
-<style>
-.Bar_container {
-	width:85%;
-	height:20px;
-	border:1px inset #999;
-	margin:0 auto;
-	margin-top:20px \9;
-	background-color:#FFFFFF;
-	z-index:100;
-}
-#proceeding_img_text {
-	position:absolute;
-	z-index:101;
-	font-size:11px;
-	color:#000000;
-	line-height:21px;
-	width: 83%;
-}
-#proceeding_img {
-	height:21px;
-	background:#C0D1D3 url(/images/ss_proceding.gif);
-}
-</style>
 <script>
-var socks5 = 1
+var x = 5;
+var noChange = 0;
+var _responseLen;
+var params = ["ss_local_server", "ss_local_port", "ss_local_password", "ss_local_method", "ss_local_timeout", "ss_local_proxyport", "ss_local_obfs", "ss_local_acl"];
+	
 function init() {
 	show_menu(menu_hook);
-	conf_to_obj();
-	buildswitch();
+	conf2obj();
 	update_visibility();
 }
 
-function buildswitch() {
-	$("#switch").click(
-	function() {
-		if (E("switch").checked) {
-			document.form.ss_local_enable.value = 1;
-		} else {
-			document.form.ss_local_enable.value = 0;
+function save() {
+	var dbus = {};
+	for (var i = 0; i < params.length; i++) {
+		if (E(params[i])) {
+			dbus[params[i]] = E(params[i]).value;
+		}
+	}
+	dbus["SystemCmd"] = "ss_socks5.sh";
+	dbus["action_mode"] = " Refresh ";
+	dbus["current_page"] = "Main_SsLocal_Content.asp";
+	dbus["ss_local_enable"] = E("ss_local_enable").checked ? '1' : '0';;
+	db_ss["ss_basic_action"] = "14";
+	push_data(dbus);
+}
+
+function push_data(obj) {
+	$.ajax({
+		type: "POST",
+		url: '/applydb.cgi?p=ss',
+		contentType: "application/x-www-form-urlencoded",
+		dataType: 'text',
+		data: $.param(obj),
+		success: function(response) {
+			showSSLoadingBar();
+			noChange = 0;
+			get_realtime_log();
 		}
 	});
 }
 
-function conf_to_obj() {
-	for (var field in db_ss) {
-		var el = E(field);
-		if (el != null) {
-			el.value = db_ss[field];
+function conf2obj(){
+	E("ss_local_enable").checked = db_ss["ss_local_enable"] == "1";
+	for (var i = 0; i < params.length; i++) {
+		if(db_ss[params[i]]){
+			E(params[i]).value = db_ss[params[i]];
 		}
 	}
-	
-	var rrt = E("switch");
-	if (document.form.ss_local_enable.value != "1") {
-		rrt.checked = false;
-	} else {
-		rrt.checked = true;
-	}
-}
-
-function onSubmitCtrl() {
-	showSSLoadingBar(5);
-	document.form.action_mode.value = ' Refresh ';
-	document.form.enctype = "";
-	document.form.encoding = "";
-	document.form.action = "/applydb.cgi?p=ss_local_";
-	document.form.SystemCmd.value = "ss_socks5.sh";
-	document.form.submit();
-}
-
-function done_validating(action) {
-	return true;
 }
 
 function update_visibility() {
-	showhide("ss_obfs_host", (document.form.ss_local_obfs.value !== "0"));
+	showhide("ss_obfs_host", (E("ss_local_obfs").value !== "0"));
+}
+
+function get_realtime_log() {
+	$.ajax({
+		url: '/cmdRet_check.htm',
+		dataType: 'html',
+		error: function(xhr) {
+			setTimeout("checkCmdRe2t();", 1000);
+		},
+		success: function(response) {
+			var retArea = E("log_content3");
+			if (response.search("XU6J03M6") != -1) {
+				retArea.value = response.replace("XU6J03M6", " ");
+				E("ok_button").style.display = "";
+				retArea.scrollTop = retArea.scrollHeight;
+				x = 6;
+				count_down_close();
+				return true;
+			} else {
+				E("ok_button").style.display = "none";
+			}
+
+			if (_responseLen == response.length) {
+				noChange++;
+			} else {
+				noChange = 0;
+			}
+
+			if (noChange > 100) {
+				return false;
+			} else {
+				setTimeout("get_realtime_log();", 1000);
+			}
+			retArea.value = response;
+			retArea.scrollTop = retArea.scrollHeight;
+			_responseLen = response.length;
+		}
+	});
+}
+
+function count_down_close() {
+	if (x == "0") {
+		hideSSLoadingBar();
+	}
+	if (x < 0) {
+		E("ok_button1").value = "手动关闭"
+		return false;
+	}
+	E("ok_button1").value = "自动关闭（" + x + "）"
+	--x;
+	setTimeout("count_down_close();", 1000);
 }
 </script>
 </head>
@@ -104,21 +133,22 @@ function update_visibility() {
 	<div id="TopBanner"></div>
 	<div id="Loading" class="popup_bg"></div>
 	<div id="LoadingBar" class="popup_bar_bg">
-		<table cellpadding="5" cellspacing="0" id="loadingBarBlock" class="loadingBarBlock" align="center">
+		<table cellpadding="5" cellspacing="0" id="loadingBarBlock" class="loadingBarBlock"  align="center">
 			<tr>
 				<td height="100">
-					<div id="loading_block3" style="margin:10px auto;width:85%; font-size:12pt;"></div>
-					<div id="loading_block1" class="Bar_container">
-						<span id="proceeding_img_text"></span>
-						<div id="proceeding_img"></div>
-					</div>
-					<div id="loading_block2" style="margin:10px auto; width:85%;"></div>
+				<div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
+				<div id="loading_block2" style="margin:10px auto;width:95%;"></div>
+				<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;">
+				<textarea cols="63" rows="21" wrap="on" readonly="readonly" id="log_content3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="border:1px solid #000;width:99%; font-family:'Lucida Console'; font-size:11px;background:#000;color:#FFFFFF;outline: none;padding-left:3px;padding-right:22px;overflow-x:hidden"></textarea>
+				</div>
+				<div id="ok_button" class="apply_gen" style="background: #000;display: none;">
+					<input id="ok_button1" class="button_gen" type="button" onclick="hideSSLoadingBar()" value="确定">
+				</div>
 				</td>
 			</tr>
 		</table>
 	</div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
-<form method="post" name="form" action="/applyss.cgi" target="hidden_frame">
 	<input type="hidden" name="current_page" value="Main_SsLocal_Content.asp">
 	<input type="hidden" name="next_page" value="Main_SsLocal_Content.asp">
 	<input type="hidden" name="group_id" value="">
@@ -130,7 +160,6 @@ function update_visibility() {
 	<input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get("preferred_lang"); %>">
 	<input type="hidden" name="SystemCmd" value="">
 	<input type="hidden" name="firmver" value="<% nvram_get("firmver"); %>">
-	<input type="hidden" id="ss_local_enable" name="ss_local_enable" value='<% dbus_get_def("ss_local_enable", "0"); %>'/>
 	<table class="content" align="center" cellpadding="0" cellspacing="0">
 		<tr>
 			<td width="17">&nbsp;</td>
@@ -148,8 +177,7 @@ function update_visibility() {
 										<div class="formfonttitle">Shadowsocks - Socks5代理设置</div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 										<div class="SimpleNote">
-											<li><i>说明：</i>此页面允许配置第二个shadosocks账号，功能仅限于在路由器上打开一个连接到shadowsocks服务器的socks5端口。如果你使用chrome浏览器，你可以使用SwitchyOmega插件去连接这个socks5代理。</li></br>
-											<li><i>此页面功能独立于ss，单独开关：</i></li>
+											<li><i>说明：</i>此页面允许配置第二个shadosocks账号，功能仅限于在路由器上打开一个连接到shadowsocks服务器的socks5端口。如果你使用chrome浏览器，你可以使用SwitchyOmega插件去连接这个socks5代理。</li>
 										</div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 										<table width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
@@ -164,8 +192,8 @@ function update_visibility() {
                                         	    </th>
                                         	    <td colspan="2">
                                         	        <div class="switch_field" style="display:table-cell;float: left;">
-                                        	            <label for="switch">
-                                        	                <input id="switch" class="switch" type="checkbox" style="display: none;">
+                                        	            <label for="ss_local_enable">
+                                        	                <input id="ss_local_enable" class="switch" type="checkbox" style="display: none;">
                                         	                <div class="switch_container" >
                                         	                    <div class="switch_bar"></div>
                                         	                    <div class="switch_circle transition_style">
@@ -261,7 +289,7 @@ function update_visibility() {
 										</table>
 										<div id="warning" style="font-size:14px;margin:20px auto;"></div>
 										<div class="apply_gen">
-											<input class="button_gen" id="cmdBtn" onClick="onSubmitCtrl()" type="button" value="提交" />
+											<input class="button_gen" id="cmdBtn" onClick="save()" type="button" value="提交" />
 										</div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px"><img src="/images/New_ui/export/line_export.png"></div>
 										<div class="KoolshareBottom">论坛技术支持： <a href="http://www.koolshare.cn" target="_blank"> <i><u>www.koolshare.cn</u></i> </a> <br/>
@@ -278,7 +306,6 @@ function update_visibility() {
 			<td width="10" align="center" valign="top"></td>
 		</tr>
 	</table>
-</form>
 <div id="footer"></div>
 </body>
 </html>

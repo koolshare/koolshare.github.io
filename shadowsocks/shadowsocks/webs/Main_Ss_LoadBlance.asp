@@ -22,21 +22,16 @@
 <script type="text/javascript" src="/help.js"></script>
 <script type="text/javascript" src="/res/ss-menu.js"></script>
 <script type="text/javascript" src="/dbconf?p=ss&v=<% uptime(); %>"></script>
-<style>
-    .cloud_main_radius h2 { border-bottom:1px #AAA dashed;}
-	.cloud_main_radius h3 { font-size:12px;color:#FFF;font-weight:normal;font-style: normal;}
-	.cloud_main_radius h4 { font-size:12px;color:#FC0;font-weight:normal;font-style: normal;}
-	.cloud_main_radius h5 { color:#FFF;font-weight:normal;font-style: normal;}
-</style>
-
 <script>
-var socks5 = 0
+var dbus = {};
 var _responseLen;
 var noChange = 0;
+var lb_node_nu = 0;
+var node_global_max = 0;
+var params = ["ss_lb_passwd", "ss_lb_port", "ss_lb_heartbeat", "ss_lb_up", "ss_lb_down", "ss_lb_interval", "ss_lb_name", "ss_lb_weight", "ss_lb_mode"];
 
 function init() {
 	show_menu(menu_hook);
-	buildswitch();
 	conf2obj();
 	loadAllConfigs();
 	refresh_table();
@@ -45,20 +40,9 @@ function init() {
 	update_visibility();
 }
 
-function buildswitch() {
-	$("#switch").click(
-	function() {
-		if (document.getElementById('switch').checked) {
-			document.form.ss_lb_enable.value = 1;
-		} else {
-			document.form.ss_lb_enable.value = 0;
-		}
-	});
-}
-
-function onSubmitCtrl() {
+function save() {
 	db_ss["ss_basic_action"] = "12";
-	lb_enable = E("ss_lb_enable").value;
+	lb_enable = E("ss_lb_enable").checked ? '1' : '0';
 	if (lb_enable == 0) {
 		del_lb_node();
 	} else if (lb_enable == 1) {
@@ -68,72 +52,70 @@ function onSubmitCtrl() {
 		}
 		add_new_lb_node();
 	}
-	document.form.action_mode.value = ' Refresh ';
-	document.form.SystemCmd.value = "ss_lb_config.sh";
-	document.form.submit();
-	showSSLoadingBar();
-	noChange = 0;
-	setTimeout("get_realtime_log();", 500);
+	dbus["SystemCmd"] = "ss_lb_config.sh";
+	dbus["action_mode"] = " Refresh ";
+	dbus["current_page"] = "Main_Ss_LoadBlance.asp";
+	dbus["ss_lb_enable"] = lb_enable;
+	for (var i = 0; i < params.length; i++) {
+		if (E(params[i])) {
+			dbus[params[i]] = E(params[i]).value;
+		}
+	}
+	push_data(dbus);
 }
 
-function conf2obj() {
-	for (var field in db_ss) {
-		$('#' + field).val(db_ss[field]);
-	}
-	var rrt = document.getElementById("switch");
-	if (document.form.ss_lb_enable.value != "1") {
-		rrt.checked = false;
-	} else {
-		rrt.checked = true;
+function push_data(obj) {
+	$.ajax({
+		type: "POST",
+		url: '/applydb.cgi?p=ss',
+		contentType: "application/x-www-form-urlencoded",
+		dataType: 'text',
+		data: $.param(obj),
+		success: function(response) {
+			showSSLoadingBar();
+			noChange = 0;
+			get_realtime_log();
+		}
+	});
+}
+
+function conf2obj(){
+	E("ss_lb_enable").checked = db_ss["ss_lb_enable"] == "1";
+	for (var i = 0; i < params.length; i++) {
+		if(db_ss[params[i]]){
+			E(params[i]).value = db_ss[params[i]];
+		}
 	}
 }
 
 function getAllConfigs() {
 	var dic = {};
-	node_global_max = 0;
 	for (var field in db_ss) {
 		names = field.split("_");
 		dic[names[names.length - 1]] = 'ok';
 	}
 	confs = {};
 	var p = "ssconf_basic";
-	var params = ["name", "server", "port", "password", "method"];
 	for (var field in dic) {
+		if (isNaN(field)){
+			continue;
+		}
 		var obj = {};
 		if (typeof db_ss[p + "_name_" + field] == "undefined") {
 			obj["name"] = '节点' + field;
 		} else {
 			obj["name"] = db_ss[p + "_name_" + field];
 		}
-
 		if (typeof db_ss[p + "_mode_" + field] == "undefined") {
 			obj["mode"] = '';
 		} else {
 			obj["mode"] = db_ss[p + "_mode_" + field];
-		}
-
-		if (typeof db_ss[p + "_onetime_auth_" + field] == "undefined") {
-			obj["onetime_auth"] = '';
-		} else {
-			obj["onetime_auth"] = db_ss[p + "_onetime_auth_" + field];
-		}
-
-		if (typeof db_ss[p + "_koolgame_udp_" + field] == "undefined") {
-			obj["koolgame_udp"] = '';
-		} else {
-			obj["koolgame_udp"] = db_ss[p + "_koolgame_udp_" + field];
 		}
 		if (typeof db_ss[p + "_use_lb_" + field] == "undefined") {
 			obj["use_lb"] = '0';
 		} else {
 			obj["use_lb"] = db_ss[p + "_use_lb_" + field];
 		}
-		if (typeof db_ss[p + "_iflb_" + field] == "undefined") {
-			obj["iflb"] = '0';
-		} else {
-			obj["iflb"] = db_ss[p + "_iflb_" + field];
-		}
-
 		if (typeof db_ss[p + "_weight_" + field] == "undefined") {
 			obj["weight"] = '';
 		} else {
@@ -144,31 +126,11 @@ function getAllConfigs() {
 		} else {
 			obj["lbmode"] = db_ss[p + "_lbmode_" + field];
 		}
-		if (typeof db_ss[p + "_rss_protocol_" + field] == "undefined") {
-			obj["rss_protocol"] = '';
-		} else {
-			obj["rss_protocol"] = db_ss[p + "_rss_protocol_" + field];
-		}
-		if (typeof db_ss[p + "_rss_protocol_param_" + field] == "undefined") {
-			obj["rss_protocol_param"] = '';
-		} else {
-			obj["rss_protocol_param"] = db_ss[p + "_rss_protocol_param_" + field];
-		}
-		if (typeof db_ss[p + "_rss_obfs_" + field] == "undefined") {
-			obj["rss_obfs"] = '';
-		} else {
-			obj["rss_obfs"] = db_ss[p + "_rss_obfs_" + field];
-		}
 
-		if (typeof db_ss[p + "_rss_obfs_param_" + field] == "undefined") {
-			obj["rss_obfs_param"] = '';
-		} else {
-			obj["rss_obfs_param"] = db_ss[p + "_rss_obfs_param_" + field];
-		}
-
+		var params = ["name", "server", "port", "password", "method"];
 		for (var i = 1; i < params.length; i++) {
 			var ofield = p + "_" + params[i] + "_" + field;
-			if (typeof db_ss[ofield] == "undefined") {
+			if (typeof db_ss["ssconf_basic_mode_" + field] == "undefined") {
 				obj = null;
 				break;
 			}
@@ -187,7 +149,6 @@ function getAllConfigs() {
 }
 
 function load_lb_node_nu() {
-	lb_node_nu = 0;
 	confs = getAllConfigs();
 	for (var field in confs) {
 		var c = confs[field];
@@ -216,7 +177,6 @@ function add_new_lb_node() {
 	cur_lb_node = node_global_max + 1;
 	for (var field in confs) {
 		var c = confs[field];
-
 		if (c["server"] == "127.0.0.1" && c["port"] == db_ss['ss_lb_port']) {
 			cur_lb_node = field;
 		}
@@ -224,24 +184,19 @@ function add_new_lb_node() {
 			min_lb_node = field;
 		}
 	}
-	var ns = {};
-	ns["ssconf_basic_name_" + cur_lb_node] = E("ss_lb_name").value;
-	ns["ssconf_basic_server_" + cur_lb_node] = "127.0.0.1";
-	ns["ssconf_basic_mode_" + cur_lb_node] = db_ss['ssconf_basic_mode_' + min_lb_node];
-	ns["ssconf_basic_port_" + cur_lb_node] = E("ss_lb_port").value;
-	ns["ssconf_basic_password_" + cur_lb_node] = db_ss['ssconf_basic_password_' + min_lb_node];
-	ns["ssconf_basic_method_" + cur_lb_node] = db_ss['ssconf_basic_method_' + min_lb_node];
-	ns["ssconf_basic_onetime_auth_" + cur_lb_node] = db_ss['ssconf_basic_onetime_auth_' + min_lb_node];
-	ns["ssconf_basic_rss_protocol_" + cur_lb_node] = db_ss['ssconf_basic_rss_protocol_' + min_lb_node];
-	ns["ssconf_basic_rss_protocol_param_" + cur_lb_node] = db_ss['ssconf_basic_rss_protocol_param_' + min_lb_node];
-	ns["ssconf_basic_rss_obfs_" + cur_lb_node] = db_ss['ssconf_basic_rss_obfs_' + min_lb_node];
-	ns["ssconf_basic_rss_obfs_param_" + cur_lb_node] = db_ss['ssconf_basic_rss_obfs_param_' + min_lb_node];
-	$.ajax({
-		url: '/applydb.cgi?p=ssconf_basic',
-		contentType: "application/x-www-form-urlencoded",
-		dataType: 'text',
-		data: $.param(ns)
-	});
+	dbus["ssconf_basic_name_" + cur_lb_node] = E("ss_lb_name").value;
+	dbus["ssconf_basic_server_" + cur_lb_node] = "127.0.0.1";
+	dbus["ssconf_basic_mode_" + cur_lb_node] = db_ss['ssconf_basic_mode_' + min_lb_node];
+	dbus["ssconf_basic_port_" + cur_lb_node] = E("ss_lb_port").value;
+	dbus["ssconf_basic_password_" + cur_lb_node] = db_ss['ssconf_basic_password_' + min_lb_node];
+	dbus["ssconf_basic_method_" + cur_lb_node] = db_ss['ssconf_basic_method_' + min_lb_node];
+	dbus["ssconf_basic_ss_obfs" + cur_lb_node] = db_ss['ss_basic_ss_obfs' + min_lb_node];
+	dbus["ssconf_basic_ss_obfs_host" + cur_lb_node] = db_ss['ss_basic_ss_obfs_host' + min_lb_node];
+	dbus["ssconf_basic_rss_protocol_" + cur_lb_node] = db_ss['ssconf_basic_rss_protocol_' + min_lb_node];
+	dbus["ssconf_basic_rss_protocol_param_" + cur_lb_node] = db_ss['ssconf_basic_rss_protocol_param_' + min_lb_node];
+	dbus["ssconf_basic_rss_obfs_" + cur_lb_node] = db_ss['ssconf_basic_rss_obfs_' + min_lb_node];
+	dbus["ssconf_basic_rss_obfs_param_" + cur_lb_node] = db_ss['ssconf_basic_rss_obfs_param_' + min_lb_node];
+	dbus["ssconf_basic_koolgame_udp" + cur_lb_node] = db_ss['ss_basic_koolgame_udp' + min_lb_node];
 }
 
 function del_lb_node(o) {
@@ -254,25 +209,20 @@ function del_lb_node(o) {
 			cur_lb_node = field;
 		}
 	}
-
 	var ns = {};
-	ns["ssconf_basic_name_" + cur_lb_node] = "";
-	ns["ssconf_basic_server_" + cur_lb_node] = "";
-	ns["ssconf_basic_mode_" + cur_lb_node] = "";
-	ns["ssconf_basic_port_" + cur_lb_node] = "";
-	ns["ssconf_basic_password_" + cur_lb_node] = "";
-	ns["ssconf_basic_method_" + cur_lb_node] = "";
-	ns["ssconf_basic_onetime_auth_" + cur_lb_node] = "";
-	ns["ssconf_basic_rss_protocol_" + cur_lb_node] = "";
-	ns["ssconf_basic_rss_protocol_param_" + cur_lb_node] = "";
-	ns["ssconf_basic_rss_obfs_" + cur_lb_node] = "";
-	ns["ssconf_basic_rss_obfs_param_" + cur_lb_node] = "";
-	$.ajax({
-		url: '/applydb.cgi?use_rm=1&p=ssconf_basic',
-		contentType: "application/x-www-form-urlencoded",
-		dataType: 'text',
-		data: $.param(ns)
-	});
+	dbus["ssconf_basic_name_" + cur_lb_node] = "";
+	dbus["ssconf_basic_server_" + cur_lb_node] = "";
+	dbus["ssconf_basic_mode_" + cur_lb_node] = "";
+	dbus["ssconf_basic_port_" + cur_lb_node] = "";
+	dbus["ssconf_basic_password_" + cur_lb_node] = "";
+	dbus["ssconf_basic_method_" + cur_lb_node] = "";
+	dbus["ssconf_basic_ss_obfs" + cur_lb_node] = "";
+	dbus["ssconf_basic_ss_obfs_host" + cur_lb_node] = "";
+	dbus["ssconf_basic_rss_protocol_" + cur_lb_node] = "";
+	dbus["ssconf_basic_rss_protocol_param_" + cur_lb_node] = "";
+	dbus["ssconf_basic_rss_obfs_" + cur_lb_node] = "";
+	dbus["ssconf_basic_rss_obfs_param_" + cur_lb_node] = "";
+	dbus["ssconf_basic_koolgame_udp" + cur_lb_node] = "";
 }
 
 function addTr() {
@@ -391,10 +341,6 @@ function loadAllConfigs() {
 	loadBasicOptions(confs);
 }
 
-function reload_Soft_Center() {
-	location.href = "/Main_Soft_center.asp";
-}
-
 function generate_link() {
 	var link = window.btoa("http://" + '<% nvram_get("lan_ipaddr"); %>' + ":1188")
 	document.getElementById("link4.1").href = "http://" + '<% nvram_get("lan_ipaddr"); %>' + ":1188";
@@ -402,7 +348,7 @@ function generate_link() {
 }
 
 function update_visibility() {
-	showhide("heartbeat_detai", (document.form.ss_lb_heartbeat.value == "1"));
+	showhide("heartbeat_detai", (E("ss_lb_heartbeat").value == "1"));
 }
 
 function get_realtime_log() {
@@ -431,7 +377,7 @@ function get_realtime_log() {
 				noChange = 0;
 			}
 
-			if (noChange > 12) {
+			if (noChange > 100) {
 				return false;
 			} else {
 				setTimeout("get_realtime_log();", 1000);
@@ -443,7 +389,6 @@ function get_realtime_log() {
 	});
 }
 
-var x = 6;
 function count_down_close() {
 	if (x == "0") {
 		hideSSLoadingBar();
@@ -459,24 +404,24 @@ function count_down_close() {
 </script>
 </head>
 <body onload="init();">
-<div id="TopBanner"></div>
-<div id="Loading" class="popup_bg"></div>
-<div id="LoadingBar" class="popup_bar_bg">
-	<table cellpadding="5" cellspacing="0" id="loadingBarBlock" class="loadingBarBlock" align="center">
-		<tr>
-			<td height="100">
+	<div id="TopBanner"></div>
+	<div id="Loading" class="popup_bg"></div>
+	<div id="LoadingBar" class="popup_bar_bg">
+		<table cellpadding="5" cellspacing="0" id="loadingBarBlock" class="loadingBarBlock"  align="center">
+			<tr>
+				<td height="100">
 				<div id="loading_block3" style="margin:10px auto;margin-left:10px;width:85%; font-size:12pt;"></div>
 				<div id="loading_block2" style="margin:10px auto;width:95%;"></div>
 				<div id="log_content2" style="margin-left:15px;margin-right:15px;margin-top:10px;">
-					<textarea cols="63" rows="25" wrap="off" readonly="readonly" id="log_content3" style="border:1px solid #000;width:99%; font-family:'Lucida Console'; font-size:11px;background:#000;color:#FFFFFF;"></textarea>
+				<textarea cols="63" rows="21" wrap="on" readonly="readonly" id="log_content3" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="border:1px solid #000;width:99%; font-family:'Lucida Console'; font-size:11px;background:#000;color:#FFFFFF;outline: none;padding-left:3px;padding-right:22px;overflow-x:hidden"></textarea>
 				</div>
 				<div id="ok_button" class="apply_gen" style="background: #000;display: none;">
 					<input id="ok_button1" class="button_gen" type="button" onclick="hideSSLoadingBar()" value="确定">
 				</div>
-			</td>
-		</tr>
-	</table>
-</div>
+				</td>
+			</tr>
+		</table>
+	</div>
 <iframe name="hidden_frame" id="hidden_frame" src="" width="0" height="0" frameborder="0"></iframe>
 <form method="POST" name="form" action="/applydb.cgi?p=ss" target="hidden_frame">
 	<input type="hidden" name="current_page" value="Main_Ss_LoadBlance.asp" />
@@ -490,7 +435,6 @@ function count_down_close() {
 	<input type="hidden" name="preferred_lang" id="preferred_lang" value="<% nvram_get(" preferred_lang "); %>"/>
 	<input type="hidden" name="SystemCmd" value="" />
 	<input type="hidden" name="firmver" value="<% nvram_get(" firmver "); %>"/>
-	<input type="hidden" id="ss_lb_enable" name="ss_lb_enable" value='<% dbus_get_def("ss_lb_enable", "0"); %>' />
 	<table class="content" align="center" cellpadding="0" cellspacing="0">
 		<tr>
 			<td width="17">&nbsp;</td>
@@ -555,8 +499,8 @@ function count_down_close() {
 												</th>
 												<td colspan="2">
 													<div class="switch_field" style="display:table-cell">
-														<label for="switch">
-															<input id="switch" class="switch" type="checkbox" style="display: none;">
+														<label for="ss_lb_enable">
+															<input id="ss_lb_enable" class="switch" type="checkbox" style="display: none;">
 															<div class="switch_container">
 																<div class="switch_bar"></div>
 																<div class="switch_circle transition_style">
@@ -574,14 +518,14 @@ function count_down_close() {
 														<a id="link4.1" href="http://aria2.me/glutton/" target="_blank"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 登录帐号：<i><% nvram_get("http_username"); %></i>
 														&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 登录密码：
 														<input type="password" maxlength="64" id="ss_lb_passwd" name="ss_lb_passwd" value="<% nvram_get(" http_passwd "); %>" class="input_ss_table"
-														style="width:80px;" autocorrect="off" autocapitalize="off" onblur="switchType(this, false);" onfocus="switchType(this, true);this.removeAttribute('readonly');"></input>
+														style="width:80px;" autocorrect="off" autocapitalize="off" onblur="switchType(this, false);" onfocus="switchType(this, true);this.removeAttribute('readonly');"/>
 													</div>
 												</td>
 											</tr>
 											<tr>
 												<th>Haproxy端口(用于ss监听)</th>
 												<td>
-													<input type="text" maxlength="64" id="ss_lb_port" name="ss_lb_port" value="1181" class="input_ss_table" style="width:60px;" autocorrect="off" autocapitalize="off"></input>
+													<input type="text" maxlength="64" id="ss_lb_port" name="ss_lb_port" value="1181" class="input_ss_table" style="width:60px;" autocorrect="off" autocapitalize="off"/>
 												</td>
 											</tr>
 											<tr>
@@ -593,15 +537,15 @@ function count_down_close() {
 													</select>	<span id="heartbeat_detai">
 													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 													成功:
-												  	<input type="text" maxlength="64" id="ss_lb_up" name="ss_lb_up" value="2" class="input_ss_table" style="width:20px;" autocorrect="off" autocapitalize="off"></input>
+												  	<input type="text" maxlength="64" id="ss_lb_up" name="ss_lb_up" value="2" class="input_ss_table" style="width:20px;" autocorrect="off" autocapitalize="off"/>
 													次;
 													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 													失败:
-												  	<input type="text" maxlength="64" id="ss_lb_down" name="ss_lb_down" value="3" class="input_ss_table" style="width:20px;" autocorrect="off" autocapitalize="off"></input>
+												  	<input type="text" maxlength="64" id="ss_lb_down" name="ss_lb_down" value="3" class="input_ss_table" style="width:20px;" autocorrect="off" autocapitalize="off"/>
 													次;
 													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 													心跳间隔:
-												  	<input type="text" maxlength="64" id="ss_lb_interval" name="ss_lb_interval" value="2000" class="input_ss_table" style="width:40px;" autocorrect="off" autocapitalize="off"></input>
+												  	<input type="text" maxlength="64" id="ss_lb_interval" name="ss_lb_interval" value="2000" class="input_ss_table" style="width:40px;" autocorrect="off" autocapitalize="off"/>
 													ms
 													</span>
 												</td>
@@ -609,7 +553,7 @@ function count_down_close() {
 											<tr>
 												<th>节点名（添加到ss节点列表）</th>
 												<td>
-													<input type="text" maxlength="64" id="ss_lb_name" name="ss_lb_name" value="负载均衡" class="input_ss_table" style="width:80px;" autocorrect="off" autocapitalize="off"></input>
+													<input type="text" maxlength="64" id="ss_lb_name" name="ss_lb_name" value="负载均衡" class="input_ss_table" style="width:80px;" autocorrect="off" autocapitalize="off"/>
 												</td>
 											</tr>
 											<tr>
@@ -642,7 +586,7 @@ function count_down_close() {
 											<textarea cols="63" rows="21" wrap="off" readonly="readonly" id="log_content1" style="width:99%; font-family:'Lucida Console'; font-size:11px;background:#475A5F;color:#FFFFFF;"></textarea>
 										</div>
 										<div class="apply_gen">
-											<input id="cmdBtn" class="button_gen" type="button" onclick="onSubmitCtrl()" value="提交">
+											<input id="cmdBtn" class="button_gen" type="button" onclick="save()" value="提交">
 										</div>
 										<div style="margin-left:5px;margin-top:10px;margin-bottom:10px">
 											<img src="/images/New_ui/export/line_export.png">
