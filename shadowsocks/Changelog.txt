@@ -1,5 +1,11 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.8.0
+   - fix	修复dns劫持功能失效导致自定义过DNS的出现问题。
+   - fix	修复chinadns2有时候启动失败的问题。
+   - revert	恢复原chinadns方案，为了区分命名为chinadns1，其中国dns使用【国内DNS设置的值】，上游方案固定为dns2socks。
+   - update	为了保证成功率，默认国外方案更换为dns2socks。
+
 3.7.9
    - 说明	是否加会原来的一些dns解析方案待观察。
    - fix	修复详细状态显示的信息不正确。

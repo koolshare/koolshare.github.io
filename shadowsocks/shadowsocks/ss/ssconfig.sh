@@ -173,6 +173,11 @@ kill_process(){
 		echo_date 关闭chinadns2进程...
 		killall chinadns
 	fi
+	chinadns1_process=`pidof chinadns1`
+	if [ -n "$chinadns1_process" ];then 
+		echo_date 关闭chinadns1进程...
+		killall chinadns1
+	fi
 	cdns_process=`pidof cdns`
 	if [ -n "$cdns_process" ];then 
 		echo_date 关闭cdns进程...
@@ -427,8 +432,7 @@ start_dns(){
 
 	if [ "$ss_foreign_dns" == "2" ]; then
 		echo_date 开启chinadns2，用于dns解析...
-		public_ip=`/koolshare/bin/curl --connect-timeout 4 -s 'https://ip.ngrok.wang/'`
-		#public_ip=`wget --timeout=3 -qO-  'https://ip.ngrok.wang/'`
+		public_ip=`/koolshare/bin/curl --connect-timeout 4 -s 'http://members.3322.org/dyndns/getip'`
 		if [ "$?" == "0" ] && [ -n "$public_ip" ];then
 			dbus set ss_basic_publicip="$public_ip"
 			clinet_ip=$public_ip
@@ -465,13 +469,21 @@ start_dns(){
 			fi
 		fi
 	fi
+	
+	#start chinadns1
+	if [ "$ss_foreign_dns" == "5" ];then
+		echo_date 开启chinadns1，用于dns解析...
+		[ "$ss_dns_china" == "1" ] && RCC="114.114.114.114" || RCC="$CDN"
+		dns2socks 127.0.0.1:23456 "$ss_chinadns1_user" 127.0.0.1:1055 > /dev/null 2>&1 &
+		chinadns1 -p $DNS_PORT -s $RCC,127.0.0.1:1055 -m -d -c /koolshare/ss/rules/chnroute.txt > /dev/null 2>&1 &
+	fi
 }
 #--------------------------------------------------------------------------------------
 
 load_cdn_site(){
 	# append china site
 	rm -rf /tmp/sscdn.conf
-	if [ "$ss_foreign_dns" != "1" ] && [ "$ss_foreign_dns" != "2" ];then
+	if [ "$ss_foreign_dns" != "1" ] && [ "$ss_foreign_dns" != "2" ] && [ "$ss_foreign_dns" != "5" ];then
 		echo_date 生成cdn加速列表到/tmp/sscdn.conf，加速用的dns：$CDN
 		echo "#for china site CDN acclerate" >> /tmp/sscdn.conf
 		cat /koolshare/ss/rules/cdn.txt | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" | sort | awk '{if ($0!=line) print;line=$0}' >>/tmp/sscdn.conf
@@ -1220,7 +1232,7 @@ apply_nat_rules(){
 chromecast(){
 	chromecast_nu=`iptables -t nat -L PREROUTING -v -n --line-numbers|grep "dpt:53"|awk '{print $1}'`
 	if [ -z "$chromecast_nu" ]; then
-		iptables -t nat $IPT_ACTION PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
+		iptables -t nat -A PREROUTING -p udp --dport 53 -j DNAT --to $lan_ipaddr >/dev/null 2>&1
 		echo_date 开启chromecast功能（DNS劫持功能）
 	else
 		echo_date DNS劫持规则已经添加，跳过~

@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# shadowsocks script for AM380 merlin firmware
+# by sadog (sadoneli@gmail.com) from koolshare.cn
+
 eval `dbus export ss`
 source /koolshare/scripts/base.sh
 source helper.sh
@@ -41,7 +44,7 @@ get_dns_name() {
 			fi
 		;;
 		5)
-			echo "koolgame内置"
+			echo "chinadns1 + dns2socks上游"
 		;;
 	esac
 }
@@ -62,6 +65,7 @@ echo_version(){
 	echo "haproxy			1.8.1 		2017年11月13日编译"
 	echo "dns2socks		V2.0 	"
 	echo "cdns			1.0 		2017年12月09日编译"
+	echo "chinadns1		1.3.2 		2017年12月09日编译"
 	echo "chinadns2		2.0.0 		2017年12月09日编译"
 	echo "client_linux_arm5	20171201	kcptun"
 	echo -----------------------------------------------------------
@@ -78,6 +82,7 @@ check_status(){
 	KOOLGAME=`pidof koolgame`
 	DNS2SOCKS=`pidof dns2socks`
 	CDNS=`pidof cdns`
+	CHINADNS1=`pidof chinadns1`
 	CHINADNS=`pidof chinadns`
 	KCPTUN=`pidof client_linux_arm5`
 	HAPROXY=`pidof haproxy`
@@ -136,6 +141,9 @@ check_status(){
 			else
 				[ -n "$SS_TUNNEL" ] && echo "ss-tunnel	工作中	pid：$SS_TUNNEL" || echo "ss-tunnel	未运行"
 			fi
+		elif [ "$ss_foreign_dns" == "5" ];then
+			[ -n "$DNS2SOCKS" ] && echo "dns2socks	工作中	pid：$DNS2SOCKS" || echo "dns2socks	未运行"
+			[ -n "$CHINADNS1" ] && echo "chinadns1	工作中	pid：$CHINADNS1" || echo "chinadns1	未运行"
 		fi
 	fi
 

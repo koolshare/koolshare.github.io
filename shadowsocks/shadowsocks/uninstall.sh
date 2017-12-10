@@ -23,6 +23,7 @@ rm -rf /koolshare/bin/dns2socks
 rm -rf /koolshare/bin/cdns
 rm -rf /koolshare/bin/client_linux_arm5
 rm -rf /koolshare/bin/chinadns
+rm -rf /koolshare/bin/chinadns1
 rm -rf /koolshare/bin/resolveip
 rm -rf /koolshare/res/layer
 rm -rf /koolshare/res/shadowsocks.css

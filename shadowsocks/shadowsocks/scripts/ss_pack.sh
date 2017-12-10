@@ -26,6 +26,7 @@ cp /koolshare/bin/pdu $TARGET_FOLDER/bin/
 cp /koolshare/bin/dns2socks $TARGET_FOLDER/bin/
 cp /koolshare/bin/cdns $TARGET_FOLDER/bin/
 cp /koolshare/bin/chinadns $TARGET_FOLDER/bin/
+cp /koolshare/bin/chinadns1 $TARGET_FOLDER/bin/
 cp /koolshare/bin/resolveip $TARGET_FOLDER/bin/
 cp /koolshare/bin/haproxy $TARGET_FOLDER/bin/
 cp /koolshare/bin/client_linux_arm5 $TARGET_FOLDER/bin/
