@@ -55,7 +55,7 @@ echo_version(){
 	echo "ss-redir		3.1.1		2017年11月25日编译"
 	echo "ss-tunnel		3.1.1 		2017年11月25日编译"
 	echo "ss-local		3.1.1		2017年11月25日编译"
-	echo "obfs-local		0.0.4		2017年11月13日编译"
+	echo "obfs-local		0.0.5		2017年11月13日编译"
 	echo "ssrr-redir		3.5.2 		2017年11月13日编译"
 	echo "ssrr-tunnel		3.5.2 		2017年11月13日编译"
 	echo "ssrr-local		3.5.2 		2017年11月13日编译"
@@ -77,7 +77,7 @@ check_status(){
 	SSR_TUNNEL=`pidof rss-tunnel`
 	KOOLGAME=`pidof koolgame`
 	DNS2SOCKS=`pidof dns2socks`
-	CDNS=`pidof CDNS`
+	CDNS=`pidof cdns`
 	CHINADNS=`pidof chinadns`
 	KCPTUN=`pidof client_linux_arm5`
 	HAPROXY=`pidof haproxy`
@@ -119,7 +119,7 @@ check_status(){
 		fi
 		
 		if [ "$ss_foreign_dns" == "1" ];then
-			[ -n "$CHINADNS" ] && echo "cdns	工作中	pid：$CDNS" || echo "cdns	未运行"
+			[ -n "$CDNS" ] && echo "cdns		工作中	pid：$CDNS" || echo "cdns	未运行"
 		elif [ "$ss_foreign_dns" == "2" ];then
 			[ -n "$CHINADNS" ] && echo "chinadns	工作中	pid：$CHINADNS" || echo "chinadns	未运行"
 		elif [ "$ss_foreign_dns" == "3" ];then
@@ -130,7 +130,7 @@ check_status(){
 				[ -n "$SS_LOCAL" ] && echo "ss-local	工作中	pid：$SS_LOCAL" || echo "ss-local	未运行"
 				[ -n "$DNS2SOCKS" ] && echo "dns2socks	工作中	pid：$DNS2SOCKS" || echo "dns2socks	未运行"
 			fi
-		elif [ "$ss_dns_foreign" == "4" ];then
+		elif [ "$ss_foreign_dns" == "4" ];then
 			if [ -n "$ss_basic_rss_obfs" ];then
 				[ -n "$SSR_TUNNEL" ] && echo "ssr-tunnel	工作中	pid：$SSR_TUNNEL" || echo "ssr-tunnel	未运行"
 			else
