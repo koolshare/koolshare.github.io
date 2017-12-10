@@ -2812,7 +2812,6 @@ function save_online_nodes(action) {
 												<tr>
 													<td>
 														<div id="node_return_button" class="apply_gen" style="margin-left: 188px;;float: left;">
-															<input class="button_gen" id="returnBtn" onClick="hide_text()" type="button" value="黑科技按钮"/>
 															<input id="add_ss_node" class="button_gen" onClick="Add_profile()" type="button" value="添加节点"/>
 														</div>
 													</td>
