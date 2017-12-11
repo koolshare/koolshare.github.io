@@ -1,11 +1,13 @@
 #!/bin/sh
-#sed -i "s/cache-size=1500/cache-size=15000/" /tmp/etc/dnsmasq.conf
 
-CONFIG=$1
 source /usr/sbin/helper.sh
+CONFIG=$1
+
 ss_dns_china=`dbus get ss_dns_china`
 ss_dns_china_user=`dbus get ss_dns_china_user`
-ss_dns_plan=`dbus get ss_dns_plan`
+gfw_on=`dbus list ss_acl_mode_|cut -d "=" -f 2 | grep 1`
+chn_on=`dbus list ss_acl_mode_|cut -d "=" -f 2 | grep -E "2|3"`
+all_on=`dbus list ss_acl_mode_|cut -d "=" -f 2 | grep -E "4"`
 
 ISP_DNS1=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 1p)
 ISP_DNS2=$(nvram get wan0_dns|sed 's/ /\n/g'|grep -v 0.0.0.0|grep -v 127.0.0.1|sed -n 2p)
@@ -26,7 +28,7 @@ fi
 [ "$ss_dns_china" == "12" ] && CDN="$ss_dns_china_user"
 
 pc_replace "cache-size=1500" "cache-size=9999" $CONFIG
-if [ "$ss_dns_plan" == "1" ] || [ -z "$ss_dns_china" ];then
+if [ "$ss_basic_mode" == "1" ] && [ -z "$chn_on" ] && [ -z "$all_on" ];then
 	if [ "$ss_dns_china" == "1" ];then
 		pc_insert "no-poll" "server=$CDN2#53" "/etc/dnsmasq.conf"
 		pc_insert "no-poll" "server=$CDN1#53" "/etc/dnsmasq.conf"
@@ -34,7 +36,7 @@ if [ "$ss_dns_plan" == "1" ] || [ -z "$ss_dns_china" ];then
 	else
 		pc_insert "no-poll" "server=$CDN#53" "/etc/dnsmasq.conf"
 	fi
-elif [ "$ss_dns_plan" == "2" ];then
+else
 	pc_insert "no-poll" "server=127.0.0.1#7913" "/etc/dnsmasq.conf"
 fi
 pc_insert "no-poll" "no-resolv" "/etc/dnsmasq.conf"
