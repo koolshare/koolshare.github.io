@@ -1,5 +1,10 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.8.2
+   - fix	修复chinadns2某些情况下开启失败的问题。
+   - fix	修复cdns方案下一些国内域名解析到国外ip的问题。
+   - update	更新5个国外DNS方案的说明，增加推荐等级。
+
 3.8.1
    - fix	修复以前使用国内优先的用户升级到3.7.8 - 3.8.0后，国外不工作的问题。
 

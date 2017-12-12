@@ -437,15 +437,32 @@ start_dns(){
 			dbus set ss_basic_publicip="$public_ip"
 			clinet_ip=$public_ip
 		else
-			[ -n "$ss_basic_publicip" ] && clinet_ip=$ss_basic_publicip
+			[ -n "$ss_basic_publicip" ] && clinet_ip=$ss_basic_publicip || clinet_ip="114.114.114.114"
 		fi
 		
 		if [ -n "$clinet_ip" ];then
-			chinadns -p $DNS_PORT -s $ss_chinadns_user -e $clinet_ip,$ss_basic_server -c /koolshare/ss/rules/chnroute.txt >/dev/null 2>&1 &
+			if [ "$ss_basic_mode" != "6" ];then
+				if [ -n "$ss_basic_server_ip" ];then
+					FO=`awk -F'[./]' -v ip=$ss_basic_server_ip ' {for (i=1;i<=int($NF/8);i++){a=a$i"."} if (index(ip, a)==1){split( ip, A, ".");b=int($NF/8);if (A[b+1]<($(NF+b-4)+2^(8-$NF%8))&&A[b+1]>=$(NF+b-4)) print ip,"belongs to",$0} a=""}' /koolshare/ss/rules/chnroute.txt`
+				else
+					FO="2333"
+				fi
+				
+				if [ -z "$FO" ];then
+					#不是国内ip
+					chinadns -p $DNS_PORT -s $ss_chinadns_user -e $clinet_ip,$ss_basic_server -c /koolshare/ss/rules/chnroute.txt >/dev/null 2>&1 &
+				else
+					#是国内ip
+					[ -n "$ss_real_server" ] && ss_real_server="8.8.8.8"
+					chinadns -p $DNS_PORT -s $ss_chinadns_user -e $clinet_ip,$ss_real_server -c /koolshare/ss/rules/chnroute.txt >/dev/null 2>&1 &
+				fi
+			else
+				chinadns -p $DNS_PORT -s $ss_chinadns_user -e $clinet_ip,$ss_basic_server -c /koolshare/ss/rules/chnroute.txt >/dev/null 2>&1 &
+			fi
 		else
-			echo_date chinadns2启动失败，改用cdns！
-			dbus set ss_foreign_dns=1
-			cdns -c /koolshare/ss/rules/cdns.json > /dev/null 2>&1 &
+			echo_date chinadns2启动失败，改用dns2socks！
+			dbus set ss_foreign_dns=3
+			dns2socks 127.0.0.1:23456 "$ss_dns2socks_user" 127.0.0.1:$DNS_PORT > /dev/null 2>&1 &
 		fi
 	fi
 	
@@ -483,7 +500,7 @@ start_dns(){
 load_cdn_site(){
 	# append china site
 	rm -rf /tmp/sscdn.conf
-	if [ "$ss_foreign_dns" != "1" ] && [ "$ss_foreign_dns" != "2" ] && [ "$ss_foreign_dns" != "5" ];then
+	if [ "$ss_foreign_dns" != "2" ] && [ "$ss_foreign_dns" != "5" ];then
 		echo_date 生成cdn加速列表到/tmp/sscdn.conf，加速用的dns：$CDN
 		echo "#for china site CDN acclerate" >> /tmp/sscdn.conf
 		cat /koolshare/ss/rules/cdn.txt | sed "s/^/server=&\/./g" | sed "s/$/\/&$CDN/g" | sort | awk '{if ($0!=line) print;line=$0}' >>/tmp/sscdn.conf

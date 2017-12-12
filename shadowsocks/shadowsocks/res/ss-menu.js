@@ -480,29 +480,34 @@ function openssHint(itemNum) {
 		_caption = "导出恢复";
 	} else if (itemNum == 25) {
 		statusmenu = "<font color='#CC0066'>1&nbsp;&nbsp;在gfwlist模式下：</font>";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;此处定义的国内DNS仅在dns2socks和ss-tunnel下有效，cdns和chinadns2因为自带了国内外cdn，所以不需要。"
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;此处定义的国内DNS仅在dns2socks和ss-tunnel下有效，chinadns1和chinadns2因为自带了国内外cdn，所以不需要。"
 		_caption = "国内DNS";
 	} else if (itemNum == 26) {
 		width = "750px";
-		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;国外DNS为大家提供了丰富的选择，其目的有二，一是为了保证大家有能用的国外DNS服务；二十在有能用的基础上，能够选择多种DNS解析方案，达到最佳的解析效果；所以如果你切换某个DNS程序，导致国外连接Problem detected! 那么久更换能用的就好，不用纠结某个解析方案不能用。"
-		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;</br></br>下面我会就我的认知对几种国外DNS方案做一个简单介绍："
-		//cdns
-		statusmenu += "</br><font color='#CC0066'>1:cdns(推荐)：</font>"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;DNS请求时将携带一个EDNS标签，解析成功后返回带该标签的解析结果，gfw投毒的解析结果则不会带该标签，以达到防dns污染的目的！";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;EDNS标签携带了请求时本机的IP地址信息，dns服务器会根据此信息选择离你最近的解析结果返回给你，因此具有非常好的cdn效果！";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;如果需要修改上游dns设定，请自行修改/koolshare/ss/rules/cdns.json文件，请确保修改的dns支持EDNS功能！";
-		//chinadns2
-		statusmenu += "</br><font color='#CC0066'>2:chinadns2(推荐)：</font>"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;同cdns描述，两者效果应该几乎一致，区别在于cdns可以定义多组上游dns，chinadns2只能定义一个。";
+		statusmenu = "&nbsp;&nbsp;&nbsp;&nbsp;国外DNS为大家提供了丰富的选择，其目的有二，一是为了保证大家有能用的国外DNS服务；二是在有能用的基础上，能够选择多种DNS解析方案，达到最佳的解析效果；所以如果你切换某个DNS程序，导致国外连接Problem detected! 那么更换能用的就好，不用纠结某个解析方案不能用。"
+		statusmenu += "&nbsp;&nbsp;&nbsp;&nbsp;</br></br>各DNS方案做简单介绍："
 		//dns2socks
-		statusmenu += "</br><font color='#CC0066'>3:dns2socks：</font>"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;可以说是万金油方案,作用是将 DNS请求通过一个socks5隧道转发到DNS服务器，和下文中ss-tunnel类似，不过1dns2socks是利用了SOCK5隧道代理，ss-tunnel是利用了加密UDP；该DNS方案不受到ss服务是否支持udp限制，只要能建立socoks5链接，就能使用；";
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;在gfwlist模式下，dns2socks用于针对性的解析gfwlist内的域名名单；在使用chnroute的模式（大陆白名单模式，游戏模式）dns2socks用于解析<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>以外的所有域名，所以一些没有包含在这份名单内的网站，而正好这个网站有部署国外地址的话，那么这个网站就会被解析为国外ip，然后由ipset判断流量走ss，当然这种情况是比较少的，因为一般常用的国内网站都包含在这份cdn名单内了。";
+		statusmenu += "</br><font color='#CC0066'><b>1:dns2socks(推荐等级 ★★★☆☆)：</b></font>"
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;万金油方案，DNS请求通过一个socks5隧道转发到DNS服务器，和下文中ss-tunnel类似，不过dns2socks是利用了SOCK5隧道代理，ss-tunnel是利用了加密UDP；该DNS方案不受到ss服务是否支持udp限制，只要能建立socoks5链接，就能使用；";
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;<b>国外解析通过SS服务器转发，国内cdn由cdn.txt提供，对cpu负担较大，国外cdn很好。</b>";
 		//ss-tunnel
-		statusmenu += "</br><font color='#CC0066'>4:ss-tunnel：</font>"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;原理是将DNS请求，通过ss-tunnel利用UDP发送到ss服务器上，由ss服务器向你定义的DNS服务器发送解析请求，解析出gfwlist中域名的IP地址，这种方式解析出来的IP地址会距离ss服务器更近，具有较强的国外CDN效果;"
-		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;在gfwlist模式下，ss-tunnel用于针对性的解析gfwlist内的域名名单；在使用chnroute的模式（大陆白名单模式，游戏模式）ss-tunnel用于解析<a href='https://github.com/koolshare/koolshare.github.io/blob/acelan_softcenter_ui/maintain_files/cdn.txt' target='_blank'><u><font color='#00F'>国内cdn名单</font></u></a>以外的所有域名，所以一些没有包含在这份名单内的网站，而正好这个网站有部署国外地址的话，那么这个网站就会被解析为国外ip，然后由ipset判断流量走ss，当然这种情况是比较少的，因为一般常用的国内网站都包含在这份cdn名单内了。";
+		statusmenu += "</br><font color='#CC0066'><b>2:ss-tunnel(推荐等级 ★★★☆☆)：</b></font>"
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;原理是将DNS请求，通过ss-tunnel利用UDP发送到ss服务器上，由ss服务器向你定义的DNS服务器发送解析请求，解析出到正确的IP地址，的解析效果和dns2socks应该是一模一样的。"
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;<b>国外解析通过SS服务器转发，国内cdn由cdn.txt提供，对cpu负担较大，国外cdn很好。</b>";
 		_caption = "国外DNS";
+		//cdns
+		statusmenu += "</br><font color='#CC0066'><b>3:cdns(推荐等级 ★★☆☆☆)：</b></font>"
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;和chinadns2一样，支持ednsDNS请求时将携带一个EDNS标签，解析成功后返回带该标签的解析结果，gfw投毒的解析结果则不会带该标签，以达到防dns污染的目的！";
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;<b>国外解析本地直链国外DNS服务器，国内cdn由cdn.txt提供，对cpu负担较大，国外cdn较弱。</b>";
+		//chinadns1
+		statusmenu += "</br><font color='#CC0066'><b>4:chinadns1(推荐等级 ★★★★★)：</b></font>"
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;使用dns2socks作为chinadns上游dns解析工具获取无污染dns，通过chinadns的国内dns请求国内dns获取国内解析结果";
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;<b>国外解析通过SS服务器转发，具有很好的国内cdn，和很好的国外cdn，不需要cdn.txt作为国内加速，对cpu负担小。</b>";
+		//chinadns2
+		statusmenu += "</br><font color='#CC0066'><b>5:chinadns2(推荐等级 ★★★★☆)：</b></font>"
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;和cdns一样，支持EDNS，并且chinadns2根据本地公网ip和ss服务器ip，同时发送两个带edns标签的请求，dns服务器会根据此信息选择离你最近的解析结果返回给你，因此具有非常好的cdn效果！";
+		statusmenu += "</br>&nbsp;&nbsp;&nbsp;&nbsp;<b>国外解析本地直链国外DNS服务器，具有较好的国内cdn，和很好的国外cdn，不需要cdn.txt作为国内加速，对cpu负担小。</b>";
+
 		return overlib(statusmenu, OFFSETX, -860, OFFSETY, -290, LEFT, STICKY, WIDTH, 'width', CAPTION, _caption, CLOSETITLE, '');
 	} else if (itemNum == 33) {
 		statusmenu = "填入需要强制用国内DNS解析的域名，一行一个，格式如下：。"
