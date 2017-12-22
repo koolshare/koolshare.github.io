@@ -3247,6 +3247,7 @@
 .*\b51jetso\.com
 .*\b51jiabo\.com
 .*\b51jiameng\.com
+.*\b51jianli\.com
 .*\b51jiarenla\.com
 .*\b51jiaxiao\.com
 .*\b51jiecai\.com
@@ -5089,6 +5090,7 @@
 .*\b8855\.org
 .*\b8860\.net
 .*\b88614\.com
+.*\b8864\.org
 .*\b886404\.org
 .*\b886520\.cc
 .*\b8866\.org
@@ -5806,6 +5808,7 @@
 .*\b9k51\.com
 .*\b9k9by\.com
 .*\b9k9k\.com
+.*\b9kjt\.com
 .*\b9kld\.com
 .*\b9koudai\.net
 .*\b9ku\.com
@@ -10838,6 +10841,7 @@
 .*\bcmb-leasing\.com
 .*\bcmbchina\.com
 .*\bcmbchinaucs\.com
+.*\bcmbimg\.com
 .*\bcmboy\.com
 .*\bcmbuy10086\.com
 .*\bcmc-conf\.org
@@ -12492,6 +12496,7 @@
 .*\bdb9db\.com
 .*\bdbacg\.com
 .*\bdbank\.com
+.*\bdbankcdn\.com
 .*\bdbankcloud\.com
 .*\bdbanotes\.net
 .*\bdbc2000\.org
@@ -13878,6 +13883,7 @@
 .*\be-lifemall\.com
 .*\be-lining\.com
 .*\be-lvyou\.com
+.*\be-mallchina\.com
 .*\be-nci\.com
 .*\be-picclife\.com
 .*\be-sleb\.com
@@ -15002,6 +15008,7 @@
 .*\bfeilvway\.com
 .*\bfeimalv\.com
 .*\bfeimao88\.com
+.*\bfeimaojiasu\.com
 .*\bfeimosheji\.com
 .*\bfeiniu\.com
 .*\bfeipin\.com
@@ -22987,6 +22994,7 @@
 .*\bli-ning\.com
 .*\bli63\.com
 .*\bliageren\.com
+.*\blialiu\.com
 .*\blianaibashi\.com
 .*\blianaibiji\.com
 .*\blianbijr\.com
@@ -24667,6 +24675,7 @@
 .*\bmicro-notes\.com
 .*\bmicroad-cn\.com
 .*\bmicrobell\.com
+.*\bmicrocai\.org
 .*\bmicrofotos\.com
 .*\bmicroidc\.com
 .*\bmicrolensyh\.com
@@ -24705,6 +24714,7 @@
 .*\bmiidol\.com
 .*\bmiiee\.com
 .*\bmiit\.cc
+.*\bmijiayoupin\.com
 .*\bmijishe\.com
 .*\bmika123\.com
 .*\bmika18\.com
@@ -27481,6 +27491,7 @@
 .*\bq366\.com
 .*\bq5\.com
 .*\bq68\.com
+.*\bq6haqi\.com
 .*\bq869\.com
 .*\bqalex\.com
 .*\bqb5200\.com
@@ -32159,6 +32170,7 @@
 .*\btoushibao\.com
 .*\btoutiao\.com
 .*\btoutiao\.io
+.*\btoutiao11\.com
 .*\btoutiao9\.com
 .*\btoutiaocdn\.com
 .*\btoutiaocdn\.net
@@ -33096,6 +33108,7 @@
 .*\buz73\.net
 .*\buzai\.com
 .*\buzaicdn\.com
+.*\buzer\.me
 .*\buzham\.com
 .*\buzhongtou\.com
 .*\buzicai\.com
@@ -36792,6 +36805,7 @@
 .*\byijian119\.com
 .*\byijiangshan\.net
 .*\byijianjiaoyu\.com
+.*\byijiaomao\.com
 .*\byijie\.com
 .*\byijiebuyi\.com
 .*\byijied\.com
@@ -37335,6 +37349,7 @@
 .*\byouxicity\.com
 .*\byouxicool\.net
 .*\byouxidaxue\.com
+.*\byouxidongli\.com
 .*\byouxidudu\.com
 .*\byouxiduo\.com
 .*\byouxigod\.com
