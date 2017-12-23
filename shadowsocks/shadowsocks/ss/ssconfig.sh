@@ -453,7 +453,7 @@ start_dns(){
 					chinadns -p $DNS_PORT -s $ss_chinadns_user -e $clinet_ip,$ss_basic_server -c /koolshare/ss/rules/chnroute.txt >/dev/null 2>&1 &
 				else
 					#是国内ip
-					[ -n "$ss_real_server" ] && ss_real_server="8.8.8.8"
+					[ -z "$ss_real_server" ] && ss_real_server="8.8.8.8"
 					chinadns -p $DNS_PORT -s $ss_chinadns_user -e $clinet_ip,$ss_real_server -c /koolshare/ss/rules/chnroute.txt >/dev/null 2>&1 &
 				fi
 			else
@@ -1373,6 +1373,7 @@ start)
 		set_ulimit >> /tmp/syslog.log
 		apply_ss >> /tmp/syslog.log
     	write_numbers >> /tmp/syslog.log
+		[ ! -f "/tmp/shadowsocks.nat_lock" ] && touch /tmp/shadowsocks.nat_lock
 	else
 		logger "[软件中心]: 科学上网插件未开启，不启动！"
 	fi

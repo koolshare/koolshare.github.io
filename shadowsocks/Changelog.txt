@@ -1,5 +1,9 @@
 Koolshare Asuswrt-Merlin shadowsocks Changelog
 ===========================================
+3.8.4
+   - fix	脚本：修复chinans2有时候不启动的问题。
+   - fix	脚本：修复开机后重启nat可能不加载iptables的问题。
+
 3.8.2 - 3.8.3
    - fix	修复kcptun重启失败
    - fix	修复chinadns2某些情况下开启失败的问题。
