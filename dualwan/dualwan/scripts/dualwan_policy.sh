@@ -1,11 +1,5 @@
 #!/bin/sh
 modprobe xt_set
-# Loading ipset modules
-lsmod | grep "xt_set" > /dev/null 2>&1 || \
-for module in ip_set ip_set_hash_net ip_set_hash_ip xt_set
-    do
-    insmod $module
-done
 # load path environment in dbus databse
 eval `dbus export dualwanpolicy`
 eval `dbus export shadowsocks`
@@ -166,21 +160,12 @@ fi
 ip rule add fwmark 7777 table 100 pref 20555
 ip rule add fwmark 8888 table 200 pref 20666
 
-for tun_number in $(ip route | grep "tun" | awk '{print $3}')
-	do
-		ip_route=$(ip route | grep $tun_number)
-		ip route add $ip_route table 100 >/dev/null 2>&1
-		ip route add $ip_route table 200 >/dev/null 2>&1
-done
-
 echo 4 > /proc/sys/net/ipv4/rt_cache_rebuild_count
 
 #Flush IP Route Cache
 ip route flush cache
 echo $(date): --------------Custom operators rule runs successfully!-------------- >> /tmp/syslog.log
 }
-
-
 
 #---------------------------------------------start or stop--------------------------------------------------
 
