@@ -3,6 +3,7 @@
 source /usr/sbin/helper.sh
 CONFIG=$1
 
+ss_basic_mode=`dbus get ss_basic_mode`
 ss_dns_china=`dbus get ss_dns_china`
 ss_dns_china_user=`dbus get ss_dns_china_user`
 gfw_on=`dbus list ss_acl_mode_|cut -d "=" -f 2 | grep 1`
