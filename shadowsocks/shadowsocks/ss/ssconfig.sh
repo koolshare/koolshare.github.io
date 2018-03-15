@@ -20,7 +20,7 @@ lan_ipaddr=$(nvram get lan_ipaddr)
 game_on=`dbus list ss_acl_mode|cut -d "=" -f 2 | grep 3`
 [ -n "$game_on" ] || [ "$ss_basic_mode" == "3" ] && mangle=1
 ip_prefix_hex=`nvram get lan_ipaddr | awk -F "." '{printf ("0x%02x", $1)} {printf ("%02x", $2)} {printf ("%02x", $3)} {printf ("00/0xffffff00\n")}'`
-ss_basic_password=`echo $ss_basic_password|base64_decode`
+ss_basic_password=`echo $ss_basic_password|base64 -d`
 IFIP=`echo $ss_basic_server|grep -E "([0-9]{1,3}[\.]){3}[0-9]{1,3}|:"`
 if [ -n "$ss_basic_rss_protocol" ];then
 	ss_basic_type=1
@@ -511,7 +511,7 @@ custom_dnsmasq(){
 	rm -rf /tmp/custom.conf
 	if [ -n "$ss_dnsmasq" ];then
 		echo_date 添加自定义dnsmasq设置到/tmp/custom.conf
-		echo "$ss_dnsmasq" | base64_decode | sort -u >> /tmp/custom.conf
+		echo "$ss_dnsmasq" | base64 -d | sort -u >> /tmp/custom.conf
 	fi
 }
 
@@ -537,7 +537,7 @@ append_white_black_conf(){
 		echo "ipset=/.apnic.net/router" >> /tmp/wblist.conf
 	fi
 	# append white domain list,not through ss
-	wanwhitedomain=$(echo $ss_wan_white_domain | base64_decode)
+	wanwhitedomain=$(echo $ss_wan_white_domain | base64 -d)
 	if [ -n "$ss_wan_white_domain" ];then
 		echo_date 应用域名白名单
 		echo "#for white_domain" >> /tmp/wblist.conf
@@ -557,7 +557,7 @@ append_white_black_conf(){
 	done
 	
 	# append black domain list,through ss
-	wanblackdomain=$(echo $ss_wan_black_domain | base64_decode)
+	wanblackdomain=$(echo $ss_wan_black_domain | base64 -d)
 	if [ -n "$ss_wan_black_domain" ];then
 		echo_date 应用域名黑名单
 		echo "#for black_domain" >> /tmp/wblist.conf
@@ -1012,7 +1012,7 @@ add_white_black_ip(){
 	done
 	
 	if [ -n "$ss_wan_black_ip" ];then
-		ss_wan_black_ip=`dbus get ss_wan_black_ip|base64_decode|sed '/\#/d'`
+		ss_wan_black_ip=`dbus get ss_wan_black_ip|base64 -d|sed '/\#/d'`
 		echo_date 应用IP/CIDR黑名单
 		for ip in $ss_wan_black_ip
 		do
@@ -1032,7 +1032,7 @@ add_white_black_ip(){
 	done
 	
 	if [ -n "$ss_wan_white_ip" ];then
-		ss_wan_white_ip=`echo $ss_wan_white_ip|base64_decode|sed '/\#/d'`
+		ss_wan_white_ip=`echo $ss_wan_white_ip|base64 -d|sed '/\#/d'`
 		echo_date 应用IP/CIDR白名单
 		for ip in $ss_wan_white_ip
 		do
