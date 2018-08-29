@@ -1,0 +1,4 @@
+Koolshare Asuswrt-Merlin koolproxy Changelog
+===========================================
+
+changelogs can be found at: http://koolshare.cn/thread-64086-1-1.html

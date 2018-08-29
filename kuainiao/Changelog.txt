@@ -1,0 +1,35 @@
+Koolshare Asuswrt-Merlin KuaiNiao Changelog
+===========================================
+0.3.4 ( 20/06/2016 14:41:00 )
+	-fix	修复迅雷快鸟心跳保持失败
+
+0.3.3 ( 17/05/2016 13:34:00 )
+	-fix	修复运行脚本bug
+
+0.3.2 ( 17/05/2016 13:28:00 )
+	-fix	修复运行脚本bug
+
+0.3.0 ( 17/05/2016 12:33:26 )
+	-fix	更换协议版本为1.0.8
+
+0.2.5
+	-fix	修复加速状态提示
+
+0.2.4
+	-fix	remove old install module and set version check in web
+
+0.2.3
+	-fix	fix installation issue
+
+0.2.2
+	-fix	adapt to new softerware center
+
+0.2.1 ( 11/04/2016 17:07:36 )
+	- fix	双WAN模式下获取网关地址的错误
+	- change	修复默认的MAC地址获取逻辑，防止迅雷检查异常
+
+0.2.0 ( 01/04/2016 15:19:20 )
+	- add	支持双WAN模式下的快鸟绑定指定端口加速
+
+0.1.2 ( 31/03/2016 10:41:28 )
+	- fix	因为迅雷移动端登陆接口增加UA认证导致的插件无法使用的异常

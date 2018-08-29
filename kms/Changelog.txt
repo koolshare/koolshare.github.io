@@ -1,0 +1,22 @@
+Koolshare Asuswrt-Merlin kms Changelog
+===========================================
+0.1
+   - add kms tools
+0.2
+   - fix auto start
+0.3
+   - fix error
+0.4
+   - you know. ah!
+0.5
+   - you know. ah!
+0.6
+   - you know. ah!
+0.7
+   - fix auto active!
+0.8
+   - fix scripts error.
+1.3
+   - update binary
+   - fix port open
+   - update start up
