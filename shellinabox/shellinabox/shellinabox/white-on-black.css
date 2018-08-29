@@ -1,0 +1,64 @@
+#vt100 #cursor.bright {
+  background-color: white;
+  color:            black;
+}
+
+#vt100 #cursor.dim {
+  background-color: black;
+  opacity:          0.2;
+  -moz-opacity:     0.2;
+  filter:           alpha(opacity=20);
+}
+
+#vt100 #scrollable {
+  font-size:		13px;
+  color:            #ffffff;
+  background-color: #2B373B;
+}
+
+#vt100 #scrollable.inverted {
+  font-size:		13px;
+  color:            #2B373B;
+  background-color: #ffffff;
+}
+
+#vt100 .ansiDef {
+  font-size:		13px;
+  color:            #ffffFf;
+}
+
+#vt100 .ansiDefR {
+  font-size:		13px;
+  color:            #2B373B;
+}
+
+#vt100 .bgAnsiDef {
+  font-size:		13px;
+  background-color: #2B373B;
+}
+
+#vt100 .bgAnsiDefR {
+  font-size:		13px;
+  background-color: #ffffFf;
+}
+
+#vt100 #scrollable.inverted .ansiDef {
+  font-size:		13px;
+  color:            #2B373B;
+}
+
+#vt100 #scrollable.inverted .ansiDefR {
+  font-size:		13px;
+  color:            #ffffFf;
+}
+
+#vt100 #scrollable.inverted .bgAnsiDef {
+  font-size:		13px;
+  background-color: #ffffFf;
+}
+
+#vt100 #scrollable.inverted .bgAnsiDefR {
+  font-size:		13px;
+  background-color: #2B373B;
+}
+

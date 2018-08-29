@@ -1,0 +1,22 @@
+Koolshare Asuswrt-Merlin dualwan Changelog
+===========================================
+0.1 (25/12/2015 01:30:00)
+   - ADD:	add dualwan for Merlin Koolshare firmware Softerware center
+0.2 (28/04/2016 16:21:00)
+   - 兼容新软件中心
+0.3 (25/12/2015 01:30:00)
+   - fix ui error
+0.4 (28/04/2016 16:21:00)
+   - fix ui again
+0.5 (28/04/2016 16:21:00)
+   - 优化路由表
+0.6 (28/04/2016 16:21:00)
+   - 针对移动用户特别优化
+0.7 (28/04/2016 16:21:00)
+   - update ip database
+0.8 (28/04/2016 16:21:00)
+   - revert to 0.6
+1.0 (24/09/2016 16:21:00)
+   - Update the routing table, other operators optimization rules
+1.1 (25/09/2016 16:21:00)
+   - fix erro

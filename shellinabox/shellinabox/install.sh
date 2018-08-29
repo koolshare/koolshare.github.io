@@ -1,0 +1,14 @@
+#! /bin/sh
+			
+	cp -rf /tmp/shellinabox/shellinabox /koolshare/
+	cp -rf /tmp/shellinabox/res/* /koolshare/res/
+	cp -rf /tmp/shellinabox/webs/* /koolshare/webs
+	chmod 755 /koolshare/shellinabox/*	
+	killall shellinaboxd
+	sleep 1
+	sh /koolshare/shellinabox/shellinabox_start.sh
+	dbus set softcenter_module_shellinabox_target="target=_blank"
+	dbus set __event__onwanstart_shellinlinux=/koolshare/shellinabox/shellinabox_start.sh
+
+	rm -rf /tmp/shellinabox*
+	

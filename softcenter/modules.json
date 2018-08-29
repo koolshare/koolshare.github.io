@@ -1,0 +1,20 @@
+[
+{"module": "acme", "git_source": "https://github.com/sadoneli/merlin380-acme.git"},
+{"module": "qiandao", "git_source": "https://github.com/sadoneli/merlin380-qiandao.git"},
+{"module": "aliddns", "git_source": "https://github.com/koolshare/merlin-aliddns.git"},
+{"module": "aria2", "git_source": "https://github.com/koolshare/merlin-aria2.git"},
+{"module": "cloudxns", "git_source": "https://github.com/koolshare/merlin_cloudxns.git"},
+{"module": "ddnsto", "git_source": "https://github.com/koolshare/merlin_ddnsto.git"},
+{"module": "easyexplorer", "git_source": "https://github.com/koolshare/merlin_EasyExplorer.git"},
+{"module": "kms", "git_source": "https://github.com/Major-k/merlin-kms.git"},
+{"module": "koolproxy", "git_source": "https://github.com/koolproxy/merlin-koolproxy.git"},
+{"module": "ssserver", "git_source": "https://github.com/koolshare/merlin-ssserver.git"},
+{"module": "adm", "git_source": "https://github.com/koolshare/merlin-adm.git"},
+{"module": "webshell", "git_source": "https://github.com/koolshare/merlin-webshell.git"},
+{"module": "frpc", "git_source": "https://github.com/koolshare/merlin_frpc.git"},
+{"module": "frps", "git_source": "https://github.com/koolshare/merlin_frps.git"},
+{"module": "softether", "git_source": "https://github.com/koolshare/merlin-SoftEtherVPN.git"},
+{"module": "gdddns", "git_source": "https://github.com/mritd/koolshare-gdddns.git"},
+{"module": "serverchan", "git_source": "https://github.com/koolshare/merlin_serverChan.git"},
+{"module": "tunnel", "git_source": "https://github.com/koolshare/merlin_tunnel.git"}
+]
