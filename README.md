@@ -10,7 +10,7 @@
 * 讯雷下载
 * Aria2 下载
 * 讯雷快鸟
-* KoolProxy 去广告 [查看介绍](http://koolshare.cn/thread-64086-1-1.html)
+* KoolProxy 家长控制 [查看介绍](http://koolshare.cn/thread-64086-1-1.html)
 * 策略路由
 * WebShell
 * 远程消息通知
