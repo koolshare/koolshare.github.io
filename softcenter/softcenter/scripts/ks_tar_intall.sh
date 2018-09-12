@@ -55,7 +55,8 @@ install_tar(){
 				echo_date 因为$MODULE_NAME插件安装失败！退出离线安装！
 				clean
 				dbus remove "softcenter_module_$MODULE_NAME$INSTALL_SUFFIX"
-				echo XU6J03M6
+				echo_date ======================== end ============================
+				#echo XU6J03M6
 				exit
 			fi
 			echo_date ====================== step 3 ===========================
@@ -87,7 +88,8 @@ install_tar(){
 					sleep 1
 					clean
 					dbus remove "softcenter_module_$MODULE_NAME$INSTALL_SUFFIX"
-					echo XU6J03M6
+					echo_date ======================== end ============================
+					#echo XU6J03M6
 					exit
 				fi
 				sleep 1
@@ -112,8 +114,9 @@ install_tar(){
 	sleep 1
 	dbus remove soft_install_version
 	dbus remove soft_name
-	echo XU6J03M6
 	clean
+	echo_date ======================== end ============================
+	#echo XU6J03M6
 }
 
 cat /dev/null > /tmp/syscmd.log
