@@ -2,7 +2,7 @@
 
 
 MODULE=shellinabox
-VERSION="1.9"
+VERSION="2.0"
 TITLE=shellinabox
 DESCRIPTION=超强的SSH网页客户端~
 HOME_URL=Module_shellinabox.asp
