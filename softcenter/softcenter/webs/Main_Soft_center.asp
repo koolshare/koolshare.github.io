@@ -468,7 +468,7 @@ function appUninstallModule(moduleInfo) {
             url: remoteURL,
             method: 'GET',
             dataType: 'jsonp',
-            timeout: 1 * 1000
+            timeout: 5000
         });
     }
 

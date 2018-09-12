@@ -43,23 +43,32 @@ function menu_hook(title, tab) {
 	tabtitle[tabtitle.length -1] = new Array("", "软件中心", "离线安装");
 	tablink[tablink.length -1] = new Array("", "Main_Soft_center.asp", "Main_Soft_setting.asp");
 }
+
 function upload_software() {
 	var fullPath = document.getElementById('ss_file').value;
 	if(!fullPath) {
 		return;
 	}
-	document.getElementById('file_info').style.display = "none";
-	document.getElementById('loadingicon').style.display = "block";
+
 	var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
 	var filename = fullPath.substring(startIndex);
 	if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
 		filename = filename.substring(1);
 	}
-	document.form.soft_name.value = filename;
-	document.form.enctype = "multipart/form-data";
-	document.form.encoding = "multipart/form-data";
-	document.form.action="ssupload.cgi?a=/tmp/"+filename;
-	document.form.submit();
+	if (/.*[\u0391-\uffe5]+.*$/.test(filename)) {
+		alert("错误：文件名中包含中文字符或符号！\n请更改文件名后重试！！");
+		isok=0;
+		return false;
+	}else{
+		document.getElementById('file_info').style.display = "none";
+		document.getElementById('loadingicon').style.display = "block";
+		document.form.soft_name.value = filename;
+		document.form.enctype = "multipart/form-data";
+		document.form.encoding = "multipart/form-data";
+		document.form.action="ssupload.cgi?a=/tmp/"+filename;
+		console.log(filename);
+		document.form.submit();
+	}
 }
 
 function upload_ok(isok) {

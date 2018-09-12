@@ -9,8 +9,8 @@ eval `dbus export soft`
 TARGET_DIR=/tmp
 clean(){
 	[ -n "$name" ] && rm -rf /tmp/$name >/dev/null 2>&1
-	[ -n "$MODULE_NAME" ] rm -rf /tmp/$MODULE_NAME >/dev/null 2>&1
-	rm -rf /tmp/$soft_name >/dev/null 2>&1
+	[ -n "$MODULE_NAME" ] && rm -rf /tmp/$MODULE_NAME >/dev/null 2>&1
+	[ -n "$soft_name" ] && rm -rf /tmp/$soft_name >/dev/null 2>&1
 	find /tmp -name "*.tar.gz"|xargs rm -rf >/dev/null 2>&1
 }
 
@@ -50,24 +50,20 @@ install_tar(){
 			echo_date ====================== step 2 ===========================
 			sleep 1
 			start-stop-daemon -S -q -x $INSTALL_SCRIPT 2>&1
-			#sh /tmp/$name/install.sh 2>&1
 			if [ "$?" != "0" ];then
 				echo_date 因为$MODULE_NAME插件安装失败！退出离线安装！
 				clean
 				dbus remove "softcenter_module_$MODULE_NAME$INSTALL_SUFFIX"
 				echo_date ======================== end ============================
-				#echo XU6J03M6
 				exit
 			fi
 			echo_date ====================== step 3 ===========================
 			dbus set "softcenter_module_$MODULE_NAME$NAME_SUFFIX=$MODULE_NAME"
 			dbus set "softcenter_module_$MODULE_NAME$INSTALL_SUFFIX=1"
-			#dbus set "softcenter_module_$name$VER_SUFFIX=$soft_install_version"
 			if [ -n "$soft_install_version" ];then
 				dbus set "softcenter_module_$MODULE_NAME$VER_SUFFIX=$soft_install_version"
 				echo_date "从插件文件名中获取到了版本号：$soft_install_version"
 			else
-				#已经在插件安装中设置了
 				if [ -z "`dbus get softcenter_module_$MODULE_NAME$VER_SUFFIX`" ];then
 					dbus set "softcenter_module_$MODULE_NAME$VER_SUFFIX=0.1"
 					echo_date "插件安装脚本里没有找到版本号，设置默认版本号为0.1"
@@ -89,7 +85,6 @@ install_tar(){
 					clean
 					dbus remove "softcenter_module_$MODULE_NAME$INSTALL_SUFFIX"
 					echo_date ======================== end ============================
-					#echo XU6J03M6
 					exit
 				fi
 				sleep 1
@@ -116,7 +111,6 @@ install_tar(){
 	dbus remove soft_name
 	clean
 	echo_date ======================== end ============================
-	#echo XU6J03M6
 }
 
 cat /dev/null > /tmp/syscmd.log
