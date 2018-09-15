@@ -7,11 +7,13 @@ source $KSROOT/scripts/base.sh
 alias echo_date='echo 【$(date +%Y年%m月%d日\ %X)】:'
 eval `dbus export soft`
 TARGET_DIR=/tmp
+
 clean(){
 	[ -n "$name" ] && rm -rf /tmp/$name >/dev/null 2>&1
 	[ -n "$MODULE_NAME" ] && rm -rf /tmp/$MODULE_NAME >/dev/null 2>&1
 	[ -n "$soft_name" ] && rm -rf /tmp/$soft_name >/dev/null 2>&1
-	find /tmp -name "*.tar.gz"|xargs rm -rf >/dev/null 2>&1
+	#find /tmp -name "*.tar.gz"|grep -v mnt|xargs rm -rf >/dev/null 2>&1
+	rm -rf /tmp/*.tar.gz >/dev/null 2>&1
 }
 
 install_tar(){
