@@ -60,14 +60,21 @@ function upload_software() {
 		isok=0;
 		return false;
 	}else{
-		document.getElementById('file_info').style.display = "none";
-		document.getElementById('loadingicon').style.display = "block";
-		document.form.soft_name.value = filename;
-		document.form.enctype = "multipart/form-data";
-		document.form.encoding = "multipart/form-data";
-		document.form.action="ssupload.cgi?a=/tmp/"+filename;
-		console.log(filename);
-		document.form.submit();
+		if(filename.indexOf('tar.gz') != -1 ){
+			document.getElementById('file_info').style.display = "none";
+			document.getElementById('loadingicon').style.display = "block";
+			document.form.soft_name.value = filename;
+			document.form.enctype = "multipart/form-data";
+			document.form.encoding = "multipart/form-data";
+			document.form.action="ssupload.cgi?a=/tmp/"+filename;
+			console.log(filename);
+			document.form.submit();
+		}else{
+			console.log(filename);
+			alert("错误：离线安装包后缀错误！需要.tar.gz后缀！\n\n如果你是mac os x系统，safari浏览器下载tar.gz文件后被自动解压导致无法安装的，请关闭此项设置：safari的偏好设置-通用-下载后打开安全的文件。或者换用chrome浏览器，重新下载离线安装包文件！");
+			isok=0;
+			return false;
+		}
 	}
 }
 
