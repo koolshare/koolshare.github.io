@@ -30,7 +30,6 @@ function init() {
 	show_menu(menu_hook);
 	buildswitch();
 	conf2obj();
-	version_show();
 	var ss_mode = '<% dbus_get_def("ss_basic_mode", "0"); %>';
 	var ss_enable = '<% dbus_get_def("ss_basic_enable", "0"); %>';
 	if (ss_enable != '0') {
@@ -149,24 +148,6 @@ function setIframeSrc() {
 }
 setTimeout(setIframeSrc, 5000);
 
-function version_show() {
-	$j("#dualwan_version_status").html("<i>当前版本：" + db_dualwanpolicy_['dualwan_version']);
-	$j.ajax({
-		url: 'https://raw.githubusercontent.com/koolshare/koolshare.github.io/acelan_softcenter_ui/dualwan/config.json.js',
-		type: 'GET',
-		success: function(res) {
-			var txt = $j(res.responseText).text();
-			if (typeof(txt) != "undefined" && txt.length > 0) {
-				//console.log(txt);
-				var obj = $j.parseJSON(txt.replace("'", "\""));
-				$j("#dualwan_version_status").html("<i>当前版本：" + obj.version);
-				if (obj.version != db_dualwanpolicy_["dualwan_version"]) {
-					$j("#dualwan_version_status").html("<i>有新版本：" + obj.version);
-				}
-			}
-		}
-	});
-}
 </script>
 </head>
 <body onload="init();">

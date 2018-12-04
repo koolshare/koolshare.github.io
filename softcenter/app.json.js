@@ -1,14 +1,14 @@
 {
     "apps": [
         {
-            "build_date": "2017-09-26_09:26:12", 
+            "build_date": "2018-12-04_10:17:34", 
             "description": "让分流更简单", 
             "home_url": "Module_policy_route.asp", 
-            "md5": "81539b2317b8f859724a84b400d2117a", 
+            "md5": "351e13b00885782adb0f09eb188d204e", 
             "name": "dualwan", 
             "tar_url": "dualwan/dualwan.tar.gz", 
             "title": "策略路由", 
-            "version": "2.1"
+            "version": "2.2"
         }, 
         {
             "build_date": "2018-09-12_20:15:49", 
