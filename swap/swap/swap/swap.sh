@@ -30,7 +30,7 @@ if [ "$swapon" == "0" ];then
 			swapon "$usb_disk"/swapfile
 			dbus set swap_warnning="4"
 		else
-			if [ "$ext_type" == "ext2" ] || [ "$ext_type" == "ext3" ] || [ "$ext_type" == "ext4" ];then
+			if [ "$ext_type" != "" ];then
 				dbus set swap_warnning="3"
 			else
 				dbus set swap_warnning="2"
