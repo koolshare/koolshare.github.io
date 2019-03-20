@@ -53,6 +53,9 @@ arIpAdress() {
 arNslookup() {
     local inter="http://119.29.29.29/d?dn="
     wget --quiet --output-document=- $inter$1
+    if [ $? != 0 ]; then
+        curl --silent $inter$1
+    fi
 }
 
 # 读取接口数据
@@ -66,6 +69,9 @@ arApiPost() {
         local param="login_token=${arToken}&format=json&${2}"
     fi
     wget --quiet --no-check-certificate --output-document=- --user-agent=$agent --post-data $param $inter
+    if [ $? != 0 ]; then
+        curl --silent -X POST -H 'charset=UTF-8;' --user-agent "$agent" --data "$param" $inter
+    fi
 }
 
 # 更新记录信息
