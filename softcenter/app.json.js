@@ -64,31 +64,6 @@
             "version": "1.0"
         }, 
         {
-            "build_date": "2016-09-16_10:11:21", 
-            "description": "广告屏蔽大师", 
-            "home_url": "Module_adbyby.asp", 
-            "md5": "8822d84a21ec33db53bdb4c1a98b2394", 
-            "name": "adbyby", 
-            "tar_url": "adbyby/adbyby.tar.gz", 
-            "title": "adbyby", 
-            "version": "1.1"
-        }, 
-        {
-            "build_date": "2018-08-15_11:32:52", 
-            "description": "koolproxy", 
-            "home_url": "Module_koolproxy.asp", 
-            "md5": "6eee67ea99fd704b4a9ae1ce9a741ef5", 
-            "name": "koolproxy", 
-            "tar_url": "koolproxy/koolproxy.tar.gz", 
-            "title": "koolproxy", 
-            "version": "3.8.1"
-        }, 
-        {
-            "name": "tunnel", 
-            "tar_url": "tunnel/tunnel.tar.gz", 
-            "title": "tunnel"
-        }, 
-        {
             "build_date": "2016-09-01_17:20:40", 
             "description": "使用Dnspod的ddns服务", 
             "home_url": "Module_ddnspod.asp", 
@@ -107,15 +82,10 @@
             "tar_url": "swap/swap.tar.gz", 
             "title": "虚拟内存", 
             "version": "1.8"
-        }, 
-        {
-            "name": "shadowsocks", 
-            "tar_url": "shadowsocks/shadowsocks.tar.gz", 
-            "title": "shadowsocks"
         }
     ], 
     "home_url": "https://raw.githubusercontent.com/koolshare/koolshare.github.io/master", 
-    "md5": "78c52468f168d06a87b17462cbcce395", 
+    "md5": "cb5210fc528a6b8e45bdecf77d4589fd", 
     "tar_url": "softcenter/softcenter.tar.gz", 
     "version": "1.1.5"
 }
