@@ -6,11 +6,9 @@
 插件支持列表
 ========
 * 穿透 DDNS
-* P2P 远程控制 [项目地址](https://github.com/jannson/koolnet)
 * 讯雷下载
 * Aria2 下载
 * 讯雷快鸟
-* Koolproxy 去广告
 * 策略路由
 
 存储核心
