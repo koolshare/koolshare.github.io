@@ -7,12 +7,10 @@
 {"module": "ddnsto", "git_source": "https://github.com/koolshare/merlin_ddnsto.git"},
 {"module": "easyexplorer", "git_source": "https://github.com/koolshare/merlin_EasyExplorer.git"},
 {"module": "kms", "git_source": "https://github.com/JSZMonkey/merlin-kms.git"},
-{"module": "ssserver", "git_source": "https://github.com/koolshare/merlin-ssserver.git"},
 {"module": "webshell", "git_source": "https://github.com/koolshare/merlin-webshell.git"},
 {"module": "frpc", "git_source": "https://github.com/koolshare/merlin_frpc.git"},
 {"module": "frps", "git_source": "https://github.com/koolshare/merlin_frps.git"},
 {"module": "softether", "git_source": "https://github.com/koolshare/merlin-SoftEtherVPN.git"},
 {"module": "gdddns", "git_source": "https://github.com/mritd/koolshare-gdddns.git"},
 {"module": "serverchan", "git_source": "https://github.com/koolshare/merlin_serverChan.git"},
-{"module": "tunnel", "git_source": "https://github.com/koolshare/merlin_tunnel.git"}
 ]
