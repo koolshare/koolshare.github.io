@@ -52,7 +52,7 @@ arIpAdress() {
 # 参数: 待查询域名
 arNslookup() {
     local inter="http://119.29.29.29/d?dn="
-    wget --quiet --output-document=- $inter$1
+    curl --silent $inter$1
 }
 
 # 读取接口数据
@@ -65,7 +65,7 @@ arApiPost() {
     else
         local param="login_token=${arToken}&format=json&${2}"
     fi
-    wget --quiet --no-check-certificate --output-document=- --user-agent=$agent --post-data $param $inter
+    curl -X POST --silent --insecure --user-agent $agent --data $param $inter
 }
 
 # 更新记录信息
