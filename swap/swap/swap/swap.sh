@@ -16,7 +16,7 @@ check_usb_status(){
 	# 3	成功检测到ext？格式磁盘,可以创建swap
 	# 4	swap分区已经加载
 
-	ext_type=`/bin/mount | grep -E 'mnt' | sed -n 1p | cut -d" " -f5`
+	ext_type=`/bin/mount | grep -E 'mnt' | cut -d" " -f5 | grep -Eo "ext2|ext3|ext4"`
 	usb_disk=`/bin/mount | grep -E 'mnt' | sed -n 1p | cut -d" " -f3`
 	swapon=`free | grep Swap | awk '{print $2}'`
 	dbus set swap_usb_type="$ext_type"
@@ -30,7 +30,7 @@ if [ "$swapon" == "0" ];then
 			swapon "$usb_disk"/swapfile
 			dbus set swap_warnning="4"
 		else
-			if [ "$ext_type" == "ext2" ] || [ "$ext_type" == "ext3" ] || [ "$ext_type" == "ext4" ];then
+			if [ "$ext_type" != "" ];then
 				dbus set swap_warnning="3"
 			else
 				dbus set swap_warnning="2"
