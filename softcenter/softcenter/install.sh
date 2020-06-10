@@ -28,7 +28,7 @@ softcenter_install() {
 		[ ! -L /koolshare/bin/netstat ] && ln -sf /koolshare/bin/koolbox /koolshare/bin/netstat
 
 		# 移除
-		if [ -f "/koolshare/scripts/ks_tar_intall.sh" ]
+		if [ -f "/koolshare/scripts/ks_tar_intall.sh" ];then
 			rm -rf /koolshare/scripts/ks_tar_intall.sh
 		fi
 	fi
