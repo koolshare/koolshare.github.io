@@ -26,6 +26,11 @@ softcenter_install() {
 			dbus set softcenter_module_shadowsocks_install=4
 		fi
 		[ ! -L /koolshare/bin/netstat ] && ln -sf /koolshare/bin/koolbox /koolshare/bin/netstat
+
+		# 移除
+		if [ -f "/koolshare/scripts/ks_tar_intall.sh" ]
+			rm -rf /koolshare/scripts/ks_tar_intall.sh
+		fi
 	fi
 }
 
