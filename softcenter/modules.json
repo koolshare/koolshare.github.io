@@ -1,4 +1,5 @@
 [
+{"module": "linkease", "git_source": "https://github.com/koolshare/merlin_LinkEase.git"},
 {"module": "acme", "git_source": "https://github.com/sadoneli/merlin380-acme.git"},
 {"module": "qiandao", "git_source": "https://github.com/sadoneli/merlin380-qiandao.git"},
 {"module": "aliddns", "git_source": "https://github.com/koolshare/merlin-aliddns.git"},
