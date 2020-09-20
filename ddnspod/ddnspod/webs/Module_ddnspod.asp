@@ -132,6 +132,7 @@
 							$("#ddnspod_"+params[i]).val(db_ddnspod_[p + params[i]]);
 						}
 					}
+                    $("#ddnspod_run_domain").html(db_ddnspod_['ddnspod_run_domain']);
                     $("#ddnspod_run_state").html(db_ddnspod_['ddnspod_run_status']);
 
 					setTimeout("write_ddnspod_run_status()", 10000);
@@ -268,9 +269,15 @@
 														</td>
 													</tr>
 													<tr>
-														<th width="35%">域名</th>
+														<th width="35%">主域名</th>
 														<td>
-															<input type="text" class="input_ss_table" style="width:auto;" size="30" id="ddnspod_config_domain" name="ddnspod_config_domain" maxlength="40" placeholder="填写完整域名" value='<% dbus_get_def("ddnspod_config_domain", ""); %>' >
+															<input type="text" class="input_ss_table" style="width:auto;" size="30" id="ddnspod_config_maindomain" name="ddnspod_config_maindomain" maxlength="40" placeholder="填写完整域名" value='<% dbus_get_def("ddnspod_config_maindomain", ""); %>' >
+														</td>
+													</tr>
+													<tr>
+														<th width="35%">子域名</th>
+														<td>
+															<input type="text" class="input_ss_table" style="width:auto;" size="30" id="ddnspod_config_subdomain" name="ddnspod_config_subdomain" maxlength="40" placeholder="填写完整域名" value='<% dbus_get_def("ddnspod_config_subdomain", ""); %>' >
 														</td>
 													</tr>
 
@@ -279,6 +286,14 @@
 														<td colspan="3">运行状态</td>
 													</tr>
 													</thead>
+													<tr>
+													    <th width="35%">域名</th>
+														<td>
+															<a>
+																<span id="ddnspod_run_domain"></span>
+															</a>
+														</td>
+													</tr>
 													<tr>
 													    <th width="35%">状态</th>
 														<td>

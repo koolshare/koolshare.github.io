@@ -13,7 +13,7 @@
 
 # ====================================变量定义====================================
 # 版本号定义
-version="0.1.6"
+version="0.1.8"
 
 # 导入skipd数据
 eval `dbus export ddnspod`
@@ -115,10 +115,10 @@ arDdnsCheck() {
     return 0
 }
 
-parseDomain() {
-    mainDomain=${ddnspod_config_domain#*.}
-    local tmp=${ddnspod_config_domain%$mainDomain}
-    subDomain=${tmp%.}
+readDomain() {
+    mainDomain=${ddnspod_config_maindomain}
+    subDomain=${ddnspod_config_subdomain}
+    dbus set ddnspod_run_domain=${subDomain}.${mainDomain}
 }
 
 #将执行脚本写入crontab定时运行
@@ -150,7 +150,7 @@ case $ACTION in
 start)
 	#此处为开机自启动设计
 	if [ "$ddnspod_enable" == "1" ] && [ "$ddnspod_auto_start" == "1" ];then
-    parseDomain
+    readDomain
     add_ddnspod_cru
     sleep $ddnspod_delay_time
     arDdnsCheck $mainDomain $subDomain
@@ -161,7 +161,7 @@ stop | kill )
 	;;
 restart)
     stop_ddnspod
-    parseDomain
+    readDomain
     add_ddnspod_cru
     sleep $ddnspod_delay_time
     arDdnsCheck $mainDomain $subDomain
