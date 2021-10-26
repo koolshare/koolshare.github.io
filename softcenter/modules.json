@@ -6,7 +6,6 @@
 {"module": "aria2", "git_source": "https://github.com/koolshare/merlin-aria2.git"},
 {"module": "cloudxns", "git_source": "https://github.com/koolshare/merlin_cloudxns.git"},
 {"module": "ddnsto", "git_source": "https://github.com/koolshare/merlin_ddnsto.git"},
-{"module": "kms", "git_source": "https://github.com/JSZMonkey/merlin-kms.git"},
 {"module": "webshell", "git_source": "https://github.com/koolshare/merlin-webshell.git"},
 {"module": "frpc", "git_source": "https://github.com/koolshare/merlin_frpc.git"},
 {"module": "frps", "git_source": "https://github.com/koolshare/merlin_frps.git"},
